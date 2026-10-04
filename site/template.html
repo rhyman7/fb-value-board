@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!--PAGE-->
+<title>NFL Value Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+<style>
+/* Layout: one left-aligned column. The slate "board" leads: every game is a strip
+   between the away and home team, crossed by yard lines at the key numbers. */
+:root {
+  --page: #f3f5f8;  --surface: #fbfcfd;  --raised: #e9edf2;
+  --ink: #10151c;   --ink-2: #4a5361;    --ink-3: #6f7986;
+  --grid: #e1e5eb;  --axis: #bfc7d1;     --rule: #d5dbe3;
+  --model: #256abf; --model-soft: #86b6ef; --market: #10151c;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
+  --good: #0ca30c; --good-ink: #006300; --good-wash: #e3f3e1;
+  --focus: #256abf;
+  --sans: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --gutter: clamp(16px, 4vw, 40px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --page: #0c0f13;  --surface: #161a20;  --raised: #222831;
+    --ink: #f2f5f8;   --ink-2: #b9c1cc;    --ink-3: #8a94a1;
+    --grid: #262c35;  --axis: #3b4450;     --rule: #2c333d;
+    --model: #5598e7; --model-soft: #1c5cab; --market: #f2f5f8;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+    --good: #0ca30c; --good-ink: #5fd35f; --good-wash: #12301a;
+    --focus: #86b6ef;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --page: #0c0f13;  --surface: #161a20;  --raised: #222831;
+  --ink: #f2f5f8;   --ink-2: #b9c1cc;    --ink-3: #8a94a1;
+  --grid: #262c35;  --axis: #3b4450;     --rule: #2c333d;
+  --model: #5598e7; --model-soft: #1c5cab; --market: #f2f5f8;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
+  --good: #0ca30c; --good-ink: #5fd35f; --good-wash: #12301a;
+  --focus: #86b6ef;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin-inline: auto; padding-inline: var(--gutter); padding-block: 28px 72px; }
+h1, h2, h3, p, ol, ul, figure { margin: 0; }
+a { color: var(--model); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+
+/* ---- type ---- */
+.cond { font-stretch: 68%; font-weight: 800; letter-spacing: 0.005em; }
+h1 { font-size: clamp(34px, 6vw, 58px); line-height: 0.98; font-stretch: 64%; font-weight: 800; text-wrap: balance; }
+h2 { font-size: 28px; line-height: 1.1; font-stretch: 68%; font-weight: 800; text-wrap: balance; }
+h3 { font-size: 16px; line-height: 1.3; font-weight: 700; }
+.lede { font-size: 17px; line-height: 1.5; max-width: 66ch; color: var(--ink-2); }
+.lede strong { color: var(--ink); font-weight: 650; }
+.note { font-size: 13px; line-height: 1.5; color: var(--ink-2); max-width: 72ch; }
+.muted { color: var(--ink-3); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---- header and nav ---- */
+header.top { display: grid; gap: 14px; padding-bottom: 22px; }
+.stamp { font-size: 13px; color: var(--ink-3); }
+nav.sections { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--page);
+  border-block: 1px solid var(--rule); margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); overflow-x: auto; }
+nav.sections ul { list-style: none; display: flex; gap: 4px; padding: 0; margin: 0; white-space: nowrap; }
+nav.sections a { display: block; padding: 11px 12px; color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 2px solid transparent; }
+nav.sections a:hover { color: var(--ink); }
+nav.sections a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+
+main { display: grid; gap: 64px; padding-top: 36px; }
+section { display: grid; gap: 20px; scroll-margin-top: 64px; min-width: 0; }
+.section-head { display: grid; gap: 8px; }
+
+/* ---- controls ---- */
+.filters { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
+.field { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.seg { display: inline-flex; border: 1px solid var(--axis); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: 600 14px var(--sans); color: var(--ink-2); background: transparent; border: 0; padding: 7px 13px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--axis); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.seg button:hover:not([aria-pressed="true"]) { background: var(--raised); color: var(--ink); }
+input.money { font: 600 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 8px; padding: 7px 10px; width: 120px; font-variant-numeric: tabular-nums; }
+
+/* ---- the board ---- */
+.board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 372px); gap: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.board-plot { padding: 16px 16px 10px; min-width: 0; }
+.board-detail { border-left: 1px solid var(--rule); padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; background: var(--surface); }
+@media (max-width: 860px) { .board { grid-template-columns: minmax(0, 1fr); } .board-detail { border-left: 0; border-top: 1px solid var(--rule); } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); padding-bottom: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.key-tick { width: 3px; height: 14px; background: var(--market); border-radius: 1px; }
+.key-dot { width: 10px; height: 10px; border-radius: 50%; }
+.key-line { width: 16px; height: 2px; border-radius: 1px; }
+.key-box { width: 10px; height: 10px; border-radius: 2px; }
+.matchup { font-size: 30px; line-height: 1; font-stretch: 64%; font-weight: 800; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 13px; }
+.kv dt { color: var(--ink-3); } .kv dd { margin: 0; }
+
+/* ---- charts ---- */
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--sans); fill: var(--ink-3); font-size: 12px; }
+svg .t-ink { fill: var(--ink); } svg .t-2 { fill: var(--ink-2); }
+svg .hit { fill: transparent; cursor: pointer; outline: none; }
+svg .hit:focus-visible { stroke: var(--focus); stroke-width: 2; }
+figure { display: grid; gap: 10px; min-width: 0; align-content: start; }
+figcaption { display: grid; gap: 4px; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 36px 40px; }
+details.data { font-size: 13px; color: var(--ink-2); }
+details.data summary { cursor: pointer; width: fit-content; color: var(--ink-2); }
+details.data[open] summary { margin-bottom: 8px; }
+#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--ink); color: var(--surface); border-radius: 6px; padding: 8px 10px; font-size: 12.5px; line-height: 1.45; max-width: 260px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.22); }
+#tip .tt { font-weight: 700; margin-bottom: 2px; }
+#tip .tr { display: flex; justify-content: space-between; gap: 14px; }
+#tip .tr b { font-weight: 700; font-variant-numeric: tabular-nums; }
+#tip .tr span { opacity: 0.78; display: inline-flex; align-items: center; gap: 6px; }
+#tip i { display: inline-block; width: 10px; height: 2px; border-radius: 1px; }
+
+/* ---- tables ---- */
+.scroll { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { padding: 8px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
+th { font-weight: 600; color: var(--ink-3); font-size: 12.5px; border-bottom-color: var(--axis); vertical-align: bottom; }
+th:first-child, td:first-child { padding-left: 0; } th:last-child, td:last-child { padding-right: 0; }
+th.l, td.l { text-align: left; }
+td.strong { font-weight: 700; }
+table.compact { font-size: 13px; } table.compact th, table.compact td { padding: 6px 6px; } table.compact th { font-size: 12px; }
+td .rec { font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+.ratings-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 36px 40px; align-items: start; }
+.ratings-grid figure { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 60px); }
+@media (max-width: 940px) { .ratings-grid { grid-template-columns: minmax(0, 1fr); } .ratings-grid figure { position: static; } }
+tr.group td { font-weight: 700; padding-top: 16px; color: var(--ink); border-bottom-color: var(--axis); }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button[aria-sort]::after { content: " ↓"; } th button[aria-sort="ascending"]::after { content: " ↑"; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 999px; background: var(--good-wash); color: var(--good-ink); font-weight: 700; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+.bar-cell { display: grid; grid-template-columns: 40px minmax(64px, 1fr); align-items: center; gap: 8px; }
+.bar-track { position: relative; height: 14px; }
+.bar-track::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
+.bar-fill { position: absolute; top: 2px; height: 10px; background: var(--s1); }
+.bar-fill.pos { left: 50%; border-radius: 0 4px 4px 0; } .bar-fill.neg { right: 50%; border-radius: 4px 0 0 4px; }
+button.link { font: inherit; color: var(--model); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+
+/* ---- stat tiles ---- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 0; border-block: 1px solid var(--rule); }
+.tile { padding: 16px 20px 16px 0; display: grid; gap: 2px; align-content: start; }
+.tile + .tile { padding-left: 20px; border-left: 1px solid var(--rule); }
+@media (max-width: 520px) { .tile + .tile { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); } }
+.tile .label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.tile .value { font-size: 34px; line-height: 1.1; font-stretch: 68%; font-weight: 800; }
+.tile .sub { font-size: 13px; color: var(--ink-2); }
+
+/* ---- method ---- */
+.method { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 28px 44px; }
+.method ol { padding-left: 20px; display: grid; gap: 12px; max-width: 62ch; }
+.method li::marker { font-weight: 700; }
+.method ul { padding-left: 18px; display: grid; gap: 10px; max-width: 62ch; }
+footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-3); display: grid; gap: 4px; }
+.empty { padding: 40px 0; font-size: 17px; color: var(--ink-2); }
+@media (prefers-reduced-motion: no-preference) { .seg button, nav.sections a { transition: background-color .12s, color .12s; } }
+</style>
+<!--/PAGE-->
+</head>
+<body>
+<!--PAGE-->
+<div class="wrap">
+  <header class="top">
+    <h1 id="title">NFL Value Board</h1>
+    <p class="lede" id="lede"></p>
+    <p class="stamp" id="stamp"></p>
+  </header>
+
+  <nav class="sections" aria-label="Sections">
+    <ul>
+      <li><a href="#slate">Slate</a></li>
+      <li><a href="#ratings">Team ratings</a></li>
+      <li><a href="#record">Track record</a></li>
+      <li><a href="#keys">Key numbers</a></li>
+      <li><a href="#method">How it works</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <section id="slate" aria-labelledby="slate-h">
+      <div class="section-head">
+        <h2 id="slate-h">Where the model and the market disagree</h2>
+        <p class="note" id="slate-note"></p>
+      </div>
+      <div class="filters" role="group" aria-label="Slate filters">
+        <div class="field"><span id="f-week">Week</span><div class="seg" id="seg-week" role="group" aria-labelledby="f-week"></div></div>
+        <div class="field"><span id="f-market">Market</span><div class="seg" id="seg-market" role="group" aria-labelledby="f-market"></div></div>
+        <div class="field"><span id="f-basis">Price bets from</span><div class="seg" id="seg-basis" role="group" aria-labelledby="f-basis"></div></div>
+        <label class="field" for="bankroll">Bankroll ($)<input class="money" id="bankroll" type="number" min="0" step="50" value="1000" inputmode="numeric"></label>
+      </div>
+      <div class="board">
+        <div class="board-plot">
+          <div class="legend" aria-hidden="true">
+            <span><i class="key-tick"></i>Market line</span>
+            <span><i class="key-dot" style="background:var(--model-soft)"></i>Raw model</span>
+            <span><i class="key-dot" style="background:var(--model)"></i>Market-adjusted</span>
+          </div>
+          <div id="board"></div>
+        </div>
+        <aside class="board-detail" id="detail" aria-live="polite"></aside>
+      </div>
+      <div class="section-head">
+        <h3 id="bets-h">Best prices this week</h3>
+        <p class="note" id="bets-note"></p>
+      </div>
+      <div class="scroll"><table id="bets" aria-labelledby="bets-h"></table></div>
+      <p class="note"><button class="link" id="bets-more" type="button"></button></p>
+    </section>
+
+    <section id="ratings" aria-labelledby="ratings-h">
+      <div class="section-head">
+        <h2 id="ratings-h">Team ratings</h2>
+        <p class="note" id="ratings-note"></p>
+      </div>
+      <div class="ratings-grid">
+        <figure>
+          <figcaption><h3>Offense against defense</h3><p class="note">Expected points added per play, adjusted for opponents and weighted toward recent games. Up and to the right is better on both sides of the ball.</p></figcaption>
+          <div id="scatter"></div>
+        </figure>
+        <div class="scroll"><table id="ratings-table" aria-labelledby="ratings-h"></table></div>
+      </div>
+    </section>
+
+    <section id="record" aria-labelledby="record-h">
+      <div class="section-head">
+        <h2 id="record-h">Track record against closing lines</h2>
+        <p class="note" id="record-note"></p>
+      </div>
+      <div class="tiles" id="tiles"></div>
+      <div class="two">
+        <figure>
+          <figcaption><h3>Average miss on the final margin, by season</h3><p class="note">Points between the projection and the result. Lower is better. The market is the closing spread.</p></figcaption>
+          <div id="mae"></div>
+          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="mae-table"></table></div></details>
+        </figure>
+        <figure>
+          <figcaption><h3>Does the claimed edge show up?</h3><p class="note">Spread and total bets grouped by the market-adjusted EV the model claimed, against what those bets returned. Dots on the diagonal would mean the claims were accurate. Whiskers are one standard error.</p></figcaption>
+          <div id="evcal"></div>
+          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="evcal-table"></table></div></details>
+        </figure>
+        <figure>
+          <figcaption><h3>Units won or lost, one unit per bet</h3><p class="note">Running total at closing prices. A flat line that drifts down is what paying the vig with no edge looks like.</p></figcaption>
+          <div class="legend" id="cum-legend"></div>
+          <div id="cum"></div>
+          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="cum-table"></table></div></details>
+        </figure>
+        <figure>
+          <figcaption><h3>Win probability against results</h3><p class="note">Games grouped by the home team's market-adjusted chance to win. Dots on the diagonal mean a 70% favorite won about 70% of the time.</p></figcaption>
+          <div id="cal"></div>
+          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="cal-table"></table></div></details>
+        </figure>
+      </div>
+      <div class="section-head"><h3 id="rec-h">Betting records</h3><p class="note" id="rec-note"></p></div>
+      <div class="scroll"><table id="records" aria-labelledby="rec-h"></table></div>
+    </section>
+
+    <section id="keys" aria-labelledby="keys-h">
+      <div class="section-head">
+        <h2 id="keys-h">Key numbers</h2>
+        <p class="note" id="keys-note"></p>
+      </div>
+      <div class="two">
+        <figure>
+          <figcaption><h3>How often each margin of victory comes up</h3><p class="note">Share of games, against what a smooth bell curve would predict for the same games.</p></figcaption>
+          <div class="legend" aria-hidden="true">
+            <span><i class="key-box" style="background:var(--s1)"></i>Actual share of games</span>
+            <span><i class="key-line" style="background:var(--market)"></i>Bell curve</span>
+          </div>
+          <div id="keychart"></div>
+          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="key-table"></table></div></details>
+        </figure>
+        <figure>
+          <figcaption><h3 id="push-h">How often a spread lands exactly on the number</h3><p class="note">A push returns the stake. A model that ignores key numbers misprices every spread near 3 and 7.</p></figcaption>
+          <div class="scroll"><table id="pushes" aria-labelledby="push-h"></table></div>
+        </figure>
+      </div>
+    </section>
+
+    <section id="method" aria-labelledby="method-h">
+      <div class="section-head"><h2 id="method-h">How it works</h2></div>
+      <div class="method">
+        <div>
+          <ol id="steps"></ol>
+        </div>
+        <div style="display:grid;gap:12px;align-content:start">
+          <h3>What this does not do yet</h3>
+          <ul id="limits"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p id="foot-data"></p>
+    <p>For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p>
+  </footer>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const DATA = /*__DATA__*/null;
+</script>
+<script>
+(function () {
+"use strict";
+const $ = (s, r = document) => r.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const S = (tag, attrs = {}, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const H = (tag, attrs = {}, ...kids) => {
+  const e = document.createElement(tag);
+  for (const k in attrs) {
+    if (k === "class") e.className = attrs[k];
+    else if (k === "text") e.textContent = attrs[k];
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), attrs[k]);
+    else e.setAttribute(k, attrs[k]);
+  }
+  kids.flat().forEach(c => c != null && e.append(c));
+  return e;
+};
+const lin = (d0, d1, r0, r1) => v => r0 + (v - d0) / (d1 - d0) * (r1 - r0);
+const pct = (x, d = 1) => x == null ? "n/a" : (x * 100).toFixed(d) + "%";
+const spct = (x, d = 1) => x == null ? "n/a" : (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x * 100).toFixed(d) + "%";
+const snum = (x, d = 1) => (x > 0 ? "+" : x < 0 ? "−" : "") + Math.abs(x).toFixed(d);
+const odds = o => o == null ? "n/a" : (o > 0 ? "+" : "−") + Math.abs(o);
+const line = x => x === 0 ? "PK" : (x > 0 ? "+" : "−") + String(Math.abs(Math.round(x * 10) / 10));
+const comma = n => n.toLocaleString("en-US");
+
+if (!DATA || !DATA.slate) {
+  $("#main").replaceChildren(H("p", { class: "empty", text: "No data yet. Run python run.py to build the board." }));
+  return;
+}
+const M = DATA.meta, BT = DATA.backtest, KN = DATA.key_numbers;
+
+/* ---------------- tooltip ---------------- */
+const tip = $("#tip");
+function showTip(evt, title, rows) {
+  tip.replaceChildren(H("div", { class: "tt", text: title }), ...rows.map(r => {
+    const k = H("span", {}, r.color ? H("i", { style: "background:" + r.color }) : null, document.createTextNode(r.k));
+    return H("div", { class: "tr" }, k, H("b", { text: r.v }));
+  }));
+  tip.hidden = false;
+  let x, y;
+  if (evt.clientX != null && evt.type !== "focus") { x = evt.clientX; y = evt.clientY; }
+  else { const b = evt.target.getBoundingClientRect(); x = b.left + b.width / 2; y = b.top; }
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, x + 14)) + "px";
+  tip.style.top = Math.max(8, y - h - 12 < 8 ? y + 18 : y - h - 12) + "px";
+}
+const hideTip = () => { tip.hidden = true; };
+function hover(el, title, rows) {
+  const on = e => showTip(e, title, typeof rows === "function" ? rows() : rows);
+  el.addEventListener("pointermove", on); el.addEventListener("focus", on);
+  el.addEventListener("pointerleave", hideTip); el.addEventListener("blur", hideTip);
+}
+/* Re-draw a chart whenever its container changes width, so text stays a fixed size. */
+function responsive(node, draw) {
+  let last = 0;
+  const run = () => { const w = Math.round(node.clientWidth); if (w && w !== last) { last = w; node.replaceChildren(draw(w)); } };
+  new ResizeObserver(run).observe(node); run();
+  return () => { last = 0; run(); };
+}
+function table(node, head, rows) {
+  const thead = H("thead", {}, H("tr", {}, head.map(h => H("th", { class: h.l ? "l" : "", scope: "col", text: h.t }))));
+  const tbody = H("tbody", {}, rows.map(r => H("tr", { class: r.cls || "" }, (r.cells || r).map((c, i) => {
+    const td = H("td", { class: (head[i] && head[i].l ? "l " : "") + ((c && c.cls) || "") });
+    if (c && c.colspan) td.colSpan = c.colspan;
+    const v = c && typeof c === "object" && !(c instanceof Node) ? c.v : c;
+    td.append(v instanceof Node ? v : document.createTextNode(v == null ? "" : String(v)));
+    return td;
+  }))));
+  node.replaceChildren(thead, tbody);
+}
+function seg(node, options, get, set) {
+  const paint = () => [...node.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === String(get()))));
+  node.replaceChildren(...options.map(o => H("button", { type: "button", "data-v": o.v, text: o.t, onclick: () => { set(o.v); paint(); } })));
+  paint();
+}
+const evCell = v => v > 0 ? H("span", { class: "chip", text: spct(v) }) : spct(v);
+
+/* ---------------- state ---------------- */
+const state = { week: DATA.slate.weeks[0], market: "Spread", basis: "adj", game: null, all: false, bankroll: 1000 };
+try { const b = parseFloat(localStorage.getItem("nflvb.bankroll")); if (b >= 0) state.bankroll = b; } catch (e) {}
+$("#bankroll").value = state.bankroll;
+const games = () => DATA.slate.games.filter(g => g.week === state.week);
+const evOf = b => state.basis === "adj" ? b.ev : b.raw_ev;
+const probOf = b => state.basis === "adj" ? b.prob : b.raw_prob;
+const lean = (g, market) => g.bets.filter(b => b.market === market).sort((a, b) => evOf(b) - evOf(a))[0];
+const kickoff = g => {
+  if (!g.time) return g.date;
+  const [h, m] = g.time.split(":").map(Number);
+  return g.date + ", " + ((h + 11) % 12 + 1) + ":" + String(m).padStart(2, "0") + (h < 12 ? " AM" : " PM") + " ET";
+};
+const homeLine = (g, margin) => g.home + " " + line(-margin);
+
+/* ---------------- header ---------------- */
+(function header() {
+  const all = DATA.slate.games.filter(g => g.week === DATA.slate.weeks[0]);
+  const bets = all.flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => b.b.ev - a.b.ev);
+  const plus = bets.filter(x => x.b.ev > 0);
+  const lede = $("#lede");
+  if (!all.length) { lede.textContent = "No upcoming games have lines yet."; }
+  else {
+    const top = bets[0];
+    lede.append(
+      H("strong", { text: "Week " + DATA.slate.weeks[0] + " of " + M.season + ": " + all.length + (all.length === 1 ? " game" : " games") + " to play. " }),
+      document.createTextNode(plus.length
+        ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even once the model is weighed against the market. The best is " + top.b.pick + " at " + odds(top.b.odds) + ", worth " + spct(top.b.ev) + " per dollar staked."
+        : "No bet clears break-even once the model is weighed against the market. The closest is " + top.b.pick + " at " + odds(top.b.odds) + ", " + spct(top.b.ev) + " per dollar staked."));
+  }
+  $("#stamp").textContent = "Results through " + M.games_through + ". Updated " + M.generated + ".";
+  $("#slate-note").textContent = "Each row is one game. The tick is the market line, the light dot is where the model alone puts it, and the dark dot is the projection after moving " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals). That share is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons. Select a game for its prices.";
+  $("#foot-data").textContent = "Data: " + M.sources.join("; ") + ", seasons " + M.seasons_of_data.replace("-", " to ") + ".";
+})();
+
+/* ---------------- board ---------------- */
+function drawBoard(W) {
+  const gs = games().slice();
+  const mk = state.market;
+  const val = { Spread: g => [g.market.spread, g.model.margin, g.proj.margin],
+                Total: g => [g.market.total, g.model.total, g.proj.total],
+                Moneyline: g => [g.win.market * 100, g.win.raw * 100, g.win.adj * 100] }[mk];
+  gs.sort((a, b) => Math.abs(val(b)[1] - val(b)[0]) - Math.abs(val(a)[1] - val(a)[0]));
+  const wide = W >= 560;
+  const left = 84, right = wide ? 132 : 8, x0 = left + 6, x1 = W - right - 10;
+  const rowH = 32, top = 24, Hh = top + gs.length * rowH + 30;
+  const flat = gs.flatMap(val);
+  let lo, hi, ticks, fmt;
+  if (mk === "Spread") {
+    lo = Math.min(-10.5, Math.floor(Math.min(...flat)) - 1); hi = Math.max(10.5, Math.ceil(Math.max(...flat)) + 1);
+    ticks = [-21, -17, -14, -10, -7, -3, 0, 3, 7, 10, 14, 17, 21].filter(t => t > lo && t < hi);
+    fmt = t => t === 0 ? "PK" : String(Math.abs(t));
+  } else if (mk === "Total") {
+    lo = Math.floor((Math.min(...flat) - 2) / 5) * 5; hi = Math.ceil((Math.max(...flat) + 2) / 5) * 5;
+    ticks = []; for (let t = lo; t <= hi; t += 5) ticks.push(t); fmt = String;
+  } else { lo = 0; hi = 100; ticks = [0, 25, 50, 75, 100]; fmt = t => t + "%"; }
+  const x = lin(lo, hi, x0, x1);
+  const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": "Market line, raw model and market-adjusted projection for each game" });
+
+  // yard lines at the key numbers
+  ticks.forEach(t => {
+    const strong = mk === "Spread" ? (t === 0) : (mk === "Moneyline" && t === 50);
+    const key = mk === "Spread" && (Math.abs(t) === 3 || Math.abs(t) === 7);
+    svg.append(S("line", { x1: x(t), x2: x(t), y1: top - 4, y2: Hh - 26, stroke: strong ? "var(--axis)" : "var(--grid)", "stroke-width": key ? 2 : 1 }));
+    svg.append(S("text", { x: x(t), y: Hh - 10, "text-anchor": "middle", class: key ? "t-ink" : "", "font-weight": key ? 700 : 400 }, fmt(t)));
+  });
+  const roomy = x1 - x0 >= 330;
+  const cap = { Spread: roomy ? ["Away team favored by", "Home team favored by"] : ["Away favored", "Home favored"], Total: ["Fewer points", "More points"], Moneyline: roomy ? ["Away team wins", "Home team wins"] : ["Away wins", "Home wins"] }[mk];
+  svg.append(S("text", { x: x0, y: 12, "text-anchor": "start" }, "← " + cap[0]));
+  svg.append(S("text", { x: x1, y: 12, "text-anchor": "end" }, cap[1] + " →"));
+
+  gs.forEach((g, i) => {
+    const cy = top + i * rowH + rowH / 2, [mkt, raw, adj] = val(g), sel = state.game === g.id;
+    if (sel) svg.append(S("rect", { x: 0, y: cy - rowH / 2 + 1, width: W, height: rowH - 2, rx: 5, fill: "var(--raised)" }));
+    svg.append(S("line", { x1: x0, x2: x1, y1: cy, y2: cy, stroke: "var(--grid)", "stroke-width": 1 }));
+    svg.append(S("text", { x: 6, y: cy + 4.5, class: "t-ink", "font-size": 14, "font-weight": sel ? 800 : 700, "font-stretch": "75%" }, g.away + " @ " + g.home));
+    svg.append(S("line", { x1: x(mkt), x2: x(raw), y1: cy, y2: cy, stroke: "var(--model-soft)", "stroke-width": 2, "stroke-linecap": "round" }));
+    svg.append(S("circle", { cx: x(raw), cy, r: 5, fill: "var(--model-soft)", stroke: sel ? "var(--raised)" : "var(--surface)", "stroke-width": 2 }));
+    svg.append(S("rect", { x: x(mkt) - 1.5, y: cy - 9, width: 3, height: 18, rx: 1, fill: "var(--market)" }));
+    svg.append(S("circle", { cx: x(adj), cy, r: 5, fill: "var(--model)", stroke: sel ? "var(--raised)" : "var(--surface)", "stroke-width": 2 }));
+    const l = lean(g, mk);
+    if (wide && l) {
+      svg.append(S("text", { x: W - right, y: cy + 4.5, class: "t-2", "font-size": 13 }, l.pick));
+      svg.append(S("text", { x: W - 6, y: cy + 4.5, "text-anchor": "end", "font-size": 13, "font-weight": 700, style: "fill:" + (evOf(l) > 0 ? "var(--good-ink)" : "var(--ink-3)") }, spct(evOf(l))));
+    }
+    const show = { Spread: v => homeLine(g, v), Total: v => v.toFixed(1), Moneyline: v => g.home + " " + v.toFixed(1) + "%" }[mk];
+    const hit = S("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, tabindex: 0, role: "button",
+      "aria-label": `${g.away} at ${g.home}. Market ${show(mkt)}, raw model ${show(raw)}, market-adjusted ${show(adj)}.` });
+    hit.addEventListener("click", () => { state.game = g.id; renderSlate(); });
+    hit.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); state.game = g.id; renderSlate(); } });
+    hover(hit, g.away + " at " + g.home, [
+      { k: "Market", v: show(mkt), color: "var(--surface)" },
+      { k: "Raw model", v: show(raw), color: "var(--model-soft)" },
+      { k: "Market-adjusted", v: show(adj), color: "var(--model)" },
+      ...(l ? [{ k: "Best side: " + l.pick, v: spct(evOf(l)) }] : []),
+    ]);
+    svg.append(hit);
+  });
+  return svg;
+}
+const redrawBoard = responsive($("#board"), drawBoard);
+
+function renderDetail() {
+  const g = games().find(g => g.id === state.game) || games()[0];
+  const node = $("#detail");
+  if (!g) { node.replaceChildren(H("p", { class: "note", text: "No games with lines this week." })); return; }
+  const qb = (team, q) => `${q.name} (${team}), ${snum(q.value, 2)} EPA per dropback against average`;
+  const facts = H("dl", { class: "kv" },
+    H("dt", { text: "Kickoff" }), H("dd", { text: kickoff(g) + (g.neutral ? ", neutral site" : "") }),
+    H("dt", { text: "Roof" }), H("dd", { text: g.roof }),
+    H("dt", { text: "Quarterbacks" }), H("dd", {}, H("div", { text: qb(g.away, g.away_qb) }), H("div", { text: qb(g.home, g.home_qb) })));
+  const cmp = H("table", { class: "compact" });
+  table(cmp, [{ t: "", l: 1 }, { t: "Market" }, { t: "Model" }, { t: "Adjusted" }], [
+    ["Spread", homeLine(g, g.market.spread), homeLine(g, g.model.margin), { v: homeLine(g, g.proj.margin), cls: "strong" }],
+    ["Total", g.market.total.toFixed(1), g.model.total.toFixed(1), { v: g.proj.total.toFixed(1), cls: "strong" }],
+    [g.home + " wins", pct(g.win.market), pct(g.win.raw), { v: pct(g.win.adj), cls: "strong" }],
+  ]);
+  const bt = H("table", { class: "compact" });
+  table(bt, [{ t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market" }, { t: "EV" }],
+    g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(b => [b.pick, odds(b.odds), pct(probOf(b)), pct(b.market_prob), spct(evOf(b))]));
+  node.replaceChildren(H("div", { class: "matchup", text: g.away + " at " + g.home }), facts, H("div", { class: "scroll" }, cmp), H("div", { class: "scroll" }, bt));
+}
+
+function renderBets() {
+  const rows = games().flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
+  const shown = state.all ? rows : rows.slice(0, 10);
+  const adj = state.basis === "adj";
+  table($("#bets"), [{ t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market, no vig" }, { t: "Break-even" }, { t: "EV per $1" }, { t: "Fair price" }, { t: "Stake" }],
+    shown.map(({ g, b }) => {
+      const p = probOf(b), fair = p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 * (1 - p) / p);
+      const game = H("button", { class: "link", type: "button", text: g.away + " @ " + g.home, onclick: () => { state.game = g.id; renderSlate(); $("#detail").scrollIntoView({ block: "nearest", behavior: "smooth" }); } });
+      const stake = adj ? (b.stake > 0 ? "$" + comma(Math.round(b.stake * state.bankroll)) + " (" + pct(b.stake) + ")" : "—") : "—";
+      return [game, { v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evCell(evOf(b)), odds(fair), stake];
+    }));
+  $("#bets-note").textContent = (adj
+    ? "Priced from the market-adjusted projection. "
+    : "Priced from the raw model alone, which has overstated its edge in every season tested. Stakes are only sized from the market-adjusted numbers. ")
+    + "Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll.";
+  const more = $("#bets-more");
+  more.hidden = rows.length <= 10;
+  more.textContent = state.all ? "Show the top 10 only" : "Show all " + rows.length + " prices";
+}
+$("#bets-more").addEventListener("click", () => { state.all = !state.all; renderBets(); });
+$("#bankroll").addEventListener("input", e => {
+  const v = parseFloat(e.target.value); state.bankroll = v >= 0 ? v : 0;
+  try { localStorage.setItem("nflvb.bankroll", String(state.bankroll)); } catch (err) {}
+  renderBets();
+});
+function renderSlate() {
+  if (!games().some(g => g.id === state.game)) state.game = (games()[0] || {}).id;
+  redrawBoard(); renderDetail(); renderBets();
+}
+seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); state.game = null; renderSlate(); });
+seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; renderSlate(); });
+seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderSlate(); });
+(function initialGame() {
+  const g = games().slice().sort((a, b) => lean(b, "Spread").ev - lean(a, "Spread").ev)[0];
+  state.game = g && g.id;
+})();
+renderSlate();
+
+/* ---------------- ratings ---------------- */
+const R = DATA.ratings;
+$("#ratings-note").textContent = "Rating is points per game better or worse than an average team on a neutral field, with this week's quarterback. It combines play-by-play efficiency, scoring and what earlier betting lines implied about each team.";
+let hot = null;
+const redrawScatter = responsive($("#scatter"), W => {
+  const Hh = Math.min(440, Math.max(320, W * 0.82)), m = { l: 44, r: 14, t: 22, b: 38 };
+  const ext = (k, pad) => { const v = R.map(r => r[k]); const a = Math.max(Math.abs(Math.min(...v)), Math.abs(Math.max(...v))) + pad; return [-a, a]; };
+  const [xl, xh] = ext("off_epa", 0.015), [yl, yh] = ext("def_epa", 0.015);
+  const x = lin(xl, xh, m.l, W - m.r), y = lin(yl, yh, m.t, Hh - m.b);   // defense: fewer points allowed is up
+  const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": "Offensive and defensive efficiency for all 32 teams" });
+  const step = 0.05;
+  for (let t = Math.ceil(xl / step) * step; t <= xh + 1e-9; t += step) {
+    const z = Math.abs(t) < 1e-9;
+    svg.append(S("line", { x1: x(t), x2: x(t), y1: m.t, y2: Hh - m.b, stroke: z ? "var(--axis)" : "var(--grid)" }));
+    svg.append(S("text", { x: x(t), y: Hh - m.b + 16, "text-anchor": "middle" }, snum(t, 2)));
+  }
+  for (let t = Math.ceil(yl / step) * step; t <= yh + 1e-9; t += step) {
+    const z = Math.abs(t) < 1e-9;
+    svg.append(S("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), stroke: z ? "var(--axis)" : "var(--grid)" }));
+    svg.append(S("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end" }, snum(t, 2)));
+  }
+  svg.append(S("text", { x: W - m.r, y: Hh - 4, "text-anchor": "end" }, "Offense, EPA per play →"));
+  svg.append(S("text", { x: m.l, y: 12, "text-anchor": "start" }, "↑ Better defense (EPA allowed per play)"));
+  // Team codes are the marks. Nudge overlapping codes apart vertically so each stays readable.
+  const P = R.map(r => ({ r, px: x(r.off_epa), py: y(r.def_epa) }));
+  for (let k = 0; k < 60; k++) for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
+    const a = P[i], b = P[j], dy = b.py - a.py;
+    if (Math.abs(b.px - a.px) < 27 && Math.abs(dy) < 13) { const push = (13 - Math.abs(dy)) / 2 + 0.1, sgn = dy >= 0 ? 1 : -1; a.py -= sgn * push; b.py += sgn * push; }
+  }
+  P.forEach(({ r, px, py }) => {
+    const on = hot === r.team;
+    py = Math.max(m.t + 8, Math.min(Hh - m.b - 6, py));
+    svg.append(S("text", { x: px, y: py + 4, "text-anchor": "middle", "font-size": on ? 15 : 12.5, "font-weight": 800, "font-stretch": "75%",
+      style: "fill:" + (on ? "var(--ink)" : "var(--s1)"), "paint-order": "stroke", stroke: "var(--page)", "stroke-width": 3 }, r.team));
+    const hit = S("rect", { class: "hit", x: px - 13, y: py - 11, width: 26, height: 22, tabindex: 0, "aria-label": `${r.team}: offense ${snum(r.off_epa, 3)}, defense ${snum(r.def_epa, 3)} EPA per play` });
+    hover(hit, r.team + " (" + r.record + ")", [
+      { k: "Rating", v: snum(r.rating) + " pts" }, { k: "Offense EPA per play", v: snum(r.off_epa, 3) }, { k: "Defense EPA allowed", v: snum(r.def_epa, 3) }, { k: "Quarterback", v: r.qb || "n/a" }]);
+    svg.append(hit);
+  });
+  return svg;
+});
+const sortState = { key: "rating", dir: -1 };
+function renderRatings() {
+  const cols = [{ k: "rank", t: "#", l: 1 }, { k: "team", t: "Team", l: 1 }, { k: "rating", t: "Rating" }, { k: "off_epa", t: "Offense" }, { k: "def_epa", t: "Defense" }, { k: "market_rating", t: "Market" }, { k: "qb", t: "Quarterback", l: 1 }];
+  const rows = R.slice().sort((a, b) => { const A = a[sortState.key], B = b[sortState.key]; return (typeof A === "string" ? A.localeCompare(B) : A - B) * sortState.dir; });
+  const max = Math.max(...R.map(r => Math.abs(r.rating)));
+  const t = $("#ratings-table");
+  table(t, cols, rows.map(r => {
+    const fill = H("div", { class: "bar-fill " + (r.rating >= 0 ? "pos" : "neg"), style: "width:" + (Math.abs(r.rating) / max * 50).toFixed(1) + "%" });
+    const bar = H("div", { class: "bar-cell" }, H("span", { text: snum(r.rating) }), H("div", { class: "bar-track" }, fill));
+    const team = H("span", {}, document.createTextNode(r.team), H("span", { class: "rec", text: r.record }));
+    const row = [r.rank, { v: team, cls: "strong" }, bar, snum(r.off_epa, 3), snum(r.def_epa, 3), snum(r.market_rating), r.qb || ""];
+    return row;
+  }));
+  [...t.tHead.rows[0].cells].forEach((th, i) => {
+    const c = cols[i], b = H("button", { type: "button", text: c.t, onclick: () => { sortState.dir = sortState.key === c.k ? -sortState.dir : (c.l ? 1 : -1); sortState.key = c.k; renderRatings(); } });
+    if (sortState.key === c.k) b.setAttribute("aria-sort", sortState.dir > 0 ? "ascending" : "descending");
+    th.replaceChildren(b);
+  });
+  [...t.tBodies[0].rows].forEach((tr, i) => {
+    tr.addEventListener("pointerenter", () => { hot = rows[i].team; redrawScatter(); });
+    tr.addEventListener("pointerleave", () => { hot = null; redrawScatter(); });
+  });
+}
+renderRatings();
+
+/* ---------------- generic charts ---------------- */
+function niceTicks(lo, hi, n = 5) {
+  const span = hi - lo, step0 = Math.pow(10, Math.floor(Math.log10(span / n)));
+  const step = [1, 2, 2.5, 5, 10].map(k => k * step0).find(s => span / s <= n) || step0 * 10;
+  const out = []; for (let t = Math.ceil(lo / step - 1e-9) * step; t <= hi + 1e-9; t += step) out.push(Math.round(t * 1e6) / 1e6);
+  return out;
+}
+function lineChart(node, o) {
+  responsive(node, W => {
+    const Hh = o.height || 280, m = { l: 44, r: o.endLabels ? 96 : 16, t: 12, b: 30 }, n = o.x.length;
+    const all = o.series.flatMap(s => s.values);
+    const ticks = niceTicks(Math.min(...all, o.zero ? 0 : Infinity), Math.max(...all, o.zero ? 0 : -Infinity), 5);
+    const stepT = ticks.length > 1 ? ticks[1] - ticks[0] : 1;
+    if (Math.max(...all) > ticks[ticks.length - 1]) ticks.push(Math.round((ticks[ticks.length - 1] + stepT) * 1e6) / 1e6);
+    if (Math.min(...all) < ticks[0]) ticks.unshift(Math.round((ticks[0] - stepT) * 1e6) / 1e6);
+    const lo = ticks[0], hi = ticks[ticks.length - 1];
+    const x = lin(0, n - 1, m.l, W - m.r), y = lin(lo, hi, Hh - m.b, m.t);
+    const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.label });
+    ticks.forEach(t => {
+      svg.append(S("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), stroke: t === 0 && o.zero ? "var(--axis)" : "var(--grid)" }));
+      svg.append(S("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end" }, o.yfmt(t)));
+    });
+    const every = Math.ceil(o.xticks.length / Math.max(2, Math.floor((W - m.l - m.r) / 52)));
+    o.xticks.forEach((t, i) => { if (i % every === 0) svg.append(S("text", { x: x(t.i), y: Hh - 8, "text-anchor": "middle" }, t.t)); });
+    const ends = [];
+    o.series.forEach(s => {
+      svg.append(S("path", { d: s.values.map((v, i) => (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1)).join(""), fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      const last = s.values[n - 1];
+      svg.append(S("circle", { cx: x(n - 1), cy: y(last), r: 4, fill: s.color, stroke: "var(--page)", "stroke-width": 2 }));
+      ends.push({ y: y(last), text: (s.short || s.name) + " " + o.vfmt(last) });
+    });
+    if (o.endLabels) {
+      ends.sort((a, b) => a.y - b.y);
+      for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 14) ends[i].y = ends[i - 1].y + 14;
+      ends.forEach(e => svg.append(S("text", { x: W - m.r + 9, y: e.y + 4, class: "t-2" }, e.text)));
+    }
+    const cross = S("line", { y1: m.t, y2: Hh - m.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" });
+    const hit = S("rect", { class: "hit", x: m.l, y: m.t, width: W - m.l - m.r, height: Hh - m.t - m.b, style: "cursor:crosshair" });
+    hit.addEventListener("pointermove", e => {
+      const b = svg.getBoundingClientRect(), px = (e.clientX - b.left) / b.width * W;
+      const i = Math.max(0, Math.min(n - 1, Math.round((px - m.l) / (W - m.l - m.r) * (n - 1))));
+      cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+      showTip(e, o.x[i], o.series.map(s => ({ k: s.name, v: o.vfmt(s.values[i]), color: s.color })));
+    });
+    hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+    svg.append(cross, hit);
+    return svg;
+  });
+}
+/* points against a y = x reference: "did what was predicted happen?" */
+function diagChart(node, o) {
+  responsive(node, W => {
+    const Hh = 280, m = { l: 48, r: 16, t: 14, b: 40 };
+    const x = lin(o.xd[0], o.xd[1], m.l, W - m.r), y = lin(o.yd[0], o.yd[1], Hh - m.b, m.t);
+    const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.label });
+    niceTicks(o.yd[0], o.yd[1], 5).forEach(t => {
+      svg.append(S("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), stroke: t === 0 && o.zero ? "var(--axis)" : "var(--grid)" }));
+      svg.append(S("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end" }, o.fmt(t)));
+    });
+    niceTicks(o.xd[0], o.xd[1], W < 420 ? 4 : 6).forEach(t => svg.append(S("text", { x: x(t), y: Hh - m.b + 16, "text-anchor": "middle" }, o.fmt(t))));
+    svg.append(S("text", { x: W - m.r, y: Hh - 4, "text-anchor": "end" }, o.xlabel + " →"));
+    svg.append(S("text", { x: m.l, y: 10, "text-anchor": "start" }, "↑ " + o.ylabel));
+    const a = Math.max(o.xd[0], o.yd[0]), b = Math.min(o.xd[1], o.yd[1]);
+    svg.append(S("line", { x1: x(a), y1: y(a), x2: x(b), y2: y(b), stroke: "var(--market)", "stroke-width": 1 }));
+    svg.append(S("text", { x: x(b) - 44, y: y(b) + 12, "text-anchor": "end", class: "t-2" }, o.diag));
+    o.points.forEach(p => {
+      if (p.se != null) svg.append(S("line", { x1: x(p.x), x2: x(p.x), y1: y(Math.min(o.yd[1], p.y + p.se)), y2: y(Math.max(o.yd[0], p.y - p.se)), stroke: "var(--s1)", "stroke-width": 2, "stroke-linecap": "round", opacity: 0.45 }));
+      svg.append(S("circle", { cx: x(p.x), cy: y(p.y), r: 5, fill: "var(--s1)", stroke: "var(--page)", "stroke-width": 2 }));
+      const hit = S("circle", { class: "hit", cx: x(p.x), cy: y(p.y), r: 14, tabindex: 0, "aria-label": p.aria });
+      hover(hit, p.title, p.rows); svg.append(hit);
+    });
+    return svg;
+  });
+}
+
+/* ---------------- track record ---------------- */
+(function record() {
+  if (!BT) { $("#record").hidden = true; return; }
+  const A = BT.accuracy, rec = BT.records, sp = rec.model.Spread.rows[0], tot = rec.model.Total.rows[0];
+  const partial = BT.by_season.filter(s => s.n < 100).map(s => s.season);
+  $("#record-note").textContent = `Every number here is out of sample: ${comma(BT.games)} games from ${BT.first_season} to ${BT.last_season}, each projected using only earlier seasons and graded at the closing price. The model's settings were chosen on ${BT.first_season} to ${BT.holdout_from - 1}, so results since ${BT.holdout_from} are the cleaner test.`;
+  const tile = (label, value, sub) => H("div", { class: "tile" }, H("div", { class: "label", text: label }), H("div", { class: "value", text: value }), H("div", { class: "sub", text: sub }));
+  $("#tiles").replaceChildren(
+    tile("Average miss on the margin", A.margin_mae.model.toFixed(2) + " pts", "The closing spread missed by " + A.margin_mae.market.toFixed(2)),
+    tile("Spread picks, every game", pct(sp.win_pct), `${comma(sp.w)}-${comma(sp.l)}-${sp.p}. A bettor needs 52.4% at −110`),
+    tile("Total picks, every game", pct(tot.win_pct), `${comma(tot.w)}-${comma(tot.l)}-${tot.p}, a return of ${spct(tot.roi)}`),
+    tile("Weight given to the model", pct(M.blend.margin, 0), `On sides, against the market's ${pct(1 - M.blend.margin, 0)}. On totals, ${pct(M.blend.total, 0)}`));
+
+  const full = BT.by_season.filter(s => s.n >= 100);
+  lineChart($("#mae"), {
+    label: "Average miss on the margin by season, model against market", height: 280, endLabels: true,
+    x: full.map(s => String(s.season)), xticks: full.map((s, i) => ({ i, t: "’" + String(s.season).slice(2) })),
+    series: [{ name: "Raw model", short: "Model", color: "var(--s1)", values: full.map(s => s.margin_mae.model) },
+             { name: "Market", color: "var(--ink-3)", values: full.map(s => s.margin_mae.market) }],
+    yfmt: t => t.toFixed(1), vfmt: v => v.toFixed(2),
+  });
+  table($("#mae-table"), [{ t: "Season", l: 1 }, { t: "Games" }, { t: "Model" }, { t: "Adjusted" }, { t: "Market" }, { t: "Model weight" }],
+    BT.by_season.map(s => [s.season + (s.n < 100 ? " (so far)" : ""), s.n, s.margin_mae.model.toFixed(2), s.margin_mae.blend.toFixed(2), s.margin_mae.market.toFixed(2), pct(s.w_margin, 0)]));
+
+  const ec = BT.ev_calibration.proj;
+  const lim = v => Math.ceil(Math.max(...v.map(Math.abs)) * 20 + 0.5) / 20;
+  const xl = lim(ec.map(p => p.claimed)), yl = Math.max(xl, lim(ec.map(p => p.realized)));
+  diagChart($("#evcal"), {
+    label: "Claimed EV against realized return", xd: [-xl, xl], yd: [-yl, yl], zero: true, fmt: t => spct(t, 0),
+    xlabel: "EV the model claimed", ylabel: "What the bets returned", diag: "Claims accurate",
+    points: ec.map(p => ({ x: p.claimed, y: p.realized, se: p.se, title: comma(p.n) + " bets",
+      aria: `${p.n} bets claimed ${spct(p.claimed)} and returned ${spct(p.realized)}`,
+      rows: [{ k: "Claimed EV", v: spct(p.claimed) }, { k: "Returned", v: spct(p.realized) }, { k: "Standard error", v: "±" + pct(p.se) }] })),
+  });
+  table($("#evcal-table"), [{ t: "Bets" }, { t: "Claimed EV" }, { t: "Returned" }, { t: "Standard error" }], ec.map(p => [comma(p.n), spct(p.claimed), spct(p.realized), "±" + pct(p.se)]));
+
+  const C = BT.cumulative, names = Object.keys(C.series), cols = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)"];
+  const short = ["Spreads", "Adjusted", "Totals", "Moneylines"];
+  const firsts = C.seasons.map((s, i) => (i === 0 || C.seasons[i - 1] !== s) ? { i, t: "’" + String(s).slice(2) } : null).filter(Boolean);
+  $("#cum-legend").replaceChildren(...names.map((n, i) => H("span", {}, H("i", { class: "key-line", style: "background:" + cols[i] }), document.createTextNode(n))));
+  lineChart($("#cum"), { label: "Cumulative units by strategy", height: 300, zero: true, endLabels: true, x: C.weeks, xticks: firsts,
+    series: names.map((n, i) => ({ name: n, short: short[i], color: cols[i], values: C.series[n] })), yfmt: t => snum(t, 0), vfmt: v => snum(v, 1) });
+  const lastOf = {}; C.seasons.forEach((s, i) => { lastOf[s] = i; });
+  table($("#cum-table"), [{ t: "Through", l: 1 }, ...names.map(n => ({ t: n }))], Object.keys(lastOf).map(s => [s, ...names.map(n => snum(C.series[n][lastOf[s]], 1))]));
+
+  const cal = BT.calibration;
+  diagChart($("#cal"), { label: "Predicted win probability against actual win rate", xd: [0, 1], yd: [0, 1], fmt: t => pct(t, 0),
+    xlabel: "Chance the model gave", ylabel: "How often they won", diag: "Perfectly calibrated",
+    points: cal.map(p => ({ x: p.predicted, y: p.actual, title: comma(p.n) + " teams", aria: `Given ${pct(p.predicted)}, won ${pct(p.actual)}`,
+      rows: [{ k: "Model said", v: pct(p.predicted) }, { k: "Market said", v: pct(p.market) }, { k: "Won", v: pct(p.actual) }] })) });
+  table($("#cal-table"), [{ t: "Teams" }, { t: "Model said" }, { t: "Market said" }, { t: "Won" }], cal.map(p => [comma(p.n), pct(p.predicted), pct(p.market), pct(p.actual)]));
+
+  const want = [["model", "Spread", 0], ["model", "Total", 0], ["model", "Moneyline", 0], ["proj", "Spread", 1], ["proj", "Spread", 2], ["proj", "Spread", 3], ["proj", "Moneyline", 1], ["proj", "Moneyline", 2], ["proj", "Total", 1]];
+  const rows = []; let lastSrc = null;
+  want.forEach(([src, mk, i]) => {
+    const r = rec[src][mk].rows[i]; if (!r || !r.n) return;
+    if (src !== lastSrc) { rows.push({ cls: "group", cells: [{ v: src === "model" ? "Raw model" : "Market-adjusted", colspan: 8 }] }); lastSrc = src; }
+    const h = r.holdout || {};
+    rows.push([mk, r.rule, comma(r.n), `${comma(r.w)}-${comma(r.l)}-${r.p}`, pct(r.win_pct), spct(r.roi) + " ±" + pct(r.roi_se), h.n ? spct(h.roi) + " (" + comma(h.n) + ")" : "none", spct(r.claimed_ev)]);
+  });
+  table($("#records"), [{ t: "Market", l: 1 }, { t: "Bets placed", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "Since " + BT.holdout_from }, { t: "Claimed EV" }], rows);
+  $("#rec-note").textContent = "One unit on every qualifying bet. Return is profit per unit staked, plus or minus one standard error; anything within two standard errors of zero is not evidence of an edge." + (partial.length ? " " + partial.join(", ") + " is included through the games played so far." : "");
+})();
+
+/* ---------------- key numbers ---------------- */
+(function keys() {
+  const F = KN.frequency, top = F.slice().sort((a, b) => b.actual - a.actual);
+  $("#keys-note").textContent = `Across ${comma(KN.games)} games from ${KN.seasons.replace("-", " to ")}, ${pct(top[0].actual, 0)} were decided by exactly ${top[0].margin} and ${pct(top[1].actual, 0)} by exactly ${top[1].margin}. The model prices spreads with those spikes built in.`;
+  responsive($("#keychart"), W => {
+    const Hh = 280, m = { l: 40, r: 10, t: 14, b: 40 }, n = F.length;
+    const hi = Math.ceil(Math.max(...F.map(f => Math.max(f.actual, f.smooth))) * 100 / 2) * 2 / 100;
+    const band = (W - m.l - m.r) / n, bw = Math.min(24, band - 2), y = lin(0, hi, Hh - m.b, m.t);
+    const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": "Share of games by margin of victory" });
+    niceTicks(0, hi, 4).forEach(t => {
+      svg.append(S("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), stroke: t === 0 ? "var(--axis)" : "var(--grid)" }));
+      svg.append(S("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end" }, pct(t, 0)));
+    });
+    F.forEach((f, i) => {
+      const cx = m.l + band * (i + 0.5), yy = y(f.actual), h = Hh - m.b - yy, r = Math.min(4, h, bw / 2), key = f.mult >= 1.4;
+      svg.append(S("path", { d: `M${cx - bw / 2} ${Hh - m.b}V${yy + r}Q${cx - bw / 2} ${yy} ${cx - bw / 2 + r} ${yy}H${cx + bw / 2 - r}Q${cx + bw / 2} ${yy} ${cx + bw / 2} ${yy + r}V${Hh - m.b}Z`, fill: "var(--s1)" }));
+      svg.append(S("line", { x1: cx - band / 2 + 1, x2: cx + band / 2 - 1, y1: y(f.smooth), y2: y(f.smooth), stroke: "var(--market)", "stroke-width": 2 }));
+      if (band >= 17 || i % 2 === 1 || key) svg.append(S("text", { x: cx, y: Hh - m.b + 16, "text-anchor": "middle", class: key ? "t-ink" : "", "font-weight": key ? 700 : 400 }, f.margin));
+      if (key && f.actual > f.smooth) svg.append(S("text", { x: cx, y: yy - 6, "text-anchor": "middle", class: "t-ink", "font-weight": 700 }, pct(f.actual, 0)));
+      const hit = S("rect", { class: "hit", x: cx - band / 2, y: m.t, width: band, height: Hh - m.b - m.t, tabindex: 0, "aria-label": `Margin ${f.margin}: ${pct(f.actual)} of games, bell curve ${pct(f.smooth)}` });
+      hover(hit, "Decided by " + f.margin, [{ k: "Share of games", v: pct(f.actual), color: "var(--s1)" }, { k: "Bell curve", v: pct(f.smooth), color: "var(--surface)" }, { k: "Multiplier used", v: "×" + f.mult.toFixed(2) }]);
+      svg.append(hit);
+    });
+    svg.append(S("text", { x: W - m.r, y: Hh - 4, "text-anchor": "end" }, "Margin of victory, points →"));
+    return svg;
+  });
+  table($("#key-table"), [{ t: "Margin" }, { t: "Share of games" }, { t: "Bell curve" }, { t: "Multiplier" }], F.map(f => [f.margin, pct(f.actual), pct(f.smooth), "×" + f.mult.toFixed(2)]));
+  table($("#pushes"), [{ t: "Spread", l: 1 }, { t: "Games" }, { t: "Pushed" }, { t: "This model" }, { t: "Bell curve" }], KN.pushes.map(p => [String(p.line), comma(p.n), pct(p.actual), { v: pct(p.model), cls: "strong" }, pct(p.bell)]));
+})();
+
+/* ---------------- method ---------------- */
+(function method() {
+  const steps = [
+    ["Rate every team each week.", "Pass and rush efficiency (expected points added per play), success rate and scoring, solved for all teams at once so each number is adjusted for opponents. Recent games count more, last season counts less, and garbage time is dropped."],
+    ["Adjust for the quarterback.", "Each quarterback carries his own rating. When this week's starter is not the one who produced the team's numbers, the projection moves."],
+    ["Read what earlier lines implied.", "Past closing spreads and totals are turned into market ratings for each team, which carry injury and roster news the play-by-play cannot see."],
+    ["Project the margin and total.", "A regression fitted on earlier seasons combines the ratings with home field, rest and roof."],
+    ["Weigh the projection against the market.", `The final number moves only part of the way from the line toward the model: ${pct(M.blend.margin, 0)} on sides and ${pct(M.blend.total, 0)} on totals, the share the model has earned over the last ${M.blend.lookback} seasons.`],
+    ["Turn projections into probabilities.", `A curve with the key numbers built in, centred so that with no disagreement each side matches the market's own no-vig price. Its width is ${KN.sd_margin} points for margins and ${KN.sd_total} for totals.`],
+    ["Price every bet.", "Expected value is the win probability times the payout, minus the chance of losing. Pushes return the stake."],
+  ];
+  $("#steps").replaceChildren(...steps.map(([a, b]) => H("li", {}, H("strong", { text: a + " " }), document.createTextNode(b))));
+  const limits = [
+    "It has not beaten closing lines. Treat it as a way to find a fair price and shop for a better one, not as a source of picks.",
+    "Injuries other than a quarterback change are only seen through earlier lines.",
+    "Weather is not modeled beyond whether the game is indoors.",
+    "Lines come from one consensus source. Your own book's prices go in lines.csv and are priced against the same projections.",
+    "Opening lines are not in the data, so beating the closing number cannot be measured yet.",
+  ];
+  $("#limits").replaceChildren(...limits.map(t => H("li", { text: t })));
+})();
+
+/* ---------------- nav highlight ---------------- */
+(function nav() {
+  const links = [...document.querySelectorAll("nav.sections a")];
+  const byId = Object.fromEntries(links.map(a => [a.getAttribute("href").slice(1), a]));
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { links.forEach(a => a.removeAttribute("aria-current")); byId[e.target.id].setAttribute("aria-current", "true"); }
+  }), { rootMargin: "-20% 0px -70% 0px" });
+  Object.keys(byId).forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
+})();
+})();
+</script>
+<!--/PAGE-->
+</body>
+</html>

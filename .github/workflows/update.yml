@@ -1,0 +1,41 @@
+name: Update board
+
+on:
+  schedule:
+    - cron: "17 11 * 9-12,1-2 *"   # daily at 11:17 UTC, September to February
+  workflow_dispatch:
+    inputs:
+      backtest:
+        description: "Re-run the full backtest"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Build the board
+        run: |
+          # Full backtest on Tuesdays (after Monday night) or when asked; otherwise the quick refresh.
+          if [ "$(date -u +%u)" = "2" ] || [ "${{ inputs.backtest }}" = "true" ]; then
+            python run.py
+          else
+            python run.py --no-backtest
+          fi
+      - run: python -m pytest -q
+      - name: Commit the result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs data/cache
+          git diff --cached --quiet || git commit -m "Update board"
+          git push
