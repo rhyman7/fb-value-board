@@ -112,6 +112,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "away": g.away_team, "home": g.home_team, "neutral": bool(g.neutral),
             "away_name": C.TEAM_NAMES.get(g.away_team, g.away_team), "home_name": C.TEAM_NAMES.get(g.home_team, g.home_team),
             "away_record": records.get(g.away_team, "0-0"), "home_record": records.get(g.home_team, "0-0"),
+            "early": bool(getattr(g, "early", False)), "weight": round(float(g.w_margin), 3),
             "open": opened.get(g.game_id),
             "opening_spread": float(true_open[g.game_id]) if g.game_id in true_open else None,
             "detail": builder.detail(g) if builder is not None else None,

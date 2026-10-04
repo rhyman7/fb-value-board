@@ -38,6 +38,9 @@ QB_HALF_LIFE_DROPBACKS = 700.0
 BLEND_LOOKBACK = 8          # seasons of history used to measure how much to trust the model
                             # over the market (its edge has shrunk, so old seasons mislead)
 
+EARLY_DAYS = 4              # a game this many days away (or more) is priced as an early line,
+                            # using the weight the model has earned against opening spreads
+
 # ---- Betting settings -------------------------------------------------------
 KELLY_FRACTION = 0.25       # stake = this share of full Kelly
 MAX_STAKE = 0.03            # cap on any single stake, as a share of bankroll

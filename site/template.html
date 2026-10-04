@@ -107,6 +107,7 @@ a.card:hover { border-color: var(--ink-3); }
 .card-grid .r { text-align: right; } .card-grid .b { font-weight: 700; }
 .card-pick { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13.5px; padding-top: 10px; border-top: 1px solid var(--grid); }
 .card-pick .go { color: var(--model); font-weight: 600; white-space: nowrap; }
+.tag { display: inline-block; padding: 1px 7px; border: 1px solid var(--axis); border-radius: 999px; font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-left: 6px; white-space: nowrap; }
 
 /* ---- game page ---- */
 .crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; font-size: 14px; }
@@ -512,8 +513,10 @@ const fairOf = p => p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 *
         : "No bet clears break-even once the model is weighed against the market. The closest is " + top.b.pick + " at " + odds(top.b.odds) + ", " + spct(top.b.ev) + " per dollar staked."));
   }
   $("#stamp").textContent = "Results through " + M.games_through + ". Updated " + M.generated + ".";
-  $("#games-note").textContent = "Open a game for its full page: how the spread is built, the quarterbacks, how the two teams match up, and recent form.";
-  $("#slate-note").textContent = "Each row is one game. The tick is the market line, the light dot is where the model alone puts it, and the dark dot is the projection after moving " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals). That share is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons.";
+  $("#games-note").textContent = "Open a game for its full page: how the spread is built, the quarterbacks, how the two teams match up, and recent form."
+    + (M.blend.early != null ? " Games " + M.blend.early_days + " or more days away are marked as early lines, which is where the model has done best." : "");
+  $("#slate-note").textContent = "Each row is one game. The tick is the market line, the light dot is where the model alone puts it, and the dark dot is the projection after moving " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals). That share is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons."
+    + (M.blend.early != null ? " Early lines use " + pct(M.blend.early, 0) + ", the share it has earned against opening spreads." : "");
   $("#foot-data").textContent = "Data: " + M.sources.join("; ") + ", seasons " + M.seasons_of_data.replace("-", " to ") + ".";
 })();
 
@@ -527,7 +530,7 @@ function renderCards() {
     return H("a", { class: "card", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
       H("div", { class: "card-top" },
         H("div", { class: "card-teams" }, document.createTextNode(g.away), H("small", { text: g.away_record }), document.createTextNode(" at " + g.home), H("small", { text: g.home_record })),
-        H("div", { class: "card-when", text: kickoff(g).replace(" ET", "") })),
+        H("div", { class: "card-when" }, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? H("span", { class: "tag", text: "Early line" }) : null)),
       H("div", { class: "card-grid" },
         cell("", "h"), cell("Market", "h r"), cell("Model", "h r"),
         cell("Spread"), cell(fav(g, g.market.spread), "r"), cell(fav(g, g.model.margin), "r b"),
@@ -703,7 +706,8 @@ function renderGame(g) {
   const wb = (label, p) => H("div", { class: "winbar" },
     H("div", { class: "lab" }, H("span", {}, H("b", { text: g.away + " " + pct(1 - p) })), H("span", { text: label }), H("span", {}, H("b", { text: g.home + " " + pct(p) }))),
     H("div", { class: "track", role: "img", "aria-label": `${label}: ${g.away} ${pct(1 - p)}, ${g.home} ${pct(p)}` }, H("i", { class: "a", style: "width:" + ((1 - p) * 100).toFixed(1) + "%" }), H("i", { class: "h", style: "flex:1" })));
-  const summary = sec("Game summary", "Model is the projection on its own. Adjusted is the market line moved " + pct(M.blend.margin, 0) + " of the way toward it, which is the number bets are priced from."
+  const summary = sec("Game summary", "Model is the projection on its own. Adjusted is the market line moved " + pct(g.weight != null ? g.weight : M.blend.margin, 0) + " of the way toward it, which is the number bets are priced from."
+      + (g.early ? " This is an early line, so that share is what the model has earned against opening spreads." : "")
       + (g.opening_spread != null
           ? (() => { const mv = g.market.spread - g.opening_spread, want = g.model.margin - g.opening_spread;
               return Math.abs(mv) < 0.01 ? " The spread has not moved since it opened."
@@ -1024,7 +1028,8 @@ function diagChart(node, o) {
   table($("#open-table"), [{ t: "Bets placed", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "Since " + (BT ? BT.holdout_from : 2019) }, { t: "Toward / away" }, { t: "CLV" }],
     OP.rows.map(r => [r.rule, comma(r.n), `${r.w}-${r.l}-${r.p}`, { v: pct(r.win_pct), cls: "strong" }, spct(r.roi) + " \u00b1" + pct(r.roi_se), pct(r.holdout.win_pct) + " (" + comma(r.holdout.n) + ")", pct(r.toward, 0) + " / " + pct(r.away, 0), snum(r.clv, 2)]));
   const z = r2.roi / r2.roi_se;
-  $("#open-table-note").textContent = `Graded at the opening price. The 2+ point row is ${z.toFixed(1)} standard errors above zero, so it is encouraging and not yet proof. Opening numbers move quickly and take small bets, so real results would land between these and the closing-line record. The line movement is the stronger evidence: of each point the model disagrees with the opener, the market later moves about ${OP.slope.toFixed(2)}.`;
+  const fl = OP.flagged;
+  $("#open-table-note").textContent = (fl ? `The board prices early lines with a ${pct(OP.weight, 0)} weight on the model. Replayed on these seasons, that pricing flagged ${comma(fl.n)} bets as positive EV: ${fl.w}-${fl.l}-${fl.p} (${pct(fl.win_pct)}), a return of ${spct(fl.roi)} against a claimed ${spct(fl.claimed_ev)}. ` : "") + `Graded at the opening price. The 2+ point row is ${z.toFixed(1)} standard errors above zero, so it is encouraging and not yet proof. Opening numbers move quickly and take small bets, so real results would land between these and the closing-line record. The line movement is the stronger evidence: of each point the model disagrees with the opener, the market later moves about ${OP.slope.toFixed(2)}.`;
 })();
 
 /* ---------------- key numbers ---------------- */
@@ -1064,7 +1069,7 @@ function diagChart(node, o) {
     ["Adjust for the quarterback.", "Each quarterback carries his own rating. When this week's starter is not the one who produced the team's numbers, the projection moves."],
     ["Read what earlier lines implied.", "Past closing spreads and totals are turned into market ratings for each team, which carry injury and roster news the play-by-play cannot see."],
     ["Project the margin and total.", "A regression fitted on earlier seasons combines the ratings with home field, rest and roof."],
-    ["Weigh the projection against the market.", `The final number moves only part of the way from the line toward the model: ${pct(M.blend.margin, 0)} on sides and ${pct(M.blend.total, 0)} on totals, the share the model has earned over the last ${M.blend.lookback} seasons.`],
+    ["Weigh the projection against the market.", `The final number moves only part of the way from the line toward the model: ${pct(M.blend.margin, 0)} on sides and ${pct(M.blend.total, 0)} on totals, the share the model has earned over the last ${M.blend.lookback} seasons.` + (M.blend.early != null ? ` Lines ${M.blend.early_days} or more days out use ${pct(M.blend.early, 0)} on sides, the share earned against opening spreads.` : "")],
     ["Turn projections into probabilities.", `A curve with the key numbers built in, centred so that with no disagreement each side matches the market's own no-vig price. Its width is ${KN.sd_margin} points for margins and ${KN.sd_total} for totals.`],
     ["Price every bet.", "Expected value is the win probability times the payout, minus the chance of losing. Pushes return the stake."],
   ];

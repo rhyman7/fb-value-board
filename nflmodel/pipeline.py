@@ -44,6 +44,30 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     r = engine.ratings_at(order_now)
     builder = matchup.MatchupBuilder(games, qb, stats, engine, info[season], season)
 
+    # ---- early lines: games several days out are priced with the opening-line weight
+    prev_path = C.DOCS / "data.json"
+    prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
+    opening = None
+    if with_backtest:
+        say("Backtesting (walk-forward, about a minute) ...")
+        graded, dists = backtest.grade_all(games, frame)
+        if len(openers):
+            say("Testing against opening lines ...")
+            # An opener is posted before late quarterback news, so re-run the model
+            # assuming each team starts whoever started the week before.
+            blind = games.assign(home_qb_id=np.nan, away_qb_id=np.nan)
+            early, _ = model.walk_forward(model.build_frame(blind, engine))
+            opening = backtest.opening_report(games, early, openers, dists)
+    else:
+        opening = prev.get("openers")
+    w_early = float(opening["weight"]) if opening and opening.get("weight") is not None else float(info[season]["w_margin"])
+    today = pd.Timestamp(dt.datetime.now(dt.timezone.utc).date())
+    frame = frame.copy()
+    frame["early"] = (~frame.played) & ((frame.gameday - today).dt.days >= C.EARLY_DAYS)
+    e = frame["early"] & frame.spread_line.notna()
+    frame.loc[e, "w_margin"] = w_early
+    frame.loc[e, "proj_margin"] = frame.loc[e, "spread_line"] + w_early * (frame.loc[e, "model_margin"] - frame.loc[e, "spread_line"])
+
     out = {
         "meta": {
             "generated": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
@@ -51,7 +75,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "games_through": games[games.played].gameday.max().strftime("%b %-d, %Y"),
             "seasons_of_data": f"{C.FIRST_SEASON}-{season}",
             "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE,
-            "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK},
+            "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
+                      "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
             "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)", "nfelo games file (opening lines)"],
         },
@@ -59,23 +84,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         "ratings": slate.ratings_table(engine, r, info[season]["margin_coefs"], games, frame, season),
         "key_numbers": backtest.key_number_report(games, dist, season),
     }
+    out["openers"] = opening
     if with_backtest:
-        say("Backtesting (walk-forward, about a minute) ...")
-        graded, _ = backtest.grade_all(games, frame)
         out["backtest"] = backtest.summarize(frame, graded)
         graded.round(4).to_csv(C.DATA / "backtest_bets.csv", index=False)
-        if len(openers):
-            say("Testing against opening lines ...")
-            # An opener is posted before late quarterback news, so re-run the model
-            # assuming each team starts whoever started the week before.
-            blind = games.assign(home_qb_id=np.nan, away_qb_id=np.nan)
-            early, _ = model.walk_forward(model.build_frame(blind, engine))
-            out["openers"] = backtest.opening_report(games, early, openers)
     else:
-        prev = C.DOCS / "data.json"
-        if prev.exists():
-            old = json.loads(prev.read_text())
-            out["backtest"], out["openers"] = old.get("backtest"), old.get("openers")
+        out["backtest"] = prev.get("backtest")
 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)

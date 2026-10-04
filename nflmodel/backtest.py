@@ -176,7 +176,14 @@ def _came_off_monday(games: pd.DataFrame) -> pd.Series:
     return flag.groupby(long["game_id"]).any()
 
 
-def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFrame) -> dict | None:
+def early_weight(clean: pd.DataFrame, before_season: int) -> float:
+    """Share of the model's disagreement with an opening spread that has shown up
+    in results, measured on the seasons before `before_season`."""
+    past = clean[(clean.season < before_season) & (clean.season >= before_season - C.BLEND_LOOKBACK)]
+    return model._blend_weight(past.model_margin.to_numpy(), past.open_spread.to_numpy(), past.result.to_numpy())
+
+
+def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFrame, dists: dict | None = None) -> dict | None:
     """How the model does when the bet is placed at the opening spread.
 
     `frame` must come from a model run that assumes each team starts whoever
@@ -186,9 +193,10 @@ def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFra
     if openers is None or not len(openers):
         return None
     f = frame.merge(openers, on="game_id", how="inner")
-    f = f[f.played & f.spread_line.notna() & (f.season >= C.FIRST_TEST_SEASON)].copy()
     monday = _came_off_monday(games)
     f["monday"] = f["game_id"].map(monday).fillna(False).to_numpy(bool)
+    every = f[f.played & f.spread_line.notna() & ~f["monday"]]          # all seasons, for walk-forward weights
+    f = f[f.played & f.spread_line.notna() & (f.season >= C.FIRST_TEST_SEASON)].copy()
     f["d"] = f["model_margin"] - f["open_spread"]            # model's disagreement with the opener
     f["move"] = f["spread_line"] - f["open_spread"]          # where the line went by the close
     pick = np.sign(f["d"])
@@ -228,14 +236,32 @@ def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFra
                          "se": round(float(x.move.std(ddof=1) / np.sqrt(len(x))), 3), "n": int(len(x))})
     d, mv = clean.d.to_numpy(), clean.move.to_numpy()
     mae = lambda a, b: round(float(np.mean(np.abs(a - b))), 3)
-    past = clean[clean.season >= clean.season.max() - C.BLEND_LOOKBACK]
     with_monday = f[f.d.abs() >= 2]
+
+    # Early-week pricing, replayed: each season priced at the opener with the weight
+    # known at the time. Does the EV it claimed match what the bets returned?
+    flagged = None
+    if dists:
+        parts = []
+        for s in sorted(clean.season.unique()):
+            if int(s) not in dists:
+                continue
+            x = clean[clean.season == s].copy()
+            w = early_weight(every, int(s))
+            x["spread_line"], x["home_spread_odds"], x["away_spread_odds"] = x["open_spread"], x["open_home_odds"], x["open_away_odds"]
+            x["proj_margin"] = x["open_spread"] + w * (x["model_margin"] - x["open_spread"])
+            b = B.price_games(x, dists[int(s)], "proj")
+            parts.append(b[(b.market == "Spread") & (b.ev > 0)])
+        if parts:
+            fb = pd.concat(parts, ignore_index=True)
+            flagged = {**_record(fb), "holdout": _record(fb[fb.season >= C.HOLDOUT_FROM])}
     return {
         "first_season": int(clean.season.min()), "last_season": int(clean.season.max()), "games": int(len(clean)),
         "left_out_monday": int(f["monday"].sum()),
         "rows": rows, "bins": bins,
         "slope": round(float(d @ mv / (d @ d)), 3), "corr": round(float(np.corrcoef(d, mv)[0, 1]), 3),
-        "weight": round(float(model._blend_weight(past.model_margin.to_numpy(), past.open_spread.to_numpy(), past.result.to_numpy())), 3),
+        "weight": round(float(early_weight(every, int(every.season.max()) + 1)), 3),
+        "flagged": flagged,
         "mae": {"model": mae(clean.model_margin, clean.result), "open": mae(clean.open_spread, clean.result), "close": mae(clean.spread_line, clean.result)},
         "mean_move": round(float(np.abs(mv).mean()), 2),
         "including_monday_2plus": rec(with_monday),

@@ -69,6 +69,12 @@ previous Monday night are left out. It is still not proof. The 2+ point return
 is 1.3 standard errors above zero, and opening numbers move fast and take
 small bets, so real results would land between the opening and closing records.
 
+Games four or more days away are marked on the board as early lines and priced
+with the weight the model has earned against opening spreads (17%, against 15%
+for closing lines). The difference is small because that is what the data
+supports: replaying that pricing on past openers flagged 899 bets that went
+467-410-22 (53.3%) and returned +1.6%, about half the +3.5% the pricing claimed.
+
 **So the model's value is early in the week.** By kickoff the market has
 absorbed what it knows. Use it to find spreads that look off when they open, and
 as a fair price to shop against.
