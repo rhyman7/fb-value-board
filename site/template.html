@@ -5,115 +5,158 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!--PAGE-->
 <title>NFL Value Board</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Big+Shoulders+Display:wght@500..900&display=swap">
 <style>
-/* Layout: one left-aligned column. The slate "board" leads: every game is a strip
-   between the away and home team, crossed by yard lines at the key numbers. */
+/* Layout: one left-aligned column. The single loud element is the slate drawn as a
+   football field: turf, chalk yard lines at the key numbers, the market as the chalk
+   line and the model in first-down yellow. Everything around it stays quiet. */
 :root {
-  --page: #f3f5f8;  --surface: #fbfcfd;  --raised: #e9edf2;
-  --ink: #10151c;   --ink-2: #4a5361;    --ink-3: #6f7986;
-  --grid: #e1e5eb;  --axis: #bfc7d1;     --rule: #d5dbe3;
-  --model: #256abf; --model-soft: #86b6ef; --market: #10151c;
-  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
-  --good: #0ca30c; --good-ink: #006300; --good-wash: #e3f3e1;
-  --focus: #256abf;
+  --page: #f2f4f1;  --surface: #ffffff;  --raised: #e7ebe7;
+  --ink: #0f1713;   --ink-2: #44514a;    --ink-3: #68756d;
+  --grid: #e3e8e4;  --axis: #bfc8c2;     --rule: #d2d9d4;
+  --turf: #1b5e3a;  --turf-2: #20693f;   --chalk: #f6f8f3;  --chalk-2: #c5dacb;
+  --flag: #ffd21f;  --flag-ink: #241d00; --link: #17643b;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --market: #0f1713;
   --rk1: #184f95; --rk1t: #ffffff; --rk2: #2a78d6; --rk2t: #ffffff; --rk3: #9ec5f4; --rk3t: #10151c; --rk4: #dbe9fb; --rk4t: #10151c;
+  --focus: #17643b;
+  --display: "Big Shoulders Display", "Archivo", "Arial Narrow", sans-serif;
   --sans: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
   --gutter: clamp(16px, 4vw, 40px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --page: #0c0f13;  --surface: #161a20;  --raised: #222831;
-    --ink: #f2f5f8;   --ink-2: #b9c1cc;    --ink-3: #8a94a1;
-    --grid: #262c35;  --axis: #3b4450;     --rule: #2c333d;
-    --model: #5598e7; --model-soft: #1c5cab; --market: #f2f5f8;
-    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-    --good: #0ca30c; --good-ink: #5fd35f; --good-wash: #12301a;
-    --focus: #86b6ef;
+    --page: #0a0e0c;  --surface: #121815;  --raised: #1d2621;
+    --ink: #eef3ef;   --ink-2: #b3bfb8;    --ink-3: #85938b;
+    --grid: #222c26;  --axis: #3a463f;     --rule: #29342d;
+    --turf: #174f31;  --turf-2: #1b5a38;   --chalk: #f6f8f3;  --chalk-2: #bcd3c3;
+    --flag: #ffd21f;  --flag-ink: #241d00; --link: #74d19b;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --market: #eef3ef;
     --rk1: #9ec5f4; --rk1t: #0c0f13; --rk2: #5598e7; --rk2t: #0c0f13; --rk3: #1c5cab; --rk3t: #ffffff; --rk4: #17355c; --rk4t: #dfe8f3;
+    --focus: #ffd21f;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --page: #0c0f13;  --surface: #161a20;  --raised: #222831;
-  --ink: #f2f5f8;   --ink-2: #b9c1cc;    --ink-3: #8a94a1;
-  --grid: #262c35;  --axis: #3b4450;     --rule: #2c333d;
-  --model: #5598e7; --model-soft: #1c5cab; --market: #f2f5f8;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
-  --good: #0ca30c; --good-ink: #5fd35f; --good-wash: #12301a;
-  --focus: #86b6ef;
+  --page: #0a0e0c;  --surface: #121815;  --raised: #1d2621;
+  --ink: #eef3ef;   --ink-2: #b3bfb8;    --ink-3: #85938b;
+  --grid: #222c26;  --axis: #3a463f;     --rule: #29342d;
+  --turf: #174f31;  --turf-2: #1b5a38;   --chalk: #f6f8f3;  --chalk-2: #bcd3c3;
+  --flag: #ffd21f;  --flag-ink: #241d00; --link: #74d19b;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --market: #eef3ef;
   --rk1: #9ec5f4; --rk1t: #0c0f13; --rk2: #5598e7; --rk2t: #0c0f13; --rk3: #1c5cab; --rk3t: #ffffff; --rk4: #17355c; --rk4t: #dfe8f3;
+  --focus: #ffd21f;
   color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--page); color: var(--ink); font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
-.wrap { max-width: 1180px; margin-inline: auto; padding-inline: var(--gutter); padding-block: 28px 72px; }
+.wrap { max-width: 1180px; margin-inline: auto; padding-inline: var(--gutter); padding-block: 0 72px; }
 h1, h2, h3, p, ol, ul, figure { margin: 0; }
-a { color: var(--model); }
+a { color: var(--link); }
 :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 3px; }
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* ---- type ---- */
-.cond { font-stretch: 68%; font-weight: 800; letter-spacing: 0.005em; }
-h1 { font-size: clamp(34px, 6vw, 58px); line-height: 0.98; font-stretch: 64%; font-weight: 800; text-wrap: balance; }
-h2 { font-size: 28px; line-height: 1.1; font-stretch: 68%; font-weight: 800; text-wrap: balance; }
+h1 { font: 800 clamp(64px, 12vw, 132px)/0.84 var(--display); letter-spacing: 0.005em; }
+h2 { font: 800 34px/1 var(--display); letter-spacing: 0.01em; text-wrap: balance; }
 h3 { font-size: 16px; line-height: 1.3; font-weight: 700; }
-.lede { font-size: 17px; line-height: 1.5; max-width: 66ch; color: var(--ink-2); }
-.lede strong { color: var(--ink); font-weight: 650; }
-.note { font-size: 13px; line-height: 1.5; color: var(--ink-2); max-width: 72ch; }
+.lede { font-size: 18px; line-height: 1.45; max-width: 60ch; color: var(--ink-2); }
+.lede strong { color: var(--ink); font-weight: 700; }
+.note { font-size: 13.5px; line-height: 1.5; color: var(--ink-2); max-width: 72ch; }
 .muted { color: var(--ink-3); }
 .num { font-variant-numeric: tabular-nums; }
-
-/* ---- header and nav ---- */
-header.top { display: grid; gap: 14px; padding-bottom: 22px; }
 .stamp { font-size: 13px; color: var(--ink-3); }
-nav.sections { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--page);
-  border-block: 1px solid var(--rule); margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); overflow-x: auto; }
-nav.sections ul { list-style: none; display: flex; gap: 4px; padding: 0; margin: 0; white-space: nowrap; }
-nav.sections a { display: block; padding: 11px 12px; color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 2px solid transparent; }
-nav.sections a:hover { color: var(--ink); }
-nav.sections a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--ink); }
 
-main { display: grid; gap: 64px; padding-top: 32px; }
-.view { display: grid; gap: 56px; min-width: 0; }
-section { display: grid; gap: 20px; scroll-margin-top: 64px; min-width: 0; }
+/* ---- top bar ---- */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--page); border-bottom: 1px solid var(--rule);
+  margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); display: flex; align-items: stretch; justify-content: space-between; gap: 8px 24px; flex-wrap: wrap; }
+.brand { display: inline-flex; align-items: center; gap: 9px; padding-block: 12px; font: 800 22px/1 var(--display); letter-spacing: 0.02em; color: var(--ink); text-decoration: none; }
+.brand i { width: 12px; height: 16px; background: var(--flag); display: block; clip-path: polygon(0 0, 100% 0, 78% 50%, 100% 100%, 0 100%); }
+nav.sections { display: flex; overflow-x: auto; }
+nav.sections ul { list-style: none; display: flex; gap: 2px; padding: 0; margin: 0; white-space: nowrap; }
+nav.sections a { display: flex; align-items: center; height: 100%; padding: 12px 12px 9px; color: var(--ink-2); text-decoration: none; font-weight: 600; font-size: 14px; border-bottom: 3px solid transparent; }
+nav.sections a:hover { color: var(--ink); }
+nav.sections a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--flag); }
+
+/* ---- hero ---- */
+header.top { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px 40px; align-items: end; padding-block: 40px 4px; }
+header.top .words { display: grid; gap: 8px; padding-bottom: 6px; }
+@media (max-width: 760px) { header.top { grid-template-columns: minmax(0, 1fr); padding-top: 28px; } }
+
+main { display: grid; gap: 60px; padding-top: 28px; }
+.view { display: grid; gap: 60px; min-width: 0; }
+section { display: grid; gap: 18px; scroll-margin-top: 64px; min-width: 0; }
 .section-head { display: grid; gap: 8px; }
 
 /* ---- controls ---- */
 .filters { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
-.field { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); font-weight: 600; }
-.seg { display: inline-flex; border: 1px solid var(--axis); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.field-label { display: grid; gap: 4px; font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.seg { display: inline-flex; border: 1px solid var(--axis); border-radius: 5px; overflow: hidden; background: var(--surface); }
 .seg button { font: 600 14px var(--sans); color: var(--ink-2); background: transparent; border: 0; padding: 7px 13px; cursor: pointer; }
 .seg button + button { border-left: 1px solid var(--axis); }
 .seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
 .seg button:hover:not([aria-pressed="true"]) { background: var(--raised); color: var(--ink); }
-input.money { font: 600 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 8px; padding: 7px 10px; width: 120px; font-variant-numeric: tabular-nums; }
+input.money { font: 600 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 5px; padding: 7px 10px; width: 120px; font-variant-numeric: tabular-nums; }
 
-/* ---- the board ---- */
-.board { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
-.board-plot { padding: 16px 16px 10px; min-width: 0; }
+/* ---- the field: the one loud element. Its colours are fixed in both themes. ---- */
+.field { background: var(--turf); color: var(--chalk); border-radius: 6px; padding: 16px 16px 8px; display: grid; gap: 10px; min-width: 0; }
+.field-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px 20px; }
+.field .legend { color: var(--chalk-2); padding: 0; }
+.field .seg { background: transparent; border-color: rgb(255 255 255 / 0.45); }
+.field .seg button { color: var(--chalk); }
+.field .seg button + button { border-left-color: rgb(255 255 255 / 0.45); }
+.field .seg button[aria-pressed="true"] { background: var(--chalk); color: var(--turf); }
+.field .seg button:hover:not([aria-pressed="true"]) { background: rgb(255 255 255 / 0.12); color: var(--chalk); }
+.field svg text { fill: var(--chalk-2); }
+.field svg text.t-ink { fill: var(--chalk); }
+.field svg .hit:hover { fill: rgb(255 255 255 / 0.08); }
+.field svg .hit:focus-visible { stroke: var(--flag); }
+.field :focus-visible { outline-color: var(--flag); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); padding-bottom: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.key-tick { width: 3px; height: 14px; background: var(--chalk); border-radius: 1px; }
+.key-ring { width: 11px; height: 11px; border-radius: 50%; border: 2px solid var(--flag); }
+.key-dot { width: 10px; height: 10px; border-radius: 50%; }
+.key-line { width: 16px; height: 2px; border-radius: 1px; }
+.key-box { width: 10px; height: 10px; border-radius: 2px; }
 
-/* ---- game cards ---- */
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; }
-a.card { display: grid; gap: 12px; padding: 16px 16px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; color: inherit; text-decoration: none; align-content: start; }
-a.card:hover { border-color: var(--ink-3); }
-.card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-.card-teams { font-size: 26px; line-height: 1; font-stretch: 66%; font-weight: 800; }
-.card-teams small { font-size: 13px; font-stretch: 100%; font-weight: 400; color: var(--ink-3); margin-left: 2px; }
-.card-when { font-size: 12.5px; color: var(--ink-3); text-align: right; white-space: nowrap; }
-.card-grid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 4px 14px; font-size: 13.5px; font-variant-numeric: tabular-nums; }
-.card-grid .h { color: var(--ink-3); font-size: 12px; }
-.card-grid .r { text-align: right; } .card-grid .b { font-weight: 700; }
-.card-pick { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13.5px; padding-top: 10px; border-top: 1px solid var(--grid); }
-.card-pick .go { color: var(--model); font-weight: 600; white-space: nowrap; }
-.tag { display: inline-block; padding: 1px 7px; border: 1px solid var(--axis); border-radius: 999px; font-size: 11.5px; font-weight: 600; color: var(--ink-2); margin-left: 6px; white-space: nowrap; }
+/* ---- team colour swatch: primary over secondary, like a helmet stripe ---- */
+.tc { display: block; width: 6px; align-self: stretch; min-height: 22px; border-radius: 1px; box-shadow: 0 0 0 1px var(--axis); }
+
+/* ---- game cards, built like a score bug ---- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+a.bug { display: grid; align-content: start; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; color: inherit; text-decoration: none; overflow: hidden; }
+a.bug:hover { border-color: var(--ink); }
+.bug-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 9px 14px 7px; font-size: 12.5px; color: var(--ink-3); }
+.bug-team { display: grid; grid-template-columns: 6px auto 1fr auto; align-items: center; column-gap: 11px; padding: 7px 14px; }
+.bug-team + .bug-team { border-top: 1px solid var(--grid); }
+.bug-team .code { font: 800 34px/0.95 var(--display); letter-spacing: 0.01em; }
+.bug-team .rec { font-size: 13px; color: var(--ink-3); }
+.bug-team .win { font: 700 30px/0.95 var(--display); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.bug-team.fav .win { color: var(--ink); }
+.bug-lines { display: grid; grid-template-columns: auto 1fr 1fr; gap: 3px 14px; font-size: 13.5px; font-variant-numeric: tabular-nums; padding: 10px 14px; border-top: 1px solid var(--rule); background: var(--page); }
+.bug-lines .h { color: var(--ink-3); font-size: 12px; }
+.bug-lines .r { text-align: right; } .bug-lines .b { font-weight: 700; }
+.bug-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13.5px; padding: 10px 14px; border-top: 1px solid var(--rule); }
+.bug-foot .go { color: var(--link); font-weight: 700; white-space: nowrap; }
+.tag { display: inline-block; padding: 1px 7px; border: 1px solid var(--axis); border-radius: 3px; font-size: 11.5px; font-weight: 600; color: var(--ink-2); white-space: nowrap; }
 
 /* ---- game page ---- */
-.crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; font-size: 14px; }
+.crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; font-size: 14px; }
 .crumbs a { font-weight: 600; text-decoration: none; } .crumbs a:hover { text-decoration: underline; }
-.game-head { display: grid; gap: 12px; }
-.game-head h1 { font-size: clamp(30px, 5.2vw, 52px); }
+.crumbs span { display: inline-flex; gap: 18px; flex-wrap: wrap; }
+.game-head { display: grid; gap: 16px; }
+.mb { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto auto; column-gap: clamp(12px, 3vw, 36px); row-gap: 0; align-items: center; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 6px clamp(14px, 3vw, 28px) 10px 0; }
+.mb > div { display: contents; }
+.mb .colh { font-size: 12.5px; line-height: 1.25; color: var(--ink-3); text-align: right; padding-top: 8px; max-width: 9ch; justify-self: end; }
+.mb .tc { width: 8px; height: 100%; min-height: 58px; border-radius: 0; }
+.mb .who { display: grid; gap: 7px; padding-block: 12px 10px; min-width: 0; }
+.mb .nm { font: 800 clamp(28px, 5.6vw, 58px)/0.92 var(--display); letter-spacing: 0.005em; overflow-wrap: break-word; }
+.mb .meta { font-size: 13px; color: var(--ink-3); }
+.mb .n { font: 700 clamp(28px, 4.6vw, 50px)/1 var(--display); text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-3); }
+.mb .fav .n { color: var(--ink); }
+.mb .sep { grid-column: 1 / -1; border-top: 1px solid var(--grid); height: 0; margin-left: 8px; }
 .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: baseline; }
 .sw.away { background: var(--s2); } .sw.home { background: var(--s1); }
 .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 32px 44px; align-items: start; }
@@ -130,31 +173,23 @@ a.card:hover { border-color: var(--ink-3); }
 .contrib .bar-fill.pos { background: var(--s1); } .contrib .bar-fill.neg { background: var(--s2); }
 .contrib .cap { grid-column: 2; display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-3); }
 .qb { display: grid; gap: 10px; align-content: start; min-width: 0; }
-.qb .who { font-size: 22px; font-stretch: 68%; font-weight: 800; line-height: 1.1; }
-.rk { display: inline-block; min-width: 30px; padding: 1px 6px; border-radius: 5px; text-align: center; font-weight: 700; font-size: 12.5px; margin-left: 8px; border: 1px solid transparent; }
+.qb .who { font: 800 28px/1 var(--display); letter-spacing: 0.01em; }
+.rk { display: inline-block; min-width: 30px; padding: 1px 6px; border-radius: 4px; text-align: center; font-weight: 700; font-size: 12.5px; margin-left: 8px; border: 1px solid transparent; }
 .rk.q1 { background: var(--rk1); color: var(--rk1t); } .rk.q2 { background: var(--rk2); color: var(--rk2t); }
 .rk.q3 { background: var(--rk3); color: var(--rk3t); } .rk.q4 { background: var(--rk4); color: var(--rk4t); }
 .rk.q5 { border-color: var(--axis); color: var(--ink-2); }
 .rank-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 12.5px; color: var(--ink-2); }
 .rank-key .rk { margin-left: 0; }
-.form-recs { display: flex; gap: 22px; flex-wrap: wrap; }
+.form-recs { display: flex; gap: 26px; flex-wrap: wrap; }
 .form-recs div { display: grid; }
-.form-recs b { font-size: 24px; font-stretch: 68%; font-weight: 800; line-height: 1.1; }
+.form-recs b { font: 800 32px/1 var(--display); }
 .form-recs span { font-size: 12.5px; color: var(--ink-3); }
 td.w { font-weight: 700; } td.dim { color: var(--ink-3); }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); padding-bottom: 6px; }
-.legend span { display: inline-flex; align-items: center; gap: 7px; }
-.key-tick { width: 3px; height: 14px; background: var(--market); border-radius: 1px; }
-.key-dot { width: 10px; height: 10px; border-radius: 50%; }
-.key-line { width: 16px; height: 2px; border-radius: 1px; }
-.key-box { width: 10px; height: 10px; border-radius: 2px; }
-.matchup { font-size: 30px; line-height: 1; font-stretch: 64%; font-weight: 800; }
-.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 13px; }
-.kv dt { color: var(--ink-3); } .kv dd { margin: 0; }
 
 /* ---- charts ---- */
 svg { display: block; width: 100%; height: auto; overflow: visible; }
 svg text { font-family: var(--sans); fill: var(--ink-3); font-size: 12px; }
+svg text.disp { font-family: var(--display); }
 svg .t-ink { fill: var(--ink); } svg .t-2 { fill: var(--ink-2); }
 svg .hit { fill: transparent; cursor: pointer; outline: none; }
 svg .hit:focus-visible { stroke: var(--focus); stroke-width: 2; }
@@ -164,7 +199,7 @@ figcaption { display: grid; gap: 4px; }
 details.data { font-size: 13px; color: var(--ink-2); }
 details.data summary { cursor: pointer; width: fit-content; color: var(--ink-2); }
 details.data[open] summary { margin-bottom: 8px; }
-#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--ink); color: var(--surface); border-radius: 6px; padding: 8px 10px; font-size: 12.5px; line-height: 1.45; max-width: 260px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.22); }
+#tip { position: fixed; z-index: 20; pointer-events: none; background: var(--ink); color: var(--surface); border-radius: 5px; padding: 8px 10px; font-size: 12.5px; line-height: 1.45; max-width: 260px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.25); }
 #tip .tt { font-weight: 700; margin-bottom: 2px; }
 #tip .tr { display: flex; justify-content: space-between; gap: 14px; }
 #tip .tr b { font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -175,34 +210,34 @@ details.data[open] summary { margin-bottom: 8px; }
 .scroll { overflow-x: auto; min-width: 0; }
 table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
 th, td { padding: 8px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--grid); }
-th { font-weight: 600; color: var(--ink-3); font-size: 12.5px; border-bottom-color: var(--axis); vertical-align: bottom; }
+th { font-weight: 600; color: var(--ink-3); font-size: 12.5px; border-bottom: 2px solid var(--ink); vertical-align: bottom; }
 th:first-child, td:first-child { padding-left: 0; } th:last-child, td:last-child { padding-right: 0; }
 th.l, td.l { text-align: left; }
 td.strong { font-weight: 700; }
 table.compact { font-size: 13px; } table.compact th, table.compact td { padding: 6px 6px; } table.compact th { font-size: 12px; }
 td .rec { font-weight: 400; color: var(--ink-3); margin-left: 4px; }
-.ratings-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 36px 40px; align-items: start; }
-.ratings-grid figure { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 60px); }
-@media (max-width: 940px) { .ratings-grid { grid-template-columns: minmax(0, 1fr); } .ratings-grid figure { position: static; } }
 tr.group td { font-weight: 700; padding-top: 16px; color: var(--ink); border-bottom-color: var(--axis); }
 th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-th button[aria-sort]::after { content: " ↓"; } th button[aria-sort="ascending"]::after { content: " ↑"; }
-.chip { display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 999px; background: var(--good-wash); color: var(--good-ink); font-weight: 700; }
-.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--good); }
+th button[aria-sort]::after { content: " \2193"; } th button[aria-sort="ascending"]::after { content: " \2191"; }
+/* A bet worth making is flagged, in the one accent colour. */
+.chip { display: inline-block; padding: 1px 8px; border-radius: 3px; background: var(--flag); color: var(--flag-ink); font-weight: 800; }
 .bar-cell { display: grid; grid-template-columns: 40px minmax(64px, 1fr); align-items: center; gap: 8px; }
 .bar-track { position: relative; height: 14px; }
 .bar-track::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
 .bar-fill { position: absolute; top: 2px; height: 10px; background: var(--s1); }
 .bar-fill.pos { left: 50%; border-radius: 0 4px 4px 0; } .bar-fill.neg { right: 50%; border-radius: 4px 0 0 4px; }
-button.link { font: inherit; color: var(--model); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+button.link { font: inherit; color: var(--link); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+.ratings-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 36px 40px; align-items: start; }
+.ratings-grid figure { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 64px); }
+@media (max-width: 940px) { .ratings-grid { grid-template-columns: minmax(0, 1fr); } .ratings-grid figure { position: static; } }
 
 /* ---- stat tiles ---- */
-.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 0; border-block: 1px solid var(--rule); }
-.tile { padding: 16px 20px 16px 0; display: grid; gap: 2px; align-content: start; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 0; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule); }
+.tile { padding: 14px 20px 16px 0; display: grid; gap: 2px; align-content: start; }
 .tile + .tile { padding-left: 20px; border-left: 1px solid var(--rule); }
 @media (max-width: 520px) { .tile + .tile { padding-left: 0; border-left: 0; border-top: 1px solid var(--rule); } }
 .tile .label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
-.tile .value { font-size: 34px; line-height: 1.1; font-stretch: 68%; font-weight: 800; }
+.tile .value { font: 800 48px/1 var(--display); letter-spacing: 0.005em; }
 .tile .sub { font-size: 13px; color: var(--ink-2); }
 
 /* ---- method ---- */
@@ -212,61 +247,62 @@ button.link { font: inherit; color: var(--model); background: none; border: 0; p
 .method ul { padding-left: 18px; display: grid; gap: 10px; max-width: 62ch; }
 footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-3); display: grid; gap: 4px; }
 .empty { padding: 40px 0; font-size: 17px; color: var(--ink-2); }
-@media (prefers-reduced-motion: no-preference) { .seg button, nav.sections a { transition: background-color .12s, color .12s; } }
+@media (prefers-reduced-motion: no-preference) { .seg button, nav.sections a, a.bug { transition: background-color .12s, color .12s, border-color .12s; } }
 </style>
 <!--/PAGE-->
 </head>
 <body>
 <!--PAGE-->
 <div class="wrap">
-  <header class="top">
-    <h1 id="title">NFL Value Board</h1>
-    <p class="lede" id="lede"></p>
-    <p class="stamp" id="stamp"></p>
-  </header>
+  <div class="bar">
+    <a class="brand" href="#games"><i aria-hidden="true"></i>NFL Value Board</a>
+    <nav class="sections" aria-label="Sections">
+      <ul>
+        <li><a href="#games" data-view="games">Games</a></li>
+        <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
+        <li><a href="#model" data-view="model">Model record</a></li>
+      </ul>
+    </nav>
+  </div>
 
-  <nav class="sections" aria-label="Sections">
-    <ul>
-      <li><a href="#games" data-view="games">Games</a></li>
-      <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
-      <li><a href="#model" data-view="model">Model record</a></li>
-    </ul>
-  </nav>
+  <header class="top" id="hero">
+    <h1 id="title">Week</h1>
+    <div class="words">
+      <p class="lede" id="lede"></p>
+      <p class="stamp" id="stamp"></p>
+    </div>
+  </header>
 
   <main id="main">
     <!-- ============ games ============ -->
     <div class="view" id="view-games">
-      <section aria-labelledby="games-h">
-        <div class="section-head">
-          <h2 id="games-h">This week's games</h2>
-          <p class="note" id="games-note"></p>
-        </div>
+      <section aria-labelledby="slate-h">
         <div class="filters" role="group" aria-label="Filters">
-          <div class="field"><span id="f-week">Week</span><div class="seg" id="seg-week" role="group" aria-labelledby="f-week"></div></div>
-          <div class="field"><span id="f-basis">Price bets from</span><div class="seg" id="seg-basis" role="group" aria-labelledby="f-basis"></div></div>
-          <label class="field" for="bankroll">Bankroll ($)<input class="money" id="bankroll" type="number" min="0" step="50" value="1000" inputmode="numeric"></label>
+          <div class="field-label"><span id="f-week">Week</span><div class="seg" id="seg-week" role="group" aria-labelledby="f-week"></div></div>
+          <div class="field-label"><span id="f-basis">Price bets from</span><div class="seg" id="seg-basis" role="group" aria-labelledby="f-basis"></div></div>
+          <label class="field-label" for="bankroll">Bankroll ($)<input class="money" id="bankroll" type="number" min="0" step="50" value="1000" inputmode="numeric"></label>
         </div>
-        <div class="cards" id="cards"></div>
+        <div class="field">
+          <div class="field-top">
+            <h2 id="slate-h">Model against the market</h2>
+            <div class="seg" id="seg-market" role="group" aria-label="Market"></div>
+          </div>
+          <div class="legend" aria-hidden="true">
+            <span><i class="key-tick"></i>Market line</span>
+            <span><i class="key-ring"></i>Raw model</span>
+            <span><i class="key-dot" style="background:var(--flag)"></i>Market-adjusted</span>
+          </div>
+          <div id="board"></div>
+        </div>
+        <p class="note" id="slate-note"></p>
       </section>
 
-      <section aria-labelledby="slate-h">
+      <section aria-labelledby="games-h">
         <div class="section-head">
-          <h2 id="slate-h">Where the model and the market disagree</h2>
-          <p class="note" id="slate-note"></p>
+          <h2 id="games-h">Games</h2>
+          <p class="note" id="games-note"></p>
         </div>
-        <div class="filters" role="group" aria-label="Chart options">
-          <div class="field"><span id="f-market">Market</span><div class="seg" id="seg-market" role="group" aria-labelledby="f-market"></div></div>
-        </div>
-        <div class="board">
-          <div class="board-plot">
-            <div class="legend" aria-hidden="true">
-              <span><i class="key-tick"></i>Market line</span>
-              <span><i class="key-dot" style="background:var(--model-soft)"></i>Raw model</span>
-              <span><i class="key-dot" style="background:var(--model)"></i>Market-adjusted</span>
-            </div>
-            <div id="board"></div>
-          </div>
-        </div>
+        <div class="cards" id="cards"></div>
       </section>
 
       <section aria-labelledby="bets-h">
@@ -403,7 +439,17 @@ const DATA = /*__DATA__*/null;
 "use strict";
 const $ = (s, r = document) => r.querySelector(s);
 const NS = "http://www.w3.org/2000/svg";
-const S = (tag, attrs = {}, text) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; };
+const S = (tag, attrs = {}, text) => {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) {
+    if (k === "font-size") e.style.fontSize = attrs[k] + "px";          // attributes lose to the page's CSS
+    else if (k === "font-weight") e.style.fontWeight = attrs[k];
+    else if (k === "style") e.style.cssText += ";" + attrs[k];             // add to, never replace, the above
+    else e.setAttribute(k, attrs[k]);
+  }
+  if (text != null) e.textContent = text;
+  return e;
+};
 const H = (tag, attrs = {}, ...kids) => {
   const e = document.createElement(tag);
   for (const k in attrs) {
@@ -497,46 +543,47 @@ const nick = name => name.split(" ").slice(-1)[0];
 const stakeText = b => b.stake > 0 ? "$" + comma(Math.round(b.stake * state.bankroll)) + " (" + pct(b.stake) + ")" : "—";
 const fairOf = p => p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 * (1 - p) / p);
 
-/* ---------------- header ---------------- */
-(function header() {
-  const all = ALL.filter(g => g.week === DATA.slate.weeks[0]);
-  const bets = all.flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => b.b.ev - a.b.ev);
-  const plus = bets.filter(x => x.b.ev > 0);
-  const lede = $("#lede");
-  if (!all.length) { lede.textContent = "No upcoming games have lines yet."; }
+/* ---------------- hero ---------------- */
+function renderHero() {
+  const all = games();
+  $("#title").textContent = "Week " + state.week;
+  const bets = all.flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
+  const plus = bets.filter(x => evOf(x.b) > 0), lede = $("#lede");
+  lede.replaceChildren();
+  if (!all.length) lede.textContent = "No games have lines yet.";
   else {
     const top = bets[0];
     lede.append(
-      H("strong", { text: "Week " + DATA.slate.weeks[0] + " of " + M.season + ": " + all.length + (all.length === 1 ? " game" : " games") + " to play. " }),
+      H("strong", { text: all.length + (all.length === 1 ? " game" : " games") + " to play. " }),
       document.createTextNode(plus.length
-        ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even once the model is weighed against the market. The best is " + top.b.pick + " at " + odds(top.b.odds) + ", worth " + spct(top.b.ev) + " per dollar staked."
-        : "No bet clears break-even once the model is weighed against the market. The closest is " + top.b.pick + " at " + odds(top.b.odds) + ", " + spct(top.b.ev) + " per dollar staked."));
+        ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + top.b.pick + " at " + odds(top.b.odds) + ", worth " + spct(evOf(top.b)) + " per dollar staked."
+        : "No bet clears break-even once the model is weighed against the market. The closest is " + top.b.pick + " at " + odds(top.b.odds) + ", " + spct(evOf(top.b)) + " per dollar staked."));
   }
-  $("#stamp").textContent = "Results through " + M.games_through + ". Updated " + M.generated + ".";
-  $("#games-note").textContent = "Open a game for its full page: how the spread is built, the quarterbacks, how the two teams match up, and recent form."
-    + (M.blend.early != null ? " Games " + M.blend.early_days + " or more days away are marked as early lines, which is where the model has done best." : "");
-  $("#slate-note").textContent = "Each row is one game. The tick is the market line, the light dot is where the model alone puts it, and the dark dot is the projection after moving " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals). That share is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons."
-    + (M.blend.early != null ? " Early lines use " + pct(M.blend.early, 0) + ", the share it has earned against opening spreads." : "");
-  $("#foot-data").textContent = "Data: " + M.sources.join("; ") + ", seasons " + M.seasons_of_data.replace("-", " to ") + ".";
-})();
+}
+$("#stamp").textContent = M.season + " season. Results through " + M.games_through + ". Updated " + M.generated + ".";
+$("#games-note").textContent = "Open a game for its full page: how the spread is built, the quarterbacks, how the two teams match up, and recent form. Win chance is the model weighed against the market."
+  + (M.blend.early != null ? " Games " + M.blend.early_days + " or more days away are marked as early lines, which is where the model has done best." : "");
+$("#slate-note").textContent = "Each row is one game, between the away team on the left and the home team on the right. The yellow dot sits " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals), which is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons."
+  + (M.blend.early != null ? " Early lines use " + pct(M.blend.early, 0) + "." : "") + " Select a row to open the game.";
+$("#foot-data").textContent = "Data: " + M.sources.join("; ") + ", seasons " + M.seasons_of_data.replace("-", " to ") + ".";
+const teamSwatch = t => { const c = (M.colors || {})[t] || ["#7a857f", "#c0c9c3"]; return H("i", { class: "tc", "aria-hidden": "true", style: "background:linear-gradient(" + c[0] + " 0 50%, " + c[1] + " 50% 100%)" }); };
 
 /* ---------------- game cards ---------------- */
 function renderCards() {
   const node = $("#cards"), gs = games();
   if (!gs.length) { node.replaceChildren(H("p", { class: "note", text: "No games with lines this week." })); return; }
   node.replaceChildren(...gs.map(g => {
-    const b = best(g), ev = evOf(b);
+    const b = best(g), ev = evOf(b), p = g.win.adj;
     const cell = (t, cls) => H("span", { class: cls || "", text: t });
-    return H("a", { class: "card", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
-      H("div", { class: "card-top" },
-        H("div", { class: "card-teams" }, document.createTextNode(g.away), H("small", { text: g.away_record }), document.createTextNode(" at " + g.home), H("small", { text: g.home_record })),
-        H("div", { class: "card-when" }, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? H("span", { class: "tag", text: "Early line" }) : null)),
-      H("div", { class: "card-grid" },
+    const team = (code, rec, win, on) => H("div", { class: "bug-team" + (on ? " fav" : "") }, teamSwatch(code), H("span", { class: "code", text: code }), H("span", { class: "rec", text: rec }), H("span", { class: "win", text: pct(win, 0) }));
+    return H("a", { class: "bug", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
+      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null), H("span", { text: "Win chance" })),
+      team(g.away, g.away_record, 1 - p, p < 0.5), team(g.home, g.home_record, p, p >= 0.5),
+      H("div", { class: "bug-lines" },
         cell("", "h"), cell("Market", "h r"), cell("Model", "h r"),
         cell("Spread"), cell(fav(g, g.market.spread), "r"), cell(fav(g, g.model.margin), "r b"),
-        cell("Total"), cell(g.market.total.toFixed(1), "r"), cell(g.model.total.toFixed(1), "r b"),
-        cell(g.home + " wins"), cell(pct(g.win.market, 0), "r"), cell(pct(g.win.raw, 0), "r b")),
-      H("div", { class: "card-pick" },
+        cell("Total"), cell(g.market.total.toFixed(1), "r"), cell(g.model.total.toFixed(1), "r b")),
+      H("div", { class: "bug-foot" },
         ev > 0 ? H("span", {}, H("span", { class: "chip", text: spct(ev) }), document.createTextNode(" " + b.pick + " " + odds(b.odds)))
                : H("span", { class: "muted", text: "No bet clears break-even" }),
         H("span", { class: "go", text: "Open game" })));
@@ -552,8 +599,8 @@ function drawBoard(W) {
                 Moneyline: g => [g.win.market * 100, g.win.raw * 100, g.win.adj * 100] }[mk];
   gs.sort((a, b) => Math.abs(val(b)[1] - val(b)[0]) - Math.abs(val(a)[1] - val(a)[0]));
   const wide = W >= 560;
-  const left = 84, right = wide ? 132 : 8, x0 = left + 6, x1 = W - right - 10;
-  const rowH = 32, top = 24, Hh = top + gs.length * rowH + 30;
+  const left = 96, right = wide ? 138 : 6, x0 = left + 4, x1 = W - right - 8;
+  const rowH = 34, top = 26, bottom = 34, Hh = top + gs.length * rowH + bottom;
   const flat = gs.flatMap(val);
   let lo, hi, ticks, fmt;
   if (mk === "Spread") {
@@ -564,43 +611,46 @@ function drawBoard(W) {
     lo = Math.floor((Math.min(...flat) - 2) / 5) * 5; hi = Math.ceil((Math.max(...flat) + 2) / 5) * 5;
     ticks = []; for (let t = lo; t <= hi; t += 5) ticks.push(t); fmt = String;
   } else { lo = 0; hi = 100; ticks = [0, 25, 50, 75, 100]; fmt = t => t + "%"; }
-  const x = lin(lo, hi, x0, x1);
+  const x = lin(lo, hi, x0, x1), y0 = top - 6, y1 = Hh - bottom + 4;
   const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": "Market line, raw model and market-adjusted projection for each game" });
+
+  // mowing stripes between the yard lines, then the yard lines themselves
+  const edges = [lo, ...ticks.filter(t => t > lo && t < hi), hi];
+  for (let i = 0; i < edges.length - 1; i += 2) svg.append(S("rect", { x: x(edges[i]), y: y0, width: x(edges[i + 1]) - x(edges[i]), height: y1 - y0, fill: "var(--turf-2)" }));
   ticks.forEach(t => {
-    const strong = mk === "Spread" ? (t === 0) : (mk === "Moneyline" && t === 50);
+    const mid = mk === "Spread" ? t === 0 : (mk === "Moneyline" && t === 50);
     const key = mk === "Spread" && (Math.abs(t) === 3 || Math.abs(t) === 7);
-    svg.append(S("line", { x1: x(t), x2: x(t), y1: top - 4, y2: Hh - 26, stroke: strong ? "var(--axis)" : "var(--grid)", "stroke-width": key ? 2 : 1 }));
-    svg.append(S("text", { x: x(t), y: Hh - 10, "text-anchor": "middle", class: key ? "t-ink" : "", "font-weight": key ? 700 : 400 }, fmt(t)));
+    svg.append(S("line", { x1: x(t), x2: x(t), y1: y0, y2: y1, stroke: "var(--chalk)", "stroke-opacity": mid ? 0.85 : key ? 0.6 : 0.28, "stroke-width": key || mid ? 2 : 1 }));
+    svg.append(S("text", { x: x(t), y: Hh - 8, "text-anchor": "middle", class: "disp" + (key || mid ? " t-ink" : ""), "font-size": key ? 24 : 19, "font-weight": key ? 800 : 600 }, fmt(t)));
   });
   const roomy = x1 - x0 >= 330;
   const cap = { Spread: roomy ? ["Away team favored by", "Home team favored by"] : ["Away favored", "Home favored"], Total: ["Fewer points", "More points"], Moneyline: roomy ? ["Away team wins", "Home team wins"] : ["Away wins", "Home wins"] }[mk];
   svg.append(S("text", { x: x0, y: 12, "text-anchor": "start" }, "← " + cap[0]));
   svg.append(S("text", { x: x1, y: 12, "text-anchor": "end" }, cap[1] + " →"));
+
   gs.forEach((g, i) => {
-    const cy = top + i * rowH + rowH / 2, [mkt, raw, adj] = val(g);
-    svg.append(S("line", { x1: x0, x2: x1, y1: cy, y2: cy, stroke: "var(--grid)", "stroke-width": 1 }));
-    svg.append(S("text", { x: 6, y: cy + 4.5, class: "t-ink", "font-size": 14, "font-weight": 700, "font-stretch": "75%" }, g.away + " @ " + g.home));
-    svg.append(S("line", { x1: x(mkt), x2: x(raw), y1: cy, y2: cy, stroke: "var(--model-soft)", "stroke-width": 2, "stroke-linecap": "round" }));
-    svg.append(S("circle", { cx: x(raw), cy, r: 5, fill: "var(--model-soft)", stroke: "var(--surface)", "stroke-width": 2 }));
-    svg.append(S("rect", { x: x(mkt) - 1.5, y: cy - 9, width: 3, height: 18, rx: 1, fill: "var(--market)" }));
-    svg.append(S("circle", { cx: x(adj), cy, r: 5, fill: "var(--model)", stroke: "var(--surface)", "stroke-width": 2 }));
-    const l = lean(g, mk);
-    if (wide && l) {
-      svg.append(S("text", { x: W - right, y: cy + 4.5, class: "t-2", "font-size": 13 }, l.pick));
-      svg.append(S("text", { x: W - 6, y: cy + 4.5, "text-anchor": "end", "font-size": 13, "font-weight": 700, style: "fill:" + (evOf(l) > 0 ? "var(--good-ink)" : "var(--ink-3)") }, spct(evOf(l))));
-    }
+    const cy = top + i * rowH + rowH / 2, [mkt, raw, adj] = val(g), l = lean(g, mk);
     const show = { Spread: v => fav(g, v), Total: v => v.toFixed(1), Moneyline: v => g.home + " " + v.toFixed(1) + "%" }[mk];
-    const hit = S("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, tabindex: 0, role: "link",
+    const hit = S("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, rx: 3, tabindex: 0, role: "link",
       "aria-label": `Open ${g.away} at ${g.home}. Market ${show(mkt)}, raw model ${show(raw)}, market-adjusted ${show(adj)}.` });
     hit.addEventListener("click", () => { hideTip(); location.hash = g.id; });
     hit.addEventListener("keydown", e => { if (e.key === "Enter") { hideTip(); location.hash = g.id; } });
     hover(hit, g.away + " at " + g.home, [
-      { k: "Market", v: show(mkt), color: "var(--surface)" },
-      { k: "Raw model", v: show(raw), color: "var(--model-soft)" },
-      { k: "Market-adjusted", v: show(adj), color: "var(--model)" },
+      { k: "Market", v: show(mkt) }, { k: "Raw model", v: show(raw) }, { k: "Market-adjusted", v: show(adj) },
       ...(l ? [{ k: "Best side: " + l.pick, v: spct(evOf(l)) }] : []),
     ]);
     svg.append(hit);
+    const mark = S("g", { "pointer-events": "none" });
+    mark.append(S("text", { x: 4, y: cy + 6.5, class: "disp t-ink", "font-size": 20, "font-weight": 800 }, g.away + " @ " + g.home));
+    mark.append(S("line", { x1: x(mkt), x2: x(raw), y1: cy, y2: cy, stroke: "var(--flag)", "stroke-opacity": 0.55, "stroke-width": 2, "stroke-linecap": "round" }));
+    mark.append(S("circle", { cx: x(raw), cy, r: 5, fill: "var(--turf)", stroke: "var(--flag)", "stroke-width": 2 }));
+    mark.append(S("rect", { x: x(mkt) - 1.5, y: cy - 10, width: 3, height: 20, rx: 1, fill: "var(--chalk)" }));
+    mark.append(S("circle", { cx: x(adj), cy, r: 5.5, fill: "var(--flag)", stroke: "var(--turf)", "stroke-width": 2 }));
+    if (wide && l) {
+      mark.append(S("text", { x: W - right, y: cy + 4.5, class: "t-ink", "font-size": 13 }, l.pick));
+      mark.append(S("text", { x: W - 4, y: cy + 4.5, "text-anchor": "end", "font-size": 13, "font-weight": 800, style: "fill:" + (evOf(l) > 0 ? "var(--flag)" : "var(--chalk-2)") }, spct(evOf(l))));
+    }
+    svg.append(mark);
   });
   return svg;
 }
@@ -628,10 +678,10 @@ $("#bankroll").addEventListener("input", e => {
   try { localStorage.setItem("nflvb.bankroll", String(state.bankroll)); } catch (err) {}
   renderBets();
 });
-function renderGames() { renderCards(); redrawBoard(); renderBets(); }
+function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); }
 seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); renderGames(); });
 seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; redrawBoard(); });
-seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); });
+seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); if (shownGame) renderGame(shownGame); });
 renderGames();
 
 /* ---------------- one game ---------------- */
@@ -681,16 +731,22 @@ function renderGame(g) {
     document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
   else verdict.append(H("strong", { text: "No bet clears break-even. " }),
     document.createTextNode("The closest is " + b.pick + " at " + odds(b.odds) + ": the model gives it " + pct(probOf(b)) + " and it needs " + pct(b.breakeven) + "."));
+  const hs0 = (g.proj.total + g.proj.margin) / 2, as0 = (g.proj.total - g.proj.margin) / 2, pw = g.win.adj;
+  const big = (code, name, rec, rest, score, win, on) => H("div", { class: on ? "fav" : "" }, teamSwatch(code),
+    H("div", { class: "who" }, H("span", { class: "nm", text: name }), H("span", { class: "meta", text: rec + (rest != null ? ", " + rest + " days rest" : "") })),
+    H("span", { class: "n", text: score.toFixed(1) }), H("span", { class: "n", text: pct(win, 0) }));
   const head = H("div", { class: "game-head" },
     H("nav", { class: "crumbs", "aria-label": "Games" },
-      H("a", { href: "#games", text: "← All games" }),
-      H("span", {}, prev ? H("a", { href: "#" + prev.id, text: "← " + prev.away + " at " + prev.home }) : null,
-        prev && next ? document.createTextNode(" ") : null,
-        next ? H("a", { href: "#" + next.id, text: next.away + " at " + next.home + " →" }) : null)),
-    H("h1", { text: g.away_name + " at " + g.home_name }),
-    H("p", { class: "note", text: "Week " + g.week + ", " + kickoff(g) + (place ? ". " + place + "." : ".") }),
-    H("p", { class: "note" }, sw("away"), document.createTextNode(nick(g.away_name) + " " + g.away_record + (d.rest && d.rest.away != null ? ", " + d.rest.away + " days rest" : "") + " "),
-      sw("home"), document.createTextNode(nick(g.home_name) + " " + g.home_record + (d.rest && d.rest.home != null ? ", " + d.rest.home + " days rest" : ""))),
+      H("a", { href: "#games", text: "All games" }),
+      H("span", {}, prev ? H("a", { href: "#" + prev.id, text: "Previous: " + prev.away + " at " + prev.home }) : null,
+        next ? H("a", { href: "#" + next.id, text: "Next: " + next.away + " at " + next.home }) : null)),
+    H("h1", { class: "vh", text: g.away_name + " at " + g.home_name }),
+    H("div", { class: "mb" },
+      H("div", {}, H("span"), H("span"), H("span", { class: "colh", text: "Projected score" }), H("span", { class: "colh", text: "Chance to win" })),
+      big(g.away, g.away_name, g.away_record, d.rest ? d.rest.away : null, as0, 1 - pw, pw < 0.5),
+      H("div", {}, H("span", { class: "sep" })),
+      big(g.home, g.home_name, g.home_record, d.rest ? d.rest.home : null, hs0, pw, pw >= 0.5)),
+    H("p", { class: "note", text: "Week " + g.week + ", " + kickoff(g) + (place ? ". " + place + "." : ".") + (g.early ? " Early line." : "") }),
     verdict);
 
   /* --- summary --- */
@@ -826,13 +882,13 @@ const redrawScatter = responsive($("#scatter"), W => {
   const P = R.map(r => ({ r, px: x(r.off_epa), py: y(r.def_epa) }));
   for (let k = 0; k < 60; k++) for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) {
     const a = P[i], b = P[j], dy = b.py - a.py;
-    if (Math.abs(b.px - a.px) < 27 && Math.abs(dy) < 13) { const push = (13 - Math.abs(dy)) / 2 + 0.1, sgn = dy >= 0 ? 1 : -1; a.py -= sgn * push; b.py += sgn * push; }
+    if (Math.abs(b.px - a.px) < 30 && Math.abs(dy) < 15) { const push = (15 - Math.abs(dy)) / 2 + 0.1, sgn = dy >= 0 ? 1 : -1; a.py -= sgn * push; b.py += sgn * push; }
   }
   P.forEach(({ r, px, py }) => {
     const on = hot === r.team;
     py = Math.max(m.t + 8, Math.min(Hh - m.b - 6, py));
-    svg.append(S("text", { x: px, y: py + 4, "text-anchor": "middle", "font-size": on ? 15 : 12.5, "font-weight": 800, "font-stretch": "75%",
-      style: "fill:" + (on ? "var(--ink)" : "var(--s1)"), "paint-order": "stroke", stroke: "var(--page)", "stroke-width": 3 }, r.team));
+    svg.append(S("text", { x: px, y: py + 6, "text-anchor": "middle", class: "disp", "font-size": on ? 24 : 17, "font-weight": 800,
+      style: "fill:" + (on ? "var(--link)" : "var(--ink)"), "paint-order": "stroke", stroke: "var(--page)", "stroke-width": 2 }, r.team));
     const hit = S("rect", { class: "hit", x: px - 13, y: py - 11, width: 26, height: 22, tabindex: 0, "aria-label": `${r.team}: offense ${snum(r.off_epa, 3)}, defense ${snum(r.def_epa, 3)} EPA per play` });
     hover(hit, r.team + " (" + r.record + ")", [
       { k: "Rating", v: snum(r.rating) + " pts" }, { k: "Offense EPA per play", v: snum(r.off_epa, 3) }, { k: "Defense EPA allowed", v: snum(r.def_epa, 3) }, { k: "Quarterback", v: r.qb || "n/a" }]);
@@ -1095,7 +1151,7 @@ function route() {
   document.querySelectorAll("nav.sections a").forEach(a => {
     if (a.dataset.view === (g ? "games" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
   });
-  $("header.top").hidden = !!g;
+  $("#hero").hidden = name !== "games";
   if (g) { shownGame = g; renderGame(g); document.title = g.away + " at " + g.home + " | NFL Value Board"; }
   else { shownGame = null; document.title = "NFL Value Board"; }
   window.scrollTo(0, 0);

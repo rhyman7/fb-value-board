@@ -55,3 +55,19 @@ TEAM_NAMES = {
     "NYJ": "New York Jets", "PHI": "Philadelphia Eagles", "PIT": "Pittsburgh Steelers", "SEA": "Seattle Seahawks",
     "SF": "San Francisco 49ers", "TB": "Tampa Bay Buccaneers", "TEN": "Tennessee Titans", "WAS": "Washington Commanders",
 }
+
+# Primary and secondary team colours (from the nflverse teams file), used only as
+# small identity swatches next to team names.
+TEAM_COLORS = {
+    "ARI": ("#97233F", "#000000"), "ATL": ("#A71930", "#000000"), "BAL": ("#241773", "#9E7C0C"),
+    "BUF": ("#00338D", "#C60C30"), "CAR": ("#0085CA", "#000000"), "CHI": ("#0B162A", "#E64100"),
+    "CIN": ("#FB4F14", "#000000"), "CLE": ("#FF3C00", "#311D00"), "DAL": ("#002244", "#B0B7BC"),
+    "DEN": ("#002244", "#FB4F14"), "DET": ("#0076B6", "#B0B7BC"), "GB": ("#203731", "#FFB612"),
+    "HOU": ("#03202F", "#A71930"), "IND": ("#002C5F", "#A5ACAF"), "JAX": ("#006778", "#000000"),
+    "KC": ("#E31837", "#FFB612"), "LA": ("#003594", "#FFD100"), "LAC": ("#007BC7", "#FFC20E"),
+    "LV": ("#000000", "#A5ACAF"), "MIA": ("#008E97", "#F58220"), "MIN": ("#4F2683", "#FFC62F"),
+    "NE": ("#002244", "#C60C30"), "NO": ("#D3BC8D", "#000000"), "NYG": ("#0B2265", "#A71930"),
+    "NYJ": ("#003F2D", "#000000"), "PHI": ("#004C54", "#A5ACAF"), "PIT": ("#000000", "#FFB612"),
+    "SEA": ("#002244", "#69BE28"), "SF": ("#AA0000", "#B3995D"), "TB": ("#A71930", "#322F2B"),
+    "TEN": ("#4495D2", "#D50A0A"), "WAS": ("#5A1414", "#FFB612"),
+}

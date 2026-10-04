@@ -75,6 +75,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "games_through": games[games.played].gameday.max().strftime("%b %-d, %Y"),
             "seasons_of_data": f"{C.FIRST_SEASON}-{season}",
             "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE,
+            "colors": {k: list(v) for k, v in C.TEAM_COLORS.items()},
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
                       "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
