@@ -47,9 +47,31 @@ currently 15% on sides and 2% on totals. Market-adjusted spread bets with EV
 above 2% went 505-455-25 (52.6%, +2.6% return, standard error 3.1%), which is
 not distinguishable from zero.
 
-Use it as a pricing tool. It gives a fair price for every bet, so a book
-offering better than that price is the value, and it shows where the model and
-market disagree most.
+### Against opening lines
+
+The picture is better when the bet is placed at the opening spread instead of
+the closing one. On 2,633 games since 2014:
+
+| Model disagrees with the opener by | Record | Win rate | Return |
+|---|---|---|---|
+| any amount | 1,315-1,261-57 | 51.0% | -2.5% |
+| 1+ points | 901-802-41 | 52.9% | +1.0% |
+| 2+ points | 517-433-22 | 54.4% | +3.9% |
+| 3+ points | 257-232-7 | 52.6% | +0.3% |
+
+On the 2+ point bets the line later moved toward the model 51% of the time
+and away from it 27%, for an average of +0.6 points of closing line value.
+The same sides bet at the close won 52.0%.
+
+This test is deliberately strict: the model is not told about quarterback
+changes announced during the week, and 345 games where a team had played the
+previous Monday night are left out. It is still not proof. The 2+ point return
+is 1.3 standard errors above zero, and opening numbers move fast and take
+small bets, so real results would land between the opening and closing records.
+
+**So the model's value is early in the week.** By kickoff the market has
+absorbed what it knows. Use it to find spreads that look off when they open, and
+as a fair price to shop against.
 
 ## Quick start
 
@@ -113,9 +135,9 @@ check its first run.
   file. Those are normally known before kickoff, but not always.
 - Injuries other than quarterback changes are only seen through earlier lines.
 - Weather is not modeled beyond indoors or outdoors.
-- The data source only carries the current line. `data/line_history.csv` records
-  each game's line the first time the board sees it and whenever it moves, so
-  line movement builds up from the first run onward.
+- Opening lines cover spreads only, for about 88% of games, and their exact
+  posting time is not known. `data/line_history.csv` also records each game's
+  line the first time the board sees it and whenever it moves.
 - Matchup ranks are season to date, so they are noisy in the first few weeks.
 - Moneyline no-vig prices use the proportional method, which slightly
   overstates underdogs.
@@ -146,8 +168,9 @@ tests/test_model.py
 
 ## Data
 
-Play-by-play, schedules, results and betting lines come from the
-[nflverse](https://github.com/nflverse) project. Check their terms before
-redistributing the data.
+Play-by-play, schedules, results and closing lines come from the
+[nflverse](https://github.com/nflverse) project. Opening lines come from the
+[nfelo](https://github.com/greerreNFL/nfelo) project's public game file. Check
+their terms before redistributing the data.
 
 For research and entertainment. Nothing here is betting advice.

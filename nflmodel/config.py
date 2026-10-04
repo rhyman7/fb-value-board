@@ -11,6 +11,9 @@ DOCS = ROOT / "docs"        # the published dashboard (GitHub Pages)
 SITE = ROOT / "site"        # dashboard template
 
 GAMES_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/games.csv"
+# Opening lines. nflverse only carries the closing number; the nfelo project
+# publishes an opening and closing spread for most games since 2009.
+OPENERS_URL = "https://raw.githubusercontent.com/greerreNFL/nfelo/main/output_data/nfelo_games.csv"
 PBP_URL = "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.parquet"
 
 FIRST_SEASON = 2006         # first season of play-by-play pulled (burn-in for ratings)

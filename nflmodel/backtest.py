@@ -12,6 +12,7 @@ import pandas as pd
 from . import config as C
 from . import bets as B
 from . import odds as O
+from . import model
 
 EV_STEPS = (0.0, 0.02, 0.05)
 
@@ -156,3 +157,86 @@ def key_number_report(games: pd.DataFrame, dist: dict, before_season: int, lookb
                        "model": round(float(key), 4), "bell": round(float(bell), 4)})
     return {"seasons": f"{before_season - lookback}-{before_season - 1}", "games": int(len(h)), "frequency": freq, "pushes": pushes,
             "sd_margin": round(dist["sd_margin"], 2), "sd_total": round(dist["sd_total"], 2), "sd_win": round(dist["sd_win"], 2)}
+
+
+# --------------------------------------------------------------------------
+# Against opening lines
+# --------------------------------------------------------------------------
+
+def _came_off_monday(games: pd.DataFrame) -> pd.Series:
+    """True for games where either team played on a Monday the week before.
+    Their opening line was posted before that game, so the model would be
+    using a result the opener could not have known."""
+    p = games[games.played].sort_values("gameday")
+    long = pd.concat([p[["season", "week", "gameday", "weekday", "game_id"]].assign(team=p[side]) for side in ("home_team", "away_team")])
+    long = long.sort_values(["team", "gameday"])
+    long["prev_day"] = long.groupby(["team", "season"])["weekday"].shift(1)
+    long["prev_week"] = long.groupby(["team", "season"])["week"].shift(1)
+    flag = (long["prev_day"] == "Monday") & (long["prev_week"] == long["week"] - 1)
+    return flag.groupby(long["game_id"]).any()
+
+
+def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFrame) -> dict | None:
+    """How the model does when the bet is placed at the opening spread.
+
+    `frame` must come from a model run that assumes each team starts whoever
+    started the week before, so no late quarterback news leaks in. Games where
+    a team played the previous Monday night are left out for the same reason.
+    """
+    if openers is None or not len(openers):
+        return None
+    f = frame.merge(openers, on="game_id", how="inner")
+    f = f[f.played & f.spread_line.notna() & (f.season >= C.FIRST_TEST_SEASON)].copy()
+    monday = _came_off_monday(games)
+    f["monday"] = f["game_id"].map(monday).fillna(False).to_numpy(bool)
+    f["d"] = f["model_margin"] - f["open_spread"]            # model's disagreement with the opener
+    f["move"] = f["spread_line"] - f["open_spread"]          # where the line went by the close
+    pick = np.sign(f["d"])
+    f["cover"] = np.sign(f["result"] - f["open_spread"]) * pick
+    f["cover_close"] = np.sign(f["result"] - f["spread_line"]) * pick
+    f["clv"] = f["move"] * pick                              # points of closing line value
+    price = np.where(pick > 0, f["open_home_odds"], f["open_away_odds"])
+    price = np.where(np.isnan(price), B.DEFAULT_PRICE, price)
+    dec = O.american_to_decimal(price)
+    f["profit"] = np.where(f["cover"] > 0, dec - 1, np.where(f["cover"] < 0, -1.0, 0.0))
+    clean = f[~f["monday"] & (f["d"] != 0)]
+
+    def rec(x: pd.DataFrame) -> dict:
+        w, l, p = int((x.cover > 0).sum()), int((x.cover < 0).sum()), int((x.cover == 0).sum())
+        wc, lc = int((x.cover_close > 0).sum()), int((x.cover_close < 0).sum())
+        n = len(x)
+        return {"n": n, "w": w, "l": l, "p": p, "win_pct": round(w / (w + l), 4) if w + l else None,
+                "roi": round(float(x.profit.mean()), 4) if n else None,
+                "roi_se": round(float(x.profit.std(ddof=1) / np.sqrt(n)), 4) if n > 1 else None,
+                "toward": round(float((x.clv > 0).mean()), 4) if n else None,
+                "away": round(float((x.clv < 0).mean()), 4) if n else None,
+                "clv": round(float(x.clv.mean()), 3) if n else None,
+                "close_win_pct": round(wc / (wc + lc), 4) if wc + lc else None}
+
+    rows = []
+    for th in (0, 1, 2, 3):
+        x = clean[clean.d.abs() >= th]
+        rows.append({"rule": "Every game" if th == 0 else f"Disagrees by {th}+ points", "threshold": th,
+                     **rec(x), "holdout": rec(x[x.season >= C.HOLDOUT_FROM])})
+
+    # How far the line moves, by how far the model disagreed with the opener.
+    edges = [-99, -4, -3, -2, -1, 0, 1, 2, 3, 4, 99]
+    bins = []
+    for _, x in clean.groupby(pd.cut(clean.d, edges), observed=True):
+        if len(x) >= 30:
+            bins.append({"d": round(float(x.d.mean()), 2), "move": round(float(x.move.mean()), 3),
+                         "se": round(float(x.move.std(ddof=1) / np.sqrt(len(x))), 3), "n": int(len(x))})
+    d, mv = clean.d.to_numpy(), clean.move.to_numpy()
+    mae = lambda a, b: round(float(np.mean(np.abs(a - b))), 3)
+    past = clean[clean.season >= clean.season.max() - C.BLEND_LOOKBACK]
+    with_monday = f[f.d.abs() >= 2]
+    return {
+        "first_season": int(clean.season.min()), "last_season": int(clean.season.max()), "games": int(len(clean)),
+        "left_out_monday": int(f["monday"].sum()),
+        "rows": rows, "bins": bins,
+        "slope": round(float(d @ mv / (d @ d)), 3), "corr": round(float(np.corrcoef(d, mv)[0, 1]), 3),
+        "weight": round(float(model._blend_weight(past.model_margin.to_numpy(), past.open_spread.to_numpy(), past.result.to_numpy())), 3),
+        "mae": {"model": mae(clean.model_margin, clean.result), "open": mae(clean.open_spread, clean.result), "close": mae(clean.spread_line, clean.result)},
+        "mean_move": round(float(np.abs(mv).mean()), 2),
+        "including_monday_2plus": rec(with_monday),
+    }

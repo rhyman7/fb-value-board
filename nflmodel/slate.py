@@ -71,11 +71,12 @@ def fair_american(p: float) -> int | None:
     return int(round(-100 * p / (1 - p))) if p >= 0.5 else int(round(100 * (1 - p) / p))
 
 
-def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None) -> dict:
+def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None, openers: pd.DataFrame | None = None) -> dict:
     up = frame[~frame.played & frame.spread_line.notna() & frame.total_line.notna()].copy()
     if up.empty:
         return {"weeks": [], "games": [], "book_lines": 0}
     opened = track_lines(up)
+    true_open = dict(zip(openers.game_id, openers.open_spread)) if openers is not None and len(openers) else {}
     records = records or {}
     priced, n_book = apply_book_lines(up)
     adj = B.price_games(priced, dist, "proj")
@@ -112,6 +113,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "away_name": C.TEAM_NAMES.get(g.away_team, g.away_team), "home_name": C.TEAM_NAMES.get(g.home_team, g.home_team),
             "away_record": records.get(g.away_team, "0-0"), "home_record": records.get(g.home_team, "0-0"),
             "open": opened.get(g.game_id),
+            "opening_spread": float(true_open[g.game_id]) if g.game_id in true_open else None,
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
             "away_qb": qb("away"), "home_qb": qb("home"),

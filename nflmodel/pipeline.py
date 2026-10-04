@@ -30,6 +30,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     say = print if verbose else (lambda *a, **k: None)
     say("Loading data ...")
     games, tg, qb, stats = data.load_all(refresh=refresh, verbose=verbose, with_stats=True)
+    openers = data.load_openers(refresh=refresh)
     season = int(games[games.played].season.max())
 
     say("Rating teams week by week ...")
@@ -52,9 +53,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE,
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
-            "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)"],
+            "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)", "nfelo games file (opening lines)"],
         },
-        "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season)),
+        "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season), openers),
         "ratings": slate.ratings_table(engine, r, info[season]["margin_coefs"], games, frame, season),
         "key_numbers": backtest.key_number_report(games, dist, season),
     }
@@ -63,10 +64,18 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         graded, _ = backtest.grade_all(games, frame)
         out["backtest"] = backtest.summarize(frame, graded)
         graded.round(4).to_csv(C.DATA / "backtest_bets.csv", index=False)
+        if len(openers):
+            say("Testing against opening lines ...")
+            # An opener is posted before late quarterback news, so re-run the model
+            # assuming each team starts whoever started the week before.
+            blind = games.assign(home_qb_id=np.nan, away_qb_id=np.nan)
+            early, _ = model.walk_forward(model.build_frame(blind, engine))
+            out["openers"] = backtest.opening_report(games, early, openers)
     else:
         prev = C.DOCS / "data.json"
         if prev.exists():
-            out["backtest"] = json.loads(prev.read_text()).get("backtest")
+            old = json.loads(prev.read_text())
+            out["backtest"], out["openers"] = old.get("backtest"), old.get("openers")
 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)

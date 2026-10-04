@@ -333,6 +333,25 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
         <div class="scroll"><table id="records" aria-labelledby="rec-h"></table></div>
       </section>
 
+      <section id="openers" aria-labelledby="open-h">
+        <div class="section-head">
+          <h2 id="open-h">Against opening lines</h2>
+          <p class="note" id="open-note"></p>
+        </div>
+        <div class="tiles" id="open-tiles"></div>
+        <div class="two">
+          <figure>
+            <figcaption><h3>The line tends to move toward the model</h3><p class="note">Games grouped by how far the model disagreed with the opening spread, against how far the spread then moved by kickoff. Right and up both mean toward the home team. Whiskers are one standard error.</p></figcaption>
+            <div id="open-chart"></div>
+            <details class="data"><summary>Show as table</summary><div class="scroll"><table id="open-chart-table"></table></div></details>
+          </figure>
+          <figure>
+            <figcaption><h3 id="open-t-h">Betting the model's side at the opener</h3><p class="note" id="open-table-note"></p></figcaption>
+            <div class="scroll"><table id="open-table" aria-labelledby="open-t-h"></table></div>
+          </figure>
+        </div>
+      </section>
+
       <section id="keys" aria-labelledby="keys-h">
         <div class="section-head">
           <h2 id="keys-h">Key numbers</h2>
@@ -674,9 +693,10 @@ function renderGame(g) {
   /* --- summary --- */
   const sum = H("table", { class: "compact" });
   const o = g.open, hs = (g.proj.total + g.proj.margin) / 2, as = (g.proj.total - g.proj.margin) / 2;
-  table(sum, [{ t: "", l: 1 }, { t: "First tracked" }, { t: "Current" }, { t: "Model" }, { t: "Adjusted" }], [
-    ["Spread", o ? fav(g, o.spread) : "n/a", fav(g, g.market.spread), fav(g, g.model.margin), { v: fav(g, g.proj.margin), cls: "strong" }],
-    ["Total", o ? o.total.toFixed(1) : "n/a", g.market.total.toFixed(1), g.model.total.toFixed(1), { v: g.proj.total.toFixed(1), cls: "strong" }],
+  const opened = g.opening_spread != null ? g.opening_spread : (o ? o.spread : null);
+  table(sum, [{ t: "", l: 1 }, { t: g.opening_spread != null ? "Opening" : "First tracked" }, { t: "Current" }, { t: "Model" }, { t: "Adjusted" }], [
+    ["Spread", opened != null ? fav(g, opened) : "n/a", fav(g, g.market.spread), fav(g, g.model.margin), { v: fav(g, g.proj.margin), cls: "strong" }],
+    ["Total", g.opening_spread != null ? "" : (o ? o.total.toFixed(1) : "n/a"), g.market.total.toFixed(1), g.model.total.toFixed(1), { v: g.proj.total.toFixed(1), cls: "strong" }],
     [g.home + " wins", "", pct(g.win.market), pct(g.win.raw), { v: pct(g.win.adj), cls: "strong" }],
     ["Projected score", { v: `${g.away} ${as.toFixed(1)}, ${g.home} ${hs.toFixed(1)}`, cls: "strong", colspan: 4 }],
   ]);
@@ -684,7 +704,11 @@ function renderGame(g) {
     H("div", { class: "lab" }, H("span", {}, H("b", { text: g.away + " " + pct(1 - p) })), H("span", { text: label }), H("span", {}, H("b", { text: g.home + " " + pct(p) }))),
     H("div", { class: "track", role: "img", "aria-label": `${label}: ${g.away} ${pct(1 - p)}, ${g.home} ${pct(p)}` }, H("i", { class: "a", style: "width:" + ((1 - p) * 100).toFixed(1) + "%" }), H("i", { class: "h", style: "flex:1" })));
   const summary = sec("Game summary", "Model is the projection on its own. Adjusted is the market line moved " + pct(M.blend.margin, 0) + " of the way toward it, which is the number bets are priced from."
-      + (o ? " First tracked is the line when this board first saw the game, on " + o.seen + (o.moves ? "; it has moved " + o.moves + (o.moves === 1 ? " time" : " times") + " since." : ".") : ""),
+      + (g.opening_spread != null
+          ? (() => { const mv = g.market.spread - g.opening_spread, want = g.model.margin - g.opening_spread;
+              return Math.abs(mv) < 0.01 ? " The spread has not moved since it opened."
+                : " The spread has moved " + Math.abs(mv).toFixed(1).replace(/\.0$/, "") + (Math.abs(mv) === 1 ? " point " : " points ") + (mv * want > 0 ? "toward" : "away from") + " the model's number since it opened."; })()
+          : (o ? " First tracked is the line when this board first saw the game, on " + o.seen + "." : "")),
     H("div", { class: "split" }, H("div", { class: "scroll" }, sum),
       H("div", { class: "winbars" }, H("h3", { text: "Chance to win" }), wb("Market", g.win.market), wb("Model", g.win.raw), wb("Adjusted", g.win.adj))));
 
@@ -899,9 +923,12 @@ function diagChart(node, o) {
     niceTicks(o.xd[0], o.xd[1], W < 420 ? 4 : 6).forEach(t => svg.append(S("text", { x: x(t), y: Hh - m.b + 16, "text-anchor": "middle" }, o.fmt(t))));
     svg.append(S("text", { x: W - m.r, y: Hh - 4, "text-anchor": "end" }, o.xlabel + " →"));
     svg.append(S("text", { x: m.l, y: 10, "text-anchor": "start" }, "↑ " + o.ylabel));
-    const a = Math.max(o.xd[0], o.yd[0]), b = Math.min(o.xd[1], o.yd[1]);
-    svg.append(S("line", { x1: x(a), y1: y(a), x2: x(b), y2: y(b), stroke: "var(--market)", "stroke-width": 1 }));
-    svg.append(S("text", { x: x(b) - 44, y: y(b) + 12, "text-anchor": "end", class: "t-2" }, o.diag));
+    if (o.cross) svg.append(S("line", { x1: x(0), x2: x(0), y1: m.t, y2: Hh - m.b, stroke: "var(--axis)" }));
+    if (o.diag) {
+      const a = Math.max(o.xd[0], o.yd[0]), b = Math.min(o.xd[1], o.yd[1]);
+      svg.append(S("line", { x1: x(a), y1: y(a), x2: x(b), y2: y(b), stroke: "var(--market)", "stroke-width": 1 }));
+      svg.append(S("text", { x: x(b) - 44, y: y(b) + 12, "text-anchor": "end", class: "t-2" }, o.diag));
+    }
     o.points.forEach(p => {
       if (p.se != null) svg.append(S("line", { x1: x(p.x), x2: x(p.x), y1: y(Math.min(o.yd[1], p.y + p.se)), y2: y(Math.max(o.yd[0], p.y - p.se)), stroke: "var(--s1)", "stroke-width": 2, "stroke-linecap": "round", opacity: 0.45 }));
       svg.append(S("circle", { cx: x(p.x), cy: y(p.y), r: 5, fill: "var(--s1)", stroke: "var(--page)", "stroke-width": 2 }));
@@ -976,6 +1003,30 @@ function diagChart(node, o) {
   $("#rec-note").textContent = "One unit on every qualifying bet. Return is profit per unit staked, plus or minus one standard error; anything within two standard errors of zero is not evidence of an edge." + (partial.length ? " " + partial.join(", ") + " is included through the games played so far." : "");
 })();
 
+/* ---------------- opening lines ---------------- */
+(function openers() {
+  const OP = DATA.openers;
+  if (!OP) { $("#openers").hidden = true; return; }
+  const r2 = OP.rows.find(r => r.threshold === 2) || OP.rows[OP.rows.length - 1];
+  $("#open-note").textContent = `The same model, but with the bet placed at the opening spread instead of the closing one: ${comma(OP.games)} games from ${OP.first_season} to ${OP.last_season}. To keep the test fair the model is not told about quarterback changes announced during the week, and ${OP.left_out_monday} games where a team had played the previous Monday night are left out, because those openers were posted before that game.`;
+  const tile = (label, value, sub) => H("div", { class: "tile" }, H("div", { class: "label", text: label }), H("div", { class: "value", text: value }), H("div", { class: "sub", text: sub }));
+  $("#open-tiles").replaceChildren(
+    tile("Win rate when it disagrees by 2+ points", pct(r2.win_pct), `${r2.w}-${r2.l}-${r2.p} at the opener. The same sides at the close: ${pct(r2.close_win_pct)}`),
+    tile("Return on those bets", spct(r2.roi), `Plus or minus ${pct(r2.roi_se)}. Since ${BT ? BT.holdout_from : 2019}: ${spct(r2.holdout.roi)} on ${r2.holdout.n} bets`),
+    tile("Line moved toward the model", pct(r2.toward, 0), `Away from it ${pct(r2.away, 0)} of the time, unchanged the rest`),
+    tile("Closing line value", snum(r2.clv, 1) + " pts", "Average points gained by betting before the move"));
+  const xl = Math.ceil(Math.max(...OP.bins.map(b => Math.abs(b.d)))), yl = Math.ceil(Math.max(...OP.bins.map(b => Math.abs(b.move) + b.se)) * 2) / 2;
+  diagChart($("#open-chart"), { label: "Line movement against model disagreement", xd: [-xl, xl], yd: [-yl, yl], zero: true, cross: true, fmt: t => snum(t, Math.abs(t) < 1 && t !== 0 ? 1 : 0),
+    xlabel: "Model minus opening spread, points", ylabel: "Opening to closing move, points",
+    points: OP.bins.map(b => ({ x: b.d, y: b.move, se: b.se, title: comma(b.n) + " games", aria: `Model disagreed by ${snum(b.d)}; line moved ${snum(b.move, 2)}`,
+      rows: [{ k: "Model minus opener", v: snum(b.d) + " pts" }, { k: "Line moved", v: snum(b.move, 2) + " pts" }, { k: "Standard error", v: "\u00b1" + b.se.toFixed(2) }] })) });
+  table($("#open-chart-table"), [{ t: "Games" }, { t: "Model minus opener" }, { t: "Line moved" }, { t: "Standard error" }], OP.bins.map(b => [comma(b.n), snum(b.d), snum(b.move, 2), "\u00b1" + b.se.toFixed(2)]));
+  table($("#open-table"), [{ t: "Bets placed", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "Since " + (BT ? BT.holdout_from : 2019) }, { t: "Toward / away" }, { t: "CLV" }],
+    OP.rows.map(r => [r.rule, comma(r.n), `${r.w}-${r.l}-${r.p}`, { v: pct(r.win_pct), cls: "strong" }, spct(r.roi) + " \u00b1" + pct(r.roi_se), pct(r.holdout.win_pct) + " (" + comma(r.holdout.n) + ")", pct(r.toward, 0) + " / " + pct(r.away, 0), snum(r.clv, 2)]));
+  const z = r2.roi / r2.roi_se;
+  $("#open-table-note").textContent = `Graded at the opening price. The 2+ point row is ${z.toFixed(1)} standard errors above zero, so it is encouraging and not yet proof. Opening numbers move quickly and take small bets, so real results would land between these and the closing-line record. The line movement is the stronger evidence: of each point the model disagrees with the opener, the market later moves about ${OP.slope.toFixed(2)}.`;
+})();
+
 /* ---------------- key numbers ---------------- */
 (function keys() {
   const F = KN.frequency, top = F.slice().sort((a, b) => b.actual - a.actual);
@@ -1019,11 +1070,11 @@ function diagChart(node, o) {
   ];
   $("#steps").replaceChildren(...steps.map(([a, b]) => H("li", {}, H("strong", { text: a + " " }), document.createTextNode(b))));
   const limits = [
-    "It has not beaten closing lines. Treat it as a way to find a fair price and shop for a better one, not as a source of picks.",
+    "It has not beaten closing lines. Against opening lines it has done better, so its value is early in the week, before the market catches up.",
     "Injuries other than a quarterback change are only seen through earlier lines.",
     "Weather is not modeled beyond whether the game is indoors.",
     "Lines come from one consensus source. Your own book's prices go in lines.csv and are priced against the same projections.",
-    "Opening lines are not in the data. Lines are now recorded each time the board updates, so line movement builds up from here.",
+    "Opening totals and moneylines are not available, so only spreads are tested against the opener.",
   ];
   $("#limits").replaceChildren(...limits.map(t => H("li", { text: t })));
 })();

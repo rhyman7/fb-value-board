@@ -70,6 +70,24 @@ def load_games(refresh: bool = False) -> pd.DataFrame:
     return g
 
 
+def load_openers(refresh: bool = False) -> pd.DataFrame:
+    """Opening spreads by game, in the same sign convention as nflverse
+    (positive = home team favoured). Empty if the file cannot be fetched."""
+    path = C.RAW / "nfelo_games.csv"
+    cols = ["game_id", "open_spread", "open_home_odds", "open_away_odds"]
+    if refresh or not path.exists():
+        try:
+            _download(C.OPENERS_URL, path)
+        except Exception as exc:
+            print(f"  could not fetch opening lines ({exc})")
+            if not path.exists():
+                return pd.DataFrame(columns=cols)
+    n = pd.read_csv(path, usecols=["game_id", "home_line_open", "home_line_open_price", "away_line_open_price"])
+    n = n[n["home_line_open"].notna()]
+    return pd.DataFrame({"game_id": n["game_id"], "open_spread": -n["home_line_open"],
+                         "open_home_odds": n["home_line_open_price"], "open_away_odds": n["away_line_open_price"]})
+
+
 # --------------------------------------------------------------------------
 # Play-by-play -> per-game aggregates
 # --------------------------------------------------------------------------
