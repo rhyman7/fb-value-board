@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import backtest, bets, config as C, data, model, slate
+from . import backtest, bets, config as C, data, matchup, model, slate
 from .ratings import RatingEngine
 
 
@@ -29,7 +29,7 @@ def _clean(o):
 def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) -> dict:
     say = print if verbose else (lambda *a, **k: None)
     say("Loading data ...")
-    games, tg, qb = data.load_all(refresh=refresh, verbose=verbose)
+    games, tg, qb, stats = data.load_all(refresh=refresh, verbose=verbose, with_stats=True)
     season = int(games[games.played].season.max())
 
     say("Rating teams week by week ...")
@@ -41,6 +41,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     upcoming = frame[~frame.played & frame.spread_line.notna()]
     order_now = int(upcoming.order.min()) if len(upcoming) else int(frame.order.max()) + 1
     r = engine.ratings_at(order_now)
+    builder = matchup.MatchupBuilder(games, qb, stats, engine, info[season], season)
 
     out = {
         "meta": {
@@ -53,7 +54,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
             "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)"],
         },
-        "slate": slate.build(frame[frame.season == season], dist, engine, r),
+        "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season)),
         "ratings": slate.ratings_table(engine, r, info[season]["margin_coefs"], games, frame, season),
         "key_numbers": backtest.key_number_report(games, dist, season),
     }

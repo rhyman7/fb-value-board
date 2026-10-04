@@ -36,6 +36,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs data/cache
+          git add docs data/cache data/line_history.csv
           git diff --cached --quiet || git commit -m "Update board"
           git push

@@ -17,6 +17,7 @@
   --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100;
   --good: #0ca30c; --good-ink: #006300; --good-wash: #e3f3e1;
   --focus: #256abf;
+  --rk1: #184f95; --rk1t: #ffffff; --rk2: #2a78d6; --rk2t: #ffffff; --rk3: #9ec5f4; --rk3t: #10151c; --rk4: #dbe9fb; --rk4t: #10151c;
   --sans: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
   --gutter: clamp(16px, 4vw, 40px);
 }
@@ -29,6 +30,7 @@
     --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
     --good: #0ca30c; --good-ink: #5fd35f; --good-wash: #12301a;
     --focus: #86b6ef;
+    --rk1: #9ec5f4; --rk1t: #0c0f13; --rk2: #5598e7; --rk2t: #0c0f13; --rk3: #1c5cab; --rk3t: #ffffff; --rk4: #17355c; --rk4t: #dfe8f3;
     color-scheme: dark;
   }
 }
@@ -40,10 +42,12 @@
   --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500;
   --good: #0ca30c; --good-ink: #5fd35f; --good-wash: #12301a;
   --focus: #86b6ef;
+  --rk1: #9ec5f4; --rk1t: #0c0f13; --rk2: #5598e7; --rk2t: #0c0f13; --rk3: #1c5cab; --rk3t: #ffffff; --rk4: #17355c; --rk4t: #dfe8f3;
   color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--page); color: var(--ink); font: 400 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
 .wrap { max-width: 1180px; margin-inline: auto; padding-inline: var(--gutter); padding-block: 28px 72px; }
 h1, h2, h3, p, ol, ul, figure { margin: 0; }
@@ -71,7 +75,8 @@ nav.sections a { display: block; padding: 11px 12px; color: var(--ink-2); text-d
 nav.sections a:hover { color: var(--ink); }
 nav.sections a[aria-current="true"] { color: var(--ink); border-bottom-color: var(--ink); }
 
-main { display: grid; gap: 64px; padding-top: 36px; }
+main { display: grid; gap: 64px; padding-top: 32px; }
+.view { display: grid; gap: 56px; min-width: 0; }
 section { display: grid; gap: 20px; scroll-margin-top: 64px; min-width: 0; }
 .section-head { display: grid; gap: 8px; }
 
@@ -86,10 +91,56 @@ section { display: grid; gap: 20px; scroll-margin-top: 64px; min-width: 0; }
 input.money { font: 600 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 8px; padding: 7px 10px; width: 120px; font-variant-numeric: tabular-nums; }
 
 /* ---- the board ---- */
-.board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 372px); gap: 0; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.board { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
 .board-plot { padding: 16px 16px 10px; min-width: 0; }
-.board-detail { border-left: 1px solid var(--rule); padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; background: var(--surface); }
-@media (max-width: 860px) { .board { grid-template-columns: minmax(0, 1fr); } .board-detail { border-left: 0; border-top: 1px solid var(--rule); } }
+
+/* ---- game cards ---- */
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 14px; }
+a.card { display: grid; gap: 12px; padding: 16px 16px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; color: inherit; text-decoration: none; align-content: start; }
+a.card:hover { border-color: var(--ink-3); }
+.card-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.card-teams { font-size: 26px; line-height: 1; font-stretch: 66%; font-weight: 800; }
+.card-teams small { font-size: 13px; font-stretch: 100%; font-weight: 400; color: var(--ink-3); margin-left: 2px; }
+.card-when { font-size: 12.5px; color: var(--ink-3); text-align: right; white-space: nowrap; }
+.card-grid { display: grid; grid-template-columns: auto 1fr 1fr; gap: 4px 14px; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.card-grid .h { color: var(--ink-3); font-size: 12px; }
+.card-grid .r { text-align: right; } .card-grid .b { font-weight: 700; }
+.card-pick { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13.5px; padding-top: 10px; border-top: 1px solid var(--grid); }
+.card-pick .go { color: var(--model); font-weight: 600; white-space: nowrap; }
+
+/* ---- game page ---- */
+.crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; font-size: 14px; }
+.crumbs a { font-weight: 600; text-decoration: none; } .crumbs a:hover { text-decoration: underline; }
+.game-head { display: grid; gap: 12px; }
+.game-head h1 { font-size: clamp(30px, 5.2vw, 52px); }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: baseline; }
+.sw.away { background: var(--s2); } .sw.home { background: var(--s1); }
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); gap: 32px 44px; align-items: start; }
+.winbars { display: grid; gap: 12px; }
+.winbar { display: grid; gap: 4px; font-size: 13px; }
+.winbar .lab { display: flex; justify-content: space-between; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.winbar .lab b { color: var(--ink); }
+.winbar .track { display: flex; gap: 2px; height: 14px; }
+.winbar .track i { display: block; height: 100%; }
+.winbar .track i.a { background: var(--s2); border-radius: 4px 0 0 4px; } .winbar .track i.h { background: var(--s1); border-radius: 0 4px 4px 0; }
+.contrib { display: grid; grid-template-columns: minmax(96px, auto) minmax(90px, 1fr) minmax(48px, auto); gap: 8px 12px; align-items: center; font-size: 14px; font-variant-numeric: tabular-nums; }
+.contrib .v { text-align: right; white-space: nowrap; } .contrib .sum { font-weight: 700; }
+.contrib .sep { grid-column: 1 / -1; border-top: 1px solid var(--axis); height: 0; margin-block: 2px; }
+.contrib .bar-fill.pos { background: var(--s1); } .contrib .bar-fill.neg { background: var(--s2); }
+.contrib .cap { grid-column: 2; display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-3); }
+.qb { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.qb .who { font-size: 22px; font-stretch: 68%; font-weight: 800; line-height: 1.1; }
+.rk { display: inline-block; min-width: 30px; padding: 1px 6px; border-radius: 5px; text-align: center; font-weight: 700; font-size: 12.5px; margin-left: 8px; border: 1px solid transparent; }
+.rk.q1 { background: var(--rk1); color: var(--rk1t); } .rk.q2 { background: var(--rk2); color: var(--rk2t); }
+.rk.q3 { background: var(--rk3); color: var(--rk3t); } .rk.q4 { background: var(--rk4); color: var(--rk4t); }
+.rk.q5 { border-color: var(--axis); color: var(--ink-2); }
+.rank-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 12.5px; color: var(--ink-2); }
+.rank-key .rk { margin-left: 0; }
+.form-recs { display: flex; gap: 22px; flex-wrap: wrap; }
+.form-recs div { display: grid; }
+.form-recs b { font-size: 24px; font-stretch: 68%; font-weight: 800; line-height: 1.1; }
+.form-recs span { font-size: 12.5px; color: var(--ink-3); }
+td.w { font-weight: 700; } td.dim { color: var(--ink-3); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); padding-bottom: 6px; }
 .legend span { display: inline-flex; align-items: center; gap: 7px; }
 .key-tick { width: 3px; height: 14px; background: var(--market); border-radius: 1px; }
@@ -175,126 +226,146 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 
   <nav class="sections" aria-label="Sections">
     <ul>
-      <li><a href="#slate">Slate</a></li>
-      <li><a href="#ratings">Team ratings</a></li>
-      <li><a href="#record">Track record</a></li>
-      <li><a href="#keys">Key numbers</a></li>
-      <li><a href="#method">How it works</a></li>
+      <li><a href="#games" data-view="games">Games</a></li>
+      <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
+      <li><a href="#model" data-view="model">Model record</a></li>
     </ul>
   </nav>
 
   <main id="main">
-    <section id="slate" aria-labelledby="slate-h">
-      <div class="section-head">
-        <h2 id="slate-h">Where the model and the market disagree</h2>
-        <p class="note" id="slate-note"></p>
-      </div>
-      <div class="filters" role="group" aria-label="Slate filters">
-        <div class="field"><span id="f-week">Week</span><div class="seg" id="seg-week" role="group" aria-labelledby="f-week"></div></div>
-        <div class="field"><span id="f-market">Market</span><div class="seg" id="seg-market" role="group" aria-labelledby="f-market"></div></div>
-        <div class="field"><span id="f-basis">Price bets from</span><div class="seg" id="seg-basis" role="group" aria-labelledby="f-basis"></div></div>
-        <label class="field" for="bankroll">Bankroll ($)<input class="money" id="bankroll" type="number" min="0" step="50" value="1000" inputmode="numeric"></label>
-      </div>
-      <div class="board">
-        <div class="board-plot">
-          <div class="legend" aria-hidden="true">
-            <span><i class="key-tick"></i>Market line</span>
-            <span><i class="key-dot" style="background:var(--model-soft)"></i>Raw model</span>
-            <span><i class="key-dot" style="background:var(--model)"></i>Market-adjusted</span>
+    <!-- ============ games ============ -->
+    <div class="view" id="view-games">
+      <section aria-labelledby="games-h">
+        <div class="section-head">
+          <h2 id="games-h">This week's games</h2>
+          <p class="note" id="games-note"></p>
+        </div>
+        <div class="filters" role="group" aria-label="Filters">
+          <div class="field"><span id="f-week">Week</span><div class="seg" id="seg-week" role="group" aria-labelledby="f-week"></div></div>
+          <div class="field"><span id="f-basis">Price bets from</span><div class="seg" id="seg-basis" role="group" aria-labelledby="f-basis"></div></div>
+          <label class="field" for="bankroll">Bankroll ($)<input class="money" id="bankroll" type="number" min="0" step="50" value="1000" inputmode="numeric"></label>
+        </div>
+        <div class="cards" id="cards"></div>
+      </section>
+
+      <section aria-labelledby="slate-h">
+        <div class="section-head">
+          <h2 id="slate-h">Where the model and the market disagree</h2>
+          <p class="note" id="slate-note"></p>
+        </div>
+        <div class="filters" role="group" aria-label="Chart options">
+          <div class="field"><span id="f-market">Market</span><div class="seg" id="seg-market" role="group" aria-labelledby="f-market"></div></div>
+        </div>
+        <div class="board">
+          <div class="board-plot">
+            <div class="legend" aria-hidden="true">
+              <span><i class="key-tick"></i>Market line</span>
+              <span><i class="key-dot" style="background:var(--model-soft)"></i>Raw model</span>
+              <span><i class="key-dot" style="background:var(--model)"></i>Market-adjusted</span>
+            </div>
+            <div id="board"></div>
           </div>
-          <div id="board"></div>
         </div>
-        <aside class="board-detail" id="detail" aria-live="polite"></aside>
-      </div>
-      <div class="section-head">
-        <h3 id="bets-h">Best prices this week</h3>
-        <p class="note" id="bets-note"></p>
-      </div>
-      <div class="scroll"><table id="bets" aria-labelledby="bets-h"></table></div>
-      <p class="note"><button class="link" id="bets-more" type="button"></button></p>
-    </section>
+      </section>
 
-    <section id="ratings" aria-labelledby="ratings-h">
-      <div class="section-head">
-        <h2 id="ratings-h">Team ratings</h2>
-        <p class="note" id="ratings-note"></p>
-      </div>
-      <div class="ratings-grid">
-        <figure>
-          <figcaption><h3>Offense against defense</h3><p class="note">Expected points added per play, adjusted for opponents and weighted toward recent games. Up and to the right is better on both sides of the ball.</p></figcaption>
-          <div id="scatter"></div>
-        </figure>
-        <div class="scroll"><table id="ratings-table" aria-labelledby="ratings-h"></table></div>
-      </div>
-    </section>
+      <section aria-labelledby="bets-h">
+        <div class="section-head">
+          <h2 id="bets-h">Best prices this week</h2>
+          <p class="note" id="bets-note"></p>
+        </div>
+        <div class="scroll"><table id="bets" aria-labelledby="bets-h"></table></div>
+        <p class="note"><button class="link" id="bets-more" type="button"></button></p>
+      </section>
+    </div>
 
-    <section id="record" aria-labelledby="record-h">
-      <div class="section-head">
-        <h2 id="record-h">Track record against closing lines</h2>
-        <p class="note" id="record-note"></p>
-      </div>
-      <div class="tiles" id="tiles"></div>
-      <div class="two">
-        <figure>
-          <figcaption><h3>Average miss on the final margin, by season</h3><p class="note">Points between the projection and the result. Lower is better. The market is the closing spread.</p></figcaption>
-          <div id="mae"></div>
-          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="mae-table"></table></div></details>
-        </figure>
-        <figure>
-          <figcaption><h3>Does the claimed edge show up?</h3><p class="note">Spread and total bets grouped by the market-adjusted EV the model claimed, against what those bets returned. Dots on the diagonal would mean the claims were accurate. Whiskers are one standard error.</p></figcaption>
-          <div id="evcal"></div>
-          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="evcal-table"></table></div></details>
-        </figure>
-        <figure>
-          <figcaption><h3>Units won or lost, one unit per bet</h3><p class="note">Running total at closing prices. A flat line that drifts down is what paying the vig with no edge looks like.</p></figcaption>
-          <div class="legend" id="cum-legend"></div>
-          <div id="cum"></div>
-          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="cum-table"></table></div></details>
-        </figure>
-        <figure>
-          <figcaption><h3>Win probability against results</h3><p class="note">Games grouped by the home team's market-adjusted chance to win. Dots on the diagonal mean a 70% favorite won about 70% of the time.</p></figcaption>
-          <div id="cal"></div>
-          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="cal-table"></table></div></details>
-        </figure>
-      </div>
-      <div class="section-head"><h3 id="rec-h">Betting records</h3><p class="note" id="rec-note"></p></div>
-      <div class="scroll"><table id="records" aria-labelledby="rec-h"></table></div>
-    </section>
+    <!-- ============ one game ============ -->
+    <div class="view" id="view-game" hidden></div>
 
-    <section id="keys" aria-labelledby="keys-h">
-      <div class="section-head">
-        <h2 id="keys-h">Key numbers</h2>
-        <p class="note" id="keys-note"></p>
-      </div>
-      <div class="two">
-        <figure>
-          <figcaption><h3>How often each margin of victory comes up</h3><p class="note">Share of games, against what a smooth bell curve would predict for the same games.</p></figcaption>
-          <div class="legend" aria-hidden="true">
-            <span><i class="key-box" style="background:var(--s1)"></i>Actual share of games</span>
-            <span><i class="key-line" style="background:var(--market)"></i>Bell curve</span>
+    <!-- ============ ratings ============ -->
+    <div class="view" id="view-ratings" hidden>
+      <section aria-labelledby="ratings-h">
+        <div class="section-head">
+          <h2 id="ratings-h">Team ratings</h2>
+          <p class="note" id="ratings-note"></p>
+        </div>
+        <div class="ratings-grid">
+          <figure>
+            <figcaption><h3>Offense against defense</h3><p class="note">Expected points added per play, adjusted for opponents and weighted toward recent games. Up and to the right is better on both sides of the ball.</p></figcaption>
+            <div id="scatter"></div>
+          </figure>
+          <div class="scroll"><table id="ratings-table" aria-labelledby="ratings-h"></table></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ model record ============ -->
+    <div class="view" id="view-model" hidden>
+      <section id="record" aria-labelledby="record-h">
+        <div class="section-head">
+          <h2 id="record-h">Track record against closing lines</h2>
+          <p class="note" id="record-note"></p>
+        </div>
+        <div class="tiles" id="tiles"></div>
+        <div class="two">
+          <figure>
+            <figcaption><h3>Average miss on the final margin, by season</h3><p class="note">Points between the projection and the result. Lower is better. The market is the closing spread.</p></figcaption>
+            <div id="mae"></div>
+            <details class="data"><summary>Show as table</summary><div class="scroll"><table id="mae-table"></table></div></details>
+          </figure>
+          <figure>
+            <figcaption><h3>Does the claimed edge show up?</h3><p class="note">Spread and total bets grouped by the market-adjusted EV the model claimed, against what those bets returned. Dots on the diagonal would mean the claims were accurate. Whiskers are one standard error.</p></figcaption>
+            <div id="evcal"></div>
+            <details class="data"><summary>Show as table</summary><div class="scroll"><table id="evcal-table"></table></div></details>
+          </figure>
+          <figure>
+            <figcaption><h3>Units won or lost, one unit per bet</h3><p class="note">Running total at closing prices. A flat line that drifts down is what paying the vig with no edge looks like.</p></figcaption>
+            <div class="legend" id="cum-legend"></div>
+            <div id="cum"></div>
+            <details class="data"><summary>Show as table</summary><div class="scroll"><table id="cum-table"></table></div></details>
+          </figure>
+          <figure>
+            <figcaption><h3>Win probability against results</h3><p class="note">Games grouped by the home team's market-adjusted chance to win. Dots on the diagonal mean a 70% favorite won about 70% of the time.</p></figcaption>
+            <div id="cal"></div>
+            <details class="data"><summary>Show as table</summary><div class="scroll"><table id="cal-table"></table></div></details>
+          </figure>
+        </div>
+        <div class="section-head"><h3 id="rec-h">Betting records</h3><p class="note" id="rec-note"></p></div>
+        <div class="scroll"><table id="records" aria-labelledby="rec-h"></table></div>
+      </section>
+
+      <section id="keys" aria-labelledby="keys-h">
+        <div class="section-head">
+          <h2 id="keys-h">Key numbers</h2>
+          <p class="note" id="keys-note"></p>
+        </div>
+        <div class="two">
+          <figure>
+            <figcaption><h3>How often each margin of victory comes up</h3><p class="note">Share of games, against what a smooth bell curve would predict for the same games.</p></figcaption>
+            <div class="legend" aria-hidden="true">
+              <span><i class="key-box" style="background:var(--s1)"></i>Actual share of games</span>
+              <span><i class="key-line" style="background:var(--market)"></i>Bell curve</span>
+            </div>
+            <div id="keychart"></div>
+            <details class="data"><summary>Show as table</summary><div class="scroll"><table id="key-table"></table></div></details>
+          </figure>
+          <figure>
+            <figcaption><h3 id="push-h">How often a spread lands exactly on the number</h3><p class="note">A push returns the stake. A model that ignores key numbers misprices every spread near 3 and 7.</p></figcaption>
+            <div class="scroll"><table id="pushes" aria-labelledby="push-h"></table></div>
+          </figure>
+        </div>
+      </section>
+
+      <section id="method" aria-labelledby="method-h">
+        <div class="section-head"><h2 id="method-h">How it works</h2></div>
+        <div class="method">
+          <div><ol id="steps"></ol></div>
+          <div style="display:grid;gap:12px;align-content:start">
+            <h3>What this does not do yet</h3>
+            <ul id="limits"></ul>
           </div>
-          <div id="keychart"></div>
-          <details class="data"><summary>Show as table</summary><div class="scroll"><table id="key-table"></table></div></details>
-        </figure>
-        <figure>
-          <figcaption><h3 id="push-h">How often a spread lands exactly on the number</h3><p class="note">A push returns the stake. A model that ignores key numbers misprices every spread near 3 and 7.</p></figcaption>
-          <div class="scroll"><table id="pushes" aria-labelledby="push-h"></table></div>
-        </figure>
-      </div>
-    </section>
-
-    <section id="method" aria-labelledby="method-h">
-      <div class="section-head"><h2 id="method-h">How it works</h2></div>
-      <div class="method">
-        <div>
-          <ol id="steps"></ol>
         </div>
-        <div style="display:grid;gap:12px;align-content:start">
-          <h3>What this does not do yet</h3>
-          <ul id="limits"></ul>
-        </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <footer>
@@ -385,23 +456,30 @@ function seg(node, options, get, set) {
 const evCell = v => v > 0 ? H("span", { class: "chip", text: spct(v) }) : spct(v);
 
 /* ---------------- state ---------------- */
-const state = { week: DATA.slate.weeks[0], market: "Spread", basis: "adj", game: null, all: false, bankroll: 1000 };
+const state = { week: DATA.slate.weeks[0], market: "Spread", basis: "adj", all: false, bankroll: 1000 };
 try { const b = parseFloat(localStorage.getItem("nflvb.bankroll")); if (b >= 0) state.bankroll = b; } catch (e) {}
 $("#bankroll").value = state.bankroll;
-const games = () => DATA.slate.games.filter(g => g.week === state.week);
+const ALL = DATA.slate.games;
+const games = () => ALL.filter(g => g.week === state.week);
 const evOf = b => state.basis === "adj" ? b.ev : b.raw_ev;
 const probOf = b => state.basis === "adj" ? b.prob : b.raw_prob;
 const lean = (g, market) => g.bets.filter(b => b.market === market).sort((a, b) => evOf(b) - evOf(a))[0];
+const best = g => g.bets.slice().sort((a, b) => evOf(b) - evOf(a))[0];
 const kickoff = g => {
   if (!g.time) return g.date;
   const [h, m] = g.time.split(":").map(Number);
   return g.date + ", " + ((h + 11) % 12 + 1) + ":" + String(m).padStart(2, "0") + (h < 12 ? " AM" : " PM") + " ET";
 };
 const homeLine = (g, margin) => g.home + " " + line(-margin);
+/* A spread written the usual way: the favorite and the points it gives. */
+const fav = (g, margin) => { const r = Math.round(margin * 10) / 10; return r === 0 ? "Pick" : (r > 0 ? g.home : g.away) + " −" + Math.abs(r).toFixed(1).replace(/\.0$/, ""); };
+const nick = name => name.split(" ").slice(-1)[0];
+const stakeText = b => b.stake > 0 ? "$" + comma(Math.round(b.stake * state.bankroll)) + " (" + pct(b.stake) + ")" : "—";
+const fairOf = p => p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 * (1 - p) / p);
 
 /* ---------------- header ---------------- */
 (function header() {
-  const all = DATA.slate.games.filter(g => g.week === DATA.slate.weeks[0]);
+  const all = ALL.filter(g => g.week === DATA.slate.weeks[0]);
   const bets = all.flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => b.b.ev - a.b.ev);
   const plus = bets.filter(x => x.b.ev > 0);
   const lede = $("#lede");
@@ -415,9 +493,33 @@ const homeLine = (g, margin) => g.home + " " + line(-margin);
         : "No bet clears break-even once the model is weighed against the market. The closest is " + top.b.pick + " at " + odds(top.b.odds) + ", " + spct(top.b.ev) + " per dollar staked."));
   }
   $("#stamp").textContent = "Results through " + M.games_through + ". Updated " + M.generated + ".";
-  $("#slate-note").textContent = "Each row is one game. The tick is the market line, the light dot is where the model alone puts it, and the dark dot is the projection after moving " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals). That share is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons. Select a game for its prices.";
+  $("#games-note").textContent = "Open a game for its full page: how the spread is built, the quarterbacks, how the two teams match up, and recent form.";
+  $("#slate-note").textContent = "Each row is one game. The tick is the market line, the light dot is where the model alone puts it, and the dark dot is the projection after moving " + pct(M.blend.margin, 0) + " of the way from the market toward the model on sides (" + pct(M.blend.total, 0) + " on totals). That share is how much the model's disagreements have been worth over the last " + M.blend.lookback + " seasons.";
   $("#foot-data").textContent = "Data: " + M.sources.join("; ") + ", seasons " + M.seasons_of_data.replace("-", " to ") + ".";
 })();
+
+/* ---------------- game cards ---------------- */
+function renderCards() {
+  const node = $("#cards"), gs = games();
+  if (!gs.length) { node.replaceChildren(H("p", { class: "note", text: "No games with lines this week." })); return; }
+  node.replaceChildren(...gs.map(g => {
+    const b = best(g), ev = evOf(b);
+    const cell = (t, cls) => H("span", { class: cls || "", text: t });
+    return H("a", { class: "card", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
+      H("div", { class: "card-top" },
+        H("div", { class: "card-teams" }, document.createTextNode(g.away), H("small", { text: g.away_record }), document.createTextNode(" at " + g.home), H("small", { text: g.home_record })),
+        H("div", { class: "card-when", text: kickoff(g).replace(" ET", "") })),
+      H("div", { class: "card-grid" },
+        cell("", "h"), cell("Market", "h r"), cell("Model", "h r"),
+        cell("Spread"), cell(fav(g, g.market.spread), "r"), cell(fav(g, g.model.margin), "r b"),
+        cell("Total"), cell(g.market.total.toFixed(1), "r"), cell(g.model.total.toFixed(1), "r b"),
+        cell(g.home + " wins"), cell(pct(g.win.market, 0), "r"), cell(pct(g.win.raw, 0), "r b")),
+      H("div", { class: "card-pick" },
+        ev > 0 ? H("span", {}, H("span", { class: "chip", text: spct(ev) }), document.createTextNode(" " + b.pick + " " + odds(b.odds)))
+               : H("span", { class: "muted", text: "No bet clears break-even" }),
+        H("span", { class: "go", text: "Open game" })));
+  }));
+}
 
 /* ---------------- board ---------------- */
 function drawBoard(W) {
@@ -442,8 +544,6 @@ function drawBoard(W) {
   } else { lo = 0; hi = 100; ticks = [0, 25, 50, 75, 100]; fmt = t => t + "%"; }
   const x = lin(lo, hi, x0, x1);
   const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": "Market line, raw model and market-adjusted projection for each game" });
-
-  // yard lines at the key numbers
   ticks.forEach(t => {
     const strong = mk === "Spread" ? (t === 0) : (mk === "Moneyline" && t === 50);
     const key = mk === "Spread" && (Math.abs(t) === 3 || Math.abs(t) === 7);
@@ -454,26 +554,24 @@ function drawBoard(W) {
   const cap = { Spread: roomy ? ["Away team favored by", "Home team favored by"] : ["Away favored", "Home favored"], Total: ["Fewer points", "More points"], Moneyline: roomy ? ["Away team wins", "Home team wins"] : ["Away wins", "Home wins"] }[mk];
   svg.append(S("text", { x: x0, y: 12, "text-anchor": "start" }, "← " + cap[0]));
   svg.append(S("text", { x: x1, y: 12, "text-anchor": "end" }, cap[1] + " →"));
-
   gs.forEach((g, i) => {
-    const cy = top + i * rowH + rowH / 2, [mkt, raw, adj] = val(g), sel = state.game === g.id;
-    if (sel) svg.append(S("rect", { x: 0, y: cy - rowH / 2 + 1, width: W, height: rowH - 2, rx: 5, fill: "var(--raised)" }));
+    const cy = top + i * rowH + rowH / 2, [mkt, raw, adj] = val(g);
     svg.append(S("line", { x1: x0, x2: x1, y1: cy, y2: cy, stroke: "var(--grid)", "stroke-width": 1 }));
-    svg.append(S("text", { x: 6, y: cy + 4.5, class: "t-ink", "font-size": 14, "font-weight": sel ? 800 : 700, "font-stretch": "75%" }, g.away + " @ " + g.home));
+    svg.append(S("text", { x: 6, y: cy + 4.5, class: "t-ink", "font-size": 14, "font-weight": 700, "font-stretch": "75%" }, g.away + " @ " + g.home));
     svg.append(S("line", { x1: x(mkt), x2: x(raw), y1: cy, y2: cy, stroke: "var(--model-soft)", "stroke-width": 2, "stroke-linecap": "round" }));
-    svg.append(S("circle", { cx: x(raw), cy, r: 5, fill: "var(--model-soft)", stroke: sel ? "var(--raised)" : "var(--surface)", "stroke-width": 2 }));
+    svg.append(S("circle", { cx: x(raw), cy, r: 5, fill: "var(--model-soft)", stroke: "var(--surface)", "stroke-width": 2 }));
     svg.append(S("rect", { x: x(mkt) - 1.5, y: cy - 9, width: 3, height: 18, rx: 1, fill: "var(--market)" }));
-    svg.append(S("circle", { cx: x(adj), cy, r: 5, fill: "var(--model)", stroke: sel ? "var(--raised)" : "var(--surface)", "stroke-width": 2 }));
+    svg.append(S("circle", { cx: x(adj), cy, r: 5, fill: "var(--model)", stroke: "var(--surface)", "stroke-width": 2 }));
     const l = lean(g, mk);
     if (wide && l) {
       svg.append(S("text", { x: W - right, y: cy + 4.5, class: "t-2", "font-size": 13 }, l.pick));
       svg.append(S("text", { x: W - 6, y: cy + 4.5, "text-anchor": "end", "font-size": 13, "font-weight": 700, style: "fill:" + (evOf(l) > 0 ? "var(--good-ink)" : "var(--ink-3)") }, spct(evOf(l))));
     }
-    const show = { Spread: v => homeLine(g, v), Total: v => v.toFixed(1), Moneyline: v => g.home + " " + v.toFixed(1) + "%" }[mk];
-    const hit = S("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, tabindex: 0, role: "button",
-      "aria-label": `${g.away} at ${g.home}. Market ${show(mkt)}, raw model ${show(raw)}, market-adjusted ${show(adj)}.` });
-    hit.addEventListener("click", () => { state.game = g.id; renderSlate(); });
-    hit.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); state.game = g.id; renderSlate(); } });
+    const show = { Spread: v => fav(g, v), Total: v => v.toFixed(1), Moneyline: v => g.home + " " + v.toFixed(1) + "%" }[mk];
+    const hit = S("rect", { class: "hit", x: 0, y: cy - rowH / 2, width: W, height: rowH, tabindex: 0, role: "link",
+      "aria-label": `Open ${g.away} at ${g.home}. Market ${show(mkt)}, raw model ${show(raw)}, market-adjusted ${show(adj)}.` });
+    hit.addEventListener("click", () => { hideTip(); location.hash = g.id; });
+    hit.addEventListener("keydown", e => { if (e.key === "Enter") { hideTip(); location.hash = g.id; } });
     hover(hit, g.away + " at " + g.home, [
       { k: "Market", v: show(mkt), color: "var(--surface)" },
       { k: "Raw model", v: show(raw), color: "var(--model-soft)" },
@@ -486,42 +584,18 @@ function drawBoard(W) {
 }
 const redrawBoard = responsive($("#board"), drawBoard);
 
-function renderDetail() {
-  const g = games().find(g => g.id === state.game) || games()[0];
-  const node = $("#detail");
-  if (!g) { node.replaceChildren(H("p", { class: "note", text: "No games with lines this week." })); return; }
-  const qb = (team, q) => `${q.name} (${team}), ${snum(q.value, 2)} EPA per dropback against average`;
-  const facts = H("dl", { class: "kv" },
-    H("dt", { text: "Kickoff" }), H("dd", { text: kickoff(g) + (g.neutral ? ", neutral site" : "") }),
-    H("dt", { text: "Roof" }), H("dd", { text: g.roof }),
-    H("dt", { text: "Quarterbacks" }), H("dd", {}, H("div", { text: qb(g.away, g.away_qb) }), H("div", { text: qb(g.home, g.home_qb) })));
-  const cmp = H("table", { class: "compact" });
-  table(cmp, [{ t: "", l: 1 }, { t: "Market" }, { t: "Model" }, { t: "Adjusted" }], [
-    ["Spread", homeLine(g, g.market.spread), homeLine(g, g.model.margin), { v: homeLine(g, g.proj.margin), cls: "strong" }],
-    ["Total", g.market.total.toFixed(1), g.model.total.toFixed(1), { v: g.proj.total.toFixed(1), cls: "strong" }],
-    [g.home + " wins", pct(g.win.market), pct(g.win.raw), { v: pct(g.win.adj), cls: "strong" }],
-  ]);
-  const bt = H("table", { class: "compact" });
-  table(bt, [{ t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market" }, { t: "EV" }],
-    g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(b => [b.pick, odds(b.odds), pct(probOf(b)), pct(b.market_prob), spct(evOf(b))]));
-  node.replaceChildren(H("div", { class: "matchup", text: g.away + " at " + g.home }), facts, H("div", { class: "scroll" }, cmp), H("div", { class: "scroll" }, bt));
-}
-
-function renderBets() {
-  const rows = games().flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
-  const shown = state.all ? rows : rows.slice(0, 10);
-  const adj = state.basis === "adj";
-  table($("#bets"), [{ t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market, no vig" }, { t: "Break-even" }, { t: "EV per $1" }, { t: "Fair price" }, { t: "Stake" }],
-    shown.map(({ g, b }) => {
-      const p = probOf(b), fair = p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 * (1 - p) / p);
-      const game = H("button", { class: "link", type: "button", text: g.away + " @ " + g.home, onclick: () => { state.game = g.id; renderSlate(); $("#detail").scrollIntoView({ block: "nearest", behavior: "smooth" }); } });
-      const stake = adj ? (b.stake > 0 ? "$" + comma(Math.round(b.stake * state.bankroll)) + " (" + pct(b.stake) + ")" : "—") : "—";
-      return [game, { v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evCell(evOf(b)), odds(fair), stake];
-    }));
-  $("#bets-note").textContent = (adj
+const priceHead = [{ t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market, no vig" }, { t: "Break-even" }, { t: "EV per $1" }, { t: "Fair price" }, { t: "Stake" }];
+const priceRow = b => { const p = probOf(b); return [{ v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evCell(evOf(b)), odds(fairOf(p)), state.basis === "adj" ? stakeText(b) : "—"]; };
+const priceNote = () => (state.basis === "adj"
     ? "Priced from the market-adjusted projection. "
     : "Priced from the raw model alone, which has overstated its edge in every season tested. Stakes are only sized from the market-adjusted numbers. ")
     + "Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll.";
+function renderBets() {
+  const rows = games().flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
+  const shown = state.all ? rows : rows.slice(0, 10);
+  table($("#bets"), [{ t: "Game", l: 1 }, ...priceHead],
+    shown.map(({ g, b }) => [H("a", { href: "#" + g.id, text: g.away + " @ " + g.home }), ...priceRow(b)]));
+  $("#bets-note").textContent = priceNote();
   const more = $("#bets-more");
   more.hidden = rows.length <= 10;
   more.textContent = state.all ? "Show the top 10 only" : "Show all " + rows.length + " prices";
@@ -532,18 +606,170 @@ $("#bankroll").addEventListener("input", e => {
   try { localStorage.setItem("nflvb.bankroll", String(state.bankroll)); } catch (err) {}
   renderBets();
 });
-function renderSlate() {
-  if (!games().some(g => g.id === state.game)) state.game = (games()[0] || {}).id;
-  redrawBoard(); renderDetail(); renderBets();
+function renderGames() { renderCards(); redrawBoard(); renderBets(); }
+seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); renderGames(); });
+seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; redrawBoard(); });
+seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); });
+renderGames();
+
+/* ---------------- one game ---------------- */
+/* Columns rising or falling from a zero line: quarterback game logs and recent margins. */
+function columns(node, o) {
+  responsive(node, W => {
+    const Hh = o.height || 190, m = { l: 40, r: 8, t: 12, b: 38 }, n = o.items.length;
+    const top = Math.max(o.min || 0, ...o.items.map(d => Math.abs(d.value)));
+    const ticks = niceTicks(-top, top, 4), lo = Math.min(ticks[0], -top), hi = Math.max(ticks[ticks.length - 1], top);
+    const y = lin(lo, hi, Hh - m.b, m.t), band = (W - m.l - m.r) / Math.max(n, 1), bw = Math.min(24, band - 4);
+    const svg = S("svg", { viewBox: `0 0 ${W} ${Hh}`, role: "img", "aria-label": o.label });
+    ticks.forEach(t => {
+      svg.append(S("line", { x1: m.l, x2: W - m.r, y1: y(t), y2: y(t), stroke: t === 0 ? "var(--axis)" : "var(--grid)" }));
+      svg.append(S("text", { x: m.l - 8, y: y(t) + 4, "text-anchor": "end" }, o.fmt(t)));
+    });
+    o.items.forEach((d, i) => {
+      const cx = m.l + band * (i + 0.5), y0 = y(0), y1 = y(d.value), up = d.value >= 0;
+      const h = Math.abs(y1 - y0), r = Math.min(4, h, bw / 2), L = cx - bw / 2, R = cx + bw / 2;
+      const path = up ? `M${L} ${y0}V${y1 + r}Q${L} ${y1} ${L + r} ${y1}H${R - r}Q${R} ${y1} ${R} ${y1 + r}V${y0}Z`
+                      : `M${L} ${y0}V${y1 - r}Q${L} ${y1} ${L + r} ${y1}H${R - r}Q${R} ${y1} ${R} ${y1 - r}V${y0}Z`;
+      svg.append(S("path", { d: path, fill: o.color }));
+      if (band >= 34 || i % 2 === (n - 1) % 2) {
+        svg.append(S("text", { x: cx, y: Hh - m.b + 15, "text-anchor": "middle", "font-size": 11 }, d.label));
+        if (d.sub) svg.append(S("text", { x: cx, y: Hh - m.b + 28, "text-anchor": "middle", "font-size": 11 }, d.sub));
+      }
+      const hit = S("rect", { class: "hit", x: cx - band / 2, y: m.t, width: band, height: Hh - m.b - m.t, tabindex: 0, "aria-label": d.aria });
+      hover(hit, d.title, d.rows); svg.append(hit);
+    });
+    return svg;
+  });
 }
-seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); state.game = null; renderSlate(); });
-seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; renderSlate(); });
-seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderSlate(); });
-(function initialGame() {
-  const g = games().slice().sort((a, b) => lean(b, "Spread").ev - lean(a, "Spread").ev)[0];
-  state.game = g && g.id;
-})();
-renderSlate();
+const rankClass = r => r == null ? "q5" : r <= 6 ? "q1" : r <= 13 ? "q2" : r <= 19 ? "q3" : r <= 26 ? "q4" : "q5";
+const rankCell = c => H("span", {}, document.createTextNode(c.v), H("span", { class: "rk " + rankClass(c.rank), text: c.rank == null ? "n/a" : String(c.rank) }));
+
+function renderGame(g) {
+  const view = $("#view-game"), d = g.detail || {}, bd = d.breakdown;
+  const idx = ALL.indexOf(g), prev = ALL[idx - 1], next = ALL[idx + 1];
+  const sw = side => H("i", { class: "sw " + side });
+  const sec = (title, note, ...kids) => H("section", {}, H("div", { class: "section-head" }, H("h2", { text: title }), note ? H("p", { class: "note", text: note }) : null), ...kids);
+
+  /* --- header --- */
+  const b = best(g), ev = evOf(b);
+  const place = [d.stadium, g.neutral ? "neutral site" : null, g.roof && g.roof !== "unknown" ? g.roof : null, d.surface ? d.surface.replace("_", " ") : null,
+                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : null].filter(Boolean).join(", ");
+  const verdict = H("p", { class: "lede" });
+  if (ev > 0) verdict.append(H("strong", { text: "Best price: " + b.pick + " at " + odds(b.odds) + ". " }),
+    document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
+  else verdict.append(H("strong", { text: "No bet clears break-even. " }),
+    document.createTextNode("The closest is " + b.pick + " at " + odds(b.odds) + ": the model gives it " + pct(probOf(b)) + " and it needs " + pct(b.breakeven) + "."));
+  const head = H("div", { class: "game-head" },
+    H("nav", { class: "crumbs", "aria-label": "Games" },
+      H("a", { href: "#games", text: "← All games" }),
+      H("span", {}, prev ? H("a", { href: "#" + prev.id, text: "← " + prev.away + " at " + prev.home }) : null,
+        prev && next ? document.createTextNode(" ") : null,
+        next ? H("a", { href: "#" + next.id, text: next.away + " at " + next.home + " →" }) : null)),
+    H("h1", { text: g.away_name + " at " + g.home_name }),
+    H("p", { class: "note", text: "Week " + g.week + ", " + kickoff(g) + (place ? ". " + place + "." : ".") }),
+    H("p", { class: "note" }, sw("away"), document.createTextNode(nick(g.away_name) + " " + g.away_record + (d.rest && d.rest.away != null ? ", " + d.rest.away + " days rest" : "") + " "),
+      sw("home"), document.createTextNode(nick(g.home_name) + " " + g.home_record + (d.rest && d.rest.home != null ? ", " + d.rest.home + " days rest" : ""))),
+    verdict);
+
+  /* --- summary --- */
+  const sum = H("table", { class: "compact" });
+  const o = g.open, hs = (g.proj.total + g.proj.margin) / 2, as = (g.proj.total - g.proj.margin) / 2;
+  table(sum, [{ t: "", l: 1 }, { t: "First tracked" }, { t: "Current" }, { t: "Model" }, { t: "Adjusted" }], [
+    ["Spread", o ? fav(g, o.spread) : "n/a", fav(g, g.market.spread), fav(g, g.model.margin), { v: fav(g, g.proj.margin), cls: "strong" }],
+    ["Total", o ? o.total.toFixed(1) : "n/a", g.market.total.toFixed(1), g.model.total.toFixed(1), { v: g.proj.total.toFixed(1), cls: "strong" }],
+    [g.home + " wins", "", pct(g.win.market), pct(g.win.raw), { v: pct(g.win.adj), cls: "strong" }],
+    ["Projected score", { v: `${g.away} ${as.toFixed(1)}, ${g.home} ${hs.toFixed(1)}`, cls: "strong", colspan: 4 }],
+  ]);
+  const wb = (label, p) => H("div", { class: "winbar" },
+    H("div", { class: "lab" }, H("span", {}, H("b", { text: g.away + " " + pct(1 - p) })), H("span", { text: label }), H("span", {}, H("b", { text: g.home + " " + pct(p) }))),
+    H("div", { class: "track", role: "img", "aria-label": `${label}: ${g.away} ${pct(1 - p)}, ${g.home} ${pct(p)}` }, H("i", { class: "a", style: "width:" + ((1 - p) * 100).toFixed(1) + "%" }), H("i", { class: "h", style: "flex:1" })));
+  const summary = sec("Game summary", "Model is the projection on its own. Adjusted is the market line moved " + pct(M.blend.margin, 0) + " of the way toward it, which is the number bets are priced from."
+      + (o ? " First tracked is the line when this board first saw the game, on " + o.seen + (o.moves ? "; it has moved " + o.moves + (o.moves === 1 ? " time" : " times") + " since." : ".") : ""),
+    H("div", { class: "split" }, H("div", { class: "scroll" }, sum),
+      H("div", { class: "winbars" }, H("h3", { text: "Chance to win" }), wb("Market", g.win.market), wb("Model", g.win.raw), wb("Adjusted", g.win.adj))));
+
+  /* --- how the spread is built --- */
+  let build = null;
+  if (bd) {
+    const rows = bd.margin, max = Math.max(1, ...rows.map(r => Math.abs(r.value)), Math.abs(bd.margin_sum), Math.abs(g.market.spread));
+    const grid = H("div", { class: "contrib" });
+    grid.append(H("div", { class: "cap" }, H("span", { text: "← " + g.away }), H("span", { text: g.home + " →" })), H("span"));
+    grid.prepend(H("span"));
+    const row = (label, v, cls, text) => {
+      const fill = H("div", { class: "bar-fill " + (v >= 0 ? "pos" : "neg"), style: "width:" + (Math.abs(v) / max * 50).toFixed(1) + "%" });
+      grid.append(H("span", { class: cls || "", text: label }), H("div", { class: "bar-track " + (cls || ""), role: "img", "aria-label": label + " " + snum(v) }, fill), H("span", { class: "v " + (cls || ""), text: text || snum(v) }));
+    };
+    rows.forEach(r => row(r.label, r.value));
+    grid.append(H("div", { class: "sep" }));
+    row("Model spread", bd.margin_sum, "sum", fav(g, bd.margin_sum));
+    row("Market line", g.market.spread, "", fav(g, g.market.spread));
+    row("Adjusted", g.proj.margin, "", fav(g, g.proj.margin));
+    const rt = rows[0], tt = H("table");
+    table(tt, [{ t: "Total", l: 1 }, { t: "Points" }], [...bd.total.map((r, i) => [r.label, i ? snum(r.value) : r.value.toFixed(1)]),
+      { cls: "group", cells: ["Model total", bd.total_sum.toFixed(1)] }, ["Market total", g.market.total.toFixed(1)], ["Adjusted", g.proj.total.toFixed(1)]]);
+    build = sec("How the spread is built", `Each piece is worth this many points toward one team. Team ratings are points against an average team before the quarterback: ${g.home} ${snum(rt.home_rating)}, ${g.away} ${snum(rt.away_rating)}.`,
+      H("div", { class: "split" }, grid, H("div", { class: "scroll" }, tt)));
+  }
+
+  /* --- quarterbacks --- */
+  let qbs = null;
+  if (d.qbs) {
+    const panel = (q, side) => {
+      const node = H("div", { class: "qb" },
+        H("div", { class: "who" }, sw(side), document.createTextNode(q.name)),
+        H("p", { class: "note", text: `${snum(q.value, 3)} EPA per dropback against the league average, on about ${comma(q.dropbacks)} recent dropbacks. Worth ${snum(q.points)} points to ${q.team} compared with the quarterbacks behind its rating.` }));
+      if (q.log && q.log.length) {
+        const chart = H("div"), tb = H("table");
+        node.append(H("h3", { text: "EPA per dropback, last " + q.log.length + " games" }), chart,
+          H("details", { class: "data" }, H("summary", { text: "Show as table" }), H("div", { class: "scroll" }, tb)));
+        columns(chart, { label: q.name + " EPA per dropback by game", color: side === "away" ? "var(--s2)" : "var(--s1)", min: 0.3, fmt: t => snum(t, 1),
+          items: q.log.map(l => ({ value: l.epa, label: l.when.split(" ")[0], sub: l.opp.replace("vs ", "").replace("at ", "@"), title: l.when + " " + l.opp,
+            aria: `${l.when} ${l.opp}: ${snum(l.epa, 2)} EPA per dropback`, rows: [{ k: "EPA per dropback", v: snum(l.epa, 3) }, { k: "Dropbacks", v: String(l.db) }] })) });
+        table(tb, [{ t: "Game", l: 1 }, { t: "Dropbacks" }, { t: "EPA per dropback" }], q.log.slice().reverse().map(l => [l.when + " " + l.opp, l.db, snum(l.epa, 3)]));
+      } else node.append(H("p", { class: "note", text: "No game log yet." }));
+      return node;
+    };
+    qbs = sec("Quarterbacks", null, H("div", { class: "split" }, panel(d.qbs.away, "away"), panel(d.qbs.home, "home")));
+  }
+
+  /* --- matchup ranks --- */
+  let ranks = null;
+  if (d.ranks) {
+    const tbl = (rows, off, def) => { const t = H("table"); table(t, [{ t: "", l: 1 }, { t: off + " offense" }, { t: def + " defense" }], rows.map(r => [r.label, rankCell(r.off), rankCell(r.def)])); return t; };
+    const key = H("div", { class: "rank-key" }, document.createTextNode("League rank:"),
+      ...[["q1", "1 to 6"], ["q2", "7 to 13"], ["q3", "14 to 19"], ["q4", "20 to 26"], ["q5", "27 to 32"]].map(([c, t]) => H("span", { class: "rk " + c, text: t })));
+    ranks = sec("How they match up", `${d.ranks.season} season to date. Each offense is set against the defense it faces. Rank 1 is best for that unit, so a defense ranked 1 in points allows the fewest.`, key,
+      H("div", { class: "split" },
+        H("figure", {}, H("figcaption", {}, H("h3", {}, sw("away"), document.createTextNode(`${g.away} offense against ${g.home} defense`))), H("div", { class: "scroll" }, tbl(d.ranks.away_off, g.away, g.home))),
+        H("figure", {}, H("figcaption", {}, H("h3", {}, sw("home"), document.createTextNode(`${g.home} offense against ${g.away} defense`))), H("div", { class: "scroll" }, tbl(d.ranks.home_off, g.home, g.away)))));
+  }
+
+  /* --- recent form --- */
+  let form = null;
+  if (d.trends) {
+    const panel = (t, side) => {
+      const chart = H("div"), tb = H("table"), gs = t.games.slice().reverse();
+      columns(chart, { label: t.team + " margin in recent games", color: side === "away" ? "var(--s2)" : "var(--s1)", min: 14, fmt: t => snum(t, 0), height: 180,
+        items: gs.map(x => ({ value: x.margin, label: x.when.split(" ")[0], sub: x.opp.replace("vs ", "").replace("at ", "@"), title: x.when + " " + x.opp,
+          aria: `${x.when} ${x.opp}: ${x.su} ${x.pf}-${x.pa}`, rows: [{ k: "Score", v: x.pf + "-" + x.pa }, { k: "Line", v: x.line == null ? "n/a" : line(x.line) }, { k: "Against the spread", v: x.ats || "n/a" }, { k: "Total", v: x.total_line == null ? "n/a" : x.total_line + " (" + (x.ou || "") + ")" }] })) });
+      table(tb, [{ t: "Game", l: 1 }, { t: "Result" }, { t: "Line" }, { t: "ATS" }, { t: "Total" }, { t: "O/U" }],
+        t.games.map(x => [x.when + " " + x.opp, { v: x.su + " " + x.pf + "-" + x.pa, cls: x.su === "W" ? "w" : "dim" }, x.line == null ? "n/a" : line(x.line), { v: x.ats || "", cls: x.ats === "W" ? "w" : "dim" }, x.total_line == null ? "n/a" : x.total_line.toFixed(1), x.ou || ""]));
+      const rec = (v, l) => H("div", {}, H("b", { text: v }), H("span", { text: l }));
+      return H("figure", {}, H("figcaption", {}, H("h3", {}, sw(side), document.createTextNode(C_NAMES[t.team] || t.team))),
+        H("div", { class: "form-recs" }, rec(t.su, "Straight up"), rec(t.ats, "Against the spread"), rec(t.ou, "Over-under")),
+        chart, H("div", { class: "scroll" }, tb));
+    };
+    form = sec("Recent form", "Each team's last ten games, newest first in the table. Columns show the margin of victory or defeat.", H("div", { class: "split" }, panel(d.trends.away, "away"), panel(d.trends.home, "home")));
+  }
+
+  /* --- prices --- */
+  const pt = H("table");
+  table(pt, priceHead, g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(priceRow));
+  const prices = sec("Every price", priceNote(), H("div", { class: "scroll" }, pt));
+
+  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices].filter(Boolean));
+}
+const C_NAMES = {}; ALL.forEach(g => { C_NAMES[g.away] = g.away_name; C_NAMES[g.home] = g.home_name; });
 
 /* ---------------- ratings ---------------- */
 const R = DATA.ratings;
@@ -797,20 +1023,31 @@ function diagChart(node, o) {
     "Injuries other than a quarterback change are only seen through earlier lines.",
     "Weather is not modeled beyond whether the game is indoors.",
     "Lines come from one consensus source. Your own book's prices go in lines.csv and are priced against the same projections.",
-    "Opening lines are not in the data, so beating the closing number cannot be measured yet.",
+    "Opening lines are not in the data. Lines are now recorded each time the board updates, so line movement builds up from here.",
   ];
   $("#limits").replaceChildren(...limits.map(t => H("li", { text: t })));
 })();
 
-/* ---------------- nav highlight ---------------- */
-(function nav() {
-  const links = [...document.querySelectorAll("nav.sections a")];
-  const byId = Object.fromEntries(links.map(a => [a.getAttribute("href").slice(1), a]));
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting) { links.forEach(a => a.removeAttribute("aria-current")); byId[e.target.id].setAttribute("aria-current", "true"); }
-  }), { rootMargin: "-20% 0px -70% 0px" });
-  Object.keys(byId).forEach(id => { const el = document.getElementById(id); if (el) io.observe(el); });
-})();
+/* ---------------- routing ---------------- */
+const views = { games: $("#view-games"), game: $("#view-game"), ratings: $("#view-ratings"), model: $("#view-model") };
+let shownGame = null;
+function route() {
+  const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
+  const name = g ? "game" : (h === "ratings" || h === "model") ? h : "games";
+  hideTip();
+  Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
+  document.querySelectorAll("nav.sections a").forEach(a => {
+    if (a.dataset.view === (g ? "games" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+  });
+  $("header.top").hidden = !!g;
+  if (g) { shownGame = g; renderGame(g); document.title = g.away + " at " + g.home + " | NFL Value Board"; }
+  else { shownGame = null; document.title = "NFL Value Board"; }
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+/* The bankroll and pricing basis also apply on a game page. */
+const rerenderGames = renderGames;
+route();
 })();
 </script>
 <!--/PAGE-->

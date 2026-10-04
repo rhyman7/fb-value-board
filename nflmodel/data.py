@@ -8,6 +8,8 @@ The play-by-play files are large (about 20 MB a season), so each season is
 reduced once to two small tables that are cached in data/cache/:
   team_games_<season>.csv  one row per team per game (offense side)
   qb_games_<season>.csv    one row per quarterback per game
+  stat_games_<season>.csv  box-score style counts per team per game (last two
+                           seasons only), for the matchup pages
 Only seasons that are missing, or the season in progress, are downloaded again.
 """
 from __future__ import annotations
@@ -24,7 +26,11 @@ PBP_COLS = [
     "game_id", "season", "week", "season_type", "home_team", "away_team",
     "posteam", "defteam", "pass", "rush", "epa", "success", "wp",
     "id", "name", "two_point_attempt", "play_type",
+    # box-score style stats for the matchup pages
+    "yards_gained", "sack", "interception", "fumble_lost", "third_down_converted", "third_down_failed",
+    "fourth_down_converted", "fourth_down_failed", "yardline_100", "fixed_drive", "fixed_drive_result",
 ]
+STATS_SEASONS = 2   # box-score stats are only kept for the current and previous season
 
 
 def _download(url: str, dest) -> None:
@@ -68,11 +74,45 @@ def load_games(refresh: bool = False) -> pd.DataFrame:
 # Play-by-play -> per-game aggregates
 # --------------------------------------------------------------------------
 
-def _reduce_season(season: int) -> tuple[pd.DataFrame, pd.DataFrame]:
+def _reduce_stats(p: pd.DataFrame, season: int) -> pd.DataFrame:
+    """Conventional counting stats per offense per game. Nothing is filtered out:
+    these are the numbers a box score would show."""
+    p = p[p["posteam"].notna() & (p["two_point_attempt"].fillna(0) == 0)].copy()
+    scrim = p["play_type"].isin(["pass", "run"])
+    is_pass, is_run = p["play_type"] == "pass", p["play_type"] == "run"
+    turnover = (p["interception"].fillna(0) == 1) | (p["fumble_lost"].fillna(0) == 1)
+    f = pd.DataFrame({
+        "game_id": p["game_id"], "team": p["posteam"], "opp": p["defteam"],
+        "plays": scrim.astype(int), "yards": p["yards_gained"].fillna(0) * scrim,
+        "pass_plays": is_pass.astype(int), "pass_yards": p["yards_gained"].fillna(0) * is_pass,
+        "rush_plays": is_run.astype(int), "rush_yards": p["yards_gained"].fillna(0) * is_run,
+        "epa": p["epa"].fillna(0) * scrim, "pass_epa": p["epa"].fillna(0) * is_pass, "rush_epa": p["epa"].fillna(0) * is_run,
+        "succ": p["success"].fillna(0) * scrim,
+        "sacks": p["sack"].fillna(0), "ints": p["interception"].fillna(0), "fumbles": p["fumble_lost"].fillna(0),
+        "to_epa": p["epa"].fillna(0) * turnover,
+        "third_conv": p["third_down_converted"].fillna(0),
+        "third_att": p["third_down_converted"].fillna(0) + p["third_down_failed"].fillna(0),
+        "fourth_conv": p["fourth_down_converted"].fillna(0),
+        "fourth_att": p["fourth_down_converted"].fillna(0) + p["fourth_down_failed"].fillna(0),
+    })
+    out = f.groupby(["game_id", "team", "opp"], sort=False).sum().reset_index()
+    # Red zone: drives that ran a play inside the 20, and how many ended in a touchdown.
+    rz = p[scrim & (p["yardline_100"] <= 20)].groupby(["game_id", "posteam", "fixed_drive"])["fixed_drive_result"].first().reset_index()
+    rz["td"] = (rz["fixed_drive_result"] == "Touchdown").astype(int)
+    rz = rz.groupby(["game_id", "posteam"]).agg(rz_trips=("td", "size"), rz_td=("td", "sum")).reset_index().rename(columns={"posteam": "team"})
+    out = out.merge(rz, on=["game_id", "team"], how="left").fillna({"rz_trips": 0, "rz_td": 0})
+    out.insert(0, "season", season)
+    for col in ("team", "opp"):
+        out[col] = out[col].replace(C.TEAM_ALIASES)
+    return out
+
+
+def _reduce_season(season: int, with_stats: bool = False):
     raw = C.RAW / f"pbp_{season}.parquet"
     _download(C.PBP_URL.format(season=season), raw)
     p = pd.read_parquet(raw, columns=PBP_COLS)
     raw.unlink()  # keep the workspace small; the cache holds what we need
+    stats = _reduce_stats(p, season) if with_stats else None
 
     p = p[((p["pass"] == 1) | (p["rush"] == 1)) & p["epa"].notna() & p["posteam"].notna()]
     p = p[p["two_point_attempt"].fillna(0) == 0].copy()
@@ -105,23 +145,26 @@ def _reduce_season(season: int) -> tuple[pd.DataFrame, pd.DataFrame]:
     for df in (tg, qb):
         df["team"] = df["team"].replace(C.TEAM_ALIASES)
     tg["opp"] = tg["opp"].replace(C.TEAM_ALIASES)
-    return tg, qb
+    return tg, qb, stats
 
 
-def load_pbp_aggregates(refresh_current: bool = False, verbose: bool = True) -> tuple[pd.DataFrame, pd.DataFrame]:
+def load_pbp_aggregates(refresh_current: bool = False, verbose: bool = True):
+    """Return (team_games, qb_games, stat_games)."""
     C.CACHE.mkdir(parents=True, exist_ok=True)
     now = current_season()
-    tgs, qbs = [], []
+    tgs, qbs, sts = [], [], []
     for season in range(C.FIRST_SEASON, now + 1):
         tpath, qpath = C.CACHE / f"team_games_{season}.csv", C.CACHE / f"qb_games_{season}.csv"
-        stale = season == now and refresh_current
-        if stale or not (tpath.exists() and qpath.exists()):
+        spath = C.CACHE / f"stat_games_{season}.csv"
+        want_stats = season > now - STATS_SEASONS
+        have = tpath.exists() and qpath.exists() and (spath.exists() or not want_stats)
+        if (season == now and refresh_current) or not have:
             if verbose:
                 print(f"  downloading play-by-play {season} ...", flush=True)
             try:
-                tg, qb = _reduce_season(season)
+                tg, qb, st = _reduce_season(season, with_stats=want_stats)
             except Exception as exc:  # season not published yet, or network trouble
-                if tpath.exists() and qpath.exists():
+                if have:
                     print(f"  could not refresh {season} ({exc}); using cached copy")
                 else:
                     print(f"  no play-by-play for {season} ({exc}); skipping")
@@ -129,18 +172,29 @@ def load_pbp_aggregates(refresh_current: bool = False, verbose: bool = True) -> 
             else:
                 tg.round(4).to_csv(tpath, index=False)
                 qb.round(4).to_csv(qpath, index=False)
+                if st is not None:
+                    st.round(4).to_csv(spath, index=False)
         tgs.append(pd.read_csv(tpath))
         qbs.append(pd.read_csv(qpath))
-    return pd.concat(tgs, ignore_index=True), pd.concat(qbs, ignore_index=True)
+        if want_stats and spath.exists():
+            sts.append(pd.read_csv(spath))
+    stats = pd.concat(sts, ignore_index=True) if sts else pd.DataFrame()
+    return pd.concat(tgs, ignore_index=True), pd.concat(qbs, ignore_index=True), stats
 
 
-def load_all(refresh: bool = False, verbose: bool = True):
-    """Return (games, team_games, qb_games), joined to the schedule ordering."""
+def load_all(refresh: bool = False, verbose: bool = True, with_stats: bool = False):
+    """Return (games, team_games, qb_games), joined to the schedule ordering.
+    With with_stats=True a fourth table of box-score stats is returned too."""
     games = load_games(refresh=refresh)
-    tg, qb = load_pbp_aggregates(refresh_current=refresh, verbose=verbose)
+    tg, qb, stats = load_pbp_aggregates(refresh_current=refresh, verbose=verbose)
     meta = games[["game_id", "order", "week", "home_score", "away_score", "neutral"]]
     tg = tg.merge(meta, on="game_id", how="inner")
     tg["is_home"] = ((tg["side"] == "home") & (tg["neutral"] == 0)).astype(int)
     tg["pts"] = np.where(tg["side"] == "home", tg["home_score"], tg["away_score"])
     qb = qb.merge(meta[["game_id", "order"]], on="game_id", how="inner")
-    return games, tg.drop(columns=["home_score", "away_score"]), qb
+    tg = tg.drop(columns=["home_score", "away_score"])
+    if with_stats:
+        if len(stats):
+            stats = stats.merge(meta[["game_id", "order"]], on="game_id", how="inner")
+        return games, tg, qb, stats
+    return games, tg, qb

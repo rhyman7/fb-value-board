@@ -44,16 +44,17 @@ def build_frame(games: pd.DataFrame, engine: RatingEngine, verbose: bool = False
 class Linear:
     """Ridge regression on standardised features (so one penalty fits all)."""
 
-    def __init__(self, alpha: float = 20.0):
-        self.alpha = alpha
+    def __init__(self, alpha: float = 20.0, intercept: bool = True):
+        self.alpha, self.intercept = alpha, intercept
 
     def fit(self, X: np.ndarray, y: np.ndarray, w: np.ndarray | None = None):
         w = np.ones(len(y)) if w is None else w
-        self.mu = np.average(X, axis=0, weights=w)
+        # Without an intercept nothing is centred: all-zero features predict exactly zero.
+        self.mu = np.average(X, axis=0, weights=w) if self.intercept else np.zeros(X.shape[1])
         self.sd = np.sqrt(np.average((X - self.mu) ** 2, axis=0, weights=w))
         self.sd[self.sd == 0] = 1.0
         Z = (X - self.mu) / self.sd
-        self.y0 = np.average(y, weights=w)
+        self.y0 = np.average(y, weights=w) if self.intercept else 0.0
         Zw = Z * w[:, None]
         self.beta = np.linalg.solve(Z.T @ Zw + self.alpha * np.eye(Z.shape[1]), Zw.T @ (y - self.y0))
         return self
@@ -85,7 +86,9 @@ def walk_forward(df: pd.DataFrame, alpha: float = 20.0) -> tuple[pd.DataFrame, d
     for s in seasons:
         train = df[(df.season < s) & df.played]
         test = df.season == s
-        m = Linear(alpha).fit(train[MARGIN_FEATS].to_numpy(), train["result"].to_numpy())
+        # Margin is symmetric: swap the teams and it flips sign. So no intercept; home
+        # edge comes only through the hfa feature, which is zero at a neutral site.
+        m = Linear(alpha, intercept=False).fit(train[MARGIN_FEATS].to_numpy(), train["result"].to_numpy())
         t = Linear(alpha).fit(train[TOTAL_FEATS].to_numpy(), train["total"].to_numpy())
         df.loc[test, "model_margin"] = m.predict(df.loc[test, MARGIN_FEATS].to_numpy())
         df.loc[test, "model_total"] = t.predict(df.loc[test, TOTAL_FEATS].to_numpy())
