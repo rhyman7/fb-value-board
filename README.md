@@ -27,25 +27,25 @@ closing prices:
 
 | | Model | Closing line |
 |---|---|---|
-| Average miss on the margin | 10.07 pts | 9.91 pts |
-| Average miss on the total | 10.58 pts | 10.46 pts |
-| Picks the winner | 65.3% | 66.0% |
+| Average miss on the margin | 10.06 pts | 9.91 pts |
+| Average miss on the total | 10.56 pts | 10.46 pts |
+| Picks the winner | 65.7% | 66.0% |
 
 | Raw model, one bet on every game | Record | Win rate | Return |
 |---|---|---|---|
-| Spreads | 1,682-1,618-87 | 51.0% | -1.0% |
-| Totals | 1,675-1,681-31 | 49.9% | -3.3% |
-| Moneylines | 1,683-1,691-12 | 49.9% | -2.3% |
+| Spreads | 1,685-1,615-87 | 51.1% | -0.9% |
+| Totals | 1,684-1,672-31 | 50.2% | -2.8% |
+| Moneylines | 1,685-1,689-12 | 49.9% | -2.6% |
 
 **The model is close to the closing line and does not beat it.** A spread bettor
 needs 52.4% at -110. Since 2019, the seasons the settings were not tuned on, the
-spread picks are 49.9%.
+spread picks are 50.1%.
 
 So the dashboard prices bets from a market-adjusted projection: the market line,
 moved toward the model by only as much as the model has earned. That weight is
-currently 15% on sides and 5% on totals (totals are capped there; see
-FEATURES.md). Market-adjusted spread bets with EV above 2% went 505-455-25
-(52.6%, +2.6% return, standard error 3.1%), which is not distinguishable from
+currently 16% on sides and 5% on totals (totals are capped there; see
+FEATURES.md). Market-adjusted spread bets with EV above 2% went 566-517-26
+(52.3%, +1.9% return, standard error 2.9%), which is not distinguishable from
 zero.
 
 ### Against opening lines
@@ -55,14 +55,14 @@ the closing one. On 2,667 games since 2014:
 
 | Model disagrees with the opener by | Record | Win rate | Return |
 |---|---|---|---|
-| any amount | 1,331-1,277-59 | 51.0% | -2.5% |
-| 1+ points | 910-813-42 | 52.8% | +0.9% |
-| 2+ points | 526-438-23 | 54.6% | +4.1% |
-| 3+ points | 263-235-8 | 52.8% | +0.8% |
+| any amount | 1,348-1,260-59 | 51.7% | -1.3% |
+| 1+ points | 895-805-38 | 52.6% | +0.5% |
+| 2+ points | 521-433-23 | 54.6% | +4.2% |
+| 3+ points | 265-228-9 | 53.8% | +2.5% |
 
 On the 2+ point bets the line later moved toward the model 51% of the time
-and away from it 27%, for an average of +0.6 points of closing line value.
-The same sides bet at the close won 52.2%.
+and away from it 28%, for an average of +0.6 points of closing line value.
+The same sides bet at the close won 52.0%.
 
 This test is deliberately strict: the model is not told about quarterback
 changes announced during the week, and 345 games where a team had played the
@@ -71,10 +71,10 @@ is 1.4 standard errors above zero, and opening numbers move fast and take
 small bets, so real results would land between the opening and closing records.
 
 Games four or more days away are marked on the board as early lines and priced
-with the weight the model has earned against opening spreads (17%, against 15%
+with the weight the model has earned against opening spreads (17%, against 16%
 for closing lines). The difference is small because that is what the data
-supports: replaying that pricing on past openers flagged 905 bets that went
-470-412-23 (53.3%) and returned +1.7%, about half the +3.5% the pricing claimed.
+supports: replaying that pricing on past openers flagged 825 bets that went
+430-376-19 (53.4%) and returned +1.9%, about half the +3.4% the pricing claimed.
 
 **So the model's value is early in the week.** By kickoff the market has
 absorbed what it knows. Use it to find spreads that look off when they open, and
@@ -133,7 +133,9 @@ check its first run.
    prior seasons count 55% as much, garbage time is dropped and single-play EPA
    is capped.
 2. **Quarterback adjustment.** Each quarterback has a decayed, shrunk EPA per
-   dropback. The feature is the gap between this week's starter and the
+   dropback, judged over about 80 team-weeks so a starter's value does not
+   collapse after a few bad games; an unknown backup starts at 0.13 EPA per
+   dropback below average. The feature is the gap between this week's starter and the
    quarterbacks who produced the team's pass rating.
 3. **Market-implied ratings.** Earlier weeks' closing spreads and totals are
    solved into a rating per team. This carries injury and roster information the

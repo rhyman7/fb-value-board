@@ -97,6 +97,37 @@ since 2019. Two cautions:
 The board now shows a wind tag on games forecast at 10-19 mph, the forecast in
 each game's header, and this table in the model record.
 
+## Quarterback changes
+
+Prompted by Carolina at Philadelphia in week 6: with Jalen Hurts out, the raw
+model still had Philadelphia by 0.7 while the market moved about 5 points
+toward Carolina. The model valued the switch to Tanner McKee at only 2.3
+points, because Hurts's rating leaned on five weak 2026 games and an unknown
+backup was rated close to an average starter.
+
+Games where either team started a different quarterback from its previous game
+(388 in 2011-2018, 475 since 2019) were scored separately. Run
+`python experiments/qb_test.py`.
+
+| Setting | Tuning, QB-change games | Holdout, QB-change games | Holdout, all games |
+|---|---|---|---|
+| Before (20-week QB half-life, backup at −0.07) | 10.409 | 10.360 | 10.013 |
+| QB half-life 80 weeks | 10.377 | 10.280 | 9.994 |
+| + unknown backup at −0.13 | **10.362** | **10.251** | **9.987** |
+| Closing line | 10.345 | 10.038 | 9.803 |
+
+Both changes are kept. Also tested and rejected: removing the starter's share
+of the market-implied rating when he is out (`d_qbm`; no gain on the tuning
+seasons) and a heavier quarterback prior (400 dropbacks; slightly worse).
+
+Carolina at Philadelphia under the new settings: raw model Carolina by 0.5
+instead of Philadelphia by 0.7. Carolina won 25-14. Quarterback changes are
+still where the model trails the market most (10.25 against 10.04): it cannot
+know a backup's talent before he plays.
+
+The game card's model column is now labelled "Raw model", so it no longer reads
+as the board's pick when the market-adjusted win chance says the opposite.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;

@@ -38,12 +38,14 @@ class RatingEngine:
     def __init__(self, team_games: pd.DataFrame, qb_games: pd.DataFrame, *,
                  half_life: float = C.HALF_LIFE_GAMES, carry: float = C.OFFSEASON_CARRY,
                  ridge: dict | None = None, window_seasons: int = 3,
-                 games: pd.DataFrame | None = None, market_half_life: float = C.MARKET_HALF_LIFE):
+                 games: pd.DataFrame | None = None, market_half_life: float = C.MARKET_HALF_LIFE,
+                 qb_half_life: float = C.QB_HALF_LIFE_DROPBACKS, qb_prior: float = C.QB_PRIOR_DROPBACKS):
         tg = team_games.sort_values("order").reset_index(drop=True)
         self.teams = sorted(set(tg["team"]) | set(tg["opp"]))
         self.tix = {t: i for i, t in enumerate(self.teams)}
         self.n = len(self.teams)
         self.half_life, self.carry, self.window = half_life, carry, window_seasons
+        self.qb_half_life, self.qb_prior = qb_half_life, qb_prior
         self.ridge = dict(C.RIDGE if ridge is None else ridge)
         self.metrics = METRICS
 
@@ -134,10 +136,10 @@ class RatingEngine:
         lg = out["pass"]["mu"]
         # Decay by time (a long half-life: quarterbacks are more stable than teams).
         age = _time(order_now) - _time(qo)
-        qw = 0.5 ** (age / (C.QB_HALF_LIFE_DROPBACKS / 35.0))
+        qw = 0.5 ** (age / (self.qb_half_life / 35.0))
         df = pd.DataFrame({"id": qid, "w_db": qw * qdb, "w_epa": qw * (qepa - lg * qdb)})
         s = df.groupby("id").sum()
-        P = C.QB_PRIOR_DROPBACKS
+        P = self.qb_prior
         qb_val = ((s["w_epa"] + P * C.QB_REPLACEMENT) / (s["w_db"] + P))
         out["qb"] = qb_val.to_dict()
         out["qb_n"] = s["w_db"].to_dict()
@@ -149,6 +151,15 @@ class RatingEngine:
         num = np.bincount(qteam[recent], weights=tw * vals, minlength=self.n)
         den = np.bincount(qteam[recent], weights=tw, minlength=self.n)
         out["qb_base"] = np.divide(num, den, out=np.full(self.n, C.QB_REPLACEMENT), where=den > 0)
+
+        # The quarterback mix behind the market-implied ratings: the same short half-life
+        # as _market, so a starter who misses a game is taken out of what the lines assumed.
+        mrec = (qo < order_now) & (qo // 100 >= order_now // 100 - 1)
+        mw = 0.5 ** ((_time(order_now) - _time(qo[mrec])) / self.mkt_half_life) * self.carry ** (order_now // 100 - qo[mrec] // 100) * qdb[mrec]
+        mv = pd.Series(qid[mrec]).map(qb_val).to_numpy()
+        mnum = np.bincount(qteam[mrec], weights=mw * mv, minlength=self.n)
+        mden = np.bincount(qteam[mrec], weights=mw, minlength=self.n)
+        out["qb_mkt_base"] = np.divide(mnum, mden, out=np.full(self.n, C.QB_REPLACEMENT), where=mden > 0)
 
         lq = self.last_qb[self.last_qb["order"] < order_now].groupby("team").tail(1)
         out["last_qb"] = dict(zip(lq["team"], lq["qb_id"]))
@@ -219,8 +230,11 @@ class RatingEngine:
                     f[f"{side}_qb_id"] = qid
                     f[f"{side}_qb_val"] = v
                     f[f"{side}_qb_delta"] = 0.0 if np.isnan(v) else v - r["qb_base"][ti]
+                    f[f"{side}_qb_mdelta"] = 0.0 if np.isnan(v) else v - r["qb_mkt_base"][ti]
                 f["d_qb"] = f["home_qb_delta"] - f["away_qb_delta"]
                 f["s_qb"] = f["home_qb_delta"] + f["away_qb_delta"]
+                f["d_qbm"] = f["home_qb_mdelta"] - f["away_qb_mdelta"]   # starter vs the QBs the recent lines assumed
+                f["s_qbm"] = f["home_qb_mdelta"] + f["away_qb_mdelta"]
                 self._extra_features(f, r, g, h, a)
                 rows.append(f)
         return pd.DataFrame(rows)

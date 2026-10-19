@@ -32,8 +32,9 @@ RIDGE = {                   # shrinkage toward league average (plays; games for 
 }
 MARKET_HALF_LIFE = 4.0      # weeks; the market re-prices teams quickly
 QB_PRIOR_DROPBACKS = 200.0  # shrinkage for quarterback ratings
-QB_REPLACEMENT = -0.07      # prior EPA/dropback (vs league avg) for an unknown QB
-QB_HALF_LIFE_DROPBACKS = 700.0
+QB_REPLACEMENT = -0.13      # prior EPA/dropback (vs league avg) for an unknown QB (was -0.07; Oct 2026, FEATURES.md)
+QB_HALF_LIFE_DROPBACKS = 2800.0   # about 80 team-weeks: a starter is judged on more than one season
+                                  # (was 700; QB-change games, FEATURES.md)
 
 TOTAL_WEIGHT_CAP = 0.05     # ceiling on the model's weight for totals. Totals the board flagged as
                             # positive EV have lost in every version tested (-5% to -12%, FEATURES.md),

@@ -587,7 +587,7 @@ function renderCards() {
       H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph", title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null), H("span", { text: "Win chance" })),
       team(g.away, g.away_record, 1 - p, p < 0.5), team(g.home, g.home_record, p, p >= 0.5),
       H("div", { class: "bug-lines" },
-        cell("", "h"), cell("Market", "h r"), cell("Model", "h r"),
+        cell("", "h"), cell("Market", "h r"), cell("Raw model", "h r"),
         cell("Spread"), cell(fav(g, g.market.spread), "r"), cell(fav(g, g.model.margin), "r b"),
         cell("Total"), cell(g.market.total.toFixed(1), "r"), cell(g.model.total.toFixed(1), "r b")),
       H("div", { class: "bug-foot" },
