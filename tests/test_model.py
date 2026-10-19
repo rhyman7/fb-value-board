@@ -155,3 +155,19 @@ def test_injury_features():
     f = add_injury_features(g, inj)
     assert abs(f.loc[0, "d_miss_ol"] - 0.4) < 1e-9 and abs(f.loc[0, "d_chg_ol"] - 0.3) < 1e-9
     assert f.loc[1, "d_chg_ol"] == 0                      # a game with no injury rows gets zeros
+
+
+def test_blank_roof_filled_from_home_stadium(tmp_path, monkeypatch):
+    from nflmodel import config as C, data
+    games = pd.DataFrame({
+        "season": [2025, 2025, 2026, 2026], "week": [1, 2, 7, 7], "game_type": "REG",
+        "game_id": ["a", "b", "c", "d"], "gameday": ["2025-09-07", "2025-09-14", "2026-10-25", "2026-10-25"],
+        "home_team": ["ATL", "CHI", "ATL", "CHI"], "away_team": ["TB", "GB", "SF", "NE"],
+        "location": "Home", "roof": ["closed", "outdoors", np.nan, np.nan], "result": [3.0, -7.0, np.nan, np.nan],
+    })
+    raw = tmp_path / "raw"; raw.mkdir()
+    games.to_csv(raw / "games.csv", index=False)
+    monkeypatch.setattr(C, "RAW", raw)
+    monkeypatch.setattr(C, "FIRST_SEASON", 2025)
+    g = data.load_games(refresh=False).set_index("game_id")
+    assert g.loc["c", "indoor"] == 1 and g.loc["d", "indoor"] == 0

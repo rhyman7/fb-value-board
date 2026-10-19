@@ -62,6 +62,13 @@ def load_games(refresh: bool = False) -> pd.DataFrame:
     g["gameday"] = pd.to_datetime(g["gameday"])
     g["played"] = g["result"].notna()
     g["neutral"] = (g["location"] == "Neutral").astype(int)
+    # The schedule leaves the roof blank for many games not yet played. Fill it from the
+    # home team's stadium: its most common roof at home over the last two seasons
+    # (retractable roofs are usually listed closed). Otherwise a dome looks outdoors.
+    home = g[g["played"] & (g["neutral"] == 0) & g["roof"].notna() & (g["season"] >= g["season"].max() - 2)]
+    usual = home.groupby("home_team")["roof"].agg(lambda r: r.value_counts().index[0])
+    blank = g["roof"].isna() & ~g["played"] & (g["neutral"] == 0)
+    g.loc[blank, "roof"] = g.loc[blank, "home_team"].map(usual)
     g["indoor"] = g["roof"].isin(["dome", "closed"]).astype(int)
     g["playoff"] = (g["game_type"] != "REG").astype(int)
     # A single running index of "game weeks" across seasons, used for ordering.
