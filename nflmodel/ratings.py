@@ -35,6 +35,10 @@ def _time(order: np.ndarray | int):
 
 
 class RatingEngine:
+    # Sport-specific constants, overridden by the college engine (cfbmodel/ratings.py).
+    QB_REPLACEMENT = C.QB_REPLACEMENT
+    MARKET_DEFAULT = {"hfa": 2.0, "avg_total": 44.0}
+
     def __init__(self, team_games: pd.DataFrame, qb_games: pd.DataFrame, *,
                  half_life: float = C.HALF_LIFE_GAMES, carry: float = C.OFFSEASON_CARRY,
                  ridge: dict | None = None, window_seasons: int = 3,
@@ -140,7 +144,7 @@ class RatingEngine:
         df = pd.DataFrame({"id": qid, "w_db": qw * qdb, "w_epa": qw * (qepa - lg * qdb)})
         s = df.groupby("id").sum()
         P = self.qb_prior
-        qb_val = ((s["w_epa"] + P * C.QB_REPLACEMENT) / (s["w_db"] + P))
+        qb_val = ((s["w_epa"] + P * self.QB_REPLACEMENT) / (s["w_db"] + P))
         out["qb"] = qb_val.to_dict()
         out["qb_n"] = s["w_db"].to_dict()
 
@@ -150,7 +154,7 @@ class RatingEngine:
         vals = pd.Series(qid[recent]).map(qb_val).to_numpy()
         num = np.bincount(qteam[recent], weights=tw * vals, minlength=self.n)
         den = np.bincount(qteam[recent], weights=tw, minlength=self.n)
-        out["qb_base"] = np.divide(num, den, out=np.full(self.n, C.QB_REPLACEMENT), where=den > 0)
+        out["qb_base"] = np.divide(num, den, out=np.full(self.n, self.QB_REPLACEMENT), where=den > 0)
 
         # The quarterback mix behind the market-implied ratings: the same short half-life
         # as _market, so a starter who misses a game is taken out of what the lines assumed.
@@ -159,7 +163,7 @@ class RatingEngine:
         mv = pd.Series(qid[mrec]).map(qb_val).to_numpy()
         mnum = np.bincount(qteam[mrec], weights=mw * mv, minlength=self.n)
         mden = np.bincount(qteam[mrec], weights=mw, minlength=self.n)
-        out["qb_mkt_base"] = np.divide(mnum, mden, out=np.full(self.n, C.QB_REPLACEMENT), where=mden > 0)
+        out["qb_mkt_base"] = np.divide(mnum, mden, out=np.full(self.n, self.QB_REPLACEMENT), where=mden > 0)
 
         lq = self.last_qb[self.last_qb["order"] < order_now].groupby("team").tail(1)
         out["last_qb"] = dict(zip(lq["team"], lq["qb_id"]))
@@ -174,7 +178,7 @@ class RatingEngine:
         n = self.n
         idx = np.flatnonzero((self.m_order < order_now) & (self.m_order // 100 >= order_now // 100 - 1))
         if len(idx) < 16:
-            return {"R": np.zeros(n), "T": np.zeros(n), "hfa": 2.0, "avg_total": 44.0}
+            return {"R": np.zeros(n), "T": np.zeros(n), **self.MARKET_DEFAULT}
         o = self.m_order[idx]
         w = 0.5 ** ((_time(order_now) - _time(o)) / self.mkt_half_life) * self.carry ** (order_now // 100 - o // 100)
         rows = np.arange(len(idx))
@@ -196,7 +200,7 @@ class RatingEngine:
     def qb_value(self, r: dict, qb_id) -> float:
         if qb_id is None or (isinstance(qb_id, float) and np.isnan(qb_id)):
             return np.nan
-        return r["qb"].get(qb_id, C.QB_REPLACEMENT)
+        return r["qb"].get(qb_id, self.QB_REPLACEMENT)
 
     # ------------------------------------------------------------------
     def features(self, games: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:

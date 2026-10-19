@@ -1,0 +1,1801 @@
+{
+ "first_season": 2017,
+ "last_season": 2026,
+ "holdout_from": 2021,
+ "games": 6858,
+ "accuracy": {
+  "tuning": {
+   "n": 2206,
+   "margin_mae": {
+    "model": 12.374,
+    "blend": 12.204,
+    "market": 12.221
+   },
+   "total_mae": {
+    "model": 13.454,
+    "blend": 13.175,
+    "market": 13.174
+   },
+   "winner_pct": {
+    "model": 0.7539,
+    "blend": 0.7552,
+    "market": 0.7484
+   }
+  },
+  "2020": {
+   "n": 509,
+   "margin_mae": {
+    "model": 12.983,
+    "blend": 12.863,
+    "market": 12.903
+   },
+   "total_mae": {
+    "model": 13.576,
+    "blend": 13.679,
+    "market": 13.696
+   },
+   "winner_pct": {
+    "model": 0.7426,
+    "blend": 0.7407,
+    "market": 0.7387
+   }
+  },
+  "holdout": {
+   "n": 4143,
+   "margin_mae": {
+    "model": 12.354,
+    "blend": 12.064,
+    "market": 12.055
+   },
+   "total_mae": {
+    "model": 12.598,
+    "blend": 12.427,
+    "market": 12.433
+   },
+   "winner_pct": {
+    "model": 0.734,
+    "blend": 0.733,
+    "market": 0.735
+   }
+  }
+ },
+ "by_season": [
+  {
+   "season": 2017,
+   "n": 737,
+   "margin_mae": {
+    "model": 12.33,
+    "blend": 12.099,
+    "market": 12.099
+   },
+   "total_mae": {
+    "model": 14.092,
+    "blend": 13.723,
+    "market": 13.723
+   },
+   "winner_pct": {
+    "model": 0.7544,
+    "blend": 0.7558,
+    "market": 0.7558
+   },
+   "w_margin": 0.0,
+   "w_total": 0.0
+  },
+  {
+   "season": 2018,
+   "n": 734,
+   "margin_mae": {
+    "model": 12.46,
+    "blend": 12.389,
+    "market": 12.446
+   },
+   "total_mae": {
+    "model": 13.257,
+    "blend": 12.93,
+    "market": 12.928
+   },
+   "winner_pct": {
+    "model": 0.748,
+    "blend": 0.7493,
+    "market": 0.7425
+   },
+   "w_margin": 0.262,
+   "w_total": 0.014
+  },
+  {
+   "season": 2019,
+   "n": 735,
+   "margin_mae": {
+    "model": 12.332,
+    "blend": 12.125,
+    "market": 12.12
+   },
+   "total_mae": {
+    "model": 13.011,
+    "blend": 12.869,
+    "market": 12.869
+   },
+   "winner_pct": {
+    "model": 0.7592,
+    "blend": 0.7605,
+    "market": 0.7469
+   },
+   "w_margin": 0.344,
+   "w_total": 0.0
+  },
+  {
+   "season": 2020,
+   "n": 509,
+   "margin_mae": {
+    "model": 12.983,
+    "blend": 12.863,
+    "market": 12.903
+   },
+   "total_mae": {
+    "model": 13.576,
+    "blend": 13.679,
+    "market": 13.696
+   },
+   "winner_pct": {
+    "model": 0.7426,
+    "blend": 0.7407,
+    "market": 0.7387
+   },
+   "w_margin": 0.319,
+   "w_total": 0.05
+  },
+  {
+   "season": 2021,
+   "n": 733,
+   "margin_mae": {
+    "model": 12.885,
+    "blend": 12.596,
+    "market": 12.557
+   },
+   "total_mae": {
+    "model": 12.669,
+    "blend": 12.456,
+    "market": 12.456
+   },
+   "winner_pct": {
+    "model": 0.7449,
+    "blend": 0.7244,
+    "market": 0.7285
+   },
+   "w_margin": 0.327,
+   "w_total": 0.05
+  },
+  {
+   "season": 2022,
+   "n": 735,
+   "margin_mae": {
+    "model": 12.295,
+    "blend": 12.055,
+    "market": 12.083
+   },
+   "total_mae": {
+    "model": 12.388,
+    "blend": 11.937,
+    "market": 11.935
+   },
+   "winner_pct": {
+    "model": 0.7279,
+    "blend": 0.7265,
+    "market": 0.7279
+   },
+   "w_margin": 0.31,
+   "w_total": 0.05
+  },
+  {
+   "season": 2023,
+   "n": 751,
+   "margin_mae": {
+    "model": 12.205,
+    "blend": 11.965,
+    "market": 11.974
+   },
+   "total_mae": {
+    "model": 12.904,
+    "blend": 12.789,
+    "market": 12.796
+   },
+   "winner_pct": {
+    "model": 0.7457,
+    "blend": 0.739,
+    "market": 0.7403
+   },
+   "w_margin": 0.293,
+   "w_total": 0.05
+  },
+  {
+   "season": 2024,
+   "n": 763,
+   "margin_mae": {
+    "model": 12.423,
+    "blend": 12.168,
+    "market": 12.154
+   },
+   "total_mae": {
+    "model": 12.557,
+    "blend": 12.668,
+    "market": 12.687
+   },
+   "winner_pct": {
+    "model": 0.7104,
+    "blend": 0.7169,
+    "market": 0.7169
+   },
+   "w_margin": 0.294,
+   "w_total": 0.05
+  },
+  {
+   "season": 2025,
+   "n": 773,
+   "margin_mae": {
+    "model": 11.978,
+    "blend": 11.853,
+    "market": 11.887
+   },
+   "total_mae": {
+    "model": 12.535,
+    "blend": 12.412,
+    "market": 12.418
+   },
+   "winner_pct": {
+    "model": 0.7309,
+    "blend": 0.7374,
+    "market": 0.74
+   },
+   "w_margin": 0.267,
+   "w_total": 0.05
+  },
+  {
+   "season": 2026,
+   "n": 388,
+   "margin_mae": {
+    "model": 12.367,
+    "blend": 11.486,
+    "market": 11.352
+   },
+   "total_mae": {
+    "model": 12.477,
+    "blend": 12.161,
+    "market": 12.159
+   },
+   "winner_pct": {
+    "model": 0.7552,
+    "blend": 0.7732,
+    "market": 0.7758
+   },
+   "w_margin": 0.277,
+   "w_total": 0.05
+  }
+ ],
+ "by_week": [
+  {
+   "weeks": "0-2",
+   "n": 580,
+   "margin_mae": {
+    "model": 12.865,
+    "blend": 12.021,
+    "market": 11.891
+   },
+   "total_mae": {
+    "model": 12.847,
+    "blend": 12.373,
+    "market": 12.368
+   },
+   "winner_pct": {
+    "model": 0.7655,
+    "blend": 0.769,
+    "market": 0.769
+   }
+  },
+  {
+   "weeks": "3-5",
+   "n": 988,
+   "margin_mae": {
+    "model": 12.429,
+    "blend": 11.949,
+    "market": 11.87
+   },
+   "total_mae": {
+    "model": 12.41,
+    "blend": 12.401,
+    "market": 12.417
+   },
+   "winner_pct": {
+    "model": 0.746,
+    "blend": 0.7571,
+    "market": 0.7621
+   }
+  },
+  {
+   "weeks": "6-9",
+   "n": 1178,
+   "margin_mae": {
+    "model": 12.072,
+    "blend": 11.969,
+    "market": 12.013
+   },
+   "total_mae": {
+    "model": 12.55,
+    "blend": 12.388,
+    "market": 12.39
+   },
+   "winner_pct": {
+    "model": 0.7207,
+    "blend": 0.7122,
+    "market": 0.7156
+   }
+  },
+  {
+   "weeks": "10+",
+   "n": 1372,
+   "margin_mae": {
+    "model": 12.317,
+    "blend": 12.235,
+    "market": 12.279
+   },
+   "total_mae": {
+    "model": 12.672,
+    "blend": 12.502,
+    "market": 12.506
+   },
+   "winner_pct": {
+    "model": 0.723,
+    "blend": 0.7179,
+    "market": 0.7172
+   }
+  },
+  {
+   "weeks": "Bowls",
+   "n": 25,
+   "margin_mae": {
+    "model": 12.87,
+    "blend": 12.728,
+    "market": 12.902
+   },
+   "total_mae": {
+    "model": 12.484,
+    "blend": 12.505,
+    "market": 12.525
+   },
+   "winner_pct": {
+    "model": 0.76,
+    "blend": 0.76,
+    "market": 0.76
+   }
+  }
+ ],
+ "records": {
+  "model": {
+   "Spread": {
+    "rows": [
+     {
+      "rule": "Every game",
+      "tuning": {
+       "n": 2206,
+       "w": 1135,
+       "l": 1026,
+       "p": 45,
+       "win_pct": 0.5252,
+       "roi": 0.0026,
+       "units": 5.8,
+       "claimed_ev": 0.1059,
+       "roi_se": 0.0201
+      },
+      "holdout": {
+       "n": 4143,
+       "w": 2060,
+       "l": 2000,
+       "p": 83,
+       "win_pct": 0.5074,
+       "roi": -0.0307,
+       "units": -127.3,
+       "claimed_ev": 0.11,
+       "roi_se": 0.0147
+      },
+      "all": {
+       "n": 6858,
+       "w": 3462,
+       "l": 3262,
+       "p": 134,
+       "win_pct": 0.5149,
+       "roi": -0.0167,
+       "units": -114.7,
+       "claimed_ev": 0.1093,
+       "roi_se": 0.0114
+      }
+     },
+     {
+      "rule": "EV above 0%",
+      "tuning": {
+       "n": 1786,
+       "w": 932,
+       "l": 821,
+       "p": 33,
+       "win_pct": 0.5317,
+       "roi": 0.0147,
+       "units": 26.3,
+       "claimed_ev": 0.136,
+       "roi_se": 0.0223
+      },
+      "holdout": {
+       "n": 3360,
+       "w": 1687,
+       "l": 1604,
+       "p": 69,
+       "win_pct": 0.5126,
+       "roi": -0.0209,
+       "units": -70.4,
+       "claimed_ev": 0.141,
+       "roi_se": 0.0163
+      },
+      "all": {
+       "n": 5571,
+       "w": 2846,
+       "l": 2617,
+       "p": 108,
+       "win_pct": 0.521,
+       "roi": -0.0053,
+       "units": -29.7,
+       "claimed_ev": 0.1398,
+       "roi_se": 0.0127
+      }
+     },
+     {
+      "rule": "EV above 2%",
+      "tuning": {
+       "n": 1638,
+       "w": 851,
+       "l": 758,
+       "p": 29,
+       "win_pct": 0.5289,
+       "roi": 0.0095,
+       "units": 15.6,
+       "claimed_ev": 0.1474,
+       "roi_se": 0.0233
+      },
+      "holdout": {
+       "n": 3011,
+       "w": 1533,
+       "l": 1413,
+       "p": 65,
+       "win_pct": 0.5204,
+       "roi": -0.0064,
+       "units": -19.4,
+       "claimed_ev": 0.1561,
+       "roi_se": 0.0172
+      },
+      "all": {
+       "n": 5042,
+       "w": 2594,
+       "l": 2348,
+       "p": 100,
+       "win_pct": 0.5249,
+       "roi": 0.002,
+       "units": 10.2,
+       "claimed_ev": 0.1534,
+       "roi_se": 0.0133
+      }
+     },
+     {
+      "rule": "EV above 5%",
+      "tuning": {
+       "n": 1364,
+       "w": 711,
+       "l": 627,
+       "p": 26,
+       "win_pct": 0.5314,
+       "roi": 0.0142,
+       "units": 19.4,
+       "claimed_ev": 0.17,
+       "roi_se": 0.0256
+      },
+      "holdout": {
+       "n": 2514,
+       "w": 1264,
+       "l": 1189,
+       "p": 61,
+       "win_pct": 0.5153,
+       "roi": -0.0159,
+       "units": -39.9,
+       "claimed_ev": 0.1801,
+       "roi_se": 0.0188
+      },
+      "all": {
+       "n": 4211,
+       "w": 2150,
+       "l": 1968,
+       "p": 93,
+       "win_pct": 0.5221,
+       "roi": -0.0032,
+       "units": -13.5,
+       "claimed_ev": 0.1768,
+       "roi_se": 0.0145
+      }
+     }
+    ],
+    "by_season": [
+     {
+      "season": 2017,
+      "n": 737,
+      "w": 371,
+      "l": 347,
+      "p": 19,
+      "win_pct": 0.5167,
+      "roi": -0.0132,
+      "units": -9.7,
+      "claimed_ev": 0.1078,
+      "roi_se": 0.0347
+     },
+     {
+      "season": 2018,
+      "n": 734,
+      "w": 390,
+      "l": 330,
+      "p": 14,
+      "win_pct": 0.5417,
+      "roi": 0.0334,
+      "units": 24.5,
+      "claimed_ev": 0.1103,
+      "roi_se": 0.0348
+     },
+     {
+      "season": 2019,
+      "n": 735,
+      "w": 374,
+      "l": 349,
+      "p": 12,
+      "win_pct": 0.5173,
+      "roi": -0.0122,
+      "units": -9.0,
+      "claimed_ev": 0.0994,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2020,
+      "n": 509,
+      "w": 267,
+      "l": 236,
+      "p": 6,
+      "win_pct": 0.5308,
+      "roi": 0.0132,
+      "units": 6.7,
+      "claimed_ev": 0.1187,
+      "roi_se": 0.042
+     },
+     {
+      "season": 2021,
+      "n": 733,
+      "w": 374,
+      "l": 348,
+      "p": 11,
+      "win_pct": 0.518,
+      "roi": -0.0109,
+      "units": -8.0,
+      "claimed_ev": 0.1075,
+      "roi_se": 0.035
+     },
+     {
+      "season": 2022,
+      "n": 735,
+      "w": 377,
+      "l": 344,
+      "p": 14,
+      "win_pct": 0.5229,
+      "roi": -0.0017,
+      "units": -1.3,
+      "claimed_ev": 0.1249,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2023,
+      "n": 751,
+      "w": 377,
+      "l": 362,
+      "p": 12,
+      "win_pct": 0.5101,
+      "roi": -0.0257,
+      "units": -19.3,
+      "claimed_ev": 0.1034,
+      "roi_se": 0.0346
+     },
+     {
+      "season": 2024,
+      "n": 763,
+      "w": 368,
+      "l": 375,
+      "p": 20,
+      "win_pct": 0.4953,
+      "roi": -0.053,
+      "units": -40.5,
+      "claimed_ev": 0.1051,
+      "roi_se": 0.0341
+     },
+     {
+      "season": 2025,
+      "n": 773,
+      "w": 390,
+      "l": 366,
+      "p": 17,
+      "win_pct": 0.5159,
+      "roi": -0.0148,
+      "units": -11.5,
+      "claimed_ev": 0.0921,
+      "roi_se": 0.034
+     },
+     {
+      "season": 2026,
+      "n": 388,
+      "w": 174,
+      "l": 205,
+      "p": 9,
+      "win_pct": 0.4591,
+      "roi": -0.1207,
+      "units": -46.8,
+      "claimed_ev": 0.1448,
+      "roi_se": 0.0478
+     }
+    ]
+   },
+   "Total": {
+    "rows": [
+     {
+      "rule": "Every game",
+      "tuning": {
+       "n": 2206,
+       "w": 1083,
+       "l": 1097,
+       "p": 26,
+       "win_pct": 0.4968,
+       "roi": -0.051,
+       "units": -112.5,
+       "claimed_ev": 0.0882,
+       "roi_se": 0.0202
+      },
+      "holdout": {
+       "n": 4143,
+       "w": 2126,
+       "l": 1962,
+       "p": 55,
+       "win_pct": 0.5201,
+       "roi": -0.0071,
+       "units": -29.3,
+       "claimed_ev": 0.0796,
+       "roi_se": 0.0147
+      },
+      "all": {
+       "n": 6858,
+       "w": 3483,
+       "l": 3287,
+       "p": 88,
+       "win_pct": 0.5145,
+       "roi": -0.0176,
+       "units": -120.6,
+       "claimed_ev": 0.0832,
+       "roi_se": 0.0114
+      }
+     },
+     {
+      "rule": "EV above 0%",
+      "tuning": {
+       "n": 1743,
+       "w": 847,
+       "l": 873,
+       "p": 23,
+       "win_pct": 0.4924,
+       "roi": -0.0591,
+       "units": -103.0,
+       "claimed_ev": 0.1179,
+       "roi_se": 0.0227
+      },
+      "holdout": {
+       "n": 3254,
+       "w": 1683,
+       "l": 1529,
+       "p": 42,
+       "win_pct": 0.524,
+       "roi": 0.0003,
+       "units": 1.0,
+       "claimed_ev": 0.1074,
+       "roi_se": 0.0166
+      },
+      "all": {
+       "n": 5406,
+       "w": 2754,
+       "l": 2581,
+       "p": 71,
+       "win_pct": 0.5162,
+       "roi": -0.0143,
+       "units": -77.4,
+       "claimed_ev": 0.1116,
+       "roi_se": 0.0129
+      }
+     },
+     {
+      "rule": "EV above 2%",
+      "tuning": {
+       "n": 1536,
+       "w": 757,
+       "l": 757,
+       "p": 22,
+       "win_pct": 0.5,
+       "roi": -0.0448,
+       "units": -68.8,
+       "claimed_ev": 0.1324,
+       "roi_se": 0.0242
+      },
+      "holdout": {
+       "n": 2852,
+       "w": 1466,
+       "l": 1346,
+       "p": 40,
+       "win_pct": 0.5213,
+       "roi": -0.0047,
+       "units": -13.3,
+       "claimed_ev": 0.121,
+       "roi_se": 0.0177
+      },
+      "all": {
+       "n": 4758,
+       "w": 2431,
+       "l": 2260,
+       "p": 67,
+       "win_pct": 0.5182,
+       "roi": -0.0105,
+       "units": -50.0,
+       "claimed_ev": 0.1254,
+       "roi_se": 0.0137
+      }
+     },
+     {
+      "rule": "EV above 5%",
+      "tuning": {
+       "n": 1268,
+       "w": 628,
+       "l": 621,
+       "p": 19,
+       "win_pct": 0.5028,
+       "roi": -0.0395,
+       "units": -50.1,
+       "claimed_ev": 0.1528,
+       "roi_se": 0.0266
+      },
+      "holdout": {
+       "n": 2251,
+       "w": 1181,
+       "l": 1039,
+       "p": 31,
+       "win_pct": 0.532,
+       "roi": 0.0154,
+       "units": 34.6,
+       "claimed_ev": 0.1441,
+       "roi_se": 0.0199
+      },
+      "all": {
+       "n": 3827,
+       "w": 1980,
+       "l": 1794,
+       "p": 53,
+       "win_pct": 0.5246,
+       "roi": 0.0016,
+       "units": 6.0,
+       "claimed_ev": 0.1474,
+       "roi_se": 0.0153
+      }
+     }
+    ],
+    "by_season": [
+     {
+      "season": 2017,
+      "n": 737,
+      "w": 351,
+      "l": 375,
+      "p": 11,
+      "win_pct": 0.4835,
+      "roi": -0.0759,
+      "units": -55.9,
+      "claimed_ev": 0.0949,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2018,
+      "n": 734,
+      "w": 353,
+      "l": 377,
+      "p": 4,
+      "win_pct": 0.4836,
+      "roi": -0.0764,
+      "units": -56.1,
+      "claimed_ev": 0.0705,
+      "roi_se": 0.0351
+     },
+     {
+      "season": 2019,
+      "n": 735,
+      "w": 379,
+      "l": 345,
+      "p": 11,
+      "win_pct": 0.5235,
+      "roi": -0.0006,
+      "units": -0.5,
+      "claimed_ev": 0.0992,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2020,
+      "n": 509,
+      "w": 274,
+      "l": 228,
+      "p": 7,
+      "win_pct": 0.5458,
+      "roi": 0.0414,
+      "units": 21.1,
+      "claimed_ev": 0.0914,
+      "roi_se": 0.0419
+     },
+     {
+      "season": 2021,
+      "n": 733,
+      "w": 369,
+      "l": 356,
+      "p": 8,
+      "win_pct": 0.509,
+      "roi": -0.028,
+      "units": -20.5,
+      "claimed_ev": 0.0719,
+      "roi_se": 0.0351
+     },
+     {
+      "season": 2022,
+      "n": 735,
+      "w": 362,
+      "l": 362,
+      "p": 11,
+      "win_pct": 0.5,
+      "roi": -0.0448,
+      "units": -32.9,
+      "claimed_ev": 0.0848,
+      "roi_se": 0.035
+     },
+     {
+      "season": 2023,
+      "n": 751,
+      "w": 388,
+      "l": 354,
+      "p": 9,
+      "win_pct": 0.5229,
+      "roi": -0.0017,
+      "units": -1.3,
+      "claimed_ev": 0.0898,
+      "roi_se": 0.0346
+     },
+     {
+      "season": 2024,
+      "n": 763,
+      "w": 415,
+      "l": 333,
+      "p": 15,
+      "win_pct": 0.5548,
+      "roi": 0.058,
+      "units": 44.3,
+      "claimed_ev": 0.0737,
+      "roi_se": 0.034
+     },
+     {
+      "season": 2025,
+      "n": 773,
+      "w": 401,
+      "l": 364,
+      "p": 8,
+      "win_pct": 0.5242,
+      "roi": 0.0007,
+      "units": 0.5,
+      "claimed_ev": 0.0797,
+      "roi_se": 0.0341
+     },
+     {
+      "season": 2026,
+      "n": 388,
+      "w": 191,
+      "l": 193,
+      "p": 4,
+      "win_pct": 0.4974,
+      "roi": -0.0499,
+      "units": -19.4,
+      "claimed_ev": 0.0753,
+      "roi_se": 0.0483
+     }
+    ]
+   }
+  },
+  "proj": {
+   "Spread": {
+    "rows": [
+     {
+      "rule": "Every game",
+      "tuning": {
+       "n": 2206,
+       "w": 1090,
+       "l": 1071,
+       "p": 45,
+       "win_pct": 0.5044,
+       "roi": -0.0363,
+       "units": -80.1,
+       "claimed_ev": -0.0141,
+       "roi_se": 0.0201
+      },
+      "holdout": {
+       "n": 4143,
+       "w": 2061,
+       "l": 1999,
+       "p": 83,
+       "win_pct": 0.5076,
+       "roi": -0.0303,
+       "units": -125.4,
+       "claimed_ev": 0.0023,
+       "roi_se": 0.0147
+      },
+      "all": {
+       "n": 6858,
+       "w": 3418,
+       "l": 3306,
+       "p": 134,
+       "win_pct": 0.5083,
+       "roi": -0.029,
+       "units": -198.7,
+       "claimed_ev": -0.0025,
+       "roi_se": 0.0114
+      }
+     },
+     {
+      "rule": "EV above 0%",
+      "tuning": {
+       "n": 627,
+       "w": 338,
+       "l": 277,
+       "p": 12,
+       "win_pct": 0.5496,
+       "roi": 0.0483,
+       "units": 30.3,
+       "claimed_ev": 0.0341,
+       "roi_se": 0.0376
+      },
+      "holdout": {
+       "n": 1750,
+       "w": 893,
+       "l": 819,
+       "p": 38,
+       "win_pct": 0.5216,
+       "roi": -0.0041,
+       "units": -7.2,
+       "claimed_ev": 0.0381,
+       "roi_se": 0.0226
+      },
+      "all": {
+       "n": 2638,
+       "w": 1366,
+       "l": 1217,
+       "p": 55,
+       "win_pct": 0.5288,
+       "roi": 0.0094,
+       "units": 24.8,
+       "claimed_ev": 0.0372,
+       "roi_se": 0.0184
+      }
+     },
+     {
+      "rule": "EV above 2%",
+      "tuning": {
+       "n": 381,
+       "w": 219,
+       "l": 157,
+       "p": 5,
+       "win_pct": 0.5824,
+       "roi": 0.1105,
+       "units": 42.1,
+       "claimed_ev": 0.0502,
+       "roi_se": 0.048
+      },
+      "holdout": {
+       "n": 1075,
+       "w": 555,
+       "l": 505,
+       "p": 15,
+       "win_pct": 0.5236,
+       "roi": -0.0004,
+       "units": -0.5,
+       "claimed_ev": 0.0563,
+       "roi_se": 0.0289
+      },
+      "all": {
+       "n": 1624,
+       "w": 862,
+       "l": 738,
+       "p": 24,
+       "win_pct": 0.5387,
+       "roi": 0.0281,
+       "units": 45.6,
+       "claimed_ev": 0.0547,
+       "roi_se": 0.0234
+      }
+     },
+     {
+      "rule": "EV above 5%",
+      "tuning": {
+       "n": 144,
+       "w": 74,
+       "l": 69,
+       "p": 1,
+       "win_pct": 0.5175,
+       "roi": -0.012,
+       "units": -1.7,
+       "claimed_ev": 0.0796,
+       "roi_se": 0.0795
+      },
+      "holdout": {
+       "n": 487,
+       "w": 251,
+       "l": 225,
+       "p": 11,
+       "win_pct": 0.5273,
+       "roi": 0.0065,
+       "units": 3.2,
+       "claimed_ev": 0.0843,
+       "roi_se": 0.0427
+      },
+      "all": {
+       "n": 708,
+       "w": 368,
+       "l": 327,
+       "p": 13,
+       "win_pct": 0.5295,
+       "roi": 0.0107,
+       "units": 7.5,
+       "claimed_ev": 0.0827,
+       "roi_se": 0.0355
+      }
+     }
+    ],
+    "by_season": [
+     {
+      "season": 2017,
+      "n": 737,
+      "w": 326,
+      "l": 392,
+      "p": 19,
+      "win_pct": 0.454,
+      "roi": -0.1298,
+      "units": -95.6,
+      "claimed_ev": -0.0447,
+      "roi_se": 0.0346
+     },
+     {
+      "season": 2018,
+      "n": 734,
+      "w": 390,
+      "l": 330,
+      "p": 14,
+      "win_pct": 0.5417,
+      "roi": 0.0334,
+      "units": 24.5,
+      "claimed_ev": -0.0032,
+      "roi_se": 0.0348
+     },
+     {
+      "season": 2019,
+      "n": 735,
+      "w": 374,
+      "l": 349,
+      "p": 12,
+      "win_pct": 0.5173,
+      "roi": -0.0122,
+      "units": -9.0,
+      "claimed_ev": 0.0057,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2020,
+      "n": 509,
+      "w": 267,
+      "l": 236,
+      "p": 6,
+      "win_pct": 0.5308,
+      "roi": 0.0132,
+      "units": 6.7,
+      "claimed_ev": 0.0085,
+      "roi_se": 0.042
+     },
+     {
+      "season": 2021,
+      "n": 733,
+      "w": 374,
+      "l": 348,
+      "p": 11,
+      "win_pct": 0.518,
+      "roi": -0.0109,
+      "units": -8.0,
+      "claimed_ev": 0.0064,
+      "roi_se": 0.035
+     },
+     {
+      "season": 2022,
+      "n": 735,
+      "w": 377,
+      "l": 344,
+      "p": 14,
+      "win_pct": 0.5229,
+      "roi": -0.0017,
+      "units": -1.3,
+      "claimed_ev": 0.0094,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2023,
+      "n": 751,
+      "w": 377,
+      "l": 362,
+      "p": 12,
+      "win_pct": 0.5101,
+      "roi": -0.0257,
+      "units": -19.3,
+      "claimed_ev": -0.0004,
+      "roi_se": 0.0346
+     },
+     {
+      "season": 2024,
+      "n": 763,
+      "w": 368,
+      "l": 375,
+      "p": 20,
+      "win_pct": 0.4953,
+      "roi": -0.053,
+      "units": -40.5,
+      "claimed_ev": 0.0003,
+      "roi_se": 0.0341
+     },
+     {
+      "season": 2025,
+      "n": 773,
+      "w": 391,
+      "l": 365,
+      "p": 17,
+      "win_pct": 0.5172,
+      "roi": -0.0123,
+      "units": -9.5,
+      "claimed_ev": -0.0075,
+      "roi_se": 0.034
+     },
+     {
+      "season": 2026,
+      "n": 388,
+      "w": 174,
+      "l": 205,
+      "p": 9,
+      "win_pct": 0.4591,
+      "roi": -0.1207,
+      "units": -46.8,
+      "claimed_ev": 0.0101,
+      "roi_se": 0.0478
+     }
+    ]
+   },
+   "Total": {
+    "rows": [
+     {
+      "rule": "Every game",
+      "tuning": {
+       "n": 2206,
+       "w": 1095,
+       "l": 1085,
+       "p": 26,
+       "win_pct": 0.5023,
+       "roi": -0.0406,
+       "units": -89.5,
+       "claimed_ev": -0.0443,
+       "roi_se": 0.0202
+      },
+      "holdout": {
+       "n": 4143,
+       "w": 2125,
+       "l": 1963,
+       "p": 55,
+       "win_pct": 0.5198,
+       "roi": -0.0075,
+       "units": -31.2,
+       "claimed_ev": -0.0386,
+       "roi_se": 0.0147
+      },
+      "all": {
+       "n": 6858,
+       "w": 3494,
+       "l": 3276,
+       "p": 88,
+       "win_pct": 0.5161,
+       "roi": -0.0145,
+       "units": -99.6,
+       "claimed_ev": -0.0404,
+       "roi_se": 0.0114
+      }
+     },
+     {
+      "rule": "EV above 0%",
+      "tuning": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      },
+      "holdout": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      },
+      "all": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      }
+     },
+     {
+      "rule": "EV above 2%",
+      "tuning": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      },
+      "holdout": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      },
+      "all": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      }
+     },
+     {
+      "rule": "EV above 5%",
+      "tuning": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      },
+      "holdout": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      },
+      "all": {
+       "n": 0,
+       "w": 0,
+       "l": 0,
+       "p": 0,
+       "win_pct": null,
+       "roi": null,
+       "units": 0.0,
+       "claimed_ev": null,
+       "roi_se": null
+      }
+     }
+    ],
+    "by_season": [
+     {
+      "season": 2017,
+      "n": 737,
+      "w": 372,
+      "l": 354,
+      "p": 11,
+      "win_pct": 0.5124,
+      "roi": -0.0215,
+      "units": -15.8,
+      "claimed_ev": -0.0449,
+      "roi_se": 0.0349
+     },
+     {
+      "season": 2018,
+      "n": 734,
+      "w": 354,
+      "l": 376,
+      "p": 4,
+      "win_pct": 0.4849,
+      "roi": -0.0738,
+      "units": -54.2,
+      "claimed_ev": -0.0433,
+      "roi_se": 0.0351
+     },
+     {
+      "season": 2019,
+      "n": 735,
+      "w": 369,
+      "l": 355,
+      "p": 11,
+      "win_pct": 0.5097,
+      "roi": -0.0266,
+      "units": -19.5,
+      "claimed_ev": -0.0449,
+      "roi_se": 0.035
+     },
+     {
+      "season": 2020,
+      "n": 509,
+      "w": 274,
+      "l": 228,
+      "p": 7,
+      "win_pct": 0.5458,
+      "roi": 0.0414,
+      "units": 21.1,
+      "claimed_ev": -0.038,
+      "roi_se": 0.0419
+     },
+     {
+      "season": 2021,
+      "n": 733,
+      "w": 369,
+      "l": 356,
+      "p": 8,
+      "win_pct": 0.509,
+      "roi": -0.028,
+      "units": -20.5,
+      "claimed_ev": -0.039,
+      "roi_se": 0.0351
+     },
+     {
+      "season": 2022,
+      "n": 735,
+      "w": 362,
+      "l": 362,
+      "p": 11,
+      "win_pct": 0.5,
+      "roi": -0.0448,
+      "units": -32.9,
+      "claimed_ev": -0.0383,
+      "roi_se": 0.035
+     },
+     {
+      "season": 2023,
+      "n": 751,
+      "w": 388,
+      "l": 354,
+      "p": 9,
+      "win_pct": 0.5229,
+      "roi": -0.0017,
+      "units": -1.3,
+      "claimed_ev": -0.0381,
+      "roi_se": 0.0346
+     },
+     {
+      "season": 2024,
+      "n": 763,
+      "w": 414,
+      "l": 334,
+      "p": 15,
+      "win_pct": 0.5535,
+      "roi": 0.0555,
+      "units": 42.4,
+      "claimed_ev": -0.0389,
+      "roi_se": 0.034
+     },
+     {
+      "season": 2025,
+      "n": 773,
+      "w": 401,
+      "l": 364,
+      "p": 8,
+      "win_pct": 0.5242,
+      "roi": 0.0007,
+      "units": 0.5,
+      "claimed_ev": -0.0387,
+      "roi_se": 0.0341
+     },
+     {
+      "season": 2026,
+      "n": 388,
+      "w": 191,
+      "l": 193,
+      "p": 4,
+      "win_pct": 0.4974,
+      "roi": -0.0499,
+      "units": -19.4,
+      "claimed_ev": -0.039,
+      "roi_se": 0.0483
+     }
+    ]
+   }
+  }
+ },
+ "openers": {
+  "games": 4069,
+  "left_out_short_week": 67,
+  "first_season": 2021,
+  "last_season": 2026,
+  "spread": {
+   "rows": [
+    {
+     "rule": "Every game",
+     "threshold": 0,
+     "n": 4069,
+     "w": 2066,
+     "l": 1938,
+     "p": 65,
+     "win_pct": 0.516,
+     "roi": -0.0147,
+     "roi_se": 0.0148,
+     "toward": 0.5333,
+     "away": 0.4045,
+     "clv": 0.342,
+     "close_win_pct": 0.5076
+    },
+    {
+     "rule": "Disagrees by 1+ points",
+     "threshold": 1,
+     "n": 3098,
+     "w": 1595,
+     "l": 1455,
+     "p": 48,
+     "win_pct": 0.523,
+     "roi": -0.0016,
+     "roi_se": 0.017,
+     "toward": 0.5539,
+     "away": 0.3822,
+     "clv": 0.431,
+     "close_win_pct": 0.5092
+    },
+    {
+     "rule": "Disagrees by 2+ points",
+     "threshold": 2,
+     "n": 2316,
+     "w": 1187,
+     "l": 1091,
+     "p": 38,
+     "win_pct": 0.5211,
+     "roi": -0.0051,
+     "roi_se": 0.0197,
+     "toward": 0.5669,
+     "away": 0.3744,
+     "clv": 0.514,
+     "close_win_pct": 0.5055
+    },
+    {
+     "rule": "Disagrees by 3+ points",
+     "threshold": 3,
+     "n": 1624,
+     "w": 836,
+     "l": 760,
+     "p": 28,
+     "win_pct": 0.5238,
+     "roi": 0.0,
+     "roi_se": 0.0235,
+     "toward": 0.5764,
+     "away": 0.3676,
+     "clv": 0.596,
+     "close_win_pct": 0.5088
+    },
+    {
+     "rule": "Disagrees by 5+ points",
+     "threshold": 5,
+     "n": 725,
+     "w": 393,
+     "l": 325,
+     "p": 7,
+     "win_pct": 0.5474,
+     "roi": 0.0445,
+     "roi_se": 0.0351,
+     "toward": 0.5862,
+     "away": 0.3614,
+     "clv": 0.827,
+     "close_win_pct": 0.529
+    }
+   ],
+   "mae": {
+    "model": 12.428,
+    "open": 12.173,
+    "close": 12.054
+   },
+   "weight": 0.182
+  },
+  "total": {
+   "rows": [
+    {
+     "rule": "Every game",
+     "threshold": 0,
+     "n": 4067,
+     "w": 2095,
+     "l": 1930,
+     "p": 42,
+     "win_pct": 0.5205,
+     "roi": -0.0063,
+     "roi_se": 0.0149,
+     "toward": 0.5424,
+     "away": 0.415,
+     "clv": 0.323,
+     "close_win_pct": 0.5162
+    },
+    {
+     "rule": "Disagrees by 1+ points",
+     "threshold": 1,
+     "n": 2997,
+     "w": 1589,
+     "l": 1379,
+     "p": 29,
+     "win_pct": 0.5354,
+     "roi": 0.0219,
+     "roi_se": 0.0173,
+     "toward": 0.5499,
+     "away": 0.4051,
+     "clv": 0.375,
+     "close_win_pct": 0.5276
+    },
+    {
+     "rule": "Disagrees by 2+ points",
+     "threshold": 2,
+     "n": 2002,
+     "w": 1079,
+     "l": 907,
+     "p": 16,
+     "win_pct": 0.5433,
+     "roi": 0.0369,
+     "roi_se": 0.0212,
+     "toward": 0.5679,
+     "away": 0.3861,
+     "clv": 0.464,
+     "close_win_pct": 0.5316
+    },
+    {
+     "rule": "Disagrees by 3+ points",
+     "threshold": 3,
+     "n": 1268,
+     "w": 694,
+     "l": 562,
+     "p": 12,
+     "win_pct": 0.5525,
+     "roi": 0.0543,
+     "roi_se": 0.0265,
+     "toward": 0.5915,
+     "away": 0.373,
+     "clv": 0.592,
+     "close_win_pct": 0.536
+    },
+    {
+     "rule": "Disagrees by 5+ points",
+     "threshold": 5,
+     "n": 408,
+     "w": 226,
+     "l": 179,
+     "p": 3,
+     "win_pct": 0.558,
+     "roi": 0.0648,
+     "roi_se": 0.0468,
+     "toward": 0.5956,
+     "away": 0.3676,
+     "clv": 0.73,
+     "close_win_pct": 0.5371
+    }
+   ],
+   "mae": {
+    "model": 12.67,
+    "open": 12.6,
+    "close": 12.444
+   },
+   "weight": 0.405
+  }
+ },
+ "wind_unders": {
+  "tiers": [
+   {
+    "label": "0-9 mph",
+    "all": {
+     "n": 4825,
+     "w": 2379,
+     "l": 2391,
+     "p": 55,
+     "win_pct": 0.4987,
+     "roi": -0.0473,
+     "roi_se": 0.0137,
+     "close_minus_actual": -0.44
+    },
+    "tuning": {
+     "n": 1438,
+     "w": 725,
+     "l": 700,
+     "p": 13,
+     "win_pct": 0.5088,
+     "roi": -0.0284,
+     "roi_se": 0.0251,
+     "close_minus_actual": -0.12
+    },
+    "holdout": {
+     "n": 3015,
+     "w": 1472,
+     "l": 1506,
+     "p": 37,
+     "win_pct": 0.4943,
+     "roi": -0.0557,
+     "roi_se": 0.0173,
+     "close_minus_actual": -0.56
+    }
+   },
+   {
+    "label": "10-14 mph",
+    "all": {
+     "n": 1293,
+     "w": 683,
+     "l": 588,
+     "p": 22,
+     "win_pct": 0.5374,
+     "roi": 0.0255,
+     "roi_se": 0.0263,
+     "close_minus_actual": -0.12
+    },
+    "tuning": {
+     "n": 486,
+     "w": 264,
+     "l": 213,
+     "p": 9,
+     "win_pct": 0.5535,
+     "roi": 0.0556,
+     "roi_se": 0.0427,
+     "close_minus_actual": 0.13
+    },
+    "holdout": {
+     "n": 726,
+     "w": 381,
+     "l": 334,
+     "p": 11,
+     "win_pct": 0.5329,
+     "roi": 0.017,
+     "roi_se": 0.0351,
+     "close_minus_actual": -0.08
+    }
+   },
+   {
+    "label": "15-19 mph",
+    "all": {
+     "n": 372,
+     "w": 195,
+     "l": 173,
+     "p": 4,
+     "win_pct": 0.5299,
+     "roi": 0.0115,
+     "roi_se": 0.0492,
+     "close_minus_actual": -0.27
+    },
+    "tuning": {
+     "n": 149,
+     "w": 78,
+     "l": 71,
+     "p": 0,
+     "win_pct": 0.5235,
+     "roi": -0.0006,
+     "roi_se": 0.0784,
+     "close_minus_actual": -0.66
+    },
+    "holdout": {
+     "n": 198,
+     "w": 105,
+     "l": 89,
+     "p": 4,
+     "win_pct": 0.5412,
+     "roi": 0.0326,
+     "roi_se": 0.0671,
+     "close_minus_actual": 0.17
+    }
+   },
+   {
+    "label": "20+ mph",
+    "all": {
+     "n": 126,
+     "w": 63,
+     "l": 59,
+     "p": 4,
+     "win_pct": 0.5164,
+     "roi": -0.0137,
+     "roi_se": 0.084,
+     "close_minus_actual": -0.33
+    },
+    "tuning": {
+     "n": 53,
+     "w": 24,
+     "l": 27,
+     "p": 2,
+     "win_pct": 0.4706,
+     "roi": -0.0978,
+     "roi_se": 0.1297,
+     "close_minus_actual": -1.92
+    },
+    "holdout": {
+     "n": 64,
+     "w": 32,
+     "l": 30,
+     "p": 2,
+     "win_pct": 0.5161,
+     "roi": -0.0142,
+     "roi_se": 0.1183,
+     "close_minus_actual": 0.36
+    }
+   }
+  ]
+ },
+ "coefs": {
+  "margin_coefs": {
+   "d_pass": -1.4538,
+   "d_rush": 3.6312,
+   "d_sr": 26.2736,
+   "d_pts": 0.4476,
+   "d_mkt": 0.388,
+   "d_qb": 45.271,
+   "hfa": 0.5925,
+   "rest_diff": 0.0811,
+   "d_talent_early": 2.4876,
+   "d_rtprod": 11.1412,
+   "d_qb_early": -33.2433,
+   "d_talent": 0.3381
+  },
+  "total_coefs": {
+   "s_pass": 4.8856,
+   "s_rush": 6.3344,
+   "s_sr": -3.5841,
+   "s_pts": 0.2157,
+   "s_mkt": 0.4319,
+   "s_qb": 20.8702,
+   "lg_pts": 0.4943,
+   "indoor": 0.9396,
+   "s_def_rtprod": -2.6595,
+   "s_snaps": 0.1557,
+   "wind_hi": -0.2898
+  },
+  "w_margin": 0.277,
+  "w_total": 0.05,
+  "n_train": 8325
+ }
+}
