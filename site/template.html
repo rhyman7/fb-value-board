@@ -216,6 +216,17 @@ th.l, td.l { text-align: left; }
 td.strong { font-weight: 700; }
 table.compact { font-size: 13px; } table.compact th, table.compact td { padding: 6px 6px; } table.compact th { font-size: 12px; }
 td .rec { font-weight: 400; color: var(--ink-3); margin-left: 4px; }
+input.p-search { width: 170px; } select.money { width: auto; }
+table.players tbody tr.prow { cursor: pointer; }
+table.players tbody tr.prow:hover td, table.players tbody tr.prow[aria-expanded="true"] td { background: var(--raised); }
+table.players th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+table.players th button[aria-sort] { color: var(--ink); }
+table.players td.why { white-space: normal; text-align: left; padding: 10px 0 16px; background: var(--raised); }
+.why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 14px 24px; padding: 0 12px; }
+.why-grid h4 { margin: 0 0 4px; font-size: 12.5px; color: var(--ink-3); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.why-grid p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
+.why-grid strong { color: var(--ink); }
+.status { font-size: 12px; font-weight: 600; color: var(--ink-2); border: 1px solid var(--axis); border-radius: 4px; padding: 1px 5px; margin-left: 6px; }
 tr.group td { font-weight: 700; padding-top: 16px; color: var(--ink); border-bottom-color: var(--axis); }
 th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 th button[aria-sort]::after { content: " \2193"; } th button[aria-sort="ascending"]::after { content: " \2191"; }
@@ -259,6 +270,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
     <nav class="sections" aria-label="Sections">
       <ul>
         <li><a href="#games" data-view="games">Games</a></li>
+        <li><a href="#players" data-view="players">Players</a></li>
         <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
         <li><a href="#model" data-view="model">Model record</a></li>
       </ul>
@@ -317,6 +329,31 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 
     <!-- ============ one game ============ -->
     <div class="view" id="view-game" hidden></div>
+
+    <!-- ============ players ============ -->
+    <div class="view" id="view-players" hidden>
+      <section aria-labelledby="players-h">
+        <div class="section-head">
+          <h2 id="players-h">Player projections</h2>
+          <p class="note" id="players-note"></p>
+        </div>
+        <div class="filters" role="group" aria-label="Player filters">
+          <div class="field-label"><span id="pf-week">Week</span><div class="seg" id="seg-pweek" role="group" aria-labelledby="pf-week"></div></div>
+          <div class="field-label"><span id="pf-pos">Position</span><div class="seg" id="seg-pos" role="group" aria-labelledby="pf-pos"></div></div>
+          <label class="field-label" for="p-team">Team<select class="money" id="p-team"></select></label>
+          <label class="field-label" for="p-search">Player<input class="money p-search" id="p-search" type="search" placeholder="Search" autocomplete="off"></label>
+        </div>
+        <div class="scroll"><table id="players-table" class="compact players" aria-labelledby="players-h"></table></div>
+        <p class="note" id="players-foot"></p>
+      </section>
+      <section aria-labelledby="pbt-h">
+        <div class="section-head">
+          <h2 id="pbt-h">How the projections have done</h2>
+          <p class="note" id="pbt-note"></p>
+        </div>
+        <div class="scroll"><table id="pbt-table" aria-labelledby="pbt-h"></table></div>
+      </section>
+    </div>
 
     <!-- ============ ratings ============ -->
     <div class="view" id="view-ratings" hidden>
@@ -1158,12 +1195,106 @@ function diagChart(node, o) {
   $("#limits").replaceChildren(...limits.map(t => H("li", { text: t })));
 })();
 
+/* ---------------- players ---------------- */
+(function playersView() {
+  const PD = DATA.players;
+  if (!PD || !PD.players || !PD.players.length) { $("#players-note").textContent = "No player projections for the coming games yet."; return; }
+  const P = PD.players, TEAM = {};
+  PD.teams.forEach(t => { TEAM[t.game + "|" + t.team] = t; });
+  const weeks = [...new Set(P.map(p => p.week))].sort((a, b) => a - b);
+  // open on the week with the most games (a Monday night leftover should not be the default)
+  const busiest = weeks.slice().sort((a, b) => P.filter(p => p.week === b).length - P.filter(p => p.week === a).length)[0];
+  const ps = { week: busiest, pos: "All", team: "", q: "", key: "score", dir: -1, open: null };
+  const f1 = x => x == null || x < 0.05 ? "–" : x.toFixed(1), f0 = x => x == null || x < 0.5 ? "–" : Math.round(x).toString();
+  const COLS = {
+    All: [["pass_yds", "Pass yds", f0], ["rush_yds", "Rush yds", f0], ["receptions", "Rec", f1], ["rec_yds", "Rec yds", f0], ["td", "Anytime TD", null]],
+    QB: [["pass_att", "Att", f1], ["completions", "Comp", f1], ["pass_yds", "Pass yds", f0], ["pass_td", "Pass TD", f1], ["ints", "INT", f1], ["rush_yds", "Rush yds", f0], ["td", "Rush TD", null]],
+    RB: [["carries", "Carries", f1], ["rush_yds", "Rush yds", f0], ["targets", "Targets", f1], ["receptions", "Rec", f1], ["rec_yds", "Rec yds", f0], ["td", "Anytime TD", null]],
+    WR: [["targets", "Targets", f1], ["receptions", "Rec", f1], ["rec_yds", "Rec yds", f0], ["td", "Anytime TD", null]],
+  };
+  COLS.TE = COLS.WR;
+  const score = p => (p.proj.pass_yds || 0) / 2.5 + (p.proj.rush_yds || 0) + (p.proj.rec_yds || 0);
+  const val = (p, k) => k === "score" ? score(p) : k === "td" ? (p.pos === "QB" ? 1 - Math.exp(-(p.proj.rush_td || 0)) : p.td_any) : k === "name" ? p.name : p.proj[k];
+  const teams = [...new Set(P.map(p => p.team))].sort();
+  $("#p-team").replaceChildren(H("option", { value: "", text: "All teams" }), ...teams.map(t => H("option", { value: t, text: t })));
+  $("#p-team").addEventListener("change", e => {
+    ps.team = e.target.value;
+    // jump to a week the team plays in, if it is not in the one shown
+    if (ps.team && !P.some(p => p.team === ps.team && p.week === ps.week)) {
+      const w = P.find(p => p.team === ps.team); if (w) { ps.week = w.week; $("#seg-pweek").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(+x.dataset.v === ps.week))); }
+    }
+    draw();
+  });
+  $("#p-search").addEventListener("input", e => { ps.q = e.target.value.trim().toLowerCase(); draw(); });
+  seg($("#seg-pweek"), weeks.map(w => ({ v: w, t: "Week " + w })), () => ps.week, v => { ps.week = +v; draw(); });
+  seg($("#seg-pos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => ps.pos, v => { ps.pos = v; ps.key = "score"; ps.dir = -1; draw(); });
+  $("#players-note").textContent = "Projected box scores for every quarterback, running back, receiver and tight end with a role this week. Each projection is volume times efficiency: the team's expected passes and runs (from its pace, the opponent, the projected score and wind), the player's share of them (recent games weighted more, with injured teammates' usage passed on to those available), and his own efficiency, adjusted for what this defense allows. Select a player to see how his numbers are built.";
+
+  const pctx = x => x == null ? "–" : (x * 100).toFixed(x < 0.1 ? 1 : 0) + "%";
+  const factor = x => x == null ? "" : (x >= 1 ? (x - 1) * 100 : (1 - x) * 100).toFixed(0) + "% " + (x >= 1 ? "more" : "fewer");
+  function why(p) {
+    const t = TEAM[p.game + "|" + p.team] || {}, w = p.why, grid = H("div", { class: "why-grid" });
+    const box = (h, ...kids) => H("div", {}, H("h4", { text: h }), H("p", {}, ...kids));
+    const tx = s => document.createTextNode(s), b = s => H("strong", { text: s });
+    grid.append(box("Team volume", tx(p.team + " is projected for "), b(f1(t.pass_att) + " pass attempts"), tx(" and "), b(f1(t.carries) + " carries"),
+      tx(`, with ${f1(t.imp_pts)} points implied by the game model (${t.margin >= 0 ? "favoured by " + f1(t.margin) : "underdog by " + f1(-t.margin)})` + (t.wind != null ? `, ${f0(t.wind)} mph wind.` : "."))));
+    if (p.pos === "QB") grid.append(box("Share and efficiency", tx("Takes "), b(pctx(w.att_share) + " of the passes"), tx(`. Completes ${pctx(w.comp)} for ${f1(w.ypa)} yards per attempt over his recent games (shrunk toward a typical starter).`)));
+    else grid.append(box("Share", tx("Projected "), b(pctx(w.tgt_share) + " of targets"), tx(" and "), b(pctx(w.car_share) + " of carries"),
+      tx(`; ${pctx(w.tgt_share_hist)} and ${pctx(w.car_share_hist)} in his recent games` + (Math.abs((w.tgt_share || 0) - (w.tgt_share_hist || 0)) > 0.01 || Math.abs((w.car_share || 0) - (w.car_share_hist || 0)) > 0.02 ? ", adjusted for who is out." : "."))));
+    if (p.pos !== "QB") grid.append(box("Efficiency", tx(`${f1(w.ypt)} yards per target and a ${pctx(w.catch)} catch rate` + ((w.car_share || 0) > 0.05 ? `; ${f1(w.ypc)} yards per carry` : "") + `, from ${f1(w.games)} weighted games, shrunk toward his position's average.`)));
+    const d = [];
+    if (p.pos === "QB" || (w.tgt_share || 0) > 0.05) d.push(`${p.opp} has allowed ${factor(w.def_ypa)} passing yards per attempt than average`);
+    if ((w.car_share || 0) > 0.05 || p.pos === "QB") d.push(`${factor(w.def_ypc)} rushing yards per carry`);
+    let dtext = d.join(" and ") + ".";
+    if (t.opp_miss_db > 0.05 || t.opp_miss_pr > 0.05) dtext += ` Out for ${p.opp}: ${pctx(t.opp_miss_db)} of its usual defensive backs and ${pctx(t.opp_miss_pr)} of its pass rush.`;
+    grid.append(box("The defense", tx(dtext)));
+    if (t.out && t.out.length) grid.append(box("Teammates out", tx(t.out.map(o => `${o.name} (${o.pos}, ${o.status}${o.tgt_share >= 0.05 ? ", " + pctx(o.tgt_share) + " of targets" : ""}${o.car_share >= 0.1 ? ", " + pctx(o.car_share) + " of carries" : ""})`).join("; ") + ".")));
+    return grid;
+  }
+
+  function draw() {
+    const cols = COLS[ps.pos];
+    let rows = P.filter(p => p.week === ps.week && (ps.pos === "All" || p.pos === ps.pos || (ps.pos === "RB" && p.pos === "FB")) && (!ps.team || p.team === ps.team) && (!ps.q || p.name.toLowerCase().includes(ps.q)));
+    rows = rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); return (typeof A === "string" ? A.localeCompare(B) : (A || 0) - (B || 0)) * ps.dir; });
+    const t = $("#players-table");
+    const head = [{ k: "name", t: "Player", l: 1 }, { k: "opp", t: "Opp", l: 1 }, ...cols.map(c => ({ k: c[0], t: c[1] }))];
+    const thead = H("thead", {}, H("tr", {}, head.map(c => {
+      const btn = H("button", { type: "button", text: c.t, onclick: () => { ps.dir = ps.key === c.k ? -ps.dir : (c.l ? 1 : -1); ps.key = c.k; draw(); } });
+      if (ps.key === c.k) btn.setAttribute("aria-sort", ps.dir > 0 ? "ascending" : "descending");
+      return H("th", { class: c.l ? "l" : "", scope: "col" }, btn);
+    })));
+    const tbody = H("tbody");
+    rows.slice(0, 400).forEach(p => {
+      const name = H("span", {}, document.createTextNode(p.name), H("span", { class: "rec", text: p.pos + " · " + p.team }), p.status ? H("span", { class: "status", text: p.status }) : null);
+      const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp })];
+      cols.forEach(c => cells.push(H("td", { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
+      const open = ps.open === p.id + p.game;
+      const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(open) }, ...cells);
+      const toggle = () => { ps.open = open ? null : p.id + p.game; draw(); };
+      tr.addEventListener("click", toggle);
+      tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+      tbody.append(tr);
+      if (open) tbody.append(H("tr", {}, H("td", { class: "why", colSpan: head.length }, why(p))));
+    });
+    t.replaceChildren(thead, tbody);
+    $("#players-foot").textContent = rows.length ? `${rows.length} players. Status comes from the weekly roster and injury report; game-day inactives are named about 90 minutes before kickoff, so check late news.` : "No players match.";
+  }
+  draw();
+
+  const BTp = PD.backtest;
+  if (BTp) {
+    $("#pbt-note").textContent = `Average miss per player-game since ${BTp.from}, scored only with what was known before each game. Lower is better. Season average is the player's average in this season's earlier games; recent average weights his latest games more. The anytime-TD row is a Brier score (the squared error of the chance of scoring).`;
+    table($("#pbt-table"), [{ t: "Stat", l: 1 }, { t: "Player-games" }, { t: "Model" }, { t: "Season average" }, { t: "Recent average" }, { t: "Model vs season average" }],
+      BTp.rows.map(r => [r.stat, comma(r.n), r.model, r.season_avg, r.recent, spct(r.model / r.season_avg - 1)]));
+  } else { $("#pbt-note").textContent = "The record appears after the next full backtest."; }
+})();
+
 /* ---------------- routing ---------------- */
-const views = { games: $("#view-games"), game: $("#view-game"), ratings: $("#view-ratings"), model: $("#view-model") };
+const views = { games: $("#view-games"), game: $("#view-game"), players: $("#view-players"), ratings: $("#view-ratings"), model: $("#view-model") };
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
-  const name = g ? "game" : (h === "ratings" || h === "model") ? h : "games";
+  const name = g ? "game" : (h === "ratings" || h === "model" || h === "players") ? h : "games";
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {

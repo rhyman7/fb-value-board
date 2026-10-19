@@ -18,6 +18,9 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
     stats, with league ranks
   - recent form: last ten games straight up, against the spread and over-under
   - every price with EV, fair price and stake
+- **Players**: projected passing, rushing and receiving for every player with a
+  role, with how each number is built (share, team volume, efficiency, the
+  defense, teammates out). See [PLAYERS.md](PLAYERS.md).
 - **Team ratings** and the **model record** (backtest, key numbers, method).
 
 ## What it found
@@ -189,6 +192,8 @@ nflmodel/
   features_ext.py         candidate features and the extended rating engine
   weather.py              wind forecasts for upcoming games, and the forecast log
   injuries.py             missing starters by position group (reports, rosters, snaps)
+  players_data.py         player box scores from play-by-play
+  players.py              player projections, backtest summary and board output
   ratings.py              team, quarterback and market-implied ratings
   model.py                margin and total models, market blend
   distributions.py        key-number curve, anchoring, width fit
@@ -207,6 +212,9 @@ data/wind_log.csv         wind forecasts as fetched
 experiments/feature_test.py  test candidate features walk-forward
 experiments/qb_test.py       quarterback-change settings
 experiments/injury_test.py   missing starters by position group
+experiments/players_test.py      player projections against baselines
+experiments/players_ablation.py  which pieces of the player model help
+PLAYERS.md                how player projections are built, and how they have done
 FEATURES.md               results of the October 2026 feature tests
 tests/test_model.py
 ```

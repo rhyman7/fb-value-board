@@ -171,3 +171,43 @@ def test_blank_roof_filled_from_home_stadium(tmp_path, monkeypatch):
     monkeypatch.setattr(C, "FIRST_SEASON", 2025)
     g = data.load_games(refresh=False).set_index("game_id")
     assert g.loc["c", "indoor"] == 1 and g.loc["d", "indoor"] == 0
+
+
+def test_player_asof_uses_only_earlier_games():
+    from nflmodel.players import asof
+    d = pd.DataFrame({"pid": ["a"] * 3 + ["b"], "t": [1, 2, 3, 1], "season": [2025] * 4, "x": [10.0, 20.0, np.nan, 5.0]})
+    r = asof(d, "pid", ["x"], None, hl=1.0).set_index(["pid", "t"])
+    assert r.loc[("a", 1), "x_sum"] == 0 and r.loc[("b", 1), "x_sum"] == 0      # nothing before the first game
+    assert abs(r.loc[("a", 2), "x_sum"] - 10 * 0.5) < 1e-9                      # one game ago, half-life 1
+    assert abs(r.loc[("a", 3), "x_sum"] - (20 * 0.5 + 10 * 0.25)) < 1e-9        # a game with no value adds nothing
+
+
+def test_player_status_label():
+    from nflmodel.players import status_label
+    assert status_label("RES", "Out") == "Injured reserve"
+    assert status_label("ACT", "Questionable") == "Questionable"
+    assert status_label("INA", None) == "Inactive"
+    assert status_label("INA", None, upcoming=True) is None          # last week's inactive list says nothing about this week
+    assert status_label("ACT", np.nan) is None
+
+
+def test_player_shares_and_starter():
+    from nflmodel import players as PL
+    base = dict(game_id="g", team="PHI", opp="DAL", season=2026, week=7, t=1, played=False, imp_pts=21.0, ptd_share=0.6,
+                catch=0.65, ypt=8.0, ypc=4.2, ypa=7.0, comp=0.64, int_rate=0.02, def_ypt=1, def_catch=1, def_ypc=1, def_ypa=1, def_comp=1,
+                rz_tgt_rate=0.1, rz_car_rate=0.1, gl_car_rate=0.03, car_share_raw=0.0, att_share_raw=0.0, tgt_share_raw=0.0)
+    rows = [dict(base, player_id="hurts", group="QB", active=0, att_share_raw=0.85),
+            dict(base, player_id="mckee", group="QB", active=1, att_share_raw=0.26),
+            dict(base, player_id="third", group="QB", active=1, att_share_raw=0.10),
+            dict(base, player_id="wr1", group="WR", active=1, tgt_share_raw=0.30),
+            dict(base, player_id="wr2", group="WR", active=1, tgt_share_raw=0.20),
+            dict(base, player_id="wr3", group="WR", active=0, tgt_share_raw=0.25)]
+    p = pd.DataFrame(rows)
+    for c in PL.VOL_FEATS:
+        p[c] = 1.0
+    const = type("M", (), {"predict": lambda self, X: np.full(len(X), 35.0)})()
+    q = PL.raw_projection(p, const, const).set_index("player_id")
+    assert q.loc["mckee", "att_share"] == 1 and q.loc["third", "att_share"] == 0 and q.loc["hurts", "att_share"] == 0
+    assert q.loc["wr3", "tgt_share"] == 0                                   # out: no targets
+    assert abs(q.loc["wr1", "tgt_share"] / q.loc["wr2", "tgt_share"] - 1.5) < 1e-9   # the rest keep their order
+    assert q.loc["wr1", "tgt_share"] > 0.30                                 # and pick up the missing receiver's targets
