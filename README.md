@@ -21,6 +21,11 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
 - **Players**: projected passing, rushing and receiving for every player with a
   role, with how each number is built (share, team volume, efficiency, the
   defense, teammates out). See [PLAYERS.md](PLAYERS.md).
+- **Past weeks**: every game's prediction and player projections as the board
+  showed them at the last update before kickoff, graded against the result:
+  the board's side of each spread and total, flagged bets, and each player's
+  projection next to his box score. Stored in `docs/archive/` by
+  `nflmodel/archive.py` (frozen at kickoff, never rewritten after).
 - **Team ratings** and the **model record** (backtest, key numbers, method).
 
 ## What it found

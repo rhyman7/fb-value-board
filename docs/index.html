@@ -257,6 +257,11 @@ button.link { font: inherit; color: var(--link); background: none; border: 0; pa
 .method li::marker { font-weight: 700; }
 .method ul { padding-left: 18px; display: grid; gap: 10px; max-width: 62ch; }
 footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-3); display: grid; gap: 4px; }
+.res { display: inline-block; min-width: 1.6em; text-align: center; font-size: 11.5px; font-weight: 700; border-radius: 3px; padding: 1px 4px; margin-left: 6px; border: 1px solid var(--axis); color: var(--ink-2); }
+.res.w { background: var(--s3); border-color: var(--s3); color: #fff; } .res.l { background: transparent; border-color: var(--s2); color: var(--s2); }
+.hist-rec { display: flex; flex-wrap: wrap; gap: 12px 36px; margin: 6px 0 4px; }
+.hist-rec div { display: grid; gap: 0; } .hist-rec b { font: 700 26px/1.1 var(--display); font-variant-numeric: tabular-nums; } .hist-rec span { font-size: 12.5px; color: var(--ink-3); }
+td .act { font-weight: 700; } td .vs { color: var(--ink-3); font-size: 12px; margin-left: 3px; }
 .empty { padding: 40px 0; font-size: 17px; color: var(--ink-2); }
 @media (prefers-reduced-motion: no-preference) { .seg button, nav.sections a, a.bug { transition: background-color .12s, color .12s, border-color .12s; } }
 </style>
@@ -271,6 +276,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
       <ul>
         <li><a href="#games" data-view="games">Games</a></li>
         <li><a href="#players" data-view="players">Players</a></li>
+        <li><a href="#history" data-view="history">Past weeks</a></li>
         <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
         <li><a href="#model" data-view="model">Model record</a></li>
       </ul>
@@ -352,6 +358,35 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
           <p class="note" id="pbt-note"></p>
         </div>
         <div class="scroll"><table id="pbt-table" aria-labelledby="pbt-h"></table></div>
+      </section>
+    </div>
+
+    <!-- ============ past weeks ============ -->
+    <div class="view" id="view-history" hidden>
+      <section aria-labelledby="hist-h">
+        <div class="section-head">
+          <h2 id="hist-h">Past weeks</h2>
+          <p class="note" id="hist-note">Every game's prediction as the board showed it at the last update before kickoff, next to how it turned out.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Week">
+          <div class="field-label"><span id="hf-week">Week</span><div class="seg" id="seg-hweek" role="group" aria-labelledby="hf-week"></div></div>
+        </div>
+        <div class="hist-rec" id="hist-rec"></div>
+        <div class="scroll"><table id="hist-games" class="compact" aria-labelledby="hist-h"></table></div>
+        <p class="note" id="hist-foot"></p>
+      </section>
+      <section aria-labelledby="hp-h">
+        <div class="section-head">
+          <h2 id="hp-h">Player projections against results</h2>
+          <p class="note" id="hp-note"></p>
+        </div>
+        <div class="filters" role="group" aria-label="Player filters">
+          <div class="field-label"><span id="hpf-pos">Position</span><div class="seg" id="seg-hpos" role="group" aria-labelledby="hpf-pos"></div></div>
+          <label class="field-label" for="hp-team">Team<select class="money" id="hp-team"></select></label>
+          <label class="field-label" for="hp-search">Player<input class="money p-search" id="hp-search" type="search" placeholder="Search" autocomplete="off"></label>
+        </div>
+        <div class="scroll"><table id="hist-players" class="compact players" aria-labelledby="hp-h"></table></div>
+        <p class="note" id="hp-foot"></p>
       </section>
     </div>
 
@@ -1289,12 +1324,120 @@ function diagChart(node, o) {
   } else { $("#pbt-note").textContent = "The record appears after the next full backtest."; }
 })();
 
+/* ---------------- past weeks ---------------- */
+const historyView = (function () {
+  let loaded = false, index = [], cur = null;
+  const cache = {}, hs = { pos: "All", team: "", q: "", key: "score", dir: -1 };
+  const f0 = x => x == null ? "–" : Math.round(x).toString(), f1 = x => x == null ? "–" : x.toFixed(1);
+  const badge = r => r ? H("span", { class: "res " + (r === "W" ? "w" : r === "L" ? "l" : ""), text: r === "W" ? "Won" : r === "L" ? "Lost" : "Push" }) : null;
+  const get = f => cache[f] ? Promise.resolve(cache[f]) : fetch("archive/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => (cache[f] = d));
+
+  function open() {
+    if (loaded) return;
+    loaded = true;
+    get("index.json").then(ix => {
+      index = ix.weeks.slice().sort((a, b) => a.season - b.season || a.week - b.week);
+      if (!index.length) { $("#hist-note").textContent = "Nothing archived yet."; return; }
+      // open on the latest week with a graded game; otherwise the latest
+      const done = index.filter(w => w.graded > 0);
+      cur = (done.length ? done[done.length - 1] : index[index.length - 1]).file;
+      seg($("#seg-hweek"), index.map(w => ({ v: w.file, t: "Week " + w.week })), () => cur, v => { cur = v; show(); });
+      seg($("#seg-hpos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => hs.pos, v => { hs.pos = v; drawPlayers(); });
+      $("#hp-team").addEventListener("change", e => { hs.team = e.target.value; drawPlayers(); });
+      $("#hp-search").addEventListener("input", e => { hs.q = e.target.value.trim().toLowerCase(); drawPlayers(); });
+      show();
+    }).catch(() => { $("#hist-note").textContent = "Past weeks load from the published board; they are not available in a copy opened from disk."; });
+  }
+
+  function show() {
+    const meta = index.find(w => w.file === cur);
+    get(cur).then(d => { if (cur === meta.file) { drawWeek(d, meta); drawPlayers(); } });
+  }
+
+  function drawWeek(d, w) {
+    const pr = (r, n) => `${r[0]}-${r[1]}${r[2] ? "-" + r[2] : ""}`;
+    const box = (v, l) => H("div", {}, H("b", { text: v }), H("span", { text: l }));
+    const pend = w.games - w.graded;
+    $("#hist-rec").replaceChildren(
+      box(pr(w.spread), "Board's side, spreads"), box(pr(w.total), "Board's side, totals"),
+      box(w.bets ? pr(w.bet_wlp || [0, 0, 0]) : "None", w.bets ? `Flagged bets, ${spct(w.units / w.staked)} return on stakes` : "Flagged bets graded"),
+      box(String(w.graded) + " of " + w.games, pend ? "games graded (" + pend + " to play)" : "games graded"));
+    const rows = Object.values(d.games).sort((a, b) => (a.kickoff || "").localeCompare(b.kickoff || "") || a.id.localeCompare(b.id));
+    table($("#hist-games"), [{ t: "Game", l: 1 }, { t: "Final", l: 1 }, { t: "Line", l: 1 }, { t: "Board projection", l: 1 }, { t: "Spread side", l: 1 }, { t: "Total side", l: 1 }, { t: "Flagged bets", l: 1 }],
+      rows.map(g => {
+        const r = d.results[g.id], res = {};
+        if (r) r.bets.forEach(b => { res[b.market + "|" + b.side] = b; });
+        const side = mk => { const s = (g.bets || []).filter(b => b.market === mk); return s.length ? s.reduce((a, b) => (b.prob || 0) > (a.prob || 0) ? b : a) : null; };
+        const pick = (b) => b ? H("span", {}, document.createTextNode(`${b.pick} (${Math.round(b.prob * 100)}%)`), r ? badge((res[b.market + "|" + b.side] || {}).result) : null) : "–";
+        const fav = g.market.spread >= 0 ? `${g.home} ${line(-g.market.spread)}` : `${g.away} ${line(g.market.spread)}`;
+        const pm = g.proj.margin, projTxt = `${pm >= 0 ? g.home : g.away} by ${Math.abs(pm).toFixed(1)}, ${g.proj.total.toFixed(1)} total`;
+        const flagged = (g.bets || []).filter(b => (b.stake || 0) > 0);
+        const fl = flagged.length ? H("span", {}, ...flagged.map((b, i) => H("span", {}, document.createTextNode((i ? "; " : "") + `${b.pick} ${odds(b.odds)}`), r ? badge((res[b.market + "|" + b.side] || {}).result) : null))) : "–";
+        return [H("strong", { text: `${g.away} at ${g.home}` }),
+          r ? `${g.away} ${r.away_score} – ${r.home_score} ${g.home}` : (g.date ? `${g.date}, not played yet` : "Not played yet"),
+          `${fav}, ${g.market.total}`, projTxt, pick(side("Spread")), pick(side("Total")), fl];
+      }));
+    const fz = [...new Set(rows.map(g => g.frozen_at))].filter(Boolean).sort();
+    $("#hist-foot").textContent = `"Side" is whichever side the board's market-adjusted chance favours, with that chance; most are close to 50%, so a week's record is mostly noise. Flagged bets are the ones the board staked. Predictions frozen ${fz.length > 1 ? "between " + fz[0] + " and " + fz[fz.length - 1] : "at " + (fz[0] || "kickoff")}.`;
+  }
+
+  const COLS = {
+    All: [["pass_yds", "Pass yds"], ["rush_yds", "Rush yds"], ["receptions", "Rec"], ["rec_yds", "Rec yds"]],
+    QB: [["completions", "Comp"], ["pass_att", "Att"], ["pass_yds", "Pass yds"], ["pass_td", "Pass TD"], ["ints", "INT"], ["rush_yds", "Rush yds"]],
+    RB: [["carries", "Carries"], ["rush_yds", "Rush yds"], ["receptions", "Rec"], ["rec_yds", "Rec yds"]],
+    WR: [["targets", "Targets"], ["receptions", "Rec"], ["rec_yds", "Rec yds"]],
+  };
+  COLS.TE = COLS.WR;
+  const YDS = ["pass_yds", "rush_yds", "rec_yds"];
+
+  function drawPlayers() {
+    const d = cache[cur];
+    if (!d) return;
+    const all = [];
+    Object.entries(d.players).forEach(([gid, ps]) => ps.forEach(p => all.push({ ...p, act: (d.actuals[gid] || {})[p.id], graded: !!d.results[gid] })));
+    const teams = [...new Set(all.map(p => p.team))].sort();
+    if (hs.team && !teams.includes(hs.team)) hs.team = "";
+    $("#hp-team").replaceChildren(H("option", { value: "", text: "All teams" }), ...teams.map(t => H("option", { value: t, text: t, ...(t === hs.team ? { selected: "" } : {}) })));
+    if (!all.length) {
+      $("#hp-note").textContent = "No player projections were archived for this week (they start with week 7).";
+      $("#hist-players").replaceChildren(); $("#hp-foot").textContent = ""; return;
+    }
+    // average miss on yards, for players who played
+    const miss = YDS.map(k => {
+      const xs = all.filter(p => p.act && (p.proj[k] || 0) >= (k === "pass_yds" ? 100 : 10)).map(p => Math.abs(p.proj[k] - p.act[k]));
+      return xs.length ? `${({ pass_yds: "passing", rush_yds: "rushing", rec_yds: "receiving" })[k]} yards ${(xs.reduce((a, b) => a + b, 0) / xs.length).toFixed(1)} (${xs.length} players)` : null;
+    }).filter(Boolean);
+    $("#hp-note").textContent = "Each player's projection as frozen at kickoff, with what he actually did. " + (miss.length ? "Average miss this week: " + miss.join(", ") + "." : "Results appear once the games are played.");
+    const cols = COLS[hs.pos];
+    let rows = all.filter(p => (hs.pos === "All" || p.pos === hs.pos || (hs.pos === "RB" && p.pos === "FB")) && (!hs.team || p.team === hs.team) && (!hs.q || p.name.toLowerCase().includes(hs.q)));
+    const score = p => (p.proj.pass_yds || 0) / 2.5 + (p.proj.rush_yds || 0) + (p.proj.rec_yds || 0);
+    rows.sort((a, b) => score(b) - score(a));
+    table($("#hist-players"), [{ t: "Player", l: 1 }, { t: "Opp", l: 1 }, ...cols.map(c => ({ t: c[1] + ", proj / actual" })), { t: "Scored", l: 0 }],
+      rows.slice(0, 400).map(p => {
+        const name = H("span", {}, document.createTextNode(p.name), H("span", { class: "rec", text: p.pos + " · " + p.team }), p.status ? H("span", { class: "status", text: p.status }) : null);
+        const cell = k => {
+          const pv = p.proj[k], fmt = /yds/.test(k) ? f0 : f1;
+          if (!p.graded) return fmt(pv);
+          if (!p.act) return H("span", {}, document.createTextNode(fmt(pv) + " / "), H("span", { class: "vs", text: "did not play" }));
+          return H("span", {}, document.createTextNode(fmt(pv) + " / "), H("span", { class: "act", text: fmt(p.act[k]) }));
+        };
+        const tds = p.act ? (p.act.rec_td || 0) + (p.act.rush_td || 0) : null;
+        const chance = p.pos === "QB" ? null : p.td_any;
+        return [name, (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp, ...cols.map(c => cell(c[0])),
+          [chance == null ? null : Math.round(chance * 100) + "%", tds == null ? (p.graded && chance != null ? "–" : null) : tds > 0 ? "Yes" : "No"].filter(Boolean).join(" · ")];
+      }));
+    $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. "Scored" is the anytime-TD chance and whether he scored a rushing or receiving touchdown.`;
+  }
+  return { open };
+})();
+
 /* ---------------- routing ---------------- */
-const views = { games: $("#view-games"), game: $("#view-game"), players: $("#view-players"), ratings: $("#view-ratings"), model: $("#view-model") };
+const views = { games: $("#view-games"), game: $("#view-game"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
-  const name = g ? "game" : (h === "ratings" || h === "model" || h === "players") ? h : "games";
+  const name = g ? "game" : (h === "ratings" || h === "model" || h === "players" || h === "history") ? h : "games";
+  if (name === "history") historyView.open();
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {

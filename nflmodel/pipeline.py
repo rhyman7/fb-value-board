@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import backtest, bets, config as C, data, extra, injuries, matchup, model, players, players_data, slate, weather
+from . import archive, backtest, bets, config as C, data, extra, injuries, matchup, model, players, players_data, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -44,6 +44,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
 
     say("Projecting players ...")
+    pg = None
     try:
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
         avail = players.load_availability(refresh_current=refresh, verbose=verbose)
@@ -121,6 +122,10 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)
     (C.DOCS / "data.json").write_text(json.dumps(out, separators=(",", ":")))
+    try:                                          # keep each week's predictions, frozen at kickoff
+        archive.update(out, games, pg, verbose=verbose)
+    except Exception as exc:
+        print(f"  archive skipped ({exc})")
     build_page(out)
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out

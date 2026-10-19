@@ -1,4 +1,5 @@
 """Run with:  python -m pytest -q   (or just: python tests/test_model.py)"""
+import json
 import sys
 from pathlib import Path
 
@@ -223,3 +224,33 @@ def test_player_shares_and_starter():
     assert starter([("vet", 0.6), ("rookie", 0.4)], "rookie") == ["rookie"]      # benching sticks
     assert starter([("hurts", 0.85), ("mckee", 0.3)], "mckee") == ["hurts"]      # regular returns from injury
     assert starter([("a", 0.6), ("b", 0.3)], None) == ["a"]                      # no previous starter: largest share
+
+
+def test_archive_freezes_at_kickoff_and_grades(tmp_path):
+    from nflmodel import archive as A
+    games = pd.DataFrame([{"game_id": "2026_07_A_B", "gameday": pd.Timestamp("2026-10-25"), "gametime": "13:00",
+                           "home_score": np.nan, "away_score": np.nan, "home_qb_id": None, "away_qb_id": None}])
+    bets = [{"market": "Spread", "side": "home", "pick": "B -3", "odds": -110, "prob": 0.55, "stake": 0.01},
+            {"market": "Spread", "side": "away", "pick": "A +3", "odds": -110, "prob": 0.45, "stake": 0.0},
+            {"market": "Total", "side": "over", "pick": "Over 44.5", "odds": -110, "prob": 0.52, "stake": 0.0},
+            {"market": "Moneyline", "side": "away", "pick": "A ML", "odds": 140, "prob": 0.4, "stake": 0.0}]
+    def out(margin, gen):
+        g = {"id": "2026_07_A_B", "week": 7, "away": "A", "home": "B", "market": {"spread": 3.0, "total": 44.5},
+             "proj": {"margin": margin, "total": 45.0}, "bets": bets}
+        return {"meta": {"season": 2026, "generated": gen}, "slate": {"games": [g]},
+                "players": {"players": [{"id": "p1", "game": "2026_07_A_B", "team": "B"}], "teams": []}}
+    before = pd.Timestamp("2026-10-25 16:00", tz="UTC")       # 12:00 ET, an hour before kickoff
+    after = pd.Timestamp("2026-10-25 18:00", tz="UTC")
+    assert A.snapshot(out(3.5, "first"), games, before, tmp_path) == 1
+    assert A.snapshot(out(9.9, "late"), games, after, tmp_path) == 0      # kicked off: frozen
+    d = json.loads((tmp_path / "2026_w07.json").read_text())
+    assert d["games"]["2026_07_A_B"]["proj"]["margin"] == 3.5 and d["games"]["2026_07_A_B"]["frozen_at"] == "first"
+    games.loc[0, ["home_score", "away_score"]] = [24, 20]                  # B by 4: covers -3, under 44.5
+    pg = pd.DataFrame([{"game_id": "2026_07_A_B", "player_id": "p1", **{k: 1.0 for k in A.BOX}}])
+    assert A.grade(games, pg, tmp_path) == 1
+    d = json.loads((tmp_path / "2026_w07.json").read_text())
+    res = {(b["market"], b["side"]): (b["result"], b["units"]) for b in d["results"]["2026_07_A_B"]["bets"]}
+    assert res[("Spread", "home")] == ("W", round(100 / 110, 4)) and res[("Total", "over")][0] == "L" and res[("Moneyline", "away")] == ("L", -1.0)
+    assert d["actuals"]["2026_07_A_B"]["p1"]["pass_yds"] == 1.0
+    w = A.write_index(tmp_path)[0]
+    assert w["spread"] == [1, 0, 0] and w["total"] == [0, 1, 0] and w["bet_wlp"] == [1, 0, 0]
