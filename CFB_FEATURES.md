@@ -99,8 +99,34 @@ The lines file and the schedule disagree on which team is home for a few neutral
 games (Army-Navy among them). Their spreads were being applied to the wrong side; the
 build now flips the lines file's numbers onto the schedule's sides.
 
+## Missing players
+
+There is no public college injury report and no game-day inactive list, so absences can
+only be read from box scores. For each team and game, the regulars by usage over its
+earlier games this season (20%+ of the carries, quarterbacks excluded; 12%+ of the
+catches; two or more appearances) are checked against the team's previous game. A regular
+with no stat there is presumed still out, which is all a bettor can know before kickoff.
+Run `python experiments/cfb_missing_test.py`.
+
+| Added to the current model | Tuning | Holdout | Kept |
+|---|---|---|---|
+| Running backs missing from the last game (difference) | +0.001 | +0.000 | no |
+| Running backs, change from the three games before | −0.005 | +0.000 | no |
+| Pass catchers missing from the last game | −0.000 | +0.004 | no |
+| Pass catchers, change | +0.001 | +0.002 | no |
+| Both groups | +0.000 | +0.003 | no |
+| Totals: running backs / pass catchers missing (sum) | −0.003 / −0.001 | +0.005 / +0.002 | no |
+| *Ceiling: regulars missing from this game's own box score* | +0.005 / −0.012 (totals) | −0.000 / +0.006 | *not usable* |
+
+**Nothing helps**, not even the ceiling row, which uses who actually played (known only
+after the game). Skill-position absences that show up in box scores are already in the
+market-implied ratings and the quarterback adjustment. Offensive line and defensive
+absences cannot be seen at all: box scores do not list linemen, and defensive stats are
+only complete from 2023.
+
 ## Not tested yet
 
-- Injuries: there is no public college injury report. The next test is players missing
-  from recent box scores, by position group, as the NFL board did with rosters.
-- The wind under, graded on forecasts instead of recorded wind (needs a season of logs).
+- The wind feature graded on forecasts instead of recorded wind (needs a season of the
+  logged forecasts in `data/cfb/wind_log.csv`).
+- Missing players again once a season or two of game rosters with listed starters exist
+  (ESPN's college game rosters only mark starters from late 2025).

@@ -107,6 +107,34 @@ spread model. Wind and snaps per game improved the total model a little. Full
 results are in [FEATURES.md](FEATURES.md); rerun them with
 `python experiments/feature_test.py`.
 
+## College football board
+
+A college version of the same board lives in `docs/cfb/` (on GitHub Pages:
+`.../docs/cfb/`), built by `python run_cfb.py` from free cfbfastR data and refreshed by
+`.github/workflows/update-cfb.yml` (daily August to January, plus Saturday midday and
+afternoon runs; full backtest on Mondays). Code is in `cfbmodel/`, which reuses the NFL
+rating engine, odds math, key-number curve and page design. The page is made from the
+NFL page by `python site/make_cfb_template.py`, which stops if an NFL page change breaks
+one of its edits.
+
+Walk-forward on FBS-against-FBS games, settings chosen on 2017-2019, graded at −110 at
+the consensus closing line:
+
+| Since 2021 (4,143 games) | Model | Closing line |
+|---|---|---|
+| Average miss on the margin | 12.35 pts | 12.05 pts |
+| Average miss on the total | 12.60 pts | 12.43 pts |
+| Picks the winner | 73.4% | 73.5% |
+
+It trails the line by about a point in weeks 0 to 5 and is level from week 6 on. Against
+opening totals (2021 on), betting the model's side when it is 3+ points off went
+694-562-12 (55.3%, +5.4% ± 2.7%). See [CFB_FEATURES.md](CFB_FEATURES.md) for every test
+and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
+
+College limits: no public injury report (a regular who missed his team's last game is
+treated as out), historical lines are consensus averages with no prices, and current
+prices come from ESPN's scoreboard (one book). For research and entertainment.
+
 ## Quick start
 
 ```bash

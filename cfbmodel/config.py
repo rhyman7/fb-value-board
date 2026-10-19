@@ -20,6 +20,9 @@ FILES = {
     "player_box": "player_box/parquet/player_box_{s}.parquet",
 }
 
+# The full schedule, including games not yet played (the parquet schedule has finished games only).
+FULL_SCHEDULE = "https://raw.githubusercontent.com/sportsdataverse/cfbfastR-cfb-raw/main/cfb/schedules/csv/cfb_schedule_{s}.csv"
+
 FIRST_SEASON = 2014         # first season of play-by-play pulled (burn-in for ratings)
 FIRST_MODEL_SEASON = 2015   # first season with betting lines; first season the game model trains on
 FIRST_TEST_SEASON = 2017    # first season scored walk-forward (two seasons of training before it)

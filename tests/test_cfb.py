@@ -63,3 +63,42 @@ def test_half_point_rounding_and_grading():
     assert b.loc[("Spread", "home"), "outcome"] == 0        # A -7 pushes on a 7-point win
     assert b.loc[("Total", "over"), "outcome"] == 1
     assert abs(b.loc[("Spread", "home"), "model_prob"] - 0.5) < 0.01   # no disagreement, no edge
+
+
+def test_espn_odds_both_shapes():
+    from cfbmodel import espn
+    comp = lambda odds: {"id": "401", "competitions": [{"odds": [odds], "competitors": [
+        {"homeAway": "home", "team": {"abbreviation": "OSU"}}, {"homeAway": "away", "team": {"abbreviation": "MICH"}}]}]}
+    old = espn.parse_event(comp({"details": "OSU -7.5", "overUnder": 48.5, "provider": {"name": "ESPN BET"},
+                                 "homeTeamOdds": {"moneyLine": -300, "spreadOdds": -110}, "awayTeamOdds": {"moneyLine": 240, "spreadOdds": -110}}))
+    assert old["spread_line"] == 7.5 and old["total_line"] == 48.5 and old["home_moneyline"] == -300 and old["away_moneyline"] == 240
+    away_fav = espn.parse_event(comp({"details": "MICH -3", "overUnder": 44}))
+    assert away_fav["spread_line"] == -3
+    new = espn.parse_event(comp({"pointSpread": {"home": {"close": {"line": "-6.5", "odds": "-105"}}, "away": {"close": {"line": "+6.5", "odds": "-115"}}},
+                                 "total": {"over": {"close": {"line": "o51.5", "odds": "-110"}}, "under": {"close": {"line": "u51.5", "odds": "-110"}}},
+                                 "moneyline": {"home": {"close": {"odds": "-250"}}, "away": {"close": {"odds": "+205"}}}}))
+    assert new["spread_line"] == 6.5 and new["total_line"] == 51.5 and new["home_spread_odds"] == -105 and new["away_moneyline"] == 205
+
+
+def test_board_breakdowns_add_up():
+    import json
+    path = Path(__file__).resolve().parent.parent / "docs" / "cfb" / "data.json"
+    if not path.exists():
+        return
+    d = json.loads(path.read_text())
+    for g in d["slate"]["games"]:
+        bd = g["detail"]["breakdown"]
+        assert abs(bd["margin_sum"] - g["model"]["margin"]) < 0.06, g["id"]
+        assert abs(bd["total_sum"] - g["model"]["total"]) < 0.06, g["id"]
+        assert 0 <= g["win"]["adj"] <= 1
+
+
+def test_archive_grades_at_the_half_point():
+    from cfbmodel import archive
+    g = {"market": {"spread": 3.0, "total": 52.5}, "proj": {"margin": 4.0, "total": 50.0}}
+    assert archive._bet_result({"market": "Spread", "side": "home", "odds": -110}, g, 3, 50)[0] == "P"
+    assert archive._bet_result({"market": "Total", "side": "under", "odds": -110}, g, 3, 50)[0] == "W"
+    d = {"games": {"x": {**g, "bets": [{"market": "Spread", "side": "home", "prob": 0.55, "stake": 0.01, "odds": -110}]}},
+         "results": {"x": {"home_score": 30, "away_score": 20, "bets": [{"market": "Spread", "side": "home", "result": "W", "units": 0.909}]}}}
+    s = archive.summarize(d)
+    assert s["winners"] == [1, 0] and s["miss"]["margin"] == 6.0 and s["miss"]["line_total"] == 2.5

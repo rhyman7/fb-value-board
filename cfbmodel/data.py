@@ -80,9 +80,33 @@ def _num(x):
     return pd.to_numeric(x, errors="coerce")
 
 
+def _add_scheduled(s: pd.DataFrame, season: int) -> pd.DataFrame:
+    """Add games not yet played from the full schedule file. Failure leaves the schedule as is."""
+    try:
+        def go():
+            req = urllib.request.Request(C.FULL_SCHEDULE.format(s=season), headers={"User-Agent": "cfb-model"})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return pd.read_csv(io.BytesIO(r.read()))
+        f = _retry(go)
+    except Exception as exc:
+        print(f"  no full schedule for {season} ({exc})")
+        return s
+    f = f[~f["id"].isin(s["game_id"]) & ~f["status_type_completed"].fillna(False).astype(bool)]
+    if not len(f):
+        return s
+    add = pd.DataFrame({
+        "game_id": f["id"], "season": season, "week": f["week"], "season_type": f["season_type"],
+        "game_date": f["start_date"], "neutral_site": f["neutral_site"], "conference_competition": f["conference_competition"],
+        "home_id": f["home_id"], "away_id": f["away_id"], "home_team": f["home_display_name"], "away_team": f["away_display_name"],
+        "home_score": np.nan, "away_score": np.nan, "venue": f["venue_full_name"], "status": f["status_type_name"],
+        "venue_indoor": f.get("venue_indoor")})
+    return pd.concat([s, add], ignore_index=True)
+
+
 def reduce_games(season: int) -> pd.DataFrame:
     s = _get("schedule", season)
     t = _get("teams", season)
+    s = _add_scheduled(s, season)
     fbs = t[t["classification"] == "fbs"]
     name = dict(zip(fbs["team_id"].astype(int), fbs["school"]))
     s = s[s["home_id"].isin(name) | s["away_id"].isin(name)].copy()
@@ -99,6 +123,7 @@ def reduce_games(season: int) -> pd.DataFrame:
         "conference_game": s["conference_competition"].fillna(False).astype(bool).astype(int).to_numpy(),
         "home_score": _num(s["home_score"]), "away_score": _num(s["away_score"]),
         "venue": s["venue"], "status": s["status"],
+        "venue_indoor": s["venue_indoor"].astype(object) if "venue_indoor" in s else np.nan,
     })
     done = g["status"].astype(str).str.upper().str.contains("FINAL")
     g.loc[~done, ["home_score", "away_score"]] = np.nan
@@ -150,6 +175,9 @@ def reduce_games(season: int) -> pd.DataFrame:
     g.loc[miss, "lat"] = g.loc[miss, "home_team"].map(home_site["latitude"])
     g.loc[miss, "lon"] = g.loc[miss, "home_team"].map(home_site["longitude"])
     g.loc[g["dome"].isna() & miss, "dome"] = g.loc[g["dome"].isna() & miss, "home_team"].map(home_site["dome"])
+    vi = g["venue_indoor"].map(lambda x: 1 if x is True or str(x).lower() == "true" else (0 if x is False or str(x).lower() == "false" else np.nan))
+    g["dome"] = g["dome"].where(g["dome"].notna(), vi)
+    g = g.drop(columns="venue_indoor")
     g["dome"] = g["dome"].map(lambda x: 1 if x is True or x == 1 or str(x).lower() == "true" else 0)
     return g
 

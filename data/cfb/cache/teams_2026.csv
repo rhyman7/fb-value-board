@@ -1,0 +1,139 @@
+school,team_id,abbr,name,short,color,alt,conference,lat,lon,dome,venue,timezone
+Auburn,2,AUB,Auburn Tigers,Auburn,#002b5c,#f26522,SEC,32.6025532,-85.4897479,False,Jordan-Hare Stadium,America/Chicago
+UAB,5,UAB,UAB Blazers,UAB,#1a5632,#fdb913,American,33.5206824,-86.8024326,False,Legion Field (AL),America/Chicago
+South Alabama,6,USA,South Alabama Jaguars,South Alabama,#00205b,#bf0d3e,Sun Belt,30.696904,-88.192013,False,Hancock Whitney Stadium,America/Chicago
+Arkansas,8,ARK,Arkansas Razorbacks,Arkansas,#a32136,#ffffff,SEC,36.0680662,-94.1789534,False,Donald W. Reynolds Razorback Stadium,America/Chicago
+Arizona State,9,ASU,Arizona State Sun Devils,Arizona St,#ffc627,#8c1d40,Big 12,33.4264471,-111.9325005,False,Mountain America Stadium,America/Phoenix
+Arizona,12,ARIZ,Arizona Wildcats,Arizona,#cc0033,#003366,Big 12,32.2288054,-110.9488677,False,Casino Del Sol Stadium,America/Phoenix
+Sacramento State,16,SAC,Sacramento State Hornets,Sacramento St,#00573C,#cdb97d,MAC,38.5556718,-121.4229607,False,Hornet Stadium,America/Los_Angeles
+San Diego State,21,SDSU,San Diego State Aztecs,San Diego St,#a6192e,#000000,Pac-12,32.784444,-117.122833,False,SDCCU Stadium,America/Los_Angeles
+San José State,23,SJSU,San José State Spartans,San José St,#0038a8,#ffb81a,Mountain West,37.3196675,-121.8682962,False,CEFCU Stadium,America/Los_Angeles
+Stanford,24,STAN,Stanford Cardinal,Stanford,#8c1515,#ffffff,ACC,37.4345556,-122.1611271,False,Stanford Stadium,America/Los_Angeles
+California,25,CAL,California Golden Bears,California,#041e42,#ffc72c,ACC,37.8710434,-122.2507729,False,California Memorial Stadium,America/Los_Angeles
+UCLA,26,UCLA,UCLA Bruins,UCLA,#2774ae,#f2a900,Big Ten,34.1613284,-118.1676462,False,Rose Bowl,America/Los_Angeles
+USC,30,USC,USC Trojans,USC,#9d2235,#ffc72c,Big Ten,34.014167,-118.287778,False,Los Angeles Memorial Coliseum,America/Los_Angeles
+Colorado State,36,CSU,Colorado State Rams,Colorado St,#004c23,#c8c372,Pac-12,40.570015,-105.088435,False,Hughes Stadium (CO),America/Denver
+Colorado,38,COLO,Colorado Buffaloes,Colorado,#cfb87c,#000000,Big 12,40.0094746,-105.266905,False,Folsom Field,America/Denver
+UConn,41,CONN,UConn Huskies,UConn,#0c2340,#a2aaad,FBS Indep.,41.7595675,-72.6187728,False,Pratt & Whitney Stadium,America/New_York
+Delaware,48,DEL,Delaware Blue Hens,Delaware,#00539f,#ffd200,CUSA,39.6617428,-75.7488224,False,Delaware Stadium,America/New_York
+Florida State,52,FSU,Florida State Seminoles,Florida St,#782f40,#ceb888,ACC,30.4381692,-84.3044032,False,Doak Campbell Stadium,America/New_York
+Jacksonville State,55,JVST,Jacksonville State Gamecocks,Jax State,#cc0000,#000000,CUSA,33.8201052,-85.76647,False,AmFirst Stadium,America/Chicago
+Florida,57,FLA,Florida Gators,Florida,#0021a5,#fa4616,SEC,29.6499357,-82.3485788,False,Ben Hill Griffin Stadium,America/New_York
+South Florida,58,USF,South Florida Bulls,South Florida,#006747,#cfc493,American,27.9758691,-82.5033344,False,Raymond James Stadium,America/New_York
+Georgia Tech,59,GT,Georgia Tech Yellow Jackets,Georgia Tech,#b3a369,#ffffff,ACC,33.7724449,-84.3928054,False,Bobby Dodd Stadium,America/New_York
+Georgia,61,UGA,Georgia Bulldogs,Georgia,#ba0c2f,#2c2a29,SEC,33.9498197,-83.3733813,False,Sanford Stadium,America/New_York
+Hawai'i,62,HAW,Hawai'i Rainbow Warriors,Hawai'i,#005737,#000000,Mountain West,21.294294,-157.819338,False,Aloha Stadium,Pacific/Honolulu
+Iowa State,66,ISU,Iowa State Cyclones,Iowa State,#ae192d,#ffc72a,Big 12,42.0139977,-93.6357716,False,Jack Trice Stadium,America/Chicago
+Boise State,68,BOIS,Boise State Broncos,Boise St,#0033a0,#d64309,Pac-12,43.6028839,-116.1958882,False,Albertsons Stadium,America/Boise
+Northwestern,77,NU,Northwestern Wildcats,Northwestern,#492f92,#ffffff,Big Ten,42.058246,-87.670876,False,Ryan Field (1926),America/Chicago
+Indiana,84,IU,Indiana Hoosiers,Indiana,#970310,#ffffff,Big Ten,39.1808959,-86.5256217,False,"Memorial Stadium (Bloomington, IN)",America/Indiana/Indianapolis
+Notre Dame,87,ND,Notre Dame Fighting Irish,Notre Dame,#062340,#c99700,FBS Indep.,41.698378,-86.2339425,False,Notre Dame Stadium,America/Indiana/Indianapolis
+Kentucky,96,UK,Kentucky Wildcats,Kentucky,#0033a0,#ffffff,SEC,38.0220905,-84.5053408,False,Kroger Field,America/New_York
+Louisville,97,LOU,Louisville Cardinals,Louisville,#c9001f,#ffffff,ACC,38.2057621,-85.7588141,False,L&N Federal Credit Union Stadium,America/Kentucky/Louisville
+Western Kentucky,98,WKU,Western Kentucky Hilltoppers,Western KY,#e13a3e,#ffffff,CUSA,36.9847901,-86.4594041,False,Houchens Industries-L.T. Smith Stadium,America/Chicago
+LSU,99,LSU,LSU Tigers,LSU,#461d76,#fdd023,SEC,30.412035,-91.1838163,False,Tiger Stadium (LA),America/Chicago
+Boston College,103,BC,Boston College Eagles,Boston College,#8c2232,#dbcca6,ACC,42.335104,-71.1664413,False,"Alumni Stadium (Chestnut Hill, MA)",America/New_York
+Massachusetts,113,MASS,Massachusetts Minutemen,UMass,#881c1c,#ffffff,MAC,42.3773244,-72.5360595,False,Warren McGuirk Alumni Stadium,America/New_York
+Maryland,120,MD,Maryland Terrapins,Maryland,#ce1126,#ffffff,Big Ten,38.9903332,-76.9473792,False,SECU Stadium,America/New_York
+Michigan State,127,MSU,Michigan State Spartans,Michigan St,#173f35,#ffffff,Big Ten,42.7281474,-84.4848526,False,Spartan Stadium,America/Detroit
+Michigan,130,MICH,Michigan Wolverines,Michigan,#00274c,#ffcb05,Big Ten,42.2658365,-83.7486956,False,Michigan Stadium,America/Detroit
+Minnesota,135,MINN,Minnesota Golden Gophers,Minnesota,#5e0a2f,#fab41c,Big Ten,44.976525,-93.2245462,False,Huntington Bank Stadium,America/Chicago
+Missouri,142,MIZ,Missouri Tigers,Missouri,#f1b82d,#000000,SEC,38.9358491,-92.3332009,False,Memorial Stadium,America/Chicago
+Ole Miss,145,MISS,Ole Miss Rebels,Ole Miss,#13294b,#cf142b,SEC,34.3619837,-89.5342076,False,Vaught-Hemingway Stadium,America/Chicago
+Duke,150,DUKE,Duke Blue Devils,Duke,#00539b,#ffffff,ACC,35.9953688,-78.9417564,False,Wallace Wade Stadium,America/New_York
+East Carolina,151,ECU,East Carolina Pirates,East Carolina,#582c83,#ffc72c,American,35.5968486,-77.364564,False,Dowdy-Ficklen Stadium,America/New_York
+NC State,152,NCSU,NC State Wolfpack,NC State,#cc0000,#ffffff,ACC,35.8008001,-78.7195655,False,Carter-Finley Stadium,America/New_York
+North Carolina,153,UNC,North Carolina Tar Heels,North Carolina,#7bafd4,#13294b,ACC,35.9069294,-79.0478889,False,Kenan Stadium,America/New_York
+Wake Forest,154,WAKE,Wake Forest Demon Deacons,Wake Forest,#ceb888,#2c2a29,ACC,36.1305507,-80.2545851,False,Allegacy Federal Credit Union Stadium,America/New_York
+Nebraska,158,NEB,Nebraska Cornhuskers,Nebraska,#e31937,#ffffff,Big Ten,40.820682,-96.705594,False,"Memorial Stadium (Lincoln, NE)",America/Chicago
+Rutgers,164,RUTG,Rutgers Scarlet Knights,Rutgers,#ce0e2d,#ffffff,Big Ten,40.513611,-74.465278,False,HighPoint.com Stadium,America/New_York
+New Mexico State,166,NMSU,New Mexico State Aggies,New Mexico St,#7e141b,#231f20,CUSA,32.2796202,-106.7411148,False,Aggie Memorial Stadium,America/Denver
+New Mexico,167,UNM,New Mexico Lobos,New Mexico,#ba0c2f,#a7a8aa,Mountain West,35.0669479,-106.6283225,False,University Stadium (NM),America/Denver
+Syracuse,183,SYR,Syracuse Orange,Syracuse,#000e54,#ff431b,ACC,43.0362269,-76.1363161,True,JMA Wireless Dome,America/New_York
+Bowling Green,189,BGSU,Bowling Green Falcons,Bowling Green,#fd5000,#4f2c1d,MAC,41.3780114,-83.6225,False,Doyt L. Perry Stadium,America/New_York
+Miami (OH),193,M-OH,Miami (OH) RedHawks,Miami OH,#c41230,#ffffff,MAC,39.5197009,-84.7330255,False,Yager Stadium,America/New_York
+Ohio State,194,OSU,Ohio State Buckeyes,Ohio State,#ba0c2f,#a8adb4,Big Ten,40.0016447,-83.0197266,False,Ohio Stadium,America/New_York
+Ohio,195,OHIO,Ohio Bobcats,Ohio,#154734,#ffffff,MAC,39.3212794,-82.1034315,False,Peden Stadium,America/New_York
+Oklahoma State,197,OKST,Oklahoma State Cowboys,Oklahoma St,#fe5c00,#000000,Big 12,36.125673,-97.066513,False,Boone Pickens Stadium,America/Chicago
+Oklahoma,201,OU,Oklahoma Sooners,Oklahoma,#990000,#ffffff,SEC,35.2058537,-97.4423145,False,"Memorial Stadium (Norman, OK)",America/Chicago
+Tulsa,202,TLSA,Tulsa Golden Hurricane,Tulsa,#003595,#d0b787,American,36.1489175,-95.9437853,False,H. A. Chapman Stadium,America/Chicago
+Oregon State,204,ORST,Oregon State Beavers,Oregon St,#dc4405,#000000,Pac-12,44.5594559,-123.2814341,False,Reser Stadium,America/Los_Angeles
+Penn State,213,PSU,Penn State Nittany Lions,Penn State,#061440,#ffffff,Big Ten,40.8121958,-77.8561023,False,Beaver Stadium,America/New_York
+Temple,218,TEM,Temple Owls,Temple,#a41e35,#ffffff,American,39.9007995,-75.1675414,False,Lincoln Financial Field,America/New_York
+Pittsburgh,221,PITT,Pittsburgh Panthers,Pitt,#003594,#ffb81c,ACC,40.4467648,-80.0157603,False,Acrisure Stadium,America/New_York
+Clemson,228,CLEM,Clemson Tigers,Clemson,#f56600,#ffffff,ACC,34.6787737,-82.8432428,False,"Memorial Stadium (Clemson, SC)",America/New_York
+Memphis,235,MEM,Memphis Tigers,Memphis,#004991,#8e908f,American,35.1209429,-89.977147,False,Simmons Bank Liberty Stadium,America/Chicago
+Vanderbilt,238,VAN,Vanderbilt Commodores,Vanderbilt,#000000,#cfae70,SEC,36.1440455,-86.8088942,False,FirstBank Stadium,America/Chicago
+Baylor,239,BAY,Baylor Bears,Baylor,#154734,#ffb81c,Big 12,31.5582015,-97.1156702,False,Floyd Casey Stadium,America/Chicago
+Rice,242,RICE,Rice Owls,Rice,#00205b,#c1c6c8,American,29.7163297,-95.4093261,False,Rice Stadium,America/Chicago
+Texas A&M,245,TA&M,Texas A&M Aggies,Texas A&M,#500000,#ffffff,SEC,30.6098891,-96.3403828,False,Kyle Field,America/Chicago
+Houston,248,HOU,Houston Cougars,Houston,#c8102e,#ffffff,Big 12,29.7219885,-95.3491623,False,Robertson Stadium,America/Chicago
+North Texas,249,UNT,North Texas Mean Green,North Texas,#068f33,#ffffff,American,33.203899,-97.159245,False,DATCU Stadium,America/Chicago
+Texas,251,TEX,Texas Longhorns,Texas,#af5c37,#ffffff,SEC,30.2836813,-97.7325345,False,DKR-Texas Memorial Stadium,America/Chicago
+BYU,252,BYU,BYU Cougars,BYU,#0047ba,#002e5d,Big 12,40.2575347,-111.6545247,False,LaVell Edwards Stadium,America/Denver
+Utah,254,UTAH,Utah Utes,Utah,#be0000,#ffffff,Big 12,40.7599724,-111.8488255,False,Rice-Eccles Stadium,America/Denver
+James Madison,256,JMU,James Madison Dukes,James Madison,#450084,#cbb677,Sun Belt,38.4352919,-78.8729349,False,Bridgeforth Stadium,America/New_York
+Virginia,258,UVA,Virginia Cavaliers,Virginia,#232d4b,#f84c1e,ACC,38.0311801,-78.5137897,False,Scott Stadium,America/New_York
+Virginia Tech,259,VT,Virginia Tech Hokies,Virginia Tech,#6a2c3e,#cf4520,ACC,37.2199873,-80.4180643,False,Lane Stadium,America/New_York
+Washington,264,WASH,Washington Huskies,Washington,#33006f,#e8d3a2,Big Ten,47.6503235,-122.3015746,False,Husky Stadium,America/Los_Angeles
+Washington State,265,WSU,Washington State Cougars,Washington St,#a60f2d,#4d4d4d,Pac-12,46.731831,-117.1604991,False,Martin Stadium,America/Los_Angeles
+Wisconsin,275,WIS,Wisconsin Badgers,Wisconsin,#a00000,#ffffff,Big Ten,43.06994,-89.4126943,False,Camp Randall Stadium,America/Chicago
+Marshall,276,MRSH,Marshall Thundering Herd,Marshall,#00b140,#000000,Sun Belt,38.4247042,-82.4214412,False,Joan C. Edwards Stadium,America/New_York
+West Virginia,277,WVU,West Virginia Mountaineers,West Virginia,#eaaa00,#002855,Big 12,39.6502744,-79.9551873,False,Milan Puskar Stadium,America/New_York
+Fresno State,278,FRES,Fresno State Bulldogs,Fresno St,#b1102b,#13284c,Pac-12,36.8143527,-119.7580092,False,Valley Children's Stadium,America/Los_Angeles
+Georgia Southern,290,GASO,Georgia Southern Eagles,GA Southern,#041e42,#a3aaae,Sun Belt,32.4122471,-81.7849296,False,Allen E. Paulson Stadium,America/New_York
+Old Dominion,295,ODU,Old Dominion Monarchs,Old Dominion,#003768,#a1d2f1,Sun Belt,36.8889533,-76.3049175,False,S.B. Ballard Stadium,America/New_York
+Louisiana,309,UL,Louisiana Ragin' Cajuns,Louisiana,#ce181e,#000000,Sun Belt,30.2158434,-92.0417371,False,Our Lady of Lourdes Stadium,America/Chicago
+Coastal Carolina,324,CCU,Coastal Carolina Chanticleers,Coastal,#006f71,#a27752,Sun Belt,33.7928506,-79.0166946,False,Brooks Stadium (SC),America/New_York
+Texas State,326,TXST,Texas State Bobcats,Texas St,#501214,#6a5638,Pac-12,29.8910008,-97.9255735,False,UFCU Stadium,America/Chicago
+Utah State,328,USU,Utah State Aggies,Utah State,#0f2439,#ffffff,Pac-12,41.7517394,-111.8116007,False,Maverik Stadium,America/Denver
+Alabama,333,ALA,Alabama Crimson Tide,Alabama,#9e1b32,#ffffff,SEC,33.2082752,-87.5503836,False,Bryant-Denny Stadium,America/Chicago
+Kennesaw State,338,KENN,Kennesaw State Owls,Kennesaw St,#fdbb30,#0b1315,CUSA,34.0289318,-84.5676234,False,Walens Family Field at Fifth Third Stadium,America/New_York
+Mississippi State,344,MSST,Mississippi State Bulldogs,Mississippi St,#5d1725,#c1c6c8,SEC,33.4563403,-88.7933652,False,Davis Wade Stadium,America/Chicago
+Army,349,ARMY,Army Black Knights,Army,#000000,#d3bc8d,American,41.3874924,-73.9640891,False,Michie Stadium,America/New_York
+Illinois,356,ILL,Illinois Fighting Illini,Illinois,#ff5f05,#13294b,Big Ten,40.0993268,-88.2359569,False,Foster Stadium,America/Chicago
+Air Force,2005,AFA,Air Force Falcons,Air Force,#003594,#ffffff,Mountain West,38.9969701,-104.8436165,False,Falcon Stadium,America/Denver
+Akron,2006,AKR,Akron Zips,Akron,#041e42,#c5b783,MAC,41.0725534,-81.5083408,False,InfoCision Stadium,America/New_York
+App State,2026,APP,App State Mountaineers,App State,#000000,#ffcd00,Sun Belt,36.2114267,-81.6854278,False,Kidd Brewer Stadium,America/New_York
+Arkansas State,2032,ARST,Arkansas State Red Wolves,Arkansas St,#cc092f,#000000,Sun Belt,35.8488977,-90.6677436,False,Centennial Bank Stadium,America/Chicago
+Ball State,2050,BALL,Ball State Cardinals,Ball State,#ba0c2f,#ffffff,MAC,40.2159422,-85.4161148,False,Scheumann Stadium,America/Indiana/Indianapolis
+Buffalo,2084,BUFF,Buffalo Bulls,Buffalo,#005bbb,#ffffff,MAC,42.9991334,-78.7775113,False,Broadview Stadium,America/New_York
+UCF,2116,UCF,UCF Knights,UCF,#000000,#b4a169,Big 12,28.6079765,-81.1927233,False,Acrisure Bounce House,America/New_York
+Central Michigan,2117,CMU,Central Michigan Chippewas,C Michigan,#4c0027,#fbab18,MAC,43.5777313,-84.7709904,False,Kelly/Shorts Stadium,America/Detroit
+Cincinnati,2132,CIN,Cincinnati Bearcats,Cincinnati,#000000,#e00122,Big 12,39.1312495,-84.5161913,False,Nippert Stadium,America/New_York
+Eastern Michigan,2199,EMU,Eastern Michigan Eagles,E Michigan,#006938,#ffffff,MAC,42.256126,-83.647285,False,Rynearson Stadium,America/Detroit
+Florida Atlantic,2226,FAU,Florida Atlantic Owls,FAU,#003366,#cc0000,American,26.3763763,-80.1015759,False,Flagler Credit Union Stadium,America/New_York
+Florida International,2229,FIU,Florida International Panthers,FIU,#091f3f,#c3993f,CUSA,25.7525,-80.37778,False,Riccardo Silva Stadium,America/New_York
+Georgia State,2247,GAST,Georgia State Panthers,Georgia St,#0039a6,#ffffff,Sun Belt,33.735267,-84.389949,False,Center Parc Stadium,America/New_York
+Iowa,2294,IOWA,Iowa Hawkeyes,Iowa,#231f20,#fcd116,Big Ten,41.6586045,-91.5510829,False,Kinnick Stadium,America/Chicago
+Kansas,2305,KU,Kansas Jayhawks,Kansas,#0051ba,#e8000d,Big 12,38.9629418,-95.2463686,False,David Booth Kansas Memorial Stadium,America/Chicago
+Kansas State,2306,KSU,Kansas State Wildcats,Kansas St,#330a57,#e2e3e4,Big 12,39.2020096,-96.5938395,False,Bill Snyder Family Stadium,America/Chicago
+Kent State,2309,KENT,Kent State Golden Flashes,Kent State,#002664,#eaab00,MAC,41.1390935,-81.31346,False,Zoeller Field at Dix Stadium,America/New_York
+Liberty,2335,LIB,Liberty Flames,Liberty,#0a254e,#b72025,CUSA,37.3544305,-79.1750239,False,Williams Stadium (VA),America/New_York
+Louisiana Tech,2348,LT,Louisiana Tech Bulldogs,Louisiana Tech,#003087,#cb333b,Sun Belt,32.5321487,-92.6560019,False,Joe Aillet Stadium,America/Chicago
+Miami,2390,MIA,Miami Hurricanes,Miami,#f47423,#035131,ACC,25.9579665,-80.2388604,False,Hard Rock Stadium,America/New_York
+Middle Tennessee,2393,MTSU,Middle Tennessee Blue Raiders,MTSU,#036eb7,#ffffff,CUSA,35.8511463,-86.3681649,False,"Johnny ""Red"" Floyd Stadium",America/Chicago
+Navy,2426,NAVY,Navy Midshipmen,Navy,#00225b,#b5a67c,American,38.9846985,-76.5076335,False,Navy-Marine Corps Memorial Stadium,America/New_York
+Charlotte,2429,CLT,Charlotte 49ers,Charlotte,#005035,#a49665,American,35.3105033,-80.7401194,False,Jerry Richardson Stadium,America/New_York
+UL Monroe,2433,ULM,UL Monroe Warhawks,UL Monroe,#840029,#fdb913,Sun Belt,32.5308089,-92.0660602,False,Malone Stadium,America/Chicago
+UNLV,2439,UNLV,UNLV Rebels,UNLV,#cf0a2c,#cac8c8,Mountain West,36.09075,-115.183722,True,Sam Boyd Stadium,America/Los_Angeles
+Nevada,2440,NEV,Nevada Wolf Pack,Nevada,#041e42,#8a8d8f,Mountain West,39.5469459,-119.8175435,False,Mackay Stadium,America/Los_Angeles
+North Dakota State,2449,NDSU,North Dakota State Bison,N Dakota St,#01402A,#ffffff,Mountain West,46.9029938,-96.8003251,True,Fargodome,America/Chicago
+Northern Illinois,2459,NIU,Northern Illinois Huskies,N Illinois,#c8102e,#000000,Mountain West,41.9339586,-88.7778357,False,Huskie Stadium,America/Chicago
+Oregon,2483,ORE,Oregon Ducks,Oregon,#00934b,#fff41b,Big Ten,44.0582712,-123.0684883,False,Autzen Stadium,America/Los_Angeles
+Purdue,2509,PUR,Purdue Boilermakers,Purdue,#ceb888,#000000,Big Ten,40.4352253,-86.9186843,False,Ross-Ade Stadium,America/Indiana/Indianapolis
+Sam Houston,2534,SHSU,Sam Houston Bearkats,Sam Houston,#f56423,#ffffff,CUSA,30.713926,-95.5419802,False,Elliott T. Bowers Stadium,America/Chicago
+SMU,2567,SMU,SMU Mustangs,SMU,#a80000,#0033a1,ACC,32.8377223,-96.7827859,False,Gerald J. Ford Stadium,America/Chicago
+Southern Miss,2572,USM,Southern Miss Golden Eagles,Southern Miss,#ffc72c,#231f20,Sun Belt,31.3289321,-89.3318118,False,M. M. Roberts Stadium,America/Chicago
+South Carolina,2579,SC,South Carolina Gamecocks,South Carolina,#73000a,#000000,SEC,33.9730239,-81.0191726,False,Williams-Brice Stadium,America/New_York
+Missouri State,2623,MOST,Missouri State Bears,Missouri St,#5e0009,#ffffff,CUSA,37.1976229,-93.2798119,False,Robert W. Plaster Stadium,America/Chicago
+TCU,2628,TCU,TCU Horned Frogs,TCU,#4d1979,#ffffff,Big 12,32.7096604,-97.3680835,False,Amon G. Carter Stadium,America/Chicago
+Tennessee,2633,TENN,Tennessee Volunteers,Tennessee,#ff8200,#ffffff,SEC,35.9550131,-83.9250128,False,Neyland Stadium,America/New_York
+UTSA,2636,UTSA,UTSA Roadrunners,UTSA,#0c2340,#f15a22,American,29.4169834,-98.4788143,True,Alamodome,America/Chicago
+UTEP,2638,UTEP,UTEP Miners,UTEP,#ff8200,#041e42,Mountain West,31.7733353,-106.507957,False,Sun Bowl,America/Denver
+Texas Tech,2641,TTU,Texas Tech Red Raiders,Texas Tech,#da291c,#000000,Big 12,33.5910518,-101.8728824,False,Galaxy Stadium,America/Chicago
+Toledo,2649,TOL,Toledo Rockets,Toledo,#0b2240,#ffcd00,MAC,41.6574777,-83.6135652,False,Glass Bowl,America/New_York
+Troy,2653,TROY,Troy Trojans,Troy,#862633,#b1b1b1,Sun Belt,31.7995565,-85.9518328,False,Veterans Memorial Stadium (AL),America/Chicago
+Tulane,2655,TULN,Tulane Green Wave,Tulane,#006747,#418fde,American,29.944616,-90.116692,False,Yulman Stadium,America/Chicago
+Western Michigan,2711,WMU,Western Michigan Broncos,W Michigan,#532e1f,#f1c500,MAC,42.2860064,-85.6007573,False,Waldo Stadium,America/Detroit
+Wyoming,2751,WYO,Wyoming Cowboys,Wyoming,#492f24,#ffc425,Mountain West,41.31161,-105.5681384,False,War Memorial Stadium,America/Denver

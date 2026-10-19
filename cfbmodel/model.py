@@ -112,5 +112,8 @@ def walk_forward(df: pd.DataFrame, alpha: float = ALPHA_MARGIN, alpha_total: flo
         ht = test & df["total_line"].notna()
         df.loc[ht, "proj_total"] = df.loc[ht, "total_line"] + wt * (df.loc[ht, "model_total"] - df.loc[ht, "total_line"])
         info[int(s)] = {"margin_coefs": m.raw_coefs(MF), "total_coefs": t.raw_coefs(TF),
+                        "total_intercept": round(float(t.y0 - (t.mu / t.sd) @ t.beta), 4),
+                        "margin_feats": list(MF), "total_feats": list(TF),
+                        "margin_c": [float(x) for x in m.beta / m.sd], "total_c": [float(x) for x in t.beta / t.sd],
                         "w_margin": round(wm, 3), "w_total": round(wt, 3), "n_train": int(len(train))}
     return df[df.season >= FIRST_OOS], info

@@ -1,0 +1,49 @@
+name: Update college board
+
+on:
+  schedule:
+    - cron: "43 12 * 8-12,1 *"      # daily at 12:43 UTC (8:43 a.m. Eastern), August to January
+    - cron: "43 16,20 * 8-12,1 6"   # Saturdays also at 12:43 and 4:43 p.m. Eastern, closer to kickoffs
+  workflow_dispatch:
+    inputs:
+      backtest:
+        description: "Re-run the full backtest"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Build the college board
+        run: |
+          # Full backtest on Mondays (Saturday's box scores are in by then) or when asked.
+          if [ "$(date -u +%u)" = "1" ] && [ "$(date -u +%H)" = "12" ] || [ "${{ inputs.backtest }}" = "true" ]; then
+            python run_cfb.py
+          else
+            python run_cfb.py --no-backtest
+          fi
+      - run: python -m pytest -q
+      - name: Commit the result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/cfb data/cfb/cache data/cfb/line_history.csv
+          for f in data/cfb/wind_log.csv data/cfb/backtest.json; do if [ -f "$f" ]; then git add "$f"; fi; done
+          git diff --cached --quiet && exit 0
+          git commit -m "Update college board"
+          for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 10; done

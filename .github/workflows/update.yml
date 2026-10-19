@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: board-commits      # shared with the college board, so the two never push at once
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -39,4 +43,5 @@ jobs:
           git add docs data/cache data/line_history.csv
           if [ -f data/wind_log.csv ]; then git add data/wind_log.csv; fi
           git diff --cached --quiet || git commit -m "Update board"
+          git pull --rebase origin main
           git push
