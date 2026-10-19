@@ -370,6 +370,13 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
         <div class="scroll"><table id="records" aria-labelledby="rec-h"></table></div>
       </section>
 
+      <section id="wind" aria-labelledby="wind-h">
+        <div class="section-head">
+          <h2 id="wind-h">Wind and totals</h2>
+          <p class="note" id="wind-note"></p>
+        </div>
+        <div class="scroll"><table id="wind-table" aria-labelledby="wind-h"></table></div>
+      </section>
       <section id="openers" aria-labelledby="open-h">
         <div class="section-head">
           <h2 id="open-h">Against opening lines</h2>
@@ -577,10 +584,10 @@ function renderCards() {
     const cell = (t, cls) => H("span", { class: cls || "", text: t });
     const team = (code, rec, win, on) => H("div", { class: "bug-team" + (on ? " fav" : "") }, teamSwatch(code), H("span", { class: "code", text: code }), H("span", { class: "rec", text: rec }), H("span", { class: "win", text: pct(win, 0) }));
     return H("a", { class: "bug", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
-      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null), H("span", { text: "Win chance" })),
+      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph", title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null), H("span", { text: "Win chance" })),
       team(g.away, g.away_record, 1 - p, p < 0.5), team(g.home, g.home_record, p, p >= 0.5),
       H("div", { class: "bug-lines" },
-        cell("", "h"), cell("Market", "h r"), cell("Model", "h r"),
+        cell("", "h"), cell("Market", "h r"), cell("Raw model", "h r"),
         cell("Spread"), cell(fav(g, g.market.spread), "r"), cell(fav(g, g.model.margin), "r b"),
         cell("Total"), cell(g.market.total.toFixed(1), "r"), cell(g.model.total.toFixed(1), "r b")),
       H("div", { class: "bug-foot" },
@@ -725,7 +732,7 @@ function renderGame(g) {
   /* --- header --- */
   const b = best(g), ev = evOf(b);
   const place = [d.stadium, g.neutral ? "neutral site" : null, g.roof && g.roof !== "unknown" ? g.roof : null, d.surface ? d.surface.replace("_", " ") : null,
-                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : null].filter(Boolean).join(", ");
+                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
   const verdict = H("p", { class: "lede" });
   if (ev > 0) verdict.append(H("strong", { text: "Best price: " + b.pick + " at " + odds(b.odds) + ". " }),
     document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
@@ -1061,6 +1068,17 @@ function diagChart(node, o) {
   });
   table($("#records"), [{ t: "Market", l: 1 }, { t: "Bets placed", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "Since " + BT.holdout_from }, { t: "Claimed EV" }], rows);
   $("#rec-note").textContent = "One unit on every qualifying bet. Return is profit per unit staked, plus or minus one standard error; anything within two standard errors of zero is not evidence of an edge." + (partial.length ? " " + partial.join(", ") + " is included through the games played so far." : "");
+})();
+
+/* ---------------- wind and totals ---------------- */
+(function wind() {
+  const W = BT && BT.wind_unders;
+  if (!W) { $("#wind").hidden = true; return; }
+  const a = W.all;
+  $("#wind-note").textContent = `Unders at the closing total in outdoor games with ${W.band[0]} to ${W.band[1] - 1} mph of recorded wind went ${a.w}-${a.l}-${a.p} (${pct(a.win_pct)}), a return of ${spct(a.roi)} plus or minus ${pct(a.roi_se)}. The effect shows up from 2014 on and not before. The band was chosen after looking at every season, and live bets use a forecast rather than the wind measured at the game, so treat it as a lead to keep testing. Games flagged on the board carry a wind tag; wind is also a feature in the total model.`;
+  const row = r => [r.label, `${r.w}-${r.l}-${r.p}`, pct(r.win_pct), spct(r.roi), "±" + pct(r.roi_se), snum(r.close_minus_actual)];
+  table($("#wind-table"), [{ t: "Games", l: 1 }, { t: "Unders" }, { t: "Win rate" }, { t: "Return" }, { t: "Std. error" }, { t: "Close minus final total" }],
+    [...W.eras.map(r => row({ ...r, label: `${W.band[0]}–${W.band[1] - 1} mph, ${r.label}` })), ...W.tiers.map(row)]);
 })();
 
 /* ---------------- opening lines ---------------- */

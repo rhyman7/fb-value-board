@@ -266,3 +266,36 @@ def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFra
         "mean_move": round(float(np.abs(mv).mean()), 2),
         "including_monday_2plus": rec(with_monday),
     }
+
+
+# --------------------------------------------------------------------------
+# Wind and totals
+# --------------------------------------------------------------------------
+
+def wind_report(frame: pd.DataFrame, lo: float = 10.0, hi: float = 20.0) -> dict:
+    """Unders at the closing total in outdoor games with recorded wind in [lo, hi) mph.
+
+    The band was picked by looking at all seasons, so treat the record as a
+    lead to keep testing, not a proven edge. Played games use the wind recorded
+    at the game; live bets would use a forecast, which is less accurate.
+    """
+    f = frame[frame.played & frame.total_line.notna() & (frame.indoor == 0) & (frame.wind_known == 1)].copy()
+    f["under"] = np.sign(f.total_line - f.total)
+    price = f["under_odds"].where(f["under_odds"].notna(), B.DEFAULT_PRICE) if "under_odds" in f else B.DEFAULT_PRICE
+    dec = O.american_to_decimal(np.asarray(price, float))
+    f["profit"] = np.where(f.under > 0, dec - 1, np.where(f.under < 0, -1.0, 0.0))
+
+    def rec(x):
+        w, l, p = int((x.under > 0).sum()), int((x.under < 0).sum()), int((x.under == 0).sum())
+        n = len(x)
+        return {"n": n, "w": w, "l": l, "p": p, "win_pct": round(w / (w + l), 4) if w + l else None,
+                "roi": round(float(x.profit.mean()), 4) if n else None,
+                "roi_se": round(float(x.profit.std(ddof=1) / np.sqrt(n)), 4) if n > 1 else None,
+                "close_minus_actual": round(float((x.total_line - x.total).mean()), 2) if n else None}
+
+    band = f[(f.wind >= lo) & (f.wind < hi)]
+    eras = [("2006-2013", band[band.season < 2014]), ("2014-2018", band[(band.season >= 2014) & (band.season < C.HOLDOUT_FROM)]),
+            (f"{C.HOLDOUT_FROM}-", band[band.season >= C.HOLDOUT_FROM])]
+    tiers = [(f"{a}+ mph" if b >= 99 else f"{a}-{b - 1} mph", f[(f.wind >= a) & (f.wind < b)]) for a, b in ((0, 10), (10, 15), (15, 20), (20, 99))]
+    return {"band": [lo, hi], "all": rec(band), "eras": [{"label": k, **rec(x)} for k, x in eras],
+            "tiers": [{"label": k, **rec(x)} for k, x in tiers]}
