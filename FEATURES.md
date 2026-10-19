@@ -171,6 +171,42 @@ market-adjusted Carolina by 2.6 (line Carolina −3, final Carolina by 11). The
 line effect on this game was small (−0.1) because Carolina was also missing
 linemen (16% of its core against Philadelphia's 19%).
 
+### Pass rush, by production
+
+The position-based defensive-line group missed many edge rushers, who are often
+listed as linebackers (in 2025, half of the top ten defenders by QB hits were).
+So pass rush was rebuilt from production: every defender weighted by QB hits
+plus sacks from play-by-play, matched to rosters and injury reports by player
+id, with half of last season's production counted for early weeks and new
+signings. Run `python experiments/pass_rush_test.py`.
+
+| Added to the current model | Tuning | Holdout | Kept |
+|---|---|---|---|
+| Pass rush missing now | +0.018 | −0.005 | no |
+| Pass rush, change vs recent games | +0.013 | −0.009 | no |
+| Pass rush in the total model | +0.007 / +0.021 | +0.011 / +0.006 | no |
+
+The sign is right (losing a team's whole pass rush is worth about 4-5 points),
+but the effect does not hold up: season by season it helped in 3 of 7 seasons
+before 2020 and 3 of 7 since.
+
+### Is it the data?
+
+Rosters only mark game-day inactives from 2020 on, so earlier seasons see fewer
+absences. Change in mean miss per season when each group is added:
+
+| Group | 2013-2019 | 2020-2026 |
+|---|---|---|
+| Pass rush | +0.014 (better in 3 of 7) | −0.010 (3 of 7) |
+| Pass catchers | +0.005 (2 of 7) | −0.013 (**7 of 7**) |
+| Defensive backs | +0.017 (2 of 7) | −0.007 (5 of 7) |
+| All groups | +0.039 (2 of 7) | −0.017 (6 of 7) |
+
+Pass catchers have helped in every season since the better data starts. That
+is a lead, not a decision: the split was chosen after seeing the results. The
+honest test is to add pass catchers at the end of the 2026 season only if 2026
+also improves, and to judge it on 2027.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;
@@ -179,4 +215,5 @@ linemen (16% of its core against Philadelphia's 19%).
 - **Grade the wind under on forecasts.** Every forecast the board fetches is
   now saved to `data/wind_log.csv`. After a season of logs, re-run the wind
   table on the logged forecast instead of the recorded wind.
+- **Pass catchers.** Re-test after the 2026 season (see above).
 - **College football**, where the market is softer and rosters change more.
