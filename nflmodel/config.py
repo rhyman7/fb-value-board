@@ -35,6 +35,9 @@ QB_PRIOR_DROPBACKS = 200.0  # shrinkage for quarterback ratings
 QB_REPLACEMENT = -0.07      # prior EPA/dropback (vs league avg) for an unknown QB
 QB_HALF_LIFE_DROPBACKS = 700.0
 
+TOTAL_WEIGHT_CAP = 0.05     # ceiling on the model's weight for totals. Totals the board flagged as
+                            # positive EV have lost in every version tested (-5% to -12%, FEATURES.md),
+                            # so totals stay close to the market; the wind-under angle is the totals signal.
 BLEND_LOOKBACK = 8          # seasons of history used to measure how much to trust the model
                             # over the market (its edge has shrunk, so old seasons mislead)
 

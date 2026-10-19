@@ -7,8 +7,8 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import backtest, bets, config as C, data, matchup, model, slate
-from .ratings import RatingEngine
+from . import backtest, bets, config as C, data, extra, matchup, model, slate, weather
+from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
 def _clean(o):
@@ -31,10 +31,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     say("Loading data ...")
     games, tg, qb, stats = data.load_all(refresh=refresh, verbose=verbose, with_stats=True)
     openers = data.load_openers(refresh=refresh)
+    team_extra, qb_extra = extra.load_extra(refresh_current=refresh, verbose=verbose)
+    games = weather.fill_wind(games, verbose=verbose)
     season = int(games[games.played].season.max())
 
     say("Rating teams week by week ...")
-    engine = RatingEngine(tg, qb, games=games)
+    engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games)
     frame, info = model.walk_forward(model.build_frame(games, engine))
 
     say("Fitting key numbers ...")
@@ -88,6 +90,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     out["openers"] = opening
     if with_backtest:
         out["backtest"] = backtest.summarize(frame, graded)
+        out["backtest"]["wind_unders"] = backtest.wind_report(frame)
         graded.round(4).to_csv(C.DATA / "backtest_bets.csv", index=False)
     else:
         out["backtest"] = prev.get("backtest")

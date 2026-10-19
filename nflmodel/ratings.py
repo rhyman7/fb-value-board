@@ -45,6 +45,7 @@ class RatingEngine:
         self.n = len(self.teams)
         self.half_life, self.carry, self.window = half_life, carry, window_seasons
         self.ridge = dict(C.RIDGE if ridge is None else ridge)
+        self.metrics = METRICS
 
         self.order = tg["order"].to_numpy()
         self.season = self.order // 100
@@ -120,7 +121,7 @@ class RatingEngine:
         idx = np.flatnonzero(mask)
         decay = self._weights(order_now, self.order[idx])
         out = {"order": order_now, "teams": self.teams}
-        for m in METRICS:
+        for m in self.metrics:
             off, dfn, mu, hfa = self._solve(m, idx, decay)
             out[m] = {"off": off, "def": dfn, "mu": mu, "hfa": hfa}
 
@@ -201,7 +202,7 @@ class RatingEngine:
                     continue
                 h, a = self.tix[g.home_team], self.tix[g.away_team]
                 f = {"game_id": g.game_id}
-                for m in METRICS:
+                for m in self.metrics:
                     eh = r[m]["off"][h] + r[m]["def"][a]   # home offense vs away defense
                     ea = r[m]["off"][a] + r[m]["def"][h]
                     f[f"d_{m}"], f[f"s_{m}"] = eh - ea, eh + ea
@@ -220,14 +221,18 @@ class RatingEngine:
                     f[f"{side}_qb_delta"] = 0.0 if np.isnan(v) else v - r["qb_base"][ti]
                 f["d_qb"] = f["home_qb_delta"] - f["away_qb_delta"]
                 f["s_qb"] = f["home_qb_delta"] + f["away_qb_delta"]
+                self._extra_features(f, r, g, h, a)
                 rows.append(f)
         return pd.DataFrame(rows)
+
+    def _extra_features(self, f: dict, r: dict, g, h: int, a: int) -> None:
+        """Hook for subclasses that add features; the base engine adds none."""
 
     # ------------------------------------------------------------------
     def table(self, r: dict, coefs: dict | None = None) -> pd.DataFrame:
         """A readable ratings table for one point in time."""
         t = pd.DataFrame({"team": self.teams})
-        for m in METRICS:
+        for m in self.metrics:
             t[f"{m}_off"] = r[m]["off"]
             t[f"{m}_def"] = r[m]["def"]      # positive = allows more than average
         if "mkt" in r:

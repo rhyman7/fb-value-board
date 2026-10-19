@@ -71,6 +71,9 @@ def fair_american(p: float) -> int | None:
     return int(round(-100 * p / (1 - p))) if p >= 0.5 else int(round(100 * (1 - p) / p))
 
 
+WIND_LO, WIND_HI = 10.0, 20.0   # mph band where closing totals have run high (backtest.wind_report)
+
+
 def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None, openers: pd.DataFrame | None = None) -> dict:
     up = frame[~frame.played & frame.spread_line.notna() & frame.total_line.notna()].copy()
     if up.empty:
@@ -117,6 +120,9 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "opening_spread": float(true_open[g.game_id]) if g.game_id in true_open else None,
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
+            "wind": ({"mph": round(float(g.wind), 1), "source": g.wind_source,
+                      "under_angle": bool(WIND_LO <= g.wind < WIND_HI)}
+                     if getattr(g, "wind_known", 0) and getattr(g, "wind_source", "") else None),
             "away_qb": qb("away"), "home_qb": qb("home"),
             "market": {"spread": float(g.spread_line), "total": float(g.total_line)},
             "model": {"margin": round(float(g.model_margin), 2), "total": round(float(g.model_total), 2)},

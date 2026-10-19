@@ -21,7 +21,8 @@ from . import config as C
 from .ratings import RatingEngine
 
 MARGIN_FEATS = ["d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_qb", "hfa", "rest_diff"]
-TOTAL_FEATS = ["s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_qb", "lg_pts", "indoor"]
+TOTAL_FEATS = ["s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_qb", "lg_pts", "indoor",
+               "wind", "s_snaps"]   # wind and pace added Oct 2026 after testing (FEATURES.md)
 FIRST_OOS = C.FIRST_MODEL_SEASON + 3   # first season with out-of-sample projections
 
 
@@ -38,7 +39,8 @@ def build_frame(games: pd.DataFrame, engine: RatingEngine, verbose: bool = False
              for s in df.season.unique()}
     df["hfa"] = df["season"].map(trail).fillna(home_margin.mean()) * (1 - df["neutral"])
     df["rest_diff"] = (df["home_rest"] - df["away_rest"]).clip(-7, 7).fillna(0) * (1 - df["playoff"])
-    return df
+    from .features_ext import add_context      # travel, time zones, wind, cold, divisional
+    return add_context(df)
 
 
 class Linear:
@@ -76,8 +78,11 @@ def _blend_weight(model: np.ndarray, market: np.ndarray, actual: np.ndarray) -> 
     return min(max(w, 0.0), 1.0)
 
 
-def walk_forward(df: pd.DataFrame, alpha: float = 20.0) -> tuple[pd.DataFrame, dict]:
+def walk_forward(df: pd.DataFrame, alpha: float = 20.0, margin_feats: list[str] | None = None,
+                 total_feats: list[str] | None = None) -> tuple[pd.DataFrame, dict]:
     """Add model, blend and spread columns to every game from FIRST_OOS on."""
+    MF = MARGIN_FEATS if margin_feats is None else margin_feats
+    TF = TOTAL_FEATS if total_feats is None else total_feats
     df = df.copy()
     for col in ("model_margin", "model_total", "proj_margin", "proj_total", "w_margin", "w_total"):
         df[col] = np.nan
@@ -88,15 +93,15 @@ def walk_forward(df: pd.DataFrame, alpha: float = 20.0) -> tuple[pd.DataFrame, d
         test = df.season == s
         # Margin is symmetric: swap the teams and it flips sign. So no intercept; home
         # edge comes only through the hfa feature, which is zero at a neutral site.
-        m = Linear(alpha, intercept=False).fit(train[MARGIN_FEATS].to_numpy(), train["result"].to_numpy())
-        t = Linear(alpha).fit(train[TOTAL_FEATS].to_numpy(), train["total"].to_numpy())
-        df.loc[test, "model_margin"] = m.predict(df.loc[test, MARGIN_FEATS].to_numpy())
-        df.loc[test, "model_total"] = t.predict(df.loc[test, TOTAL_FEATS].to_numpy())
+        m = Linear(alpha, intercept=False).fit(train[MF].to_numpy(), train["result"].to_numpy())
+        t = Linear(alpha).fit(train[TF].to_numpy(), train["total"].to_numpy())
+        df.loc[test, "model_margin"] = m.predict(df.loc[test, MF].to_numpy())
+        df.loc[test, "model_total"] = t.predict(df.loc[test, TF].to_numpy())
 
         # Blend weights and residual spread come from earlier out-of-sample seasons.
         past = df[(df.season < s) & (df.season >= max(FIRST_OOS, s - C.BLEND_LOOKBACK)) & df.played]
         wm = _blend_weight(*(past[c].to_numpy() for c in ("model_margin", "spread_line", "result")))
-        wt = _blend_weight(*(past[c].to_numpy() for c in ("model_total", "total_line", "total")))
+        wt = min(_blend_weight(*(past[c].to_numpy() for c in ("model_total", "total_line", "total"))), C.TOTAL_WEIGHT_CAP)
         df.loc[test, "w_margin"], df.loc[test, "w_total"] = wm, wt
         has_line = test & df["spread_line"].notna()
         df.loc[test, "proj_margin"] = df.loc[test, "model_margin"]
@@ -106,7 +111,7 @@ def walk_forward(df: pd.DataFrame, alpha: float = 20.0) -> tuple[pd.DataFrame, d
         df.loc[has_tot, "proj_total"] = df.loc[has_tot, "total_line"] + wt * (df.loc[has_tot, "model_total"] - df.loc[has_tot, "total_line"])
 
         info[int(s)] = {
-            "margin_coefs": m.raw_coefs(MARGIN_FEATS), "total_coefs": t.raw_coefs(TOTAL_FEATS),
+            "margin_coefs": m.raw_coefs(MF), "total_coefs": t.raw_coefs(TF),
             "margin_intercept": round(float(m.y0 - (m.mu / m.sd) @ m.beta), 3),
             "total_intercept": round(float(t.y0 - (t.mu / t.sd) @ t.beta), 3),
             "w_margin": round(wm, 3), "w_total": round(wt, 3), "n_train": int(len(train)),

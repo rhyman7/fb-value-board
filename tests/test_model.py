@@ -101,3 +101,44 @@ if __name__ == "__main__":
         if name.startswith("test_"):
             fn()
             print("ok", name)
+
+
+def _ctx_games():
+    return pd.DataFrame({
+        "game_id": ["a", "b", "c"], "home_team": ["NYG", "BUF", "JAX"], "away_team": ["SEA", "MIA", "HOU"],
+        "neutral": [0, 0, 1], "indoor": [0, 0, 0], "played": [True, True, True], "gametime": ["13:00", "20:20", "09:30"],
+        "wind": [12.0, np.nan, 5.0], "temp": [50.0, 30.0, 60.0], "hfa": [1.5, 1.5, 0.0], "div_game": [0, 1, 1],
+    })
+
+
+def test_context_features():
+    from nflmodel.features_ext import add_context
+    d = add_context(_ctx_games())
+    assert d.loc[2, "travel"] == 0 and d.loc[2, "tz_east"] == 0          # neutral site: nobody is the traveller
+    assert d.loc[0, "travel"] > 3.5 and d.loc[0, "tz_east"] == 3          # Seattle flying to New Jersey
+    assert d.loc[0, "west_early"] == 1                                    # Pacific team, 1 p.m. Eastern
+    assert d.loc[1, "wind_known"] == 0 and d.loc[1, "wind"] > 0           # blank wind becomes the median, flagged unknown
+    assert d.loc[1, "cold"] == 15 and d.loc[1, "hfa_div"] == 1.5
+
+
+def test_wind_forecast_failure_is_harmless(monkeypatch):
+    from nflmodel import weather
+    g = _ctx_games().assign(played=False, gameday=pd.Timestamp.now().normalize(), wind=np.nan)
+    def boom(*a, **k):
+        raise OSError("no network")
+    monkeypatch.setattr(weather, "_fetch", boom)
+    out = weather.fill_wind(g, verbose=False, log=False)
+    assert out["wind"].isna().all() and (out["wind_source"] == "").all()
+    monkeypatch.setattr(weather, "_fetch", lambda *a, **k: [float(h) for h in range(24)])
+    out = weather.fill_wind(g, verbose=False, log=False)
+    assert out.loc[0, "wind"] == 13 and out.loc[0, "wind_source"] == "forecast"   # kickoff hour 13
+    assert np.isnan(out.loc[2, "wind"])                                            # neutral site skipped
+
+
+def test_wind_log_appends(tmp_path):
+    from nflmodel import weather
+    path = tmp_path / "wind_log.csv"
+    weather.log_forecasts({"g1": 12.34}, path)
+    weather.log_forecasts({"g1": 14.0, "g2": 3.0}, path)
+    log = pd.read_csv(path)
+    assert len(log) == 3 and list(log.columns) == ["game_id", "fetched", "wind_mph"] and log.wind_mph.iloc[0] == 12.3
