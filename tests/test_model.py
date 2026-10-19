@@ -195,7 +195,8 @@ def test_player_shares_and_starter():
     from nflmodel import players as PL
     base = dict(game_id="g", team="PHI", opp="DAL", season=2026, week=7, t=1, played=False, imp_pts=21.0, ptd_share=0.6,
                 catch=0.65, ypt=8.0, ypc=4.2, ypa=7.0, comp=0.64, int_rate=0.02, def_ypt=1, def_catch=1, def_ypc=1, def_ypa=1, def_comp=1,
-                rz_tgt_rate=0.1, rz_car_rate=0.1, gl_car_rate=0.03, car_share_raw=0.0, att_share_raw=0.0, tgt_share_raw=0.0)
+                rz_tgt_rate=0.1, rz_car_rate=0.1, gl_car_rate=0.03, car_share_raw=0.0, att_share_raw=0.0, tgt_share_raw=0.0,
+                prev_qb="hurts")
     rows = [dict(base, player_id="hurts", group="QB", active=0, att_share_raw=0.85),
             dict(base, player_id="mckee", group="QB", active=1, att_share_raw=0.26),
             dict(base, player_id="third", group="QB", active=1, att_share_raw=0.10),
@@ -211,3 +212,14 @@ def test_player_shares_and_starter():
     assert q.loc["wr3", "tgt_share"] == 0                                   # out: no targets
     assert abs(q.loc["wr1", "tgt_share"] / q.loc["wr2", "tgt_share"] - 1.5) < 1e-9   # the rest keep their order
     assert q.loc["wr1", "tgt_share"] > 0.30                                 # and pick up the missing receiver's targets
+
+    # starter choice: last game's starter keeps the job unless the clear regular is back
+    def starter(qbs, prev):
+        d = pd.DataFrame([dict(base, player_id=n, group="QB", active=1, att_share_raw=s, prev_qb=prev) for n, s in qbs])
+        for c in PL.VOL_FEATS:
+            d[c] = 1.0
+        r = PL.raw_projection(d, const, const)
+        return r.loc[r["att_share"] == 1, "player_id"].tolist()
+    assert starter([("vet", 0.6), ("rookie", 0.4)], "rookie") == ["rookie"]      # benching sticks
+    assert starter([("hurts", 0.85), ("mckee", 0.3)], "mckee") == ["hurts"]      # regular returns from injury
+    assert starter([("a", 0.6), ("b", 0.3)], None) == ["a"]                      # no previous starter: largest share

@@ -207,8 +207,12 @@ def _shrink(num, den, prior_mean, prior_n):
 
 
 def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.DataFrame,
-          inj_groups: pd.DataFrame | None = None, pass_rush: pd.DataFrame | None = None) -> pd.DataFrame:
-    """The full player-game table with every pre-game projection input."""
+          inj_groups: pd.DataFrame | None = None, pass_rush: pd.DataFrame | None = None,
+          games: pd.DataFrame | None = None) -> pd.DataFrame:
+    """The full player-game table with every pre-game projection input.
+
+    games (optional) supplies each game's official starting quarterbacks, used only as an
+    outcome: whether the projected starter really started (see walk_forward)."""
     tg = team_games(frame, pg)
     rows = player_rows(tg, pg, avail, info)
     played_rows = rows[rows["played"] & (rows["active"] == 1)].copy()
@@ -290,6 +294,19 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
     for c in ("def_ypt", "def_catch", "def_ypc", "def_ypa", "def_comp"):
         out[c] = out[c].fillna(1.0)          # QBs have no defense-vs-position row; they use def_ypa
 
+    # did this quarterback start the game? Official starter where listed, otherwise half the passes.
+    # An outcome, known only after the game: used to fit and score the passing projections.
+    out["started"] = out["start"]
+    if games is not None and {"home_qb_id", "away_qb_id"} <= set(games.columns):
+        g = games[["game_id", "home_team", "away_team", "home_qb_id", "away_qb_id"]]
+        off = pd.concat([g.rename(columns={"home_team": "team", "home_qb_id": "qb_id"})[["game_id", "team", "qb_id"]],
+                         g.rename(columns={"away_team": "team", "away_qb_id": "qb_id"})[["game_id", "team", "qb_id"]]])
+        off["team"] = off["team"].replace(C.TEAM_ALIASES)
+        out = out.merge(off.dropna(), on=["game_id", "team"], how="left")
+        known = out["qb_id"].notna() & out["played"].astype(bool)
+        out.loc[known, "started"] = (out.loc[known, "player_id"] == out.loc[known, "qb_id"]).astype(float)
+        out = out.drop(columns="qb_id")
+
     # ---- defensive injuries --------------------------------------------------------
     if inj_groups is not None and len(inj_groups):
         ig = inj_groups[["game_id", "team", "miss_db", "mrec_db", "miss_lb"]].rename(columns={"team": "opp", "miss_db": "opp_miss_db", "mrec_db": "opp_mrec_db", "miss_lb": "opp_miss_lb"})
@@ -329,6 +346,15 @@ class Lin:
 VOL_FEATS = ["team_att_avg", "opp_att_allowed", "team_car_avg", "opp_car_allowed", "margin", "proj_total", "wind", "home"]
 
 
+def _pick_starter(d: pd.DataFrame):
+    """Row label of the projected starter among a team's active quarterbacks (sorted by share)."""
+    top = d.iloc[0]
+    prev = d[d["player_id"] == top["prev_qb"]]
+    if len(prev) and not (top["att_share_raw"] >= 0.8 and top["player_id"] != top["prev_qb"]):
+        return prev.index[0]
+    return d.index[0]
+
+
 def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFrame:
     """Volume x share x efficiency, before calibration."""
     p = p.copy()
@@ -342,13 +368,14 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
         tot = raw.groupby([p["game_id"], p["team"]]).transform("sum")
         # vacated usage goes to those available, but not all of it (some goes to players with no history)
         p[c] = np.where(tot > 0, raw / tot.clip(lower=0.85), 0.0)
-    # One starting quarterback takes the passes: the active quarterback with the largest share of
-    # the team's recent passes. (Preferring last game's starter fails when a regular starter
-    # returns from injury: his backup would keep the job.)
+    # One starting quarterback takes the passes: last game's starter if he is active, unless
+    # another active quarterback is clearly the regular (80%+ of the team's recent passes), as when
+    # a starter returns from injury; with neither, the active quarterback with the largest share.
+    # Right on 92.7% of team-games since 2019 (91.1% for largest share alone).
     qb = p[(p["group"] == "QB") & act].copy()
     if len(qb):
         qb = qb.sort_values("att_share_raw", ascending=False)
-        starters = set(qb.groupby(["game_id", "team"]).head(1).index)
+        starters = set(qb.groupby(["game_id", "team"]).apply(_pick_starter).dropna().astype(int))
         p["att_share"] = 0.0                     # only the starter projects passes (trick plays are noise)
         p.loc[list(starters), "att_share"] = 1.0
     # QB attempts
@@ -376,6 +403,8 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
         p[c + "_p"] = p[c + "_p"].fillna(0.0)
     return p
 
+
+PASS_STATS = ("pass_att", "completions", "pass_yds", "pass_td", "ints")
 
 CAL_EXTRA = {   # extra terms in the calibration of each stat (multiplied by the raw projection).
     # Defensive injuries are kept only where they helped on 2013-2018 (receiving); see FEATURES.md.
@@ -414,8 +443,15 @@ def walk_forward(table: pd.DataFrame, first_test: int = 2013) -> pd.DataFrame:
         hist = raw_projection(table[(table["season"] < s) & (table["season"] >= max(first_test - 1, s - 6))], att, car)
         hist = hist[hist["played"].astype(bool) & (hist["active"] == 1)]
         cur = raw_projection(table[table["season"] == s], att, car)
+        # Passing is fitted on projected starters who did start. A projected starter who does not
+        # start (benched, or a returning starter's backup who keeps the job) throws next to nothing,
+        # and fitting on those games shrank every starter's projection: starters ran about 17 yards
+        # low. A passing prop is void if the quarterback does not play, so the projection is what he
+        # throws if he starts.
+        qb_fit = hist[(hist["att_share"] > 0.5) & (hist["started"] == 1)]
         for stat in STATS:
-            m = Lin(1.0).fit(calib_X(hist, stat), hist[stat].to_numpy(float))
+            h = qb_fit if stat in PASS_STATS else hist
+            m = Lin(1.0).fit(calib_X(h, stat), h[stat].to_numpy(float))
             X = calib_X(cur, stat)
             # no projected volume and no history for this stat: zero, not the regression's intercept
             none = (X[:, 0] == 0) & (X[:, 1] == 0)
@@ -489,7 +525,7 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set) -> dict:
 # --------------------------------------------------------------------------
 # Backtest summary for the board
 # --------------------------------------------------------------------------
-EVAL_SETS = {   # stat -> (label, position groups, QBs: main passer only)
+EVAL_SETS = {   # stat -> (label, position groups, QBs: projected starter who started)
     "pass_yds": ("Passing yards", ("QB",), True), "pass_td": ("Passing TDs", ("QB",), True),
     "rush_yds": ("Rushing yards", ("RB", "QB"), False), "carries": ("Carries", ("RB", "QB"), False),
     "receptions": ("Receptions", ("WR", "TE", "RB"), False), "rec_yds": ("Receiving yards", ("WR", "TE", "RB"), False),
@@ -497,14 +533,17 @@ EVAL_SETS = {   # stat -> (label, position groups, QBs: main passer only)
 
 
 def season_average(table: pd.DataFrame) -> pd.DataFrame:
-    """Each player's average in earlier played, active games this season (last season's in week 1)."""
+    """Each player's average in earlier played, active games this season (last season's in week 1);
+    for passing, in games he started."""
     t = table[table["active"] == 1].sort_values(["player_id", "t"]).copy()
     played = t["played"].astype(bool)
     out = t[["game_id", "player_id"]].copy()
     for st in STATS:
         v = t[st].where(played)
+        if st in PASS_STATS:          # quarterbacks: per game started
+            v = v.where(t["started"] == 1)
         out[st + "_savg"] = v.groupby([t["player_id"], t["season"]]).transform(lambda s: s.shift().expanding().mean()).to_numpy()
-        last = t[played].groupby(["player_id", "season"])[st].mean()
+        last = v.groupby([t["player_id"], t["season"]]).mean()
         prev = pd.Series(list(zip(t["player_id"], t["season"] - 1))).map(last).to_numpy()
         out[st + "_savg"] = out[st + "_savg"].fillna(pd.Series(prev, index=out.index)).fillna(0.0)
     return out
@@ -516,10 +555,11 @@ def backtest_summary(proj: pd.DataFrame, table: pd.DataFrame, holdout_from: int)
     rows = []
     for st, (label, groups, main_qb) in EVAL_SETS.items():
         x = ev[ev["group"].isin(groups)]
-        if main_qb:
-            x = x[x["att_share_raw"] > 0.5]
+        if main_qb:   # the projected starter, in games he started (a passing prop is void otherwise)
+            x = x[(x["att_share"] > 0.5) & (x["started"] == 1) & (x["start_sum"] > 0.3) & (x[st + "_savg"] > 0)]
         x = x[(x[st + "_savg"] > 0) | (x[st] > 0)]
-        recent = x[st + "_sum"] / x["one_sum"].replace(0, np.nan)
+        recent = (x[st + "_st_sum"] / x["start_sum"].where(x["start_sum"] > 0.3) if st in PASS_STATS
+                  else x[st + "_sum"] / x["one_sum"].replace(0, np.nan))
         mae = lambda pred: round(float(np.mean(np.abs(pred.fillna(0) - x[st]))), 3)
         rows.append({"stat": label, "n": int(len(x)), "model": mae(x[st + "_proj"]), "season_avg": mae(x[st + "_savg"]), "recent": mae(recent)})
     td = ev[ev["group"].isin(["WR", "TE", "RB"]) & ((ev["rec_td_savg"] + ev["rush_td_savg"] > 0) | (ev["rec_td"] + ev["rush_td"] > 0))]

@@ -4,11 +4,12 @@
 
 Every projection for season S is fitted on seasons before S. Baselines:
   season avg   the player's average in games he played this season so far
-               (last season's average in week 1)
+               (last season's average in week 1); per start for passing
   recent avg   the same stat averaged over his games with recent ones weighted
                more (the decayed history the model starts from)
 Scored on active players in played games: receiving for WR/TE/RB, rushing for
-RB and QB, passing for each team's main passer. Tuning 2013-2018, check 2019 on.
+RB and QB, passing for the projected starter in games he started (with an earlier start, so
+every baseline exists). Tuning 2013-2018, check 2019 on.
 """
 from __future__ import annotations
 
@@ -27,23 +28,8 @@ warnings.filterwarnings("ignore")
 SETS = {
     "receiving": (["targets", "receptions", "rec_yds", "rec_td"], lambda d: d.group.isin(["WR", "TE", "RB"])),
     "rushing": (["carries", "rush_yds", "rush_td"], lambda d: d.group.isin(["RB", "QB"])),
-    "passing": (["pass_att", "completions", "pass_yds", "pass_td", "ints"], lambda d: (d.group == "QB") & (d.att_share_raw > 0.5)),
+    "passing": (["pass_att", "completions", "pass_yds", "pass_td", "ints"], lambda d: (d.group == "QB") & (d.att_share > 0.5) & (d.started == 1) & (d.start_sum > 0.3) & (d.pass_att_savg > 0)),
 }
-
-
-def season_avg(table: pd.DataFrame) -> pd.DataFrame:
-    """Season-to-date average per player over earlier active, played games (last season's in week 1)."""
-    t = table[(table.active == 1)].sort_values(["player_id", "t"]).copy()
-    played = t["played"].astype(bool)
-    for st in PL.STATS:
-        v = t[st].where(played)
-        cum = v.groupby([t.player_id, t.season]).transform(lambda s: s.shift().expanding().mean())
-        last = t.groupby(["player_id", "season"])[st].mean().rename("last").reset_index()
-        last["season"] += 1
-        t = t.drop(columns=[f"{st}_last"], errors="ignore").merge(last.rename(columns={"last": f"{st}_last"}), on=["player_id", "season"], how="left")
-        t[f"{st}_savg"] = cum.to_numpy()
-        t[f"{st}_savg"] = t[f"{st}_savg"].fillna(t[f"{st}_last"]).fillna(0.0)
-    return t[["game_id", "player_id"] + [f"{s}_savg" for s in PL.STATS]]
 
 
 def main():
@@ -55,11 +41,12 @@ def main():
     frame, _ = model.walk_forward(model.build_frame(games, eng, injuries=inj))
     pg, info = PD.load_player_games(verbose=False)
     av = PL.load_availability(verbose=False)
-    table = PL.build(frame, pg, info, av, inj, pr)
+    table = PL.build(frame, pg, info, av, inj, pr, games=games)
     proj = PL.walk_forward(table)
-    proj = proj.merge(season_avg(table), on=["game_id", "player_id"], how="left")
+    proj = proj.merge(PL.season_average(table), on=["game_id", "player_id"], how="left")
     for st in PL.STATS:
-        proj[f"{st}_recent"] = proj[f"{st}_sum"] / proj["one_sum"].replace(0, np.nan)
+        proj[f"{st}_recent"] = (proj[f"{st}_st_sum"] / proj["start_sum"].where(proj["start_sum"] > 0.3) if st in PL.PASS_STATS
+                                else proj[f"{st}_sum"] / proj["one_sum"].replace(0, np.nan))
     ev = proj[proj.played.astype(bool) & (proj.active == 1)]
     rows = []
     for name, (stats, sel) in SETS.items():

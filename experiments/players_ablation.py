@@ -45,7 +45,7 @@ def main():
     frame, _ = model.walk_forward(model.build_frame(games, eng, injuries=inj))
     pg, info = PD.load_player_games(verbose=False)
     av = PL.load_availability(verbose=False)
-    table = PL.build(frame, pg, info, av, inj, pr)
+    table = PL.build(frame, pg, info, av, inj, pr, games=games)
 
     variants = {}
     variants["full model"] = table

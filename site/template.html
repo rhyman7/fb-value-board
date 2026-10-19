@@ -1238,7 +1238,7 @@ function diagChart(node, o) {
     const tx = s => document.createTextNode(s), b = s => H("strong", { text: s });
     grid.append(box("Team volume", tx(p.team + " is projected for "), b(f1(t.pass_att) + " pass attempts"), tx(" and "), b(f1(t.carries) + " carries"),
       tx(`, with ${f1(t.imp_pts)} points implied by the game model (${t.margin >= 0 ? "favoured by " + f1(t.margin) : "underdog by " + f1(-t.margin)})` + (t.wind != null ? `, ${f0(t.wind)} mph wind.` : "."))));
-    if (p.pos === "QB") grid.append(box("Share and efficiency", tx("Takes "), b(pctx(w.att_share) + " of the passes"), tx(`. Completes ${pctx(w.comp)} for ${f1(w.ypa)} yards per attempt over his recent games (shrunk toward a typical starter).`)));
+    if (p.pos === "QB") grid.append(box("Share and efficiency", tx("Projected starter: "), b("all of the passes if he starts"), tx(` (the numbers assume he does). Completes ${pctx(w.comp)} for ${f1(w.ypa)} yards per attempt over his recent games (shrunk toward a typical starter).`)));
     else grid.append(box("Share", tx("Projected "), b(pctx(w.tgt_share) + " of targets"), tx(" and "), b(pctx(w.car_share) + " of carries"),
       tx(`; ${pctx(w.tgt_share_hist)} and ${pctx(w.car_share_hist)} in his recent games` + (Math.abs((w.tgt_share || 0) - (w.tgt_share_hist || 0)) > 0.01 || Math.abs((w.car_share || 0) - (w.car_share_hist || 0)) > 0.02 ? ", adjusted for who is out." : "."))));
     if (p.pos !== "QB") grid.append(box("Efficiency", tx(`${f1(w.ypt)} yards per target and a ${pctx(w.catch)} catch rate` + ((w.car_share || 0) > 0.05 ? `; ${f1(w.ypc)} yards per carry` : "") + `, from ${f1(w.games)} weighted games, shrunk toward his position's average.`)));
@@ -1283,7 +1283,7 @@ function diagChart(node, o) {
 
   const BTp = PD.backtest;
   if (BTp) {
-    $("#pbt-note").textContent = `Average miss per player-game since ${BTp.from}, scored only with what was known before each game. Lower is better. Season average is the player's average in this season's earlier games; recent average weights his latest games more. The anytime-TD row is a Brier score (the squared error of the chance of scoring).`;
+    $("#pbt-note").textContent = `Average miss per player-game since ${BTp.from}, scored only with what was known before each game. Lower is better. Season average is the player's average in this season's earlier games; recent average weights his latest games more. Quarterback rows count the projected starter in games he started, per start, since a passing prop is void if he does not play. The anytime-TD row is a Brier score (the squared error of the chance of scoring).`;
     table($("#pbt-table"), [{ t: "Stat", l: 1 }, { t: "Player-games" }, { t: "Model" }, { t: "Season average" }, { t: "Recent average" }, { t: "Model vs season average" }],
       BTp.rows.map(r => [r.stat, comma(r.n), r.model, r.season_avg, r.recent, spct(r.model / r.season_avg - 1)]));
   } else { $("#pbt-note").textContent = "The record appears after the next full backtest."; }
