@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import backtest, bets, config as C, data, extra, injuries, matchup, model, slate, weather
+from . import backtest, bets, config as C, data, extra, injuries, matchup, model, players, players_data, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -40,6 +40,28 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games)
     frame, info = model.walk_forward(model.build_frame(games, engine, injuries=inj))
 
+    prev_path = C.DOCS / "data.json"
+    prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
+
+    say("Projecting players ...")
+    try:
+        pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
+        avail = players.load_availability(refresh_current=refresh, verbose=verbose)
+        rush = injuries.load_pass_rush(games, refresh_current=refresh, verbose=verbose)
+        ptable = players.build(frame, pg, pinfo, avail, inj, rush)
+        pproj = players.walk_forward(ptable, first_test=season)
+        upcoming_ids = set(frame.loc[~frame.played & frame.spread_line.notna() & (frame.season == season), "game_id"])
+        player_board = players.board(pproj, pinfo, upcoming_ids)
+        if with_backtest:
+            say("Backtesting player projections ...")
+            pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
+            player_board["backtest"] = players.backtest_summary(pall, ptable, C.HOLDOUT_FROM)
+        elif prev.get("players") and prev["players"].get("backtest"):
+            player_board["backtest"] = prev["players"]["backtest"]
+    except Exception as exc:                      # the game board must not fail because of the player board
+        print(f"  player projections skipped ({exc})")
+        player_board = None
+
     say("Fitting key numbers ...")
     dist = bets.fit_distribution(games, season)
     upcoming = frame[~frame.played & frame.spread_line.notna()]
@@ -48,8 +70,6 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     builder = matchup.MatchupBuilder(games, qb, stats, engine, info[season], season)
 
     # ---- early lines: games several days out are priced with the opening-line weight
-    prev_path = C.DOCS / "data.json"
-    prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
     opening = None
     if with_backtest:
         say("Backtesting (walk-forward, about a minute) ...")
@@ -90,6 +110,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         "key_numbers": backtest.key_number_report(games, dist, season),
     }
     out["openers"] = opening
+    out["players"] = player_board
     if with_backtest:
         out["backtest"] = backtest.summarize(frame, graded)
         out["backtest"]["wind_unders"] = backtest.wind_report(frame)
