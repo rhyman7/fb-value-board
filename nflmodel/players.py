@@ -349,8 +349,7 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
     if len(qb):
         qb = qb.sort_values("att_share_raw", ascending=False)
         starters = set(qb.groupby(["game_id", "team"]).head(1).index)
-        is_qb = p["group"] == "QB"
-        p.loc[is_qb, "att_share"] = 0.0
+        p["att_share"] = 0.0                     # only the starter projects passes (trick plays are noise)
         p.loc[list(starters), "att_share"] = 1.0
     # QB attempts
     p["pass_att_p"] = p["att_share"] * p["proj_team_att"]
