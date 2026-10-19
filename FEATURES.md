@@ -128,6 +128,49 @@ know a backup's talent before he plays.
 The game card's model column is now labelled "Raw model", so it no longer reads
 as the board's pick when the market-adjusted win chance says the opposite.
 
+## Injuries beyond the quarterback
+
+Prompted by Philadelphia's offensive line in week 6. For each team and game,
+`nflmodel/injuries.py` finds the core players in six position groups by snap
+share in earlier games, then marks who is unavailable: Out or Doubtful on the
+injury report, or not active on that week's roster (injured reserve, game-day
+inactive, released). Players on injured reserve drop off the weekly injury
+report, so the roster is what catches them; Lane Johnson (inactive weeks 4 to
+6) and Cam Jurgens (off the roster after week 4) never appeared on a report.
+Data: nflverse injury reports, snap counts and weekly rosters, 2013 on.
+
+Two measures per group: the share of the core missing now, and the change from
+what the team's last four games already reflect (its ratings have seen those).
+Tuning seasons here are 2013-2018. Run `python experiments/injury_test.py`.
+
+| Added to the margin model | Tuning change | Holdout change | Kept |
+|---|---|---|---|
+| **Offensive line, change** | **−0.015** | **−0.006** | **yes** |
+| Offensive line, missing now | +0.003 | −0.015 | no |
+| Pass catchers, missing now | +0.003 | −0.020 | no |
+| Pass catchers, change | +0.005 | −0.017 | no |
+| Running back | −0.007 / +0.003 | +0.014 / +0.007 | no |
+| Defensive line | −0.002 / +0.000 | +0.016 / +0.007 | no |
+| Linebackers | −0.003 / −0.007 | −0.003 / −0.004 | no (tiny) |
+| Defensive backs | +0.015 / +0.018 | −0.009 / −0.009 | no |
+| All six groups, missing now | +0.037 | −0.027 | no |
+| All six groups, change | +0.020 | −0.011 | no |
+
+Only the offensive line helps in both periods. The model values the whole line
+turning over at about 2.5 points, roughly half a point per additional missing
+starter. Several groups (pass catchers, defensive backs, all groups together)
+help since 2019 but hurt before, so by the rule they are out. One possible
+reason is data: rosters only mark game-day inactives from 2020 on. Re-test
+them once a few more seasons are in.
+
+The opening-line test runs without injury information, since most of it
+arrives after openers are posted.
+
+Carolina at Philadelphia with all of the above: raw model Carolina by 0.5,
+market-adjusted Carolina by 2.6 (line Carolina −3, final Carolina by 11). The
+line effect on this game was small (−0.1) because Carolina was also missing
+linemen (16% of its core against Philadelphia's 19%).
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;

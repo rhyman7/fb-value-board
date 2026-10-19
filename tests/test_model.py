@@ -142,3 +142,16 @@ def test_wind_log_appends(tmp_path):
     weather.log_forecasts({"g1": 14.0, "g2": 3.0}, path)
     log = pd.read_csv(path)
     assert len(log) == 3 and list(log.columns) == ["game_id", "fetched", "wind_mph"] and log.wind_mph.iloc[0] == 12.3
+
+
+def test_injury_features():
+    from nflmodel.injuries import GROUPS, add_injury_features
+    g = pd.DataFrame({"game_id": ["x", "y"], "home_team": ["PHI", "NYG"], "away_team": ["CAR", "DAL"]})
+    z = add_injury_features(g, None)                       # no data: every feature is zero
+    assert all((z[f"d_chg_{k}"] == 0).all() and (z[f"d_miss_{k}"] == 0).all() for k in GROUPS)
+    inj = pd.DataFrame([{"season": 2026, "game_id": "x", "team": "PHI", **{f"miss_{k}": 0.0 for k in GROUPS}, **{f"mrec_{k}": 0.0 for k in GROUPS}},
+                        {"season": 2026, "game_id": "x", "team": "CAR", **{f"miss_{k}": 0.0 for k in GROUPS}, **{f"mrec_{k}": 0.0 for k in GROUPS}}])
+    inj.loc[0, "miss_ol"], inj.loc[0, "mrec_ol"] = 0.4, 0.1   # home line: 40% out now, 10% in recent games
+    f = add_injury_features(g, inj)
+    assert abs(f.loc[0, "d_miss_ol"] - 0.4) < 1e-9 and abs(f.loc[0, "d_chg_ol"] - 0.3) < 1e-9
+    assert f.loc[1, "d_chg_ol"] == 0                      # a game with no injury rows gets zeros

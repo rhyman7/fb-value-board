@@ -13,6 +13,7 @@ import pandas as pd
 
 from . import config as C
 
+EXTRA_TOTAL_METRICS = ("snaps",)   # extra rated metrics in the total model
 RATING_METRICS = ("pass", "rush", "sr", "pts")
 
 # key, label, how to compute from season sums, format, is a bigger number better for the offense?
@@ -68,6 +69,7 @@ class MatchupBuilder:
     def total_rating(self, r: dict, i: int) -> float:
         """Points this team adds to (or takes from) a game's total."""
         v = sum(self.tc[f"s_{m}"] * (r[m]["off"] + r[m]["def"]) for m in RATING_METRICS) + self.tc["s_mkt"] * r["mkt"]["T"]
+        v = v + sum(self.tc[f"s_{m}"] * (r[m]["off"] + r[m]["def"]) for m in EXTRA_TOTAL_METRICS if f"s_{m}" in self.tc and m in r)
         return float(v[i])
 
     # ------------------------------------------------------------------ breakdown
@@ -83,6 +85,8 @@ class MatchupBuilder:
             {"key": "home_qb", "label": f"{g.home_team} quarterback", "value": _f(qh)},
             {"key": "away_qb", "label": f"{g.away_team} quarterback", "value": _f(qa)},
         ]
+        if "d_chg_ol" in self.mc:
+            margin.append({"key": "ol", "label": "Offensive line injuries", "value": _f(self.mc["d_chg_ol"] * getattr(g, "d_chg_ol", 0.0))})
         th, ta = self.total_rating(r, h), self.total_rating(r, a)
         base = self.info["total_intercept"] + self.tc["lg_pts"] * g.lg_pts + self.tc["s_mkt"] * r["mkt"]["avg_total"]
         total = [
@@ -92,6 +96,9 @@ class MatchupBuilder:
             {"key": "qb", "label": "Quarterbacks", "value": _f(self.tc["s_qb"] * g.s_qb)},
             {"key": "roof", "label": "Indoors" if g.indoor else "Outdoors", "value": _f(self.tc["indoor"] * g.indoor)},
         ]
+        if "wind" in self.tc:
+            mph = "indoors" if g.indoor else f"{g.wind:.0f} mph" + ("" if getattr(g, "wind_known", 0) else ", typical day assumed")
+            total.append({"key": "wind", "label": f"Wind ({mph})", "value": _f(self.tc["wind"] * g.wind)})
         return {"margin": margin, "margin_sum": _f(sum(x["value"] for x in margin)),
                 "total": total, "total_sum": _f(sum(x["value"] for x in total)),
                 "weight_margin": _f(g.w_margin, 3), "weight_total": _f(g.w_total, 3)}

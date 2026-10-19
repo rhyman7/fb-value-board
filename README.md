@@ -27,26 +27,27 @@ closing prices:
 
 | | Model | Closing line |
 |---|---|---|
-| Average miss on the margin | 10.06 pts | 9.91 pts |
+| Average miss on the margin | 10.04 pts | 9.91 pts |
 | Average miss on the total | 10.56 pts | 10.46 pts |
-| Picks the winner | 65.7% | 66.0% |
+| Picks the winner | 65.5% | 66.0% |
 
 | Raw model, one bet on every game | Record | Win rate | Return |
 |---|---|---|---|
-| Spreads | 1,685-1,615-87 | 51.1% | -0.9% |
+| Spreads | 1,690-1,610-87 | 51.2% | -0.6% |
 | Totals | 1,684-1,672-31 | 50.2% | -2.8% |
-| Moneylines | 1,685-1,689-12 | 49.9% | -2.6% |
+| Moneylines | 1,701-1,673-12 | 50.4% | -2.2% |
 
 **The model is close to the closing line and does not beat it.** A spread bettor
 needs 52.4% at -110. Since 2019, the seasons the settings were not tuned on, the
-spread picks are 50.1%.
+spread picks are 50.5%.
 
 So the dashboard prices bets from a market-adjusted projection: the market line,
 moved toward the model by only as much as the model has earned. That weight is
-currently 16% on sides and 5% on totals (totals are capped there; see
-FEATURES.md). Market-adjusted spread bets with EV above 2% went 566-517-26
-(52.3%, +1.9% return, standard error 2.9%), which is not distinguishable from
-zero.
+currently 17% on sides and 5% on totals (totals are capped there; see
+FEATURES.md). Market-adjusted spread bets with EV above 2% went 603-513-25
+(54.0%, +5.4% return, standard error 2.9%), but only 51.9% since 2019, so the
+improvement over earlier versions comes mostly from seasons the settings were
+chosen on and is not yet proof.
 
 ### Against opening lines
 
@@ -71,7 +72,7 @@ is 1.4 standard errors above zero, and opening numbers move fast and take
 small bets, so real results would land between the opening and closing records.
 
 Games four or more days away are marked on the board as early lines and priced
-with the weight the model has earned against opening spreads (17%, against 16%
+with the weight the model has earned against opening spreads (17%, against 17%
 for closing lines). The difference is small because that is what the data
 supports: replaying that pricing on past openers flagged 825 bets that went
 430-376-19 (53.4%) and returned +1.9%, about half the +3.4% the pricing claimed.
@@ -141,8 +142,8 @@ check its first run.
    solved into a rating per team. This carries injury and roster information the
    play-by-play cannot see. This week's line is never used as a feature.
 4. **Game model** (`nflmodel/model.py`). Ridge regression for margin and total
-   on the ratings, quarterback gap, a trailing home-field estimate, rest and
-   roof. The total model also uses wind and a snaps-per-game rating (pace).
+   on the ratings, quarterback gap, a trailing home-field estimate, rest,
+   missing offensive-line starters (`nflmodel/injuries.py`) and roof. The total model also uses wind and a snaps-per-game rating (pace).
    Refitted each season on earlier seasons only. The margin model has no
    intercept, so a neutral-site game gives neither team a home edge.
 5. **Market blend.** `projection = line + w * (model - line)`, with `w` measured
@@ -164,7 +165,9 @@ check its first run.
   all seasons, so even the post-2019 numbers are slightly optimistic.
 - Starting quarterbacks in the backtest are the actual starters from the games
   file. Those are normally known before kickoff, but not always.
-- Injuries other than quarterback changes are only seen through earlier lines.
+- Injuries other than quarterback changes and the offensive line are only seen
+  through earlier lines and the current line. For upcoming games, game-day
+  inactives are not known, so only injured reserve and Out/Doubtful count.
 - Weather is wind only. The backtest uses wind recorded at the game, so the
   wind feature and the wind under will look better in testing than they will
   live, where a forecast is used.
@@ -185,6 +188,7 @@ nflmodel/
   extra.py                extra per-game stats (sacks, pace, special teams, CPOE ...)
   features_ext.py         candidate features and the extended rating engine
   weather.py              wind forecasts for upcoming games, and the forecast log
+  injuries.py             missing starters by position group (reports, rosters, snaps)
   ratings.py              team, quarterback and market-implied ratings
   model.py                margin and total models, market blend
   distributions.py        key-number curve, anchoring, width fit
@@ -201,6 +205,8 @@ data/cache/               small per-season aggregates (committed)
 data/line_history.csv     lines as first seen and as they move
 data/wind_log.csv         wind forecasts as fetched
 experiments/feature_test.py  test candidate features walk-forward
+experiments/qb_test.py       quarterback-change settings
+experiments/injury_test.py   missing starters by position group
 FEATURES.md               results of the October 2026 feature tests
 tests/test_model.py
 ```

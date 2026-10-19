@@ -1,0 +1,150 @@
+"""Missing starters by position group, from injury reports and snap counts (2012 on).
+
+For each team and game:
+  core players   the top-k players in each group by average snap share over the
+                 team's earlier games this season (a game a player missed counts 0)
+  unavailable    listed Out or Doubtful on this week's injury report, or not active
+                 on this week's roster (injured reserve, game-day inactive, released).
+                 For a game not yet played, the latest roster is used and only
+                 longer-term lists count (inactives are named 90 minutes before kickoff)
+  miss_<group>   snap-share-weighted share of the group's core that is unavailable
+  mrec_<group>   the same measured on the team's last four games, i.e. what the
+                 team's recent results (and so its ratings) already reflect
+
+Groups: ol (5), pc = pass catchers WR/TE (3), rb (1), dl (4), lb (2), db (4).
+Week 1 and games without snap data get zeros (no information).
+"""
+from __future__ import annotations
+
+import numpy as np
+import pandas as pd
+
+from . import config as C
+from .data import _download, current_season
+
+URL = "https://github.com/nflverse/nflverse-data/releases/download/{kind}/{kind}_{season}.parquet"
+FIRST = 2012
+GROUPS = {
+    "ol": ({"T", "G", "C", "OL", "OT", "OG", "C/G", "G/T", "G/C", "T/G", "G/OT"}, 5, "offense_pct"),
+    "pc": ({"WR", "TE", "WR/R", "TE/D"}, 3, "offense_pct"),
+    "rb": ({"RB", "HB", "RB/W", "RB/F"}, 1, "offense_pct"),
+    "dl": ({"DE", "DT", "DL", "NT", "DT/D", "DE/L", "DE/D"}, 4, "defense_pct"),
+    "lb": ({"LB", "OLB", "ILB", "MLB", "LB/F", "LB/S"}, 2, "defense_pct"),
+    "db": ({"CB", "S", "DB", "FS", "SS", "DB/L", "CB/R"}, 4, "defense_pct"),
+}
+RECENT = 4
+
+
+def _norm(name: str) -> str:
+    return "".join(ch for ch in str(name).lower() if ch.isalpha())
+
+
+def _season(season: int, sched: pd.DataFrame) -> pd.DataFrame:
+    """sched: the nflverse games table (regular season used), for each team's game list."""
+    paths = {k: C.RAW / f"{k}_{season}.parquet" for k in ("snap_counts", "injuries", "roster_weekly")}
+    for k, path in paths.items():
+        kind = "weekly_rosters" if k == "roster_weekly" else k
+        if not path.exists():
+            _download(URL.format(kind=kind, season=season).replace(f"/{kind}_{season}", f"/{k}_{season}"), path)
+    s = pd.read_parquet(paths["snap_counts"])
+    inj = pd.read_parquet(paths["injuries"])
+    ros = pd.read_parquet(paths["roster_weekly"], columns=["team", "week", "full_name", "status", "game_type"])
+    s = s[s["game_type"] == "REG"]
+    ros = ros[ros["game_type"] == "REG"]
+    for df in (s, inj, ros):
+        df["team"] = df["team"].replace(C.TEAM_ALIASES)
+    s["key"] = s["player"].map(_norm)
+    inj["key"] = inj["full_name"].map(_norm)
+    ros["key"] = ros["full_name"].map(_norm)
+    report = inj.groupby(["team", "week", "key"])["report_status"].last().to_dict()
+    roster = ros.groupby(["team", "week", "key"])["status"].first().to_dict()
+    roster_weeks = ros.groupby("team")["week"].apply(lambda w: sorted(set(w))).to_dict()
+
+    g = sched[(sched["season"] == season) & (sched["game_type"] == "REG")]
+    long = pd.concat([g[["game_id", "week", "home_team"]].rename(columns={"home_team": "team"}),
+                      g[["game_id", "week", "away_team"]].rename(columns={"away_team": "team"})])
+    played_weeks = set(s["week"])
+    rows = []
+    for team, tg in long.groupby("team"):
+        tg = tg.sort_values("week")
+        t = s[s["team"] == team]
+        have = sorted(set(t["week"]))
+        for gid, wk in zip(tg["game_id"], tg["week"]):
+            row = {"season": season, "game_id": gid, "team": team}
+            prior = [w for w in have if w < wk]
+            # roster status for this week, or the latest earlier week for an upcoming game
+            rw = [w for w in roster_weeks.get(team, []) if w <= wk]
+            rweek = rw[-1] if rw else None
+            exact = rweek == wk
+            for grp, (pos, k, col) in GROUPS.items():
+                row[f"miss_{grp}"] = row[f"mrec_{grp}"] = 0.0
+                if not prior:
+                    continue
+                gg = t[t["position"].isin(pos)]
+                share = gg[gg["week"].isin(prior)].pivot_table(index="key", columns="week", values=col, aggfunc="max")
+                share = share.reindex(columns=prior).fillna(0.0)
+                core = share.mean(axis=1).sort_values(ascending=False).head(k)
+                core = core[core > 0.2]
+                if core.empty:
+                    continue
+                out_now = []
+                for key in core.index:
+                    rep = report.get((team, wk, key))
+                    st = roster.get((team, rweek, key)) if rweek is not None else "ACT"
+                    if rep in ("Out", "Doubtful"):
+                        out_now.append(key)
+                    elif rweek is None:
+                        continue
+                    elif st is None:                       # no longer on the roster (released, traded)
+                        out_now.append(key)
+                    elif exact and st != "ACT":            # reserve lists, game-day inactive, suspended
+                        out_now.append(key)
+                    elif not exact and st not in ("ACT", "INA"):   # upcoming game: only longer-term lists
+                        out_now.append(key)
+                row[f"miss_{grp}"] = float(core[out_now].sum() / core.sum())
+                rec = prior[-RECENT:]
+                played = share.loc[core.index, rec] > 0
+                row[f"mrec_{grp}"] = float(((~played).mul(core, axis=0).sum(axis=0) / core.sum()).mean())
+            rows.append(row)
+    for path in paths.values():
+        path.unlink(missing_ok=True)
+    return pd.DataFrame(rows)
+
+
+def load_injuries(sched: pd.DataFrame, refresh_current: bool = False, verbose: bool = True) -> pd.DataFrame:
+    now = current_season()
+    out = []
+    for season in range(FIRST, now + 1):
+        path = C.CACHE / f"injury_groups_{season}.csv"
+        if (season == now and refresh_current) or not path.exists():
+            if verbose:
+                print(f"  injuries and snap counts {season} ...", flush=True)
+            try:
+                _season(season, sched).round(4).to_csv(path, index=False)
+            except Exception as exc:
+                print(f"  no injury data for {season} ({exc})")
+                continue
+        out.append(pd.read_csv(path))
+    return pd.concat(out, ignore_index=True) if out else pd.DataFrame()
+
+
+def add_injury_features(df: pd.DataFrame, inj: pd.DataFrame) -> pd.DataFrame:
+    """d_miss_<g>: home minus away share of core missing now; d_chg_<g>: the same,
+    less what each team's last four games already reflect."""
+    df = df.copy()
+    if inj is None or inj.empty:
+        for g in GROUPS:
+            df[f"d_miss_{g}"] = df[f"d_chg_{g}"] = 0.0
+        return df
+    cols = [c for c in inj.columns if c.startswith(("miss_", "mrec_"))]
+    h = inj.rename(columns={c: "h_" + c for c in cols}).rename(columns={"team": "home_team"})
+    a = inj.rename(columns={c: "a_" + c for c in cols}).rename(columns={"team": "away_team"})
+    df = df.merge(h.drop(columns=["season"]), on=["game_id", "home_team"], how="left")
+    df = df.merge(a.drop(columns=["season"]), on=["game_id", "away_team"], how="left")
+    for g in GROUPS:
+        for p in ("h_", "a_"):
+            df[f"{p}miss_{g}"] = df[f"{p}miss_{g}"].fillna(0.0)
+            df[f"{p}mrec_{g}"] = df[f"{p}mrec_{g}"].fillna(0.0)
+        df[f"d_miss_{g}"] = df[f"h_miss_{g}"] - df[f"a_miss_{g}"]
+        df[f"d_chg_{g}"] = (df[f"h_miss_{g}"] - df[f"h_mrec_{g}"]) - (df[f"a_miss_{g}"] - df[f"a_mrec_{g}"])
+    return df

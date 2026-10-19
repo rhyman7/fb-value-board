@@ -20,13 +20,14 @@ import pandas as pd
 from . import config as C
 from .ratings import RatingEngine
 
-MARGIN_FEATS = ["d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_qb", "hfa", "rest_diff"]
+MARGIN_FEATS = ["d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_qb", "hfa", "rest_diff",
+                "d_chg_ol"]   # offensive-line starters missing beyond recent games (Oct 2026, FEATURES.md)
 TOTAL_FEATS = ["s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_qb", "lg_pts", "indoor",
                "wind", "s_snaps"]   # wind and pace added Oct 2026 after testing (FEATURES.md)
 FIRST_OOS = C.FIRST_MODEL_SEASON + 3   # first season with out-of-sample projections
 
 
-def build_frame(games: pd.DataFrame, engine: RatingEngine, verbose: bool = False) -> pd.DataFrame:
+def build_frame(games: pd.DataFrame, engine: RatingEngine, verbose: bool = False, injuries: pd.DataFrame | None = None) -> pd.DataFrame:
     """Every game from FIRST_MODEL_SEASON on, with pre-game features attached."""
     g = games[games.season >= C.FIRST_MODEL_SEASON].copy()
     feats = engine.features(g, verbose=verbose)
@@ -40,7 +41,8 @@ def build_frame(games: pd.DataFrame, engine: RatingEngine, verbose: bool = False
     df["hfa"] = df["season"].map(trail).fillna(home_margin.mean()) * (1 - df["neutral"])
     df["rest_diff"] = (df["home_rest"] - df["away_rest"]).clip(-7, 7).fillna(0) * (1 - df["playoff"])
     from .features_ext import add_context      # travel, time zones, wind, cold, divisional
-    return add_context(df)
+    from .injuries import add_injury_features  # missing starters; zeros when no injury data is given
+    return add_injury_features(add_context(df), injuries)
 
 
 class Linear:

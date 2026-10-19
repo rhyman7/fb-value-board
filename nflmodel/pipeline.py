@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import backtest, bets, config as C, data, extra, matchup, model, slate, weather
+from . import backtest, bets, config as C, data, extra, injuries, matchup, model, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -33,11 +33,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     openers = data.load_openers(refresh=refresh)
     team_extra, qb_extra = extra.load_extra(refresh_current=refresh, verbose=verbose)
     games = weather.fill_wind(games, verbose=verbose)
+    inj = injuries.load_injuries(games, refresh_current=refresh, verbose=verbose)
     season = int(games[games.played].season.max())
 
     say("Rating teams week by week ...")
     engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games)
-    frame, info = model.walk_forward(model.build_frame(games, engine))
+    frame, info = model.walk_forward(model.build_frame(games, engine, injuries=inj))
 
     say("Fitting key numbers ...")
     dist = bets.fit_distribution(games, season)
@@ -58,6 +59,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             # An opener is posted before late quarterback news, so re-run the model
             # assuming each team starts whoever started the week before.
             blind = games.assign(home_qb_id=np.nan, away_qb_id=np.nan)
+            # ... and with no injury information, which mostly arrives after openers are posted.
             early, _ = model.walk_forward(model.build_frame(blind, engine))
             opening = backtest.opening_report(games, early, openers, dists)
     else:
