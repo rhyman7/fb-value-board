@@ -24,8 +24,15 @@ boards in detail; this file is the rules.
 - **Both boards.** Design and feature changes go to both the NFL and the college board
   unless Ryan says otherwise. Don't call a change finished until both are done.
 - **Ask first** if anything is unclear or a change could break the live site.
-- **Kept separate for now.** Don't link the value boards from the matchup dashboards or
-  rhyman7.github.io, and don't link those from here, until Ryan says otherwise.
+- **Kept separate for now, with one exception.** Don't link the value boards from the matchup
+  dashboards or rhyman7.github.io, and don't link those from here, until Ryan says otherwise.
+  The exception (Ryan's call, Oct 2026): the dashboards' **game packets** include this board's
+  matchup page. Their Build PDFs Actions check out this repo, open the Matchups view
+  (`docs/index.html#matchups`, `docs/cfb/index.html#matchups`), press Print all and take one
+  landscape page per game, matched to the dashboard by game id (the college board's
+  `game_id` is the ESPN id the CFB dashboard uses). If you change the Matchups view's print
+  layout, its row links (`#matchups/<id>`) or the game ids, check the dashboards' packets
+  still map every game; their Action logs print the counts.
 - **What commits straight to `main`** (automated, not hand edits): the **Update board** and
   **Update college board** Actions (`.github/workflows/update.yml`, `update-cfb.yml`), which
   rebuild `docs/` and the committed files under `data/`. They share the `board-commits`
