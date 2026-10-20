@@ -13,8 +13,14 @@ boards in detail; this file is the rules.
 
 ## How changes get made
 
-- **Pull requests only.** Never push or merge to `main` yourself: `main` is the live site.
-  Open a pull request and wait for Ryan's approval. One topic per PR.
+- **Pull requests, merged after checks.** Don't push hand edits straight to `main`: `main` is
+  the live site. Open a pull request (one topic per PR), run the checks in "Checks before
+  merging", and merge it yourself once they pass (squash, delete the branch). Then tell Ryan
+  in a line or two what went live, with the PR link. If a check fails, don't merge: fix it, or
+  leave the PR open and tell Ryan why.
+- **After merging**, confirm the Pages deploy for the merge commit succeeded and load the live
+  board(s) you changed. If something broke, revert right away (a revert PR, merged the same
+  way) and tell Ryan.
 - **Both boards.** Design and feature changes go to both the NFL and the college board
   unless Ryan says otherwise. Don't call a change finished until both are done.
 - **Ask first** if anything is unclear or a change could break the live site.
@@ -42,8 +48,16 @@ boards in detail; this file is the rules.
 - Both boards share the same sections and anchors, in this order:
   Games `#games` | Players `#players` | Past weeks `#history` | Team ratings `#ratings` |
   Model record `#model`. Each board's nav links to the other board.
-- Run `python -m pytest -q` before opening a PR that touches `nflmodel/`, `cfbmodel/` or
-  the pipelines.
+
+## Checks before merging
+
+- `python -m pytest -q` passes (required for anything touching `nflmodel/`, `cfbmodel/` or
+  the pipelines).
+- If a template changed: `python site/make_cfb_template.py`, then rebuild both boards
+  (`python run.py --no-backtest`, `python run_cfb.py --no-backtest`) and commit the generated
+  `docs/` files with the template.
+- Serve the repo root (`python -m http.server`) and load the landing page and both boards'
+  sections you touched at desktop and phone widths with no page errors.
 
 ## Landing page (`index.html`)
 
