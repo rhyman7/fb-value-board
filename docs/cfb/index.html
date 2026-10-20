@@ -319,6 +319,13 @@ td .act { font-weight: 700; }
 /* matchup */
 .mx .back-link { display: inline-block; margin-bottom: 6px; font-size: 0.875rem; color: var(--text-dim); text-decoration: none; }
 .mx .back-link:hover { color: var(--text); }
+.mx .mx-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.mx .mx-actions .back-link { margin-bottom: 0; }
+.mx .print-btn { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; background: transparent; color: var(--text); border: 1px solid var(--border);
+  border-radius: 6px; font: inherit; font-size: 0.875rem; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.mx .print-btn:hover { background: var(--panel-alt); }
+.mx .print-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.mx .mx-print-head, .mx .mx-print-disc { display: none; }
 .mx .section-title { margin: 8px 0 6px; font: 800 1.625rem/1.1 var(--sans); font-stretch: 62%; }
 .mx .mx-sub { margin: 0 0 18px; font-size: 0.875rem; color: var(--text-dim); }
 .mx .mx-sub a { color: var(--text); }
@@ -401,6 +408,39 @@ td .act { font-weight: 700; }
   .mx .team-name-block h2 { font-size: 1.75rem; }
 }
 @media (max-width: 560px) { .mx .gauges { gap: 10px 16px; } }
+@media (max-width: 760px) { .mx .print-btn { height: 44px; } }
+
+/* Print matchup: both team cards side by side on one landscape page, in black on white
+   (like the matchup dashboards' Print matchup). Only applies while a matchup is open. */
+@media print {
+  @page matchup { size: letter landscape; margin: 0.35in; }
+  :root[data-mx] body { page: matchup; }
+  :root[data-mx] { --page: #ffffff; --ink: #111318; color-scheme: light; }
+  :root[data-mx] body { background: #ffffff; }
+  :root[data-mx] .bar, :root[data-mx] footer, :root[data-mx] #tip, :root[data-mx] .mx-actions { display: none !important; }
+  :root[data-mx] .wrap { max-width: none; padding: 0; }
+  #view-matchup.mx {
+    --bg: #ffffff; --panel: #ffffff; --panel-alt: #ffffff; --border: #b8bfcc; --hair: #d9dde5;
+    --text: #111318; --text-dim: #5b6472; --good: #15803d; --neg: #b91c1c; --track: #d9dde5;
+  }
+  #view-matchup .mx-print-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin: 0 0 8px; padding-bottom: 6px; border-bottom: 2px solid #111318; font-size: 0.8125rem; color: var(--text-dim); }
+  #view-matchup .mx-print-head b { font: 800 1.375rem/1.1 var(--sans); font-stretch: 62%; color: var(--text); }
+  #view-matchup .mx-print-disc { display: block; margin: 8px 0 0; font-size: 0.6875rem; color: var(--text-dim); }
+  #view-matchup .slab { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #view-matchup .team-name-block h2 { color: var(--tc-inkp); }
+  #view-matchup .g-arc { stroke: var(--tc-inkp); }
+  #view-matchup .stat-col { border: 1px solid var(--border); }
+  /* laid out wide at screen size, then scaled to the page (10.3in is about 989px) */
+  #view-matchup .cards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; width: 1720px; zoom: 0.55; }
+  #view-matchup .team-card { padding: 0; border: none; break-inside: avoid; page-break-inside: avoid; }
+  #view-matchup .stat-columns { grid-template-columns: minmax(0, 1fr) 170px minmax(0, 1fr) !important; gap: 10px; }
+  #view-matchup .center-col { flex-direction: column !important; }
+  #view-matchup .tables-row { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px; }
+  #view-matchup .table-block { overflow: visible; }
+  #view-matchup th, #view-matchup td { padding: 3px; }
+  #view-matchup td:first-child { overflow-wrap: anywhere; }
+  #view-matchup .mx-foot { max-width: none; font-size: 0.75rem; }
+}
 </style>
 <!--/PAGE-->
 </head>
@@ -1657,7 +1697,7 @@ const matchups = (() => {
 
   /* team colors, as on the dashboards: the abbreviation lettered in the secondary color
      on the primary (never black lettering), and a readable team color for text and dials */
-  const TC_PANEL = "#1b1d21", TC_DARK = "#111214";
+  const TC_PANEL = "#1b1d21", TC_DARK = "#111214", TC_PAPER = "#ffffff";
   const tcRgb = hex => { const h = hex.replace("#", ""); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
   const tcLum = hex => { const [r, g, b] = tcRgb(hex).map(c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
   const tcContrast = (a, b) => { const x = tcLum(a), y = tcLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
@@ -1695,12 +1735,19 @@ const matchups = (() => {
     }
     return "#ffffff";
   }
+  // the team color darkened until it reads on white (printed cards)
+  function tcPaper(hex) {
+    if (tcContrast(hex, TC_PAPER) >= 4.5) return hex;
+    const [h, s, l] = tcHsl(hex);
+    for (let step = 1; step <= 100; step++) { const x = l - step / 100; if (x < 0) break; const c = tcHex(h, s, x); if (tcContrast(c, TC_PAPER) >= 4.5) return c; }
+    return "#111318";
+  }
   const TCC = {};
   function teamVars(abbr) {
     if (!TCC[abbr]) {
       const [bg, sec] = (M.colors && M.colors[abbr]) || ["#3a3f47", "#f2f1ee"];
       const base = tcHsl(bg)[1] < 0.15 && sec && tcHsl(sec)[1] > 0.3 ? sec : bg;
-      TCC[abbr] = `--tc:${bg};--tc-on2:${tcLetter(sec, bg)};--tc-ink:${tcReadable(base, TC_PANEL, 4.6)}`;
+      TCC[abbr] = `--tc:${bg};--tc-on2:${tcLetter(sec, bg)};--tc-ink:${tcReadable(base, TC_PANEL, 4.6)};--tc-inkp:${tcPaper(base)}`;
     }
     return TCC[abbr];
   }
@@ -1903,9 +1950,14 @@ const matchups = (() => {
 
   function game(g) {
     const host = $("#view-matchup");
-    host.innerHTML = `<a class="back-link" href="#matchups">← This week's matchups</a>
+    const where = [dayName(g) + (g.time ? ", " + clock(g.time) + " ET" : ""), (g.detail && g.detail.stadium) || ""].filter(Boolean).join(". ");
+    host.innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups">← This week's matchups</a>
+        <button class="print-btn" id="mx-print" type="button">Print matchup</button></div>
+      <div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
-      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no injury report: a regular who missed his team's last game is treated as out."}</p>`;
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no injury report: a regular who missed his team's last game is treated as out."}</p>
+      <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p>`;
+    $("#mx-print").addEventListener("click", () => window.print());
   }
 
   return { board, game, find: id => ALL.find(g => g.id === id && g.week === WEEK) };
