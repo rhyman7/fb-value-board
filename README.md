@@ -216,6 +216,9 @@ check its first run.
 - Injuries other than quarterback changes and the offensive line are only seen
   through earlier lines and the current line. For upcoming games, game-day
   inactives are not known, so only injured reserve and Out/Doubtful count.
+  News the official sources have not caught up with yet (a starting quarterback
+  named midweek, a player ruled out before Friday's report) can be entered by hand
+  in `data/overrides.csv`, one row per player per game (see `nflmodel/overrides.py`).
 - Weather is wind only. The backtest uses wind recorded at the game, so the
   wind feature and the wind under will look better in testing than they will
   live, where a forecast is used.
@@ -237,6 +240,7 @@ nflmodel/
   features_ext.py         candidate features and the extended rating engine
   weather.py              wind forecasts for upcoming games, and the forecast log
   injuries.py             missing starters by position group (reports, rosters, snaps)
+  overrides.py            hand-entered starters and outs from data/overrides.csv
   players_data.py         player box scores from play-by-play
   players.py              player projections, backtest summary and board output
   ratings.py              team, quarterback and market-implied ratings

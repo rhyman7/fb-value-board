@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import archive, backtest, bets, config as C, data, extra, injuries, matchup, model, players, players_data, slate, weather
+from . import archive, backtest, bets, config as C, data, extra, injuries, matchup, model, overrides, players, players_data, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -30,6 +30,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     say = print if verbose else (lambda *a, **k: None)
     say("Loading data ...")
     games, tg, qb, stats = data.load_all(refresh=refresh, verbose=verbose, with_stats=True)
+    ov = overrides.load()                         # hand-entered starters and outs for upcoming games
+    games = overrides.apply_starters(games, ov, verbose=verbose)
     openers = data.load_openers(refresh=refresh)
     team_extra, qb_extra = extra.load_extra(refresh_current=refresh, verbose=verbose)
     games = weather.fill_wind(games, verbose=verbose)
@@ -49,7 +51,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
         avail = players.load_availability(refresh_current=refresh, verbose=verbose)
         rush = injuries.load_pass_rush(games, refresh_current=refresh, verbose=verbose)
-        ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games)
+        ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov)
         pproj = players.walk_forward(ptable, first_test=season)
         upcoming_ids = set(frame.loc[~frame.played & frame.spread_line.notna() & (frame.season == season), "game_id"])
         player_board = players.board(pproj, pinfo, upcoming_ids)

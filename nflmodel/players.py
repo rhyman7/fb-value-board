@@ -26,7 +26,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from . import config as C
+from . import config as C, overrides as overrides_mod
 from .data import _download, current_season
 
 SKILL = ("QB", "RB", "WR", "TE", "FB")
@@ -208,13 +208,17 @@ def _shrink(num, den, prior_mean, prior_n):
 
 def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.DataFrame,
           inj_groups: pd.DataFrame | None = None, pass_rush: pd.DataFrame | None = None,
-          games: pd.DataFrame | None = None) -> pd.DataFrame:
+          games: pd.DataFrame | None = None, overrides: pd.DataFrame | None = None) -> pd.DataFrame:
     """The full player-game table with every pre-game projection input.
+
+    overrides (optional) marks players out of upcoming games (see nflmodel/overrides.py).
 
     games (optional) supplies each game's official starting quarterbacks, used only as an
     outcome: whether the projected starter really started (see walk_forward)."""
     tg = team_games(frame, pg)
     rows = player_rows(tg, pg, avail, info)
+    if overrides is not None:
+        rows = overrides_mod.apply_out(rows, overrides)
     played_rows = rows[rows["played"] & (rows["active"] == 1)].copy()
 
     # ---- player usage shares, over games the player was active ---------------------

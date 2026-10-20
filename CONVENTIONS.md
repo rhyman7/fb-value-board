@@ -32,6 +32,13 @@ boards in detail; this file is the rules.
   concurrency group so they never push at once. Everything else goes through a PR.
 - If a change touches what those Actions build or where it lands, check their steps and
   wording still match the site structure.
+- **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
+  `starter` sets that game's starting quarterback for the game model, `out` takes a player
+  out of the player projections. Use it only for confirmed news the nflverse schedule or the
+  official injury report hasn't picked up yet, and put the source and date in `source`. Rows
+  only touch games not yet played, so they lapse by themselves; delete stale rows when you
+  see them. Edits go through a PR like any other change (the Actions never write this
+  file); after merging, run **Update board** so the board picks them up.
 
 ## Site structure
 
