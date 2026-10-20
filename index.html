@@ -1,15 +1,188 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>NFL Value Board</title>
-<!-- The board lives in docs/. This page only exists so the site opens on the
-     board even if GitHub Pages is set to serve the repository root. -->
-<meta http-equiv="refresh" content="0; url=docs/">
-<link rel="canonical" href="docs/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Value Boards</title>
+<meta name="description" content="Weekly value boards for college football and the NFL: every game priced by the model against the market, with player projections and a graded track record.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Weekly Value Boards">
+<meta property="og:title" content="Weekly Value Boards">
+<meta property="og:description" content="Weekly value boards for college football and the NFL.">
+<meta property="og:url" content="https://rhyman7.github.io/fb-value-board/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap">
+<style>
+  /* Same tokens, type and layout as the Weekly Gridiron Board (rhyman7.github.io). */
+  :root {
+    --bg: #131416;
+    --panel: #1b1d21;
+    --panel-alt: #24272c;
+    --border: #353a42;
+    --text: #f2f1ee;
+    --text-dim: #9da2ab;
+    --mute: #6b717c;
+    --accent: #f2f1ee;
+    --radius: 8px;
+    --font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    background: var(--bg);
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 48px 28px 56px; }
+
+  /* ---------- Heading ---------- */
+  .hub-head { margin-bottom: 28px; text-align: center; }
+  .hub-title { margin: 0; font-size: 4.5rem; line-height: 0.95; font-stretch: 62%; font-weight: 800; }
+  .hub-sub { margin: 10px auto 0; max-width: 560px; color: var(--text-dim); }
+
+  /* ---------- League panels ---------- */
+  .leagues { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .league-col { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .league-col .league { width: 100%; flex: 1; }
+  .league-logo { display: block; height: 160px; width: auto; }
+  .league {
+    display: flex;
+    flex-direction: column;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .league-main {
+    display: block;
+    padding: 24px 24px 20px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .league.cfb { --hover: #107fcb; }  /* NCAA logo ring blue */
+  .league.nfl { --hover: #003a73; }  /* NFL shield blue */
+  .league-main:hover { background: var(--hover); }
+  .league-main:hover .league-tag,
+  .league-main:hover .league-desc { color: rgba(255, 255, 255, 0.85); }
+  .league-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+  .league-name {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 6px 0 8px;
+    font-size: 2.75rem;
+    line-height: 0.95;
+    font-stretch: 62%;
+    font-weight: 800;
+  }
+  .league-arrow { font-size: 1.75rem; color: var(--text-dim); transition: transform 0.15s ease, color 0.15s ease; }
+  .league-main:hover .league-arrow { transform: translateX(4px); color: #fff; }
+  .league-desc { margin: 0; color: var(--text-dim); }
+
+  .league-links { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); margin-top: auto; }
+  .league-links li + li { border-top: 1px solid var(--border); }
+  .league-links a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 44px;
+    padding: 0 24px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+  .league-links a::after { content: "\2192"; color: var(--mute); }
+  .league-links a:hover { background: var(--hover); color: #fff; }
+  .league-links a:hover::after { color: #fff; }
+
+  footer { padding: 20px 28px 28px; text-align: center; font-size: 0.78rem; color: var(--text-dim); }
+
+  @media (prefers-reduced-motion: reduce) { .league-arrow { transition: none; } }
+
+  @media (max-width: 820px) {
+    main { padding: 32px 16px 40px; }
+    .hub-title { font-size: 3.75rem; }
+    .leagues { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+    .league-logo { height: 120px; }
+  }
+  @media (max-width: 480px) {
+    .hub-title { font-size: 3rem; }
+    .league-main { padding: 20px 16px 16px; }
+    .league-links a { padding: 0 16px; }
+  }
+</style>
 </head>
 <body>
-<p><a href="docs/">Open the NFL Value Board</a></p>
-<script>location.replace("docs/" + location.hash);</script>
+<script>
+  // This page used to forward straight to the NFL board. Keep old links such
+  // as /fb-value-board/#games working by sending any hashed URL there.
+  if (location.hash) location.replace("docs/" + location.hash);
+</script>
+<main>
+  <section class="hub-head">
+    <h1 class="hub-title">Weekly Value Boards</h1>
+    <p class="hub-sub">Every game this week priced by the model against the market: spreads, totals and moneylines with expected value, player projections, and a graded record of how it has done.</p>
+  </section>
+
+  <div class="leagues">
+    <div class="league-col">
+    <img class="league-logo" src="img/ncaa.png" width="232" height="320" alt="NCAA">
+    <section class="league cfb">
+      <a class="league-main" href="docs/cfb/">
+        <span class="league-tag">College Football</span>
+        <span class="league-name">CFB Value Board <span class="league-arrow" aria-hidden="true">&rarr;</span></span>
+        <p class="league-desc">Every FBS game this week, with the model's spread, total and win probability next to the market's and the best price if one clears break-even.</p>
+      </a>
+      <ul class="league-links">
+        <li><a href="docs/cfb/#games">Games</a></li>
+        <li><a href="docs/cfb/#players">Players</a></li>
+        <li><a href="docs/cfb/#history">Past Weeks</a></li>
+        <li><a href="docs/cfb/#ratings">Team Ratings</a></li>
+        <li><a href="docs/cfb/#model">Model Record</a></li>
+      </ul>
+    </section>
+    </div>
+
+    <div class="league-col">
+    <img class="league-logo" src="img/nfl.png" width="242" height="320" alt="NFL">
+    <section class="league nfl">
+      <a class="league-main" href="docs/">
+        <span class="league-tag">NFL</span>
+        <span class="league-name">NFL Value Board <span class="league-arrow" aria-hidden="true">&rarr;</span></span>
+        <p class="league-desc">Every game this week, with the model's spread, total and win probability next to the market's and the best price if one clears break-even.</p>
+      </a>
+      <ul class="league-links">
+        <li><a href="docs/#games">Games</a></li>
+        <li><a href="docs/#players">Players</a></li>
+        <li><a href="docs/#history">Past Weeks</a></li>
+        <li><a href="docs/#ratings">Team Ratings</a></li>
+        <li><a href="docs/#model">Model Record</a></li>
+      </ul>
+    </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>Lines and prices: ESPN. <a href="https://open-meteo.com/" rel="noopener">Weather data by Open-Meteo.com</a>.</p>
+  <p>For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p>
+</footer>
 </body>
 </html>
