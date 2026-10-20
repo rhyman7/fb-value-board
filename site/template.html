@@ -325,7 +325,9 @@ td .act { font-weight: 700; }
   border-radius: 6px; font: inherit; font-size: 0.875rem; font-weight: 500; white-space: nowrap; cursor: pointer; }
 .mx .print-btn:hover { background: var(--panel-alt); }
 .mx .print-btn:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
-.mx .mx-print-head, .mx .mx-print-disc { display: none; }
+.mx .mx-print-head, .mx .mx-print-disc, .mx .mx-print-all { display: none; }
+.mx .print-btn:disabled { opacity: 0.5; cursor: default; }
+.mx .week-filters .print-btn { height: 36px; }
 .mx .section-title { margin: 8px 0 6px; font: 800 1.625rem/1.1 var(--sans); font-stretch: 62%; }
 .mx .mx-sub { margin: 0 0 18px; font-size: 0.875rem; color: var(--text-dim); }
 .mx .mx-sub a { color: var(--text); }
@@ -412,33 +414,40 @@ td .act { font-weight: 700; }
 
 /* Print matchup: both team cards side by side on one landscape page, in black on white
    (like the matchup dashboards' Print matchup). Only applies while a matchup is open; the
-   landscape page size is the #mx-page style below, switched on by route(). */
+   landscape page size is the #mx-page style below, switched on by route(). Print all on the
+   board prints every game the same way, one per page. */
 @media print {
   :root[data-mx] { --page: #ffffff; --ink: #111318; color-scheme: light; }
   :root[data-mx] body { background: #ffffff; }
   :root[data-mx] .bar, :root[data-mx] footer, :root[data-mx] #tip, :root[data-mx] .mx-actions { display: none !important; }
   :root[data-mx] .wrap { max-width: none; padding: 0; }
-  #view-matchup.mx {
+  .mx-game {
     --bg: #ffffff; --panel: #ffffff; --panel-alt: #ffffff; --border: #b8bfcc; --hair: #d9dde5;
     --text: #111318; --text-dim: #5b6472; --good: #15803d; --neg: #b91c1c; --track: #d9dde5;
+    color: var(--text);
   }
-  #view-matchup .mx-print-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin: 0 0 8px; padding-bottom: 6px; border-bottom: 2px solid #111318; font-size: 0.8125rem; color: var(--text-dim); }
-  #view-matchup .mx-print-head b { font: 800 1.375rem/1.1 var(--sans); font-stretch: 62%; color: var(--text); }
-  #view-matchup .mx-print-disc { display: block; margin: 8px 0 0; font-size: 0.6875rem; color: var(--text-dim); }
-  #view-matchup .slab { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  #view-matchup .team-name-block h2 { color: var(--tc-inkp); }
-  #view-matchup .g-arc { stroke: var(--tc-inkp); }
-  #view-matchup .stat-col { border: 1px solid var(--border); }
+  .mx-game .mx-print-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin: 0 0 8px; padding-bottom: 6px; border-bottom: 2px solid #111318; font-size: 0.8125rem; color: var(--text-dim); }
+  .mx-game .mx-print-head b { font: 800 1.375rem/1.1 var(--sans); font-stretch: 62%; color: var(--text); }
+  .mx-game .mx-print-disc { display: block; margin: 8px 0 0; font-size: 0.6875rem; color: var(--text-dim); }
+  .mx-game .slab { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .mx-game .team-name-block h2 { color: var(--tc-inkp); }
+  .mx-game .g-arc { stroke: var(--tc-inkp); }
+  .mx-game .stat-col { border: 1px solid var(--border); }
   /* laid out wide at screen size, then scaled to the page (10.3in is about 989px) */
-  #view-matchup .cards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; width: 1720px; zoom: 0.55; }
-  #view-matchup .team-card { padding: 0; border: none; break-inside: avoid; page-break-inside: avoid; }
-  #view-matchup .stat-columns { grid-template-columns: minmax(0, 1fr) 170px minmax(0, 1fr) !important; gap: 10px; }
-  #view-matchup .center-col { flex-direction: column !important; }
-  #view-matchup .tables-row { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px; }
-  #view-matchup .table-block { overflow: visible; }
-  #view-matchup th, #view-matchup td { padding: 3px; }
-  #view-matchup td:first-child { overflow-wrap: anywhere; }
-  #view-matchup .mx-foot { max-width: none; font-size: 0.75rem; }
+  .mx-game .cards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; width: 1720px; zoom: 0.55; }
+  .mx-game .team-card { padding: 0; border: none; break-inside: avoid; page-break-inside: avoid; }
+  .mx-game .stat-columns { grid-template-columns: minmax(0, 1fr) 170px minmax(0, 1fr) !important; gap: 10px; }
+  .mx-game .center-col { flex-direction: column !important; }
+  .mx-game .tables-row { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 12px; }
+  .mx-game .table-block { overflow: visible; }
+  .mx-game th, .mx-game td { padding: 3px; }
+  .mx-game td:first-child { overflow-wrap: anywhere; }
+  .mx-game .mx-foot { max-width: none; font-size: 0.75rem; }
+  /* Print all: hide the board, print each game on its own page */
+  :root.mx-printing #view-matchups > :not(#mx-print-all) { display: none !important; }
+  :root.mx-printing #mx-print-all { display: block; }
+  .mx-print-all .mx-game { break-after: page; page-break-after: always; break-inside: avoid; page-break-inside: avoid; }
+  .mx-print-all .mx-game:last-child { break-after: auto; page-break-after: auto; }
 }
 </style>
 <!-- landscape paper for Print matchup: route() sets media="print" only while a matchup is open.
@@ -1779,6 +1788,8 @@ const matchups = (() => {
 
   /* ---- the board ---- */
   const st = { q: "", conf: "" };
+  const hit = g => (!st.q || [g.away, g.home, g.away_name, g.home_name, nameOf(g, "away"), nameOf(g, "home")].some(x => String(x || "").toLowerCase().includes(st.q)))
+    && (!st.conf || confOf(g.away) === st.conf || confOf(g.home) === st.conf);
   let wired = false;
   function board() {
     const host = $("#view-matchups"), all = games();
@@ -1790,17 +1801,20 @@ const matchups = (() => {
           <div class="week-filters" role="group" aria-label="Filter games">
             <input type="search" id="mx-q" placeholder="Find a team" aria-label="Find a team" autocomplete="off">
             ${confs.length ? `<select id="mx-conf" aria-label="Conference"><option value="">All conferences</option>${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select>` : ""}
+            <button class="print-btn" id="mx-print-all-btn" type="button">Print all</button>
           </div>
         </div>
-        <div id="mx-board"></div>`;
+        <div id="mx-board"></div>
+        <div id="mx-print-all" class="mx-print-all"></div>`;
+      $("#mx-print-all-btn").addEventListener("click", printAll);
       $("#mx-q").addEventListener("input", e => { st.q = e.target.value.trim().toLowerCase(); draw(); });
       if ($("#mx-conf")) $("#mx-conf").addEventListener("change", e => { st.conf = e.target.value; draw(); });
     }
     draw();
     function draw() {
-      const hit = g => (!st.q || [g.away, g.home, g.away_name, g.home_name, nameOf(g, "away"), nameOf(g, "home")].some(x => String(x || "").toLowerCase().includes(st.q)))
-        && (!st.conf || confOf(g.away) === st.conf || confOf(g.home) === st.conf);
       const shown = all.filter(hit);
+      $("#mx-print-all-btn").textContent = shown.length < all.length ? `Print ${shown.length} shown` : "Print all";
+      $("#mx-print-all-btn").disabled = !shown.length;
       $("#mx-sub").textContent = `${all.length} games${shown.length < all.length ? ", " + shown.length + " shown" : ""}. Projections from the value model, updated ${M.generated}. Implied scores are from the betting line. Pick a game for each team's projected stats.`;
       if (!shown.length) { $("#mx-board").innerHTML = `<div class="empty-note">No games match.</div>`; return; }
       const groups = [];
@@ -1916,17 +1930,36 @@ const matchups = (() => {
     </div>`;
   }
 
-  function game(g) {
-    const host = $("#view-matchup");
+  // one game: heading (printed only), both team cards, the note and the disclaimer (printed only)
+  function gameBlock(g) {
     const where = [dayName(g) + (g.time ? ", " + clock(g.time) + " ET" : ""), (g.detail && g.detail.stadium) || ""].filter(Boolean).join(". ");
-    host.innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups">← This week's matchups</a>
-        <button class="print-btn" id="mx-print" type="button">Print matchup</button></div>
-      <div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
+    return `<div class="mx-game"><div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
       <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no injury report: a regular who missed his team's last game is treated as out."}</p>
-      <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p>`;
+      <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p></div>`;
+  }
+  function game(g) {
+    $("#view-matchup").innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups">← This week's matchups</a>
+        <button class="print-btn" id="mx-print" type="button">Print matchup</button></div>${gameBlock(g)}`;
     $("#mx-print").addEventListener("click", () => window.print());
   }
+
+  /* Print all: every game on the board (as filtered), one landscape page each. The games are
+     built into #mx-print-all only for the print, and html.mx-printing shows them instead of the board. */
+  function printAll() {
+    const list = games().filter(hit);
+    if (!list.length) return;
+    $("#mx-print-all").innerHTML = list.map(gameBlock).join("");
+    document.documentElement.classList.add("mx-printing");
+    $("#mx-page").media = "print";
+    window.print();
+  }
+  window.addEventListener("afterprint", () => {
+    if (!document.documentElement.classList.contains("mx-printing")) return;
+    document.documentElement.classList.remove("mx-printing");
+    $("#mx-print-all").innerHTML = "";
+    if (!/^#matchups\//.test(location.hash)) $("#mx-page").media = "not all";
+  });
 
   return { board, game, find: id => ALL.find(g => g.id === id && g.week === WEEK) };
 })();

@@ -61,6 +61,13 @@ boards in detail; this file is the rules.
   (the landscape `@page` lives in the `#mx-page` style, which `route()` turns on only for a
   matchup). Don't use a named `@page` for this: Chrome prints a blank sheet before and after
   a named page. Other sections print as before.
+- The matchups board (`#matchups`) has a **Print all** button that prints every game on the
+  board, one landscape page per game, in the same layout as Print matchup. It follows the
+  board's team/conference filter (the label becomes "Print N shown"). The games are built
+  into `#mx-print-all` only for the print (`html.mx-printing` shows them in place of the
+  board) and cleared on `afterprint`. Both prints share `gameBlock()` and the `.mx-game`
+  print rules, so a change to one game's printed layout applies to both. Ctrl+P on the board
+  without the button still prints the board list.
 
 ## Checks before merging
 
