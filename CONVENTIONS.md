@@ -54,6 +54,11 @@ boards in detail; this file is the rules.
   game's projections, not season stats. While it is open, `data-mx` on `<html>` switches the
   page tokens to graphite; every other section keeps the board's own look. Its styles are
   all under `.mx`. If the dashboards' week board or team card changes look, bring these along.
+- Each matchup (`#matchups/<game id>`) has a **Print matchup** button, like the dashboards'.
+  It prints both team cards side by side on one landscape letter page in black on white, with
+  a printed heading (week, teams, kickoff, stadium, line) and the disclaimer. The print rules
+  are the `@media print` block after the `.mx` styles and only apply while a matchup is open
+  (the landscape page is the named `@page matchup`); other sections print as before.
 
 ## Checks before merging
 
