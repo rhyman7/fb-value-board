@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <!--PAGE-->
 <title>College Football Value Board</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..800&family=Big+Shoulders+Display:wght@500..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Big+Shoulders+Display:wght@500..900&display=swap">
 <style>
 /* Layout: one left-aligned column. The single loud element is the slate drawn as a
    football field: turf, chalk yard lines at the key numbers, the market as the chalk
@@ -270,6 +270,137 @@ td .act { font-weight: 700; }
 #hist-players .stick { position: sticky; left: 0; z-index: 1; background: var(--page); } td .vs { color: var(--ink-3); font-size: 12px; margin-left: 3px; }
 .empty { padding: 40px 0; font-size: 17px; color: var(--ink-2); }
 @media (prefers-reduced-motion: no-preference) { .seg button, nav.sections a, a.bug { transition: background-color .12s, color .12s, border-color .12s; } }
+
+/* ---- This week's matchups: drawn in the matchup dashboards' look (graphite, Archivo,
+   team-color blocks). While one of these views is open the whole page switches to the
+   graphite tokens (data-mx on <html>), so the top bar matches. ---- */
+:root[data-mx] {
+  --page: #131416;  --surface: #1b1d21;  --raised: #24272c;
+  --ink: #f2f1ee;   --ink-2: #c3c6cc;    --ink-3: #9da2ab;
+  --grid: rgba(53, 58, 66, 0.55);  --axis: #353a42;  --rule: #353a42;
+  --link: #f2f1ee;  --focus: #f2f1ee;
+  color-scheme: dark;
+}
+.mx {
+  --bg: #131416; --panel: #1b1d21; --panel-alt: #24272c; --border: #353a42; --hair: rgba(53, 58, 66, 0.55);
+  --text: #f2f1ee; --text-dim: #9da2ab; --good: #4ade80; --neg: #f87171; --track: #353a42; --radius: 8px;
+  --tc: #3a3f47; --tc-on2: #f2f1ee; --tc-ink: #f2f1ee;
+  display: block; padding-top: 0; font-family: var(--sans); font-size: 0.9375rem; line-height: 1.4; color: var(--text); font-variant-numeric: tabular-nums;
+}
+.mx a { color: inherit; }
+.mx h2, .mx h3, .mx h4 { font-family: var(--sans); letter-spacing: 0; }
+.mx .slab { display: inline-grid; place-items: center; flex: none; width: 52px; height: 32px; border-radius: 5px; background: var(--tc); color: var(--tc-on2);
+  font-size: 1.0625rem; line-height: 1; font-stretch: 62%; font-weight: 800; letter-spacing: 0.02em; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18); }
+.mx .slab.long { font-size: 0.875rem; letter-spacing: 0; }
+/* week board */
+.mx .week-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 24px; flex-wrap: wrap; margin-bottom: 28px; }
+.mx .week-title { margin: 0; font: 800 4.5rem/0.95 var(--sans); font-stretch: 62%; }
+.mx .week-sub { margin: 10px 0 0; color: var(--text-dim); max-width: 64ch; }
+.mx .week-filters { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mx .week-filters input, .mx .week-filters select { height: 36px; padding: 0 12px; background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 6px; font: inherit; font-size: 0.875rem; }
+.mx .week-filters input { width: 180px; }
+.mx .week-filters input::placeholder { color: var(--text-dim); }
+.mx .board-cols, .mx .game-row { display: grid; grid-template-columns: minmax(0, 1.35fr) 22px minmax(0, 1.35fr) 124px 70px 148px minmax(0, 1.3fr); column-gap: 14px; align-items: center; }
+.mx .board-cols { padding: 0 10px; font-size: 0.78rem; color: var(--text-dim); }
+.mx section.day-group { display: block; }
+.mx .day-label { display: flex; align-items: baseline; gap: 10px; margin: 0; padding: 28px 0 8px; font: 700 1.1875rem/1.3 var(--sans); font-stretch: 68%; }
+.mx .day-count { margin-left: auto; font-size: 0.78rem; font-weight: 400; font-stretch: 100%; color: var(--text-dim); }
+.mx .game-row { padding: 11px 10px; border-top: 1px solid var(--border); color: var(--text); text-decoration: none; }
+.mx .game-row:hover { background: var(--panel); }
+.mx .gr-team { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mx .gr-tx { min-width: 0; flex: 1; }
+.mx .gr-name { font-size: 1.25rem; line-height: 1.1; font-stretch: 68%; font-weight: 700; text-wrap: balance; }
+.mx .gr-sub { font-size: 0.78rem; color: var(--text-dim); }
+.mx .gr-at { text-align: center; font-size: 0.78rem; color: var(--text-dim); }
+.mx .gr-big { font-size: 1.25rem; line-height: 1.15; font-stretch: 68%; font-weight: 700; }
+.mx .gr-implied, .mx .gr-where { min-width: 0; font-size: 0.875rem; }
+.mx .ou-pre, .mx .imp-pre { display: none; }
+.mx .empty-note { padding: 20px; text-align: center; font-size: 0.875rem; color: var(--text-dim); }
+/* matchup */
+.mx .back-link { display: inline-block; margin-bottom: 6px; font-size: 0.875rem; color: var(--text-dim); text-decoration: none; }
+.mx .back-link:hover { color: var(--text); }
+.mx .section-title { margin: 8px 0 6px; font: 800 1.625rem/1.1 var(--sans); font-stretch: 62%; }
+.mx .mx-sub { margin: 0 0 18px; font-size: 0.875rem; color: var(--text-dim); }
+.mx .mx-sub a { color: var(--text); }
+.mx .cards { display: flex; flex-direction: column; gap: 20px; }
+.mx .team-card { padding: 22px 24px 24px; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); }
+.mx .team-card-header { display: flex; align-items: center; gap: 16px 28px; flex-wrap: wrap; margin-bottom: 18px; }
+.mx .team-name-block { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; min-width: 0; margin-right: auto; }
+.mx .team-name-block h2 { margin: 0; font: 800 2rem/1 var(--sans); font-stretch: 62%; color: var(--tc-ink); }
+.mx .record { font-size: 1.375rem; line-height: 1; font-stretch: 68%; font-weight: 700; }
+.mx .record .conf { margin-left: 8px; font-size: 0.875rem; font-stretch: 100%; font-weight: 400; color: var(--text-dim); }
+.mx .rating-badges { display: flex; gap: 28px; flex-wrap: wrap; }
+.mx .badge { display: flex; flex-direction: column; gap: 1px; }
+.mx .badge .label { font-size: 0.78rem; color: var(--text-dim); }
+.mx .badge .value { font-size: 1.1875rem; font-stretch: 68%; font-weight: 700; }
+.mx .pos { color: var(--good); } .mx .neg { color: var(--neg); }
+.mx .stat-columns { display: grid; grid-template-columns: minmax(0, 1fr) 200px minmax(0, 1fr); gap: 14px; margin-bottom: 14px; }
+.mx .stat-col { padding: 16px; background: var(--panel-alt); border-radius: 6px; }
+.mx .stat-col h3 { margin: 0 0 10px; font-size: 0.9375rem; font-weight: 600; text-align: center; }
+.mx .gauges { display: flex; gap: 10px 40px; justify-content: center; flex-wrap: wrap; }
+.mx .gauge-block { width: 120px; text-align: center; }
+.mx .g-track { stroke: var(--track); } .mx .g-arc { stroke: var(--tc-ink); } .mx .g-needle { stroke: var(--text); } .mx .g-hub { fill: var(--text); }
+.mx .gauge-value { font-size: 1.625rem; line-height: 1.1; font-stretch: 62%; font-weight: 800; }
+.mx .gauge-label, .mx .gauge-rank { font-size: 0.78rem; color: var(--text-dim); }
+.mx .mini-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; }
+.mx .mini-stat .val { font-size: 1.1875rem; font-stretch: 68%; font-weight: 700; }
+.mx .mini-stat .lbl, .mx .mini-stat .avg { font-size: 0.78rem; color: var(--text-dim); }
+.mx .center-col { display: flex; flex-direction: column; justify-content: center; gap: 14px; text-align: center; }
+.mx .rank-line .lbl { font-size: 0.78rem; color: var(--text-dim); }
+.mx .rank-line .val { font-size: 1.375rem; font-stretch: 68%; font-weight: 700; }
+.mx .rank-line .val span { font-size: 0.875rem; font-stretch: 100%; font-weight: 500; color: var(--text-dim); }
+.mx .mx-note { margin: 0 0 20px; font-size: 0.8125rem; color: var(--text-dim); }
+.mx .mx-note b { color: var(--text); font-weight: 600; }
+.mx .tables-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.mx .table-block { min-width: 0; overflow-x: auto; }
+.mx .table-block h4 { margin: 0 0 4px 8px; font-size: 0.9375rem; font-weight: 600; }
+.mx table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.mx th, .mx td { padding: 7px 6px; text-align: left; white-space: nowrap; vertical-align: middle; }
+.mx th { color: var(--text-dim); font-size: 0.78rem; font-weight: 500; border-bottom: 1px solid var(--border); }
+.mx td { border-bottom: 1px solid var(--hair); }
+.mx tbody tr:last-child td { border-bottom: 0; }
+.mx th.num, .mx td.num { text-align: right; }
+.mx th:first-child, .mx td:first-child { padding-left: 8px; }
+.mx td:first-child { white-space: normal; }
+.mx .ptag { margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; }
+.mx .ppos { margin-left: 6px; font-size: 0.75rem; color: var(--text-dim); }
+.mx .out-line { margin: 16px 0 0; font-size: 0.8125rem; color: var(--text-dim); }
+.mx .out-line b { color: var(--text); font-weight: 600; }
+.mx .mx-foot { margin: 18px 0 0; font-size: 0.8125rem; color: var(--text-dim); max-width: 80ch; }
+@media (max-width: 900px) {
+  .mx .stat-columns, .mx .tables-row { grid-template-columns: minmax(0, 1fr); }
+  .mx .center-col { flex-direction: row; justify-content: space-around; }
+}
+@media (max-width: 820px) {
+  .mx .week-title { font-size: 3.75rem; }
+  .mx .week-filters { width: 100%; }
+  .mx .week-filters input, .mx .week-filters select { flex: 1 1 140px; width: auto; height: 44px; min-width: 0; }
+  .mx .rating-badges { gap: 22px; }
+}
+@media (max-width: 760px) {
+  .mx .board-cols { display: none; }
+  .mx .game-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "away spread" "home total" "impl impl" "where where"; gap: 6px 12px; padding: 12px 0; }
+  .mx .game-row:hover { background: none; }
+  .mx .gr-team.away { grid-area: away; } .mx .gr-team.home { grid-area: home; }
+  .mx .gr-at { display: none; }
+  .mx .gr-spread { grid-area: spread; text-align: right; }
+  .mx .gr-total { grid-area: total; text-align: right; }
+  .mx .gr-total .gr-big { font-size: 1rem; color: var(--text-dim); }
+  .mx .gr-implied { grid-area: impl; margin-top: 2px; font-size: 0.78rem; color: var(--text-dim); }
+  .mx .gr-where { grid-area: where; font-size: 0.78rem; color: var(--text-dim); }
+  .mx .gr-where > div { display: inline; }
+  .mx .gr-where > div + div::before { content: ", "; }
+  .mx .ou-pre, .mx .imp-pre { display: inline; }
+  .mx .gr-team { gap: 10px; }
+  .mx .gr-name { font-size: 1.1875rem; }
+  .mx .slab { width: 44px; height: 28px; font-size: 0.9375rem; }
+  .mx .slab.long { font-size: 0.75rem; }
+}
+@media (max-width: 700px) {
+  .mx .team-card { padding: 18px 16px 20px; }
+  .mx .team-name-block h2 { font-size: 1.75rem; }
+}
+@media (max-width: 560px) { .mx .gauges { gap: 10px 16px; } }
 </style>
 <!--/PAGE-->
 </head>
@@ -280,6 +411,7 @@ td .act { font-weight: 700; }
     <a class="brand" href="#games"><i aria-hidden="true"></i>College Value Board</a>
     <nav class="sections" aria-label="Sections">
       <ul>
+        <li><a href="#matchups" data-view="matchups">This Week's Matchups</a></li>
         <li><a href="#games" data-view="games">Games</a></li>
         <li><a href="#players" data-view="players">Players</a></li>
         <li><a href="#history" data-view="history">Past weeks</a></li>
@@ -342,6 +474,9 @@ td .act { font-weight: 700; }
 
     <!-- ============ one game ============ -->
     <div class="view" id="view-game" hidden></div>
+    <!-- ============ this week's matchups (dashboard look) ============ -->
+    <div class="view mx" id="view-matchups" hidden></div>
+    <div class="view mx" id="view-matchup" hidden></div>
 
     <!-- ============ players ============ -->
     <div class="view" id="view-players" hidden>
@@ -1503,20 +1638,304 @@ const historyView = (function () {
   return { open };
 })();
 
+
+/* ---------------- this week's matchups (in the matchup dashboards' look) ----------------
+   A board of this week's games, one row per game, and for each game the two team cards
+   with this game's projections: team volume and yards, and every player's projected line. */
+const matchups = (() => {
+  const LEAGUE = "cfb";
+  const WEEK = DATA.slate.weeks[0];
+  const RT = Object.fromEntries((DATA.ratings || []).map(r => [r.team, r]));
+  const PL = (DATA.players && DATA.players.players) || [];
+  const TP = {};
+  ((DATA.players && DATA.players.teams) || []).forEach(t => { TP[t.game + "|" + t.team] = t; });
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  const n0 = x => x == null || isNaN(x) ? "–" : Math.round(x).toString();
+  const n1 = x => x == null || isNaN(x) ? "–" : (Math.round(x * 10) / 10).toFixed(1);
+  const MINUS = "−";
+  const sgn = (x, d = 1) => x == null ? "–" : x === 0 ? "0" : (x > 0 ? "+" : MINUS) + Math.abs(x).toFixed(d);
+
+  /* team colors, as on the dashboards: the abbreviation lettered in the secondary color
+     on the primary (never black lettering), and a readable team color for text and dials */
+  const TC_PANEL = "#1b1d21", TC_DARK = "#111214";
+  const tcRgb = hex => { const h = hex.replace("#", ""); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
+  const tcLum = hex => { const [r, g, b] = tcRgb(hex).map(c => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4))); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const tcContrast = (a, b) => { const x = tcLum(a), y = tcLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  function tcHsl(hex) {
+    const [r, g, b] = tcRgb(hex), max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2, d = max - min;
+    if (!d) return [0, 0, l];
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    const h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return [h / 6, s, l];
+  }
+  function tcHex(h, s, l) {
+    const f = (p, q, t) => { t = (t + 1) % 1; return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p; };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+    const rgb = s ? [f(p, q, h + 1 / 3), f(p, q, h), f(p, q, h - 1 / 3)] : [l, l, l];
+    return "#" + rgb.map(v => Math.round(v * 255).toString(16).padStart(2, "0")).join("");
+  }
+  function tcReadable(hex, bg, floor) {
+    if (tcContrast(hex, bg) >= floor) return hex;
+    const [h, s, l] = tcHsl(hex);
+    for (let step = 1; step <= 100; step++) { const x = l + step / 100; if (x > 1) break; const c = tcHex(h, s, x); if (tcContrast(c, bg) >= floor) return c; }
+    return "#ffffff";
+  }
+  function tcLetter(sec, bg) {
+    if (!sec) return "#ffffff";
+    const [h, s, l] = tcHsl(sec), rgb = tcRgb(sec);
+    const neutral = Math.max(...rgb) - Math.min(...rgb) < 0.1;
+    if (neutral && l < 0.3) return "#ffffff";
+    const floor = !neutral || l > 0.85 ? 3 : 4.5;
+    if (tcContrast(sec, bg) >= floor) return sec;
+    if (neutral || tcLum(sec) <= tcLum(bg)) return "#ffffff";
+    for (let step = 1; step <= 100; step++) {
+      const x = l + step / 100; if (x > 1) break;
+      const c = tcHex(h, s, x); if (tcContrast(c, bg) < floor) continue;
+      return l >= 0.25 && l <= 0.8 && x > 0.9 ? "#ffffff" : c;
+    }
+    return "#ffffff";
+  }
+  const TCC = {};
+  function teamVars(abbr) {
+    if (!TCC[abbr]) {
+      const [bg, sec] = (M.colors && M.colors[abbr]) || ["#3a3f47", "#f2f1ee"];
+      const base = tcHsl(bg)[1] < 0.15 && sec && tcHsl(sec)[1] > 0.3 ? sec : bg;
+      TCC[abbr] = `--tc:${bg};--tc-on2:${tcLetter(sec, bg)};--tc-ink:${tcReadable(base, TC_PANEL, 4.6)}`;
+    }
+    return TCC[abbr];
+  }
+  const slab = abbr => `<span class="slab${String(abbr).length > 4 ? " long" : ""}" style="${teamVars(abbr)}">${esc(abbr)}</span>`;
+
+  // names: the school on the college board, the full team name in the NFL
+  const nameOf = (g, s) => { const r = RT[g[s]]; return (r && (r.school || r.name)) || g[s + "_name"] || g[s]; };
+  const confOf = abbr => (RT[abbr] && RT[abbr].conference) || "";
+  const other = s => s === "away" ? "home" : "away";
+  // spreads and margins are from the home side: positive = home favoured
+  const ptsFor = (p, s) => s === "home" ? (p.total + p.margin) / 2 : (p.total - p.margin) / 2;
+  const mkt = g => ({ total: g.market.total, margin: g.market.spread });
+  const lineFor = (g, s) => { const v = s === "home" ? -g.market.spread : g.market.spread; return v === 0 ? "PK" : sgn(v); };
+  const winFor = (g, s) => s === "home" ? g.win.adj : 1 - g.win.adj;
+  function spreadText(g) {
+    const sp = g.market.spread;
+    if (sp == null) return "—";
+    if (sp === 0) return "Pick'em";
+    return (sp > 0 ? g.home : g.away) + " " + MINUS + Math.abs(sp);
+  }
+
+  // kickoff: the slate gives an Eastern date ("Tue Oct 20") and 24-hour time
+  const MON = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+  const DAYS = { Sun: "Sunday", Mon: "Monday", Tue: "Tuesday", Wed: "Wednesday", Thu: "Thursday", Fri: "Friday", Sat: "Saturday" };
+  const order = g => { const [, mo, d] = (g.date || "").split(" "); const m = MON[mo] ?? 0; return ((m < 6 ? 12 : 0) + m) * 100 + (+d || 0) + (g.time || "").replace(":", "") / 10000; };
+  const clock = t => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${(h + 11) % 12 + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
+  const dayName = g => { const [w, mo, d] = (g.date || "").split(" "); return `${DAYS[w] || w}, ${mo} ${d}`; };
+
+  const games = () => ALL.filter(g => g.week === WEEK).slice().sort((a, b) => order(a) - order(b) || a.id.localeCompare(b.id));
+  const playersOf = (g, abbr) => PL.filter(p => p.game === g.id && p.team === abbr && String(p.name).trim() !== "Team");
+  const sum = (ps, k) => ps.reduce((a, p) => a + (p.proj[k] || 0), 0);
+
+  // projected yards for every team this week, for the dials and their ranks
+  let WK = null;
+  function weekTable() {
+    if (WK) return WK;
+    const rows = [];
+    games().forEach(g => ["away", "home"].forEach(s => {
+      const ps = playersOf(g, g[s]);
+      rows.push({ key: g.id + "|" + g[s], pass: sum(ps, "pass_yds"), rush: sum(ps, "rush_yds"), pts: ptsFor(g.proj, s),
+        att: (TP[g.id + "|" + g[s]] || {}).pass_att, car: (TP[g.id + "|" + g[s]] || {}).carries });
+    }));
+    const byKey = Object.fromEntries(rows.map(r => [r.key, r]));
+    const rank = (k, dir) => { const v = rows.map(r => r[k]).sort((a, b) => (b - a) * dir); return x => v.indexOf(x) + 1; };
+    const avg = k => { const v = rows.map(r => r[k]).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+    const top = k => Math.ceil(Math.max(...rows.map(r => r[k])) * 1.05 / 25) * 25;
+    WK = { byKey, n: rows.length, most: { pass: rank("pass", 1), rush: rank("rush", 1) }, fewest: { pass: rank("pass", -1), rush: rank("rush", -1) },
+      avg: { pts: avg("pts"), att: avg("att"), car: avg("car") }, max: { pass: top("pass"), rush: top("rush") } };
+    return WK;
+  }
+  // season efficiency ranks from the team ratings (offense: highest EPA first; defense: lowest allowed first)
+  let RK = null;
+  function ratingRanks() {
+    if (RK) return RK;
+    const rows = DATA.ratings || [];
+    const r = (k, dir) => { const v = rows.map(x => x[k]).sort((a, b) => (b - a) * dir); return x => v.indexOf(x) + 1; };
+    const fn = { rush_off: r("rush_off", 1), pass_off: r("pass_off", 1), rush_def: r("rush_def", -1), pass_def: r("pass_def", -1) };
+    RK = abbr => { const t = RT[abbr]; return t ? { rush_off: fn.rush_off(t.rush_off), pass_off: fn.pass_off(t.pass_off), rush_def: fn.rush_def(t.rush_def), pass_def: fn.pass_def(t.pass_def), n: rows.length } : null; };
+    return RK;
+  }
+
+  /* ---- the board ---- */
+  const st = { q: "", conf: "" };
+  let wired = false;
+  function board() {
+    const host = $("#view-matchups"), all = games();
+    if (!wired) {
+      wired = true;
+      const confs = [...new Set(all.flatMap(g => [confOf(g.away), confOf(g.home)]).filter(Boolean))].sort();
+      host.innerHTML = `<div class="week-head">
+          <div><h1 class="week-title">Week ${WEEK}</h1><p class="week-sub" id="mx-sub"></p></div>
+          <div class="week-filters" role="group" aria-label="Filter games">
+            <input type="search" id="mx-q" placeholder="Find a team" aria-label="Find a team" autocomplete="off">
+            ${confs.length ? `<select id="mx-conf" aria-label="Conference"><option value="">All conferences</option>${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select>` : ""}
+          </div>
+        </div>
+        <div id="mx-board"></div>`;
+      $("#mx-q").addEventListener("input", e => { st.q = e.target.value.trim().toLowerCase(); draw(); });
+      if ($("#mx-conf")) $("#mx-conf").addEventListener("change", e => { st.conf = e.target.value; draw(); });
+    }
+    draw();
+    function draw() {
+      const hit = g => (!st.q || [g.away, g.home, g.away_name, g.home_name, nameOf(g, "away"), nameOf(g, "home")].some(x => String(x || "").toLowerCase().includes(st.q)))
+        && (!st.conf || confOf(g.away) === st.conf || confOf(g.home) === st.conf);
+      const shown = all.filter(hit);
+      $("#mx-sub").textContent = `${all.length} games${shown.length < all.length ? ", " + shown.length + " shown" : ""}. Projections from the value model, updated ${M.generated}. Pick a game for each team's projected stats.`;
+      if (!shown.length) { $("#mx-board").innerHTML = `<div class="empty-note">No games match.</div>`; return; }
+      const groups = [];
+      shown.forEach(g => { const last = groups[groups.length - 1]; if (last && last.date === g.date) last.games.push(g); else groups.push({ date: g.date, games: [g] }); });
+      $("#mx-board").innerHTML = `<div class="board-cols" aria-hidden="true"><span>Away</span><span></span><span>Home</span><span>Spread</span><span>Total</span><span>Projected score</span><span>Where</span></div>`
+        + groups.map(grp => {
+          const exact = grp.games.every(g => g.time === grp.games[0].time);
+          return `<section class="day-group">
+            <h2 class="day-label">${esc(dayName(grp.games[0]))}${exact ? ", " + clock(grp.games[0].time) : ""}${grp.games.length > 1 ? ` <span class="day-count">${grp.games.length} games</span>` : ""}</h2>
+            ${grp.games.map(g => row(g, exact)).join("")}
+          </section>`;
+        }).join("");
+    }
+  }
+  function rowTeam(g, s) {
+    const sub = [g[s + "_record"], confOf(g[s])].filter(Boolean).join(", ");
+    return `<div class="gr-team ${s}">${slab(g[s])}<div class="gr-tx"><div class="gr-name">${esc(nameOf(g, s))}</div><div class="gr-sub">${esc(sub)}</div></div></div>`;
+  }
+  function row(g, exact) {
+    const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
+    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind` : ""].filter(Boolean);
+    const stadium = (g.detail && g.detail.stadium) || "";
+    return `<a class="game-row" href="#matchups/${encodeURIComponent(g.id)}">
+      ${rowTeam(g, "away")}
+      <div class="gr-at">${g.neutral ? "vs" : "at"}</div>
+      ${rowTeam(g, "home")}
+      <div class="gr-spread"><div class="gr-big">${esc(spreadText(g))}</div></div>
+      <div class="gr-total"><div class="gr-big"><span class="ou-pre">O/U </span>${g.market.total != null ? g.market.total : "—"}</div></div>
+      <div class="gr-implied"><span class="imp-pre">Projected </span>${esc(g.away)} ${n1(ptsFor(g.proj, "away"))}, ${esc(g.home)} ${n1(ptsFor(g.proj, "home"))}</div>
+      <div class="gr-where"><div>${esc(stadium)}</div><div class="gr-sub">${esc(bits.join(". "))}</div></div>
+    </a>`;
+  }
+
+  /* ---- one game: the two team cards ---- */
+  function gaugeSvg(value, max) {
+    const pct = Math.max(0, Math.min(1, value / (max || 1))), angle = 180 * pct, cx = 60, cy = 58, r = 46;
+    const xy = deg => { const rad = (deg * Math.PI) / 180; return [cx + r * Math.cos(rad), cy - r * Math.sin(rad)]; };
+    const [sx, sy] = xy(180), [ex, ey] = xy(180 - angle);
+    const nr = ((180 - angle) * Math.PI) / 180, nx = cx + (r - 6) * Math.cos(nr), ny = cy - (r - 6) * Math.sin(nr);
+    return `<svg viewBox="0 0 120 66" width="120" height="66" aria-hidden="true">
+      <path class="g-track" d="M ${cx - r} ${cy} A ${r} ${r} 0 1 1 ${cx + r} ${cy}" fill="none" stroke-width="8"/>
+      <path class="g-arc" d="M ${sx.toFixed(2)} ${sy.toFixed(2)} A ${r} ${r} 0 0 1 ${ex.toFixed(2)} ${ey.toFixed(2)}" fill="none" stroke-width="8"/>
+      <line class="g-needle" x1="${cx}" y1="${cy}" x2="${nx.toFixed(2)}" y2="${ny.toFixed(2)}" stroke-width="2"/>
+      <circle class="g-hub" cx="${cx}" cy="${cy}" r="3.5"/></svg>`;
+  }
+  const gauge = (label, v, max, rank, n) => `<div class="gauge-block">${gaugeSvg(v, max)}<div class="gauge-value">${n0(v)}</div><div class="gauge-label">${label}</div><div class="gauge-rank">#${rank} of ${n}</div></div>`;
+  const mini = (label, v, avg) => `<div class="mini-stat"><div class="val">${v}</div><div class="lbl">${label}</div><div class="avg">${avg}</div></div>`;
+  const badge = (label, v, cls) => `<div class="badge"><span class="label">${label}</span><span class="value ${cls || ""}">${v}</span></div>`;
+  const pctx = x => x == null ? "–" : Math.round(x * 100) + "%";
+  const factor = x => x == null ? "" : x >= 1 ? `${Math.round((x - 1) * 100)}% more` : `${Math.round((1 - x) * 100)}% fewer`;
+
+  function table(title, rows, cols) {
+    if (!rows.length) return `<div class="table-block"><h4>${title}</h4><div class="empty-note">No projection</div></div>`;
+    return `<div class="table-block"><h4>${title}</h4><table><thead><tr>${cols.map(c => `<th class="${c.n ? "num" : ""}" scope="col">${c.t}</th>`).join("")}</tr></thead><tbody>${
+      rows.map(p => `<tr>${cols.map(c => c.n ? `<td class="num">${c.f(p)}</td>`
+        : `<td>${esc(p.name)}<span class="ppos">${esc(p.pos)}</span>${p.status ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
+    }</tbody></table></div>`;
+  }
+
+  function card(g, s) {
+    const abbr = g[s], o = other(s), opp = g[o], key = g.id + "|" + abbr, W = weekTable(), me = W.byKey[key], them = W.byKey[g.id + "|" + opp];
+    const t = TP[key] || {}, ps = playersOf(g, abbr), rk = ratingRanks()(abbr), rt = RT[abbr];
+    const rec = [g[s + "_record"], confOf(abbr)];
+    const passing = ps.filter(p => (p.proj.pass_att || 0) >= 1).sort((a, b) => b.proj.pass_yds - a.proj.pass_yds).slice(0, 3);
+    const rushing = ps.filter(p => (p.proj.carries || 0) >= 0.5).sort((a, b) => b.proj.rush_yds - a.proj.rush_yds).slice(0, 6);
+    const recv = ps.filter(p => (LEAGUE === "nfl" ? p.proj.targets || 0 : p.proj.receptions || 0) >= 0.5).sort((a, b) => b.proj.rec_yds - a.proj.rec_yds).slice(0, 7);
+    const name = { t: "Player" };
+    const tables = [
+      table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints) },
+        { t: "Cmp", n: 1, f: p => n1(p.proj.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att) }]),
+      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rush_td) },
+        { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries) }]),
+      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions) },
+        LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–" }]),
+    ].join("");
+    const d = [];
+    if (t.def_ypa != null) d.push(`${factor(t.def_ypa)} yards per pass`);
+    if (t.def_ypc != null) d.push(`${factor(t.def_ypc)} per carry`);
+    let note = d.length ? `Against <b>${esc(opp)}</b>'s defense, which has allowed ${d.join(" and ")} than average.` : "";
+    const miss = [t.opp_miss_db > 0.05 ? pctx(t.opp_miss_db) + " of its usual defensive backs" : "", t.opp_miss_pr > 0.05 ? pctx(t.opp_miss_pr) + " of its pass rush" : ""].filter(Boolean);
+    if (miss.length) note += ` Out for ${esc(opp)}: ${miss.join(" and ")}.`;
+    if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
+    const out = (t.out || []).map(x => `${esc(x.name)}${x.pos ? " (" + esc(x.pos) + ")" : ""}`);
+    return `<div class="team-card" style="${teamVars(abbr)}">
+      <div class="team-card-header">
+        <div class="team-name-block">${slab(abbr)}<h2>${esc(nameOf(g, s))}</h2>
+          <div class="record"><b>${esc(rec[0] || "")}</b>${rec[1] ? ` <span class="conf">${esc(rec[1])}</span>` : ""}</div></div>
+        <div class="rating-badges">
+          ${badge("Proj pts", n1(me.pts))}
+          ${badge("Win chance", pctx(winFor(g, s)))}
+          ${badge("Line", lineFor(g, s))}
+          ${rt ? badge("Rating", sgn(rt.rating), rt.rating > 0 ? "pos" : rt.rating < 0 ? "neg" : "") : ""}
+        </div>
+      </div>
+      <div class="stat-columns">
+        <div class="stat-col offense"><h3>Offense, projected</h3>
+          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n)}</div>
+          <div class="mini-stats">${mini("Points", n1(me.pts), "avg " + n1(W.avg.pts))}${mini("Pass att", n1(me.att), "avg " + n1(W.avg.att))}${mini("Carries", n1(me.car), "avg " + n1(W.avg.car))}</div>
+        </div>
+        <div class="center-col">
+          ${rk ? `<div class="rank-line"><div class="lbl">Run game</div><div class="val">#${rk.rush_off} <span>off</span> / #${rk.rush_def} <span>def</span></div></div>
+          <div class="rank-line"><div class="lbl">Pass game</div><div class="val">#${rk.pass_off} <span>off</span> / #${rk.pass_def} <span>def</span></div></div>
+          <div class="rank-line"><div class="lbl">Season efficiency rank of ${rk.n}</div></div>` : ""}
+        </div>
+        <div class="stat-col defense"><h3>Defense, projected to allow</h3>
+          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n)}</div>
+          <div class="mini-stats">${mini("Points", n1(them.pts), "avg " + n1(W.avg.pts))}${mini("Pass att", n1(them.att), "avg " + n1(W.avg.att))}${mini("Carries", n1(them.car), "avg " + n1(W.avg.car))}</div>
+        </div>
+      </div>
+      ${note ? `<p class="mx-note">${note}</p>` : ""}
+      <div class="tables-row">${tables}</div>
+      ${out.length ? `<p class="out-line"><b>${LEAGUE === "nfl" ? "Out" : "Missed the last game, treated as out"}:</b> ${out.join(", ")}.</p>` : ""}
+    </div>`;
+  }
+
+  function game(g) {
+    const host = $("#view-matchup");
+    const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
+    const where = [(g.detail && g.detail.stadium) || "", indoor ? "indoors" : ""].filter(Boolean).join(", ");
+    host.innerHTML = `<a class="back-link" href="#matchups">← This week's matchups</a>
+      <h2 class="section-title">${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</h2>
+      <p class="mx-sub">Week ${g.week}, ${esc(dayName(g))}, ${clock(g.time)} ET${where ? ". " + esc(where) : ""}. Projected score ${esc(g.away)} ${n1(ptsFor(g.proj, "away"))}, ${esc(g.home)} ${n1(ptsFor(g.proj, "home"))}. <a href="#${encodeURIComponent(g.id)}">Model and bets for this game</a></p>
+      <div class="cards">${card(g, "away")}${card(g, "home")}</div>
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no injury report: a regular who missed his team's last game is treated as out."}</p>`;
+  }
+
+  return { board, game, find: id => ALL.find(g => g.id === id && g.week === WEEK) };
+})();
+
 /* ---------------- routing ---------------- */
-const views = { games: $("#view-games"), game: $("#view-game"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
+const views = { games: $("#view-games"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
-  const name = g ? "game" : (h === "ratings" || h === "model" || h === "players" || h === "history") ? h : "games";
+  const mm = /^matchups\/(.+)$/.exec(h), mg = mm ? matchups.find(decodeURIComponent(mm[1])) : null;
+  const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups") ? h : "games";
+  // the matchup views wear the matchup dashboards' graphite look, top bar included
+  document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
+  if (name === "matchups") matchups.board();
+  if (mg) matchups.game(mg);
   if (name === "history") historyView.open();
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {
-    if (a.dataset.view === (g ? "games" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    if (a.dataset.view === (g ? "games" : mg ? "matchups" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
   });
   $("#hero").hidden = name !== "games";
   if (g) { shownGame = g; renderGame(g); document.title = g.away + " at " + g.home + " | College Value Board"; }
+  else if (mg) { shownGame = null; document.title = mg.away + " at " + mg.home + ", projected | College Value Board"; }
+  else if (name === "matchups") { shownGame = null; document.title = "This Week's Matchups | College Value Board"; }
   else { shownGame = null; document.title = "College Value Board"; }
   window.scrollTo(0, 0);
 }
