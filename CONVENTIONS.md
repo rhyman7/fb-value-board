@@ -58,7 +58,9 @@ boards in detail; this file is the rules.
   It prints both team cards side by side on one landscape letter page in black on white, with
   a printed heading (week, teams, kickoff, stadium, line) and the disclaimer. The print rules
   are the `@media print` block after the `.mx` styles and only apply while a matchup is open
-  (the landscape page is the named `@page matchup`); other sections print as before.
+  (the landscape `@page` lives in the `#mx-page` style, which `route()` turns on only for a
+  matchup). Don't use a named `@page` for this: Chrome prints a blank sheet before and after
+  a named page. Other sections print as before.
 
 ## Checks before merging
 
