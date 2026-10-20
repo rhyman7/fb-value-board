@@ -254,3 +254,32 @@ def test_archive_freezes_at_kickoff_and_grades(tmp_path):
     assert d["actuals"]["2026_07_A_B"]["p1"]["pass_yds"] == 1.0
     w = A.write_index(tmp_path)[0]
     assert w["spread"] == [1, 0, 0] and w["total"] == [0, 1, 0] and w["bet_wlp"] == [1, 0, 0]
+
+
+def test_overrides_starter_and_out(tmp_path):
+    from nflmodel import overrides as OV
+    p = tmp_path / "overrides.csv"
+    p.write_text("game_id,team,kind,player_id,name,status,source\n"
+                 "G2,SEA,starter,qb-new,New QB,,test\n"
+                 "G1,SEA,starter,qb-x,Played QB,,test\n"
+                 "G2,KC,out,wr-1,Some WR,,test\n")
+    ov = OV.load(p)
+    games = pd.DataFrame({"game_id": ["G1", "G2"], "home_team": ["SEA", "SEA"], "away_team": ["KC", "KC"],
+                          "home_qb_id": ["qb-old", "qb-old"], "home_qb_name": ["Old", "Old"],
+                          "away_qb_id": ["kc", "kc"], "away_qb_name": ["KC", "KC"], "played": [True, False]})
+    g = OV.apply_starters(games, ov, verbose=False)
+    assert list(g.home_qb_id) == ["qb-old", "qb-new"]          # a played game is never changed
+    assert g.home_qb_name.iloc[1] == "New QB" and list(g.away_qb_id) == ["kc", "kc"]
+    rows = pd.DataFrame({"game_id": ["G1", "G2", "G2"], "player_id": ["wr-1", "wr-1", "wr-2"],
+                         "played": [True, False, False], "active": [1, 1, 1], "report": [np.nan] * 3})
+    r = OV.apply_out(rows, ov)
+    assert list(r.active) == [1, 0, 1] and r.report.iloc[1] == "Out"
+
+
+def test_overrides_file_is_valid():
+    from nflmodel import overrides as OV
+    ov = OV.load()
+    assert ov["player_id"].str.match(r"^00-\d{7}$").all()
+    assert ov["game_id"].str.match(r"^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$").all()
+    for r in ov.itertuples():
+        assert r.team in r.game_id.split("_")[2:], f"{r.team} not in {r.game_id}"
