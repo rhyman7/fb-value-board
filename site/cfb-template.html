@@ -385,6 +385,7 @@ td .act { font-weight: 700; } td .vs { color: var(--ink-3); font-size: 12px; mar
           <div class="field-label"><span id="hpf-pos">Position</span><div class="seg" id="seg-hpos" role="group" aria-labelledby="hpf-pos"></div></div>
           <label class="field-label" for="hp-team">Team<select class="money" id="hp-team"></select></label>
           <label class="field-label" for="hp-search">Player<input class="money p-search" id="hp-search" type="search" placeholder="Search" autocomplete="off"></label>
+          <div class="field-label"><span id="hpf-by">Sort by</span><div class="seg" id="seg-hby" role="group" aria-labelledby="hpf-by"></div></div>
         </div>
         <div class="scroll"><table id="hist-players" class="compact players" aria-labelledby="hp-h"></table></div>
         <p class="note" id="hp-foot"></p>
@@ -1349,7 +1350,7 @@ function diagChart(node, o) {
 /* ---------------- past weeks ---------------- */
 const historyView = (function () {
   let loaded = false, index = [], cur = null;
-  const cache = {}, hs = { pos: "All", team: "", q: "", key: "score", dir: -1 };
+  const cache = {}, hs = { pos: "All", team: "", q: "", key: "score", dir: -1, by: "proj" };
   const f0 = x => x == null ? "–" : Math.round(x).toString(), f1 = x => x == null ? "–" : x.toFixed(1);
   const badge = r => r ? H("span", { class: "res " + (r === "W" ? "w" : r === "L" ? "l" : ""), text: r === "W" ? "Won" : r === "L" ? "Lost" : "Push" }) : null;
   const get = f => cache[f] ? Promise.resolve(cache[f]) : fetch("archive/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => (cache[f] = d));
@@ -1364,7 +1365,8 @@ const historyView = (function () {
       const done = index.filter(w => w.graded > 0);
       cur = (done.length ? done[done.length - 1] : index[index.length - 1]).file;
       seg($("#seg-hweek"), index.map(w => ({ v: w.file, t: "Week " + w.week + (w.backfilled ? "*" : "") })), () => cur, v => { cur = v; show(); });
-      seg($("#seg-hpos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => hs.pos, v => { hs.pos = v; drawPlayers(); });
+      seg($("#seg-hpos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => hs.pos, v => { hs.pos = v; if (hs.key !== "name" && hs.key !== "opp" && hs.key !== "td") { hs.key = "score"; hs.dir = -1; } drawPlayers(); });
+      seg($("#seg-hby"), [{ v: "proj", t: "Projected" }, { v: "act", t: "Actual" }, { v: "miss", t: "Miss" }], () => hs.by, v => { hs.by = v; if (v === "miss" && hs.key !== "name" && hs.key !== "opp") hs.dir = -1; drawPlayers(); });
       $("#hp-team").addEventListener("change", e => { hs.team = e.target.value; drawPlayers(); });
       $("#hp-search").addEventListener("input", e => { hs.q = e.target.value.trim().toLowerCase(); drawPlayers(); });
       show();
@@ -1445,10 +1447,23 @@ const historyView = (function () {
     $("#hp-note").textContent = "Each player's projection as frozen at kickoff, with what he actually did. " + (miss.length ? "Average miss this week: " + miss.join(", ") + "." : "Results appear once the games are played.");
     const cols = COLS[hs.pos];
     let rows = all.filter(p => (hs.pos === "All" || p.pos === hs.pos || (hs.pos === "RB" && p.pos === "FB")) && (!hs.team || p.team === hs.team) && (!hs.q || p.name.toLowerCase().includes(hs.q)));
-    const score = p => (p.proj.pass_yds || 0) / 2.5 + (p.proj.rush_yds || 0) + (p.proj.rec_yds || 0);
-    rows.sort((a, b) => score(b) - score(a));
-    table($("#hist-players"), [{ t: "Player", l: 1 }, { t: "Opp", l: 1 }, ...cols.map(c => ({ t: c[1] + ", proj / actual" })), { t: "Scored", l: 0 }],
-      rows.slice(0, 400).map(p => {
+    // Sorting: a header picks the column; "Sort by" picks which of its numbers (projection,
+    // actual result, or the miss between them). Players without that number sort last.
+    const tdsOf = p => p.act ? (p.act.rec_td || 0) + (p.act.rush_td || 0) : null;
+    const score = (p, src) => src ? (src.pass_yds || 0) / 2.5 + (src.rush_yds || 0) + (src.rec_yds || 0) : null;
+    const pick = (p, prj, act) => hs.by === "proj" ? prj : act == null ? null : hs.by === "act" ? act : Math.abs(prj - act);
+    const val = (p, k) => k === "name" ? p.name : k === "opp" ? p.opp
+      : k === "score" ? pick(p, score(p, p.proj), p.act ? score(p, p.act) : null)
+      : k === "td" ? (hs.by === "act" ? tdsOf(p) : p.pos === "QB" ? null : p.td_any)
+      : pick(p, p.proj[k] || 0, p.act ? p.act[k] || 0 : null);
+    rows.sort((a, b) => {
+      const A = val(a, hs.key), B = val(b, hs.key);
+      if (A == null || B == null) return A == null && B == null ? (score(b, b.proj) - score(a, a.proj)) : A == null ? 1 : -1;
+      const d = typeof A === "string" ? A.localeCompare(B) : A - B;
+      return d ? d * hs.dir : score(b, b.proj) - score(a, a.proj);
+    });
+    const head = [{ k: "name", t: "Player", l: 1 }, { k: "opp", t: "Opp", l: 1 }, ...cols.map(c => ({ k: c[0], t: c[1] + ", proj / actual" })), { k: "td", t: "Scored", l: 0 }];
+    table($("#hist-players"), head, rows.slice(0, 400).map(p => {
         const name = H("span", {}, document.createTextNode(p.name), H("span", { class: "rec", text: p.pos + " · " + p.team }), p.status ? H("span", { class: "status", text: p.status }) : null);
         const cell = k => {
           const pv = p.proj[k], fmt = /yds/.test(k) ? f0 : f1;
@@ -1456,11 +1471,18 @@ const historyView = (function () {
           if (!p.act) return H("span", {}, document.createTextNode(fmt(pv) + " / "), H("span", { class: "vs", text: "did not play" }));
           return H("span", {}, document.createTextNode(fmt(pv) + " / "), H("span", { class: "act", text: fmt(p.act[k]) }));
         };
-        const tds = p.act ? (p.act.rec_td || 0) + (p.act.rush_td || 0) : null;
+        const tds = tdsOf(p);
         const chance = p.pos === "QB" ? null : p.td_any;
         return [name, (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp, ...cols.map(c => cell(c[0])),
           [chance == null ? null : Math.round(chance * 100) + "%", tds == null ? (p.graded && chance != null ? "–" : null) : tds > 0 ? "Yes" : "No"].filter(Boolean).join(" · ")];
       }));
+    // header buttons, same pattern as the Players table: first click sorts high to low
+    // (A to Z for names), a second click flips it
+    $("#hist-players").querySelectorAll("thead th").forEach((th, i) => {
+      const c = head[i], btn = H("button", { type: "button", text: c.t, onclick: () => { hs.dir = hs.key === c.k ? -hs.dir : (c.l ? 1 : -1); hs.key = c.k; drawPlayers(); } });
+      if (hs.key === c.k) btn.setAttribute("aria-sort", hs.dir > 0 ? "ascending" : "descending");
+      th.replaceChildren(btn);
+    });
     $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. "Scored" is the anytime-TD chance and whether he scored a rushing or receiving touchdown.`;
   }
   return { open };
