@@ -411,10 +411,9 @@ td .act { font-weight: 700; }
 @media (max-width: 760px) { .mx .print-btn { height: 44px; } }
 
 /* Print matchup: both team cards side by side on one landscape page, in black on white
-   (like the matchup dashboards' Print matchup). Only applies while a matchup is open. */
+   (like the matchup dashboards' Print matchup). Only applies while a matchup is open; the
+   landscape page size is the #mx-page style below, switched on by route(). */
 @media print {
-  @page matchup { size: letter landscape; margin: 0.35in; }
-  :root[data-mx] body { page: matchup; }
   :root[data-mx] { --page: #ffffff; --ink: #111318; color-scheme: light; }
   :root[data-mx] body { background: #ffffff; }
   :root[data-mx] .bar, :root[data-mx] footer, :root[data-mx] #tip, :root[data-mx] .mx-actions { display: none !important; }
@@ -442,6 +441,9 @@ td .act { font-weight: 700; }
   #view-matchup .mx-foot { max-width: none; font-size: 0.75rem; }
 }
 </style>
+<!-- landscape paper for Print matchup: route() sets media="print" only while a matchup is open.
+     Not a named @page: Chrome adds a blank page on each side of a named page. -->
+<style id="mx-page" media="not all">@page { size: letter landscape; margin: 0.35in; }</style>
 <!--/PAGE-->
 </head>
 <body>
@@ -1938,6 +1940,7 @@ function route() {
   const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups") ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
+  $("#mx-page").media = mg ? "print" : "not all";   // a printed matchup is one landscape page
   if (name === "matchups") matchups.board();
   if (mg) matchups.game(mg);
   if (name === "history") historyView.open();
