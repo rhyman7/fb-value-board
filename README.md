@@ -24,7 +24,9 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
 - **Past weeks**: every game's prediction and player projections as the board
   showed them at the last update before kickoff, graded against the result:
   the board's side of each spread and total, flagged bets, and each player's
-  projection next to his box score. Stored in `docs/archive/` by
+  projection next to his box score. The player table sorts by any column
+  (click a header; again to flip it), by the projection, the actual result or
+  the miss between them ("Sort by"). Stored in `docs/archive/` by
   `nflmodel/archive.py` (frozen at kickoff, never rewritten after).
 - **Team ratings** and the **model record** (backtest, key numbers, method).
 
