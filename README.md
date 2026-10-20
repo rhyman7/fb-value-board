@@ -7,8 +7,8 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
 ## What the site shows
 
 - **This Week's Matchups** (`#matchups`): this week's games laid out like the
-  matchup dashboards' home page (one row per game: spread, total, projected
-  score, stadium), in their graphite look. Each game (`#matchups/<game id>`)
+  matchup dashboards' home page (one row per game: spread, total, implied
+  score from the line, stadium), in their graphite look. Each game (`#matchups/<game id>`)
   opens the two teams' cards with this game's projections instead of season
   stats: projected points, win chance, line and rating; projected pass and
   rush yards for and against (dials ranked among this week's teams); pass

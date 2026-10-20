@@ -1786,11 +1786,11 @@ const matchups = (() => {
       const hit = g => (!st.q || [g.away, g.home, g.away_name, g.home_name, nameOf(g, "away"), nameOf(g, "home")].some(x => String(x || "").toLowerCase().includes(st.q)))
         && (!st.conf || confOf(g.away) === st.conf || confOf(g.home) === st.conf);
       const shown = all.filter(hit);
-      $("#mx-sub").textContent = `${all.length} games${shown.length < all.length ? ", " + shown.length + " shown" : ""}. Projections from the value model, updated ${M.generated}. Pick a game for each team's projected stats.`;
+      $("#mx-sub").textContent = `${all.length} games${shown.length < all.length ? ", " + shown.length + " shown" : ""}. Projections from the value model, updated ${M.generated}. Implied scores are from the betting line. Pick a game for each team's projected stats.`;
       if (!shown.length) { $("#mx-board").innerHTML = `<div class="empty-note">No games match.</div>`; return; }
       const groups = [];
       shown.forEach(g => { const last = groups[groups.length - 1]; if (last && last.date === g.date) last.games.push(g); else groups.push({ date: g.date, games: [g] }); });
-      $("#mx-board").innerHTML = `<div class="board-cols" aria-hidden="true"><span>Away</span><span></span><span>Home</span><span>Spread</span><span>Total</span><span>Projected score</span><span>Where</span></div>`
+      $("#mx-board").innerHTML = `<div class="board-cols" aria-hidden="true"><span>Away</span><span></span><span>Home</span><span>Spread</span><span>Total</span><span>Implied score</span><span>Where</span></div>`
         + groups.map(grp => {
           const exact = grp.games.every(g => g.time === grp.games[0].time);
           return `<section class="day-group">
@@ -1814,7 +1814,7 @@ const matchups = (() => {
       ${rowTeam(g, "home")}
       <div class="gr-spread"><div class="gr-big">${esc(spreadText(g))}</div></div>
       <div class="gr-total"><div class="gr-big"><span class="ou-pre">O/U </span>${g.market.total != null ? g.market.total : "—"}</div></div>
-      <div class="gr-implied"><span class="imp-pre">Projected </span>${esc(g.away)} ${n1(ptsFor(g.proj, "away"))}, ${esc(g.home)} ${n1(ptsFor(g.proj, "home"))}</div>
+      <div class="gr-implied"><span class="imp-pre">Implied </span>${esc(g.away)} ${n1(ptsFor(mkt(g), "away"))}, ${esc(g.home)} ${n1(ptsFor(mkt(g), "home"))}</div>
       <div class="gr-where"><div>${esc(stadium)}</div><div class="gr-sub">${esc(bits.join(". "))}</div></div>
     </a>`;
   }
@@ -1903,11 +1903,7 @@ const matchups = (() => {
 
   function game(g) {
     const host = $("#view-matchup");
-    const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
-    const where = [(g.detail && g.detail.stadium) || "", indoor ? "indoors" : ""].filter(Boolean).join(", ");
     host.innerHTML = `<a class="back-link" href="#matchups">← This week's matchups</a>
-      <h2 class="section-title">${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</h2>
-      <p class="mx-sub">Week ${g.week}, ${esc(dayName(g))}, ${clock(g.time)} ET${where ? ". " + esc(where) : ""}. Projected score ${esc(g.away)} ${n1(ptsFor(g.proj, "away"))}, ${esc(g.home)} ${n1(ptsFor(g.proj, "home"))}. <a href="#${encodeURIComponent(g.id)}">Model and bets for this game</a></p>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
       <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no injury report: a regular who missed his team's last game is treated as out."}</p>`;
   }
