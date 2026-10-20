@@ -25,10 +25,13 @@ def sub(old, new, n=1):
 sub("<title>NFL Value Board</title>", "<title>College Football Value Board</title>")
 sub('<i aria-hidden="true"></i>NFL Value Board</a>', '<i aria-hidden="true"></i>College Value Board</a>')
 sub('        <li><a href="cfb/" data-view="cfb">College board</a></li>\n', '        <li><a href="../" data-view="nfl">NFL board</a></li>\n')
-sub(' | NFL Value Board"; }', ' | College Value Board"; }')
+sub(' | NFL Value Board"; }', ' | College Value Board"; }', 3)   # game page, matchups board, one matchup
 sub('document.title = "NFL Value Board";', 'document.title = "College Value Board";')
 sub('"nflvb.bankroll"', '"cfbvb.bankroll"', None)
 sub("No data yet. Run python run.py to build the board.", "No data yet. Run python run_cfb.py to build the board.")
+
+# ---- this week's matchups: college names, conferences and no targets ---------------------------
+sub('  const LEAGUE = "nfl";', '  const LEAGUE = "cfb";')
 
 # ---- games ---------------------------------------------------------------------------
 sub('$("#stamp").textContent = M.season + " season. Results through " + M.games_through + ". Updated " + M.generated + ".";',

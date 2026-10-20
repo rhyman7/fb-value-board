@@ -46,8 +46,14 @@ boards in detail; this file is the rules.
   keep that placeholder.
 - `docs/archive/` holds each week's predictions frozen at kickoff. Never rewrite past weeks.
 - Both boards share the same sections and anchors, in this order:
-  Games `#games` | Players `#players` | Past weeks `#history` | Team ratings `#ratings` |
-  Model record `#model`. Each board's nav links to the other board.
+  This Week's Matchups `#matchups` | Games `#games` | Players `#players` | Past weeks `#history` |
+  Team ratings `#ratings` | Model record `#model`. Each board's nav links to the other board.
+- **This Week's Matchups** copies the matchup dashboards' look on purpose (graphite colors,
+  condensed Archivo, team-color blocks lettered in the secondary color, never black): the
+  board of this week's games, and `#matchups/<game id>` with each team's card showing this
+  game's projections, not season stats. While it is open, `data-mx` on `<html>` switches the
+  page tokens to graphite; every other section keeps the board's own look. Its styles are
+  all under `.mx`. If the dashboards' week board or team card changes look, bring these along.
 
 ## Checks before merging
 
@@ -63,7 +69,7 @@ boards in detail; this file is the rules.
 
 - Titled **Weekly Value Boards**. Same layout, tokens, Archivo type and NCAA/NFL logos as
   the Weekly Gridiron Board (rhyman7.github.io); keep it styled consistently with it.
-- College card on the left, NFL on the right. Each card links to its board and to the five
+- College card on the left, NFL on the right. Each card links to its board and to the six
   sections above; if a section is added, renamed or reordered, update both cards.
 - Logos live in `img/` (copies of rhyman7.github.io's `img/ncaa.png` and `img/nfl.png`).
 - All links are relative (`docs/`, `docs/cfb/`, `img/`) so the page works at
