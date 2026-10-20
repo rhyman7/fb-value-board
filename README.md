@@ -154,8 +154,10 @@ consensus line; only the prices being graded change.
 ## Publishing on GitHub Pages
 
 1. Push the repo.
-2. Settings, Pages: deploy from the `main` branch, `/docs` folder. (If Pages is
-   set to the repository root instead, `index.html` there forwards to the board.)
+2. Settings, Pages: deploy from the `main` branch, `/docs` folder. (The live site is served from the
+   repository root, where `index.html` is the Weekly Value Boards landing page
+   linking to both boards; a URL with a hash such as `#games` forwards to the
+   NFL board.)
 3. Settings, Actions, General: allow workflows read and write permission.
 
 `.github/workflows/update.yml` then refreshes the board daily during the season
@@ -238,7 +240,8 @@ nflmodel/
   pipeline.py             runs everything, writes docs/
 site/template.html        site template (no build step, no dependencies)
 docs/                     generated site: index.html and data.json
-index.html                forwards to docs/ if Pages serves the repository root
+index.html                Weekly Value Boards landing page (links to both boards)
+img/                      league logos for the landing page
 data/cache/               small per-season aggregates (committed)
 data/line_history.csv     lines as first seen and as they move
 data/wind_log.csv         wind forecasts as fetched
