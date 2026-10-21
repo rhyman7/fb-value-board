@@ -17,10 +17,18 @@ Opportunity times efficiency, using only what was known before each game.
    Targets are not used: the college play-by-play is missing the receiver on many
    incompletions in 2021-2024 (targets ran barely above catches), so catch share is the
    consistent measure.
-3. **Who plays.** There is no public injury report or game-day inactive list. A player
-   is expected to play if he recorded a stat in his team's last game (in its first game,
-   if he played for it last season). A regular who did not is treated as out and his
-   share goes to the players expected to play.
+3. **Who plays.** There is no official injury report or game-day inactive list. In past
+   games (the backtests), a player is expected to play if he recorded a stat in his team's
+   last game (in its first game, if he played for it last season); a regular who did not
+   is treated as out and his share goes to the players expected to play. For upcoming
+   games, the daily Covers.com injury designations (`docs/cfb/designations.json`,
+   `cfbmodel/designations.py`) decide instead: Out or Doubtful means out of the team's
+   next game (every game, if out for the season) and his share goes to teammates; a
+   regular who sat out but played in one of the team's last three games, and isn't listed
+   out, is expected back. A starting quarterback listed out is replaced in the game model
+   by the team's next quarterback by dropbacks this season. Injured linemen and defenders
+   are listed on the board but change no numbers. None of this can be backtested: there is
+   no history of the designations.
 4. **Starting quarterback.** Last game's starter, unless another expected quarterback is
    clearly the regular (80% or more of recent passes). Right on 93.4% of team-games
    since 2021.

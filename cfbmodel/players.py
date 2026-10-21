@@ -9,10 +9,14 @@ public college data allows:
   player share   share of team carries, pass attempts and receptions in games the player
                  appeared, recent games weighted more. Targets are not used: the play-by-play
                  is missing receivers on many incompletions in 2021-2024.
-  availability   there is no college injury report or game-day inactive list. A player is
-                 expected to play if he recorded a stat in his team's previous game (in a
-                 team's first game, if he played for it last season). Players who were
-                 expected to play leave their share to teammates if they are not.
+  availability   there is no official college injury report or game-day inactive list. In
+                 past games (the backtests), a player is expected to play if he recorded a
+                 stat in his team's previous game (in a team's first game, if he played for
+                 it last season). For upcoming games, a regular who sat out is expected back
+                 if he played in one of the team's last three games, and the Covers.com
+                 injury designations (cfbmodel/designations.py) take out anyone listed Out or
+                 Doubtful. Players who were expected to play leave their share to teammates
+                 if they are not.
   efficiency     completion rate, yards per attempt, TD and interception rates, yards per
                  carry and per catch, shrunk toward the position average; passing and rushing
                  multiplied by what this defense allows compared with the league
@@ -32,6 +36,7 @@ import pandas as pd
 from nflmodel.players import Lin, _shrink, asof
 
 from . import config as C
+from . import designations as DES
 from .players_data import GROUP
 
 SEASON_LEN = 22
@@ -102,9 +107,11 @@ def team_games(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame) -> pd
     return tg
 
 
-def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame) -> pd.DataFrame:
+def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, des_out: pd.DataFrame | None = None) -> pd.DataFrame:
     """Every offensive player of each team for each game: those with a stat in the game, plus
-    those expected to play (a stat in the team's previous game; in its first game, last season)."""
+    those expected to play (a stat in the team's previous game; in its first game, last season;
+    for upcoming games also the regulars back from a missed game). des_out: Out and Doubtful
+    injury designations (designations.outs), applied to upcoming games only."""
     off = pg[(pg[["pass_att", "carries", "receptions"]].sum(axis=1) > 0)]
     stats = off[["game_id", "team_id", "player_id"] + STATS]
     tg = tg.sort_values(["team", "t"]).reset_index(drop=True)
@@ -127,7 +134,8 @@ def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame) -> pd.Da
         f0 = exp.loc[first, ["game_id", "team_id", "season", "last_season"]].drop_duplicates(["game_id", "team_id"])
         f0 = f0.merge(lastseason.rename(columns={"season": "last_season"}), on=["team_id", "last_season"])
         exp = pd.concat([exp[~first], f0[["game_id", "team_id", "player_id", "season", "last_season"]]], ignore_index=True)
-    exp = exp[["game_id", "team_id", "player_id"]].drop_duplicates().assign(expected=1)
+    exp = pd.concat([exp[["game_id", "team_id", "player_id"]], _regulars_back(tg, stats)], ignore_index=True)
+    exp = exp.drop_duplicates().assign(expected=1)
     rows = stats.merge(exp, on=["game_id", "team_id", "player_id"], how="outer")
     rows["appeared"] = rows["pass_att"].notna().astype(int)
     rows["expected"] = rows["expected"].fillna(0).astype(int)
@@ -144,12 +152,50 @@ def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame) -> pd.Da
     rows["position"] = pos.where(grp.notna(), rows["group"])
     # active: expected to play (for an upcoming game, the only information), or in the box score
     rows["active"] = np.where(rows["played"].astype(bool), ((rows["expected"] == 1) | (rows["appeared"] == 1)).astype(int), rows["expected"])
+    rows["report"] = None
+    if des_out is not None and len(des_out):
+        cur = rows.loc[rows["played"].astype(bool), "season"].max()
+        up = ~rows["played"].astype(bool) & (rows["season"] == cur)      # this season's games still to play
+        po = DES.player_outs(rows[up], des_out, info)
+        if len(po):
+            hit = rows[["game_id", "player_id"]].merge(po[["game_id", "player_id", "status"]], on=["game_id", "player_id"], how="left")["status"].to_numpy()
+            m = up.to_numpy() & pd.notna(hit)
+            rows.loc[m, "active"] = 0
+            rows.loc[m, "report"] = hit[m]
     return rows
 
 
-def build(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame) -> pd.DataFrame:
+def _regulars_back(tg: pd.DataFrame, stats: pd.DataFrame) -> pd.DataFrame:
+    """(game_id, team_id, player_id) for upcoming games: this season's regulars (two or more
+    games, a large share of carries, catches or passes) who played in one of the team's last
+    three games. A starter who sat out one game is expected back unless listed out."""
+    cols = ["game_id", "team_id", "player_id"]
+    done = tg[tg["played"].astype(bool)][["game_id", "team_id", "season", "t", "team_car", "team_comp", "team_att"]]
+    if done.empty:
+        return pd.DataFrame(columns=cols)
+    cur = done["season"].max()
+    up = tg[~tg["played"].astype(bool) & (tg["season"] == cur)][["game_id", "team_id", "season"]]
+    done = done[done["season"] == cur]
+    if up.empty:
+        return pd.DataFrame(columns=cols)
+    st = stats.merge(done, on=["game_id", "team_id"])
+    if st.empty:
+        return pd.DataFrame(columns=cols)
+    st["car_s"] = st["carries"] / st["team_car"].replace(0, np.nan)
+    st["rec_s"] = st["receptions"] / st["team_comp"].replace(0, np.nan)
+    st["att_s"] = st["pass_att"] / st["team_att"].replace(0, np.nan)
+    last3 = done.sort_values("t").groupby(["team_id", "season"]).tail(3)[["game_id", "team_id"]].assign(recent=1)
+    st = st.merge(last3, on=["game_id", "team_id"], how="left")
+    g = st.groupby(["team_id", "season", "player_id"]).agg(n=("game_id", "nunique"), car=("car_s", "mean"), rec=("rec_s", "mean"),
+                                                          att=("att_s", "mean"), recent=("recent", "max")).reset_index()
+    reg = g[(g["n"] >= 2) & (g["recent"] == 1) & ((g["car"] >= 0.2) | (g["rec"] >= 0.12) | (g["att"] >= 0.5))]
+    return up.merge(reg[["team_id", "season", "player_id"]], on=["team_id", "season"])[cols]
+
+
+def build(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame,
+          des_out: pd.DataFrame | None = None) -> pd.DataFrame:
     tg = team_games(games, frame, pg)
-    rows = player_rows(tg, pg, info)
+    rows = player_rows(tg, pg, info, des_out)
     act = rows.copy()
     use = (act["appeared"] == 1) & act["played"].astype(bool)
     act["car_share"] = np.where(act["team_car"] > 0, act["carries"] / act["team_car"], np.nan)
@@ -357,9 +403,11 @@ def backtest_summary(proj: pd.DataFrame, table: pd.DataFrame, periods: dict) -> 
 # Board output
 # --------------------------------------------------------------------------
 
-def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys: dict, abbr: dict) -> dict:
+def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys: dict, abbr: dict,
+          des_out: pd.DataFrame | None = None) -> dict:
     """Projections for the board's upcoming games (game_keys: game_id -> board id), with the inputs
-    behind them, and for each team the regulars who did not play its last game."""
+    behind them, and for each team the players listed Out or Doubtful for the game (des_out:
+    designations.outs), with their share of the team's usage when they have one."""
     p = proj[proj["game_id"].isin(game_keys) & (proj["active"] == 1)].copy()
     if p.empty:
         return {"players": [], "teams": []}
@@ -368,22 +416,28 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
     r2 = lambda x: None if pd.isna(x) else round(float(x), 2)
     r3 = lambda x: None if pd.isna(x) else round(float(x), 3)
     hist = table[table["played"].astype(bool) & (table["appeared"] == 1)]
+    up = table[~table["played"].astype(bool) & table["game_id"].isin(game_keys)][["game_id", "team", "t"]].drop_duplicates()
+    cov = DES.applies(des_out, up) if des_out is not None and len(des_out) else None
     teams = []
     for (gid, team), t in p.groupby(["game_id", "team"]):
         first = t.iloc[0]
         season = int(first["season"])
         mine = hist[(hist["team"] == team) & (hist["season"] == season) & (hist["t"] < first["t"])]
         out = []
-        if len(mine):
-            last_gid = mine.sort_values("t")["game_id"].iloc[-1]
-            g = mine.groupby("player_id").agg(n=("game_id", "nunique"), car=("carries", "sum"), rec=("receptions", "sum"),
-                                              tc=("team_car", "sum"), tr=("team_comp", "sum"), pa=("pass_att", "sum"), ta=("team_att", "sum"))
-            g["car_share"], g["rec_share"], g["att_share"] = g.car / g.tc.replace(0, np.nan), g.rec / g.tr.replace(0, np.nan), g.pa / g.ta.replace(0, np.nan)
-            played_last = set(mine[mine["game_id"] == last_gid]["player_id"])
-            reg = g[(g.n >= 2) & ((g.car_share >= 0.2) | (g.rec_share >= 0.12) | (g.att_share >= 0.5)) & ~g.index.isin(played_last)]
-            for pid, x in reg.iterrows():
-                out.append({"name": info["name"].get(pid, str(pid)), "pos": str(info["position"].get(pid, "")) if pd.notna(info["position"].get(pid)) else "",
-                            "status": "Did not play last game", "rec_share": r3(x.rec_share), "car_share": r3(x.car_share), "att_share": r3(x.att_share)})
+        if cov is not None:
+            listed = cov[(cov["game_id"] == gid) & (cov["team_name"] == team)]
+            if len(listed):
+                g = mine.groupby("player_id").agg(car=("carries", "sum"), rec=("receptions", "sum"), tc=("team_car", "sum"),
+                                                  tr=("team_comp", "sum"), pa=("pass_att", "sum"), ta=("team_att", "sum"))
+                g["key"] = g.index.map(lambda i: DES.norm(info["name"].get(i)))
+                g = g.reset_index().drop_duplicates("key").set_index("key")
+                for x in listed.itertuples():
+                    sh = g.loc[x.key] if x.key in g.index else None
+                    share = (lambda a, b: r3(sh[a] / sh[b]) if sh is not None and sh[b] > 0 else None)
+                    out.append({"name": x.name, "pos": str(x.pos or ""), "status": DES.OUT_CODES[x.d] + (f", {x.injury.lower()}" if isinstance(x.injury, str) and x.injury and x.injury.lower() != "undisclosed" else ""),
+                                "rec_share": share("rec", "tr"), "car_share": share("car", "tc"), "att_share": share("pa", "ta")})
+                # biggest roles first, then linemen and defense
+                out.sort(key=lambda o: -max(o["rec_share"] or 0, o["car_share"] or 0, o["att_share"] or 0))
         teams.append({"game": game_keys[gid], "team": abbr.get(team, team), "opp": abbr.get(first["opp"], first["opp"]),
                       "pass_att": r1(first["proj_team_att"]), "carries": r1(first["proj_team_car"]),
                       "imp_pts": r1(first["imp_pts"]), "margin": r1(first["margin"]), "wind": r1(first["wind"]),

@@ -227,6 +227,9 @@ table.players td.why { white-space: normal; text-align: left; padding: 10px 0 16
 .why-grid p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
 .why-grid strong { color: var(--ink); }
 .status { font-size: 12px; font-weight: 600; color: var(--ink-2); border: 1px solid var(--axis); border-radius: 4px; padding: 1px 5px; margin-left: 6px; }
+/* injury designation after a player's name (O, D, Q, P, IR): display only */
+sup.dz { font-size: 0.78em; font-weight: 800; line-height: 0; margin-left: 2px; letter-spacing: 0.02em; color: var(--ink); cursor: help; }
+sup.dz-O, sup.dz-D, sup.dz-IR { color: var(--s2); }
 tr.group td { font-weight: 700; padding-top: 16px; color: var(--ink); border-bottom-color: var(--axis); }
 th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 th button[aria-sort]::after { content: " \2193"; } th button[aria-sort="ascending"]::after { content: " \2191"; }
@@ -373,6 +376,7 @@ td .act { font-weight: 700; }
 .mx td:first-child { white-space: normal; }
 .mx .ptag { margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; }
 .mx .ppos { margin-left: 6px; font-size: 0.75rem; color: var(--text-dim); }
+.mx sup.dz { color: var(--text); } .mx sup.dz-O, .mx sup.dz-D, .mx sup.dz-IR { color: var(--neg); }
 .mx .out-line { margin: 16px 0 0; font-size: 0.8125rem; color: var(--text-dim); }
 .mx .out-line b { color: var(--text); font-weight: 600; }
 .mx .mx-foot { margin: 18px 0 0; font-size: 0.8125rem; color: var(--text-dim); max-width: 80ch; }
@@ -747,6 +751,41 @@ if (!DATA || !DATA.slate) {
 }
 const M = DATA.meta, BT = DATA.backtest, KN = DATA.key_numbers;
 
+/* ---------------- injury designations (display only) ----------------
+   designations.json, next to the page and optional, lists game-status designations from an
+   injury report: { source, url, checked: "YYYY-MM-DD", players: [{ team, name, d, injury, updated }] }
+   with d one of O, D, Q, P. They show as a superscript after the player's name; the projections
+   never use them. A file not checked in the last 3 days is ignored, so old news can't linger.
+   Without the file, a player's own status (Out, Doubtful, Questionable, Injured reserve) is used. */
+const DZ = {}, DZ_REDRAW = [];
+let DZ_META = null;
+const DZ_WORD = { O: "Out", D: "Doubtful", Q: "Questionable", P: "Probable", IR: "Injured reserve" };
+const dzKey = (team, name) => team + "|" + String(name || "").toLowerCase().replace(/\b(jr|sr|ii|iii|iv|v)\b/g, "").replace(/[^a-z]/g, "");
+const dzFromStatus = s => { const t = String(s || "").toLowerCase(); return t === "out" ? "O" : t === "doubtful" ? "D" : t === "questionable" ? "Q" : t.startsWith("injured reserve") || t === "ir" ? "IR" : null; };
+function dzOf(p) {
+  const r = DZ[dzKey(p.team, p.name)];
+  if (r) return { d: r.d, title: [DZ_WORD[r.d] || r.d, r.injury, (DZ_META.source || "Injury report") + (r.updated ? ", " + r.updated : "")].filter(Boolean).join(" · ") };
+  const d = dzFromStatus(p.status);
+  return d ? { d, title: p.status } : null;
+}
+// the superscript as an element (H) or as HTML text
+const dzEl = p => { const z = dzOf(p); return z ? H("sup", { class: "dz dz-" + z.d, title: z.title, "aria-label": z.title, text: z.d }) : null; };
+const dzHtml = p => { const e = dzEl(p); return e ? e.outerHTML : ""; };
+// a status chip is still shown when the superscript doesn't already say it
+const chipText = p => p.status && !dzFromStatus(p.status) ? p.status : null;
+const dzReady = Promise.race([
+  fetch("designations.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => {
+    if (!j || !Array.isArray(j.players) || !j.checked) return;
+    const age = (Date.now() - Date.parse(j.checked + "T00:00:00Z")) / 864e5;
+    if (!(age <= 3.5)) return;
+    DZ_META = j;
+    j.players.forEach(r => { if (r && r.team && r.name && DZ_WORD[r.d]) DZ[dzKey(r.team, r.name)] = r; });
+  }).catch(() => {}),
+  new Promise(res => setTimeout(res, 2500)),
+]);
+
+const dzFoot = () => DZ_META ? ` Superscripts after a name are injury designations (O out, D doubtful, Q questionable, P probable) from ${DZ_META.source || "the injury report"}, checked ${DZ_META.checked}; they are shown for reference and the projections do not use them.` : (DATA.players && (DATA.players.players || []).some(p => dzFromStatus(p.status))) ? " A superscript after a name is the player's injury designation (O out, D doubtful, Q questionable, IR injured reserve)." : "";
+
 /* ---------------- tooltip ---------------- */
 const tip = $("#tip");
 function showTip(evt, title, rows) {
@@ -1072,7 +1111,7 @@ function renderGame(g) {
   if (d.qbs) {
     const panel = (q, side) => {
       const node = H("div", { class: "qb" },
-        H("div", { class: "who" }, sw(side), document.createTextNode(q.name)),
+        H("div", { class: "who" }, sw(side), document.createTextNode(q.name), dzEl({ team: q.team, name: q.name })),
         H("p", { class: "note", text: `${snum(q.value, 3)} EPA per dropback against the league average, on about ${comma(q.dropbacks)} recent dropbacks. Worth ${snum(q.points)} points to ${q.team} compared with the quarterbacks behind its rating.` }));
       if (q.log && q.log.length) {
         const chart = H("div"), tb = H("table");
@@ -1493,7 +1532,8 @@ function diagChart(node, o) {
     })));
     const tbody = H("tbody");
     rows.slice(0, 400).forEach(p => {
-      const name = H("span", {}, document.createTextNode(p.name), H("span", { class: "rec", text: p.pos + " · " + p.team }), p.status ? H("span", { class: "status", text: p.status }) : null);
+      const chip = chipText(p);
+      const name = H("span", {}, document.createTextNode(p.name), dzEl(p), H("span", { class: "rec", text: p.pos + " · " + p.team }), chip ? H("span", { class: "status", text: chip }) : null);
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp })];
       cols.forEach(c => cells.push(H("td", { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
       const open = ps.open === p.id + p.game;
@@ -1505,9 +1545,10 @@ function diagChart(node, o) {
       if (open) tbody.append(H("tr", {}, H("td", { class: "why", colSpan: head.length }, why(p))));
     });
     t.replaceChildren(thead, tbody);
-    $("#players-foot").textContent = rows.length ? `${rows.length} players. Status comes from the weekly roster and injury report; game-day inactives are named about 90 minutes before kickoff, so check late news.` : "No players match.";
+    $("#players-foot").textContent = rows.length ? `${rows.length} players. Status comes from the weekly roster and injury report; game-day inactives are named about 90 minutes before kickoff, so check late news.` + dzFoot() : "No players match.";
   }
   draw();
+  DZ_REDRAW.push(draw);
 
   const BTp = PD.backtest;
   if (BTp) {
@@ -1870,7 +1911,7 @@ const matchups = (() => {
     if (!rows.length) return `<div class="table-block"><h4>${title}</h4><div class="empty-note">No projection</div></div>`;
     return `<div class="table-block"><h4>${title}</h4><table><thead><tr>${cols.map(c => `<th class="${c.n ? "num" : ""}" scope="col">${c.t}</th>`).join("")}</tr></thead><tbody>${
       rows.map(p => `<tr>${cols.map(c => c.n ? `<td class="num">${c.f(p)}</td>`
-        : `<td>${esc(p.name)}<span class="ppos">${esc(p.pos)}</span>${p.status ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
+        : `<td>${esc(p.name)}${dzHtml(p)}<span class="ppos">${esc(p.pos)}</span>${chipText(p) ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
     }</tbody></table></div>`;
   }
 
@@ -1897,7 +1938,7 @@ const matchups = (() => {
     const miss = [t.opp_miss_db > 0.05 ? pctx(t.opp_miss_db) + " of its usual defensive backs" : "", t.opp_miss_pr > 0.05 ? pctx(t.opp_miss_pr) + " of its pass rush" : ""].filter(Boolean);
     if (miss.length) note += ` Out for ${esc(opp)}: ${miss.join(" and ")}.`;
     if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
-    const out = (t.out || []).map(x => `${esc(x.name)}${x.pos ? " (" + esc(x.pos) + ")" : ""}`);
+    const out = (t.out || []).map(x => { const tag = [x.pos, /^doubtful/i.test(x.status || "") ? "doubtful" : ""].filter(Boolean).join(", "); return `${esc(x.name)}${tag ? " (" + esc(tag) + ")" : ""}`; });
     return `<div class="team-card" style="${teamVars(abbr)}">
       <div class="team-card-header">
         <div class="team-name-block">${slab(abbr)}<h2>${esc(nameOf(g, s))}</h2>
@@ -1926,7 +1967,7 @@ const matchups = (() => {
       </div>
       ${note ? `<p class="mx-note">${note}</p>` : ""}
       <div class="tables-row">${tables}</div>
-      ${out.length ? `<p class="out-line"><b>${LEAGUE === "nfl" ? "Out" : "Missed the last game, treated as out"}:</b> ${out.join(", ")}.</p>` : ""}
+      ${out.length ? `<p class="out-line"><b>Out:</b> ${out.join(", ")}.</p>` : ""}
     </div>`;
   }
 
@@ -1935,7 +1976,7 @@ const matchups = (() => {
     const where = [dayName(g) + (g.time ? ", " + clock(g.time) + " ET" : ""), (g.detail && g.detail.stadium) || ""].filter(Boolean).join(". ");
     return `<div class="mx-game"><div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
-      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no injury report: a regular who missed his team's last game is treated as out."}</p>
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}</p>
       <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p></div>`;
   }
   function game(g) {
@@ -1992,7 +2033,8 @@ function route() {
 window.addEventListener("hashchange", route);
 /* The bankroll and pricing basis also apply on a game page. */
 const rerenderGames = renderGames;
-route();
+// first paint waits (briefly) for the injury designations, so names don't change after load
+dzReady.then(() => { DZ_REDRAW.forEach(f => f()); route(); });
 })();
 </script>
 <!--/PAGE-->

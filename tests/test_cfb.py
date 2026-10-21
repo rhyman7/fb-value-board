@@ -102,3 +102,53 @@ def test_archive_grades_at_the_half_point():
          "results": {"x": {"home_score": 30, "away_score": 20, "bets": [{"market": "Spread", "side": "home", "result": "W", "units": 0.909}]}}}
     s = archive.summarize(d)
     assert s["winners"] == [1, 0] and s["miss"]["margin"] == 6.0 and s["miss"]["line_total"] == 2.5
+
+
+def test_designations_file_is_valid():
+    """docs/cfb/designations.json (injury designations shown next to names; display only)."""
+    import datetime as dt
+    import json
+    docs = Path(__file__).resolve().parent.parent / "docs" / "cfb"
+    path = docs / "designations.json"
+    if not path.exists():
+        return
+    d = json.loads(path.read_text())
+    dt.date.fromisoformat(d["checked"])
+    assert d.get("source") and isinstance(d["players"], list)
+    data = docs / "data.json"
+    teams = set(json.loads(data.read_text())["meta"]["colors"]) if data.exists() else set()   # the board's team abbreviations
+    seen = set()
+    for r in d["players"]:
+        assert r["d"] in {"O", "D", "Q", "P"}, r
+        assert r["name"].strip() and r["team"].strip(), r
+        if teams:
+            assert r["team"] in teams, f"{r['team']} is not a board team abbreviation"
+        assert isinstance(r.get("season", False), bool), r
+        if r.get("updated"):
+            dt.date.fromisoformat(r["updated"])
+        assert (r["team"], r["name"]) not in seen, f"duplicate {r['team']} {r['name']}"
+        seen.add((r["team"], r["name"]))
+
+
+def test_designations_rules(tmp_path):
+    """Out/Doubtful take a player out of his team's next game only ("season": every upcoming
+    game); Questionable doesn't; a stale file is ignored."""
+    import datetime as dt
+    import json
+    from cfbmodel import designations as D
+    f = tmp_path / "designations.json"
+    f.write_text(json.dumps({"source": "Covers.com", "checked": "2026-10-21", "players": [
+        {"team": "AAA", "name": "Joe Smith Jr.", "pos": "WR", "d": "O"},
+        {"team": "AAA", "name": "Al Q", "pos": "RB", "d": "Q"},
+        {"team": "BBB", "name": "Big Lineman", "pos": "OT", "d": "D", "season": True}]}))
+    assert D.load(f, today=dt.date(2026, 10, 25)).empty                     # more than 3 days old
+    des = D.load(f, today=dt.date(2026, 10, 22))
+    out = D.outs(des, {"Team A": "AAA", "Team B": "BBB"})
+    assert sorted(out["name"]) == ["Big Lineman", "Joe Smith Jr."]          # Q is not out
+    up = pd.DataFrame({"game_id": ["g1", "g2", "g1", "g3"], "team": ["Team A", "Team A", "Team B", "Team B"], "t": [1, 2, 1, 2]})
+    cov = D.applies(out, up)
+    assert set(zip(cov["name"], cov["game_id"])) == {("Joe Smith Jr.", "g1"), ("Big Lineman", "g1"), ("Big Lineman", "g3")}
+    rows = pd.DataFrame({"game_id": ["g1", "g1", "g2"], "team": ["Team A"] * 3, "t": [1, 1, 2], "player_id": [1, 2, 1]})
+    info = pd.DataFrame({"name": ["Joe Smith", "Other Guy"]}, index=[1, 2])
+    po = D.player_outs(rows, out, info)
+    assert list(zip(po["game_id"], po["player_id"], po["status"])) == [("g1", 1, "Out")]
