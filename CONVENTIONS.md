@@ -46,6 +46,22 @@ boards in detail; this file is the rules.
   only touch games not yet played, so they lapse by themselves; delete stale rows when you
   see them. Edits go through a PR like any other change (the Actions never write this
   file); after merging, run **Update board** so the board picks them up.
+- **Injury designations (college board): `docs/cfb/designations.json`.** The daily college
+  check task writes it from Covers.com's NCAAF injury page
+  (https://www.covers.com/sport/football/ncaaf/injuries) and merges it through a PR like any
+  other change, then starts **Update college board** so the board uses it; the Actions never
+  write it. Shape: `{source, url, checked: "YYYY-MM-DD", players: [{team, name, pos, d,
+  injury, updated, season}]}`: `team` is the board abbreviation, `name` the board's name for
+  quarterbacks, backs and receivers (Covers' own, e.g. "J. Smith", for linemen and defense),
+  `d` one of O, D, Q, P, `season` true when he is out for the season. What it does
+  (`cfbmodel/designations.py`, upcoming games only): Out and Doubtful players get no
+  projection and their usage goes to teammates, a starting quarterback out is replaced by
+  the next one in the game model, and all of them are listed under "Out" on the team card;
+  Questionable and Probable are only shown as a superscript after the name; linemen and
+  defenders change no numbers. The page and the pipeline ignore the file once `checked` is
+  more than 3 days old, and `tests/test_cfb.py` checks it. Ryan approved this one exception
+  to "model inputs belong to the Model project" (Oct 21, 2026). The NFL board shows the same
+  superscript from its own official-report status.
 
 ## Site structure
 

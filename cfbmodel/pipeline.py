@@ -9,7 +9,7 @@ import pandas as pd
 
 from nflmodel.pipeline import _clean
 
-from . import archive, backtest, bets, board, config as C, data, espn, model, players, players_data, teams as T, weather
+from . import archive, backtest, bets, board, config as C, data, designations as DES, espn, model, players, players_data, teams as T, weather
 from .ratings import CFBRatingEngine
 
 PLAYER_PERIODS = {"tuning": (2017, 2019), "holdout": (C.HOLDOUT_FROM, 2100)}
@@ -32,12 +32,17 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
 
     say("Rating teams week by week ...")
     engine = CFBRatingEngine(tg, qb, games=games)
+    teams = T.load_teams(season, refresh=refresh)
+    abbr = teams["abbr"].to_dict()
+    # injury designations (Covers.com, docs/cfb/designations.json): upcoming games only
+    des_out = DES.outs(DES.load(), abbr)
+    if len(des_out):
+        say(f"  injury designations: {len(des_out)} players out or doubtful")
+    games = DES.apply_qbs(games, qb, des_out, engine, verbose=verbose)
     frame, info = model.walk_forward(model.build_frame(games, engine))
 
     prev_path = C.DOCS / "data.json"
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
-    teams = T.load_teams(season, refresh=refresh)
-    abbr = teams["abbr"].to_dict()
     names = teams["name"].to_dict()
     colors = {r.abbr: [r.color, r.alt] for r in teams.itertuples()}
 
@@ -78,10 +83,10 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     pboard, pg, ptable = None, None, None
     try:
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
-        ptable = players.build(games, frame, pg, pinfo)
+        ptable = players.build(games, frame, pg, pinfo, des_out)
         pproj = players.walk_forward(ptable, first_test=season)
         keys = {g["game_id"]: g["id"] for g in slate["games"]}
-        pboard = players.board(pproj, ptable, pinfo, keys, abbr)
+        pboard = players.board(pproj, ptable, pinfo, keys, abbr, des_out)
         if with_backtest:
             say("Backtesting player projections ...")
             pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)

@@ -141,8 +141,9 @@ opening totals (2021 on), betting the model's side when it is 3+ points off went
 694-562-12 (55.3%, +5.4% ± 2.7%). See [CFB_FEATURES.md](CFB_FEATURES.md) for every test
 and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
 
-College limits: no public injury report (a regular who missed his team's last game is
-treated as out), historical lines are consensus averages with no prices, and current
+College limits: no official injury report (players listed Out or Doubtful on Covers.com,
+read daily into `docs/cfb/designations.json`, get no projection; see
+`cfbmodel/designations.py`), historical lines are consensus averages with no prices, and current
 prices come from ESPN's scoreboard (one book). For research and entertainment.
 
 ## Quick start
