@@ -404,20 +404,30 @@ def backtest_summary(proj: pd.DataFrame, table: pd.DataFrame, periods: dict) -> 
 # --------------------------------------------------------------------------
 
 def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys: dict, abbr: dict,
-          des_out: pd.DataFrame | None = None) -> dict:
+          des: pd.DataFrame | None = None) -> dict:
     """Projections for the board's upcoming games (game_keys: game_id -> board id), with the inputs
-    behind them, and for each team the players listed Out or Doubtful for the game (des_out:
-    designations.outs), with their share of the team's usage when they have one."""
+    behind them, and for each team the players listed Out or Doubtful for the game, with their
+    share of the team's usage when they have one. des: the injury designations
+    (designations.listed). Each one covers the team's next game (every game if out for the
+    season): there, Questionable and Probable become the player's status, and a player listed
+    Out or Doubtful never gets a projection."""
     p = proj[proj["game_id"].isin(game_keys) & (proj["active"] == 1)].copy()
     if p.empty:
         return {"players": [], "teams": []}
     p["name"] = p["player_id"].map(info["name"]).fillna(p["player_id"].astype(str))
+    des = des if des is not None and len(des) else None
+    des_out = DES.outs(des, abbr) if des is not None else None
     r1 = lambda x: None if pd.isna(x) else round(float(x), 1)
     r2 = lambda x: None if pd.isna(x) else round(float(x), 2)
     r3 = lambda x: None if pd.isna(x) else round(float(x), 3)
     hist = table[table["played"].astype(bool) & (table["appeared"] == 1)]
     up = table[~table["played"].astype(bool) & table["game_id"].isin(game_keys)][["game_id", "team", "t"]].drop_duplicates()
     cov = DES.applies(des_out, up) if des_out is not None and len(des_out) else None
+    # the designation each player carries in each board game: {(game_id, team, name key): code}
+    tag = {}
+    if des is not None:
+        for x in DES.applies(des, up).itertuples():
+            tag[(x.game_id, x.team_name, x.key)] = x.d
     teams = []
     for (gid, team), t in p.groupby(["game_id", "team"]):
         first = t.iloc[0]
@@ -445,11 +455,14 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
     a = p[(p["receptions_proj"] >= 0.8) | (p["carries_proj"] >= 2) | ((p["group"] == "QB") & (p["att_share"] >= 0.5))]
     players = []
     for r in a.itertuples():
+        d = tag.get((r.game_id, r.team, DES.norm(r.name)))
+        if d in DES.OUT_CODES:
+            continue                       # listed out for this game: no projection (player_rows already drops him)
         td = (r.rec_td_proj or 0) + (r.rush_td_proj or 0)
         players.append({
             "id": str(int(r.player_id)), "name": r.name, "pos": r.position if isinstance(r.position, str) else r.group,
             "team": abbr.get(r.team, r.team), "opp": abbr.get(r.opp, r.opp), "game": game_keys[r.game_id], "week": int(r.week),
-            "status": None,
+            "status": DES.WORDS.get(d),
             "proj": {k: r1(getattr(r, k + "_proj")) for k in STATS},
             "td_any": r3(1 - np.exp(-max(td, 0))),
             "why": {"rec_share": r3(r.rec_share), "car_share": r3(r.car_share), "att_share": r3(r.att_share),

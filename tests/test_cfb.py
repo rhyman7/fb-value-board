@@ -152,3 +152,48 @@ def test_designations_rules(tmp_path):
     info = pd.DataFrame({"name": ["Joe Smith", "Other Guy"]}, index=[1, 2])
     po = D.player_outs(rows, out, info)
     assert list(zip(po["game_id"], po["player_id"], po["status"])) == [("g1", 1, "Out")]
+
+
+def test_board_out_players_have_no_projection():
+    """A designation covers one game: Questionable shows only there, and a player listed Out
+    (here one the player table still has as active) never gets a projection for that game."""
+    import datetime as dt
+    import json
+    import tempfile
+    from cfbmodel import designations as D, players as P
+    with tempfile.TemporaryDirectory() as tmp:
+        f = Path(tmp) / "designations.json"
+        f.write_text(json.dumps({"source": "Covers.com", "checked": "2026-10-21", "players": [
+            {"team": "AAA", "name": "Out Guy", "pos": "WR", "d": "O"},
+            {"team": "AAA", "name": "Q Guy", "pos": "RB", "d": "Q"}]}))
+        des = D.listed(D.load(f, today=dt.date(2026, 10, 21)), {"Team A": "AAA", "Team B": "BBB"})
+    base = {"team": "Team A", "opp": "Team B", "season": 2026, "active": 1, "played": False, "appeared": 0,
+            "proj_team_att": 30, "proj_team_car": 35, "imp_pts": 28, "margin": 3, "wind": 5, "def_ypa": 1, "def_ypc": 1,
+            "group": "WR", "position": "WR", "att_share": 0, "rec_share": 0.2, "car_share": 0.1, "rec_share_raw": 0.2,
+            "car_share_raw": 0.1, "ypr": 12, "ypc": 4, "ypa": 7, "comp": 0.6, "one_sum": 5, "receptions_proj": 4,
+            "carries_proj": 3, "rec_td_proj": 0.3, "rush_td_proj": 0.1, "carries": 0, "receptions": 0,
+            "team_car": 0, "team_comp": 0, "pass_att": 0, "team_att": 0}
+    base.update({s + "_proj": 1.0 for s in P.STATS})
+    rows = [dict(base, game_id=g, t=t, week=w, player_id=pid) for g, t, w in (("g1", 1, 8), ("g2", 2, 9)) for pid in (1, 2, 3)]
+    proj = pd.DataFrame(rows)
+    info = pd.DataFrame({"name": ["Out Guy", "Q Guy", "Fine Guy"], "position": ["WR", "RB", "WR"]}, index=[1, 2, 3])
+    b = P.board(proj, proj, info, {"g1": "K1", "g2": "K2"}, {"Team A": "AAA", "Team B": "BBB"}, des)
+    got = {(p["game"], p["name"]): p["status"] for p in b["players"]}
+    assert ("K1", "Out Guy") not in got                                   # out: no projection that week
+    assert got[("K2", "Out Guy")] is None                                 # the next week he is projected, no tag
+    assert got[("K1", "Q Guy")] == "Questionable" and got[("K2", "Q Guy")] is None
+    assert got[("K1", "Fine Guy")] is None
+    assert [o["name"] for t in b["teams"] if t["game"] == "K1" for o in t["out"]] == ["Out Guy"]
+
+
+def test_board_files_have_no_projections_for_out_players():
+    """On both boards' committed data, nobody out, doubtful or on IR for a game is projected in it."""
+    root = Path(__file__).resolve().parent.parent / "docs"
+    for f in (root / "data.json", root / "cfb" / "data.json"):
+        if not f.exists():
+            continue
+        import json
+        pl = (json.loads(f.read_text()).get("players") or {}).get("players") or []
+        bad = [(p["name"], p["game"], p["status"]) for p in pl
+               if str(p.get("status") or "").lower() in ("out", "doubtful", "ir") or str(p.get("status") or "").lower().startswith("injured reserve")]
+        assert not bad, f"{f.parent.name}: projected while out {bad}"
