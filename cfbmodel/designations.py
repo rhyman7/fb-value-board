@@ -35,6 +35,7 @@ from . import config as C
 PATH = C.DOCS / "designations.json"
 MAX_AGE_DAYS = 3
 OUT_CODES = {"O": "Out", "D": "Doubtful"}
+WORDS = {**OUT_CODES, "Q": "Questionable", "P": "Probable"}
 COLS = ["team", "name", "pos", "d", "injury", "updated", "season", "key"]
 
 
@@ -71,15 +72,22 @@ def load(path=None, today: dt.date | None = None) -> pd.DataFrame:
     return o[COLS]
 
 
-def outs(des: pd.DataFrame, abbr: dict) -> pd.DataFrame:
-    """Out and Doubtful rows, with the data's team name in `team_name`."""
-    o = des[des["d"].isin(list(OUT_CODES))].copy()
+def listed(des: pd.DataFrame, abbr: dict) -> pd.DataFrame:
+    """Every designation row (O, D, Q, P), with the data's team name in `team_name`."""
+    o = des.copy()
     back = {v: k for k, v in abbr.items()}
     o["team_name"] = o["team"].map(back)
     missing = o[o["team_name"].isna()]
     if len(missing):
         print(f"  designations: unknown teams {sorted(missing['team'].unique())}")
     return o[o["team_name"].notna()].reset_index(drop=True)
+
+
+def outs(des: pd.DataFrame, abbr: dict) -> pd.DataFrame:
+    """Out and Doubtful rows, with the data's team name in `team_name`. Accepts the raw rows
+    (load) or rows already given a team name (listed)."""
+    o = des if "team_name" in des.columns else listed(des, abbr)
+    return o[o["d"].isin(list(OUT_CODES))].reset_index(drop=True)
 
 
 def applies(out_rows: pd.DataFrame, upcoming: pd.DataFrame) -> pd.DataFrame:

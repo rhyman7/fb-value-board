@@ -58,10 +58,18 @@ boards in detail; this file is the rules.
   projection and their usage goes to teammates, a starting quarterback out is replaced by
   the next one in the game model, and all of them are listed under "Out" on the team card;
   Questionable and Probable are only shown as a superscript after the name; linemen and
-  defenders change no numbers. The page and the pipeline ignore the file once `checked` is
+  defenders change no numbers. Each designation covers only the team's next game (every
+  game if `season`), and the pipeline writes it into that game's player status, so the
+  superscript shows on that week's row only. The page and the pipeline ignore the file once `checked` is
   more than 3 days old, and `tests/test_cfb.py` checks it. Ryan approved this one exception
   to "model inputs belong to the Model project" (Oct 21, 2026). The NFL board shows the same
   superscript from its own official-report status.
+- **Out means no projection, on both boards.** A player Out, Doubtful or on injured reserve
+  for a game never has a projection for that game: the pipelines leave him out (his usage
+  goes to teammates) and list him under "Out" on the team card, the page drops any player row
+  whose status says otherwise, and `tests/test_cfb.py` checks both boards' `data.json`. The
+  superscript comes from the board data, not from fetching `designations.json` (that file
+  only adds the injury and date to the tooltip), so it always matches the projections.
 
 ## Site structure
 

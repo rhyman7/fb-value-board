@@ -755,22 +755,31 @@ if (!DATA || !DATA.slate) {
 }
 const M = DATA.meta, BT = DATA.backtest, KN = DATA.key_numbers;
 
-/* ---------------- injury designations (display only) ----------------
-   designations.json, next to the page and optional, lists game-status designations from an
-   injury report: { source, url, checked: "YYYY-MM-DD", players: [{ team, name, d, injury, updated }] }
-   with d one of O, D, Q, P. They show as a superscript after the player's name; the projections
-   never use them. A file not checked in the last 3 days is ignored, so old news can't linger.
-   Without the file, a player's own status (Out, Doubtful, Questionable, Injured reserve) is used. */
+/* ---------------- injury designations ----------------
+   Each projected player's status (DATA.players.players[].status) is his designation for that
+   game, written by the pipeline: the official report on the NFL board; on the college board
+   Covers.com via docs/cfb/designations.json, which covers the team's next game (every game if
+   he is out for the season). It shows as a superscript after the name. A player who is Out,
+   Doubtful or on injured reserve for a game gets no projection for it: the pipeline leaves him
+   out and lists him under "Out" on the team card, and the page drops any row that says
+   otherwise. designations.json, when present and checked in the last 3 days, only adds the
+   injury and date to the superscript's tooltip; it never decides who plays. */
 const DZ = {}, DZ_REDRAW = [];
 let DZ_META = null;
 const DZ_WORD = { O: "Out", D: "Doubtful", Q: "Questionable", P: "Probable", IR: "Injured reserve" };
 const dzKey = (team, name) => team + "|" + String(name || "").toLowerCase().replace(/\b(jr|sr|ii|iii|iv|v)\b/g, "").replace(/[^a-z]/g, "");
-const dzFromStatus = s => { const t = String(s || "").toLowerCase(); return t === "out" ? "O" : t === "doubtful" ? "D" : t === "questionable" ? "Q" : t.startsWith("injured reserve") || t === "ir" ? "IR" : null; };
+const dzFromStatus = s => { const t = String(s || "").toLowerCase(); return t === "out" ? "O" : t === "doubtful" ? "D" : t === "questionable" ? "Q" : t === "probable" ? "P" : t.startsWith("injured reserve") || t === "ir" ? "IR" : null; };
+// a player who is out for a game can't have stats in it: never show a projection for him
+const dzSits = p => ["O", "D", "IR"].includes(dzFromStatus(p.status));
+if (DATA.players && Array.isArray(DATA.players.players)) DATA.players.players = DATA.players.players.filter(p => !dzSits(p));
+// a player's status in one game (for the quarterback panels)
+const dzStatus = (game, team, name) => { const k = dzKey(team, name), p = ((DATA.players && DATA.players.players) || []).find(x => x.game === game && dzKey(x.team, x.name) === k); return p ? p.status : null; };
 function dzOf(p) {
-  const r = DZ[dzKey(p.team, p.name)];
-  if (r) return { d: r.d, title: [DZ_WORD[r.d] || r.d, r.injury, (DZ_META.source || "Injury report") + (r.updated ? ", " + r.updated : "")].filter(Boolean).join(" · ") };
   const d = dzFromStatus(p.status);
-  return d ? { d, title: p.status } : null;
+  if (!d) return null;
+  const r = DZ[dzKey(p.team, p.name)];
+  if (r && r.d === d) return { d, title: [DZ_WORD[d], r.injury, (DZ_META.source || "Injury report") + (r.updated ? ", " + r.updated : "")].filter(Boolean).join(" · ") };
+  return { d, title: p.status };
 }
 // the superscript as an element (H) or as HTML text
 const dzEl = p => { const z = dzOf(p); return z ? H("sup", { class: "dz dz-" + z.d, title: z.title, "aria-label": z.title, text: z.d }) : null; };
@@ -788,7 +797,9 @@ const dzReady = Promise.race([
   new Promise(res => setTimeout(res, 2500)),
 ]);
 
-const dzFoot = () => DZ_META ? ` Superscripts after a name are injury designations (O out, D doubtful, Q questionable, P probable) from ${DZ_META.source || "the injury report"}, checked ${DZ_META.checked}; they are shown for reference and the projections do not use them.` : (DATA.players && (DATA.players.players || []).some(p => dzFromStatus(p.status))) ? " A superscript after a name is the player's injury designation (O out, D doubtful, Q questionable, IR injured reserve)." : "";
+const dzFoot = () => (DATA.players && (DATA.players.players || []).some(p => dzFromStatus(p.status)))
+  ? ` A superscript after a name is his injury designation for that game (Q questionable, P probable)${DZ_META ? ", from " + (DZ_META.source || "the injury report") + ", checked " + DZ_META.checked : ""}. Players out or doubtful for a game get no projection for it and are listed under Out on the team card.`
+  : " Players out or doubtful for a game get no projection for it and are listed under Out on the team card.";
 
 /* ---------------- tooltip ---------------- */
 const tip = $("#tip");
@@ -1116,7 +1127,7 @@ function renderGame(g) {
   if (d.qbs) {
     const panel = (q, side) => {
       const node = H("div", { class: "qb" },
-        H("div", { class: "who" }, sw(side), document.createTextNode(q.name), dzEl({ team: q.team, name: q.name })),
+        H("div", { class: "who" }, sw(side), document.createTextNode(q.name), dzEl({ team: q.team, name: q.name, status: dzStatus(g.id, q.team, q.name) })),
         H("p", { class: "note", text: `${snum(q.value, 3)} EPA per dropback against the league average, on about ${comma(q.dropbacks)} recent dropbacks. Worth ${snum(q.points)} points to ${q.team} compared with the quarterbacks behind its rating.` }));
       if (q.log && q.log.length) {
         const chart = H("div"), tb = H("table");
