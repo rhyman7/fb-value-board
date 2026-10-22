@@ -241,3 +241,19 @@ def test_starters_file_is_valid():
     for team, e in d["starters"].items():
         assert team.strip() and e["qb"].strip(), team
         assert e.get("status") in {"confirmed", "reported", "uncertain", "no change"}, (team, e)
+
+
+def test_designations_played_through():
+    """A designation the player has played through is dropped; one posted after his last game,
+    or one with no date, stands."""
+    from cfbmodel import designations as D
+    des = pd.DataFrame({"team": ["AAA"] * 4, "team_name": ["Team A"] * 4, "d": ["O", "O", "D", "Q"],
+                        "name": ["Old Out", "New Out", "No Date", "Never Played"],
+                        "updated": ["2026-10-04", "2026-10-19", None, "2026-10-04"]})
+    des["key"] = des["name"].map(D.norm)
+    played = pd.DataFrame({"team_name": ["Team A"] * 3, "key": [D.norm("Old Out"), D.norm("New Out"), D.norm("No Date")],
+                           "date": pd.to_datetime(["2026-10-17", "2026-10-17", "2026-10-17"])})
+    kept = D.drop_played(des, played, verbose=False)
+    assert sorted(kept["name"]) == ["Never Played", "New Out", "No Date"]
+    other = played.assign(team_name="Team B")                        # played for another team: stands
+    assert len(D.drop_played(des, other, verbose=False)) == 4

@@ -36,6 +36,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     abbr = teams["abbr"].to_dict()
     # injury designations (Covers.com, docs/cfb/designations.json): upcoming games only
     des_all = DES.listed(DES.load(), abbr)
+    des_all = DES.drop_played(des_all, DES.played_from_qbs(qb, games), verbose=verbose)   # quarterbacks played through
     des_out = DES.outs(des_all, abbr)
     if len(des_out):
         say(f"  injury designations: {len(des_out)} players out or doubtful")
@@ -89,6 +90,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     pboard, pg, ptable = None, None, None
     try:
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
+        des_all = DES.drop_played(des_all, DES.played_from_box(pg, pinfo, games), verbose=verbose)  # everyone else
+        des_out = DES.outs(des_all, abbr)
         ptable = players.build(games, frame, pg, pinfo, des_out, qb_picks)
         pproj = players.walk_forward(ptable, first_test=season)
         keys = {g["game_id"]: g["id"] for g in slate["games"]}
