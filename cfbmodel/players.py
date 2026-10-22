@@ -107,7 +107,8 @@ def team_games(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame) -> pd
     return tg
 
 
-def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, des_out: pd.DataFrame | None = None) -> pd.DataFrame:
+def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, des_out: pd.DataFrame | None = None,
+                starters: pd.DataFrame | None = None) -> pd.DataFrame:
     """Every offensive player of each team for each game: those with a stat in the game, plus
     those expected to play (a stat in the team's previous game; in its first game, last season;
     for upcoming games also the regulars back from a missed game). des_out: Out and Doubtful
@@ -135,6 +136,9 @@ def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, des_out:
         f0 = f0.merge(lastseason.rename(columns={"season": "last_season"}), on=["team_id", "last_season"])
         exp = pd.concat([exp[~first], f0[["game_id", "team_id", "player_id", "season", "last_season"]]], ignore_index=True)
     exp = pd.concat([exp[["game_id", "team_id", "player_id"]], _regulars_back(tg, stats)], ignore_index=True)
+    if starters is not None and len(starters):      # a named starter plays even if he sat out last game
+        st = starters[starters["qb_id"] != "replacement"].merge(tg[["game_id", "team", "team_id"]], on=["game_id", "team"])
+        exp = pd.concat([exp, st[["game_id", "team_id"]].assign(player_id=st["qb_id"].astype(np.int64).to_numpy())], ignore_index=True)
     exp = exp.drop_duplicates().assign(expected=1)
     rows = stats.merge(exp, on=["game_id", "team_id", "player_id"], how="outer")
     rows["appeared"] = rows["pass_att"].notna().astype(int)
@@ -193,9 +197,11 @@ def _regulars_back(tg: pd.DataFrame, stats: pd.DataFrame) -> pd.DataFrame:
 
 
 def build(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame,
-          des_out: pd.DataFrame | None = None) -> pd.DataFrame:
+          des_out: pd.DataFrame | None = None, starters: pd.DataFrame | None = None) -> pd.DataFrame:
+    """starters (optional): this week's starting quarterbacks (starters.resolve); the named
+    quarterback takes the team's passes in that game."""
     tg = team_games(games, frame, pg)
-    rows = player_rows(tg, pg, info, des_out)
+    rows = player_rows(tg, pg, info, des_out, starters)
     act = rows.copy()
     use = (act["appeared"] == 1) & act["played"].astype(bool)
     act["car_share"] = np.where(act["team_car"] > 0, act["carries"] / act["team_car"], np.nan)
@@ -250,12 +256,21 @@ def build(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame, info: pd.D
     out = out.merge(dr[["game_id", "opp", "def_ypc", "def_ypa", "def_comp"]], on=["game_id", "opp"], how="left")
     for c in ("def_ypc", "def_ypa", "def_comp"):
         out[c] = out[c].fillna(1.0)
+    out["forced_qb"] = None
+    if starters is not None and len(starters):
+        f = starters[starters["qb_id"] != "replacement"].set_index(["game_id", "team"])["qb_id"].astype(np.int64)
+        out["forced_qb"] = [f.get((g, t)) for g, t in zip(out["game_id"], out["team"])]
     out["started"] = out["start"]      # did he start (half the team's passes)? an outcome, used to fit and score passing
     return out
 
 
 def _pick_starter(d: pd.DataFrame):
     top = d.iloc[0]
+    forced = top.get("forced_qb") if "forced_qb" in d else None
+    if forced is not None and pd.notna(forced):     # this week's named starter (starters.py)
+        hit = d[d["player_id"] == forced]
+        if len(hit):
+            return hit.index[0]
     prev = d[d["player_id"] == top["prev_qb"]]
     if len(prev) and not (top["att_share_raw"] >= 0.8 and top["player_id"] != top["prev_qb"]):
         return prev.index[0]
@@ -268,6 +283,10 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
     p["proj_team_att"] = att_model.predict(X).clip(12, 65)
     p["proj_team_car"] = car_model.predict(X).clip(15, 65)
     act = p["active"] == 1
+    if "forced_qb" in p:                             # a named starter's teammates at QB are backups: no designed runs
+        fq = pd.to_numeric(p["forced_qb"], errors="coerce")
+        backup = fq.notna() & (p["group"] == "QB") & (p["player_id"] != fq)
+        p["car_share_raw"] = p["car_share_raw"].where(~backup, 0.0)
     for c in ("car_share", "rec_share"):
         raw = p[f"{c}_raw"].where(act, 0.0)
         tot = raw.groupby([p["game_id"], p["team"]]).transform("sum")
