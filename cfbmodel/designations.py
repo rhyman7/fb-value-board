@@ -19,6 +19,8 @@ How the board uses it, for upcoming games only (played games and the backtests a
   - Questionable or Probable: projected as normal; the page shows the designation.
   - Linemen and defensive players are listed under "Out" but change no numbers: there is
     no college injury history to measure what they are worth.
+A designation the player has played through (a game for his team after its `updated` date)
+is left out: Covers keeps old entries. A newer one, posted after that game, stands.
 A file not checked in the last MAX_AGE_DAYS days is ignored.
 """
 from __future__ import annotations
@@ -88,6 +90,39 @@ def outs(des: pd.DataFrame, abbr: dict) -> pd.DataFrame:
     (load) or rows already given a team name (listed)."""
     o = des if "team_name" in des.columns else listed(des, abbr)
     return o[o["d"].isin(list(OUT_CODES))].reset_index(drop=True)
+
+
+def drop_played(des: pd.DataFrame, played: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
+    """Leave out designations the player has played through: a row whose `updated` date is
+    before a game he has since played in for that team (Covers keeps old entries). A newer
+    designation, posted after his last game, stands. played has team_name, key (norm name)
+    and date (game day) for each game a player played in; rows without `updated` stay."""
+    if des.empty or played.empty or "team_name" not in des.columns:
+        return des
+    last = played.groupby(["team_name", "key"])["date"].max()
+    upd = pd.to_datetime(des["updated"], errors="coerce")
+    seen = pd.Series([last.get((t, k)) for t, k in zip(des["team_name"], des["key"])], index=des.index)
+    seen = pd.to_datetime(seen, errors="coerce")
+    stale = upd.notna() & seen.notna() & (seen.dt.normalize() > upd)
+    if verbose and stale.any():
+        names = [f"{t} {n} ({d})" for t, n, d in zip(des.loc[stale, "team_name"], des.loc[stale, "name"], des.loc[stale, "d"])]
+        print(f"  designations dropped, played since they were posted: {', '.join(names)}")
+    return des[~stale].reset_index(drop=True)
+
+
+def played_from_qbs(qb: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
+    """(team_name, key, date) for every game a quarterback has dropbacks in."""
+    q = qb.merge(games[["game_id", "gameday"]], on="game_id")
+    return pd.DataFrame({"team_name": q["team"], "key": q["name"].map(norm), "date": q["gameday"]})
+
+
+def played_from_box(pg: pd.DataFrame, info: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
+    """(team_name, key, date) for every game a player has a pass, carry or catch in."""
+    off = pg[pg[["pass_att", "carries", "receptions"]].sum(axis=1) > 0]
+    team = pd.concat([games[["home_id", "home_team"]].set_axis(["team_id", "team_name"], axis=1),
+                      games[["away_id", "away_team"]].set_axis(["team_id", "team_name"], axis=1)]).drop_duplicates("team_id")
+    o = off[["game_id", "team_id", "player_id"]].merge(games[["game_id", "gameday"]], on="game_id").merge(team, on="team_id")
+    return pd.DataFrame({"team_name": o["team_name"], "key": o["player_id"].map(info["name"]).map(norm), "date": o["gameday"]})
 
 
 def applies(out_rows: pd.DataFrame, upcoming: pd.DataFrame) -> pd.DataFrame:

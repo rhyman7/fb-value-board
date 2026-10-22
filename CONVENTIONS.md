@@ -60,7 +60,7 @@ boards in detail; this file is the rules.
   Questionable and Probable are only shown as a superscript after the name; linemen and
   defenders change no numbers. Each designation covers only the team's next game (every
   game if `season`), and the pipeline writes it into that game's player status, so the
-  superscript shows on that week's row only. The page and the pipeline ignore the file once `checked` is
+  superscript shows on that week's row only. A designation the player has played through (a game for his team after its `updated` date) is ignored, since Covers keeps old entries; a newer one, posted after that game, stands. The page and the pipeline ignore the file once `checked` is
   more than 3 days old, and `tests/test_cfb.py` checks it. Ryan approved this one exception
   to "model inputs belong to the Model project" (Oct 21, 2026). The NFL board shows the same
   superscript from its own official-report status.
