@@ -64,6 +64,20 @@ boards in detail; this file is the rules.
   more than 3 days old, and `tests/test_cfb.py` checks it. Ryan approved this one exception
   to "model inputs belong to the Model project" (Oct 21, 2026). The NFL board shows the same
   superscript from its own official-report status.
+- **Starting quarterbacks (college board): the CFB dashboard's weekly list.** Each build
+  downloads `overrides/qb_starters.json` from rhyman7/cfb (the CFB dashboard's daily task
+  checks every FBS team's expected starter on every run) and keeps a copy in
+  `docs/cfb/starters.json`; if the download fails, the saved copy is used. What it does
+  (`cfbmodel/starters.py`, upcoming games only): when a team's next game is in the list's
+  week, the listed quarterback starts that game and the team's later games this season in
+  the game model, takes the team's passes in the player projections, and the team's other
+  quarterbacks get no designed runs. A listed quarterback with no pass this season counts as
+  replacement level only when the list marks the change confirmed or reported. Injury
+  designations are applied after it, so a listed starter who is Out or Doubtful is still
+  replaced. A list for another season or week changes nothing; `tests/test_cfb.py` checks
+  the rules and the saved copy. Ryan approved this second exception to "model inputs belong
+  to the Model project" (Oct 22, 2026). Don't edit the copy by hand: fix the list in
+  rhyman7/cfb and re-run **Update college board**.
 - **Out means no projection, on both boards.** A player Out, Doubtful or on injured reserve
   for a game never has a projection for that game: the pipelines leave him out (his usage
   goes to teammates) and list him under "Out" on the team card, the page drops any player row

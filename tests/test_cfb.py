@@ -197,3 +197,47 @@ def test_board_files_have_no_projections_for_out_players():
         bad = [(p["name"], p["game"], p["status"]) for p in pl
                if str(p.get("status") or "").lower() in ("out", "doubtful", "ir") or str(p.get("status") or "").lower().startswith("injured reserve")]
         assert not bad, f"{f.parent.name}: projected while out {bad}"
+
+
+def test_starters_rules(tmp_path):
+    """The CFB dashboard's starting-QB list sets the starter for a team's upcoming games when
+    its next game is in the list's week; another season or week, or a played game, is untouched;
+    an unknown name counts only for a reported change."""
+    import json
+    from cfbmodel import starters as S
+    games = pd.DataFrame({
+        "game_id": [1, 2, 3, 4], "season": [2026] * 4, "week": [7, 8, 9, 8], "order": [202607, 202608, 202609, 202608],
+        "home_team": ["Team A", "Team A", "Team B", "Team C"], "away_team": ["Team B", "Team B", "Team A", "Team D"],
+        "played": [True, False, False, False], "home_qb_id": ["10", None, None, None], "away_qb_id": ["20", None, None, None]})
+    qb = pd.DataFrame({"season": [2026] * 3, "team": ["Team A", "Team A", "Team B"], "name": ["Old Starter", "New Guy Jr.", "B Starter"],
+                       "qb_id": ["10", "11", "20"]})
+    lst = {"season": 2026, "week": 8, "checked": "2026-10-22", "starters": {
+        "Team A": {"qb": "New Guy", "status": "reported"},
+        "Team B": {"qb": "B Starter", "status": "no change"},
+        "Team C": {"qb": "Never Threw", "status": "uncertain"},
+        "Team D": {"qb": "Freshman", "status": "confirmed"}}}
+    f = tmp_path / "starters.json"
+    f.write_text(json.dumps(lst))
+    picks = S.resolve(S.load(f), games, qb, verbose=False)
+    got = set(zip(picks["game_id"], picks["team"], picks["qb_id"]))
+    assert got == {(2, "Team A", "11"), (3, "Team A", "11"), (2, "Team B", "20"), (3, "Team B", "20"), (4, "Team D", "replacement")}
+    g = S.apply(games, picks, verbose=False)
+    assert g.loc[0, "home_qb_id"] == "10"                       # played game untouched
+    assert g.loc[1, "home_qb_id"] == "11" and g.loc[2, "away_qb_id"] == "11"
+    assert S.resolve({**lst, "week": 9}, games, qb, verbose=False).empty      # list for another week
+    assert S.resolve({**lst, "season": 2025}, games, qb, verbose=False).empty
+
+
+def test_starters_file_is_valid():
+    """docs/cfb/starters.json, the saved copy of the CFB dashboard's list (if present)."""
+    import datetime as dt
+    import json
+    path = Path(__file__).resolve().parent.parent / "docs" / "cfb" / "starters.json"
+    if not path.exists():
+        return
+    d = json.loads(path.read_text())
+    dt.date.fromisoformat(d["checked"])
+    assert isinstance(d["season"], int) and isinstance(d["week"], int)
+    for team, e in d["starters"].items():
+        assert team.strip() and e["qb"].strip(), team
+        assert e.get("status") in {"confirmed", "reported", "uncertain", "no change"}, (team, e)
