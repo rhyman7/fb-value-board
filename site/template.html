@@ -374,6 +374,9 @@ td .act { font-weight: 700; }
 .mx th.num, .mx td.num { text-align: right; }
 .mx th:first-child, .mx td:first-child { padding-left: 8px; }
 .mx td:first-child { white-space: normal; }
+.mx td.pname { cursor: help; }
+.mx td.pname:hover { text-decoration: underline dotted; text-underline-offset: 3px; }
+.mx td.pname:focus-visible { outline: 2px solid var(--text); outline-offset: -2px; }
 .mx .ptag { margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; }
 .mx .ppos { margin-left: 6px; font-size: 0.75rem; color: var(--text-dim); }
 .mx sup.dz { color: var(--text); } .mx sup.dz-O, .mx sup.dz-D, .mx sup.dz-IR { color: var(--neg); }
@@ -1918,12 +1921,64 @@ const matchups = (() => {
   const pctx = x => x == null ? "–" : Math.round(x * 100) + "%";
   const factor = x => x == null ? "" : x >= 1 ? `${Math.round((x - 1) * 100)}% more` : `${Math.round((1 - x) * 100)}% fewer`;
 
-  function table(title, rows, cols) {
+  // kind: "pass", "rush" or "rec", the table the name sits in, so hovering it explains that line
+  function table(title, rows, cols, kind) {
     if (!rows.length) return `<div class="table-block"><h4>${title}</h4><div class="empty-note">No projection</div></div>`;
     return `<div class="table-block"><h4>${title}</h4><table><thead><tr>${cols.map(c => `<th class="${c.n ? "num" : ""}" scope="col">${c.t}</th>`).join("")}</tr></thead><tbody>${
       rows.map(p => `<tr>${cols.map(c => c.n ? `<td class="num">${c.f(p)}</td>`
-        : `<td>${esc(p.name)}${dzHtml(p)}<span class="ppos">${esc(p.pos)}</span>${chipText(p) ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
+        : `<td class="pname" tabindex="0" data-pi="${PL.indexOf(p)}" data-kind="${kind}" aria-label="${esc(p.name)}: how this projection is built">${esc(p.name)}${dzHtml(p)}<span class="ppos">${esc(p.pos)}</span>${chipText(p) ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
     }</tbody></table></div>`;
+  }
+
+  /* Hover (or focus, or tap) a player's name: how that line is built. Team volume, his share,
+     his efficiency, what this defense allows, then the chain against the projection when the
+     data has it (the college board exports the chain and recent average; the NFL board not yet). */
+  const sgnf = x => (x >= 0 ? "+" : MINUS) + n1(Math.abs(x));
+  function tipRows(p, kind) {
+    const w = p.why || {}, t = TP[p.game + "|" + p.team] || {}, rows = [];
+    const recent = (now, hist) => pctx(now) + (hist != null && Math.abs((now || 0) - hist) >= 0.01 ? ` (${pctx(hist)} recent)` : "");
+    let stat, label;
+    if (kind === "pass") {
+      stat = "pass_yds"; label = "Pass yds";
+      rows.push({ k: "Team pass attempts", v: n1(t.pass_att) }, { k: "Completion rate", v: pctx(w.comp) }, { k: "Yards per attempt", v: n1(w.ypa) });
+      if (w.def_ypa != null) rows.push({ k: p.opp + " pass defense", v: factor(w.def_ypa) + " /att" });
+    } else if (kind === "rush") {
+      stat = "rush_yds"; label = "Rush yds";
+      rows.push({ k: "Team carries", v: n1(t.carries) }, { k: "Share of carries", v: recent(w.car_share, w.car_share_hist) }, { k: "Yards per carry", v: n1(w.ypc) });
+      if (w.def_ypc != null) rows.push({ k: p.opp + " run defense", v: factor(w.def_ypc) + " /carry" });
+    } else {
+      stat = "rec_yds"; label = "Rec yds";
+      rows.push({ k: "Team pass attempts", v: n1(t.pass_att) });
+      if (w.tgt_share != null) rows.push({ k: "Share of targets", v: recent(w.tgt_share, w.tgt_share_hist) }, { k: "Yards per target", v: n1(w.ypt) });
+      else rows.push({ k: "Share of catches", v: recent(w.rec_share, w.rec_share_hist) }, { k: "Yards per catch", v: n1(w.ypr) });
+    }
+    const proj = p.proj[stat];
+    if (w.chain && w.chain[stat] != null) {
+      rows.push({ k: label + ", chain", v: n1(w.chain[stat]) },
+        { k: p.pos === "QB" && kind === "pass" ? "Recent per start" : "Recent per game", v: n1(w.recent[stat]) },
+        { k: "Calibration", v: sgnf((proj || 0) - w.chain[stat]) });
+    }
+    rows.push({ k: label + ", projected", v: n1(proj) });
+    return rows;
+  }
+  let tipFor = null;   // the name cell the tooltip is showing, so a second tap closes it
+  function wireTips(host) {
+    const show = (e, cell) => { const p = PL[+cell.dataset.pi]; if (!p) return; tipFor = cell; showTip(e, `${p.name} · ${p.pos} · ${p.team}`, tipRows(p, cell.dataset.kind)); };
+    const close = () => { tipFor = null; hideTip(); };
+    host.addEventListener("pointermove", e => { const c = e.target.closest("td.pname"); if (c && e.pointerType === "mouse") show(e, c); else if (!c && tipFor && e.pointerType === "mouse") close(); });
+    host.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") close(); });
+    let lastType = "mouse";            // a mouse already shows the tip on hover; taps toggle it
+    host.addEventListener("pointerdown", e => { lastType = e.pointerType; });
+    host.addEventListener("click", e => {
+      if (lastType === "mouse") return;
+      const c = e.target.closest("td.pname");
+      if (!c) { if (tipFor) close(); return; }
+      if (tipFor === c) close(); else show(e, c);
+    });
+    host.addEventListener("focusin", e => { const c = e.target.closest("td.pname"); if (c) show(e, c); });
+    host.addEventListener("focusout", e => { if (e.target.closest("td.pname")) close(); });
+    host.addEventListener("keydown", e => { if (e.key === "Escape" && tipFor) close(); });
+    window.addEventListener("scroll", () => { if (tipFor) close(); }, { passive: true });
   }
 
   function card(g, s) {
@@ -1936,11 +1991,11 @@ const matchups = (() => {
     const name = { t: "Player" };
     const tables = [
       table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints) },
-        { t: "Cmp", n: 1, f: p => n1(p.proj.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att) }]),
+        { t: "Cmp", n: 1, f: p => n1(p.proj.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att) }], "pass"),
       table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rush_td) },
-        { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries) }]),
+        { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries) }], "rush"),
       table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions) },
-        LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–" }]),
+        LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–" }], "rec"),
     ].join("");
     const d = [];
     if (t.def_ypa != null) d.push(`${factor(t.def_ypa)} yards per pass`);
@@ -1995,6 +2050,7 @@ const matchups = (() => {
         <button class="print-btn" id="mx-print" type="button">Print matchup</button></div>${gameBlock(g)}`;
     $("#mx-print").addEventListener("click", () => window.print());
   }
+  wireTips($("#view-matchup"));
 
   /* Print all: every game on the board (as filtered), one landscape page each. The games are
      built into #mx-print-all only for the print, and html.mx-printing shows them instead of the board. */
