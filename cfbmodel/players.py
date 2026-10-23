@@ -472,8 +472,18 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
                       "imp_pts": r1(first["imp_pts"]), "margin": r1(first["margin"]), "wind": r1(first["wind"]),
                       "def_ypa": r3(first["def_ypa"]), "def_ypc": r3(first["def_ypc"]), "out": out})
     a = p[(p["receptions_proj"] >= 0.8) | (p["carries_proj"] >= 2) | ((p["group"] == "QB") & (p["att_share"] >= 0.5))]
+    # The two inputs to the last calibration step, per stat: the volume x share x efficiency
+    # chain and the recent per-game average (per start, for a starter's passing). The card shows
+    # both, so a projection far from the chain is explained.
+    SHOWN = ("pass_yds", "carries", "rush_yds", "receptions", "rec_yds")
+    def _cal_in(s):
+        try:
+            return calib_X(a, s)[:, :2]
+        except KeyError:                   # a frame without the chain columns: nothing to show
+            return np.full((len(a), 2), np.nan)
+    cal_in = {s: _cal_in(s) for s in SHOWN}
     players = []
-    for r in a.itertuples():
+    for i, r in enumerate(a.itertuples()):
         d = tag.get((r.game_id, r.team, DES.norm(r.name)))
         if d in DES.OUT_CODES:
             continue                       # listed out for this game: no projection (player_rows already drops him)
@@ -487,7 +497,9 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
             "why": {"rec_share": r3(r.rec_share), "car_share": r3(r.car_share), "att_share": r3(r.att_share),
                     "rec_share_hist": r3(r.rec_share_raw), "car_share_hist": r3(r.car_share_raw),
                     "ypr": r2(r.ypr), "ypc": r2(r.ypc), "ypa": r2(r.ypa), "comp": r3(r.comp),
-                    "def_ypc": r3(r.def_ypc), "def_ypa": r3(r.def_ypa), "games": r1(r.one_sum)},
+                    "def_ypc": r3(r.def_ypc), "def_ypa": r3(r.def_ypa), "games": r1(r.one_sum),
+                    "chain": {k: r1(cal_in[k][i, 0]) for k in SHOWN},
+                    "recent": {k: r1(cal_in[k][i, 1]) for k in SHOWN}},
         })
     players.sort(key=lambda x: -(x["proj"]["rec_yds"] or 0) - (x["proj"]["rush_yds"] or 0) - (x["proj"]["pass_yds"] or 0) / 2.5)
     return {"players": players, "teams": teams}

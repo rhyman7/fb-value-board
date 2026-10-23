@@ -1547,6 +1547,20 @@ function diagChart(node, o) {
     if ((w.car_share || 0) > 0.05 || p.pos === "QB") d.push(`${factor(w.def_ypc)} rushing yards per carry`);
     let dtext = d.join(" and ") + ".";
     grid.append(box("The defense", tx(dtext)));
+    if (w.chain && w.recent) {
+      const keys = (p.pos === "QB" ? [["pass_yds", "Passing yards"], ["rush_yds", "Rushing yards"]]
+        : [["rush_yds", "Rushing yards"], ["rec_yds", "Receiving yards"]])
+        .filter(([k]) => w.chain[k] != null && ((p.proj[k] || 0) >= 10 || (w.chain[k] || 0) >= 10));
+      if (keys.length) {
+        const kids = [tx("The chain is team volume × share × efficiency × defense. The projection comes from a regression on earlier seasons that blends the chain with his recent average.")];
+        keys.forEach(([k, label]) => {
+          const lift = (p.proj[k] || 0) - (w.chain[k] || 0);
+          const rec = p.pos === "QB" && k === "pass_yds" ? "per start" : "per game";
+          kids.push(H("br"), b(label + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(p.proj[k])} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from calibration).`));
+        });
+        grid.append(box("From chain to projection", ...kids));
+      }
+    }
     if (t.out && t.out.length) grid.append(box("Teammates out", tx(t.out.map(o => `${o.name} (${[o.pos, o.status, o.att_share >= 0.5 ? pctx(o.att_share) + " of passes" : "", o.rec_share >= 0.05 ? pctx(o.rec_share) + " of catches" : "", o.car_share >= 0.1 ? pctx(o.car_share) + " of carries" : ""].filter(Boolean).join(", ")})`).join("; ") + ". From Covers.com.")));
     return grid;
   }

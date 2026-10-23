@@ -186,6 +186,29 @@ def test_board_out_players_have_no_projection():
     assert [o["name"] for t in b["teams"] if t["game"] == "K1" for o in t["out"]] == ["Out Guy"]
 
 
+def test_board_shows_calibration_inputs():
+    """Each player card carries the chain value and the recent average that the calibration
+    blends, per shown stat, and the recent average is the per-game one calib_X uses."""
+    from cfbmodel import players as P
+    base = {"team": "Team A", "opp": "Team B", "season": 2026, "active": 1, "played": False, "appeared": 0,
+            "proj_team_att": 30, "proj_team_car": 35, "imp_pts": 28, "margin": 3, "wind": 5, "def_ypa": 1, "def_ypc": 1,
+            "group": "RB", "position": "RB", "att_share": 0, "rec_share": 0.1, "car_share": 0.4, "rec_share_raw": 0.1,
+            "car_share_raw": 0.35, "ypr": 8, "ypc": 5, "ypa": 7, "comp": 0.6, "one_sum": 5, "receptions_proj": 2,
+            "carries_proj": 14, "rec_td_proj": 0.1, "rush_td_proj": 0.5, "carries": 0, "receptions": 0,
+            "team_car": 0, "team_comp": 0, "pass_att": 0, "team_att": 0, "start_sum": 0,
+            "game_id": "g1", "t": 1, "week": 8, "player_id": 1}
+    base.update({s + "_proj": 1.0 for s in P.STATS})
+    base.update({s + "_p": 2.0 for s in P.STATS})
+    base.update({s + "_sum": 15.0 for s in P.STATS})
+    base.update({s + "_st_sum": 0.0 for s in P.STATS})
+    base.update({"rush_yds_p": 62.8, "rush_yds_sum": 305.0, "rush_yds_proj": 70.0})
+    proj = pd.DataFrame([base])
+    info = pd.DataFrame({"name": ["Back"], "position": ["RB"]}, index=[1])
+    w = P.board(proj, proj, info, {"g1": "K1"}, {"Team A": "AAA", "Team B": "BBB"})["players"][0]["why"]
+    assert w["chain"]["rush_yds"] == 62.8 and w["recent"]["rush_yds"] == 61.0
+    assert set(w["chain"]) == set(w["recent"]) == {"pass_yds", "carries", "rush_yds", "receptions", "rec_yds"}
+
+
 def test_board_files_have_no_projections_for_out_players():
     """On both boards' committed data, nobody out, doubtful or on IR for a game is projected in it."""
     root = Path(__file__).resolve().parent.parent / "docs"

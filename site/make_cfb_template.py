@@ -186,6 +186,26 @@ sub('''    $("#hist-foot").textContent = `"Side" is whichever side the board's m
 sub('''    WR: [["targets", "Targets"], ["receptions", "Rec"], ["rec_yds", "Rec yds"]],''', '''    WR: [["receptions", "Rec"], ["rec_yds", "Rec yds"], ["rec_td", "Rec TD"]],''')
 sub('"No player projections were archived for this week (they start with week 7)."', '"No player projections were archived for this week."')
 
+# ---- player card: the last calibration step ----------------------------------------
+# The chain (volume x share x efficiency x defense) is not the projection: a regression fitted
+# on earlier seasons blends it with the player's recent average. Show both inputs and the gap.
+CAL_BOX = r'''
+    if (w.chain && w.recent) {
+      const keys = (p.pos === "QB" ? [["pass_yds", "Passing yards"], ["rush_yds", "Rushing yards"]]
+        : [["rush_yds", "Rushing yards"], ["rec_yds", "Receiving yards"]])
+        .filter(([k]) => w.chain[k] != null && ((p.proj[k] || 0) >= 10 || (w.chain[k] || 0) >= 10));
+      if (keys.length) {
+        const kids = [tx("The chain is team volume × share × efficiency × defense. The projection comes from a regression on earlier seasons that blends the chain with his recent average.")];
+        keys.forEach(([k, label]) => {
+          const lift = (p.proj[k] || 0) - (w.chain[k] || 0);
+          const rec = p.pos === "QB" && k === "pass_yds" ? "per start" : "per game";
+          kids.push(H("br"), b(label + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(p.proj[k])} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from calibration).`));
+        });
+        grid.append(box("From chain to projection", ...kids));
+      }
+    }'''
+sub('    grid.append(box("The defense", tx(dtext)));', '    grid.append(box("The defense", tx(dtext)));' + CAL_BOX)
+
 
 def main():
     html = SRC.read_text()
