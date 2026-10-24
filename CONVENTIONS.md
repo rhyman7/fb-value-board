@@ -77,7 +77,11 @@ boards in detail; this file is the rules.
   replaced. A list for another season or week changes nothing; `tests/test_cfb.py` checks
   the rules and the saved copy. Ryan approved this second exception to "model inputs belong
   to the Model project" (Oct 22, 2026). Don't edit the copy by hand: fix the list in
-  rhyman7/cfb and re-run **Update college board**.
+  rhyman7/cfb and re-run **Update college board**. The daily value-board check may make that
+  fix itself (Ryan's call, Oct 24, 2026): when news confirms that a team's listed starter is out
+  or a different starter is named for a game in the next 3 days, it changes only that team's
+  entry in rhyman7/cfb's `overrides/qb_starters.json` through a PR there, then re-runs
+  **Update college board**. Its task prompt has the rules.
 - **Out means no projection, on both boards.** A player Out, Doubtful or on injured reserve
   for a game never has a projection for that game: the pipelines leave him out (his usage
   goes to teammates) and list him under "Out" on the team card, the page drops any player row
