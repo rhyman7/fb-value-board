@@ -23,6 +23,8 @@ def sub(old, new, n=1):
 
 # ---- names and storage ------------------------------------------------------------
 sub("<title>NFL Value Board</title>", "<title>College Football Value Board</title>")
+sub('href="../favicon', 'href="../../favicon', 2)   # icons: docs/cfb/ is one folder deeper than docs/
+sub('href="../apple-touch-icon', 'href="../../apple-touch-icon')
 sub('<i aria-hidden="true"></i>NFL Value Board</a>', '<i aria-hidden="true"></i>College Value Board</a>')
 sub('        <li><a href="cfb/" data-view="cfb">College board</a></li>\n', '        <li><a href="../" data-view="nfl">NFL board</a></li>\n')
 sub(' | NFL Value Board"; }', ' | College Value Board"; }', 3)   # game page, matchups board, one matchup
