@@ -27,7 +27,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856663,home,5141684,Austin Simmons,Missouri,20,18.876,20
 2026,401856663,away,5303364,Garrison Davis,FCS,14,-2.8603,8
 2026,401856663,away,5163068,Jack Schierholz,FCS,10,2.4369,5
-2026,401856663,home,5195300,Matt Zollers,Missouri,12,-3.7351,4
+2026,401856663,home,5195300,Matt Zollers,Missouri,12,-1.6704,4
 2026,401856663,home,4755664,Nick Evers,Missouri,2,1.0903,0
 2026,401856663,away,5229490,Landon Holcomb,FCS,1,-0.7655,0
 2026,401858423,home,4870900,Dylan Lonergan,Rutgers,33,-8.454,29
@@ -53,11 +53,11 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864425,away,4880196,Colton Fitzgerald,FCS,8,-6.5812,0
 2026,401864425,home,5265536,Skyler Williams,Kennesaw State,4,-2.5374,0
 2026,401866409,home,5328086,Elijah Holmes,Buffalo,48,-0.5671,48
-2026,401866409,away,5095216,Kai Colon,FCS,39,-3.3423,39
+2026,401866409,away,5095216,Kai Colon,FCS,39,-2.7846,39
 2026,401866409,away,5082909,Aidan Semo,FCS,5,-1.8452,5
 2026,401856776,away,5159016,Julian Lewis,Colorado,27,-0.5908,27
 2026,401856776,home,5296224,Landon Shaffer,Georgia Tech,2,1.6586,2
-2026,401856776,home,5191162,Alberto Mendoza,Georgia Tech,24,2.6548,24
+2026,401856776,home,5191162,Alberto Mendoza,Georgia Tech,24,6.4836,24
 2026,401858422,home,5144959,Drake Lindsey,Minnesota,24,11.7035,17
 2026,401858422,away,5113896,Cole LaCrue,FCS,13,2.2575,10
 2026,401858422,away,5083199,Jeremiah Salem,FCS,3,-1.1699,0
@@ -70,7 +70,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858206,away,5141605,Luke Nickel,Miami,4,-4.0892,0
 2026,401858206,home,5211073,Michael Mitchell Jr.,Stanford,1,0.3162,0
 2026,401856664,home,4915980,John Mateer,Oklahoma,18,13.6922,14
-2026,401856664,away,5141395,EJ Colson Jr.,UTEP,14,-4.9041,13
+2026,401856664,away,5141395,EJ Colson Jr.,UTEP,14,-4.7504,13
 2026,401856664,away,4877714,Jaden Smith,UTEP,1,1.0404,1
 2026,401856664,away,5232049,Raymond Moore III,UTEP,7,-6.4805,0
 2026,401856664,home,5224237,Whitt Newbauer,Oklahoma,1,0.1785,0
@@ -81,22 +81,22 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864495,home,4690158,Noah Kim,Eastern Michigan,43,-14.297,43
 2026,401864495,away,5295238,Luke Weaver,San José State,40,8.0103,40
 2026,401864495,away,5296610,Tama Amisone,San José State,1,-1.0883,1
-2026,401858435,home,5104738,Ryan Browne,Purdue,30,18.0467,30
+2026,401858435,home,5104738,Ryan Browne,Purdue,30,19.0532,30
 2026,401858435,away,5155321,Elijah Owens,FCS,20,-5.8933,20
 2026,401858435,away,4685691,Brady Allen,FCS,5,7.5275,0
 2026,401858435,home,5149006,Evans Chuba,Purdue,6,-2.3197,0
 2026,401866623,away,5226768,Braxton Thomas,FCS,3,-3.1232,3
 2026,401866623,home,5193926,Cameran Brown,Georgia State,20,16.4439,20
-2026,401866623,away,5164567,Kevin White,FCS,24,-3.3256,15
+2026,401866623,away,5164567,Kevin White,FCS,24,-2.8237,15
 2026,401866623,home,5083490,Ayden Pereira,Georgia State,7,-0.685,0
 2026,401866623,home,5381375,Gavin Nuckolls,Georgia State,3,-0.6867,0
-2026,401866623,away,5150663,Champ Long,FCS,1,1.3602,0
+2026,401866623,away,5150663,Champ Long,FCS,1,-0.6717,0
 2026,401866623,home,5216706,TJ Stanley,Georgia State,3,0.171,0
 2026,401856769,away,4837195,Luca Stanzani,FCS,21,0.4262,15
 2026,401856769,home,5079604,Isaiah Marshall,Kansas,19,17.2717,17
 2026,401856769,home,5151060,Cole Ballard,Kansas,6,6.9392,0
 2026,401856769,away,5304536,Mekhi Moore,FCS,2,-1.8275,0
-2026,401858429,away,5082330,John Alan Richter,Toledo,23,4.6147,23
+2026,401858429,away,5082330,John Alan Richter,Toledo,23,6.9857,23
 2026,401858429,home,5146670,Alessio Milivojevic,Michigan State,37,11.7216,37
 2026,401858432,home,5079712,Julian Sayin,Ohio State,27,19.8152,27
 2026,401858432,away,5075392,Keldric Luster,Ball State,34,-15.3897,22
@@ -145,7 +145,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858434,home,4801299,Rocco Becht,Penn State,19,20.2777,19
 2026,401858434,away,4432691,Carlos Del Rio-Wilson,Marshall,27,-5.7319,23
 2026,401858434,home,5164316,Alex Manske,Penn State,8,-0.353,0
-2026,401858434,away,4685697,Zion Turner,Marshall,3,1.9512,0
+2026,401858434,away,4685697,Zion Turner,Marshall,3,-2.5967,0
 2026,401858434,home,5082407,Connor Barry,Penn State,1,-0.9127,0
 2026,401856666,away,4432703,Jake Garcia,FCS,23,-21.3216,17
 2026,401856666,home,5158973,Faizon Brandon,Tennessee,18,10.4581,15
@@ -157,7 +157,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858426,home,5121030,Jeremy Hecklinski,Iowa,15,-6.1119,8
 2026,401858426,away,4881032,Taron Dickens,Northern Illinois,18,-6.1414,1
 2026,401858426,home,5192909,Jimmy Sullivan,Iowa,4,-2.7102,0
-2026,401856778,away,5212654,Braden Atkinson,Oregon State,52,9.7607,52
+2026,401856778,away,5212654,Braden Atkinson,Oregon State,52,10.3241,52
 2026,401856778,home,4685574,Conner Weigman,Houston,31,12.433,31
 2026,401856778,home,5159035,Keisean Henderson,Houston,1,-0.4859,1
 2026,401856780,away,5296439,Deuce Bailey,Coastal Carolina,42,8.4934,42
@@ -167,7 +167,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858208,away,5226704,Tommy McLeish,FCS,10,-5.2295,0
 2026,401858208,home,5153782,Amari Odom,Syracuse,3,2.2242,0
 2026,401858208,home,4870928,Malachi Nelson,Syracuse,2,-1.0205,0
-2026,401858430,away,5228762,Nick Poulos,Ohio,32,-0.8553,32
+2026,401858430,away,5228762,Nick Poulos,Ohio,32,-1.3813,32
 2026,401858430,home,5044387,Anthony Colandrea,Nebraska,33,14.5968,33
 2026,401858430,away,5171031,Matt Vezza,Ohio,2,-4.9471,2
 2026,401861962,home,5079619,Kalieb Osborne,UConn,25,13.2549,22
@@ -179,13 +179,13 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862701,home,5293684,Bryson Luter,Army,2,-0.6377,0
 2026,401862701,away,5157426,Jaden Keefner,FCS,5,-1.1823,0
 2026,401862701,home,5219408,Ethan Washington,Army,2,0.5191,0
-2026,401866410,home,5385753,Jay Kastantin,Bowling Green,30,17.3003,30
+2026,401866410,home,5385753,Jay Kastantin,Bowling Green,30,12.6778,30
 2026,401866410,away,4899468,Kaden Anderson,FCS,25,5.1866,25
 2026,401869960,away,5138131,Deshawn Purdie,Liberty,29,5.9363,29
 2026,401869960,home,5172036,JC Evans,James Madison,9,3.5176,9
 2026,401869960,home,5153978,Camden Coleman,James Madison,10,-2.7552,10
 2026,401858207,away,5141549,David McComb,Miami (OH),35,4.0746,28
-2026,401858207,home,5208095,Mason Heintschel,Pittsburgh,43,30.4113,34
+2026,401858207,home,5208095,Mason Heintschel,Pittsburgh,43,31.2542,34
 2026,401858207,away,5388435,Caleb Heavner,Miami (OH),4,-0.8331,0
 2026,401858207,home,4714300,Holden Geriner,Pittsburgh,3,1.9485,0
 2026,401856665,away,5119841,Dru DeShields,Kent State,21,-5.1442,17
@@ -202,7 +202,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856779,away,4920145,Braylen Ragland,FCS,28,-10.4908,24
 2026,401856779,home,5140620,Connor Moberly,Iowa State,1,0.3122,0
 2026,401864496,home,5238868,Liam Szarka,Air Force,5,-3.5964,5
-2026,401864496,away,4695784,Carson Camp,FCS,19,-11.0497,17
+2026,401864496,away,4695784,Carson Camp,FCS,19,-10.9738,17
 2026,401864496,home,5306440,Evan Medders,Air Force,2,-1.9066,1
 2026,401864496,away,5227106,Logan Kushner,FCS,4,-0.8966,0
 2026,401862698,home,5078166,Ajani Sheppard,Temple,11,-1.0032,11
@@ -211,7 +211,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856636,home,4880272,Byrum Brown,Auburn,39,-2.3166,39
 2026,401856636,away,5079555,DJ Lagway,Baylor,55,4.3537,55
 2026,401856777,home,4685345,JC French IV,Cincinnati,12,-4.5561,12
-2026,401856777,away,5307005,Mason McKenzie,Boston College,39,-12.2964,36
+2026,401856777,away,5307005,Mason McKenzie,Boston College,39,-9.0649,36
 2026,401856777,home,5089327,Samaj Jones,Cincinnati,1,-0.9048,1
 2026,401856777,home,5152045,Malachi Henry,Cincinnati,3,5.8889,3
 2026,401858209,home,4694149,Walker Eget,Duke,26,-4.3313,26
@@ -221,7 +221,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862694,home,5089540,Cole Gonzales,Charlotte,41,7.5144,41
 2026,401862694,away,5223107,Quentin Hayes,FCS,4,-0.3184,4
 2026,401862694,away,4695602,Nick Billoups,FCS,11,8.8303,11
-2026,401862696,away,5301657,Andrew Indorf,FCS,20,6.696,20
+2026,401862696,away,5301657,Andrew Indorf,FCS,20,6.5019,20
 2026,401862696,home,5158343,Braxton Woodson,Navy,6,-3.6376,6
 2026,401862696,away,5405931,Jacob Davis,FCS,2,-1.6856,0
 2026,401862700,away,4685521,Garret Rangel,FCS,33,-1.5141,33
@@ -251,7 +251,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401860878,home,5193168,Terrence Smith Jr.,Colorado State,1,1.7916,1
 2026,401860878,away,4838536,Tyler Hughes,Wyoming,21,-9.2429,20
 2026,401867973,home,5193346,Quinn Henicle,Old Dominion,14,4.3047,14
-2026,401867973,away,5150426,Deljay Bailey,FCS,23,-4.7221,23
+2026,401867973,away,5150426,Deljay Bailey,FCS,23,-2.4789,23
 2026,401867973,home,5295919,Ryan Huff,Old Dominion,1,-2.1193,1
 2026,401856669,home,5121691,Blaze Berlowitz,Vanderbilt,16,7.6265,16
 2026,401856669,away,4870889,Chris Parson,FCS,26,-9.2572,26
@@ -271,8 +271,8 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862697,away,5301346,Reilly Garcia,FCS,1,-1.2493,0
 2026,401862697,away,4691966,Maddox Kopp,FCS,6,1.1154,0
 2026,401862699,home,5079620,M.Van Buren Jr.,South Florida,19,1.7521,19
-2026,401862699,away,4870883,JJ Kohl,Florida International,51,0.7837,51
-2026,401868140,away,5301731,Tyler Travers,FCS,20,-1.7598,11
+2026,401862699,away,4870883,JJ Kohl,Florida International,51,0.6811,51
+2026,401868140,away,5301731,Tyler Travers,FCS,20,-2.1518,11
 2026,401868140,home,5122157,Caden Creel,Jacksonville State,29,23.4665,17
 2026,401868140,home,5222557,Jack Moran,Jacksonville State,2,0.5011,0
 2026,401868170,home,4685740,Max Johnson,Georgia Southern,40,3.1352,36
@@ -336,7 +336,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856774,home,4597499,Mikey Keene,Arizona State,7,-0.824,0
 2026,401856774,home,5209295,Jake Fette,Arizona State,3,-1.4524,0
 2026,401856774,away,5154534,Tahj Smith,FCS,1,0.0221,0
-2026,401864497,away,4870607,Jackson Arnold,UNLV,19,-5.0944,19
+2026,401864497,away,4870607,Jackson Arnold,UNLV,19,-4.6096,19
 2026,401864497,home,5101124,Micah Alejado,Hawai'i,45,-5.8895,45
 2026,401864497,home,5211117,Bjorn Jurgensen,Hawai'i,3,-2.4859,3
 2026,401864498,home,5261479,Toa Fa'avae,New Mexico,9,-3.4315,7
@@ -351,15 +351,15 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858210,away,4870799,Nico Iamaleava,UCLA,24,-3.801,24
 2026,401858210,home,5054036,Jackson Brousseau,California,6,-1.5425,6
 2026,401864432,home,5205097,Carter Jones,Nevada,15,0.8445,15
-2026,401864432,away,5196864,Rodney Tisdale Jr.,Western Kentucky,43,3.0687,33
+2026,401864432,away,5196864,Rodney Tisdale Jr.,Western Kentucky,43,3.0947,33
 2026,401864432,home,5103836,Marshaun Brown,Nevada,1,-0.8243,1
-2026,401858438,away,5125715,Colton Joseph,Wisconsin,31,3.0145,24
+2026,401858438,away,5125715,Colton Joseph,Wisconsin,31,4.9577,24
 2026,401858438,home,5079369,CJ Carr,Notre Dame,30,8.3413,30
 2026,401858438,away,-6965,TEAM,Wisconsin,1,-5.0,1
-2026,401856661,home,4911529,Trinidad Chambliss,Ole Miss,37,7.6808,37
+2026,401856661,home,4911529,Trinidad Chambliss,Ole Miss,37,9.9554,37
 2026,401856661,away,5078278,Lincoln Kienholz,Louisville,32,7.1611,32
 2026,401858437,away,5226019,Caden Pinnick,Washington State,28,-11.6172,28
-2026,401858437,home,5079653,Demond Williams Jr.,Washington,34,-3.1895,34
+2026,401858437,home,5079653,Demond Williams Jr.,Washington,34,1.2496,34
 2026,401858212,away,5084084,Kevin Jennings,SMU,36,19.9699,36
 2026,401858212,home,4838679,Ashton Daniels,Florida State,26,2.6479,26
 2026,401858213,away,4431976,Dustin Fletcher,FCS,19,-9.4363,11
@@ -446,7 +446,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856681,home,5191162,Alberto Mendoza,Georgia Tech,44,-6.2364,44
 2026,401856681,away,5158973,Faizon Brandon,Tennessee,22,3.6935,22
 2026,401858446,away,5081197,Grady Brosterhous,Utah State,32,-2.9489,32
-2026,401858446,home,5079653,Demond Williams Jr.,Washington,43,-2.0295,43
+2026,401858446,home,5079653,Demond Williams Jr.,Washington,43,-1.599,43
 2026,401856670,away,5079516,KJ Jackson,Arkansas,35,-10.8474,26
 2026,401856670,home,5294263,Byrd Ficklin,Utah,4,0.2565,1
 2026,401856670,home,5105849,Devon Dampier,Utah,24,5.4377,18
@@ -487,7 +487,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401868187,home,4602923,Jaylen Henderson,Liberty,4,4.596,4
 2026,401856791,away,4801302,Julian Calvez,FCS,4,0.0066,4
 2026,401856791,home,5079465,Michael Hawkins Jr.,West Virginia,7,7.5156,6
-2026,401856791,away,5299226,Tate Surber,FCS,30,-2.2176,18
+2026,401856791,away,5299226,Tate Surber,FCS,30,-2.856,18
 2026,401856791,home,5164314,Scotty Fox Jr.,West Virginia,4,0.7814,0
 2026,401856791,home,5161828,Jyron Hughley,West Virginia,1,3.4996,0
 2026,401856791,away,5147475,Aidan Glover,FCS,1,0.081,0
@@ -498,7 +498,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866417,away,5154302,David Lynch,FCS,26,1.9652,16
 2026,401866417,home,5141549,David McComb,Miami (OH),13,18.0062,13
 2026,401866417,home,5388435,Caleb Heavner,Miami (OH),2,-0.9067,0
-2026,401866413,home,5075392,Keldric Luster,Ball State,36,7.2593,36
+2026,401866413,home,5075392,Keldric Luster,Ball State,36,4.664,36
 2026,401866413,away,5226896,Quinn Boyd,FCS,36,-10.2526,29
 2026,401866413,away,5405824,Frenchmon Bethea,FCS,2,-0.8706,2
 2026,401856677,away,5177084,Kamario Taylor,Mississippi State,23,3.6395,20
@@ -511,12 +511,12 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856790,home,5208095,Mason Heintschel,Pittsburgh,30,2.9218,30
 2026,401856790,away,4911929,Alonza Barnett III,UCF,32,-3.1556,32
 2026,401856790,away,5085337,Keyone Jenkins,UCF,1,-2.4491,1
-2026,401858216,home,4685694,Steve Angeli,Syracuse,52,-4.0843,52
+2026,401858216,home,4685694,Steve Angeli,Syracuse,52,-3.2784,52
 2026,401858216,away,5164313,Jaron-Keawe Sagapolutele,California,35,-5.4701,35
 2026,401858216,home,5290980,Jimmy Gregg,Syracuse,1,3.5363,1
 2026,401858216,home,-7579,TEAM,Syracuse,1,-5.0,1
 2026,401858217,home,4795295,Katin Houser,Illinois,36,10.5931,36
-2026,401858217,away,4694149,Walker Eget,Duke,21,13.7491,21
+2026,401858217,away,4694149,Walker Eget,Duke,21,14.4194,21
 2026,401858217,away,5185699,Dan Mahan,Duke,1,-1.6543,1
 2026,401858440,away,4690158,Noah Kim,Eastern Michigan,30,-11.9535,27
 2026,401858440,home,5146670,Alessio Milivojevic,Michigan State,22,6.529,22
@@ -538,7 +538,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866419,away,5105336,Conner Kenyon,FCS,16,-4.9679,9
 2026,401866419,home,5394415,Khamoni Robinson,Toledo,6,-5.8231,0
 2026,401866419,home,5200190,Walter Moses,Toledo,1,5.0,0
-2026,401866420,home,4920153,William Watson III,Massachusetts,10,6.8155,10
+2026,401866420,home,4920153,William Watson III,Massachusetts,10,2.3225,10
 2026,401866420,away,5225700,Poochie Snyder,FCS,15,0.6995,14
 2026,401866420,away,-12170,TEAM,FCS,1,-4.6748,0
 2026,401866420,away,5165911,John Michalski,FCS,5,4.7217,0
@@ -582,20 +582,20 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866418,away,5295639,Carter Lewis,Jacksonville State,1,2.6233,1
 2026,401866418,away,5087930,Jamill Williams,Jacksonville State,1,1.3116,1
 2026,401866418,home,5244755,Levi Davis,Ohio,2,-0.1885,2
-2026,401866421,away,5226663,Frankie Weaver,FCS,47,3.5203,28
+2026,401866421,away,5226663,Frankie Weaver,FCS,47,5.5402,28
 2026,401866421,home,5074245,Broc Lowry,Western Michigan,21,4.0837,16
 2026,401866421,home,5126475,Trey Petty,Western Michigan,5,5.8479,0
 2026,401856680,home,4875127,LaNorris Sellers,South Carolina,24,-9.5816,24
 2026,401856680,away,5301657,Andrew Indorf,FCS,33,1.4114,31
 2026,401856680,home,5164334,Cutter Woods,South Carolina,3,-2.6047,0
-2026,401856680,away,5405931,Jacob Davis,FCS,5,-0.4411,0
+2026,401856680,away,5405931,Jacob Davis,FCS,5,-0.4967,0
 2026,401856786,away,4875128,Lex Thomas,FCS,32,-3.2486,28
 2026,401856786,home,4685345,JC French IV,Cincinnati,23,14.9118,22
 2026,401856786,home,5084404,Liam O'Brien,Cincinnati,5,-2.4801,0
 2026,401856786,away,5231037,Isaac Lee,FCS,3,-4.4842,0
 2026,401856786,home,5089327,Samaj Jones,Cincinnati,2,-0.6357,0
 2026,401856786,away,5441193,Patrick Harding,FCS,2,0.3575,0
-2026,401858441,home,5044387,Anthony Colandrea,Nebraska,25,15.7432,20
+2026,401858441,home,5044387,Anthony Colandrea,Nebraska,25,15.0235,20
 2026,401858441,away,5385753,Jay Kastantin,Bowling Green,17,-3.7681,7
 2026,401858441,home,5141556,TJ Lateef,Nebraska,8,4.7997,0
 2026,401860882,home,5079443,Hauss Hejny,Colorado State,31,12.3986,31
@@ -603,7 +603,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401860882,away,5441452,Jackson Stevens,FCS,1,-0.868,0
 2026,401860882,home,5212610,K'saan Farrar,Colorado State,7,-0.0628,0
 2026,401860882,away,5441448,Lee Norman-Lester,FCS,1,0.8072,0
-2026,401862707,home,5148427,Landyn Locke,Sam Houston,39,2.5358,39
+2026,401862707,home,5148427,Landyn Locke,Sam Houston,39,-2.742,39
 2026,401862707,away,5224011,Baylor Hayes,Tulsa,32,-10.5769,32
 2026,401862707,away,4710860,Oran Singleton Jr.,Tulsa,2,-1.2191,2
 2026,401862707,away,4565355,Dexter Williams II,Tulsa,2,-3.9102,2
@@ -615,7 +615,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864503,away,5227699,Beckham Pellant,FCS,2,-6.5091,2
 2026,401864503,away,5227704,Dylan Lord,FCS,1,-4.0353,1
 2026,401864503,away,5298094,Chase Kwiatkowski,FCS,1,0.3705,1
-2026,401864575,home,5091890,Kadin Semonza,Tulane,23,10.6397,23
+2026,401864575,home,5091890,Kadin Semonza,Tulane,23,10.7523,23
 2026,401864575,away,4869553,Bishop Davenport,South Alabama,33,14.9771,33
 2026,401868241,away,5157481,Collin Hurst,FCS,8,-3.7616,8
 2026,401868241,home,5123665,Trey Owens,Arkansas State,18,2.5185,13
@@ -633,13 +633,13 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401871046,away,5225648,Pops Battle,FCS,23,-1.1247,12
 2026,401871046,home,4685252,Henry Belin IV,Missouri State,4,-0.0652,0
 2026,401871046,home,5227766,Elijah Leonard,Missouri State,1,0.8547,0
-2026,401858443,home,4870799,Nico Iamaleava,UCLA,25,-8.6515,25
-2026,401858443,away,4685311,Jayden Denegal,San Diego State,19,-7.9811,19
+2026,401858443,home,4870799,Nico Iamaleava,UCLA,25,-6.0229,25
+2026,401858443,away,4685311,Jayden Denegal,San Diego State,19,-13.1775,19
 2026,401858443,away,5302259,Draiden Trudeau,San Diego State,1,-1.8004,1
 2026,401858447,away,5165011,Kennedy McGill,FCS,22,1.9864,22
-2026,401858447,home,5125715,Colton Joseph,Wisconsin,22,-0.4016,22
+2026,401858447,home,5125715,Colton Joseph,Wisconsin,22,-0.0952,22
 2026,401858447,away,5299364,Cason Carswell,FCS,2,-0.5995,0
-2026,401862703,home,4869991,Caden Veltkamp,Florida Atlantic,36,17.8763,34
+2026,401862703,home,4869991,Caden Veltkamp,Florida Atlantic,36,18.1696,34
 2026,401862703,away,5158343,Braxton Woodson,Navy,11,-2.6976,11
 2026,401862703,away,5220473,Jackson Gutierrez,Navy,12,0.234,8
 2026,401862703,home,5219898,Drew Devillier,Florida Atlantic,1,-0.9703,1
@@ -655,7 +655,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856789,home,5141643,Adam Schobel,TCU,1,-0.397,0
 2026,401856784,away,4801301,Tevin Carter,FCS,28,-11.6379,21
 2026,401856784,home,5145459,Nate Bennett,Baylor,37,2.5113,25
-2026,401856784,home,5213685,Edward Griffin,Baylor,6,-4.5654,0
+2026,401856784,home,5213685,Edward Griffin,Baylor,6,-5.6596,0
 2026,401856784,away,5425111,Kaeden Smith,FCS,5,-5.4639,0
 2026,401856671,away,4618083,Ethan Hampton,Southern Miss,28,-3.9712,28
 2026,401856671,home,4880272,Byrum Brown,Auburn,30,3.1317,27
@@ -687,7 +687,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864578,home,5218881,Tama Uiliata,Hawai'i,1,4.1587,1
 2026,401858225,home,5208095,Mason Heintschel,Pittsburgh,25,-8.908,25
 2026,401858225,away,4685694,Steve Angeli,Syracuse,27,-6.9813,27
-2026,401858225,away,5153782,Amari Odom,Syracuse,8,0.5254,8
+2026,401858225,away,5153782,Amari Odom,Syracuse,8,0.0793,8
 2026,401858226,away,5121169,Darian Mensah,Miami,34,4.2942,34
 2026,401858226,home,4920227,Gio Lopez,Wake Forest,49,7.0341,49
 2026,401856811,away,4685574,Conner Weigman,Houston,41,6.3744,41
@@ -721,10 +721,10 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858454,away,5141625,Deante Ruffin,Kent State,3,-1.7148,0
 2026,401858454,home,5146824,Tavien St. Clair,Ohio State,1,-4.5157,0
 2026,401856688,home,4911529,Trinidad Chambliss,Ole Miss,50,12.0512,50
-2026,401856688,away,5078810,Sam Leavitt,LSU,29,1.7751,29
+2026,401856688,away,5078810,Sam Leavitt,LSU,29,5.211,29
 2026,401856694,home,4870971,Marcel Reed,Texas A&M,49,-8.159,49
 2026,401856694,away,4918099,Kenny Minchey,Kentucky,20,14.1666,20
-2026,401856685,home,5141629,Keelon Russell,Alabama,31,22.7801,31
+2026,401856685,home,5141629,Keelon Russell,Alabama,31,23.9553,31
 2026,401856685,away,4838679,Ashton Daniels,Florida State,32,6.4077,32
 2026,401856795,home,5079443,Hauss Hejny,Colorado State,10,4.7911,10
 2026,401856795,away,5141367,Bear Bachmeier,BYU,16,11.7589,13
@@ -766,7 +766,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401869940,away,5296439,Deuce Bailey,Coastal Carolina,30,1.2792,30
 2026,401856792,away,5091890,Kadin Semonza,Tulane,32,-5.5503,32
 2026,401856792,home,4870857,Avery Johnson,Kansas State,28,15.4585,28
-2026,401856798,away,5385753,Jay Kastantin,Bowling Green,17,-4.2339,17
+2026,401856798,away,5385753,Jay Kastantin,Bowling Green,17,-4.1601,17
 2026,401856798,home,5080403,Jaylen Raynor,Iowa State,18,-1.8446,13
 2026,401856798,away,4912647,Austin Novosad,Bowling Green,5,-5.4062,0
 2026,401856798,home,5140620,Connor Moberly,Iowa State,1,1.6294,0
@@ -782,7 +782,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858451,away,5198324,Cibastian Broughton,Akron,14,-4.7847,14
 2026,401858451,away,5146903,Brayden Roggow,Akron,26,-4.9763,20
 2026,401858451,away,5209397,Semaj Beals,Akron,1,-0.7778,0
-2026,401860889,home,5148803,Brad Jackson,Texas State,22,18.1533,22
+2026,401860889,home,5148803,Brad Jackson,Texas State,22,14.8579,22
 2026,401860889,away,4801307,Tayven Jackson,North Texas,56,24.5637,56
 2026,401858460,home,5125715,Colton Joseph,Wisconsin,33,23.2233,24
 2026,401858460,away,4690158,Noah Kim,Eastern Michigan,29,-10.2636,21
@@ -795,14 +795,14 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864508,away,4838536,Tyler Hughes,Wyoming,30,-11.3199,30
 2026,401864508,away,5220376,Bart Edmiston,Wyoming,1,3.0566,1
 2026,401858227,home,5307005,Mason McKenzie,Boston College,22,-0.7546,22
-2026,401858227,away,5226632,Eddie Buehler,FCS,36,7.0059,36
+2026,401858227,away,5226632,Eddie Buehler,FCS,36,2.3055,36
 2026,401858448,away,4697094,DJ Williams,FCS,39,-7.0101,32
 2026,401858448,home,4795295,Katin Houser,Illinois,31,9.4169,29
 2026,401858448,away,5151518,Kyle Thomas,FCS,1,2.7848,1
 2026,401858448,away,5227786,Jake Curry,FCS,3,-1.4367,0
 2026,401862774,away,5077787,Jaxon Smolik,Temple,1,-1.9284,1
 2026,401862774,away,5078166,Ajani Sheppard,Temple,24,13.663,24
-2026,401862774,home,5082330,John Alan Richter,Toledo,51,21.1761,51
+2026,401862774,home,5082330,John Alan Richter,Toledo,51,22.6338,51
 2026,401856797,home,4685345,JC French IV,Cincinnati,46,10.0258,46
 2026,401856797,away,5141549,David McComb,Miami (OH),29,2.4687,29
 2026,401856797,away,5193270,D'Shawntae Jones,Miami (OH),2,3.9456,2
@@ -812,7 +812,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858233,home,5054036,Jackson Brousseau,California,10,-0.103,0
 2026,401858233,away,5440760,Jason Wiley,FCS,1,-0.6199,0
 2026,401860890,away,4695784,Carson Camp,FCS,19,-7.2856,16
-2026,401860890,home,5226019,Caden Pinnick,Washington State,23,11.1363,21
+2026,401860890,home,5226019,Caden Pinnick,Washington State,23,10.6739,21
 2026,401860890,away,5227106,Logan Kushner,FCS,2,-1.0835,0
 2026,401866424,away,5106897,Jack O'Connell,FCS,23,-13.9433,21
 2026,401866424,home,4920153,William Watson III,Massachusetts,27,-0.3616,25
@@ -830,13 +830,13 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401868317,away,4685440,Kyle Lowe,FCS,24,6.711,24
 2026,401868317,home,5207934,Austin Carlisle,UL Monroe,27,-7.6199,27
 2026,401868317,home,5122054,Aidan Armenta,UL Monroe,15,8.5295,15
-2026,401856691,home,4875127,LaNorris Sellers,South Carolina,43,2.6655,43
+2026,401856691,home,4875127,LaNorris Sellers,South Carolina,43,0.7163,43
 2026,401856691,away,5177084,Kamario Taylor,Mississippi State,29,9.4609,29
 2026,401856691,away,5141501,Gracen Harris,Mississippi State,1,2.0421,1
 2026,401862710,away,4433829,Mitch Griffis,East Carolina,14,-7.0642,14
 2026,401862710,home,5193346,Quinn Henicle,Old Dominion,20,-8.8343,20
 2026,401862710,away,5226083,Jason Dickerson,East Carolina,1,3.1997,1
-2026,401862710,away,5075800,Emory Williams,East Carolina,7,-8.1842,7
+2026,401862710,away,5075800,Emory Williams,East Carolina,7,-6.2408,7
 2026,401862771,home,4869991,Caden Veltkamp,Florida Atlantic,39,-6.811,39
 2026,401862771,away,4870883,JJ Kohl,Florida International,44,-4.9738,44
 2026,401871047,home,5083042,Skyler Locklear,Missouri State,28,17.8394,28
@@ -861,7 +861,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862772,away,5299226,Tate Surber,FCS,30,6.7191,26
 2026,401862772,home,5165807,Marcus Stokes,Memphis,33,17.8669,33
 2026,401862772,home,5079548,Air Noland,Memphis,3,-3.5729,2
-2026,401862773,away,5074245,Broc Lowry,Western Michigan,22,-1.4019,22
+2026,401862773,away,5074245,Broc Lowry,Western Michigan,22,-1.0807,22
 2026,401862773,home,4685291,Jacurri Brown,Rice,19,5.0984,19
 2026,401862777,home,5079620,Michael Van Buren Jr.,South Florida,33,11.2651,31
 2026,401862777,away,5150645,Ui Ale,FCS,23,15.7465,23
@@ -885,13 +885,13 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858452,home,5141556,TJ Lateef,Nebraska,3,1.1783,0
 2026,401858452,home,5126471,Daniel Kaelin,Nebraska,2,-1.9638,0
 2026,401858459,home,5079653,Demond Williams Jr.,Washington,34,17.1991,29
-2026,401858459,away,5152110,Nate Bell,FCS,26,-3.5566,20
+2026,401858459,away,5152110,Nate Bell,FCS,26,1.8653,20
 2026,401858459,home,5079318,Elijah Brown,Washington,3,5.8143,0
 2026,401858459,away,5146672,Jake Schakel,FCS,5,-0.0086,0
 2026,401856796,home,5075805,Aidan Chiles,Northwestern,23,9.1183,19
 2026,401856796,away,5159016,Julian Lewis,Colorado,30,-6.1279,19
 2026,401858232,away,5144078,Ethan Grunkemeyer,Virginia Tech,40,20.0096,40
-2026,401858232,home,5141695,Malik Washington,Maryland,45,15.3805,45
+2026,401858232,home,5141695,Malik Washington,Maryland,45,15.7368,45
 2026,401856799,away,5123665,Trey Owens,Arkansas State,26,-14.5766,26
 2026,401856799,home,5083569,Jaden Craig,TCU,29,18.4736,29
 2026,401862775,away,5151407,Jack Jacobs,FCS,23,-7.4297,22
@@ -941,10 +941,10 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862778,home,5057381,Ryder Burton,UAB,24,3.4432,24
 2026,401862778,away,5220473,Jackson Gutierrez,Navy,19,-5.1257,19
 2026,401858234,away,5159078,Tait Reynolds,Clemson,23,-6.8511,23
-2026,401858234,home,5164313,Jaron-Keawe Sagapolutele,California,31,-16.1091,31
+2026,401858234,home,5164313,Jaron-Keawe Sagapolutele,California,31,-14.3431,31
 2026,401858234,home,5165154,Mason Mini,California,1,2.5747,1
 2026,401856704,away,4870906,Arch Manning,Texas,25,0.2303,25
-2026,401856704,home,5158973,Faizon Brandon,Tennessee,39,-16.0397,39
+2026,401856704,home,5158973,Faizon Brandon,Tennessee,39,-15.6837,39
 2026,401856704,home,5141571,George MacIntyre,Tennessee,3,-1.0799,3
 2026,401856700,home,4685578,Gunner Stockton,Georgia,25,-3.4628,20
 2026,401856700,away,4915980,John Mateer,Oklahoma,36,7.56,28
@@ -961,12 +961,12 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858238,away,5295480,Marcus Beamon,Central Michigan,5,-1.3186,2
 2026,401858238,home,5141605,Luke Nickel,Miami,8,-0.0159,0
 2026,401858465,home,5079712,Julian Sayin,Ohio State,36,23.0282,36
-2026,401858465,away,4795295,Katin Houser,Illinois,41,-0.1577,32
+2026,401858465,away,4795295,Katin Houser,Illinois,41,2.4744,32
 2026,401856696,away,4875127,LaNorris Sellers,South Carolina,31,-8.4972,28
 2026,401856696,home,5141629,Keelon Russell,Alabama,29,22.2496,28
 2026,401856696,away,5164334,Cutter Woods,South Carolina,3,0.3273,0
 2026,401856702,home,5078810,Sam Leavitt,LSU,23,13.9945,23
-2026,401856702,away,4870971,Marcel Reed,Texas A&M,29,-16.8101,23
+2026,401856702,away,4870971,Marcel Reed,Texas A&M,29,-16.5115,23
 2026,401856702,home,5224789,Landen Clark,LSU,5,-6.7495,0
 2026,401856702,away,5295969,Brady Hart,Texas A&M,1,-2.9573,0
 2026,401856805,away,5148427,Landyn Locke,Sam Houston,39,-12.5402,33
@@ -976,9 +976,9 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858469,home,4685454,Jayden Maiava,USC,44,14.8095,44
 2026,401858469,away,4870921,Dante Moore,Oregon,10,4.5839,10
 2026,401858469,away,5079572,Dylan Raiola,Oregon,25,23.3253,25
-2026,401858466,home,4801299,Rocco Becht,Penn State,31,-15.2011,31
+2026,401858466,home,4801299,Rocco Becht,Penn State,31,-15.0703,31
 2026,401858466,away,5125715,Colton Joseph,Wisconsin,39,-10.0321,39
-2026,401856816,home,5080403,Jaylen Raynor,Iowa State,41,-2.5917,41
+2026,401856816,home,5080403,Jaylen Raynor,Iowa State,41,0.1691,41
 2026,401856816,away,5105849,Devon Dampier,Utah,28,8.5503,28
 2026,401858243,home,5078278,Lincoln Kienholz,Louisville,40,3.0464,40
 2026,401858243,away,4920227,Gio Lopez,Wake Forest,22,7.0645,22
@@ -994,7 +994,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856806,away,4685574,Conner Weigman,Houston,21,18.3674,21
 2026,401856806,home,5212641,Weston Bryan,Georgia Southern,1,-0.4508,1
 2026,401856813,home,5079555,DJ Lagway,Baylor,39,-8.0335,39
-2026,401856813,away,5159016,Julian Lewis,Colorado,18,-5.5277,18
+2026,401856813,away,5159016,Julian Lewis,Colorado,18,-5.6515,18
 2026,401856813,away,5189530,Joseph Williams,Colorado,1,3.3958,1
 2026,401856813,away,5079771,Isaac Wilson,Colorado,27,0.2102,27
 2026,401858236,away,5402059,Emmett Dowling,FCS,21,-12.2092,12
@@ -1022,21 +1022,21 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866427,away,5225648,Pops Battle,FCS,5,-3.6848,5
 2026,401866427,home,4690158,Noah Kim,Eastern Michigan,38,10.1962,38
 2026,401866427,away,5298518,Hoyt Gregory,FCS,16,-4.9553,11
-2026,401858462,home,5141695,Malik Washington,Maryland,39,-22.2411,26
+2026,401858462,home,5141695,Malik Washington,Maryland,39,-21.9717,26
 2026,401858462,away,4870799,Nico Iamaleava,UCLA,25,-4.8421,21
 2026,401858462,home,-6544,TEAM,Maryland,1,-5.0,1
 2026,401858462,home,4872721,Cardell Williams,Maryland,1,-0.3878,0
 2026,401864511,home,5193926,Cameran Brown,Georgia State,21,5.2517,21
-2026,401864511,away,4881032,Taron Dickens,Northern Illinois,48,-0.4128,48
+2026,401864511,away,4881032,Taron Dickens,Northern Illinois,48,2.3672,48
 2026,401864511,home,4812474,DJ Riles,Georgia State,1,3.3635,1
 2026,401858237,home,4838679,Ashton Daniels,Florida State,18,9.0139,18
 2026,401858237,away,5416075,Donovyn Omolo,FCS,33,-3.8561,20
 2026,401858237,home,5141661,Kevin Sperry,Florida State,3,-1.2464,0
 2026,401864510,home,4838536,Tyler Hughes,Wyoming,26,9.0581,26
-2026,401864510,away,5101124,Micah Alejado,Hawai'i,47,-1.2731,47
+2026,401864510,away,5101124,Micah Alejado,Hawai'i,47,-1.0457,47
 2026,401856815,away,5083569,Jaden Craig,TCU,43,4.952,43
 2026,401856815,home,5085337,Keyone Jenkins,UCF,22,4.9004,22
-2026,401858244,home,4694149,Walker Eget,Duke,22,15.2258,20
+2026,401858244,home,4694149,Walker Eget,Duke,22,10.6341,20
 2026,401858244,away,5226917,Winston Watkins,FCS,19,2.7648,15
 2026,401858244,home,5193566,Kade Reynoldson,Duke,1,-3.01,1
 2026,401858244,home,5185699,Dan Mahan,Duke,7,11.5802,2
@@ -1046,23 +1046,23 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401860897,home,5074245,Broc Lowry,Western Michigan,29,-14.776,20
 2026,401860897,home,5126475,Trey Petty,Western Michigan,1,-0.7581,0
 2026,401861970,away,5079619,Kalieb Osborne,UConn,33,-2.9618,33
-2026,401861970,home,5141549,David McComb,Miami (OH),30,18.5915,30
+2026,401861970,home,5141549,David McComb,Miami (OH),30,19.389,30
 2026,401861970,home,5388435,Caleb Heavner,Miami (OH),3,-0.6628,3
 2026,401864579,away,5261479,Toa Fa'avae,New Mexico,19,6.7439,16
 2026,401864579,home,5224084,Trey Hedden,New Mexico State,21,-4.8412,21
-2026,401864579,home,5152503,Adam Damante,New Mexico State,21,7.6456,4
+2026,401864579,home,5152503,Adam Damante,New Mexico State,21,7.8819,4
 2026,401866426,away,4832789,Carson Haggard,FCS,31,-5.3008,31
 2026,401866426,home,5222591,Jason Wright,Buffalo,29,-10.285,29
 2026,401866428,home,5171031,Matt Vezza,Ohio,20,4.487,20
 2026,401866428,away,5106897,Jack O'Connell,FCS,19,-1.1068,19
 2026,401866428,away,5229295,Drew Eason,FCS,1,0.9267,0
 2026,401866428,home,5244755,Levi Davis,Ohio,1,1.2011,0
-2026,401868188,away,4869817,Cole Pennington,FCS,36,14.0009,36
+2026,401868188,away,4869817,Cole Pennington,FCS,36,9.9511,36
 2026,401868188,home,4432691,Carlos Del Rio-Wilson,Marshall,43,8.46,43
 2026,401868188,home,5158251,Khalil Wilkins,Marshall,1,-1.2189,1
 2026,401862781,away,5301057,Nelson Layne,FCS,19,-15.8766,14
 2026,401862781,home,5075800,Emory Williams,East Carolina,38,9.8624,23
-2026,401862781,away,5230073,Cobey Thompkins,FCS,16,0.4872,2
+2026,401862781,away,5230073,Cobey Thompkins,FCS,16,-1.6186,2
 2026,401862781,home,4433829,Mitch Griffis,East Carolina,2,-1.6273,0
 2026,401856698,home,4880272,Byrum Brown,Auburn,28,-2.5144,28
 2026,401856698,away,5158948,Jared Curtis,Vanderbilt,37,-1.6524,37
@@ -1095,12 +1095,12 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862780,away,5146661,Daniel Beale,Louisiana,2,0.1378,2
 2026,401862780,home,5272738,Jaylen White,Charlotte,1,-0.6228,1
 2026,401856814,home,4685345,JC French IV,Cincinnati,13,2.4122,13
-2026,401856814,away,4870857,Avery Johnson,Kansas State,51,-0.5573,51
+2026,401856814,away,4870857,Avery Johnson,Kansas State,51,-0.0763,51
 2026,401856814,home,5089327,Samaj Jones,Cincinnati,1,5.0,1
 2026,401856881,home,5079465,Michael Hawkins Jr.,West Virginia,26,-11.5936,26
 2026,401856881,away,5219834,Drew Mestemaker,Oklahoma State,26,20.3923,26
 2026,401862784,away,4833635,Landry Lyddy,Southern Miss,33,4.4615,33
-2026,401862784,home,5091890,Kadin Semonza,Tulane,27,-12.2526,27
+2026,401862784,home,5091890,Kadin Semonza,Tulane,27,-11.9933,27
 2026,401862784,away,5394591,Eelijah Singleton,Southern Miss,1,2.1198,1
 2026,401862784,home,5291713,Trace Johnson,Tulane,5,2.8421,5
 2026,401869931,away,4870645,Rickie Collins,Kennesaw State,25,-4.2457,25
@@ -1138,15 +1138,15 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401860891,home,5010409,Jayden Mandal,Fresno State,34,8.7062,34
 2026,401860891,away,4685291,Jacurri Brown,Rice,19,-4.8838,19
 2026,401858240,away,5191162,Alberto Mendoza,Georgia Tech,41,1.8002,41
-2026,401858240,home,4878681,Davis Warren,Stanford,36,25.8638,36
-2026,401864509,home,5205097,Carter Jones,Nevada,34,-3.8922,34
+2026,401858240,home,4878681,Davis Warren,Stanford,36,24.2767,36
+2026,401864509,home,5205097,Carter Jones,Nevada,34,-4.1914,34
 2026,401864509,away,5238868,Liam Szarka,Air Force,14,3.1927,14
 2026,401864509,home,4819250,AJ Bianco,Nevada,1,-0.778,1
 2026,401858470,away,5144959,Drake Lindsey,Minnesota,29,7.6625,29
-2026,401858470,home,5079653,Demond Williams Jr.,Washington,34,-2.9374,34
+2026,401858470,home,5079653,Demond Williams Jr.,Washington,34,-2.9699,34
 2026,401858470,away,4920901,Darius Taylor,Minnesota,1,-2.4834,1
 2026,401871049,home,5152503,Adam Damante,New Mexico State,27,-7.7273,27
-2026,401871049,away,5196864,Rodney Tisdale Jr.,Western Kentucky,44,-6.4664,44
+2026,401871049,away,5196864,Rodney Tisdale Jr.,Western Kentucky,44,-6.9786,44
 2026,401871049,away,4920158,Brock Glenn,Western Kentucky,5,0.6912,5
 2026,401862786,home,5224011,Baylor Hayes,Tulsa,44,0.8282,44
 2026,401862786,away,4801307,Tayven Jackson,North Texas,40,21.7756,40
@@ -1154,7 +1154,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858245,away,5208095,Mason Heintschel,Pittsburgh,19,3.1635,19
 2026,401858245,away,4714300,Holden Geriner,Pittsburgh,12,-1.0114,12
 2026,401871050,away,5138131,Deshawn Purdie,Liberty,22,-4.3217,22
-2026,401871050,home,5296312,EJ Archield Jr.,Delaware,19,4.9056,19
+2026,401871050,home,5296312,EJ Archield Jr.,Delaware,19,0.6738,19
 2026,401871050,home,5224762,Braden Streeter,Delaware,7,0.2194,5
 2026,401871050,home,5289314,Tyler Bell,Delaware,10,-2.5582,0
 2026,401871050,away,4602923,Jaylen Henderson,Liberty,5,-3.2826,2
@@ -1237,7 +1237,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858479,away,5146670,Alessio Milivojevic,Michigan State,32,-12.9803,32
 2026,401858479,away,4700135,Cam Fancher,Michigan State,2,-3.2687,2
 2026,401858479,away,5266583,Kayd Coffman,Michigan State,1,-1.7993,0
-2026,401866432,home,5222591,Jason Wright,Buffalo,21,0.3145,21
+2026,401866432,home,5222591,Jason Wright,Buffalo,21,-0.013,21
 2026,401866432,away,5074245,Broc Lowry,Western Michigan,26,7.4855,26
 2026,401866432,home,5151369,Messiah Burch,Buffalo,2,-2.3183,2
 2026,401866431,home,5075392,Keldric Luster,Ball State,33,4.3814,33
@@ -1261,7 +1261,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866430,home,5084769,Angel Flores,Central Michigan,14,-2.7455,14
 2026,401866430,home,5149056,Jadyn Glasser,Central Michigan,3,2.9153,0
 2026,401866433,home,4920153,William Watson III,Massachusetts,27,7.7009,23
-2026,401866433,away,4690158,Noah Kim,Eastern Michigan,29,11.999,24
+2026,401866433,away,4690158,Noah Kim,Eastern Michigan,29,10.7379,24
 2026,401866434,away,5171031,Matt Vezza,Ohio,11,-10.1586,11
 2026,401866434,home,5119841,Dru DeShields,Kent State,38,-3.5478,38
 2026,401866434,away,5244755,Levi Davis,Ohio,5,-0.3759,5
@@ -1287,7 +1287,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858472,away,5104738,Ryan Browne,Purdue,27,13.1012,27
 2026,401858472,home,4795295,Katin Houser,Illinois,39,0.4792,39
 2026,401860899,away,5212654,Braden Atkinson,Oregon State,36,26.6239,31
-2026,401860899,home,5212610,K'saan Farrar,Colorado State,31,9.2966,16
+2026,401860899,home,5212610,K'saan Farrar,Colorado State,31,8.8782,16
 2026,401860899,home,5193168,Terrence Smith Jr.,Colorado State,1,-5.0,1
 2026,401862790,away,4917305,Cam'Ron McCoy,FCS,28,1.0797,15
 2026,401862790,home,4869991,Caden Veltkamp,Florida Atlantic,17,15.8519,17
@@ -1297,7 +1297,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862790,home,5302741,Jeremiah Daoud,Florida Atlantic,4,-0.6411,0
 2026,401856711,away,5079516,KJ Jackson,Arkansas,26,-3.3197,20
 2026,401856711,home,4870971,Marcel Reed,Texas A&M,19,-0.1373,17
-2026,401862788,away,4775136,Owen McCown,UTSA,31,-4.9212,31
+2026,401862788,away,4775136,Owen McCown,UTSA,31,-4.2047,31
 2026,401862788,home,4685291,Jacurri Brown,Rice,17,3.6852,17
 2026,401869942,home,5296439,Deuce Bailey,Coastal Carolina,36,-4.6749,36
 2026,401869942,away,4685740,Max Johnson,Georgia Southern,28,8.6012,28
@@ -1319,12 +1319,12 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856817,away,5079555,DJ Lagway,Baylor,43,14.842,39
 2026,401856817,home,5110535,Kyson Brown,Arizona State,2,0.0892,2
 2026,401856817,away,5145459,Nate Bennett,Baylor,2,0.0525,0
-2026,401860900,away,5148803,Brad Jackson,Texas State,47,6.926,47
+2026,401860900,away,5148803,Brad Jackson,Texas State,47,7.2978,47
 2026,401860900,home,4685311,Jayden Denegal,San Diego State,23,-6.3461,23
 2026,401856820,home,4801717,Noah Fifita,Arizona,40,14.3347,28
 2026,401856820,away,4685345,JC French IV,Cincinnati,32,-5.7206,27
 2026,401864513,away,5295238,Luke Weaver,San José State,30,11.8154,30
-2026,401864513,home,5101124,Micah Alejado,Hawai'i,41,7.0672,41
+2026,401864513,home,5101124,Micah Alejado,Hawai'i,41,7.2232,41
 2026,401871090,home,4431633,Goose Crowder,Troy,23,15.0243,23
 2026,401871090,away,4833635,Landry Lyddy,Southern Miss,39,18.5712,39
 2026,401871090,away,5218891,Mario Sanders,Southern Miss,1,5.0,1
@@ -1336,12 +1336,12 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401871066,home,5153845,Zach Marker,Florida International,1,0.1874,1
 2026,401871066,away,5224084,Trey Hedden,New Mexico State,9,-9.8378,9
 2026,401870766,home,5138131,Deshawn Purdie,Liberty,14,4.0605,9
-2026,401870766,away,5148427,Landyn Locke,Sam Houston,32,-9.8169,23
+2026,401870766,away,5148427,Landyn Locke,Sam Houston,32,-9.6228,23
 2026,401870766,home,4832918,Ethan Vasko,Liberty,1,0.6065,1
 2026,401871052,away,5083042,Skyler Locklear,Missouri State,25,-8.4172,25
 2026,401871052,home,4920158,Brock Glenn,Western Kentucky,35,4.2702,35
 2026,401871052,away,4685252,Henry Belin IV,Missouri State,15,0.3456,15
-2026,401862794,away,5079620,Michael Van Buren Jr.,South Florida,29,8.6732,29
+2026,401862794,away,5079620,Michael Van Buren Jr.,South Florida,29,9.0277,29
 2026,401862794,home,4775136,Owen McCown,UTSA,32,0.2235,32
 2026,401862794,away,5079542,Luke Kromenhoek,South Florida,1,-1.0619,1
 2026,401862794,home,4917054,David Amador II,UTSA,2,1.172,2
@@ -1390,8 +1390,8 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856713,home,5079516,KJ Jackson,Arkansas,29,-3.9679,29
 2026,401856713,away,5141571,George MacIntyre,Tennessee,30,0.2997,30
 2026,401856714,away,4875127,LaNorris Sellers,South Carolina,38,12.5462,38
-2026,401856714,home,5132812,Aaron Philo,Florida,31,0.1288,31
-2026,401856714,home,5295814,Tramell Jones Jr.,Florida,8,5.7112,0
+2026,401856714,home,5132812,Aaron Philo,Florida,31,-0.0203,31
+2026,401856714,home,5295814,Tramell Jones Jr.,Florida,8,0.8122,0
 2026,401856824,home,5219834,Drew Mestemaker,Oklahoma State,29,17.4062,29
 2026,401856824,away,5085337,Keyone Jenkins,UCF,43,20.7784,43
 2026,401858485,away,4685454,Jayden Maiava,USC,34,20.6457,34
@@ -1399,7 +1399,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858485,home,5077502,Carson Hansen,Penn State,1,-2.4216,1
 2026,401856825,away,4685574,Conner Weigman,Houston,30,17.0933,26
 2026,401856825,home,4870857,Avery Johnson,Kansas State,32,1.7606,21
-2026,401860901,home,5010409,Jayden Mandal,Fresno State,35,9.0135,35
+2026,401860901,home,5010409,Jayden Mandal,Fresno State,35,11.2462,35
 2026,401860901,away,4870513,Maddux Madsen,Boise State,34,16.6332,34
 2026,401860901,home,5146667,Khristian Martin,Fresno State,2,4.4125,2
 2026,401858256,home,4714300,Holden Geriner,Pittsburgh,46,-9.7886,46
@@ -1419,19 +1419,19 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858482,away,5075392,Keldric Luster,Ball State,43,-1.6813,32
 2026,401858482,home,4685459,Nicco Marchiol,Northwestern,1,-1.15,0
 2026,401858482,away,5152153,Tyler Mizzell,Ball State,6,1.4696,0
-2026,401862797,home,5075800,Emory Williams,East Carolina,33,-6.6328,33
+2026,401862797,home,5075800,Emory Williams,East Carolina,33,-6.9273,33
 2026,401862797,away,4685291,Jacurri Brown,Rice,12,-12.8225,12
 2026,401862797,home,4433829,Mitch Griffis,East Carolina,3,-2.8773,3
 2026,401862797,away,5145788,Gael Ochoa,Rice,5,0.2757,5
 2026,401869843,home,4870999,Malachi Singleton,App State,24,-16.4472,24
-2026,401869843,away,5193346,Quinn Henicle,Old Dominion,23,-7.3199,23
+2026,401869843,away,5193346,Quinn Henicle,Old Dominion,23,-7.575,23
 2026,401869843,home,5146664,Henry Hasselbeck,App State,5,-4.4468,5
 2026,401866440,home,5327585,Aedan McCarthy,Massachusetts,31,-3.2594,31
 2026,401866440,away,5388435,Caleb Heavner,Miami (OH),22,-11.5171,22
 2026,401866440,away,5079772,Damarion Witten,Miami (OH),1,-0.4526,1
 2026,401866440,home,5298739,Logan Inagawa,Massachusetts,7,6.7919,7
-2026,401858255,home,5191162,Alberto Mendoza,Georgia Tech,30,5.1561,30
-2026,401858255,away,4694149,Walker Eget,Duke,38,7.8104,38
+2026,401858255,home,5191162,Alberto Mendoza,Georgia Tech,30,6.1464,30
+2026,401858255,away,4694149,Walker Eget,Duke,38,5.089,38
 2026,401858255,away,5164332,Nate Sheppard,Duke,4,3.1503,4
 2026,401858259,home,5054036,Jackson Brousseau,California,42,7.7793,42
 2026,401858259,away,5144078,Ethan Grunkemeyer,Virginia Tech,35,1.486,35
@@ -1443,7 +1443,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862796,away,4801306,Conner Harrell,Charlotte,25,-5.6603,17
 2026,401862796,home,5215310,Chaston Ditta,North Texas,9,-5.025,0
 2026,401862796,away,5272738,Jaylen White,Charlotte,3,-2.6341,0
-2026,401862799,away,5224011,Baylor Hayes,Tulsa,37,11.0341,37
+2026,401862799,away,5224011,Baylor Hayes,Tulsa,37,12.0138,37
 2026,401862799,away,4710860,Oran Singleton Jr.,Tulsa,1,2.9964,1
 2026,401862799,home,5220473,Jackson Gutierrez,Navy,7,4.0868,7
 2026,401866435,away,4690158,Noah Kim,Eastern Michigan,46,6.7624,46
@@ -1466,13 +1466,13 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401860902,home,4685497,Maalik Murphy,Oregon State,8,4.2851,0
 2026,401860902,home,5296163,Brady Jones,Oregon State,1,-0.43,0
 2026,401862798,away,5057381,Ryder Burton,UAB,23,-11.262,23
-2026,401862798,home,5165807,Marcus Stokes,Memphis,22,3.4597,22
+2026,401862798,home,5165807,Marcus Stokes,Memphis,22,3.4013,22
 2026,401862798,away,5197123,Nate Rogers,UAB,2,-0.9282,0
 2026,401864517,home,5232049,Raymond Moore III,UTEP,30,-8.6465,24
 2026,401864517,away,5205097,Carter Jones,Nevada,21,-4.4987,21
 2026,401864517,away,4819250,AJ Bianco,Nevada,3,2.7849,3
 2026,401864518,home,4870607,Jackson Arnold,UNLV,17,-4.4471,17
-2026,401864518,away,5087156,Nathan Hayes,North Dakota State,24,-10.2811,24
+2026,401864518,away,5087156,Nathan Hayes,North Dakota State,24,-9.0156,24
 2026,401869943,home,4432691,Carlos Del Rio-Wilson,Marshall,6,-9.5052,6
 2026,401869943,away,5296439,Deuce Bailey,Coastal Carolina,19,-8.17,19
 2026,401869943,home,4685697,Zion Turner,Marshall,29,11.5792,29
@@ -1537,7 +1537,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856719,away,5296027,Christian Neptune,Auburn,1,3.6538,1
 2026,401856719,away,5210501,Tristan Ti'a,Auburn,1,-0.5385,1
 2026,401856809,home,5141367,Bear Bachmeier,BYU,35,2.0444,35
-2026,401856809,away,5079369,CJ Carr,Notre Dame,49,9.3373,49
+2026,401856809,away,5079369,CJ Carr,Notre Dame,49,6.9015,49
 2026,401856809,home,4870876,Kyler Kasper,BYU,2,2.6254,2
 2026,401858263,away,4838679,Ashton Daniels,Florida State,30,19.6934,30
 2026,401858263,home,5121169,Darian Mensah,Miami,36,18.9895,36
@@ -1548,7 +1548,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856723,home,5141571,George MacIntyre,Tennessee,32,0.1518,32
 2026,401856723,away,5141629,Keelon Russell,Alabama,34,-11.5562,34
 2026,401856724,home,4870906,Arch Manning,Texas,25,-2.6887,25
-2026,401856724,away,5295814,Tramell Jones Jr.,Florida,36,6.4832,36
+2026,401856724,away,5295814,Tramell Jones Jr.,Florida,36,6.7449,36
 2026,401856721,home,4911529,Trinidad Chambliss,Ole Miss,36,12.146,34
 2026,401856721,away,5141684,Austin Simmons,Missouri,46,2.3409,36
 2026,401856828,home,5126468,Will Hammond,Texas Tech,26,11.7044,26
@@ -1558,7 +1558,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856833,away,5105849,Devon Dampier,Utah,44,1.6847,44
 2026,401856833,home,5079771,Isaac Wilson,Colorado,30,0.3954,30
 2026,401858494,away,5125715,Colton Joseph,Wisconsin,18,-8.9403,18
-2026,401858494,home,5092275,Ty Dieffenbach,UCLA,34,12.9354,34
+2026,401858494,home,5092275,Ty Dieffenbach,UCLA,34,12.8697,34
 2026,401858494,home,4899366,Semaj Morgan,UCLA,1,0.6544,1
 2026,401856722,away,4918099,Kenny Minchey,Kentucky,32,-0.3218,32
 2026,401856722,home,4915980,John Mateer,Oklahoma,45,-3.7009,45
@@ -1571,7 +1571,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858269,home,5054036,Jackson Brousseau,California,31,-13.0869,27
 2026,401858269,away,4920227,Gio Lopez,Wake Forest,21,16.5528,15
 2026,401858269,home,5164313,Jaron-Keawe Sagapolutele,California,18,4.1766,0
-2026,401858269,away,5141634,Steele Pizzella,Wake Forest,3,2.9368,0
+2026,401858269,away,5141634,Steele Pizzella,Wake Forest,3,-0.0989,0
 2026,401858268,home,5084084,Kevin Jennings,SMU,37,9.5474,37
 2026,401858268,away,4685696,Beau Pribula,Virginia,23,-0.9174,23
 2026,401858491,home,5146670,Alessio Milivojevic,Michigan State,31,0.3755,31
@@ -1597,7 +1597,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401869957,away,5193926,Cameran Brown,Georgia State,27,-3.4459,25
 2026,401869957,home,5172036,JC Evans,James Madison,8,4.5679,7
 2026,401869957,away,5083490,Ayden Pereira,Georgia State,5,3.3418,2
-2026,401858489,home,5141695,Malik Washington,Maryland,39,9.6363,39
+2026,401858489,home,5141695,Malik Washington,Maryland,39,5.9322,39
 2026,401858489,away,4870900,Dylan Lonergan,Rutgers,36,19.2716,36
 2026,401856725,home,4870971,Marcel Reed,Texas A&M,13,7.8844,13
 2026,401856725,away,5223107,Quentin Hayes,FCS,1,-3.6499,1
@@ -1631,7 +1631,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866444,home,5144207,Jace Stuckey,Eastern Michigan,6,-9.4458,6
 2026,401866444,home,5094040,Brogan McCaughey,Eastern Michigan,5,-0.1064,5
 2026,401866478,home,5388435,Caleb Heavner,Miami (OH),18,-8.5435,18
-2026,401866478,away,5146903,Brayden Roggow,Akron,41,-11.0451,41
+2026,401866478,away,5146903,Brayden Roggow,Akron,41,-11.1418,41
 2026,401862805,away,5224011,Baylor Hayes,Tulsa,28,19.4313,28
 2026,401862805,home,4685291,Jacurri Brown,Rice,7,-1.5914,7
 2026,401862805,home,5145788,Gael Ochoa,Rice,4,-3.5968,4
@@ -1652,10 +1652,10 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864520,away,4819250,AJ Bianco,Nevada,34,-5.5408,34
 2026,401864520,home,5087156,Nathan Hayes,North Dakota State,26,-0.4966,26
 2026,401864520,away,5077500,Luke Duncan,Nevada,2,-2.8677,2
-2026,401869934,away,5123665,Trey Owens,Arkansas State,31,-4.5244,31
+2026,401869934,away,5123665,Trey Owens,Arkansas State,31,-3.6679,31
 2026,401869934,home,4833635,Landry Lyddy,Southern Miss,35,-2.563,35
 2026,401858262,away,5151062,TJ Crews IV,FCS,27,-14.6941,22
-2026,401858262,home,4878681,Davis Warren,Stanford,40,2.0268,40
+2026,401858262,home,4878681,Davis Warren,Stanford,40,7.7717,40
 2026,401858262,home,5211073,Michael Mitchell Jr.,Stanford,2,0.5183,0
 2026,401858265,away,5078278,Lincoln Kienholz,Louisville,29,8.2301,29
 2026,401858265,home,4870928,Malachi Nelson,Syracuse,44,-3.2158,44
@@ -1723,7 +1723,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401864525,home,4838536,Tyler Hughes,Wyoming,18,6.2113,18
 2026,401864525,away,5306440,Evan Medders,Air Force,4,3.3432,4
 2026,401864525,away,5223108,Josh Johnson,Air Force,4,0.8637,4
-2026,401864525,away,5449066,Howard Fisher IV,Air Force,9,-0.7954,9
+2026,401864525,away,5449066,Howard Fisher IV,Air Force,9,-2.503,9
 2026,401858272,home,4878681,Davis Warren,Stanford,38,15.1968,38
 2026,401858272,away,5079301,CJ Bailey,NC State,33,14.5162,33
 2026,401858274,away,4714300,Holden Geriner,Pittsburgh,33,4.4008,12
@@ -1739,14 +1739,14 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856840,away,5126468,Will Hammond,Texas Tech,41,-5.0179,41
 2026,401858499,away,5266583,Kayd Coffman,Michigan State,13,-9.7461,13
 2026,401858499,home,5092275,Ty Dieffenbach,UCLA,31,-3.6151,31
-2026,401858499,away,5164308,Leo Hannan,Michigan State,16,0.3959,16
+2026,401858499,away,5164308,Leo Hannan,Michigan State,16,-1.7261,16
 2026,401856837,home,5105849,Devon Dampier,Utah,27,4.1853,27
 2026,401856837,away,4685574,Conner Weigman,Houston,38,-4.5501,38
-2026,401856731,home,4875127,LaNorris Sellers,South Carolina,37,-1.8485,37
+2026,401856731,home,4875127,LaNorris Sellers,South Carolina,37,-1.5727,37
 2026,401856731,away,5141571,George MacIntyre,Tennessee,25,-4.045,25
 2026,401856729,away,5158948,Jared Curtis,Vanderbilt,39,6.1468,36
 2026,401856729,home,4918099,Kenny Minchey,Kentucky,27,9.2828,27
-2026,401856727,home,5141629,Keelon Russell,Alabama,33,14.1289,33
+2026,401856727,home,5141629,Keelon Russell,Alabama,33,12.7848,33
 2026,401856727,away,4870971,Marcel Reed,Texas A&M,23,2.1058,23
 2026,401858497,away,5121030,Jeremy Hecklinski,Iowa,15,-4.6589,15
 2026,401858497,home,5144959,Drake Lindsey,Minnesota,28,-3.7123,28
@@ -1765,7 +1765,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401858270,away,5151623,Angus Davies,California,1,-1.899,1
 2026,401858270,home,5141487,Ty Hawkins,SMU,1,0.427,0
 2026,401858498,home,5075805,Aidan Chiles,Northwestern,26,8.5258,26
-2026,401858498,away,5079717,AJ Surace,Rutgers,21,-11.4251,21
+2026,401858498,away,5079717,AJ Surace,Rutgers,21,-13.0945,21
 2026,401858498,away,5172031,Sean Ashenfelder,Rutgers,10,-9.8259,8
 2026,401856838,home,4801717,Noah Fifita,Arizona,35,14.4202,32
 2026,401856838,away,5080403,Jaylen Raynor,Iowa State,11,0.1154,11
@@ -1784,13 +1784,13 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401856834,home,5151060,Cole Ballard,Kansas,1,-0.5804,1
 2026,401866446,home,5119841,Dru DeShields,Kent State,33,15.8185,33
 2026,401866446,away,5146903,Brayden Roggow,Akron,37,0.5627,37
-2026,401866476,home,5149056,Jadyn Glasser,Central Michigan,33,-1.5132,33
+2026,401866476,home,5149056,Jadyn Glasser,Central Michigan,33,4.7244,33
 2026,401866476,away,5388435,Caleb Heavner,Miami (OH),37,-8.2609,37
 2026,401858495,away,5079572,Dylan Raiola,Oregon,43,-7.2403,43
 2026,401858495,home,5198286,Michael Clayton II,Illinois,21,-8.2615,21
 2026,401858495,home,5196352,Carson Boyd,Illinois,1,-1.5379,1
 2026,401856730,home,5177084,Kamario Taylor,Mississippi State,8,-10.5568,8
-2026,401856730,away,4915980,John Mateer,Oklahoma,30,7.3829,30
+2026,401856730,away,4915980,John Mateer,Oklahoma,30,6.8401,30
 2026,401856730,home,5294646,Parker Puckett,Mississippi State,25,0.3847,25
 2026,401856730,home,4920164,Sam West,Mississippi State,1,2.6094,1
 2026,401858273,home,5191162,Alberto Mendoza,Georgia Tech,24,-3.3761,24
@@ -1800,7 +1800,7 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401862810,home,5220473,Jackson Gutierrez,Navy,10,10.5509,10
 2026,401862810,away,4801307,Tayven Jackson,North Texas,24,13.3821,24
 2026,401862810,home,5158343,Braxton Woodson,Navy,2,0.8773,2
-2026,401864526,away,5101124,Micah Alejado,Hawai'i,32,17.5181,25
+2026,401864526,away,5101124,Micah Alejado,Hawai'i,32,15.7607,25
 2026,401864526,home,4881032,Taron Dickens,Northern Illinois,25,3.3695,13
 2026,401864526,away,5211117,Bjorn Jurgensen,Hawai'i,2,-0.6986,0
 2026,401866447,home,5075392,Keldric Luster,Ball State,27,2.6864,27
@@ -1810,9 +1810,9 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401866448,away,5385753,Jay Kastantin,Bowling Green,29,5.1007,29
 2026,401856839,away,4736246,Jacob Knuth,Kansas State,44,-13.7857,44
 2026,401856839,home,4597499,Mikey Keene,Arizona State,21,2.3975,21
-2026,401856839,home,5141378,Cutter Boley,Arizona State,7,-3.9169,7
+2026,401856839,home,5141378,Cutter Boley,Arizona State,7,-4.0168,7
 2026,401856839,home,5209295,Jake Fette,Arizona State,7,0.0737,7
-2026,401866449,away,5094040,Brogan McCaughey,Eastern Michigan,42,-11.4169,42
+2026,401866449,away,5094040,Brogan McCaughey,Eastern Michigan,42,-11.4367,42
 2026,401866449,home,5228762,Nick Poulos,Ohio,32,-1.9075,32
 2026,401871094,away,5122054,Aidan Armenta,UL Monroe,23,4.3371,23
 2026,401871094,home,4431633,Goose Crowder,Troy,14,-10.5815,14
@@ -1843,9 +1843,9 @@ season,game_id,side,qb_id,name,team,dropbacks,epa,clean_db
 2026,401869935,home,5123665,Trey Owens,Arkansas State,34,9.2165,34
 2026,401869935,away,5083490,Ayden Pereira,Georgia State,19,5.5669,19
 2026,401858275,home,4592532,Billy Edwards Jr.,North Carolina,46,4.4802,46
-2026,401858275,away,4685694,Steve Angeli,Syracuse,35,10.5042,35
+2026,401858275,away,4685694,Steve Angeli,Syracuse,35,11.0718,35
 2026,401860906,away,5081197,Grady Brosterhous,Utah State,39,8.1041,39
-2026,401860906,home,5148803,Brad Jackson,Texas State,42,-8.8506,42
+2026,401860906,home,5148803,Brad Jackson,Texas State,42,-7.1437,42
 2026,401862811,away,4775136,Owen McCown,UTSA,23,1.1609,21
 2026,401862811,home,5291713,Trace Johnson,Tulane,45,-5.6998,38
 2026,401862811,home,5219709,Dagan Bruno,Tulane,2,1.4527,2
