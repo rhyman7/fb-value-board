@@ -124,6 +124,7 @@ boards in detail; this file is the rules.
   board) and cleared on `afterprint`. Both prints share `gameBlock()` and the `.mx-game`
   print rules, so a change to one game's printed layout applies to both. Ctrl+P on the board
   without the button still prints the board list.
+- **Favicon:** the RH monogram, as `favicon.ico`, `favicon-192.png` and `apple-touch-icon.png` at the repo root (the same three files in rhyman7/nfl, rhyman7/cfb, rhyman7.github.io and rhyman7/fb-value-board). Every page links all three in `<head>`, right after the viewport meta; a new page gets the same three lines. The boards are one and two folders below the root, so the template links `../favicon.ico` and so on, and `site/make_cfb_template.py` changes those to `../../` for the college board.
 
 ## Checks before merging
 
