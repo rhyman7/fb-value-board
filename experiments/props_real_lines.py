@@ -13,10 +13,13 @@ kickoff) and at the close (ten minutes before kickoff):
   - the bets the live rules would have flagged at the pricing snapshot: record, return
     with its standard error, and closing line value (the bet's EV at the closing price)
 
-Look-ahead to keep in mind: the walk-forward projection uses each game's actual
-game-day actives and starting quarterback, which a pricing snapshot three days out did
-not know. That flatters the pricing-snapshot comparison a little; the close does not
-have this problem (inactives are out 90 minutes before kickoff).
+The pricing snapshot is scored with **pregame projections** (players.build(pregame=True)):
+who plays judged from the week before's roster, no injury report or inactives for the
+week, and the game model run without the week's starting quarterbacks or injuries, so it
+knows only what a projection three days out could. The close is scored with the board's
+usual game-day projections (inactives are out 90 minutes before kickoff). Remaining
+look-ahead in both: the game model's market blend uses the closing spread and total, and
+wind is the game's actual wind.
 """
 from __future__ import annotations
 
@@ -72,9 +75,10 @@ def priced(proj: pd.DataFrame, model: P.PropModel, snaps: pd.DataFrame, season: 
     return pd.concat(out, ignore_index=True) if out else pd.DataFrame()
 
 
-def role_clear(d: pd.DataFrame) -> pd.Series:
-    """The live rule, from what the projection table knew before the game."""
-    status_ok = d["report"].isna() | d["report"].isin(["Probable"])
+def role_clear(d: pd.DataFrame, use_report: bool = False) -> pd.Series:
+    """The live rule, from what the projection table knew before the game. The week's
+    injury report came out after the pricing snapshot, so it is left out by default."""
+    status_ok = (d["report"].isna() | d["report"].isin(["Probable"])) if use_report else pd.Series(True, index=d.index)
     games_ok = d["one_sum"].fillna(0) >= PM.MIN_GAMES
     shift = pd.Series(0.0, index=d.index)
     for now, hist in (("tgt_share", "tgt_share_raw"), ("car_share", "car_share_raw")):
@@ -148,21 +152,64 @@ def bets(fl: pd.DataFrame, cl: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     return b, s
 
 
+PREGAME_CACHE = C.RAW / "players_proj_pregame.pkl"
+
+
+def load_pregame(path=None) -> pd.DataFrame:
+    """The player walk-forward as of a few days before each game (cached)."""
+    path = path or PREGAME_CACHE
+    if path.exists():
+        return pd.read_pickle(path)
+    from nflmodel import data, extra, injuries, model, players as PL, players_data as PD
+    from nflmodel.features_ext import PRODUCTION_METRICS, ExtRatingEngine
+    games, tg, qb = data.load_all(refresh=False, verbose=False)
+    te, qe = extra.load_extra(verbose=False)
+    eng = ExtRatingEngine(tg, qb, te, qe, extra_metrics=PRODUCTION_METRICS, games=games)
+    blind = games.assign(home_qb_id=np.nan, away_qb_id=np.nan)     # this week's starters unknown
+    frame, _ = model.walk_forward(model.build_frame(blind, eng))   # and no injury information
+    pg, info = PD.load_player_games(verbose=False)
+    av = PL.load_availability(verbose=False)
+    # no defensive injuries either; `games` (with starters) only marks who started, an outcome
+    table = PL.build(frame, pg, info, av, None, None, games=games, pregame=True)
+    proj = PL.walk_forward(table).merge(PL.season_average(table), on=["game_id", "player_id"], how="left")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    proj.to_pickle(path)
+    return proj
+
+
+def line_moves(b: pd.DataFrame, cl: pd.DataFrame) -> dict:
+    """For the flagged sides: did the closing line move toward the bet?"""
+    if b.empty:
+        return {}
+    c = cl.groupby(["game_id", "player_id", "market"])["line"].median().rename("close_line").reset_index()
+    x = b.merge(c, on=["game_id", "player_id", "market"], how="inner")
+    mv = np.where(x["side"] == "over", x["close_line"] - x["line"], x["line"] - x["close_line"])
+    g = pd.Series(mv).groupby(x["game_id"].to_numpy()).sum()
+    return {"n": int(len(x)), "toward": round(float(np.mean(mv > 0)), 3), "away": round(float(np.mean(mv < 0)), 3),
+            "same": round(float(np.mean(mv == 0)), 3), "avg_points": round(float(np.mean(mv)), 3),
+            "avg_points_se": round(float(g.std(ddof=1) * np.sqrt(len(g)) / len(x)), 3) if len(g) > 1 else None}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--season", type=int, required=True)
     ap.add_argument("--proj", type=Path, default=None)
+    ap.add_argument("--pregame-proj", type=Path, default=None)
     args = ap.parse_args()
     sys.path.insert(0, str(Path(__file__).resolve().parent))
     from props_calibration import FAMILY, load_proj
     proj = load_proj(args.proj)
-    # widths fitted only on seasons before this one; the tuning-season correction from the saved parameters
-    model = P.PropModel(FAMILY).fit(proj[(proj.season < args.season) & (proj.season >= 2013)])
+    pre = load_pregame(args.pregame_proj)
     saved = P.PropModel.load()
-    if saved is not None:
-        model.iso = saved.iso
-    fl = priced(proj, model, B.load(args.season, "flag"), args.season)
-    cl = priced(proj, model, B.load(args.season, "close"), args.season)
+
+    def fitted(table):
+        # widths fitted only on seasons before this one; the tuning-season correction from the saved parameters
+        m = P.PropModel(FAMILY).fit(table[(table.season < args.season) & (table.season >= 2013)])
+        if saved is not None:
+            m.iso = saved.iso
+        return m
+    fl = priced(pre, fitted(pre), B.load(args.season, "flag"), args.season)
+    cl = priced(proj, fitted(proj), B.load(args.season, "close"), args.season)
     if fl.empty:
         print(f"No saved snapshots for {args.season}: run `python run_props.py backfill` first.")
         return
@@ -175,7 +222,11 @@ def main():
         p = y["our_over"] / (y["our_over"] + y["our_under"])
         report["calibration"][name] = D.calibration_table(p, (y["y"] > y["line"]).astype(float))
     b, s = bets(fl, cl)
+    s["line_moves"] = line_moves(b, cl)
     report["bets"] = s
+    # how far the books moved between the two snapshots, all props: toward the pregame model?
+    allm = fl.assign(side=np.where(fl["our_over"] / (fl["our_over"] + fl["our_under"]) > fl["fair_over"], "over", "under"))
+    report["all_props_line_moves"] = line_moves(allm.drop_duplicates(["game_id", "player_id", "market"]), cl)
     report["bets_by_stat"] = {st: bets(g, cl)[1] for st, g in fl.groupby("stat")}
     OUT.mkdir(exist_ok=True)
     (OUT / f"props_real_lines_{args.season}.json").write_text(json.dumps(report, indent=1, default=float))
@@ -184,6 +235,8 @@ def main():
     for name in ("pricing", "close"):
         print(f"\n== {name}: ours against the vig-free market (Brier, lower is better)")
         print(pd.DataFrame(report[name]).T.to_string())
+    print("\n== every prop: did the line move toward the side the pregame model preferred?")
+    print(report["all_props_line_moves"])
     print("\n== bets the live rules would have flagged at the pricing snapshot")
     print(json.dumps(report["bets"], indent=1))
     print(pd.DataFrame(report["bets_by_stat"]).T.to_string())

@@ -206,12 +206,35 @@ def _shrink(num, den, prior_mean, prior_n):
     return (num + prior_mean * prior_n) / (den + prior_n)
 
 
+def pregame_active(rows: pd.DataFrame, avail: pd.DataFrame) -> pd.Series:
+    """Who a projection made a few days before kickoff would expect to play: his roster
+    status the week before (active or a game-day inactive; injured reserve and the like
+    are out), with no injury report for this week and no game-day inactive list. A player
+    with no earlier listing uses this week's roster status. Used to test props against
+    prices posted before the week's news (experiments/props_real_lines.py)."""
+    a = avail[["season", "week", "player_id", "status"]].copy()
+    a["t"] = _t(a["season"], a["week"])
+    a = a.sort_values(["player_id", "t"]).drop_duplicates(["player_id", "t"], keep="last")
+    a["prev_status"] = a.groupby("player_id")["status"].shift()
+    a["prev_t"] = a.groupby("player_id")["t"].shift()
+    a = a[["player_id", "t", "prev_status", "prev_t"]]
+    r = rows[["player_id", "t", "status"]].reset_index().merge(a, on=["player_id", "t"], how="left").set_index("index")
+    st = r["prev_status"].where(r["prev_status"].notna() & (r["t"] - r["prev_t"] <= 3), r["status"])
+    out = st.isin(["ACT", "INA"]).astype(int)
+    out[st.isna()] = 1                     # credited with stats, no roster listing at all
+    return out.reindex(rows.index)
+
+
 def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.DataFrame,
           inj_groups: pd.DataFrame | None = None, pass_rush: pd.DataFrame | None = None,
-          games: pd.DataFrame | None = None, overrides: pd.DataFrame | None = None) -> pd.DataFrame:
+          games: pd.DataFrame | None = None, overrides: pd.DataFrame | None = None,
+          pregame: bool = False) -> pd.DataFrame:
     """The full player-game table with every pre-game projection input.
 
     overrides (optional) marks players out of upcoming games (see nflmodel/overrides.py).
+
+    pregame: project as of a few days before kickoff (pregame_active): who plays is
+    judged without this week's injury report or inactives. The board never uses this.
 
     games (optional) supplies each game's official starting quarterbacks, used only as an
     outcome: whether the projected starter really started (see walk_forward)."""
@@ -219,6 +242,8 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
     rows = player_rows(tg, pg, avail, info)
     if overrides is not None:
         rows = overrides_mod.apply_out(rows, overrides)
+    # who the projection expects to play; history and fitting still use who did play
+    rows["active_pre"] = pregame_active(rows, avail) if pregame else rows["active"]
     played_rows = rows[rows["played"] & (rows["active"] == 1)].copy()
 
     # ---- player usage shares, over games the player was active ---------------------
@@ -365,8 +390,8 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
     X = p[VOL_FEATS].fillna(0).to_numpy()
     p["proj_team_att"] = att_model.predict(X).clip(15, 60)
     p["proj_team_car"] = car_model.predict(X).clip(10, 45)
-    # shares among the players who are active for this game
-    act = p["active"] == 1
+    # shares among the players expected to play in this game
+    act = (p["active_pre"] if "active_pre" in p else p["active"]) == 1
     for c in ("tgt_share", "car_share", "att_share"):
         raw = p[f"{c}_raw"].where(act, 0.0)
         tot = raw.groupby([p["game_id"], p["team"]]).transform("sum")
