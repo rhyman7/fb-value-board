@@ -140,10 +140,36 @@ def depth(season: int, games: pd.DataFrame, refresh: bool = False) -> pd.DataFra
     return out
 
 
+PRACTICE = {"Full Participation in Practice": 0, "Limited Participation in Practice": 1, "Did Not Participate In Practice": 2}
+REPORT = {"Probable": 0, "Questionable": 1, "Doubtful": 2, "Out": 3}
+
+
+def practice(season: int, refresh: bool = False) -> pd.DataFrame:
+    """The week's injury report for skill players: final practice status and game status.
+    Published by Friday for a Sunday game, so known before kickoff (not three days before)."""
+    path = C.CACHE / f"practice_{season}.csv"
+    if path.exists() and not refresh:
+        return pd.read_csv(path, dtype={"player_id": str})
+    raw = C.RAW / f"injuries_p_{season}.parquet"
+    try:
+        _download(f"{REL}/injuries/injuries_{season}.parquet", raw)
+    except Exception:
+        return pd.DataFrame(columns=["season", "week", "team", "player_id", "practice", "report"])
+    d = pd.read_parquet(raw, columns=["season", "team", "week", "gsis_id", "position", "report_status", "practice_status"])
+    raw.unlink(missing_ok=True)
+    d = d[d["position"].isin(SKILL) & d["gsis_id"].notna()].rename(columns={"gsis_id": "player_id"})
+    d["team"] = d["team"].replace(C.TEAM_ALIASES)
+    d["practice"] = d["practice_status"].map(PRACTICE)
+    d["report"] = d["report_status"].map(REPORT)
+    d = d.groupby(["season", "week", "team", "player_id"], as_index=False)[["practice", "report"]].max()
+    d.to_csv(path, index=False)
+    return d
+
+
 def load_all(games: pd.DataFrame, refresh_current: bool = False, verbose: bool = True, first: int = 2012) -> dict:
     now = current_season()
     b = bio(refresh=refresh_current)
-    sn, ct, cp, dp = [], [], [], []
+    sn, ct, cp, dp, pr = [], [], [], [], []
     for s in range(first, now + 1):
         r = refresh_current and s == now
         if verbose:
@@ -152,7 +178,8 @@ def load_all(games: pd.DataFrame, refresh_current: bool = False, verbose: bool =
         t, p = context(s, r)
         ct.append(t); cp.append(p)
         dp.append(depth(s, games, r))
-    return {"bio": b, "snaps": pd.concat(sn, ignore_index=True), "ctx_team": pd.concat(ct, ignore_index=True),
+        pr.append(practice(s, r))
+    return {"practice": pd.concat(pr, ignore_index=True), "bio": b, "snaps": pd.concat(sn, ignore_index=True), "ctx_team": pd.concat(ct, ignore_index=True),
             "ctx_player": pd.concat(cp, ignore_index=True), "depth": pd.concat(dp, ignore_index=True)}
 
 
@@ -197,6 +224,11 @@ def features(table: pd.DataFrame, R: dict) -> pd.DataFrame:
     out = out.merge(t[["game_id", "player_id", "season", "week", "team", "t"]], on=["game_id", "player_id"], how="left")
     out = out.merge(d, on=["season", "week", "team", "player_id"], how="left")
     out["depth"] = out["depth"].clip(upper=5)
+    if "practice" in R and len(R["practice"]):
+        pr = R["practice"].rename(columns={"practice": "practice_lvl", "report": "report_lvl"})
+        out = out.merge(pr, on=["season", "week", "team", "player_id"], how="left")
+        out["practice_lvl"] = out["practice_lvl"].fillna(-1)     # not on the report
+        out["report_lvl"] = out["report_lvl"].fillna(-1)
     # background
     b = R["bio"].drop_duplicates("player_id").set_index("player_id")
     born = pd.to_datetime(out["player_id"].map(b["birth_date"]), errors="coerce")
@@ -215,5 +247,5 @@ def features(table: pd.DataFrame, R: dict) -> pd.DataFrame:
     team_f = a[["game_id", "team", "pace", "neutral_pass"]]
     out = out.merge(team_f, on=["game_id", "team"], how="left")
     keep = ["game_id", "player_id", "snap_avg", "snap_last", "snap_last2", "snap_trend", "car_close_avg", "tgt_close_avg",
-            "new_team", "depth", "age", "draft_pick", "exp", "pace", "neutral_pass"]
+            "new_team", "depth", "age", "draft_pick", "exp", "pace", "neutral_pass", "practice_lvl", "report_lvl"]
     return out[[c for c in keep if c in out.columns]]
