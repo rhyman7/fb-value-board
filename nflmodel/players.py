@@ -507,9 +507,19 @@ def status_label(roster_status, report, upcoming: bool = False) -> str | None:
     return report if isinstance(report, str) else None
 
 
-def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set) -> dict:
-    """Projections for the board's upcoming games, with the inputs behind them."""
+def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFrame | None = None) -> dict:
+    """Projections for the board's upcoming games, with the inputs behind them. new
+    (optional): players_ml.py's projections, shown next to the current ones as proj_new
+    for the stats and positions where they tested better."""
     p = proj[proj["game_id"].isin(game_ids)].copy()
+    newmap = {}
+    if new is not None and len(new):
+        from .players_ml import ADOPT
+        nn = new[new["game_id"].isin(game_ids)]
+        for st, groups in ADOPT.items():
+            x = nn[nn["group"].isin(groups)]
+            for gid, pid, v in zip(x["game_id"], x["player_id"], x[st + "_proj"]):
+                newmap.setdefault((gid, pid), {})[st] = None if pd.isna(v) else round(float(v), 1)
     if p.empty:
         return {"players": [], "teams": []}
     p["name"] = p["player_id"].map(info["name"]).fillna(p["player_id"])
@@ -540,6 +550,7 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set) -> dict:
             "id": r.player_id, "name": r.name, "pos": r.position, "team": r.team, "opp": r.opp, "game": r.game_id, "week": int(r.week),
             "status": status_label(r.status, r.report, upcoming=True),
             "proj": {k: r1(getattr(r, k + "_proj")) for k in STATS},
+            **({"proj_new": newmap[(r.game_id, r.player_id)]} if (r.game_id, r.player_id) in newmap else {}),
             "td_any": r3(1 - np.exp(-max(td, 0))),
             "why": {"tgt_share": r3(r.tgt_share), "car_share": r3(r.car_share), "att_share": r3(r.att_share),
                     "tgt_share_hist": r3(r.tgt_share_raw), "car_share_hist": r3(r.car_share_raw),
