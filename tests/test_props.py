@@ -333,3 +333,16 @@ def test_backfill_snapshot_times_budget_and_restart(tmp_path, monkeypatch):
     r = B.run(f, 2025, B.YARDAGE, max_credits=100, verbose=False)
     assert r["complete"] and r["snapshots"] == 1                                  # restart fetches only what's missing
     assert len(B.load(2025, "close")) == 2 and set(B.load(2025, "flag")["game_id"]) == set(sched["game_id"])
+
+
+def test_pregame_availability_ignores_the_weeks_news():
+    """A pregame projection may not know this week's injury report or inactives: only the
+    roster status the week before."""
+    from nflmodel import players as PL
+    avail = pd.DataFrame({"season": 2025, "week": [1, 2, 1, 2, 1, 2], "player_id": ["a", "a", "b", "b", "c", "c"],
+                          "status": ["ACT", "INA", "ACT", "ACT", "RES", "ACT"]})
+    rows = pd.DataFrame({"season": 2025, "week": 2, "player_id": ["a", "b", "c", "d"], "t": PL._t(2025, 2),
+                         "status": ["INA", "ACT", "ACT", np.nan], "report": [None, "Out", None, None],
+                         "active": [0, 0, 1, 1]})
+    pre = PL.pregame_active(rows, avail)
+    assert list(pre) == [1, 1, 0, 1]     # a: scratched on game day; b: ruled out late; c: on IR the week before; d: no listing
