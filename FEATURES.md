@@ -207,6 +207,36 @@ is a lead, not a decision: the split was chosen after seeing the results. The
 honest test is to add pass catchers at the end of the 2026 season only if 2026
 also improves, and to judge it on 2027.
 
+## Player roles in the game model, October 2026
+
+The player work added snap shares, depth charts and team play-calling
+(`nflmodel/roles.py`). Tested in the margin and total models
+(`experiments/game_roles_test.py`, 2014 on):
+
+| Candidate | Model | Tuning | Holdout | Kept |
+|---|---|---|---|---|
+| Depth-chart starters (QB, RB, WR, TE) out, home minus away | margin | better | better | **yes, with the next** |
+| Regular players' snap share falling, last two games vs average | margin | better | better | **yes** |
+| Usage missing (target and carry shares of players out) | margin | no gain | | no |
+| Neutral-situation pass rate | margin / total | no gain | | no |
+| Any of these, summed | total | no gain | | no |
+
+Together the two kept signals cut the margin's average miss by 0.013 points on the
+tuning seasons and 0.019 since 2019. "Out" uses only what is known by Friday
+(`nflmodel/game_roles.py`): last week's roster status plus players listed Out or
+Doubtful, never the game-day inactive list. Against openers
+(`experiments/game_roles_open_test.py`; side picked by the model against the opening
+spread):
+
+| | Average miss, tuning / since 2019 | Win rate at the opener, tuning / since 2019 |
+|---|---|---|
+| Before | 10.058 / 9.989 | 53.5% / 52.7% (1,204 / 1,825 games) |
+| With both signals | 10.026 / 9.976 | 54.8% / 53.4% |
+
+Better on both periods, but small: the gain since 2019 (+0.6 points) is inside
+the noise for 1,825 games (about ±1.2). Kept because it helps on both and the
+inputs are known in time. Totals unchanged.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;

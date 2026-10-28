@@ -21,7 +21,8 @@ from . import config as C
 from .ratings import RatingEngine
 
 MARGIN_FEATS = ["d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_qb", "hfa", "rest_diff",
-                "d_chg_ol"]   # offensive-line starters missing beyond recent games (Oct 2026, FEATURES.md)
+                "d_chg_ol",   # offensive-line starters missing beyond recent games (Oct 2026, FEATURES.md)
+                "d_depth1_out", "d_snap_drop"]   # skill starters out and falling snap shares (Oct 2026, game_roles.py)
 TOTAL_FEATS = ["s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_qb", "lg_pts", "indoor",
                "wind", "s_snaps"]   # wind and pace added Oct 2026 after testing (FEATURES.md)
 FIRST_OOS = C.FIRST_MODEL_SEASON + 3   # first season with out-of-sample projections
@@ -86,6 +87,9 @@ def walk_forward(df: pd.DataFrame, alpha: float = 20.0, margin_feats: list[str] 
     MF = MARGIN_FEATS if margin_feats is None else margin_feats
     TF = TOTAL_FEATS if total_feats is None else total_feats
     df = df.copy()
+    for col in MF + TF:              # role signals (game_roles.py) need the player table; 0 = no information
+        if col not in df:
+            df[col] = 0.0
     for col in ("model_margin", "model_total", "proj_margin", "proj_total", "w_margin", "w_total"):
         df[col] = np.nan
     info = {}

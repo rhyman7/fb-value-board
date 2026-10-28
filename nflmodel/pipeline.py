@@ -40,7 +40,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
 
     say("Rating teams week by week ...")
     engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games)
-    frame, info = model.walk_forward(model.build_frame(games, engine, injuries=inj))
+    base = model.build_frame(games, engine, injuries=inj)
+    frame, info = model.walk_forward(base)
 
     prev_path = C.DOCS / "data.json"
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
@@ -51,6 +52,16 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
         avail = players.load_availability(refresh_current=refresh, verbose=verbose)
         rush = injuries.load_pass_rush(games, refresh_current=refresh, verbose=verbose)
+        R = None
+        try:                                      # the role signals for the game model (game_roles.py)
+            from . import game_roles, roles
+            say("Role signals for the game model ...")
+            R = roles.load_all(games, refresh_current=refresh, verbose=False)
+            rows = players.player_rows(players.team_games(frame, pg), pg, avail, pinfo)
+            rows = overrides.apply_out(rows, ov) if ov is not None else rows
+            frame, info = model.walk_forward(game_roles.attach(base, game_roles.team_features(rows, R, avail)))
+        except Exception as exc:
+            print(f"  role signals skipped ({exc}); game model runs without them")
         ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov)
         pproj = players.walk_forward(ptable, first_test=season)
         upcoming_ids = set(frame.loc[~frame.played & frame.spread_line.notna() & (frame.season == season), "game_id"])
@@ -60,7 +71,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         try:
             say("New projections (role inputs, boosted model) ...")
             from . import players_ml, roles
-            R = roles.load_all(games, refresh_current=refresh, verbose=False)
+            R = R if R is not None else roles.load_all(games, refresh_current=refresh, verbose=False)
             pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
             ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=season), first=C.FIRST_TEST_SEASON)
             new = ml[ml["season"] == season]
