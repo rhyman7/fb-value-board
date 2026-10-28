@@ -58,7 +58,7 @@ def build(proj_path):
         av = PL.load_availability(verbose=False)
         table = PL.build(frame, pg, info, av, inj, pr, games=games)
         proj = PL.walk_forward(table)
-    R = roles.load_all(games, verbose=False)
+    R = roles.load_all(games, verbose=False)   # includes the week's injury report (practice and game status)
     F = roles.features(proj, R)
     proj = proj.merge(F, on=["game_id", "player_id"], how="left")
     for st in STATS:
@@ -81,7 +81,7 @@ def main():
     args = ap.parse_args()
     proj = build(args.proj)
     played = proj["played"].astype(bool) & (proj["active"] == 1)
-    variants = {"current": None, "boost, current inputs": BASE_F, "boost, all inputs": BASE_F + ROLE_F}
+    variants = {"current": None, "boost, all inputs": BASE_F + ROLE_F, "boost, all + injury report": BASE_F + ROLE_F + ["practice_lvl", "report_lvl"]}
     preds = {k: proj.copy() for k in variants}
     seasons = sorted(proj["season"].unique())
     for stat, groups in STATS.items():
