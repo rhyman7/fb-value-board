@@ -227,3 +227,39 @@ def test_dry_run_on_this_weeks_board(tmp_path, monkeypatch, capsys):
     assert len(log) == 2 and set(log["side"]) == {"over", "under"}
     assert abs(log["our_p"].sum() + log["our_push"].iloc[0] - 1) < 1e-6
     assert abs(log["fair"].sum() - 1) < 1e-6
+
+
+# ---- no look-ahead -----------------------------------------------------------------
+
+def test_no_look_ahead_in_probabilities_or_history():
+    """Nothing used for a game may come from after its kickoff: the probabilities depend only
+    on pre-game projection columns, and the recent-games baseline only on earlier games."""
+    m = _toy_model()
+    d = _toy_board().assign(rec_yds=12.0, receptions=1.0)
+    a = m.probs(d, "rec_yds", "WR", np.array([60.5]), calibrate=False)
+    b = m.probs(d.assign(rec_yds=150.0, receptions=11.0), "rec_yds", "WR", np.array([60.5]), calibrate=False)
+    assert np.allclose(np.r_[a], np.r_[b])                         # the outcome changes nothing
+    h = pd.DataFrame({"player_id": ["p"] * 4, "game_id": list("abcd"), "t": [1, 2, 3, 4], "played": True,
+                      "active": 1, "started": 1, "rec_yds": [10.0, 20.0, 30.0, 40.0]})
+    lags = P.recent_history(h, "rec_yds").set_index("game_id")
+    assert np.isnan(lags.loc["a", "lag1"])                         # first game: no history
+    assert lags.loc["c", "lag1"] == 20.0 and lags.loc["c", "lag2"] == 10.0 and np.isnan(lags.loc["c", "lag3"])
+
+
+def test_games_already_started_are_never_priced(tmp_path, monkeypatch):
+    import run_props
+    past = (pd.Timestamp.now(tz="UTC") - pd.Timedelta(minutes=5)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    (tmp_path / "events.json").write_text(json.dumps([{"id": "old", "commence_time": past, "home_team": "x", "away_team": "y"}]))
+    called = []
+
+    class F(run_props.Fixture):
+        def event_odds(self, *a, **k):
+            called.append(a)
+            return {}
+    for name in ("LOG", "RESULTS", "SNAPS"):
+        monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
+    if P.PropModel.load() is None:
+        pytest.skip("no fitted prop parameters yet")
+    run_props.cmd_flag(F(tmp_path), log_it=False)
+    run_props.cmd_close(F(tmp_path), log_it=False)
+    assert not called

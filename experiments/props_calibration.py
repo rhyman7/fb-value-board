@@ -133,7 +133,7 @@ def median_line_test(df, models, stat, hist):
         d, L, lags = d[ok].reset_index(drop=True), L[ok], lags[ok]
         cal, _, _ = models.probs(d, stat, g, L, calibrate=True)
         emp = P.empirical_over(lags, L[:, None])[:, 0]
-        out.append(pd.DataFrame({"stat": stat, "group": g, "season": d["season"].to_numpy(), "line": L,
+        out.append(pd.DataFrame({"stat": stat, "group": g, "season": d["season"].to_numpy(), "game_id": d["game_id"].to_numpy(), "line": L,
                                  "p_cal": cal, "p_emp": emp, "hit": (P.actual(d, stat) > L).astype(float)}))
     return pd.concat(out, ignore_index=True) if out else pd.DataFrame()
 
@@ -168,16 +168,35 @@ def scores(r: pd.DataFrame, cols=("p_raw", "p_cal", "p_base", "p_emp")) -> dict:
     return out
 
 
+def diff_se(g, a, b):
+    """Brier difference a - b and its standard error, clustered by game (props in one game,
+    and the several lines per player, are not independent)."""
+    x = g[g[[a, b]].notna().all(axis=1)]
+    if len(x) < 50:
+        return np.nan, np.nan
+    dlt = (x[a] - x["hit"]) ** 2 - (x[b] - x["hit"]) ** 2
+    cl = dlt.groupby(x["game_id"]).sum()
+    n = len(x)
+    return float(dlt.mean()), float(cl.std(ddof=1) * np.sqrt(len(cl)) / n)
+
+
 def by(r, keys, cols=("p_raw", "p_cal", "p_base", "p_emp")):
     rows = []
     for k, g in r.groupby(keys):
+        common = g[g[list(cols)].notna().all(axis=1)]
         sc = scores(g, cols)
         rec = dict(zip(keys if isinstance(keys, list) else [keys], k if isinstance(k, tuple) else (k,)))
         rec["n"] = sc["n_common"]
+        rec["games"] = int(common["game_id"].nunique()) if "game_id" in common and len(common) else 0
         for c in cols:
             if c in sc:
                 rec[f"{c}_brier"] = round(sc[c]["brier"], 5)
                 rec[f"{c}_ll"] = round(sc[c]["log_loss"], 5)
+        if "game_id" in g:
+            for other in [c for c in cols if c != "p_cal" and c != "p_raw"]:
+                d, se = diff_se(common, "p_cal", other)
+                rec[f"cal_minus_{other[2:]}"] = None if np.isnan(d) else round(d, 5)
+                rec[f"cal_minus_{other[2:]}_se"] = None if np.isnan(se) else round(se, 5)
         rows.append(rec)
     return pd.DataFrame(rows)
 
@@ -353,6 +372,8 @@ def main():
     OUT.mkdir(exist_ok=True)
     (OUT / "props_calibration.json").write_text(json.dumps(report, indent=1, default=float))
     hpred.to_csv(C.RAW / "props_holdout_preds.csv", index=False)
+    tpred.to_csv(C.RAW / "props_tuning_preds.csv", index=False)
+    hmed.to_csv(C.RAW / "props_holdout_median.csv", index=False)
     reliability_chart(tpred, hpred, OUT / "props_reliability.png")
     print_report(report)
 
