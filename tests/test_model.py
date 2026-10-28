@@ -283,3 +283,30 @@ def test_overrides_file_is_valid():
     assert ov["game_id"].str.match(r"^\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}$").all()
     for r in ov.itertuples():
         assert r.team in r.game_id.split("_")[2:], f"{r.team} not in {r.game_id}"
+
+
+def test_questionable_adjustment_uses_only_earlier_seasons():
+    """The Questionable multiplier for a season comes from earlier seasons only: changing
+    a later season's results leaves an earlier season's projections unchanged."""
+    import numpy as np
+    import pandas as pd
+    from nflmodel import players_ml
+
+    rng = np.random.default_rng(0)
+    rows = []
+    for s in (2014, 2015, 2016):
+        for i in range(300):
+            rows.append({"season": s, "group": "WR", "report_lvl": 1, "practice_lvl": i % 3, "played": True, "active": 1,
+                         "rec_yds_proj": 50.0, "rec_yds": float(rng.poisson(35)), "receptions_proj": 4.0, "receptions": 3.0})
+    p = pd.DataFrame(rows)
+    a = players_ml.questionable(p, first=2015)
+    p2 = p.copy()
+    p2.loc[p2.season == 2016, "rec_yds"] = 200.0
+    b = players_ml.questionable(p2, first=2015)
+    early = p.season <= 2016
+    assert np.allclose(a.loc[early, "rec_yds_proj"], b.loc[early, "rec_yds_proj"])   # 2016 is predicted from 2014-15
+    assert (a.loc[p.season == 2014, "rec_yds_proj"] == 50.0).all()                    # before `first`: untouched
+    assert (a.loc[p.season == 2015, "rec_yds_proj"] < 50.0).all()                     # under-used, so scaled down
+    # not listed: untouched
+    c = players_ml.questionable(p.assign(report_lvl=-1), first=2015)
+    assert (c["rec_yds_proj"] == 50.0).all()
