@@ -346,3 +346,23 @@ def test_pregame_availability_ignores_the_weeks_news():
                          "active": [0, 0, 1, 1]})
     pre = PL.pregame_active(rows, avail)
     assert list(pre) == [1, 1, 0, 1]     # a: scratched on game day; b: ruled out late; c: on IR the week before; d: no listing
+
+
+def test_alternate_ladder_rungs_are_priced_from_the_same_distribution():
+    """A rung posted over-only (e.g. 40+ receiving yards at -400) gets our chance from the
+    same distribution as the main line, and a fair price under the assumed ladder margin."""
+    board = _toy_board()
+    rows = []
+    for b in ("draftkings", "fanduel"):
+        for line, price in ((39.5, -400), (59.5, -150), (79.5, 120)):
+            rows.append({"event_id": "e1", "commence": "", "home_name": "Philadelphia Eagles", "away_name": "Dallas Cowboys",
+                         "book": b, "market": "player_reception_yds_alternate", "updated": "", "player": "AJ Brown",
+                         "side": "over", "line": line, "price": float(price)})
+    o = PM.match(pd.DataFrame(rows), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    b = PM.price(PM.consensus(o), board, _toy_model())
+    assert set(b["line"]) == {39.5, 59.5, 79.5} and (b["side"] == "over").all() and b["one_sided"].all()
+    main = PM.price(PM.consensus(PM.match(_toy_odds(line=59.5), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])), board, _toy_model())
+    assert abs(b.loc[b.line == 59.5, "our_p"].iloc[0] - main.loc[main.side == "over", "our_p"].iloc[0]) < 1e-12
+    p = b.sort_values("line")["our_p"].to_numpy()
+    assert p[0] > p[1] > p[2]                        # lower rungs are likelier
+    assert np.allclose(b["fair"], O.one_sided_fair(b["price"], PM.ALT_MARGIN, "power"))

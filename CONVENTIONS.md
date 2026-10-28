@@ -45,8 +45,8 @@ boards in detail; this file is the rules.
   wording still match the site structure.
 - **Player props (NFL) and The Odds API** ([PROPS.md](PROPS.md)). The key is the
   `ODDS_API_KEY` repository secret; never print it or write it to a file. The account has
-  20,000 credits a month (Oct 2026). Live logging (DraftKings and FanDuel, ten markets, open,
-  pricing and closing snapshots) runs about 2,000 a month; every call's cost is in
+  20,000 credits a month (Oct 2026). Live logging (DraftKings and FanDuel, ten markets plus
+  the three yardage ladders, open, pricing and closing snapshots) runs about 2,500 a month; every call's cost is in
   `data/props/api_usage.csv`. **Ask Ryan before** anything that would use most of the
   month's credits (a backfill), changes what the board shows, or can't be undone.
   `data/props/prop_log.csv` and `prop_results.csv` are append-only: never edit or delete a

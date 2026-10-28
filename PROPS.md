@@ -247,14 +247,18 @@ not in The Odds API's free data, so none are flagged.
   than 200 (`PROPS_RESERVE`).
 - Books: DraftKings and FanDuel only (Ryan's call, Oct 2026; `PROPS_BOOKS` to change).
 - Markets: all ten the model prices (pass, rush and receiving yards, receptions, carries,
-  pass attempts, completions, pass TDs, interceptions, anytime TD; `PROPS_MARKETS`).
+  pass attempts, completions, pass TDs, interceptions, anytime TD), plus the alternate
+  ladders for the three yardage props (200+, 225+, 250+ ...; added Oct 27, 2026: Ryan bets
+  lower rungs more than the main line). Each rung is priced from the same distribution as
+  the main line. Rungs posted over-only assume a 10% two-way margin (`ALT_MARGIN`), to be
+  checked against rungs with both sides once the log has them. `PROPS_MARKETS` to change.
 - **Live, three snapshots per game** (`.github/workflows/props.yml`):
   - open: the first daily run (12:47 UTC) once props are posted, kickoff 3-8 days away;
   - pricing: the first daily run with kickoff 3 days away or less (Friday for Sunday
     games, when injury reports are mostly out). **Bets are decided here only**;
   - close: runs every 30 minutes in the usual kickoff windows take every game's prices
     about 45 minutes before kickoff.
-  About 15 games x 10 markets x 3 = 450 credits a week, 2,000 a month. Games on unusual
+  About 15 games x 13 markets x 3 = 585 credits a week, 2,500 a month. Games on unusual
   days (Christmas, a Wednesday) may miss their closing snapshot.
 - **Backfill** (`.github/workflows/props-backfill.yml`, run by hand; `nflmodel/propbackfill.py`):
   past prices at the same two moments the live run uses, the pricing run (12:47 UTC, first
@@ -325,5 +329,10 @@ refreshes daily.
   (`tests/test_props.py`).
 - Pass and rush TDs are projected separately but the anytime-TD prop uses their sum;
   quarterback anytime TD is rushing only.
-- Not modelled: alternate lines, longest-play props, quarter props.
+- Not modelled: longest-play props, quarter props. Alternate ladders for receptions,
+  carries and the like are not fetched.
+- Low ladder rungs are high-probability bets (often -300 or shorter), where a small error
+  in our chance is a large error in EV. On the holdout the model was well calibrated up to
+  80-90% (receiving yards: 83.5% predicted, 84.6% happened) but slightly overconfident at
+  90-95% (90.8% against 87.8%, 123 lines). Rungs far below the projection were not tested.
 - College: not started.
