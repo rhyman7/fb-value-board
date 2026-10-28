@@ -34,6 +34,11 @@ MARKET_STAT = {s.odds_key: k for k, s in SPECS.items() if s.odds_key}
 DEFAULT_MARKETS = [s.odds_key for s in SPECS.values() if s.odds_key]
 
 MIN_EDGE = 0.05            # in probability; see PROPS.md for how it was chosen
+# Flags are paused (Oct 2026): against real 2025 DraftKings and FanDuel lines the model's
+# chances were worse than the books' vig-free ones, and the sides these rules would have
+# flagged broke even (PROPS.md). Every side is still priced and logged; nothing is flagged
+# until a market-anchored version beats the books out of sample.
+FLAGS_ON = False
 MIN_BOOKS = 2              # books posting this player's market (at any line): with DraftKings and
                            # FanDuel only, both; their lines often differ by a half point
 SHARP: set = set()         # no sharp book in the feed (DraftKings and FanDuel only)
@@ -244,6 +249,8 @@ def flag(b: pd.DataFrame) -> pd.DataFrame:
             r.append("role")
         if not ir:
             r.append("price")
+        if not FLAGS_ON:
+            r.append("paused")
         reasons.append(",".join(r))
     b["why_not"] = reasons
     b["flagged"] = b["why_not"] == ""
