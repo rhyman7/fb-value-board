@@ -113,7 +113,8 @@ def test_names_match_across_punctuation_and_suffixes():
     assert (o["player_id"] == "00-1").all()
 
 
-def test_price_flags_a_clear_edge_and_sizes_the_stake():
+def test_price_flags_a_clear_edge_and_sizes_the_stake(monkeypatch):
+    monkeypatch.setattr(PM, "FLAGS_ON", True)
     board = _toy_board()
     o = PM.match(_toy_odds(line=60.5), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
     cons = PM.consensus(o)
@@ -126,6 +127,14 @@ def test_price_flags_a_clear_edge_and_sizes_the_stake():
     assert not under["flagged"] and under["stake"] == 0
     ev = over["our_p"] * (O.american_to_decimal(-110) - 1) - (1 - over["our_p"])
     assert abs(over["ev"] - ev) < 1e-9
+
+
+def test_paused_flags_price_everything_and_flag_nothing():
+    board = _toy_board()
+    o = PM.match(_toy_odds(line=60.5), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    b = PM.price(PM.consensus(o), board, _toy_model())
+    assert len(b) == 2 and not b["flagged"].any() and (b["stake"] == 0).all()
+    assert b["why_not"].str.contains("paused").all()
 
 
 def test_unclear_role_and_thin_markets_are_not_flagged():
@@ -149,6 +158,7 @@ def test_game_cap():
 # ---- the log ------------------------------------------------------------------------
 
 def test_log_is_append_only_and_grades(tmp_path, monkeypatch):
+    monkeypatch.setattr(PM, "FLAGS_ON", True)
     for name in ("LOG", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
         monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
     board = _toy_board()

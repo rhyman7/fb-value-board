@@ -1,0 +1,313 @@
+{
+ "season": 2025,
+ "pricing": {
+  "all": {
+   "n": 6263,
+   "games": 269,
+   "brier_ours": 0.25395,
+   "brier_market": 0.25004,
+   "brier_blend_half": 0.24959,
+   "ours_minus_market": 0.0039,
+   "se": 0.0018,
+   "log_loss_ours": 0.70322,
+   "log_loss_market": 0.69324,
+   "over_rate": 0.4824,
+   "market_over": 0.5,
+   "ours_over": 0.4668
+  },
+  "pass_yds": {
+   "n": 941,
+   "games": 269,
+   "brier_ours": 0.25428,
+   "brier_market": 0.24999,
+   "brier_blend_half": 0.25086,
+   "ours_minus_market": 0.00429,
+   "se": 0.0032,
+   "log_loss_ours": 0.70196,
+   "log_loss_market": 0.69312,
+   "over_rate": 0.5048,
+   "market_over": 0.4999,
+   "ours_over": 0.5041
+  },
+  "rec_yds": {
+   "n": 3499,
+   "games": 254,
+   "brier_ours": 0.25515,
+   "brier_market": 0.25019,
+   "brier_blend_half": 0.25037,
+   "ours_minus_market": 0.00495,
+   "se": 0.00227,
+   "log_loss_ours": 0.70543,
+   "log_loss_market": 0.69355,
+   "over_rate": 0.471,
+   "market_over": 0.4999,
+   "ours_over": 0.4581
+  },
+  "rush_yds": {
+   "n": 1823,
+   "games": 254,
+   "brier_ours": 0.25147,
+   "brier_market": 0.24978,
+   "brier_blend_half": 0.24744,
+   "ours_minus_market": 0.00169,
+   "se": 0.00358,
+   "log_loss_ours": 0.69965,
+   "log_loss_market": 0.6927,
+   "over_rate": 0.4926,
+   "market_over": 0.5,
+   "ours_over": 0.464
+  }
+ },
+ "close": {
+  "all": {
+   "n": 9138,
+   "games": 278,
+   "brier_ours": 0.25742,
+   "brier_market": 0.25004,
+   "brier_blend_half": 0.25076,
+   "ours_minus_market": 0.00738,
+   "se": 0.00164,
+   "log_loss_ours": 0.71126,
+   "log_loss_market": 0.69324,
+   "over_rate": 0.4754,
+   "market_over": 0.4999,
+   "ours_over": 0.4578
+  },
+  "pass_yds": {
+   "n": 1015,
+   "games": 277,
+   "brier_ours": 0.2538,
+   "brier_market": 0.24996,
+   "brier_blend_half": 0.25071,
+   "ours_minus_market": 0.00384,
+   "se": 0.003,
+   "log_loss_ours": 0.70091,
+   "log_loss_market": 0.69306,
+   "over_rate": 0.5084,
+   "market_over": 0.5,
+   "ours_over": 0.5027
+  },
+  "rec_yds": {
+   "n": 5644,
+   "games": 275,
+   "brier_ours": 0.25743,
+   "brier_market": 0.25009,
+   "brier_blend_half": 0.25091,
+   "ours_minus_market": 0.00734,
+   "se": 0.00194,
+   "log_loss_ours": 0.7103,
+   "log_loss_market": 0.69334,
+   "over_rate": 0.4662,
+   "market_over": 0.4999,
+   "ours_over": 0.4513
+  },
+  "rush_yds": {
+   "n": 2479,
+   "games": 274,
+   "brier_ours": 0.25891,
+   "brier_market": 0.24997,
+   "brier_blend_half": 0.25044,
+   "ours_minus_market": 0.00893,
+   "se": 0.00358,
+   "log_loss_ours": 0.7177,
+   "log_loss_market": 0.6931,
+   "over_rate": 0.4829,
+   "market_over": 0.5,
+   "ours_over": 0.4541
+  }
+ },
+ "calibration": {
+  "pricing": [
+   {
+    "band": "0%-5%",
+    "n": 6,
+    "pred": 0.029335161484948774,
+    "actual": 0.6666666666666666
+   },
+   {
+    "band": "5%-10%",
+    "n": 13,
+    "pred": 0.07296788791281447,
+    "actual": 0.38461538461538464
+   },
+   {
+    "band": "10%-20%",
+    "n": 35,
+    "pred": 0.1508928760803676,
+    "actual": 0.2857142857142857
+   },
+   {
+    "band": "20%-30%",
+    "n": 155,
+    "pred": 0.250442460795198,
+    "actual": 0.4645161290322581
+   },
+   {
+    "band": "30%-40%",
+    "n": 1200,
+    "pred": 0.3624433214213714,
+    "actual": 0.4425
+   },
+   {
+    "band": "40%-45%",
+    "n": 860,
+    "pred": 0.4287948269831541,
+    "actual": 0.4697674418604651
+   },
+   {
+    "band": "45%-50%",
+    "n": 1771,
+    "pred": 0.47186712310923856,
+    "actual": 0.4850367024280068
+   },
+   {
+    "band": "50%-55%",
+    "n": 1216,
+    "pred": 0.5252874694685032,
+    "actual": 0.5180921052631579
+   },
+   {
+    "band": "55%-60%",
+    "n": 699,
+    "pred": 0.5698752407343957,
+    "actual": 0.5050071530758226
+   },
+   {
+    "band": "60%-70%",
+    "n": 256,
+    "pred": 0.6384459748908944,
+    "actual": 0.4921875
+   },
+   {
+    "band": "70%-80%",
+    "n": 52,
+    "pred": 0.7336112523684801,
+    "actual": 0.5192307692307693
+   }
+  ],
+  "close": [
+   {
+    "band": "0%-5%",
+    "n": 6,
+    "pred": 0.030456111167339053,
+    "actual": 0.6666666666666666
+   },
+   {
+    "band": "5%-10%",
+    "n": 12,
+    "pred": 0.07020629290995192,
+    "actual": 0.5
+   },
+   {
+    "band": "10%-20%",
+    "n": 111,
+    "pred": 0.15538773349580373,
+    "actual": 0.44144144144144143
+   },
+   {
+    "band": "20%-30%",
+    "n": 399,
+    "pred": 0.2522842384097503,
+    "actual": 0.46115288220551376
+   },
+   {
+    "band": "30%-40%",
+    "n": 1905,
+    "pred": 0.36045930490955697,
+    "actual": 0.4545931758530184
+   },
+   {
+    "band": "40%-45%",
+    "n": 1185,
+    "pred": 0.42772071844887116,
+    "actual": 0.4666666666666667
+   },
+   {
+    "band": "45%-50%",
+    "n": 2492,
+    "pred": 0.4713712859072851,
+    "actual": 0.47592295345104335
+   },
+   {
+    "band": "50%-55%",
+    "n": 1584,
+    "pred": 0.5238207869775807,
+    "actual": 0.5037878787878788
+   },
+   {
+    "band": "55%-60%",
+    "n": 932,
+    "pred": 0.5705375858401945,
+    "actual": 0.4721030042918455
+   },
+   {
+    "band": "60%-70%",
+    "n": 431,
+    "pred": 0.6373676166724039,
+    "actual": 0.494199535962877
+   },
+   {
+    "band": "70%-80%",
+    "n": 80,
+    "pred": 0.7398278699674514,
+    "actual": 0.5625
+   },
+   {
+    "band": "80%-90%",
+    "n": 1,
+    "pred": 0.80144691671657,
+    "actual": 0.0
+   }
+  ]
+ },
+ "bets": {
+  "bets": 1486,
+  "record": "789-697-0",
+  "return_flat": 0.0037,
+  "return_se": 0.0265,
+  "avg_edge": 0.1078,
+  "avg_ev_claimed": 0.1477,
+  "clv_bets": 484,
+  "avg_clv_ev": -0.0536,
+  "clv_se": 0.0022,
+  "beat_close": 0.0
+ },
+ "bets_by_stat": {
+  "pass_yds": {
+   "bets": 211,
+   "record": "104-107-0",
+   "return_flat": -0.0701,
+   "return_se": 0.0637,
+   "avg_edge": 0.0883,
+   "avg_ev_claimed": 0.1103,
+   "clv_bets": 30,
+   "avg_clv_ev": -0.0562,
+   "clv_se": 0.0032,
+   "beat_close": 0.0
+  },
+  "rec_yds": {
+   "bets": 805,
+   "record": "425-380-0",
+   "return_flat": -0.0013,
+   "return_se": 0.0348,
+   "avg_edge": 0.1108,
+   "avg_ev_claimed": 0.1534,
+   "clv_bets": 297,
+   "avg_clv_ev": -0.0536,
+   "clv_se": 0.0023,
+   "beat_close": 0.0
+  },
+  "rush_yds": {
+   "bets": 470,
+   "record": "260-210-0",
+   "return_flat": 0.0455,
+   "return_se": 0.0443,
+   "avg_edge": 0.1115,
+   "avg_ev_claimed": 0.1549,
+   "clv_bets": 158,
+   "avg_clv_ev": -0.0532,
+   "clv_se": 0.0023,
+   "beat_close": 0.0
+  }
+ }
+}

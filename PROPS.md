@@ -11,9 +11,10 @@ Code: `nflmodel/propdist.py` (distributions), `nflmodel/props.py` (the prop mode
 `run_props.py` (the command line), `experiments/props_calibration.py` (choosing the
 methods, the calibration report, the fitted parameters in `data/prop_params.json`).
 
-**Status (Oct 27, 2026):** calibration done and reported below. The market side is built
-and tested against saved responses; the first live runs and the 2025 backfill start once
-this is merged. The board shows nothing new: prices, flags and results go only to the log.
+**Status (Oct 27, 2026):** calibrated against outcomes (below), but **against real 2025
+DraftKings and FanDuel lines the model is worse than the books**, and the sides it would
+have flagged broke even. Flags are paused (`propmarket.FLAGS_ON = False`); every side is
+still priced and logged. The board shows nothing new.
 
 ## From a mean to a chance
 
@@ -134,6 +135,52 @@ is the live log.
 **Not shown profitable.** None of the results above uses a price. Nothing in the tuning or
 holdout seasons says these props make money.
 
+## Against real lines: 2025
+
+`experiments/props_real_lines.py`, on the 2025 backfill (278 games, DraftKings and
+FanDuel, passing, rushing and receiving yards; two-sided markets, pushes left out, each
+book's line counted separately). Distribution widths fitted on seasons before 2025.
+
+| Snapshot | Props | Brier, ours | Brier, books (vig-free) | Ours minus books |
+|---|---|---|---|---|
+| Pricing (first daily run within 3 days) | 6,263 | 0.2540 | 0.2500 | +0.0039 ± 0.0018 |
+| Close (10 minutes before kickoff) | 9,138 | 0.2574 | 0.2500 | +0.0074 ± 0.0016 |
+
+By stat at the pricing snapshot: passing yards +0.0043 ± 0.0032, receiving yards
++0.0050 ± 0.0023, rushing yards +0.0017 ± 0.0036. **The books' prices are the better
+forecast, at both snapshots.** Where the model disagreed with them, the results sided
+with the books: lines the model put at 60-70% went over 49% of the time (256 lines), and
+lines it put at 30-40% went over 44% (1,200 lines).
+
+**The bets the live rules would have flagged** at the pricing snapshot: 1,486 bets,
+789-697, **return +0.4% ± 2.7%** against an average claimed EV of +14.8%. By stat:
+passing yards −7.0% ± 6.4% (211 bets), receiving yards −0.1% ± 3.5% (805), rushing yards
++4.6% ± 4.4% (470). Two-thirds were unders. Indistinguishable from zero, and nowhere
+near what the edges claimed.
+
+**Line movement.** For those bets, the closing line moved toward the model's side 59% of
+the time and away 31% (average +1.0 point). That looks like closing line value, but it is
+not clean: the walk-forward projection knows each game's actual inactives and starting
+quarterback, which the pricing snapshot did not, so it is partly predicting the news that
+moved the line. Where the line did not move (484 bets), the closing price gave the bet an
+EV of −5.4%, the vig.
+
+**A market-anchored blend** (book's chance + w x (ours - book's)) did a little better than
+the books alone at w = 0.2-0.3 (Brier 0.2492 against 0.2500 at the pricing snapshot), but
+that weight was picked on the same season it is scored on, at the snapshot with the
+look-ahead, so it proves nothing yet.
+
+**What this means.** The model knows far more than a player's averages (the calibration
+above), but not more than DraftKings and FanDuel. Flags are paused. To earn them back:
+
+1. Projections as of the pricing snapshot: re-run the player walk-forward without the
+   game-day inactives and starter (as the game model's opening-line test does), so the
+   pricing comparison has no look-ahead.
+2. Fit the blend weight on one season of real lines and test it on another: backfill
+   2024 (about 16,000 credits, next month), fit on 2024, test on 2025.
+3. Turn flags back on only if the blend beats the books' prices out of sample, with the
+   closing line value to match.
+
 ## Same-game combinations
 
 `nflmodel/propsim.py`. A Gaussian copula: each leg keeps its own distribution (so single
@@ -197,7 +244,7 @@ not in The Odds API's free data, so none are flagged.
   May 2023. Plan agreed with Ryan (Oct 27, 2026): the 2025 season's three yardage markets
   first (about 17,100 credits, so most of the first month), then 2024 and 2023 only if
   2025 is worth it. `experiments/props_real_lines.py` then scores the model against those
-  lines (results below once it has run).
+  lines (above). The 2025 run used 16,062 credits (578 calls, Oct 27, 2026).
 
 ## Vig, edge, EV and flags
 
@@ -211,7 +258,7 @@ not in The Odds API's free data, so none are flagged.
   sides posted, their median overround replaces the 8%.
 - **Edge** = our chance of winning (pushes set aside) minus the vig-free market chance.
 - **EV** per unit at the best price posted = p(win) x payout - p(lose).
-- **Flag** only when all hold:
+- **Flag** (paused, see "Against real lines") only when all hold:
   - edge of 5 points or more. There are no past prices to set this on. On the tuning
     seasons, at the recent-median line (yards, catches, carries, attempts), the side the
     model favoured won about 0.6-0.8 points less often than it said, whatever the size of

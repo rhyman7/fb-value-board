@@ -52,6 +52,9 @@ boards in detail; this file is the rules.
   `data/props/prop_log.csv` and `prop_results.csv` are append-only: never edit or delete a
   row. `data/prop_params.json` is written only by `experiments/props_calibration.py`; refit
   it there (methods chosen on 2013-2018, holdout 2019 on, run once) rather than by hand.
+  Bet flags are off (`propmarket.FLAGS_ON = False`, Oct 2026): against real 2025 lines the
+  model did worse than the books. Turning them back on needs an out-of-sample win over the
+  books' prices (PROPS.md) and Ryan's go-ahead.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model, `out` takes a player
   out of the player projections. Use it only for confirmed news the nflverse schedule or the
