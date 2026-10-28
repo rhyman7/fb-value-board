@@ -118,7 +118,7 @@ def test_qb(proj):
 # ---------------------------------------------------------------------- 3. questionable players
 def test_questionable(proj, R):
     pr = R["practice"]
-    p = proj.merge(pr.rename(columns={"practice": "practice_lvl", "report": "report_lvl"}), on=["season", "week", "team", "player_id"], how="left")
+    p = proj if "report_lvl" in proj else proj.merge(pr.rename(columns={"practice": "practice_lvl", "report": "report_lvl"}), on=["season", "week", "team", "player_id"], how="left")
     q = p[(p.report_lvl == 1) & p.played.astype(bool) & (p.active == 1) & p.group.isin(["RB", "WR", "TE"])].copy()
     q["practice_lvl"] = q["practice_lvl"].fillna(0)
     rows = []
@@ -149,8 +149,10 @@ def main():
     rows = []
     print("1. team volume ...", flush=True)
     rows += test_volume(proj, proj[["game_id", "team", "pace", "neutral_pass"]])
+    print(pd.DataFrame(rows).to_string(index=False), flush=True)
     print("2. quarterback passing ...", flush=True)
     rows += test_qb(proj)
+    print(pd.DataFrame(rows).to_string(index=False), flush=True)
     print("3. questionable players ...", flush=True)
     rows += test_questionable(proj, R)
     r = pd.DataFrame(rows)
