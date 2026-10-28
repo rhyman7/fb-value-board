@@ -310,3 +310,19 @@ def test_questionable_adjustment_uses_only_earlier_seasons():
     # not listed: untouched
     c = players_ml.questionable(p.assign(report_lvl=-1), first=2015)
     assert (c["rec_yds_proj"] == 50.0).all()
+
+
+def test_game_role_signals_ignore_game_day_inactives():
+    """'Out' for the game model comes from last week's roster and the Friday report only:
+    a played game's game-day inactive list does not count; Out/Doubtful and the board's
+    own outs for upcoming games do."""
+    import pandas as pd
+    from nflmodel import game_roles
+
+    avail = pd.DataFrame({"season": 2025, "week": [1, 1, 1, 1, 2, 2, 2, 2], "player_id": ["a", "b", "c", "d"] * 2,
+                          "status": ["ACT"] * 4 + ["INA", "ACT", "ACT", "ACT"]})
+    table = pd.DataFrame({"season": 2025, "week": 2, "player_id": ["a", "b", "c", "d"], "team": "KC",
+                          "played": [True, True, True, False], "active": [0, 1, 1, 0]})
+    R = {"practice": pd.DataFrame({"season": [2025], "week": [2], "team": ["KC"], "player_id": ["b"], "report": [3]})}
+    act = game_roles.friday_active(table, R, avail).tolist()
+    assert act == [1, 0, 1, 0]      # a: inactive on game day only; b: listed Out; c: plays; d: board has him out
