@@ -77,10 +77,10 @@ def price_event(client, ev, mk, players, games, model, margin):
         pn = PM.price(cons, alt, model)
         if not pn.empty:
             k = ["game_id", "player_id", "market", "line", "side"]
-            pn = pn[k + ["proj", "our_p", "our_push", "edge", "ev"]].rename(columns={"proj": "proj_new", "our_p": "our_p_new", "our_push": "our_push_new", "edge": "edge_new", "ev": "ev_new"})
             stat_new = {c[: -len("_proj_new")] for c in alt.columns if c.endswith("_proj_new")}
-            pn = pn[pn.merge(priced[k + ["stat"]], on=k, how="left")["stat"].isin(stat_new).to_numpy()]
-            priced = priced.merge(pn, on=k, how="left")
+            pn = pn[pn["stat"].isin(stat_new)]                # only the stats the new projections cover
+            pn = pn[k + ["proj", "our_p", "our_push", "edge", "ev"]].rename(columns={"proj": "proj_new", "our_p": "our_p_new", "our_push": "our_push_new", "edge": "edge_new", "ev": "ev_new"})
+            priced = priced.merge(pn.drop_duplicates(k), on=k, how="left")
     return priced, len(rows)
 
 

@@ -401,3 +401,13 @@ def test_board_files_are_strict_json(tmp_path):
     from nflmodel import propboard as PB
     PB._dump(tmp_path / "x.json", {"a": float("nan"), "b": [np.nan, 1.5, pd.NaT], "c": {"d": np.float64("nan")}})
     assert json.loads((tmp_path / "x.json").read_text()) == {"a": None, "b": [None, 1.5, None], "c": {"d": None}}
+
+
+def test_a_player_on_the_board_twice_is_priced_for_the_right_game():
+    """This week's and next week's games can both be on the board."""
+    b1 = _toy_board()
+    b2 = b1.assign(game_id="2026_10_PHI_NYG", opp="NYG", rec_yds_proj=20.0)
+    board = pd.concat([b1, b2], ignore_index=True)
+    o = PM.match(_toy_odds(line=60.5), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    b = PM.price(PM.consensus(o), board, _toy_model())
+    assert len(b) == 2 and (b["game_id"] == "2026_09_DAL_PHI").all() and b.loc[b.side == "over", "proj"].iloc[0] == 80.0

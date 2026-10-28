@@ -208,12 +208,14 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
         return cons
     cons = cons.copy()
     cons["stat"] = cons["market"].map(MARKET_STAT)
-    pl = players.set_index("player_id")
+    # a player can be on the board for two games (this week's and next week's), so look him up by game too
+    pl = players.drop_duplicates(["game_id", "player_id"]).set_index(["game_id", "player_id"])
+    cons = cons[pd.MultiIndex.from_frame(cons[["game_id", "player_id"]]).isin(pl.index)]
     rows = []
     for (stat, ), g in cons.groupby(["stat"]):
         if stat not in SPECS:
             continue
-        d = pl.loc[g["player_id"]].reset_index()
+        d = pl.loc[list(zip(g["game_id"], g["player_id"]))].reset_index()
         for grp in d["group"].unique():
             m = (d["group"] == grp).to_numpy()
             if (stat, grp) not in model.counts and (stat, grp) not in model.yards:
