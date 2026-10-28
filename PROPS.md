@@ -199,6 +199,32 @@ above), but not more than DraftKings and FanDuel. Flags are paused. To earn them
 3. Turn flags back on only if the blend beats the books' prices out of sample, with the
    closing line value to match.
 
+## Rushing yards with the books' split of the carries (Oct 27, 2026)
+
+`experiments/props_rush_shares.py`. Ryan's idea: let the books say how a team splits its
+carries, and keep the model for the rest. For each running back with a rushing-yards line,
+the mean that makes our distribution match the book's vig-free price is turned into carries
+(divided by the model's yards per carry for him); each back's share is his part of those
+carries. The model still sets the team's running-back carries (pace, game script, opponent)
+and each back's yards per carry (efficiency, the defense). Real 2025 lines, one row per back:
+
+| | Pricing snapshot (pregame projections) | Close |
+|---|---|---|
+| Lines | 683 (252 games) | 932 (274 games) |
+| Brier, model | 0.2508 | 0.2582 |
+| Brier, books' split | 0.2527 | 0.2536 |
+| Brier, books | 0.2499 | 0.2501 |
+| Books' split minus books | +0.0028 ± 0.0034 | +0.0035 ± 0.0035 |
+| Carries, average miss: model / books' split | 3.98 / 3.91 | 4.00 / 3.83 |
+| Bets the flag rules would pick (books' split) | 302, −1.0% ± 5.5% | 403, +2.9% ± 4.8% |
+
+At the close the books' split closes most of the gap to the books (the model alone is
++0.0081 ± 0.0044 worse than them; with the split, +0.0035 ± 0.0035), and it predicts carries
+a little better. At the pricing snapshot it does not help. In neither case does it beat the
+books, and the bet returns are within noise of zero. One season of 683-932 lines is small;
+the live log adds the books' rushing-attempts lines (DraftKings posts them for the lead
+backs), a more direct read of the split than backing it out of the yards line.
+
 ## Same-game combinations
 
 `nflmodel/propsim.py`. A Gaussian copula: each leg keeps its own distribution (so single
