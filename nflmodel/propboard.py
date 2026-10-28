@@ -168,9 +168,22 @@ def summary(x: pd.DataFrame) -> dict:
         "moved_points": _num(mv.mean(), 2) if len(mv) else None, "moved_n": int(len(mv)),
         "flagged": int((x["flag_over"] | x["flag_under"]).sum()),
         "flag_record": f"{fl.count(1.0)}-{fl.count(-1.0)}-{fl.count(0.0)}",
+        "new": _new_vs(dec, hit, ours),
         "calibration": D.calibration_table(ours, hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
         "calibration_books": D.calibration_table(dec["fair_over"], hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
     }
+
+
+def _new_vs(dec, hit, ours) -> dict | None:
+    """The new projections against the current ones and the books, on the props both priced."""
+    if "pn_over" not in dec:
+        return None
+    m = dec["pn_over"].notna().to_numpy()
+    if not m.any():
+        return None
+    new = dec["pn_over"][m] / (dec["pn_over"][m] + dec["pn_under"][m])
+    return {"n": int(m.sum()), "brier_new": _num(D.brier(new, hit[m]), 5), "brier_ours": _num(D.brier(ours[m], hit[m]), 5),
+            "brier_books": _num(D.brier(dec["fair_over"][m], hit[m]), 5)}
 
 
 def _rec(r) -> dict:
