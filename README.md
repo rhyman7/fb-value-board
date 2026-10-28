@@ -153,6 +153,7 @@ pip install -r requirements.txt
 python run.py                  # download data, rate teams, backtest, build docs/
 python run.py --no-backtest    # weekly refresh, about 20 seconds
 python -m pytest -q            # tests
+python run_props.py all        # player props: grade, price, log (needs ODDS_API_KEY; PROPS.md)
 ```
 
 Open `docs/index.html` in a browser. The data is inlined, so it works from disk.
@@ -253,6 +254,13 @@ nflmodel/
   slate.py                upcoming games, line tracking and the ratings table
   matchup.py              per-game pages: breakdown, quarterbacks, ranks, trends
   pipeline.py             runs everything, writes docs/
+  propdist.py             player-prop distributions (counts, yards, early exit, lines)
+  props.py                prop probabilities from the player projections
+  propsim.py              same-game combinations (correlations by kind of pair)
+  oddsapi.py              The Odds API client, with a credit log
+  propmarket.py           vig removal, edge, EV, flags and stakes for props
+  proplog.py              the append-only prop log, grading, closing line value
+  propbackfill.py         past prop prices from the historical endpoint
 site/template.html        site template (no build step, no dependencies)
 docs/                     generated site: index.html and data.json
 index.html                Weekly Value Boards landing page (links to both boards)
@@ -266,6 +274,12 @@ experiments/injury_test.py   missing starters by position group
 experiments/players_test.py      player projections against baselines
 experiments/players_ablation.py  which pieces of the player model help
 PLAYERS.md                how player projections are built, and how they have done
+run_props.py              player props: price, log, grade, backfill
+experiments/props_calibration.py  prop distributions, calibration report, fitted parameters
+experiments/props_real_lines.py   the prop model against past DraftKings and FanDuel lines
+PROPS.md                  player props: method, calibration, market, log
+data/prop_params.json     fitted prop distributions
+data/props/               prop log, results, snapshots, credit usage, past prices
 FEATURES.md               results of the October 2026 feature tests
 tests/test_model.py
 ```
@@ -274,7 +288,8 @@ tests/test_model.py
 
 Play-by-play, schedules, results and closing lines come from the
 [nflverse](https://github.com/nflverse) project. Opening lines come from the
-[nfelo](https://github.com/greerreNFL/nfelo) project's public game file. Wind
+[nfelo](https://github.com/greerreNFL/nfelo) project's public game file. Player-prop
+prices come from [The Odds API](https://the-odds-api.com) (DraftKings and FanDuel). Wind
 forecasts come from [Open-Meteo](https://open-meteo.com). Check their terms
 before redistributing the data.
 

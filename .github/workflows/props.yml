@@ -1,0 +1,60 @@
+name: Player props
+
+# Prices NFL player props from The Odds API (DraftKings and FanDuel), logs every side, and
+# grades finished games. The daily run grades, then takes each game's opening snapshot (once
+# props are posted) and its pricing snapshot (first run within three days of kickoff, where
+# bets are decided). The runs around kickoff take every game's closing prices. All ten
+# markets: about 450 credits a week. See PROPS.md.
+
+on:
+  schedule:
+    - cron: "47 12 * 9-12,1-2 *"          # daily, after Update board (11:17 UTC)
+    - cron: "13,43 12-23 * 9-12,1-2 0"    # Sundays: London, early, late afternoon games
+    - cron: "13,43 0-1 * 9-12,1-2 1"      # Sunday night (Monday UTC)
+    - cron: "13,43 23 * 9-12,1-2 1,4"     # Monday and Thursday night
+    - cron: "13,43 0-1 * 9-12,1-2 2,5"
+    - cron: "13,43 17-23 * 12,1 6"        # Saturdays late in the season
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "flag, close, grade or all"
+        type: choice
+        options: [all, flag, close, grade]
+        default: all
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits      # shared with the board updates, so the pushes never collide
+  cancel-in-progress: false
+
+jobs:
+  props:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          if [ -n "${{ inputs.command }}" ]; then
+            python run_props.py "${{ inputs.command }}"
+          elif [ "${{ github.event.schedule }}" = "47 12 * 9-12,1-2 *" ]; then
+            python run_props.py all
+          else
+            python run_props.py close
+          fi
+      - name: Commit the log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/props
+          git diff --cached --quiet || git commit -m "Update prop log"
+          git pull --rebase origin main
+          git push

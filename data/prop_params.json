@@ -1,0 +1,2496 @@
+{
+ "meta": {
+  "fitted_through": 2026,
+  "tuning": [
+   2013,
+   2018
+  ],
+  "holdout_from": 2019,
+  "correlation": {
+   "pairs": {
+    "opp|anytime_td@R1|anytime_td@R1": [
+     0.2184,
+     1600
+    ],
+    "opp|anytime_td@R1|anytime_td@R2": [
+     0.2351,
+     3191
+    ],
+    "opp|anytime_td@R1|anytime_td@R3": [
+     0.1808,
+     3162
+    ],
+    "opp|anytime_td@R1|anytime_td@RB1": [
+     0.1559,
+     3200
+    ],
+    "opp|anytime_td@R1|carries@RB1": [
+     0.1773,
+     3195
+    ],
+    "opp|anytime_td@R1|completions@QB": [
+     0.2698,
+     3030
+    ],
+    "opp|anytime_td@R1|pass_att@QB": [
+     0.2709,
+     3030
+    ],
+    "opp|anytime_td@R1|pass_td@QB": [
+     0.5163,
+     3030
+    ],
+    "opp|anytime_td@R1|pass_yds@QB": [
+     0.2265,
+     3030
+    ],
+    "opp|anytime_td@R1|rec_yds@R1": [
+     0.1287,
+     3202
+    ],
+    "opp|anytime_td@R1|rec_yds@R2": [
+     0.1793,
+     3202
+    ],
+    "opp|anytime_td@R1|rec_yds@R3": [
+     0.1143,
+     3202
+    ],
+    "opp|anytime_td@R1|rec_yds@RB1": [
+     0.1276,
+     2455
+    ],
+    "opp|anytime_td@R1|receptions@R1": [
+     0.1862,
+     3202
+    ],
+    "opp|anytime_td@R1|receptions@R2": [
+     0.2314,
+     3202
+    ],
+    "opp|anytime_td@R1|receptions@R3": [
+     0.1997,
+     3196
+    ],
+    "opp|anytime_td@R1|receptions@RB1": [
+     0.183,
+     2777
+    ],
+    "opp|anytime_td@R1|rush_yds@QB": [
+     0.3126,
+     1443
+    ],
+    "opp|anytime_td@R1|rush_yds@RB1": [
+     0.1663,
+     3201
+    ],
+    "opp|anytime_td@R2|anytime_td@R2": [
+     0.1843,
+     1591
+    ],
+    "opp|anytime_td@R2|anytime_td@R3": [
+     0.1761,
+     3153
+    ],
+    "opp|anytime_td@R2|anytime_td@RB1": [
+     0.0639,
+     3191
+    ],
+    "opp|anytime_td@R2|carries@RB1": [
+     0.1558,
+     3186
+    ],
+    "opp|anytime_td@R2|completions@QB": [
+     0.2055,
+     3022
+    ],
+    "opp|anytime_td@R2|pass_att@QB": [
+     0.234,
+     3022
+    ],
+    "opp|anytime_td@R2|pass_td@QB": [
+     0.519,
+     3022
+    ],
+    "opp|anytime_td@R2|pass_yds@QB": [
+     0.1738,
+     3022
+    ],
+    "opp|anytime_td@R2|rec_yds@R1": [
+     0.1269,
+     3193
+    ],
+    "opp|anytime_td@R2|rec_yds@R2": [
+     0.222,
+     3193
+    ],
+    "opp|anytime_td@R2|rec_yds@R3": [
+     0.16,
+     3193
+    ],
+    "opp|anytime_td@R2|rec_yds@RB1": [
+     0.0978,
+     2449
+    ],
+    "opp|anytime_td@R2|receptions@R1": [
+     0.109,
+     3193
+    ],
+    "opp|anytime_td@R2|receptions@R2": [
+     0.2461,
+     3193
+    ],
+    "opp|anytime_td@R2|receptions@R3": [
+     0.2041,
+     3187
+    ],
+    "opp|anytime_td@R2|receptions@RB1": [
+     0.1919,
+     2768
+    ],
+    "opp|anytime_td@R2|rush_yds@QB": [
+     0.2034,
+     1439
+    ],
+    "opp|anytime_td@R2|rush_yds@RB1": [
+     0.1426,
+     3192
+    ],
+    "opp|anytime_td@R3|anytime_td@R3": [
+     0.1088,
+     1562
+    ],
+    "opp|anytime_td@R3|anytime_td@RB1": [
+     0.0241,
+     3162
+    ],
+    "opp|anytime_td@R3|carries@RB1": [
+     0.111,
+     3157
+    ],
+    "opp|anytime_td@R3|completions@QB": [
+     0.1853,
+     2996
+    ],
+    "opp|anytime_td@R3|pass_att@QB": [
+     0.1621,
+     2996
+    ],
+    "opp|anytime_td@R3|pass_td@QB": [
+     0.3599,
+     2996
+    ],
+    "opp|anytime_td@R3|pass_yds@QB": [
+     0.2372,
+     2996
+    ],
+    "opp|anytime_td@R3|rec_yds@R1": [
+     0.1003,
+     3164
+    ],
+    "opp|anytime_td@R3|rec_yds@R2": [
+     0.1177,
+     3164
+    ],
+    "opp|anytime_td@R3|rec_yds@R3": [
+     0.0606,
+     3164
+    ],
+    "opp|anytime_td@R3|rec_yds@RB1": [
+     0.1205,
+     2424
+    ],
+    "opp|anytime_td@R3|receptions@R1": [
+     0.1084,
+     3164
+    ],
+    "opp|anytime_td@R3|receptions@R2": [
+     0.1016,
+     3164
+    ],
+    "opp|anytime_td@R3|receptions@R3": [
+     0.1277,
+     3159
+    ],
+    "opp|anytime_td@R3|receptions@RB1": [
+     0.155,
+     2742
+    ],
+    "opp|anytime_td@R3|rush_yds@QB": [
+     0.2769,
+     1429
+    ],
+    "opp|anytime_td@R3|rush_yds@RB1": [
+     0.0843,
+     3163
+    ],
+    "opp|anytime_td@RB1|anytime_td@RB1": [
+     -0.0276,
+     1600
+    ],
+    "opp|anytime_td@RB1|carries@RB1": [
+     0.0027,
+     3195
+    ],
+    "opp|anytime_td@RB1|completions@QB": [
+     0.0565,
+     3030
+    ],
+    "opp|anytime_td@RB1|pass_att@QB": [
+     0.1243,
+     3030
+    ],
+    "opp|anytime_td@RB1|pass_td@QB": [
+     0.1112,
+     3030
+    ],
+    "opp|anytime_td@RB1|pass_yds@QB": [
+     0.0826,
+     3030
+    ],
+    "opp|anytime_td@RB1|rec_yds@R1": [
+     -0.0069,
+     3202
+    ],
+    "opp|anytime_td@RB1|rec_yds@R2": [
+     0.0677,
+     3202
+    ],
+    "opp|anytime_td@RB1|rec_yds@R3": [
+     0.0532,
+     3202
+    ],
+    "opp|anytime_td@RB1|rec_yds@RB1": [
+     0.0754,
+     2455
+    ],
+    "opp|anytime_td@RB1|receptions@R1": [
+     0.0174,
+     3202
+    ],
+    "opp|anytime_td@RB1|receptions@R2": [
+     0.105,
+     3202
+    ],
+    "opp|anytime_td@RB1|receptions@R3": [
+     0.1176,
+     3196
+    ],
+    "opp|anytime_td@RB1|receptions@RB1": [
+     0.1547,
+     2777
+    ],
+    "opp|anytime_td@RB1|rush_yds@QB": [
+     0.0854,
+     1442
+    ],
+    "opp|anytime_td@RB1|rush_yds@RB1": [
+     -0.0118,
+     3201
+    ],
+    "opp|carries@RB1|carries@RB1": [
+     0.0702,
+     1595
+    ],
+    "opp|carries@RB1|completions@QB": [
+     0.1449,
+     3025
+    ],
+    "opp|carries@RB1|pass_att@QB": [
+     0.2373,
+     3025
+    ],
+    "opp|carries@RB1|pass_td@QB": [
+     0.2438,
+     3025
+    ],
+    "opp|carries@RB1|pass_yds@QB": [
+     0.1051,
+     3025
+    ],
+    "opp|carries@RB1|rec_yds@R1": [
+     0.0768,
+     3197
+    ],
+    "opp|carries@RB1|rec_yds@R2": [
+     0.1801,
+     3197
+    ],
+    "opp|carries@RB1|rec_yds@R3": [
+     0.0814,
+     3197
+    ],
+    "opp|carries@RB1|rec_yds@RB1": [
+     0.0902,
+     2450
+    ],
+    "opp|carries@RB1|receptions@R1": [
+     0.0924,
+     3197
+    ],
+    "opp|carries@RB1|receptions@R2": [
+     0.1964,
+     3197
+    ],
+    "opp|carries@RB1|receptions@R3": [
+     0.1682,
+     3191
+    ],
+    "opp|carries@RB1|receptions@RB1": [
+     0.271,
+     2771
+    ],
+    "opp|carries@RB1|rush_yds@QB": [
+     0.2557,
+     1444
+    ],
+    "opp|carries@RB1|rush_yds@RB1": [
+     0.0211,
+     3196
+    ],
+    "opp|completions@QB|completions@QB": [
+     -0.0299,
+     1438
+    ],
+    "opp|completions@QB|pass_att@QB": [
+     -0.0712,
+     2876
+    ],
+    "opp|completions@QB|pass_td@QB": [
+     0.3107,
+     2876
+    ],
+    "opp|completions@QB|pass_yds@QB": [
+     0.0499,
+     2876
+    ],
+    "opp|completions@QB|rec_yds@R1": [
+     0.0295,
+     3032
+    ],
+    "opp|completions@QB|rec_yds@R2": [
+     0.0684,
+     3032
+    ],
+    "opp|completions@QB|rec_yds@R3": [
+     0.0359,
+     3032
+    ],
+    "opp|completions@QB|rec_yds@RB1": [
+     -0.0695,
+     2318
+    ],
+    "opp|completions@QB|receptions@R1": [
+     0.0283,
+     3032
+    ],
+    "opp|completions@QB|receptions@R2": [
+     0.0493,
+     3032
+    ],
+    "opp|completions@QB|receptions@R3": [
+     0.0758,
+     3027
+    ],
+    "opp|completions@QB|receptions@RB1": [
+     0.0485,
+     2627
+    ],
+    "opp|completions@QB|rush_yds@QB": [
+     0.1852,
+     1364
+    ],
+    "opp|completions@QB|rush_yds@RB1": [
+     0.0571,
+     3031
+    ],
+    "opp|pass_att@QB|pass_att@QB": [
+     -0.1001,
+     1438
+    ],
+    "opp|pass_att@QB|pass_td@QB": [
+     0.2973,
+     2876
+    ],
+    "opp|pass_att@QB|pass_yds@QB": [
+     0.047,
+     2876
+    ],
+    "opp|pass_att@QB|rec_yds@R1": [
+     0.0592,
+     3032
+    ],
+    "opp|pass_att@QB|rec_yds@R2": [
+     0.0696,
+     3032
+    ],
+    "opp|pass_att@QB|rec_yds@R3": [
+     -0.0068,
+     3032
+    ],
+    "opp|pass_att@QB|rec_yds@RB1": [
+     -0.0946,
+     2318
+    ],
+    "opp|pass_att@QB|receptions@R1": [
+     0.0316,
+     3032
+    ],
+    "opp|pass_att@QB|receptions@R2": [
+     0.039,
+     3032
+    ],
+    "opp|pass_att@QB|receptions@R3": [
+     0.0342,
+     3027
+    ],
+    "opp|pass_att@QB|receptions@RB1": [
+     0.0194,
+     2627
+    ],
+    "opp|pass_att@QB|rush_yds@QB": [
+     0.1725,
+     1364
+    ],
+    "opp|pass_att@QB|rush_yds@RB1": [
+     0.119,
+     3031
+    ],
+    "opp|pass_td@QB|pass_td@QB": [
+     0.454,
+     1438
+    ],
+    "opp|pass_td@QB|pass_yds@QB": [
+     0.2713,
+     2876
+    ],
+    "opp|pass_td@QB|rec_yds@R1": [
+     0.1125,
+     3032
+    ],
+    "opp|pass_td@QB|rec_yds@R2": [
+     0.2437,
+     3032
+    ],
+    "opp|pass_td@QB|rec_yds@R3": [
+     0.1586,
+     3032
+    ],
+    "opp|pass_td@QB|rec_yds@RB1": [
+     0.1102,
+     2318
+    ],
+    "opp|pass_td@QB|receptions@R1": [
+     0.1542,
+     3032
+    ],
+    "opp|pass_td@QB|receptions@R2": [
+     0.2622,
+     3032
+    ],
+    "opp|pass_td@QB|receptions@R3": [
+     0.3158,
+     3027
+    ],
+    "opp|pass_td@QB|receptions@RB1": [
+     0.345,
+     2627
+    ],
+    "opp|pass_td@QB|rush_yds@QB": [
+     0.4331,
+     1364
+    ],
+    "opp|pass_td@QB|rush_yds@RB1": [
+     0.1517,
+     3031
+    ],
+    "opp|pass_yds@QB|pass_yds@QB": [
+     0.1347,
+     1438
+    ],
+    "opp|pass_yds@QB|rec_yds@R1": [
+     0.0521,
+     3032
+    ],
+    "opp|pass_yds@QB|rec_yds@R2": [
+     0.0798,
+     3032
+    ],
+    "opp|pass_yds@QB|rec_yds@R3": [
+     0.0784,
+     3032
+    ],
+    "opp|pass_yds@QB|rec_yds@RB1": [
+     -0.0021,
+     2318
+    ],
+    "opp|pass_yds@QB|receptions@R1": [
+     0.0377,
+     3032
+    ],
+    "opp|pass_yds@QB|receptions@R2": [
+     0.0801,
+     3032
+    ],
+    "opp|pass_yds@QB|receptions@R3": [
+     0.084,
+     3027
+    ],
+    "opp|pass_yds@QB|receptions@RB1": [
+     0.0824,
+     2627
+    ],
+    "opp|pass_yds@QB|rush_yds@QB": [
+     0.146,
+     1364
+    ],
+    "opp|pass_yds@QB|rush_yds@RB1": [
+     0.0593,
+     3031
+    ],
+    "opp|rec_yds@R1|rec_yds@R1": [
+     -0.0155,
+     1602
+    ],
+    "opp|rec_yds@R1|rec_yds@R2": [
+     0.0474,
+     3204
+    ],
+    "opp|rec_yds@R1|rec_yds@R3": [
+     -0.0322,
+     3204
+    ],
+    "opp|rec_yds@R1|rec_yds@RB1": [
+     -0.0155,
+     2456
+    ],
+    "opp|rec_yds@R1|receptions@R1": [
+     0.0217,
+     3204
+    ],
+    "opp|rec_yds@R1|receptions@R2": [
+     0.0956,
+     3204
+    ],
+    "opp|rec_yds@R1|receptions@R3": [
+     0.0446,
+     3198
+    ],
+    "opp|rec_yds@R1|receptions@RB1": [
+     0.0721,
+     2778
+    ],
+    "opp|rec_yds@R1|rush_yds@QB": [
+     0.1358,
+     1444
+    ],
+    "opp|rec_yds@R1|rush_yds@RB1": [
+     0.0169,
+     3203
+    ],
+    "opp|rec_yds@R2|rec_yds@R2": [
+     0.1255,
+     1602
+    ],
+    "opp|rec_yds@R2|rec_yds@R3": [
+     0.0639,
+     3204
+    ],
+    "opp|rec_yds@R2|rec_yds@RB1": [
+     0.0564,
+     2456
+    ],
+    "opp|rec_yds@R2|receptions@R1": [
+     0.0281,
+     3204
+    ],
+    "opp|rec_yds@R2|receptions@R2": [
+     0.1467,
+     3204
+    ],
+    "opp|rec_yds@R2|receptions@R3": [
+     0.1062,
+     3198
+    ],
+    "opp|rec_yds@R2|receptions@RB1": [
+     0.146,
+     2778
+    ],
+    "opp|rec_yds@R2|rush_yds@QB": [
+     0.1906,
+     1444
+    ],
+    "opp|rec_yds@R2|rush_yds@RB1": [
+     0.1687,
+     3203
+    ],
+    "opp|rec_yds@R3|rec_yds@R3": [
+     0.0613,
+     1602
+    ],
+    "opp|rec_yds@R3|rec_yds@RB1": [
+     -0.0206,
+     2456
+    ],
+    "opp|rec_yds@R3|receptions@R1": [
+     -0.0172,
+     3204
+    ],
+    "opp|rec_yds@R3|receptions@R2": [
+     0.0462,
+     3204
+    ],
+    "opp|rec_yds@R3|receptions@R3": [
+     0.0752,
+     3198
+    ],
+    "opp|rec_yds@R3|receptions@RB1": [
+     0.0534,
+     2778
+    ],
+    "opp|rec_yds@R3|rush_yds@QB": [
+     0.0998,
+     1444
+    ],
+    "opp|rec_yds@R3|rush_yds@RB1": [
+     0.049,
+     3203
+    ],
+    "opp|rec_yds@RB1|rec_yds@RB1": [
+     -0.0187,
+     940
+    ],
+    "opp|rec_yds@RB1|receptions@R1": [
+     -0.0041,
+     2456
+    ],
+    "opp|rec_yds@RB1|receptions@R2": [
+     0.0062,
+     2456
+    ],
+    "opp|rec_yds@RB1|receptions@R3": [
+     0.045,
+     2450
+    ],
+    "opp|rec_yds@RB1|receptions@RB1": [
+     0.0432,
+     2125
+    ],
+    "opp|rec_yds@RB1|rush_yds@QB": [
+     0.162,
+     1122
+    ],
+    "opp|rec_yds@RB1|rush_yds@RB1": [
+     0.0564,
+     2455
+    ],
+    "opp|receptions@R1|receptions@R1": [
+     0.0658,
+     1602
+    ],
+    "opp|receptions@R1|receptions@R2": [
+     0.0726,
+     3204
+    ],
+    "opp|receptions@R1|receptions@R3": [
+     0.0294,
+     3198
+    ],
+    "opp|receptions@R1|receptions@RB1": [
+     0.0888,
+     2778
+    ],
+    "opp|receptions@R1|rush_yds@QB": [
+     0.1411,
+     1444
+    ],
+    "opp|receptions@R1|rush_yds@RB1": [
+     0.0449,
+     3203
+    ],
+    "opp|receptions@R2|receptions@R2": [
+     0.1279,
+     1602
+    ],
+    "opp|receptions@R2|receptions@R3": [
+     0.1128,
+     3198
+    ],
+    "opp|receptions@R2|receptions@RB1": [
+     0.1232,
+     2778
+    ],
+    "opp|receptions@R2|rush_yds@QB": [
+     0.1902,
+     1444
+    ],
+    "opp|receptions@R2|rush_yds@RB1": [
+     0.1867,
+     3203
+    ],
+    "opp|receptions@R3|receptions@R3": [
+     0.0937,
+     1596
+    ],
+    "opp|receptions@R3|receptions@RB1": [
+     0.1495,
+     2772
+    ],
+    "opp|receptions@R3|rush_yds@QB": [
+     0.1531,
+     1440
+    ],
+    "opp|receptions@R3|rush_yds@RB1": [
+     0.1205,
+     3197
+    ],
+    "opp|receptions@RB1|receptions@RB1": [
+     0.1096,
+     1198
+    ],
+    "opp|receptions@RB1|rush_yds@QB": [
+     0.2938,
+     1256
+    ],
+    "opp|receptions@RB1|rush_yds@RB1": [
+     0.1974,
+     2777
+    ],
+    "opp|rush_yds@QB|rush_yds@QB": [
+     0.2295,
+     304
+    ],
+    "opp|rush_yds@QB|rush_yds@RB1": [
+     0.1462,
+     1444
+    ],
+    "opp|rush_yds@RB1|rush_yds@RB1": [
+     -0.0185,
+     1601
+    ],
+    "self|anytime_td|carries": [
+     0.5027,
+     3195
+    ],
+    "self|anytime_td|rec_yds": [
+     0.496,
+     12014
+    ],
+    "self|anytime_td|receptions": [
+     0.4721,
+     12331
+    ],
+    "self|anytime_td|rush_yds": [
+     0.4676,
+     3201
+    ],
+    "self|carries|rec_yds": [
+     0.1258,
+     2454
+    ],
+    "self|carries|receptions": [
+     0.2964,
+     2776
+    ],
+    "self|carries|rush_yds": [
+     0.8367,
+     3197
+    ],
+    "self|completions|pass_att": [
+     0.8003,
+     3032
+    ],
+    "self|completions|pass_td": [
+     0.4323,
+     3032
+    ],
+    "self|completions|pass_yds": [
+     0.714,
+     3032
+    ],
+    "self|completions|rush_yds": [
+     0.2157,
+     1444
+    ],
+    "self|pass_att|pass_td": [
+     0.279,
+     3032
+    ],
+    "self|pass_att|pass_yds": [
+     0.6003,
+     3032
+    ],
+    "self|pass_att|rush_yds": [
+     0.2257,
+     1444
+    ],
+    "self|pass_td|pass_yds": [
+     0.5175,
+     3032
+    ],
+    "self|pass_td|rush_yds": [
+     0.448,
+     1444
+    ],
+    "self|pass_yds|rush_yds": [
+     0.1545,
+     1444
+    ],
+    "self|rec_yds|receptions": [
+     0.8644,
+     12062
+    ],
+    "self|rec_yds|rush_yds": [
+     0.1019,
+     2456
+    ],
+    "self|receptions|rush_yds": [
+     0.1774,
+     2778
+    ],
+    "team|anytime_td@R1|anytime_td@R2": [
+     0.177,
+     3191
+    ],
+    "team|anytime_td@R1|anytime_td@R3": [
+     0.138,
+     3162
+    ],
+    "team|anytime_td@R1|anytime_td@RB1": [
+     0.0847,
+     3200
+    ],
+    "team|anytime_td@R1|carries@RB1": [
+     0.2593,
+     3195
+    ],
+    "team|anytime_td@R1|completions@QB": [
+     0.2795,
+     3032
+    ],
+    "team|anytime_td@R1|pass_att@QB": [
+     0.1772,
+     3032
+    ],
+    "team|anytime_td@R1|pass_td@QB": [
+     0.8645,
+     3032
+    ],
+    "team|anytime_td@R1|pass_yds@QB": [
+     0.3607,
+     3032
+    ],
+    "team|anytime_td@R1|rec_yds@R2": [
+     0.2015,
+     3202
+    ],
+    "team|anytime_td@R1|rec_yds@R3": [
+     0.1098,
+     3202
+    ],
+    "team|anytime_td@R1|rec_yds@RB1": [
+     0.1294,
+     2454
+    ],
+    "team|anytime_td@R1|receptions@R2": [
+     0.2007,
+     3202
+    ],
+    "team|anytime_td@R1|receptions@R3": [
+     0.1165,
+     3196
+    ],
+    "team|anytime_td@R1|receptions@RB1": [
+     0.2088,
+     2776
+    ],
+    "team|anytime_td@R1|rush_yds@QB": [
+     0.2485,
+     1444
+    ],
+    "team|anytime_td@R1|rush_yds@RB1": [
+     0.2178,
+     3201
+    ],
+    "team|anytime_td@R2|anytime_td@R3": [
+     0.0294,
+     3153
+    ],
+    "team|anytime_td@R2|anytime_td@RB1": [
+     0.0803,
+     3191
+    ],
+    "team|anytime_td@R2|carries@RB1": [
+     0.2499,
+     3186
+    ],
+    "team|anytime_td@R2|completions@QB": [
+     0.2592,
+     3023
+    ],
+    "team|anytime_td@R2|pass_att@QB": [
+     0.177,
+     3023
+    ],
+    "team|anytime_td@R2|pass_td@QB": [
+     0.8642,
+     3023
+    ],
+    "team|anytime_td@R2|pass_yds@QB": [
+     0.35,
+     3023
+    ],
+    "team|anytime_td@R2|rec_yds@R1": [
+     0.1282,
+     3193
+    ],
+    "team|anytime_td@R2|rec_yds@R3": [
+     0.1146,
+     3193
+    ],
+    "team|anytime_td@R2|rec_yds@RB1": [
+     0.1217,
+     2447
+    ],
+    "team|anytime_td@R2|receptions@R1": [
+     0.0912,
+     3193
+    ],
+    "team|anytime_td@R2|receptions@R3": [
+     0.1991,
+     3187
+    ],
+    "team|anytime_td@R2|receptions@RB1": [
+     0.149,
+     2768
+    ],
+    "team|anytime_td@R2|rush_yds@QB": [
+     0.2426,
+     1439
+    ],
+    "team|anytime_td@R2|rush_yds@RB1": [
+     0.2125,
+     3192
+    ],
+    "team|anytime_td@R3|anytime_td@RB1": [
+     -0.0162,
+     3162
+    ],
+    "team|anytime_td@R3|carries@RB1": [
+     0.1055,
+     3157
+    ],
+    "team|anytime_td@R3|completions@QB": [
+     0.1537,
+     2995
+    ],
+    "team|anytime_td@R3|pass_att@QB": [
+     0.0852,
+     2995
+    ],
+    "team|anytime_td@R3|pass_td@QB": [
+     0.8635,
+     2995
+    ],
+    "team|anytime_td@R3|pass_yds@QB": [
+     0.2405,
+     2995
+    ],
+    "team|anytime_td@R3|rec_yds@R1": [
+     0.0723,
+     3164
+    ],
+    "team|anytime_td@R3|rec_yds@R2": [
+     0.0335,
+     3164
+    ],
+    "team|anytime_td@R3|rec_yds@RB1": [
+     0.0613,
+     2425
+    ],
+    "team|anytime_td@R3|receptions@R1": [
+     0.0522,
+     3164
+    ],
+    "team|anytime_td@R3|receptions@R2": [
+     0.0395,
+     3164
+    ],
+    "team|anytime_td@R3|receptions@RB1": [
+     0.0728,
+     2740
+    ],
+    "team|anytime_td@R3|rush_yds@QB": [
+     0.1537,
+     1423
+    ],
+    "team|anytime_td@R3|rush_yds@RB1": [
+     0.0988,
+     3163
+    ],
+    "team|anytime_td@RB1|completions@QB": [
+     -0.0404,
+     3030
+    ],
+    "team|anytime_td@RB1|pass_att@QB": [
+     -0.1432,
+     3030
+    ],
+    "team|anytime_td@RB1|pass_td@QB": [
+     0.1951,
+     3030
+    ],
+    "team|anytime_td@RB1|pass_yds@QB": [
+     0.0369,
+     3030
+    ],
+    "team|anytime_td@RB1|rec_yds@R1": [
+     0.0438,
+     3202
+    ],
+    "team|anytime_td@RB1|rec_yds@R2": [
+     0.0858,
+     3202
+    ],
+    "team|anytime_td@RB1|rec_yds@R3": [
+     0.0123,
+     3202
+    ],
+    "team|anytime_td@RB1|receptions@R1": [
+     0.0152,
+     3202
+    ],
+    "team|anytime_td@RB1|receptions@R2": [
+     0.0466,
+     3202
+    ],
+    "team|anytime_td@RB1|receptions@R3": [
+     0.0211,
+     3196
+    ],
+    "team|anytime_td@RB1|rush_yds@QB": [
+     0.1949,
+     1444
+    ],
+    "team|carries@RB1|completions@QB": [
+     0.0141,
+     3026
+    ],
+    "team|carries@RB1|pass_att@QB": [
+     -0.0684,
+     3026
+    ],
+    "team|carries@RB1|pass_td@QB": [
+     0.4264,
+     3026
+    ],
+    "team|carries@RB1|pass_yds@QB": [
+     0.0179,
+     3026
+    ],
+    "team|carries@RB1|rec_yds@R1": [
+     0.1095,
+     3197
+    ],
+    "team|carries@RB1|rec_yds@R2": [
+     0.1264,
+     3197
+    ],
+    "team|carries@RB1|rec_yds@R3": [
+     0.0287,
+     3197
+    ],
+    "team|carries@RB1|receptions@R1": [
+     0.1122,
+     3197
+    ],
+    "team|carries@RB1|receptions@R2": [
+     0.119,
+     3197
+    ],
+    "team|carries@RB1|receptions@R3": [
+     0.0712,
+     3191
+    ],
+    "team|carries@RB1|rush_yds@QB": [
+     0.2501,
+     1438
+    ],
+    "team|completions@QB|rec_yds@R1": [
+     0.3025,
+     3032
+    ],
+    "team|completions@QB|rec_yds@R2": [
+     0.3588,
+     3032
+    ],
+    "team|completions@QB|rec_yds@R3": [
+     0.2616,
+     3032
+    ],
+    "team|completions@QB|rec_yds@RB1": [
+     0.2073,
+     2323
+    ],
+    "team|completions@QB|receptions@R1": [
+     0.4118,
+     3032
+    ],
+    "team|completions@QB|receptions@R2": [
+     0.4879,
+     3032
+    ],
+    "team|completions@QB|receptions@R3": [
+     0.42,
+     3027
+    ],
+    "team|completions@QB|receptions@RB1": [
+     0.4176,
+     2624
+    ],
+    "team|completions@QB|rush_yds@RB1": [
+     -0.0983,
+     3031
+    ],
+    "team|pass_att@QB|rec_yds@R1": [
+     0.2219,
+     3032
+    ],
+    "team|pass_att@QB|rec_yds@R2": [
+     0.2904,
+     3032
+    ],
+    "team|pass_att@QB|rec_yds@R3": [
+     0.1678,
+     3032
+    ],
+    "team|pass_att@QB|rec_yds@RB1": [
+     0.1725,
+     2323
+    ],
+    "team|pass_att@QB|receptions@R1": [
+     0.32,
+     3032
+    ],
+    "team|pass_att@QB|receptions@R2": [
+     0.4067,
+     3032
+    ],
+    "team|pass_att@QB|receptions@R3": [
+     0.3087,
+     3027
+    ],
+    "team|pass_att@QB|receptions@RB1": [
+     0.3719,
+     2624
+    ],
+    "team|pass_att@QB|rush_yds@RB1": [
+     -0.1104,
+     3031
+    ],
+    "team|pass_td@QB|rec_yds@R1": [
+     0.2713,
+     3032
+    ],
+    "team|pass_td@QB|rec_yds@R2": [
+     0.4183,
+     3032
+    ],
+    "team|pass_td@QB|rec_yds@R3": [
+     0.2154,
+     3032
+    ],
+    "team|pass_td@QB|rec_yds@RB1": [
+     0.0877,
+     2323
+    ],
+    "team|pass_td@QB|receptions@R1": [
+     0.2848,
+     3032
+    ],
+    "team|pass_td@QB|receptions@R2": [
+     0.3909,
+     3032
+    ],
+    "team|pass_td@QB|receptions@R3": [
+     0.372,
+     3027
+    ],
+    "team|pass_td@QB|receptions@RB1": [
+     0.3124,
+     2624
+    ],
+    "team|pass_td@QB|rush_yds@RB1": [
+     0.3226,
+     3031
+    ],
+    "team|pass_yds@QB|rec_yds@R1": [
+     0.3981,
+     3032
+    ],
+    "team|pass_yds@QB|rec_yds@R2": [
+     0.3915,
+     3032
+    ],
+    "team|pass_yds@QB|rec_yds@R3": [
+     0.3322,
+     3032
+    ],
+    "team|pass_yds@QB|rec_yds@RB1": [
+     0.1213,
+     2323
+    ],
+    "team|pass_yds@QB|receptions@R1": [
+     0.3417,
+     3032
+    ],
+    "team|pass_yds@QB|receptions@R2": [
+     0.3728,
+     3032
+    ],
+    "team|pass_yds@QB|receptions@R3": [
+     0.3661,
+     3027
+    ],
+    "team|pass_yds@QB|receptions@RB1": [
+     0.227,
+     2624
+    ],
+    "team|pass_yds@QB|rush_yds@RB1": [
+     -0.0864,
+     3031
+    ],
+    "team|rec_yds@R1|rec_yds@R2": [
+     0.002,
+     3204
+    ],
+    "team|rec_yds@R1|rec_yds@R3": [
+     -0.0723,
+     3204
+    ],
+    "team|rec_yds@R1|rec_yds@RB1": [
+     -0.0084,
+     2456
+    ],
+    "team|rec_yds@R1|receptions@R2": [
+     0.0428,
+     3204
+    ],
+    "team|rec_yds@R1|receptions@R3": [
+     -0.0109,
+     3198
+    ],
+    "team|rec_yds@R1|receptions@RB1": [
+     0.1061,
+     2778
+    ],
+    "team|rec_yds@R1|rush_yds@QB": [
+     0.0772,
+     1444
+    ],
+    "team|rec_yds@R1|rush_yds@RB1": [
+     0.0133,
+     3203
+    ],
+    "team|rec_yds@R2|rec_yds@R3": [
+     -0.0095,
+     3204
+    ],
+    "team|rec_yds@R2|rec_yds@RB1": [
+     0.0169,
+     2456
+    ],
+    "team|rec_yds@R2|receptions@R1": [
+     0.0391,
+     3204
+    ],
+    "team|rec_yds@R2|receptions@R3": [
+     0.0744,
+     3198
+    ],
+    "team|rec_yds@R2|receptions@RB1": [
+     0.1355,
+     2778
+    ],
+    "team|rec_yds@R2|rush_yds@QB": [
+     0.1064,
+     1444
+    ],
+    "team|rec_yds@R2|rush_yds@RB1": [
+     0.0859,
+     3203
+    ],
+    "team|rec_yds@R3|rec_yds@RB1": [
+     0.0116,
+     2456
+    ],
+    "team|rec_yds@R3|receptions@R1": [
+     -0.0281,
+     3204
+    ],
+    "team|rec_yds@R3|receptions@R2": [
+     0.022,
+     3204
+    ],
+    "team|rec_yds@R3|receptions@RB1": [
+     0.0863,
+     2778
+    ],
+    "team|rec_yds@R3|rush_yds@QB": [
+     0.0394,
+     1444
+    ],
+    "team|rec_yds@R3|rush_yds@RB1": [
+     -0.0204,
+     3203
+    ],
+    "team|rec_yds@RB1|receptions@R1": [
+     0.0428,
+     2456
+    ],
+    "team|rec_yds@RB1|receptions@R2": [
+     0.0832,
+     2456
+    ],
+    "team|rec_yds@RB1|receptions@R3": [
+     0.0789,
+     2453
+    ],
+    "team|rec_yds@RB1|rush_yds@QB": [
+     0.0854,
+     1073
+    ],
+    "team|receptions@R1|receptions@R2": [
+     0.0856,
+     3204
+    ],
+    "team|receptions@R1|receptions@R3": [
+     0.0585,
+     3198
+    ],
+    "team|receptions@R1|receptions@RB1": [
+     0.1524,
+     2778
+    ],
+    "team|receptions@R1|rush_yds@QB": [
+     0.067,
+     1444
+    ],
+    "team|receptions@R1|rush_yds@RB1": [
+     0.0048,
+     3203
+    ],
+    "team|receptions@R2|receptions@R3": [
+     0.127,
+     3198
+    ],
+    "team|receptions@R2|receptions@RB1": [
+     0.1985,
+     2778
+    ],
+    "team|receptions@R2|rush_yds@QB": [
+     0.1395,
+     1444
+    ],
+    "team|receptions@R2|rush_yds@RB1": [
+     0.0906,
+     3203
+    ],
+    "team|receptions@R3|receptions@RB1": [
+     0.1388,
+     2773
+    ],
+    "team|receptions@R3|rush_yds@QB": [
+     0.1803,
+     1443
+    ],
+    "team|receptions@R3|rush_yds@RB1": [
+     0.0041,
+     3197
+    ],
+    "team|receptions@RB1|rush_yds@QB": [
+     0.1878,
+     1246
+    ],
+    "team|rush_yds@QB|rush_yds@RB1": [
+     0.1957,
+     1443
+    ]
+   },
+   "min_pairs": 300,
+   "shrink": 300.0,
+   "fitted_on": [
+    2013,
+    2018
+   ]
+  }
+ },
+ "family": {
+  "receptions": "nb",
+  "carries": "nb",
+  "pass_att": "nb",
+  "completions": "nb",
+  "pass_td": "nb",
+  "ints": "nb",
+  "anytime_td": "nb"
+ },
+ "counts": {
+  "receptions|WR": {
+   "a": 0.48449044496945826,
+   "b": -0.995668771340887,
+   "c": -9.976469340162488,
+   "q": 0.025148801905644336,
+   "f": 0.0660902550224491,
+   "family": "nb",
+   "n": 20000
+  },
+  "receptions|TE": {
+   "a": -0.363043948458236,
+   "b": -0.5598011326175427,
+   "c": -8.518290256093795,
+   "q": 0.01182813921301173,
+   "f": 1.928749847963918e-22,
+   "family": "nb",
+   "n": 11719
+  },
+  "receptions|RB": {
+   "a": 0.5815428894861621,
+   "b": -0.1338772320111882,
+   "c": -28.070987321512078,
+   "q": 0.20280178822210013,
+   "f": 0.3832006859828207,
+   "family": "nb",
+   "n": 13218
+  },
+  "carries|RB": {
+   "a": 2.547152030845181,
+   "b": -1.6207582684383701,
+   "c": -1.1462467606792437,
+   "q": 0.02558634778510104,
+   "f": 0.014462558441978688,
+   "family": "nb",
+   "n": 15968
+  },
+  "carries|QB": {
+   "a": -1.6431012573536514,
+   "b": -0.9057847258052467,
+   "c": 0.0020350660227588056,
+   "q": 0.18489653961680172,
+   "f": 0.5062428956404739,
+   "family": "nb",
+   "n": 2131
+  },
+  "pass_att|QB": {
+   "a": 0.8419678271157933,
+   "b": -1.2440428412598532,
+   "c": 0.0033909958274934817,
+   "q": 0.016910880845816042,
+   "f": 0.2365782629123461,
+   "family": "nb",
+   "n": 6852
+  },
+  "completions|QB": {
+   "a": 0.4592270995395525,
+   "b": -1.3934950940290183,
+   "c": -0.001585983644219165,
+   "q": 0.020888406702334817,
+   "f": 0.22978241565533136,
+   "family": "nb",
+   "n": 6852
+  },
+  "pass_td|QB": {
+   "a": -115.40837732775452,
+   "b": -10.070063125982562,
+   "c": -0.02966422152952963,
+   "q": 0.2359335585701618,
+   "f": 0.999999975829088,
+   "family": "nb",
+   "n": 6852
+  },
+  "ints|QB": {
+   "a": -10.494006910814386,
+   "b": -18.89093544365824,
+   "c": -0.4589056492525394,
+   "q": 0.06732458535358359,
+   "f": 1.928749847963918e-22,
+   "family": "nb",
+   "n": 6852
+  },
+  "anytime_td|WR": {
+   "a": -2.171758414582932,
+   "b": -1.4337596242224475,
+   "c": -15.772740841886954,
+   "q": 5.786249543891754e-23,
+   "f": 1.0,
+   "family": "nb",
+   "n": 20000
+  },
+  "anytime_td|TE": {
+   "a": 2.736120505198336,
+   "b": 0.23523922059520597,
+   "c": -57.42292684737255,
+   "q": 5.786249543891754e-23,
+   "f": 1.0,
+   "family": "nb",
+   "n": 15209
+  },
+  "anytime_td|RB": {
+   "a": 0.6944605193274054,
+   "b": -0.5251707697528281,
+   "c": -9.523558892389747,
+   "q": 5.786249543891754e-23,
+   "f": 1.928749847963918e-22,
+   "family": "nb",
+   "n": 20000
+  },
+  "anytime_td|QB": {
+   "a": -65.6358722740018,
+   "b": -22.36782027743346,
+   "c": -0.2599645836771268,
+   "q": 0.13913084599574158,
+   "f": 2.4480764129241407e-11,
+   "family": "nb",
+   "n": 5307
+  }
+ },
+ "yards": {
+  "rec_yds|WR": {
+   "a": 0.8512405616347115,
+   "b": 0.20077054587636237,
+   "c": -2.815167739390609,
+   "n": 8000
+  },
+  "rec_yds|TE": {
+   "a": 0.5336102038991959,
+   "b": 0.07503689835627947,
+   "c": -0.004651528951290675,
+   "n": 8000
+  },
+  "rec_yds|RB": {
+   "a": 0.5853012283993815,
+   "b": -0.475936319895377,
+   "c": 0.4000430029439628,
+   "n": 8000
+  },
+  "rush_yds|RB": {
+   "a": 0.08592302658665876,
+   "b": -0.5346171977477707,
+   "c": 0.15460460010769625,
+   "n": 8000
+  },
+  "rush_yds|QB": {
+   "a": 0.1936023868052333,
+   "b": -0.28802763553139016,
+   "c": -0.15201649083245308,
+   "n": 3792
+  },
+  "pass_yds|QB": {
+   "a": 0.03124109565724209,
+   "b": 0.3049290228094754,
+   "c": -0.1178609594557925,
+   "n": 6852
+  }
+ },
+ "isotonic": {
+  "anytime_td": {
+   "x": [
+    0.0,
+    0.0461,
+    0.05084,
+    0.05419,
+    0.05776,
+    0.06148,
+    0.06542,
+    0.0699,
+    0.07449,
+    0.07922,
+    0.08416,
+    0.08943,
+    0.09465,
+    0.10012,
+    0.10576,
+    0.11155,
+    0.11817,
+    0.12476,
+    0.13152,
+    0.13862,
+    0.14579,
+    0.15313,
+    0.16128,
+    0.16967,
+    0.17819,
+    0.18733,
+    0.19648,
+    0.20615,
+    0.21633,
+    0.22692,
+    0.23845,
+    0.25056,
+    0.26341,
+    0.27704,
+    0.29213,
+    0.30891,
+    0.32935,
+    0.35316,
+    0.38347,
+    0.42507,
+    0.5109,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.04101,
+    0.04348,
+    0.0519,
+    0.0519,
+    0.06514,
+    0.07117,
+    0.07488,
+    0.07488,
+    0.08648,
+    0.08648,
+    0.08648,
+    0.08685,
+    0.09903,
+    0.11768,
+    0.11768,
+    0.13036,
+    0.13036,
+    0.13337,
+    0.13337,
+    0.15217,
+    0.18094,
+    0.18101,
+    0.18101,
+    0.18101,
+    0.2035,
+    0.2035,
+    0.20929,
+    0.20929,
+    0.23913,
+    0.24396,
+    0.25211,
+    0.29632,
+    0.29632,
+    0.29632,
+    0.29632,
+    0.32729,
+    0.36731,
+    0.36731,
+    0.42754,
+    0.5006,
+    1.0
+   ]
+  },
+  "carries": {
+   "x": [
+    0.0,
+    0.0787,
+    0.14569,
+    0.16818,
+    0.18582,
+    0.19965,
+    0.21329,
+    0.22571,
+    0.23726,
+    0.24785,
+    0.25867,
+    0.271,
+    0.28383,
+    0.29807,
+    0.31503,
+    0.33084,
+    0.34497,
+    0.35817,
+    0.3723,
+    0.38795,
+    0.40689,
+    0.42676,
+    0.4439,
+    0.45861,
+    0.47335,
+    0.49039,
+    0.51416,
+    0.54249,
+    0.56186,
+    0.57516,
+    0.58624,
+    0.59771,
+    0.61167,
+    0.67368,
+    0.70523,
+    0.71668,
+    0.72763,
+    0.73938,
+    0.75429,
+    0.78011,
+    0.87097,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.081,
+    0.11734,
+    0.15057,
+    0.17549,
+    0.20145,
+    0.21558,
+    0.21558,
+    0.25026,
+    0.25407,
+    0.25407,
+    0.25407,
+    0.27103,
+    0.2731,
+    0.34026,
+    0.34026,
+    0.37522,
+    0.37522,
+    0.37522,
+    0.37591,
+    0.39813,
+    0.43718,
+    0.45171,
+    0.47248,
+    0.48287,
+    0.50987,
+    0.52935,
+    0.52935,
+    0.56698,
+    0.57996,
+    0.57996,
+    0.61786,
+    0.63136,
+    0.66771,
+    0.71429,
+    0.71429,
+    0.73572,
+    0.73572,
+    0.77155,
+    0.77985,
+    0.85462,
+    1.0
+   ]
+  },
+  "completions": {
+   "x": [
+    0.0,
+    0.20819,
+    0.22221,
+    0.23068,
+    0.23781,
+    0.24438,
+    0.25128,
+    0.25918,
+    0.27249,
+    0.32101,
+    0.33466,
+    0.34415,
+    0.3517,
+    0.35949,
+    0.36755,
+    0.37615,
+    0.38794,
+    0.45683,
+    0.4676,
+    0.47648,
+    0.48494,
+    0.494,
+    0.503,
+    0.51164,
+    0.52114,
+    0.59809,
+    0.60765,
+    0.6158,
+    0.62466,
+    0.63329,
+    0.64187,
+    0.65064,
+    0.66143,
+    0.72527,
+    0.73757,
+    0.74548,
+    0.75283,
+    0.7598,
+    0.76746,
+    0.77549,
+    0.78961,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.20317,
+    0.22164,
+    0.23799,
+    0.23799,
+    0.23799,
+    0.23799,
+    0.23799,
+    0.2533,
+    0.30871,
+    0.33773,
+    0.3562,
+    0.3562,
+    0.3562,
+    0.3562,
+    0.37335,
+    0.37335,
+    0.45778,
+    0.45778,
+    0.50726,
+    0.50726,
+    0.50726,
+    0.50726,
+    0.52902,
+    0.52902,
+    0.60422,
+    0.61741,
+    0.62005,
+    0.63061,
+    0.6438,
+    0.66359,
+    0.66359,
+    0.6781,
+    0.73087,
+    0.73087,
+    0.73087,
+    0.77309,
+    0.77309,
+    0.77309,
+    0.7942,
+    0.7942,
+    1.0
+   ]
+  },
+  "ints": {
+   "x": [
+    0.0,
+    0.17651,
+    0.1894,
+    0.19526,
+    0.19936,
+    0.20315,
+    0.20656,
+    0.20987,
+    0.21261,
+    0.21542,
+    0.21849,
+    0.22104,
+    0.22415,
+    0.22688,
+    0.22959,
+    0.23264,
+    0.23598,
+    0.23936,
+    0.24343,
+    0.25013,
+    0.2617,
+    0.50402,
+    0.52392,
+    0.53194,
+    0.53753,
+    0.54233,
+    0.54642,
+    0.5504,
+    0.55384,
+    0.55714,
+    0.56033,
+    0.56357,
+    0.56687,
+    0.56982,
+    0.57295,
+    0.57641,
+    0.57996,
+    0.58344,
+    0.58837,
+    0.59508,
+    0.60748,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.16447,
+    0.16447,
+    0.17018,
+    0.17018,
+    0.17018,
+    0.17018,
+    0.17018,
+    0.21004,
+    0.21004,
+    0.21004,
+    0.21004,
+    0.21004,
+    0.22296,
+    0.22296,
+    0.22296,
+    0.22296,
+    0.22296,
+    0.23762,
+    0.23762,
+    0.26974,
+    0.46711,
+    0.50165,
+    0.50165,
+    0.50165,
+    0.50165,
+    0.53575,
+    0.53575,
+    0.53575,
+    0.53575,
+    0.53575,
+    0.53575,
+    0.54605,
+    0.57626,
+    0.57626,
+    0.57626,
+    0.57626,
+    0.57626,
+    0.57626,
+    0.57626,
+    0.57626,
+    1.0
+   ]
+  },
+  "pass_att": {
+   "x": [
+    0.0,
+    0.28402,
+    0.29542,
+    0.30169,
+    0.30703,
+    0.31217,
+    0.31752,
+    0.32357,
+    0.33258,
+    0.37079,
+    0.38034,
+    0.38635,
+    0.39191,
+    0.39772,
+    0.40327,
+    0.40903,
+    0.41666,
+    0.46553,
+    0.47238,
+    0.47871,
+    0.48482,
+    0.49057,
+    0.49657,
+    0.50266,
+    0.50887,
+    0.56152,
+    0.5678,
+    0.57432,
+    0.58069,
+    0.58636,
+    0.5924,
+    0.5985,
+    0.60655,
+    0.65297,
+    0.66139,
+    0.66747,
+    0.67351,
+    0.67929,
+    0.68532,
+    0.69193,
+    0.70257,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.29947,
+    0.29947,
+    0.29947,
+    0.29947,
+    0.29947,
+    0.29947,
+    0.3285,
+    0.3285,
+    0.37995,
+    0.37995,
+    0.37995,
+    0.37995,
+    0.37995,
+    0.41425,
+    0.41425,
+    0.43008,
+    0.46834,
+    0.46834,
+    0.48417,
+    0.48417,
+    0.49077,
+    0.49077,
+    0.49077,
+    0.53298,
+    0.53298,
+    0.57454,
+    0.57454,
+    0.57454,
+    0.57454,
+    0.61478,
+    0.61478,
+    0.62137,
+    0.62137,
+    0.66227,
+    0.66227,
+    0.68074,
+    0.68074,
+    0.70185,
+    0.71108,
+    0.71108,
+    1.0
+   ]
+  },
+  "pass_td": {
+   "x": [
+    0.0,
+    0.0672,
+    0.10272,
+    0.12277,
+    0.14045,
+    0.15608,
+    0.17206,
+    0.18746,
+    0.20385,
+    0.22103,
+    0.23799,
+    0.25693,
+    0.27374,
+    0.29423,
+    0.31317,
+    0.33206,
+    0.35261,
+    0.37392,
+    0.39405,
+    0.4149,
+    0.43534,
+    0.45765,
+    0.48043,
+    0.50257,
+    0.52821,
+    0.55344,
+    0.58448,
+    0.62042,
+    0.65881,
+    0.68779,
+    0.7121,
+    0.73227,
+    0.74929,
+    0.76542,
+    0.78079,
+    0.79658,
+    0.81054,
+    0.82583,
+    0.8407,
+    0.85946,
+    0.8903,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.0614,
+    0.08571,
+    0.08571,
+    0.10573,
+    0.15385,
+    0.15385,
+    0.18062,
+    0.18901,
+    0.18901,
+    0.2467,
+    0.25439,
+    0.28634,
+    0.31672,
+    0.31672,
+    0.31672,
+    0.37885,
+    0.39035,
+    0.4,
+    0.4,
+    0.4185,
+    0.47137,
+    0.50439,
+    0.52863,
+    0.59649,
+    0.62555,
+    0.62555,
+    0.67692,
+    0.67692,
+    0.70485,
+    0.76264,
+    0.76264,
+    0.76264,
+    0.76264,
+    0.81319,
+    0.81319,
+    0.85242,
+    0.85242,
+    0.89035,
+    0.90308,
+    0.91667,
+    1.0
+   ]
+  },
+  "pass_yds": {
+   "x": [
+    0.0,
+    0.31725,
+    0.32714,
+    0.33222,
+    0.3366,
+    0.34077,
+    0.34486,
+    0.34955,
+    0.35741,
+    0.39666,
+    0.40409,
+    0.40836,
+    0.41224,
+    0.41587,
+    0.41948,
+    0.42332,
+    0.42948,
+    0.48002,
+    0.48548,
+    0.48927,
+    0.49275,
+    0.49616,
+    0.49979,
+    0.50346,
+    0.50851,
+    0.56145,
+    0.56765,
+    0.5716,
+    0.57535,
+    0.57896,
+    0.58248,
+    0.58668,
+    0.59432,
+    0.63866,
+    0.64693,
+    0.65203,
+    0.65627,
+    0.66006,
+    0.66439,
+    0.66996,
+    0.68088,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.34301,
+    0.35055,
+    0.35055,
+    0.35055,
+    0.35055,
+    0.35055,
+    0.35055,
+    0.35055,
+    0.42183,
+    0.42183,
+    0.42183,
+    0.42183,
+    0.42183,
+    0.42183,
+    0.42183,
+    0.42183,
+    0.49604,
+    0.49755,
+    0.49755,
+    0.49755,
+    0.49755,
+    0.49755,
+    0.49755,
+    0.49755,
+    0.56992,
+    0.57124,
+    0.57124,
+    0.58399,
+    0.58399,
+    0.58399,
+    0.58443,
+    0.58443,
+    0.65435,
+    0.66227,
+    0.67348,
+    0.67348,
+    0.67348,
+    0.67348,
+    0.67414,
+    0.67414,
+    1.0
+   ]
+  },
+  "rec_yds": {
+   "x": [
+    0.0,
+    0.11381,
+    0.14305,
+    0.16413,
+    0.18267,
+    0.19884,
+    0.21497,
+    0.2291,
+    0.24195,
+    0.25386,
+    0.26547,
+    0.277,
+    0.28909,
+    0.30171,
+    0.31556,
+    0.33,
+    0.34421,
+    0.3584,
+    0.37295,
+    0.38813,
+    0.40451,
+    0.42083,
+    0.43454,
+    0.44578,
+    0.45621,
+    0.46674,
+    0.47904,
+    0.50875,
+    0.54674,
+    0.56199,
+    0.57505,
+    0.58825,
+    0.60427,
+    0.62399,
+    0.6464,
+    0.66743,
+    0.68779,
+    0.70803,
+    0.73128,
+    0.76231,
+    0.82602,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.11312,
+    0.14201,
+    0.15015,
+    0.17745,
+    0.20821,
+    0.20821,
+    0.23549,
+    0.24371,
+    0.24704,
+    0.25333,
+    0.27652,
+    0.27885,
+    0.29734,
+    0.31571,
+    0.32581,
+    0.33173,
+    0.34898,
+    0.3554,
+    0.37463,
+    0.39571,
+    0.39852,
+    0.41827,
+    0.45202,
+    0.45202,
+    0.45229,
+    0.46117,
+    0.49427,
+    0.53328,
+    0.55288,
+    0.56842,
+    0.56969,
+    0.60133,
+    0.62093,
+    0.63327,
+    0.67714,
+    0.67973,
+    0.69464,
+    0.71783,
+    0.76368,
+    0.81479,
+    1.0
+   ]
+  },
+  "receptions": {
+   "x": [
+    0.0,
+    0.07104,
+    0.09736,
+    0.11721,
+    0.13196,
+    0.14355,
+    0.15515,
+    0.16717,
+    0.17957,
+    0.19253,
+    0.20629,
+    0.22122,
+    0.23714,
+    0.25292,
+    0.26753,
+    0.28275,
+    0.29886,
+    0.31652,
+    0.33514,
+    0.35438,
+    0.37525,
+    0.39675,
+    0.41969,
+    0.44369,
+    0.46848,
+    0.49324,
+    0.51769,
+    0.54128,
+    0.56438,
+    0.58735,
+    0.61062,
+    0.63461,
+    0.6594,
+    0.68503,
+    0.71044,
+    0.73601,
+    0.76129,
+    0.78635,
+    0.81219,
+    0.83976,
+    0.87687,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.06429,
+    0.09962,
+    0.12014,
+    0.12014,
+    0.13722,
+    0.1594,
+    0.17594,
+    0.1851,
+    0.19241,
+    0.21617,
+    0.23008,
+    0.23016,
+    0.24925,
+    0.2703,
+    0.2797,
+    0.30312,
+    0.3282,
+    0.34737,
+    0.36229,
+    0.36229,
+    0.38872,
+    0.41278,
+    0.46504,
+    0.47857,
+    0.50884,
+    0.52481,
+    0.54164,
+    0.54164,
+    0.59398,
+    0.61015,
+    0.64474,
+    0.65927,
+    0.68647,
+    0.70038,
+    0.73797,
+    0.75968,
+    0.78684,
+    0.8203,
+    0.83835,
+    0.87218,
+    1.0
+   ]
+  },
+  "rush_yds": {
+   "x": [
+    0.0,
+    0.10194,
+    0.13878,
+    0.16067,
+    0.17776,
+    0.19416,
+    0.21009,
+    0.22438,
+    0.23808,
+    0.25016,
+    0.26224,
+    0.27358,
+    0.28503,
+    0.29703,
+    0.30965,
+    0.32314,
+    0.33651,
+    0.35033,
+    0.36449,
+    0.37937,
+    0.39591,
+    0.41392,
+    0.42961,
+    0.44218,
+    0.45362,
+    0.46552,
+    0.48497,
+    0.52293,
+    0.54103,
+    0.55319,
+    0.56475,
+    0.57708,
+    0.59291,
+    0.61484,
+    0.64315,
+    0.66774,
+    0.69182,
+    0.71802,
+    0.75164,
+    0.79892,
+    0.87539,
+    1.0
+   ],
+   "y": [
+    0.0,
+    0.11234,
+    0.14602,
+    0.14602,
+    0.17696,
+    0.19521,
+    0.20645,
+    0.22857,
+    0.23722,
+    0.23722,
+    0.26427,
+    0.27097,
+    0.2965,
+    0.30783,
+    0.30783,
+    0.31737,
+    0.31737,
+    0.35606,
+    0.35606,
+    0.36004,
+    0.37788,
+    0.44195,
+    0.44195,
+    0.44195,
+    0.45948,
+    0.48479,
+    0.50368,
+    0.5424,
+    0.5424,
+    0.56863,
+    0.56863,
+    0.56863,
+    0.56863,
+    0.59761,
+    0.62949,
+    0.67926,
+    0.72317,
+    0.72317,
+    0.75322,
+    0.75853,
+    0.84807,
+    1.0
+   ]
+  }
+ }
+}

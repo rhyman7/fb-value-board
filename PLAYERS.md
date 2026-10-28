@@ -104,4 +104,4 @@ the game model.
   week only injured reserve and Out or Doubtful count.
 - A quarterback's line assumes he starts. The starter pick is wrong about one
   game in fourteen, mostly benchings announced during the week; check the news.
-- Not yet compared with sportsbook prop lines.
+- Prop probabilities and the comparison with sportsbook lines: [PROPS.md](PROPS.md).
