@@ -152,7 +152,9 @@ boards in detail; this file is the rules.
 ## Checks before merging
 
 - `python -m pytest -q` passes (required for anything touching `nflmodel/`, `cfbmodel/` or
-  the pipelines).
+  the pipelines). `pytest.ini` limits collection to `tests/`: the `experiments/*_test.py`
+  scripts are run by hand, and a `test_*` function in one of them would otherwise break the
+  Update board Actions' test step.
 - If a template changed: `python site/make_cfb_template.py`, then rebuild both boards
   (`python run.py --no-backtest`, `python run_cfb.py --no-backtest`) and commit the generated
   `docs/` files with the template.
