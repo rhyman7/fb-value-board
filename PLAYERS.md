@@ -95,6 +95,30 @@ Each piece removed in turn (`python experiments/players_ablation.py`):
 The defense matters less than usage and game situation, the same pattern as
 the game model.
 
+## Long plays (tested October 2026, not adopted)
+
+Ryan's question: would projections be more accurate if a player's efficiency ignored his
+unusually long plays? Tested by capping each run and catch at 15, 20 or 30 yards when
+measuring yards per carry and per target (yards beyond the cap came back at the position's
+average rate), with and without capping the recent average the calibration uses. The
+outcomes were never capped. `python experiments/players_capped_test.py`.
+
+No variant helped. Average miss per player-game, 2019 on (same player-games for each):
+
+| | No cap | Cap 15 | Cap 20 | Cap 30 |
+|---|---|---|---|---|
+| Rushing yards, RB | 21.99 | 22.06 | 22.04 | 22.02 |
+| Rushing yards, QB | 14.79 | 14.78 | 14.79 | 14.79 |
+| Receiving yards, WR | 23.23 | 23.22 | 23.22 | 23.23 |
+| Receiving yards, TE | 17.89 | 17.93 | 17.92 | 17.90 |
+| Receiving yards, RB | 14.16 | 14.19 | 14.18 | 14.17 |
+
+The tuning seasons (2013-2018) showed the same: differences in the second decimal, mixed in
+direction, and capping the recent average was worse everywhere. The model already damps one
+long play: yards per carry is shrunk toward the position average by 60 carries and yards per
+target by 40 targets, so a single 70-yard run moves a back's rate little. The switch is
+`players.EFF_CAP` (off).
+
 ## Limits
 
 - No cornerback-by-receiver matchups: that needs coverage charting (PFF or Next

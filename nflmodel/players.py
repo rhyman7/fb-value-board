@@ -41,6 +41,14 @@ PRIORS = {  # shrinkage, in opportunities, and position averages filled in from 
 STATS = ["pass_att", "completions", "pass_yds", "pass_td", "ints", "carries", "rush_yds", "rush_td",
          "targets", "receptions", "rec_yds", "rec_td"]
 ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_{season}.parquet"
+# Long plays and efficiency (tested Oct 2026, experiments/players_capped_test.py): when set,
+# a player's yards per carry and per target are measured with each play capped at EFF_CAP
+# yards, and yards beyond the cap come back as his position's average rate, since breakaway
+# plays repeat little from game to game. Needs rush_yds_c<cap> and rec_yds_c<cap> in the box
+# scores. CAP_RECENT also caps the recent per-game average the calibration blends in.
+# None leaves everything as it was.
+EFF_CAP: int | None = None
+CAP_RECENT = False
 INJ_URL = "https://github.com/nflverse/nflverse-data/releases/download/injuries/injuries_{season}.parquet"
 
 
@@ -181,7 +189,8 @@ def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, avail: pd.DataFrame, info: p
     rows.loc[future, "active"] = ((rows.loc[future, "status"].isin(["ACT", "INA"])) &
                                   ~rows.loc[future, "report"].isin(["Out", "Doubtful"])).astype(int)
     rows = rows[["game_id", "team", "opp", "season", "week", "t", "player_id", "position", "active", "status", "report"]]
-    stats = pg.rename(columns={"posteam": "team"})[["game_id", "team", "player_id"] + STATS + ["rz_targets", "rz_carries", "gl_carries", "air_yards", "sacks"]]
+    extra = [c for c in pg.columns if c.startswith(("rush_yds_c", "rec_yds_c"))]
+    stats = pg.rename(columns={"posteam": "team"})[["game_id", "team", "player_id"] + STATS + ["rz_targets", "rz_carries", "gl_carries", "air_yards", "sacks"] + extra]
     rows = rows.merge(stats, on=["game_id", "team", "player_id"], how="outer", indicator=True)
     # players credited with stats but missing from the roster listing (rare): take schedule info
     miss = rows["_merge"] == "right_only"
@@ -196,7 +205,7 @@ def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, avail: pd.DataFrame, info: p
     rows = rows.drop(columns="_merge")
     rows = rows[rows["position"].isin(SKILL)].copy()
     rows["group"] = rows["position"].map(GROUP)
-    rows[STATS + ["rz_targets", "rz_carries", "gl_carries", "air_yards", "sacks"]] = rows[STATS + ["rz_targets", "rz_carries", "gl_carries", "air_yards", "sacks"]].fillna(0.0)
+    rows[STATS + ["rz_targets", "rz_carries", "gl_carries", "air_yards", "sacks"] + extra] = rows[STATS + ["rz_targets", "rz_carries", "gl_carries", "air_yards", "sacks"] + extra].fillna(0.0)
     rows["season"] = rows["season"].astype(int)
     rows["week"] = rows["week"].astype(int)
     return rows.merge(tg[["game_id", "team", "team_att", "team_car", "played"]], on=["game_id", "team"], how="left")
@@ -259,12 +268,13 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
     act["start"] = np.where(use, (act["pass_att"] >= 0.5 * act["team_att"].clip(lower=1)).astype(float), np.nan)
     for c in ("pass_att", "completions", "pass_yds", "pass_td", "ints"):
         act[c + "_st"] = np.where(use, act[c] * act["start"], np.nan)
+    capc = [f"rush_yds_c{EFF_CAP}", f"rec_yds_c{EFF_CAP}"] if EFF_CAP else []
     for c in ("tgt_share", "car_share", "att_share", "targets", "receptions", "rec_yds", "rec_td", "rz_targets",
-              "carries", "rush_yds", "rush_td", "rz_carries", "gl_carries", "pass_att", "completions", "pass_yds", "pass_td", "ints"):
+              "carries", "rush_yds", "rush_td", "rz_carries", "gl_carries", "pass_att", "completions", "pass_yds", "pass_td", "ints", *capc):
         act[c] = act[c].where(use)
     pl = asof(act, "player_id", ["tgt_share", "car_share", "att_share", "targets", "receptions", "rec_yds", "rec_td", "rz_targets",
                                  "carries", "rush_yds", "rush_td", "rz_carries", "gl_carries", "pass_att", "completions",
-                                 "pass_yds", "pass_td", "ints", "pass_att_st", "completions_st", "pass_yds_st", "pass_td_st", "ints_st"],
+                                 "pass_yds", "pass_td", "ints", "pass_att_st", "completions_st", "pass_yds_st", "pass_td_st", "ints_st", *capc],
               ["one", "start"], PLAYER_HL)
     n = pl["one_sum"]
     pos_share = act[use].groupby("group")[["tgt_share", "car_share", "att_share"]].mean()
@@ -278,6 +288,18 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
     pl["catch"] = _shrink(pl["receptions_sum"], pl["targets_sum"], g.map(pm("receptions", "targets")), PRIORS["catch"])
     pl["ypt"] = _shrink(pl["rec_yds_sum"], pl["targets_sum"], g.map(pm("rec_yds", "targets")), PRIORS["ypt"])
     pl["ypc"] = _shrink(pl["rush_yds_sum"], pl["carries_sum"], g.map(pm("rush_yds", "carries")), PRIORS["ypc"])
+    if EFF_CAP:
+        rc, tc = f"rush_yds_c{EFF_CAP}", f"rec_yds_c{EFF_CAP}"
+        ct = act[use].groupby("group")[[rc, tc]].sum()
+        tot2 = tot.join(ct)
+        pc = lambda a, b: (tot2[a] / tot2[b].replace(0, np.nan)).fillna(0)
+        ex_r = pc("rush_yds", "carries") - pc(rc, "carries")          # long-play yards per carry, by position
+        ex_t = pc("rec_yds", "targets") - pc(tc, "targets")
+        pl["ypc"] = _shrink(pl[rc + "_sum"], pl["carries_sum"], g.map(pc(rc, "carries")), PRIORS["ypc"]) + g.map(ex_r).fillna(0)
+        pl["ypt"] = _shrink(pl[tc + "_sum"], pl["targets_sum"], g.map(pc(tc, "targets")), PRIORS["ypt"]) + g.map(ex_t).fillna(0)
+        if CAP_RECENT:      # the recent per-game average the calibration uses, on the same basis
+            pl["rush_yds_sum"] = pl[rc + "_sum"] + pl["carries_sum"] * g.map(ex_r).fillna(0)
+            pl["rec_yds_sum"] = pl[tc + "_sum"] + pl["targets_sum"] * g.map(ex_t).fillna(0)
     qb = lambda a: tot.loc["QB", a] if "QB" in tot.index else np.nan
     pl["comp"] = _shrink(pl["completions_sum"], pl["pass_att_sum"], qb("completions") / qb("pass_att"), PRIORS["comp"])
     pl["ypa"] = _shrink(pl["pass_yds_sum"], pl["pass_att_sum"], qb("pass_yds") / qb("pass_att"), PRIORS["ypa"])
