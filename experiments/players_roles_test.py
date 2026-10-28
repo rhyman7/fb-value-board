@@ -136,7 +136,7 @@ def main():
     x = preds["current"][played & (preds["current"]["season"] < C.HOLDOUT_FROM) & preds["current"]["group"].isin(["RB"])]
     miss = x["rush_yds"] - x["rush_yds_proj"]
     print("\ncorrelation of RB rushing-yards miss with each role input (tuning seasons):")
-    print(pd.Series({f: round(float(np.corrcoef(x[f].fillna(x[f].median()), miss)[0, 1]), 3) for f in ROLE_F}).to_string())
+    print(pd.Series({f: round(float(pd.to_numeric(x[f], errors="coerce").corr(miss)), 3) for f in ROLE_F}).to_string())
     proj.to_pickle(C.RAW / "players_proj_roles.pkl")
 
 

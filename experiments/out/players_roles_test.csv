@@ -1,0 +1,61 @@
+stat,group,variant,period,n,mae,rmse,bias,brier
+rush_yds,RB,current,2014-18,6558,22.974,31.207,0.302,0.2291
+rush_yds,RB,current,2019-26,9685,21.99,29.441,0.513,0.22981
+rush_yds,RB,"boost, current inputs",2014-18,6558,23.399,32.189,-0.942,0.23533
+rush_yds,RB,"boost, current inputs",2019-26,9685,22.068,29.858,-0.101,0.23039
+rush_yds,RB,"boost, all inputs",2014-18,6558,22.707,31.405,-0.874,0.22671
+rush_yds,RB,"boost, all inputs",2019-26,9685,21.692,29.563,-0.476,0.22584
+rush_yds,QB,current,2014-18,1202,13.53,18.822,-1.735,0.21098
+rush_yds,QB,current,2019-26,2348,14.787,19.97,-1.104,0.21218
+rush_yds,QB,"boost, current inputs",2014-18,1202,14.158,19.48,-1.613,0.21834
+rush_yds,QB,"boost, current inputs",2019-26,2348,15.181,20.592,-0.639,0.21525
+rush_yds,QB,"boost, all inputs",2014-18,1202,14.06,19.403,-1.016,0.26275
+rush_yds,QB,"boost, all inputs",2019-26,2348,14.972,20.165,-0.462,0.24339
+rec_yds,WR,current,2014-18,10913,24.162,31.947,0.554,0.23094
+rec_yds,WR,current,2019-26,16798,23.23,30.708,0.524,0.22978
+rec_yds,WR,"boost, current inputs",2014-18,10913,24.516,32.753,-0.023,0.23556
+rec_yds,WR,"boost, current inputs",2019-26,16798,23.159,30.813,0.127,0.22959
+rec_yds,WR,"boost, all inputs",2014-18,10913,23.936,32.159,-0.221,0.22849
+rec_yds,WR,"boost, all inputs",2019-26,16798,22.584,30.467,-0.15,0.22336
+rec_yds,TE,current,2014-18,4490,18.921,25.288,-0.047,0.22689
+rec_yds,TE,current,2019-26,6761,17.894,23.671,-0.238,0.22749
+rec_yds,TE,"boost, current inputs",2014-18,4490,19.251,25.806,0.189,0.2307
+rec_yds,TE,"boost, current inputs",2019-26,6761,17.979,23.776,-0.016,0.22804
+rec_yds,TE,"boost, all inputs",2014-18,4490,19.014,25.677,-0.095,0.22806
+rec_yds,TE,"boost, all inputs",2019-26,6761,17.794,23.646,-0.301,0.22567
+rec_yds,RB,current,2014-18,4253,15.399,20.7,-0.106,0.2201
+rec_yds,RB,current,2019-26,5817,14.163,18.673,0.592,0.21677
+rec_yds,RB,"boost, current inputs",2014-18,4253,15.771,21.115,0.091,0.22423
+rec_yds,RB,"boost, current inputs",2019-26,5817,14.174,18.734,0.373,0.21658
+rec_yds,RB,"boost, all inputs",2014-18,4253,15.429,20.727,-0.12,0.21981
+rec_yds,RB,"boost, all inputs",2019-26,5817,14.114,18.753,0.217,0.21637
+carries,RB,current,2014-18,5962,4.445,5.785,0.083,0.23041
+carries,RB,current,2019-26,8793,4.02,5.12,0.073,0.22944
+carries,RB,"boost, current inputs",2014-18,5962,4.495,5.894,-0.041,0.23473
+carries,RB,"boost, current inputs",2019-26,8793,3.974,5.089,0.139,0.22592
+carries,RB,"boost, all inputs",2014-18,5962,4.371,5.732,-0.045,0.22596
+carries,RB,"boost, all inputs",2019-26,8793,3.87,5.005,0.054,0.21998
+carries,QB,current,2014-18,645,1.974,2.552,-0.021,0.19194
+carries,QB,current,2019-26,1340,2.158,2.753,-0.068,0.19764
+carries,QB,"boost, current inputs",2014-18,645,2.021,2.66,-0.247,0.19997
+carries,QB,"boost, current inputs",2019-26,1340,2.215,2.845,-0.02,0.20167
+carries,QB,"boost, all inputs",2014-18,645,1.965,2.555,-0.233,0.22608
+carries,QB,"boost, all inputs",2019-26,1340,2.159,2.816,-0.013,0.20543
+receptions,WR,current,2014-18,10022,1.641,2.115,-0.001,0.21989
+receptions,WR,current,2019-26,15128,1.605,2.072,0.01,0.21867
+receptions,WR,"boost, current inputs",2014-18,10022,1.666,2.155,0.008,0.22413
+receptions,WR,"boost, current inputs",2019-26,15128,1.606,2.077,0.013,0.21847
+receptions,WR,"boost, all inputs",2014-18,10022,1.63,2.124,-0.005,0.21827
+receptions,WR,"boost, all inputs",2019-26,15128,1.574,2.054,-0.013,0.21407
+receptions,TE,current,2014-18,4276,1.485,1.936,-0.003,0.21433
+receptions,TE,current,2019-26,6637,1.449,1.887,-0.049,0.21517
+receptions,TE,"boost, current inputs",2014-18,4276,1.502,1.965,0.01,0.21723
+receptions,TE,"boost, current inputs",2019-26,6637,1.454,1.896,-0.058,0.21604
+receptions,TE,"boost, all inputs",2014-18,4276,1.487,1.959,-0.015,0.21461
+receptions,TE,"boost, all inputs",2019-26,6637,1.436,1.881,-0.08,0.21292
+receptions,RB,current,2014-18,5062,1.493,1.949,-0.004,0.21529
+receptions,RB,current,2019-26,7227,1.395,1.793,0.03,0.21279
+receptions,RB,"boost, current inputs",2014-18,5062,1.505,1.969,-0.001,0.21706
+receptions,RB,"boost, current inputs",2019-26,7227,1.376,1.791,-0.031,0.21119
+receptions,RB,"boost, all inputs",2014-18,5062,1.487,1.954,-0.033,0.21422
+receptions,RB,"boost, all inputs",2019-26,7227,1.368,1.781,-0.037,0.20941
