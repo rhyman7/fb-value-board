@@ -394,3 +394,10 @@ def test_board_week_files_from_the_log(tmp_path, monkeypatch):
     assert p["res"] == "win" and p["y"] == 77.0 and p["fl"] == "over"
     assert abs(p["po"] + p["pu"] + (p["pp"] or 0) - 1) < 1e-6
     assert wk["summary"]["moved_toward"] == 1.0 and wk["summary"]["flag_record"] == "1-0-0"
+
+
+def test_board_files_are_strict_json(tmp_path):
+    """The page's JSON.parse rejects NaN, so every missing value must be null."""
+    from nflmodel import propboard as PB
+    PB._dump(tmp_path / "x.json", {"a": float("nan"), "b": [np.nan, 1.5, pd.NaT], "c": {"d": np.float64("nan")}})
+    assert json.loads((tmp_path / "x.json").read_text()) == {"a": None, "b": [None, 1.5, None], "c": {"d": None}}

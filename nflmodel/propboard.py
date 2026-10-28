@@ -32,6 +32,27 @@ def _num(x, d=4):
     return None if x is None or (isinstance(x, float) and not np.isfinite(x)) or pd.isna(x) else round(float(x), d)
 
 
+def _clean(o):
+    """JSON-safe: NaN and missing values become null (the page's JSON.parse rejects NaN)."""
+    if isinstance(o, dict):
+        return {k: _clean(v) for k, v in o.items()}
+    if isinstance(o, (list, tuple)):
+        return [_clean(v) for v in o]
+    if isinstance(o, (float, np.floating)):
+        return None if not np.isfinite(o) else float(o)
+    if isinstance(o, (np.integer,)):
+        return int(o)
+    if isinstance(o, (np.bool_,)):
+        return bool(o)
+    if o is pd.NaT or (not isinstance(o, (str, bytes)) and pd.api.types.is_scalar(o) and pd.isna(o)):
+        return None
+    return o
+
+
+def _dump(path, body):
+    path.write_text(json.dumps(_clean(body), separators=(",", ":"), default=str, allow_nan=False))
+
+
 def _books(s) -> dict:
     try:
         return json.loads(s) if isinstance(s, str) and s else {}
@@ -167,11 +188,11 @@ def build(out_dir=OUT) -> dict:
             f = f"{int(season)}_w{int(week):02d}.json"
             body = {"season": int(season), "week": int(week), "summary": summary(x),
                     "props": [_rec(r) for r in x.sort_values(["game_id", "player", "stat", "market", "line"]).to_dict("records")]}
-            (out_dir / f).write_text(json.dumps(body, separators=(",", ":"), default=str))
+            _dump(out_dir / f, body)
             weeks.append({"file": f, "season": int(season), "week": int(week), **{k: v for k, v in body["summary"].items() if not k.startswith("calibration")}})
     ix = {"updated": PLOG._now(), "flags_on": _flags_on(), "weeks": weeks,
           "season": summary(rec) if len(rec) else {"props": 0}}
-    (out_dir / "index.json").write_text(json.dumps(ix, separators=(",", ":"), default=str))
+    _dump(out_dir / "index.json", ix)
     return ix
 
 
