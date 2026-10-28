@@ -81,20 +81,20 @@ model (with the correction) minus the baseline, with one standard error clustere
 | Interceptions | 7,336 | 2,035 | 0.1931 | −0.0212 ± 0.0019 | −0.0176 ± 0.0016 |
 | Anytime TD | 39,300 | 2,067 | 0.1428 | −0.0097 ± 0.0005 | −0.0125 ± 0.0005 |
 
-**Tuning, 2013-2018** (Brier: model, season average, last 8 games)
+**Tuning, 2013-2018** (each season with widths fitted on the other five)
 
-| Stat | Lines | Model | Season average | Last 8 games |
-|---|---|---|---|---|
-| Receiving yards | 101,388 | 0.2100 | 0.2186 | 0.2264 |
-| Receptions | 100,542 | 0.1896 | 0.1970 | 0.2036 |
-| Rushing yards | 40,343 | 0.2078 | 0.2165 | 0.2252 |
-| Carries | 36,147 | 0.2040 | 0.2141 | 0.2226 |
-| Passing yards | 13,920 | 0.2374 | 0.2542 | 0.2594 |
-| Pass attempts | 13,920 | 0.2326 | 0.2494 | 0.2508 |
-| Completions | 13,920 | 0.2134 | 0.2279 | 0.2306 |
-| Passing TDs | 8,352 | 0.1787 | 0.1950 | 0.1948 |
-| Interceptions | 5,568 | 0.2039 | 0.2223 | 0.2226 |
-| Anytime TD | 30,574 | 0.1402 | 0.1488 | 0.1532 |
+| Stat | Lines | Games | Model | vs season average | vs last 8 games |
+|---|---|---|---|---|---|
+| Receiving yards | 101,388 | 1,554 | 0.2100 | −0.0086 ± 0.0007 | −0.0164 ± 0.0006 |
+| Receptions | 100,542 | 1,554 | 0.1896 | −0.0075 ± 0.0006 | −0.0141 ± 0.0005 |
+| Rushing yards | 40,343 | 1,554 | 0.2078 | −0.0087 ± 0.0011 | −0.0175 ± 0.0011 |
+| Carries | 36,147 | 1,554 | 0.2040 | −0.0100 ± 0.0012 | −0.0185 ± 0.0011 |
+| Passing yards | 13,920 | 1,538 | 0.2374 | −0.0168 ± 0.0022 | −0.0220 ± 0.0022 |
+| Pass attempts | 13,920 | 1,538 | 0.2326 | −0.0168 ± 0.0022 | −0.0182 ± 0.0021 |
+| Completions | 13,920 | 1,538 | 0.2134 | −0.0145 ± 0.0019 | −0.0172 ± 0.0017 |
+| Passing TDs | 8,352 | 1,538 | 0.1787 | −0.0163 ± 0.0018 | −0.0162 ± 0.0016 |
+| Interceptions | 5,568 | 1,538 | 0.2039 | −0.0185 ± 0.0022 | −0.0187 ± 0.0020 |
+| Anytime TD | 30,574 | 1,554 | 0.1402 | −0.0086 ± 0.0005 | −0.0130 ± 0.0006 |
 
 The model beats both baselines on every stat in both periods, and at every position
 (`experiments/out/props_calibration.json` has the tables by stat and position, log loss,
@@ -213,10 +213,12 @@ not in The Odds API's free data, so none are flagged.
 - **EV** per unit at the best price posted = p(win) x payout - p(lose).
 - **Flag** only when all hold:
   - edge of 5 points or more. There are no past prices to set this on. On the tuning
-    seasons, at the recent-median line, the model's stated chance held up within half a
-    point even where it was furthest from 50% (predicted 72.3%, won 71.9% at a 5-point
-    gap), so its confidence does not run ahead of it at the extremes; 5 points is a
-    starting value, to be set from the live closing line value.
+    seasons, at the recent-median line (yards, catches, carries, attempts), the side the
+    model favoured won about 0.6-0.8 points less often than it said, whatever the size of
+    the gap (65.3% predicted against 64.6% won where it was 5 points or more from 50%;
+    47,860 lines). So its confidence runs slightly ahead of it, by less than a point, and a
+    5-point minimum leaves room for that; it is a starting value, to be set from the live
+    closing line value and the backfill.
   - positive EV at the best price;
   - liquid: both DraftKings and FanDuel post the player's market (their lines may differ
     by a half point; each line is priced against its own book), a hold of 10% or less, and
