@@ -143,27 +143,46 @@ book's line counted separately). Distribution widths fitted on seasons before 20
 
 | Snapshot | Props | Brier, ours | Brier, books (vig-free) | Ours minus books |
 |---|---|---|---|---|
-| Pricing (first daily run within 3 days) | 6,263 | 0.2540 | 0.2500 | +0.0039 ± 0.0018 |
+| Pricing (first daily run within 3 days), pregame projections | 6,217 | 0.2547 | 0.2500 | +0.0047 ± 0.0018 |
 | Close (10 minutes before kickoff) | 9,138 | 0.2574 | 0.2500 | +0.0074 ± 0.0016 |
 
-By stat at the pricing snapshot: passing yards +0.0043 ± 0.0032, receiving yards
-+0.0050 ± 0.0023, rushing yards +0.0017 ± 0.0036. **The books' prices are the better
+By stat at the pricing snapshot: passing yards +0.0042 ± 0.0034, receiving yards
++0.0066 ± 0.0023, rushing yards +0.0012 ± 0.0033. **The books' prices are the better
 forecast, at both snapshots.** Where the model disagreed with them, the results sided
 with the books: lines the model put at 60-70% went over 49% of the time (256 lines), and
 lines it put at 30-40% went over 44% (1,200 lines).
 
 **The bets the live rules would have flagged** at the pricing snapshot: 1,486 bets,
-789-697, **return +0.4% ± 2.7%** against an average claimed EV of +14.8%. By stat:
-passing yards −7.0% ± 6.4% (211 bets), receiving yards −0.1% ± 3.5% (805), rushing yards
-+4.6% ± 4.4% (470). Two-thirds were unders. Indistinguishable from zero, and nowhere
+790-696, **return +0.5% ± 2.7%** against an average claimed EV of +14.9%. By stat:
+passing yards −8.8% ± 6.5% (213 bets), receiving yards −0.6% ± 3.3% (820), rushing yards
++6.8% ± 4.6% (453). Two-thirds were unders. Indistinguishable from zero, and nowhere
 near what the edges claimed.
 
-**Line movement.** For those bets, the closing line moved toward the model's side 59% of
-the time and away 31% (average +1.0 point). That looks like closing line value, but it is
-not clean: the walk-forward projection knows each game's actual inactives and starting
-quarterback, which the pricing snapshot did not, so it is partly predicting the news that
-moved the line. Where the line did not move (484 bets), the closing price gave the bet an
-EV of −5.4%, the vig.
+**Line movement.** For those bets, the closing line moved toward the model's side 58% of
+the time and away 32%, by +0.96 ± 0.10 points on average (1,484 bets). Across every prop,
+on the side the model preferred, it moved toward us 47% and away 43% (+0.21 ± 0.06 points,
+3,285 props). Where the line did not move (475 bets), the closing price gave the bet an EV
+of −5.4%, the vig.
+
+**Without the week's news (Oct 27, 2026).** The numbers above use pregame projections:
+`players.build(pregame=True)` judges who plays from the previous week's roster, with no
+injury report or game-day inactives for the week, and the game model runs without the
+week's starting quarterbacks or injuries. The first version of this test used the game-day
+projections, which know each game's inactives; the results barely changed:
+
+| Pricing snapshot | Game-day projections | Pregame projections |
+|---|---|---|
+| Brier, ours minus books' | +0.0039 ± 0.0018 | +0.0047 ± 0.0018 |
+| Flagged bets, return | +0.4% ± 2.7% (1,486) | +0.5% ± 2.7% (1,486) |
+| Lines moved toward the flag | 59% (away 31%) | 58% (away 32%) |
+
+So the line movement was not the model knowing the injury news. One look-ahead remains in
+both: the game model is anchored to the **closing** spread and total, so a player
+projection already reflects moves in the game's line between the pricing snapshot and
+kickoff, and props tend to move with those. That alone could produce some of the
+movement toward the model. Taking it out needs the spread and total as they stood at the
+pricing snapshot (the backfill has only player props; the nfelo file has opening spreads
+but no opening totals).
 
 **A market-anchored blend** (book's chance + w x (ours - book's)) did a little better than
 the books alone at w = 0.2-0.3 (Brier 0.2492 against 0.2500 at the pricing snapshot), but
@@ -173,9 +192,8 @@ look-ahead, so it proves nothing yet.
 **What this means.** The model knows far more than a player's averages (the calibration
 above), but not more than DraftKings and FanDuel. Flags are paused. To earn them back:
 
-1. Projections as of the pricing snapshot: re-run the player walk-forward without the
-   game-day inactives and starter (as the game model's opening-line test does), so the
-   pricing comparison has no look-ahead.
+1. Projections as of the pricing snapshot: done (pregame projections, above). Still to
+   take out: the closing spread and total in the game model.
 2. Fit the blend weight on one season of real lines and test it on another: backfill
    2024 (about 16,000 credits, next month), fit on 2024, test on 2025.
 3. Turn flags back on only if the blend beats the books' prices out of sample, with the
