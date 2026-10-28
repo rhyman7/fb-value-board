@@ -1,0 +1,52 @@
+{
+ "pricing": {
+  "n": 683,
+  "games": 252,
+  "brier_model": 0.25083,
+  "brier_book_split": 0.25269,
+  "brier_books": 0.24985,
+  "model_minus_books": [
+   0.00098,
+   0.00423
+  ],
+  "book_split_minus_books": [
+   0.00284,
+   0.00343
+  ],
+  "carries_miss_model": 3.98,
+  "carries_miss_book_split": 3.91,
+  "yards_miss_model": 25.4,
+  "yards_miss_book_split": 25.43,
+  "bets_book_split": {
+   "bets": 302,
+   "won": 158,
+   "return": -0.0097,
+   "return_se": 0.0552
+  }
+ },
+ "close": {
+  "n": 932,
+  "games": 274,
+  "brier_model": 0.25821,
+  "brier_book_split": 0.2536,
+  "brier_books": 0.25008,
+  "model_minus_books": [
+   0.00813,
+   0.00437
+  ],
+  "book_split_minus_books": [
+   0.00352,
+   0.00345
+  ],
+  "carries_miss_model": 4.0,
+  "carries_miss_book_split": 3.83,
+  "yards_miss_model": 24.69,
+  "yards_miss_book_split": 24.43,
+  "bets_book_split": {
+   "bets": 403,
+   "won": 219,
+   "return": 0.0286,
+   "return_se": 0.0479
+  }
+ }
+}
