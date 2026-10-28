@@ -159,7 +159,7 @@ def test_game_cap():
 
 def test_log_is_append_only_and_grades(tmp_path, monkeypatch):
     monkeypatch.setattr(PM, "FLAGS_ON", True)
-    for name in ("LOG", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
+    for name in ("LOG", "LOG_NEW", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
         monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
     board = _toy_board()
     o = PM.match(_toy_odds(), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
@@ -230,7 +230,7 @@ def test_dry_run_on_this_weeks_board(tmp_path, monkeypatch, capsys):
                                 for k in ("draftkings", "fanduel")])
     (tmp_path / "events.json").write_text(json.dumps([ev]))
     (tmp_path / "event_evt1.json").write_text(json.dumps(body))
-    for name in ("LOG", "RESULTS", "SNAPS"):
+    for name in ("LOG", "LOG_NEW", "RESULTS", "SNAPS"):
         monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
     run_props.cmd_flag(run_props.Fixture(tmp_path), log_it=True)
     log = PLOG.read_log()
@@ -266,7 +266,7 @@ def test_games_already_started_are_never_priced(tmp_path, monkeypatch):
         def event_odds(self, *a, **k):
             called.append(a)
             return {}
-    for name in ("LOG", "RESULTS", "SNAPS"):
+    for name in ("LOG", "LOG_NEW", "RESULTS", "SNAPS"):
         monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
     if P.PropModel.load() is None:
         pytest.skip("no fitted prop parameters yet")
@@ -373,7 +373,7 @@ def test_alternate_ladder_rungs_are_priced_from_the_same_distribution():
 def test_board_week_files_from_the_log(tmp_path, monkeypatch):
     from nflmodel import propboard as PB
     monkeypatch.setattr(PM, "FLAGS_ON", True)
-    for name in ("LOG", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
+    for name in ("LOG", "LOG_NEW", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
         monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
     board = _toy_board()
     games = [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}]
