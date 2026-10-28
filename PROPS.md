@@ -12,8 +12,8 @@ Code: `nflmodel/propdist.py` (distributions), `nflmodel/props.py` (the prop mode
 methods, the calibration report, the fitted parameters in `data/prop_params.json`).
 
 **Status (Oct 27, 2026):** calibration done and reported below. The market side is built
-and tested against saved responses, but has not been run against The Odds API. The board
-shows nothing new.
+and tested against saved responses; the first live runs and the 2025 backfill start once
+this is merged. The board shows nothing new: prices, flags and results go only to the log.
 
 ## From a mean to a chance
 
@@ -171,25 +171,33 @@ of pair, was further off (27% against 32% for the first pair) and was replaced.
 Combinations are priced on request (`propsim.combo_prob`); the books' same-game prices are
 not in The Odds API's free data, so none are flagged.
 
-## Market prices (The Odds API, free plan)
+## Market prices (The Odds API)
 
 - Key: the `ODDS_API_KEY` repository secret. Never written to a file or a log.
-- Cost: (markets returned) x (regions) per event; ten named books count as one region; an
-  empty response costs nothing; the events list is free. Every call's cost and the credits
-  left go to `data/props/api_usage.csv`, and no call is made that could leave fewer than 40.
+- Plan: 20,000 credits a month (Oct 2026). Cost per call: (markets returned) x (regions)
+  for live odds; 10 x that for historical odds; one to ten named books count as one region,
+  so DraftKings and FanDuel cost the same as ten books; an empty response costs nothing;
+  the live events list is free, the historical one 1 credit. Every call's cost and the
+  credits left go to `data/props/api_usage.csv`, and no call is made that could leave fewer
+  than 200 (`PROPS_RESERVE`).
 - Books: DraftKings and FanDuel only (Ryan's call, Oct 2026; `PROPS_BOOKS` to change).
-  Fewer books does not save credits: one to ten named books cost the same.
-- Markets (5): passing, rushing and receiving yards, receptions, anytime TD
-  (`PROPS_MARKETS` to change).
-- One pricing snapshot per game, on the first daily run with kickoff 3 days away or less
-  (Friday for Sunday games; injury reports are mostly out). Closing prices from runs every
-  30 minutes in the usual kickoff windows, about 45 minutes before kickoff, **only for games
-  with flagged bets and only the markets bet**.
-- Expected use: about 14 games x 5 markets = 70 credits a week for pricing, plus closing
-  prices for flagged games, roughly 430 of the 500 a month. Check
-  `data/props/api_usage.csv` after the first week; cut markets before cutting closing prices.
-- Limits: games on unusual days (Christmas, a Wednesday) may miss their closing snapshot;
-  the closing snapshot is 45 minutes out, not the final price.
+- Markets: all ten the model prices (pass, rush and receiving yards, receptions, carries,
+  pass attempts, completions, pass TDs, interceptions, anytime TD; `PROPS_MARKETS`).
+- **Live, three snapshots per game** (`.github/workflows/props.yml`):
+  - open: the first daily run (12:47 UTC) once props are posted, kickoff 3-8 days away;
+  - pricing: the first daily run with kickoff 3 days away or less (Friday for Sunday
+    games, when injury reports are mostly out). **Bets are decided here only**;
+  - close: runs every 30 minutes in the usual kickoff windows take every game's prices
+    about 45 minutes before kickoff.
+  About 15 games x 10 markets x 3 = 450 credits a week, 2,000 a month. Games on unusual
+  days (Christmas, a Wednesday) may miss their closing snapshot.
+- **Backfill** (`.github/workflows/props-backfill.yml`, run by hand; `nflmodel/propbackfill.py`):
+  past prices at the same two moments the live run uses, the pricing run (12:47 UTC, first
+  day within 3 days) and the close (10 minutes before kickoff). Historical props start in
+  May 2023. Plan agreed with Ryan (Oct 27, 2026): the 2025 season's three yardage markets
+  first (about 17,100 credits, so most of the first month), then 2024 and 2023 only if
+  2025 is worth it. `experiments/props_real_lines.py` then scores the model against those
+  lines (results below once it has run).
 
 ## Vig, edge, EV and flags
 
@@ -198,7 +206,7 @@ not in The Odds API's free data, so none are flagged.
   method is used. When both books post the same line, the consensus is their average.
   Neither is a sharp book, so the market price here is a retail price; closing line value
   is measured against the same two books.
-- **One-sided markets** (anytime TD is often Yes only): an assumed two-way overround of 8%,
+- **One-sided markets** (anytime TD is sometimes Yes only): an assumed two-way overround of 8%,
   applied by the power method. Once the log has 30 or more anytime-TD markets with both
   sides posted, their median overround replaces the 8%.
 - **Edge** = our chance of winning (pushes set aside) minus the vig-free market chance.
@@ -224,7 +232,8 @@ not in The Odds API's free data, so none are flagged.
 
 `data/props/`, committed by the **Player props** Action (`.github/workflows/props.yml`):
 
-- `prop_log.csv` append-only: every side priced, every run (time, player, game, market,
+- `prop_log.csv` append-only: every side priced at every snapshot (open, pricing, close;
+  time, player, game, market,
   line, each book's prices, vig-free chance both ways, ours, edge, EV, stake, flagged, why
   not). Rows are never edited.
 - `prop_results.csv` append-only: the result of each priced side (void if he did not
@@ -233,7 +242,8 @@ not in The Odds API's free data, so none are flagged.
   line with the model's own difference between the two lines).
 - `weekly_summary.csv`, `summary.json`: record, units, return, average closing line value,
   share of bets that beat the close, and calibration of every live probability so far.
-- `snapshots.csv`, `api_usage.csv`: which games have been priced or closed, and credits.
+- `snapshots.csv`, `api_usage.csv`: which games have had which snapshot, and credits.
+- `history/<season>/`: past prices from the backfill, one file per game and snapshot.
 
 Results come from the board's box-score and availability caches, which **Update board**
 refreshes daily.

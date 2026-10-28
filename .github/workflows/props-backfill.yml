@@ -1,0 +1,52 @@
+name: Prop price backfill
+
+# Past DraftKings and FanDuel prop prices from The Odds API's historical endpoint, for testing
+# the prop model against real lines (experiments/props_real_lines.py). Run by hand only.
+# Cost: 1 credit per week for the event list, then 10 per market per snapshot; two snapshots
+# per game (pricing and close). A season of the three yardage markets is about 17,100 credits.
+# Saved under data/props/history/<season>/; a stopped run picks up where it left off.
+
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season (2023 or later)"
+        default: "2025"
+      max_credits:
+        description: "Most credits this run may spend"
+        default: "17500"
+      markets:
+        description: "Markets, comma separated"
+        default: "player_pass_yds,player_rush_yds,player_reception_yds"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: python run_props.py backfill --season "${{ inputs.season }}" --max-credits "${{ inputs.max_credits }}" --markets "${{ inputs.markets }}"
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/props
+          git diff --cached --quiet || git commit -m "Prop price backfill ${{ inputs.season }}"
+          git pull --rebase origin main
+          git push

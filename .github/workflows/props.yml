@@ -1,9 +1,10 @@
 name: Player props
 
-# Prices NFL player props from The Odds API, logs every side, and grades finished games.
-# The daily run grades, then takes one pricing snapshot of each game kicking off within
-# three days. The runs around kickoff take closing prices, only for games with flagged
-# bets and only for the markets bet, to save credits (free plan: 500 a month). See PROPS.md.
+# Prices NFL player props from The Odds API (DraftKings and FanDuel), logs every side, and
+# grades finished games. The daily run grades, then takes each game's opening snapshot (once
+# props are posted) and its pricing snapshot (first run within three days of kickoff, where
+# bets are decided). The runs around kickoff take every game's closing prices. All ten
+# markets: about 450 credits a week. See PROPS.md.
 
 on:
   schedule:

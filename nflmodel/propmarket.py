@@ -29,10 +29,9 @@ from .oddsapi import BOOK_WEIGHT
 from .props import SPECS, PropModel
 
 MARKET_STAT = {s.odds_key: k for k, s in SPECS.items() if s.odds_key}
-# The markets fetched by default: five, to fit the free plan's 500 credits a month
-# (about 14 games x 5 markets for one snapshot per game, plus closing prices for games with
-# flagged bets). Change with the PROPS_MARKETS environment variable.
-DEFAULT_MARKETS = ["player_pass_yds", "player_rush_yds", "player_reception_yds", "player_receptions", "player_anytime_td"]
+# The markets fetched: every one the model prices (ten). About 15 games x 10 markets x 3
+# snapshots (open, pricing, close) = 450 credits a week. Change with PROPS_MARKETS.
+DEFAULT_MARKETS = [s.odds_key for s in SPECS.values() if s.odds_key]
 
 MIN_EDGE = 0.05            # in probability; see PROPS.md for how it was chosen
 MIN_BOOKS = 2              # books posting this player's market (at any line): with DraftKings and

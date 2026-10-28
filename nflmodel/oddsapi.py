@@ -1,7 +1,12 @@
-"""The Odds API client for NFL player props, careful with the free plan's credits.
+"""The Odds API client for NFL player props, careful with credits (20,000 a month).
 
-  GET /v4/sports/americanfootball_nfl/events                 free
-  GET /v4/sports/americanfootball_nfl/events/{id}/odds       costs (markets returned) x (regions)
+  GET /v4/sports/americanfootball_nfl/events                            free
+  GET /v4/sports/americanfootball_nfl/events/{id}/odds                  (markets returned) x (regions)
+  GET /v4/historical/sports/americanfootball_nfl/events?date=           1 (0 if none found)
+  GET /v4/historical/sports/americanfootball_nfl/events/{id}/odds?date= 10 x (markets returned) x (regions)
+
+Historical player props start 2023-05-03, in 5-minute snapshots; a historical call returns
+the snapshot at or before `date`, wrapped in {timestamp, previous_timestamp, next_timestamp, data}.
 
 Up to ten named bookmakers count as one region, and an empty response costs nothing.
 Every call's cost and the credits left (response headers) go to data/props/api_usage.csv,
@@ -31,7 +36,7 @@ BOOKS = [b.strip() for b in os.environ.get("PROPS_BOOKS", "draftkings,fanduel").
 # Weight of each book in the consensus no-vig price; the two count equally.
 BOOK_WEIGHT = {"draftkings": 1.0, "fanduel": 1.0}
 
-PROPS_RESERVE = int(os.environ.get("PROPS_RESERVE", "40"))   # never spend below this many credits
+PROPS_RESERVE = int(os.environ.get("PROPS_RESERVE", "200"))   # never spend below this many credits
 
 
 class BudgetError(RuntimeError):
@@ -44,6 +49,7 @@ class Client:
         self.reserve = reserve
         self.remaining: int | None = None
         self.used_this_run = 0
+        self.last_cost = 0
         self._open = opener or urllib.request.urlopen
 
     @property
@@ -61,6 +67,7 @@ class Client:
         if rem is not None:
             self.remaining = int(float(rem))
         self.used_this_run += last
+        self.last_cost = last
         _log_usage(what, last, self.remaining)
         return body
 
@@ -77,6 +84,29 @@ class Client:
         params = {"markets": ",".join(markets), "bookmakers": ",".join(books or BOOKS),
                   "oddsFormat": "american", "dateFormat": "iso"}
         return self._get(f"/sports/{SPORT}/events/{event_id}/odds", params, f"odds {event_id}")
+
+    def historical_events(self, date: str, commence_from: str, commence_to: str) -> list[dict]:
+        """Events as listed at `date` with kickoff in [commence_from, commence_to] (1 credit)."""
+        if self.remaining is not None and self.remaining - 1 < self.reserve:
+            raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}")
+        body = self._get(f"/historical/sports/{SPORT}/events",
+                         {"date": date, "commenceTimeFrom": commence_from, "commenceTimeTo": commence_to, "dateFormat": "iso"},
+                         f"historical events {date[:10]}")
+        return body.get("data") or []
+
+    def historical_event_odds(self, event_id: str, markets: list[str], date: str, books: list[str] | None = None) -> dict:
+        """Player-prop odds for one event as they stood at `date` (10 credits per market
+        returned). Returns the event object, with the snapshot time under '_snapshot'."""
+        worst = 10 * len(markets)
+        if self.remaining is not None and self.remaining - worst < self.reserve:
+            raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}: skipping {event_id}")
+        params = {"markets": ",".join(markets), "bookmakers": ",".join(books or BOOKS),
+                  "oddsFormat": "american", "dateFormat": "iso", "date": date}
+        body = self._get(f"/historical/sports/{SPORT}/events/{event_id}/odds", params, f"historical odds {event_id} {date}")
+        ev = body.get("data") or {}
+        if ev:
+            ev["_snapshot"] = body.get("timestamp")
+        return ev
 
 
 def _log_usage(what: str, cost: int, remaining):

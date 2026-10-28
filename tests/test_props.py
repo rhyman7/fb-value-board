@@ -288,3 +288,38 @@ def test_combo_keeps_each_leg_and_raises_the_joint_chance():
     assert out["joint"] <= min(single) + 0.01
     opposite = S.combo_prob(pl, m, [(0, "rec_yds", 70.5, "over"), (0, "receptions", 5.5, "under")], n=60000)
     assert opposite["joint"] < opposite["independent"]
+
+
+# ---- historical backfill -----------------------------------------------------------
+
+def test_backfill_snapshot_times_budget_and_restart(tmp_path, monkeypatch):
+    from nflmodel import propbackfill as B
+    kick = pd.Timestamp("2025-09-07T17:00:00Z")
+    assert B.flag_time(kick) == pd.Timestamp("2025-09-05T12:47:00Z")          # Friday: the first daily run under 3 days out
+    sched = pd.DataFrame({"game_id": ["2025_01_DAL_PHI", "2025_01_KC_LAC"], "season": 2025, "week": 1,
+                          "home_team": ["PHI", "LAC"], "away_team": ["DAL", "KC"], "kickoff": [kick, kick + pd.Timedelta(hours=3)]})
+    monkeypatch.setattr(B, "schedule", lambda s: sched)
+    monkeypatch.setattr(B, "HIST", tmp_path)
+
+    class Fake:
+        remaining, last_cost, used_this_run = 10000, 0, 0
+        calls = []
+
+        def historical_events(self, date, a, b):
+            self.calls.append(("events", date))
+            return [{"id": "e1", "home_team": "Philadelphia Eagles", "away_team": "Dallas Cowboys", "commence_time": "2025-09-07T17:00:00Z"},
+                    {"id": "e2", "home_team": "Los Angeles Chargers", "away_team": "Kansas City Chiefs", "commence_time": "2025-09-07T20:00:00Z"}]
+
+        def historical_event_odds(self, eid, markets, date):
+            self.calls.append((eid, date))
+            self.last_cost = 30
+            return {"id": eid, "_snapshot": date, "bookmakers": [{"key": "draftkings", "markets": [{"key": "player_pass_yds",
+                    "outcomes": [{"name": "Over", "description": "X", "price": -110, "point": 230.5}]}]}]}
+
+    f = Fake()
+    r = B.run(f, 2025, B.YARDAGE, max_credits=1 + 30 * 3, verbose=False)
+    assert not r["complete"] and r["snapshots"] == 3 and r["spent"] == 91        # stops at the cap
+    assert ("e1", "2025-09-07T16:50:00Z") in f.calls                              # close: ten minutes before kickoff
+    r = B.run(f, 2025, B.YARDAGE, max_credits=100, verbose=False)
+    assert r["complete"] and r["snapshots"] == 1                                  # restart fetches only what's missing
+    assert len(B.load(2025, "close")) == 2 and set(B.load(2025, "flag")["game_id"]) == set(sched["game_id"])

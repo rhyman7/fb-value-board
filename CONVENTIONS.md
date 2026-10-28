@@ -37,8 +37,21 @@ boards in detail; this file is the rules.
   **Update college board** Actions (`.github/workflows/update.yml`, `update-cfb.yml`), which
   rebuild `docs/` and the committed files under `data/`. They share the `board-commits`
   concurrency group so they never push at once. Everything else goes through a PR.
+- The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
+  also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
+  credit usage and past prices). They share the `board-commits` group too. The backfill runs
+  only by hand.
 - If a change touches what those Actions build or where it lands, check their steps and
   wording still match the site structure.
+- **Player props (NFL) and The Odds API** ([PROPS.md](PROPS.md)). The key is the
+  `ODDS_API_KEY` repository secret; never print it or write it to a file. The account has
+  20,000 credits a month (Oct 2026). Live logging (DraftKings and FanDuel, ten markets, open,
+  pricing and closing snapshots) runs about 2,000 a month; every call's cost is in
+  `data/props/api_usage.csv`. **Ask Ryan before** anything that would use most of the
+  month's credits (a backfill), changes what the board shows, or can't be undone.
+  `data/props/prop_log.csv` and `prop_results.csv` are append-only: never edit or delete a
+  row. `data/prop_params.json` is written only by `experiments/props_calibration.py`; refit
+  it there (methods chosen on 2013-2018, holdout 2019 on, run once) rather than by hand.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model, `out` takes a player
   out of the player projections. Use it only for confirmed news the nflverse schedule or the
