@@ -39,7 +39,7 @@ boards in detail; this file is the rules.
   concurrency group so they never push at once. Everything else goes through a PR.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
-  credit usage and past prices). They share the `board-commits` group too. The backfill runs
+  credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
   only by hand.
 - If a change touches what those Actions build or where it lands, check their steps and
   wording still match the site structure.
@@ -120,6 +120,13 @@ boards in detail; this file is the rules.
 - Both boards share the same sections and anchors, in this order:
   This Week's Matchups `#matchups` | Games `#games` | Players `#players` | Past weeks `#history` |
   Team ratings `#ratings` | Model record `#model`. Each board's nav links to the other board.
+- **Props `#props` is NFL only** (Ryan's call, Oct 2026), between Players and Past weeks. Its
+  markup, styles and script in `site/template.html` sit between `<!--NFL-ONLY-->` and
+  `<!--/NFL-ONLY-->` (HTML) or `/*NFL-ONLY*/` and `/*/NFL-ONLY*/` (CSS and script), which
+  `site/make_cfb_template.py` cuts from the college page; it checks the number of blocks, so
+  update its count when adding one. The section reads `docs/props/` (one file per week,
+  `index.json` for the list), written by `nflmodel/propboard.py` on every props run; it never
+  edits past weeks by hand, since the files are rebuilt from the append-only log.
 - **This Week's Matchups** copies the matchup dashboards' look on purpose (graphite colors,
   condensed Archivo, team-color blocks lettered in the secondary color, never black): the
   board of this week's games, and `#matchups/<game id>` with each team's card showing this
@@ -157,7 +164,8 @@ boards in detail; this file is the rules.
 - Titled **Weekly Value Boards**. Same layout, tokens, Archivo type and NCAA/NFL logos as
   the Weekly Gridiron Board (rhyman7.github.io); keep it styled consistently with it.
 - College card on the left, NFL on the right. Each card links to its board and to the six
-  sections above; if a section is added, renamed or reordered, update both cards.
+  sections above (the NFL card also to Props); if a section is added, renamed or reordered,
+  update both cards.
 - Logos live in `img/` (copies of rhyman7.github.io's `img/ncaa.png` and `img/nfl.png`).
 - All links are relative (`docs/`, `docs/cfb/`, `img/`) so the page works at
   `/fb-value-board/`.

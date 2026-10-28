@@ -9,6 +9,7 @@ page has changed underneath one, the script stops and says which.
 
     python site/make_cfb_template.py
 """
+import re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -209,8 +210,17 @@ CAL_BOX = r'''
 sub('    grid.append(box("The defense", tx(dtext)));', '    grid.append(box("The defense", tx(dtext)));' + CAL_BOX)
 
 
+# NFL-only parts of the page (the Props section, Oct 2026: props are NFL only, Ryan's call),
+# marked in template.html and cut from the college page: (pattern, expected count).
+NFL_ONLY = [(r"<!--NFL-ONLY-->.*?<!--/NFL-ONLY-->\n?", 2), (r"/\*NFL-ONLY\*/.*?/\*/NFL-ONLY\*/\n?", 4)]
+
+
 def main():
     html = SRC.read_text()
+    for pat, n in NFL_ONLY:
+        html, c = re.subn(pat, "", html, flags=re.S)
+        if c != n:
+            raise SystemExit(f"make_cfb_template: expected {n} NFL-only blocks matching {pat}, found {c}")
     for old, new, n in P:
         c = html.count(old)
         if (n is None and c == 0) or (n is not None and c != n):

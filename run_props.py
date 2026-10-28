@@ -26,7 +26,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from nflmodel import config as C, oddsapi, propmarket as PM, proplog as PLOG
+from nflmodel import config as C, oddsapi, propboard, propmarket as PM, proplog as PLOG
 from nflmodel.props import PropModel
 
 OPEN_DAYS = float(os.environ.get("PROPS_OPEN_DAYS", "3"))         # price a game this many days out, or nearer
@@ -200,6 +200,9 @@ def main():
         cmd_flag(client, log_it, now)
     if args.cmd in ("close", "all") and client:
         cmd_close(client, log_it, now)
+    if log_it:
+        ix = propboard.build()          # the board's Props section (docs/props/)
+        print(f"  board props: {len(ix['weeks'])} weeks on file")
     return 0
 
 

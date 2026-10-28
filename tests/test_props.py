@@ -366,3 +366,31 @@ def test_alternate_ladder_rungs_are_priced_from_the_same_distribution():
     p = b.sort_values("line")["our_p"].to_numpy()
     assert p[0] > p[1] > p[2]                        # lower rungs are likelier
     assert np.allclose(b["fair"], O.one_sided_fair(b["price"], PM.ALT_MARGIN, "power"))
+
+
+# ---- the board's Props section ------------------------------------------------------
+
+def test_board_week_files_from_the_log(tmp_path, monkeypatch):
+    from nflmodel import propboard as PB
+    monkeypatch.setattr(PM, "FLAGS_ON", True)
+    for name in ("LOG", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
+        monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
+    board = _toy_board()
+    games = [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}]
+    b = PM.price(PM.consensus(PM.match(_toy_odds(line=60.5), board, games)), board, _toy_model())
+    b["event_id"], b["commence"] = "e1", "2026-11-01T18:00:00Z"
+    PLOG.append_priced(b.assign(flagged=False, stake=0.0), "open", 2026, 9)
+    PLOG.append_priced(b, "flag", 2026, 9)
+    PLOG.append_priced(b.assign(line=62.5), "close", 2026, 9)
+    pg = pd.DataFrame({"game_id": ["2026_09_DAL_PHI"], "player_id": ["00-1"], "rec_yds": [77.0], "receptions": [6.0], "rec_td": [0], "rush_td": [0]})
+    av = pd.DataFrame({"season": [2026], "week": [9], "team": ["PHI"], "player_id": ["00-1"], "active": [1]})
+    monkeypatch.setattr(PLOG, "outcomes", lambda seasons: (pg, av))
+    PLOG.grade()
+    ix = PB.build(tmp_path / "props")
+    assert [w["file"] for w in ix["weeks"]] == ["2026_w09.json"]
+    wk = json.loads((tmp_path / "props" / "2026_w09.json").read_text())
+    (p,) = [x for x in wk["props"] if x["s"] == "rec_yds"]
+    assert p["snap"] == "flag" and p["L"] == 60.5 and p["cL"] == 62.5       # the pricing snapshot, with the close
+    assert p["res"] == "win" and p["y"] == 77.0 and p["fl"] == "over"
+    assert abs(p["po"] + p["pu"] + (p["pp"] or 0) - 1) < 1e-6
+    assert wk["summary"]["moved_toward"] == 1.0 and wk["summary"]["flag_record"] == "1-0-0"
