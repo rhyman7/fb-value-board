@@ -266,6 +266,17 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .res { display: inline-block; min-width: 1.6em; text-align: center; font-size: 11.5px; font-weight: 700; border-radius: 3px; padding: 1px 4px; margin-left: 6px; border: 1px solid var(--axis); color: var(--ink-2); }
 .res.w { background: var(--s3); border-color: var(--s3); color: #fff; } .res.l { background: transparent; border-color: var(--s2); color: var(--s2); }
 .hist-rec { display: flex; flex-wrap: wrap; gap: 12px 36px; margin: 6px 0 4px; }
+/*NFL-ONLY*/
+.props-banner { border-left: 4px solid var(--flag); background: var(--raised); padding: 10px 14px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); max-width: 82ch; margin: 4px 0 14px; }
+.props-banner strong { color: var(--ink); }
+#props-table .lean { font-weight: 700; } #props-table .lean.o, #props-table .lean.u { white-space: nowrap; }
+#props-table td.px { color: var(--ink-2); } #props-table td.px b { color: var(--ink); font-weight: 600; }
+#props-table td.ladder { white-space: normal; text-align: left; padding: 8px 0 14px; background: var(--raised); }
+#props-table td.ladder table { margin: 0 12px; width: calc(100% - 24px); background: var(--surface); }
+#props-table .early { display: inline-block; font-size: 11px; font-weight: 700; color: var(--ink-3); border: 1px solid var(--axis); border-radius: 3px; padding: 0 4px; margin-left: 6px; }
+.props-calls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 18px 32px; }
+.props-calls h3 { margin-bottom: 6px; }
+/*/NFL-ONLY*/
 .hist-rec div { display: grid; gap: 0; } .hist-rec b { font: 700 26px/1.1 var(--display); font-variant-numeric: tabular-nums; } .hist-rec span { font-size: 12.5px; color: var(--ink-3); }
 td .act { font-weight: 700; }
 #hist-players th.grp { text-align: center; border-bottom: 1px solid var(--axis); padding-bottom: 2px; }
@@ -475,7 +486,8 @@ td .act { font-weight: 700; }
         <li><a href="#matchups" data-view="matchups">This Week's Matchups</a></li>
         <li><a href="#games" data-view="games">Games</a></li>
         <li><a href="#players" data-view="players">Players</a></li>
-        <li><a href="#history" data-view="history">Past weeks</a></li>
+<!--NFL-ONLY-->        <li><a href="#props" data-view="props">Props</a></li>
+<!--/NFL-ONLY-->        <li><a href="#history" data-view="history">Past weeks</a></li>
         <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
         <li><a href="#model" data-view="model">Model record</a></li>
         <li><a href="cfb/" data-view="cfb">College board</a></li>
@@ -564,6 +576,48 @@ td .act { font-weight: 700; }
       </section>
     </div>
 
+<!--NFL-ONLY-->
+    <!-- ============ player props (NFL only) ============ -->
+    <div class="view" id="view-props" hidden>
+      <section aria-labelledby="props-h">
+        <div class="section-head">
+          <h2 id="props-h">Player props</h2>
+          <p class="note" id="props-note"></p>
+        </div>
+        <p class="props-banner" id="props-banner" hidden></p>
+        <div class="filters" role="group" aria-label="Prop filters">
+          <div class="field-label"><span id="prf-week">Week</span><div class="seg" id="seg-prweek" role="group" aria-labelledby="prf-week"></div></div>
+          <label class="field-label" for="pr-stat">Stat<select class="money" id="pr-stat"></select></label>
+          <label class="field-label" for="pr-team">Team<select class="money" id="pr-team"></select></label>
+          <label class="field-label" for="pr-search">Player<input class="money p-search" id="pr-search" type="search" placeholder="Search" autocomplete="off"></label>
+        </div>
+        <div class="hist-rec" id="props-rec"></div>
+        <div class="scroll"><table id="props-table" class="compact players" aria-labelledby="props-h"></table></div>
+        <p class="note" id="props-foot"></p>
+      </section>
+      <section aria-labelledby="prcalls-h">
+        <div class="section-head">
+          <h2 id="prcalls-h">What went right, what was off</h2>
+          <p class="note" id="prcalls-note"></p>
+        </div>
+        <div class="props-calls" id="props-calls"></div>
+      </section>
+      <section aria-labelledby="prcal-h">
+        <div class="section-head">
+          <h2 id="prcal-h">How the chances have held up</h2>
+          <p class="note" id="prcal-note"></p>
+        </div>
+        <div class="scroll"><table id="props-cal" class="compact" aria-labelledby="prcal-h"></table></div>
+      </section>
+      <section aria-labelledby="prweeks-h">
+        <div class="section-head">
+          <h2 id="prweeks-h">Week by week</h2>
+          <p class="note" id="prweeks-note"></p>
+        </div>
+        <div class="scroll"><table id="props-weeks" class="compact" aria-labelledby="prweeks-h"></table></div>
+      </section>
+    </div>
+<!--/NFL-ONLY-->
     <!-- ============ past weeks ============ -->
     <div class="view" id="view-history" hidden>
       <section aria-labelledby="hist-h">
@@ -1714,6 +1768,186 @@ const historyView = (function () {
 })();
 
 
+/*NFL-ONLY*/
+/* ---------------- player props (NFL only) ----------------
+   Every prop the books posted (main lines and ladder rungs), as priced at the pricing
+   snapshot, with the closing line and the result. One file per week in props/, built
+   from the prop log by run_props.py; fetched when the section opens. */
+const propsView = (function () {
+  let loaded = false, index = null, cur = null;
+  const cache = {}, ps = { stat: "all", team: "", q: "", key: "gap", dir: -1, open: null };
+  const STAT = { pass_yds: "Passing yards", rush_yds: "Rushing yards", rec_yds: "Receiving yards", receptions: "Receptions",
+    carries: "Carries", pass_att: "Pass attempts", completions: "Completions", pass_td: "Passing TDs", ints: "Interceptions", anytime_td: "Anytime TD" };
+  const ORDER = Object.keys(STAT);
+  const get = f => cache[f] ? Promise.resolve(cache[f]) : fetch("props/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => (cache[f] = d));
+  const dec = p => (p.po == null || p.pu == null) ? p.po : p.po / Math.max(p.po + p.pu, 1e-9);     // our chance of the over, pushes set aside
+  const gap = p => p.fo == null || dec(p) == null ? null : dec(p) - p.fo;                          // ours minus the books', on the over
+  const lineTxt = p => p.s === "anytime_td" ? "Scores" : (p.alt ? Math.ceil(p.L) + "+" : String(p.L));
+  const opp = p => { const [, , a, h] = p.g.split("_"); return p.t === h ? "vs " + a : "at " + h; };
+  const bookTxt = (p, b) => { const x = (p.bk || {})[b]; if (!x) return "–"; return (x[0] != null ? odds(x[0]) : "–") + " / " + (x[1] != null ? odds(x[1]) : "–"); };
+  const pts = g => (Math.abs(g) * 100).toFixed(0) + " pts";
+  // The two books often post a player's main line a half point apart: one row per player and
+  // stat, at the line more books share (DraftKings's if they differ), each book's own line in its column.
+  const key = p => p.g + "|" + p.id + "|" + p.s;
+  function mainRows(d) {
+    const groups = {};
+    d.props.forEach(p => { (groups[key(p)] = groups[key(p)] || []).push(p); });
+    return Object.values(groups).map(gs => {
+      const main = gs.filter(p => !p.alt);
+      const pool = main.length ? main : gs.slice().sort((a, b) => Math.abs(a.L - (a.mu || 0)) - Math.abs(b.L - (b.mu || 0)));
+      const pick = pool.slice().sort((a, b) => Object.keys(b.bk || {}).length - Object.keys(a.bk || {}).length || ("draftkings" in (b.bk || {})) - ("draftkings" in (a.bk || {})))[0];
+      const cell = book => { const r = pool.find(x => (x.bk || {})[book]); return r ? (r.L !== pick.L ? r.L + ": " : "") + bookTxt(r, book) : "–"; };
+      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), ladder: gs.some(p => p.alt) };
+    });
+  }
+  const resBadge = p => {
+    if (!p.res || p.res === "void") return p.res === "void" ? H("span", { class: "res", text: "Void" }) : null;
+    if (p.res === "push") return H("span", { class: "res", text: "Push" });
+    const g = gap(p), ours = g == null ? null : (g >= 0 ? "win" : "loss");            // did the side we leaned to win?
+    return H("span", { class: "res " + (ours === p.res ? "w" : "l"), text: p.res === "win" ? (p.s === "anytime_td" ? "Scored" : "Over") : (p.s === "anytime_td" ? "No TD" : "Under") });
+  };
+
+  function open() {
+    if (loaded) return;
+    loaded = true;
+    get("index.json").then(ix => {
+      index = ix;
+      const banner = $("#props-banner");
+      if (!ix.flags_on) {
+        banner.hidden = false;
+        banner.replaceChildren(H("strong", { text: "No bets are flagged. " }), document.createTextNode("Against real 2025 DraftKings and FanDuel lines the books' prices were the better forecast, and the props the model would have picked broke even. Every prop is still priced and tracked here, so the record below shows whether that changes. Nothing here is a recommendation."));
+      }
+      $("#props-note").textContent = "Every passing, rushing and receiving prop DraftKings and FanDuel post, main lines and alternate ladders, priced by the model about three days before kickoff. Our chance comes from the player's projection and the range around it; the books' chance is their price with the vig taken out. Select a player to see his whole ladder.";
+      const weeks = (ix.weeks || []).slice().sort((a, b) => a.season - b.season || a.week - b.week);
+      if (!weeks.length) {
+        $("#props-foot").textContent = "No prices yet. The first ones arrive with the next daily props run (8:47 am Eastern), and each week fills in through the closing prices and the results.";
+        $("#view-props .filters").hidden = true;
+        [...$("#view-props").querySelectorAll("section")].slice(1).forEach(s => { s.hidden = true; });
+        return;
+      }
+      cur = weeks[weeks.length - 1].file;
+      seg($("#seg-prweek"), weeks.map(w => ({ v: w.file, t: (w.season !== weeks[weeks.length - 1].season ? w.season + " " : "") + "Week " + w.week })), () => cur, v => { cur = v; ps.open = null; show(); });
+      $("#pr-stat").addEventListener("change", e => { ps.stat = e.target.value; ps.open = null; draw(); });
+      $("#pr-team").addEventListener("change", e => { ps.team = e.target.value; draw(); });
+      $("#pr-search").addEventListener("input", e => { ps.q = e.target.value.trim().toLowerCase(); draw(); });
+      drawWeeks(weeks);
+      show();
+    }).catch(() => { $("#props-foot").textContent = "Props load from the published board; they are not available in a copy opened from disk."; });
+  }
+
+  function show() { get(cur).then(d => { if (cache[cur] === d) { drawRec(d); draw(); drawCalls(d); drawCal(d); } }); }
+
+  function drawRec(d) {
+    const s = d.summary || {}, box = (v, l) => H("div", {}, H("b", { text: v }), H("span", { text: l }));
+    const kids = [box(comma(s.main_lines || 0), "main lines priced"), box(comma(s.ladder_rungs || 0), "ladder rungs"),
+      box(s.graded ? comma(s.graded) : "–", s.graded ? "graded" : "graded (after the games)")];
+    if (s.brier_ours != null) kids.push(box(s.brier_ours.toFixed(3) + " / " + s.brier_books.toFixed(3), "Brier: ours / books' (lower is better)"));
+    if (s.moved_toward != null) kids.push(box(pct(s.moved_toward, 0) + " / " + pct(s.moved_away, 0), "lines moved toward / away from us"));
+    kids.push(box(index.flags_on ? (s.flagged ? s.flag_record : "None") : "Paused", "flagged bets"));
+    $("#props-rec").replaceChildren(...kids);
+    const stats = ORDER.filter(k => d.props.some(p => p.s === k));
+    if (ps.stat !== "all" && !stats.includes(ps.stat)) ps.stat = "all";
+    $("#pr-stat").replaceChildren(H("option", { value: "all", text: "All stats" }), ...stats.map(k => H("option", { value: k, text: STAT[k], ...(k === ps.stat ? { selected: "" } : {}) })));
+    const teams = [...new Set(d.props.map(p => p.t))].sort();
+    if (ps.team && !teams.includes(ps.team)) ps.team = "";
+    $("#pr-team").replaceChildren(H("option", { value: "", text: "All teams" }), ...teams.map(t => H("option", { value: t, text: t, ...(t === ps.team ? { selected: "" } : {}) })));
+  }
+
+  function ladder(d, p) {
+    const rungs = d.props.filter(x => x.g === p.g && x.id === p.id && x.s === p.s).sort((a, b) => a.L - b.L);
+    const t = H("table", { class: "compact" });
+    table(t, [{ t: "Line", l: 1 }, { t: "Our chance, over" }, { t: "Books', no vig" }, { t: "Ours − books'" }, { t: "DraftKings O / U" }, { t: "FanDuel O / U" }, { t: "EV per $1, over" }, { t: "Result", l: 1 }],
+      rungs.map(r => [r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L,
+        pct(dec(r)), r.fo == null ? "–" : pct(r.fo), gap(r) == null ? "–" : (gap(r) >= 0 ? "+" : "−") + pts(gap(r)),
+        { v: bookTxt(r, "draftkings"), cls: "px" }, { v: bookTxt(r, "fanduel"), cls: "px" },
+        r.vo == null ? "–" : spct(r.vo), r.y == null ? (r.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(r.y)),
+          r.res === "push" ? H("span", { class: "res", text: "Push" }) : H("span", { class: "res" + (r.res === "win" ? " w" : ""), text: r.res === "win" ? "Hit" : "Missed" }))]));
+    const one = rungs.some(r => r.alt);
+    return H("div", {}, t, H("p", { class: "note", style: "margin: 6px 12px 0", text: (one ? "Rungs posted over-only have no under to take the vig out; their no-vig chance assumes a 10% margin. " : "") + "EV is per $1 at the better of the two books' prices for the over, at our chance. Result: whether the over hit." }));
+  }
+
+  function draw() {
+    const d = cache[cur];
+    if (!d) return;
+    let rows = mainRows(d).filter(p => (ps.stat === "all" || p.s === ps.stat) && (!ps.team || p.t === ps.team) && (!ps.q || p.n.toLowerCase().includes(ps.q)));
+    const val = (p, k) => k === "gap" ? Math.abs(gap(p) || 0) : k === "name" ? p.n : k === "ours" ? dec(p) || 0 : k === "books" ? p.fo || 0 : k === "proj" ? p.mu || 0 : k === "line" ? p.L : 0;
+    rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); return (typeof A === "string" ? A.localeCompare(B) : A - B) * ps.dir; });
+    const head = [{ k: "name", t: "Player", l: 1 }, { t: "Game", l: 1 }, { t: "Stat", l: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" },
+      { k: "ours", t: "Ours, over" }, { k: "books", t: "Books'" }, { k: "gap", t: "Lean" }, { t: "DK O / U" }, { t: "FD O / U" }, { t: "Close" }, { t: "Result", l: 1 }];
+    const thead = H("thead", {}, H("tr", {}, head.map(c => {
+      if (!c.k) return H("th", { class: c.l ? "l" : "", scope: "col", text: c.t });
+      const btn = H("button", { type: "button", text: c.t, onclick: () => { ps.dir = ps.key === c.k ? -ps.dir : (c.l ? 1 : -1); ps.key = c.k; draw(); } });
+      if (ps.key === c.k) btn.setAttribute("aria-sort", ps.dir > 0 ? "ascending" : "descending");
+      return H("th", { class: c.l ? "l" : "", scope: "col" }, btn);
+    })));
+    const tbody = H("tbody");
+    rows.slice(0, 500).forEach(p => {
+      const g = gap(p), side = g == null ? null : g >= 0 ? "Over" : "Under";
+      const lean = g == null ? "–" : H("span", { class: "lean " + (g >= 0 ? "o" : "u") }, (p.fl ? H("span", { class: "chip", text: (p.fl === "over" ? "Over" : "Under") + " " + pts(g) }) : document.createTextNode(side + " " + pts(g))));
+      const name = H("span", {}, document.createTextNode(p.n), H("span", { class: "rec", text: p.pos + " · " + p.t }), p.snap === "open" ? H("span", { class: "early", text: "early" }) : null,
+        p.ladder ? H("span", { class: "early", text: "ladder" }) : null);
+      const close = p.cL == null || p.alt ? "–" : (p.cL === p.L ? "No move" : String(p.cL) + " (" + (p.cL > p.L ? "+" : "−") + Math.abs(p.cL - p.L).toFixed(1).replace(/\.0$/, "") + ")");
+      const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: STAT[p.s] || p.s }),
+        H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) }), H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
+        H("td", { text: p.fo == null ? "–" : pct(p.fo, 0) }), H("td", {}, lean), H("td", { class: "px", text: p.dk }), H("td", { class: "px", text: p.fd }),
+        H("td", { text: close }), H("td", { class: "l" }, p.y == null ? document.createTextNode(p.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(p.y)), resBadge(p)))];
+      const k = key(p), isOpen = ps.open === k;
+      const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(isOpen) }, ...cells);
+      const toggle = () => { ps.open = isOpen ? null : k; draw(); };
+      tr.addEventListener("click", toggle);
+      tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+      tbody.append(tr);
+      if (isOpen) tbody.append(H("tr", {}, H("td", { class: "ladder", colSpan: head.length }, ladder(d, p))));
+    });
+    $("#props-table").replaceChildren(thead, tbody);
+    $("#props-foot").textContent = rows.length
+      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}. Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
+      : "No props match.";
+  }
+
+  function drawCalls(d) {
+    const graded = mainRows(d).filter(p => (p.res === "win" || p.res === "loss") && gap(p) != null && !p.alt);
+    if (!graded.length) { $("#prcalls-note").textContent = "Appears once this week's games are played."; $("#props-calls").replaceChildren(); return; }
+    $("#prcalls-note").textContent = "This week's main lines where the model disagreed most with the books, and how they came out. Right: the result went the way the model leaned. Off: it went the books' way.";
+    const right = [], off = [];
+    graded.slice().sort((a, b) => Math.abs(gap(b)) - Math.abs(gap(a))).forEach(p => {
+      const ok = (gap(p) >= 0) === (p.res === "win");
+      (ok ? right : off).push(p);
+    });
+    const list = (title, xs) => {
+      const t = H("table", { class: "compact" });
+      table(t, [{ t: "Player", l: 1 }, { t: "Prop", l: 1 }, { t: "Lean", l: 1 }, { t: "Ours, over" }, { t: "Books'" }, { t: "Result" }],
+        xs.slice(0, 8).map(p => [H("span", {}, document.createTextNode(p.n), H("span", { class: "rec", text: p.t })), (STAT[p.s] || p.s) + " " + lineTxt(p),
+          (gap(p) >= 0 ? "Over" : "Under") + " " + pts(gap(p)), pct(dec(p), 0), pct(p.fo, 0), String(p.y)]));
+      return H("div", { style: "min-width: 0" }, H("h3", { text: `${title} (${xs.length})` }), H("div", { class: "scroll" }, t));
+    };
+    $("#props-calls").replaceChildren(list("Went the model's way", right), list("Went the books' way", off));
+  }
+
+  function drawCal(d) {
+    const wk = (d.summary || {}).calibration || [], wb = (d.summary || {}).calibration_books || [];
+    const ss = index.season || {}, sk = ss.calibration || [], sb = ss.calibration_books || [];
+    if (!sk.length) { $("#prcal-note").textContent = "Appears once games are graded: for each band of predicted chances, how often the over actually hit, ours and the books'."; $("#props-cal").replaceChildren(); return; }
+    $("#prcal-note").textContent = "For each band of predicted chances, how often the over actually hit. A well-calibrated chance hits about as often as it says. This week and every week on file, for our chances and the books' no-vig ones.";
+    const byBand = rows => Object.fromEntries(rows.map(r => [r.band, r]));
+    const W = byBand(wk), WB = byBand(wb), Sk = byBand(sk), SB = byBand(sb);
+    const bands = [...new Set([...sk.map(r => r.band), ...sb.map(r => r.band)])];
+    const cell = r => r ? `${pct(r.pred, 0)} → ${pct(r.actual, 0)} (${comma(r.n)})` : "–";
+    table($("#props-cal"), [{ t: "Predicted", l: 1 }, { t: "Ours, this week" }, { t: "Books', this week" }, { t: "Ours, all weeks" }, { t: "Books', all weeks" }],
+      bands.map(b => [b, cell(W[b]), cell(WB[b]), { v: cell(Sk[b]), cls: "strong" }, cell(SB[b])]));
+  }
+
+  function drawWeeks(weeks) {
+    $("#prweeks-note").textContent = "Each week's props in one line. Brier score: the squared error of the chance of the over, lower is better; ours against the books' no-vig chance on the same props. Lines moved: for main lines, how often the closing line moved toward the side we leaned, against away from it.";
+    table($("#props-weeks"), [{ t: "Week", l: 1 }, { t: "Main lines" }, { t: "Ladder rungs" }, { t: "Graded" }, { t: "Brier, ours" }, { t: "Brier, books'" }, { t: "Lines moved toward / away" }, { t: "Flagged bets" }],
+      weeks.slice().reverse().map(w => [w.season + " week " + w.week, comma(w.main_lines || 0), comma(w.ladder_rungs || 0), comma(w.graded || 0),
+        w.brier_ours == null ? "–" : { v: w.brier_ours.toFixed(4), cls: w.brier_ours <= w.brier_books ? "strong" : "" }, w.brier_books == null ? "–" : w.brier_books.toFixed(4),
+        w.moved_toward == null ? "–" : pct(w.moved_toward, 0) + " / " + pct(w.moved_away, 0), index.flags_on ? (w.flagged ? w.flag_record : "None") : "Paused"]));
+  }
+  return { open };
+})();
+/*/NFL-ONLY*/
+
 /* ---------------- this week's matchups (in the matchup dashboards' look) ----------------
    A board of this week's games, one row per game, and for each game the two team cards
    with this game's projections: team volume and yards, and every player's projected line. */
@@ -2077,17 +2311,19 @@ const matchups = (() => {
 
 /* ---------------- routing ---------------- */
 const views = { games: $("#view-games"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
+/*NFL-ONLY*/views.props = $("#view-props");/*/NFL-ONLY*/
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
   const mm = /^matchups\/(.+)$/.exec(h), mg = mm ? matchups.find(decodeURIComponent(mm[1])) : null;
-  const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups") ? h : "games";
+  const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups" || (h === "props" && views.props)) ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
   $("#mx-page").media = mg ? "print" : "not all";   // a printed matchup is one landscape page
   if (name === "matchups") matchups.board();
   if (mg) matchups.game(mg);
   if (name === "history") historyView.open();
+/*NFL-ONLY*/  if (name === "props") propsView.open();/*/NFL-ONLY*/
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {

@@ -1762,6 +1762,7 @@ const historyView = (function () {
 })();
 
 
+
 /* ---------------- this week's matchups (in the matchup dashboards' look) ----------------
    A board of this week's games, one row per game, and for each game the two team cards
    with this game's projections: team volume and yards, and every player's projected line. */
@@ -2129,7 +2130,7 @@ let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
   const mm = /^matchups\/(.+)$/.exec(h), mg = mm ? matchups.find(decodeURIComponent(mm[1])) : null;
-  const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups") ? h : "games";
+  const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups" || (h === "props" && views.props)) ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
   $("#mx-page").media = mg ? "print" : "not all";   // a printed matchup is one landscape page

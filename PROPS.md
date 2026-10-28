@@ -299,6 +299,17 @@ not in The Odds API's free data, so none are flagged.
 - **Stakes:** a quarter of the Kelly stake at our chance, at most 1% of bankroll per prop
   and 3% per game (scaled down together when a game's flags add up to more).
 
+## On the board
+
+The NFL board's **Props** section (`#props`, NFL only) shows each week from the log:
+every main line and ladder rung with DraftKings' and FanDuel's prices, our chance, the
+books' no-vig chance and the lean; select a player for his whole ladder; the closing line
+and the result once played. Below that, what went right and what was off (the biggest
+disagreements with the books, and which way they came out), calibration of our chances and
+the books' by band, and a week-by-week table. Past weeks stay selectable. The files are in
+`docs/props/`, rebuilt by `nflmodel/propboard.py` on every props run, and fetched when the
+section opens (so it works on the published site, not from a copy opened from disk).
+
 ## The log
 
 `data/props/`, committed by the **Player props** Action (`.github/workflows/props.yml`):
