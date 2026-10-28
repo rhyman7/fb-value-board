@@ -29,9 +29,13 @@ from .oddsapi import BOOK_WEIGHT
 from .props import SPECS, PropModel
 
 MARKET_STAT = {s.odds_key: k for k, s in SPECS.items() if s.odds_key}
+# Alternate yardage ladders (200+, 225+, 250+ ...): priced off the same distribution as the
+# main line. Ryan bets lower rungs more than the main line (Oct 2026).
+ALT_MARKETS = ["player_pass_yds_alternate", "player_rush_yds_alternate", "player_reception_yds_alternate"]
+MARKET_STAT.update({m: MARKET_STAT[m.removesuffix("_alternate")] for m in ALT_MARKETS})
 # The markets fetched: every one the model prices (ten). About 15 games x 10 markets x 3
 # snapshots (open, pricing, close) = 450 credits a week. Change with PROPS_MARKETS.
-DEFAULT_MARKETS = [s.odds_key for s in SPECS.values() if s.odds_key]
+DEFAULT_MARKETS = [s.odds_key for s in SPECS.values() if s.odds_key] + ALT_MARKETS
 
 MIN_EDGE = 0.05            # in probability; see PROPS.md for how it was chosen
 # Flags are paused (Oct 2026): against real 2025 DraftKings and FanDuel lines the model's
@@ -45,6 +49,9 @@ SHARP: set = set()         # no sharp book in the feed (DraftKings and FanDuel o
 MAX_HOLD = 0.10            # a two-way market holding more than this is not treated as liquid
 MAX_ODDS = 400             # longshots beyond +400 / -400 are not flagged
 ONE_SIDED_MARGIN = 0.08    # assumed two-way overround for one-sided markets (anytime TD)
+ALT_MARGIN = 0.10          # the same for a ladder rung posted over-only: an assumption (ladders
+                           # usually carry more margin than the main line), to be checked
+                           # against rungs posted with both sides once the log has them
 KELLY_FRACTION = min(C.KELLY_FRACTION, 0.25)
 MAX_STAKE_BET = 0.01       # share of bankroll on any one prop
 MAX_STAKE_GAME = 0.03      # across all props in one game
@@ -145,12 +152,13 @@ def consensus(o: pd.DataFrame, one_sided_margin: float = ONE_SIDED_MARGIN) -> pd
     pa, _ = O.no_vig(wide["over"].fillna(-110), wide["under"].fillna(-110))
     pw, _ = O.no_vig_power(wide["over"].fillna(-110), wide["under"].fillna(-110))
     one = wide["over"].notna() & wide["under"].isna()
-    wide["fair_prop"] = np.where(two, pa, np.where(one, O.one_sided_fair(wide["over"].fillna(100), one_sided_margin, "proportional"), np.nan))
-    wide["fair_power"] = np.where(two, pw, np.where(one, O.one_sided_fair(wide["over"].fillna(100), one_sided_margin, "power"), np.nan))
+    marg = np.where(wide["market"].str.endswith("_alternate"), ALT_MARGIN, one_sided_margin)
+    wide["fair_prop"] = np.where(two, pa, np.where(one, O.one_sided_fair(wide["over"].fillna(100), marg, "proportional"), np.nan))
+    wide["fair_power"] = np.where(two, pw, np.where(one, O.one_sided_fair(wide["over"].fillna(100), marg, "power"), np.nan))
     # an under posted alone (rare) gives a fair over too
-    lone_u = wide["under"].notna() & wide["over"].isna()
-    wide.loc[lone_u, "fair_prop"] = 1 - O.one_sided_fair(wide.loc[lone_u, "under"], one_sided_margin, "proportional")
-    wide.loc[lone_u, "fair_power"] = 1 - O.one_sided_fair(wide.loc[lone_u, "under"], one_sided_margin, "power")
+    lone_u = (wide["under"].notna() & wide["over"].isna()).to_numpy()
+    wide.loc[lone_u, "fair_prop"] = 1 - O.one_sided_fair(wide.loc[lone_u, "under"], marg[lone_u], "proportional")
+    wide.loc[lone_u, "fair_power"] = 1 - O.one_sided_fair(wide.loc[lone_u, "under"], marg[lone_u], "power")
     wide["w"] = wide["book"].map(BOOK_WEIGHT).fillna(0.5)
     wide["one_sided"] = ~two
     books_mkt = wide.groupby(["game_id", "player_id", "market"])["book"].nunique().rename("books_market")
@@ -170,7 +178,7 @@ def consensus(o: pd.DataFrame, one_sided_margin: float = ONE_SIDED_MARGIN) -> pd
         for side in ("over", "under"):
             s = g[g[side].notna()]
             if len(s):
-                best = s.loc[O.american_to_decimal(s[side]).argmax()]
+                best = s.iloc[int(np.argmax(O.american_to_decimal(s[side])))]
                 rec[f"best_{side}"], rec[f"best_{side}_book"] = int(best[side]), best["book"]
             else:
                 rec[f"best_{side}"], rec[f"best_{side}_book"] = np.nan, None
