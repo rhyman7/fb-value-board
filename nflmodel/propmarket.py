@@ -142,7 +142,7 @@ def consensus(o: pd.DataFrame, one_sided_margin: float = ONE_SIDED_MARGIN) -> pd
     o["line"] = np.where(o["market"] == "player_anytime_td", 0.5, o["line"])
     o["side"] = o["side"].replace({"yes": "over", "no": "under"})
     o = o[o["side"].isin(["over", "under"]) & o["line"].notna()]
-    key = ["event_id", "game_id", "player_id", "player", "market", "line"]
+    key = ["event_id", "commence", "game_id", "player_id", "player", "market", "line"]
     wide = o.pivot_table(index=key + ["book"], columns="side", values="price", aggfunc="last").reset_index()
     for c in ("over", "under"):
         if c not in wide:
