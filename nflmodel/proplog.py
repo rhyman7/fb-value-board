@@ -36,7 +36,7 @@ SUMMARY = DIR / "summary.json"
 
 LOG_COLS = ["row_id", "time", "snapshot", "season", "week", "game_id", "event_id", "commence", "player_id", "player",
             "team", "pos", "market", "stat", "line", "side", "proj", "books", "n_books", "sharp", "one_sided", "hold",
-            "price", "book", "fair", "fair_scaled", "our_p", "our_push", "edge", "ev", "kelly", "stake", "flagged",
+            "books_market", "price", "book", "fair", "fair_scaled", "our_p", "our_push", "edge", "ev", "kelly", "stake", "flagged",
             "why_not", "role_clear", "status"]
 RES_COLS = ["row_id", "graded", "actual", "result", "profit_flat", "close_line", "close_price", "close_fair",
             "clv_fair", "clv_ev", "clv_note"]

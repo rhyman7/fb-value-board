@@ -1,110 +1,38 @@
-"""Same-game simulation: player outcomes that move together with the game.
+"""Same-game combinations: player outcomes that move together.
 
-A quarterback's passing yards and his receivers' yards rise and fall together, and all
-of them with how many points the team scores. Single props don't need this; any
-combination of props from one game does.
+A quarterback's passing yards and his top receiver's yards go over together far more often
+than two independent props would; a receiver's catches and his yards even more so. Single
+props don't need any of this; any combination of props from one game does.
 
-The structure is a Gaussian copula with two factors per team:
+The structure is a Gaussian copula. Each leg (a player's stat) has its own distribution
+from props.PropModel, so every single-prop probability is exactly the model's. What the
+copula adds is one correlation per pair of legs, looked up by the kind of pair:
 
-  S   team scoring: (points - points implied by the board's projected margin and
-      total) / its spread. The two teams' S are drawn together, with the correlation
-      seen in past games.
-  P   the passing game beyond the scoreboard: the starting quarterback's passing-yards
-      residual with S taken out.
+  self   two stats of the same player (receptions and receiving yards)
+  team   two players on the same team, by role: QB (the projected starter), R1, R2, R3
+         (wide receivers and tight ends by target share), RB1 (the lead back by carries)
+  opp    the same roles on opposite teams (both quarterbacks' passing yards)
 
-Each player-stat has loadings (l_S, l_P), fitted on the tuning seasons. In a simulated
-game a player's normal score is z = l_S S + l_P P + sqrt(1 - l_S^2 - l_P^2) e, and his
-outcome is his own distribution's quantile at Phi(z). Every player's single-prop
-distribution is therefore exactly the one props.PropModel gives: the simulation changes
-the joint outcomes and nothing else (checked in evaluate()).
+Each correlation is fitted on the tuning seasons so that the chance both legs go over,
+summed over past pairs of that kind, matches how often both did. That targets the thing a
+combination bet pays on. With fewer than MIN_PAIRS past pairs, a kind gets no correlation.
+Correlations are shrunk toward zero by sample size.
 """
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from scipy import special, stats
+from scipy import optimize, special, stats
 
-from . import config as C, propdist as D, props as P
+from . import propdist as D, props as P
 
-CORR_STATS = {   # the player-stats the copula covers, by position group
-    "pass_yds": ("QB",), "pass_td": ("QB",), "completions": ("QB",),
-    "rec_yds": ("WR", "TE", "RB"), "receptions": ("WR", "TE", "RB"),
-    "rush_yds": ("RB", "QB"), "carries": ("RB",), "anytime_td": ("WR", "TE", "RB"),
+LEG_STATS = {   # the stats a combination can use, by role
+    "QB": ("pass_yds", "pass_td", "completions", "pass_att", "rush_yds"),
+    "R": ("rec_yds", "receptions", "anytime_td"),
+    "RB1": ("rush_yds", "carries", "rec_yds", "receptions", "anytime_td"),
 }
-
-
-# --------------------------------------------------------------------------
-# Normal scores of past outcomes
-# --------------------------------------------------------------------------
-
-def pit_z(model: P.PropModel, d: pd.DataFrame, stat: str, g: str, rng) -> np.ndarray:
-    """Randomized probability integral transform of the outcome, as a normal score."""
-    f = model.cdf_fn(d, stat, g)
-    y = np.maximum(np.round(P.actual(d, stat)), 0)
-    hi = f(y)[:, 0]
-    lo = f(y - 1)[:, 0]
-    u = lo + rng.uniform(size=len(y)) * (hi - lo)
-    return stats.norm.ppf(np.clip(u, 1e-4, 1 - 1e-4))
-
-
-def team_points(games_path=None) -> pd.DataFrame:
-    path = games_path or (C.RAW / "games.csv")
-    g = pd.read_csv(path, usecols=["game_id", "home_team", "away_team", "home_score", "away_score"])
-    for c in ("home_team", "away_team"):
-        g[c] = g[c].replace(C.TEAM_ALIASES)
-    h = g.rename(columns={"home_team": "team", "home_score": "pts"})[["game_id", "team", "pts"]]
-    a = g.rename(columns={"away_team": "team", "away_score": "pts"})[["game_id", "team", "pts"]]
-    return pd.concat([h, a], ignore_index=True)
-
-
-def scores_table(proj: pd.DataFrame, model: P.PropModel, seed: int = 0) -> pd.DataFrame:
-    """Long table of player-stat normal scores with their team's S and P factors."""
-    rng = np.random.default_rng(seed)
-    parts = []
-    for stat, groups in CORR_STATS.items():
-        for g in groups:
-            if (stat, g) not in model.counts and (stat, g) not in model.yards:
-                continue
-            d = proj[P.eligible(proj, stat, g)].reset_index(drop=True)
-            if d.empty:
-                continue
-            parts.append(pd.DataFrame({"game_id": d["game_id"], "team": d["team"], "opp": d["opp"], "season": d["season"],
-                                       "player_id": d["player_id"], "stat": stat, "group": g,
-                                       "z": pit_z(model, d, stat, g, rng), "imp_pts": d["imp_pts"].to_numpy()}))
-    z = pd.concat(parts, ignore_index=True)
-    tp = team_points()
-    z = z.merge(tp, on=["game_id", "team"], how="left")
-    z = z[z["pts"].notna()]
-    return z
-
-
-def fit_loadings(z: pd.DataFrame) -> dict:
-    """S spread and cross-team correlation, then loadings per player-stat by least squares."""
-    team = z.drop_duplicates(["game_id", "team"])[["game_id", "team", "opp", "pts", "imp_pts"]].copy()
-    resid = team["pts"] - team["imp_pts"]
-    sd = float(resid.std())
-    team["S"] = (resid - resid.mean()) / sd
-    opp = team[["game_id", "team", "S"]].rename(columns={"team": "opp", "S": "S_opp"})
-    tt = team.merge(opp, on=["game_id", "opp"], how="inner")
-    r_cross = float(np.corrcoef(tt["S"], tt["S_opp"])[0, 1])
-    qb = z[(z.stat == "pass_yds")][["game_id", "team", "z"]].drop_duplicates(["game_id", "team"]).rename(columns={"z": "zqb"})
-    team = team.merge(qb, on=["game_id", "team"], how="left")
-    rho_qb = float(np.corrcoef(team.dropna()["S"], team.dropna()["zqb"])[0, 1])
-    team["P"] = (team["zqb"] - rho_qb * team["S"]) / np.sqrt(1 - rho_qb ** 2)
-    x = z.merge(team[["game_id", "team", "S", "P"]], on=["game_id", "team"], how="left").dropna(subset=["S"])
-    load = {}
-    for (stat, g), d in x.groupby(["stat", "group"]):
-        if stat == "pass_yds":
-            load[f"{stat}|{g}"] = [round(rho_qb, 4), round(float(np.sqrt(1 - rho_qb ** 2)), 4), int(len(d))]
-            continue
-        dd = d.dropna(subset=["P"])
-        X = dd[["S", "P"]].to_numpy()
-        b = np.linalg.lstsq(X, dd["z"].to_numpy(), rcond=None)[0]
-        norm = np.hypot(*b)
-        if norm > 0.95:
-            b = b * 0.95 / norm
-        load[f"{stat}|{g}"] = [round(float(b[0]), 4), round(float(b[1]), 4), int(len(dd))]
-    return {"pts_sd": round(sd, 3), "cross_team_S": round(r_cross, 4), "qb_S": round(rho_qb, 4), "loadings": load}
+MIN_PAIRS = 300
+SHRINK = 300.0          # rho x n / (n + SHRINK)
 
 
 # --------------------------------------------------------------------------
@@ -114,149 +42,243 @@ def fit_loadings(z: pd.DataFrame) -> dict:
 def bvn_upper(a, b, rho):
     """P(Z1 > a, Z2 > b) for standard normals with correlation rho (Owen's T)."""
     h, k = -np.asarray(a, float), -np.asarray(b, float)
+    h, k = np.broadcast_arrays(h, k)
     rho = np.broadcast_to(np.asarray(rho, float), h.shape)
     s = np.sqrt(np.maximum(1 - rho ** 2, 1e-12))
     hs = np.where(np.abs(h) < 1e-9, 1e-9, h)
     ks = np.where(np.abs(k) < 1e-9, 1e-9, k)
-    ah = (k - rho * hs) / (hs * s)
-    ak = (h - rho * ks) / (ks * s)
-    c = np.where((hs * ks > 0) | ((hs * ks == 0) & (hs + ks >= 0)), 0.0, 0.5)
-    phi2 = 0.5 * stats.norm.cdf(h) + 0.5 * stats.norm.cdf(k) - special.owens_t(hs, ah) - special.owens_t(ks, ak) - c
+    ah = (ks - rho * hs) / (hs * s)
+    ak = (hs - rho * ks) / (ks * s)
+    c = np.where(hs * ks > 0, 0.0, 0.5)
+    phi2 = 0.5 * stats.norm.cdf(hs) + 0.5 * stats.norm.cdf(ks) - special.owens_t(hs, ah) - special.owens_t(ks, ak) - c
     return np.clip(phi2, 0, 1)
 
 
-def pair_corr(load: dict, key1: str, key2: str, same_team: bool, cross_s: float) -> float:
-    l1, l2 = load.get(key1), load.get(key2)
-    if l1 is None or l2 is None:
-        return 0.0
-    if same_team:
-        return l1[0] * l2[0] + l1[1] * l2[1]
-    return l1[0] * l2[0] * cross_s
+def joint_over(pa, pb, rho):
+    """Chance both legs go over, given each one's chance and the pair's correlation."""
+    za = stats.norm.ppf(1 - np.clip(pa, 1e-6, 1 - 1e-6))
+    zb = stats.norm.ppf(1 - np.clip(pb, 1e-6, 1 - 1e-6))
+    return bvn_upper(za, zb, rho)
 
 
 # --------------------------------------------------------------------------
-# Simulation of one game (live use)
+# Legs and their roles
 # --------------------------------------------------------------------------
 
-def simulate(players: pd.DataFrame, model: P.PropModel, legs: list[tuple], n: int = 20000, seed: int = 0) -> np.ndarray:
-    """Simulated outcomes for legs [(row index in players, stat), ...] of one game.
-    Returns (n, len(legs)) integer outcomes. Uses model.meta['correlation']."""
-    corr = model.meta.get("correlation") or {}
-    load = corr.get("loadings", {})
-    rng = np.random.default_rng(seed)
-    teams = sorted(players["team"].unique())
-    r = corr.get("cross_team_S", 0.0)
-    Ssamp = rng.multivariate_normal([0, 0], [[1, r], [r, 1]], size=n)
-    S = {t: Ssamp[:, i % 2] for i, t in enumerate(teams)}
-    Pf = {t: rng.standard_normal(n) for t in teams}
-    out = np.zeros((n, len(legs)))
-    for j, (i, stat) in enumerate(legs):
-        row = players.loc[[i]]
-        g = row["group"].iloc[0]
-        lS, lP = (load.get(f"{stat}|{g}") or [0.0, 0.0])[:2]
-        t = row["team"].iloc[0]
-        z = lS * S[t] + lP * Pf[t] + np.sqrt(max(1 - lS ** 2 - lP ** 2, 0)) * rng.standard_normal(n)
-        u = stats.norm.cdf(z)
-        kmax = P.SPECS[stat].kmax if P.SPECS[stat].kind == "count" else 700
-        grid = np.arange(kmax + 1, dtype=float)
-        cdf = model.cdf_fn(row.reset_index(drop=True), stat, g)(grid[None, :])[0]
-        out[:, j] = np.searchsorted(cdf, u)          # smallest k with F(k) >= u
+def roles(df: pd.DataFrame) -> pd.Series:
+    """QB (projected starter), R1-R3 (WR/TE by target share), RB1 (top back by carries)."""
+    r = pd.Series(pd.NA, index=df.index, dtype=object)
+    qb = (df["group"] == "QB") & (df["att_share"] > 0.5)
+    r[qb] = "QB"
+    key = [df["game_id"], df["team"]]
+    rec = df["group"].isin(["WR", "TE"]) & (df["active"] == 1)
+    rk = df["tgt_share"].where(rec).groupby(key).rank(ascending=False, method="first")
+    for i in (1, 2, 3):
+        r[rec & (rk == i)] = f"R{i}"
+    rb = (df["group"] == "RB") & (df["active"] == 1)
+    rk = df["car_share"].where(rb).groupby(key).rank(ascending=False, method="first")
+    r[rb & (rk == 1)] = "RB1"
+    return r
+
+
+def _stats_for(role):
+    return LEG_STATS["R"] if str(role).startswith("R") and role != "RB1" else LEG_STATS.get(role, ())
+
+
+def legs(df: pd.DataFrame, model: P.PropModel, played: bool = True) -> pd.DataFrame:
+    """Every leg in these games at its middle synthetic line (the standard line for
+    touchdowns): chance of the over and, for played games, whether it went over."""
+    df = df.copy()
+    df["role"] = roles(df)
+    out = []
+    for role in ("QB", "R1", "R2", "R3", "RB1"):
+        for stat in _stats_for(role):
+            g = {"QB": "QB", "RB1": "RB"}.get(role)
+            sub = df[df["role"] == role]
+            for grp in ([g] if g else ["WR", "TE"]):
+                if (stat, grp) not in model.counts and (stat, grp) not in model.yards:
+                    continue
+                d = sub[P.eligible(sub, stat, grp, played=played)].reset_index(drop=True)
+                if d.empty:
+                    continue
+                L = P.test_lines(P.mean(d, stat), stat)
+                mid = L[:, L.shape[1] // 2] if not P.SPECS[stat].fixed_lines else L[:, 0]
+                p, _, _ = model.probs(d, stat, grp, mid)
+                rec = {"game_id": d["game_id"].to_numpy(), "team": d["team"].to_numpy(), "player_id": d["player_id"].to_numpy(),
+                       "season": d["season"].to_numpy() if "season" in d else 0, "role": role, "stat": stat, "group": grp,
+                       "line": mid, "p": p}
+                if played:
+                    rec["hit"] = (P.actual(d, stat) > mid).astype(float)
+                out.append(pd.DataFrame(rec))
+    return pd.concat(out, ignore_index=True) if out else pd.DataFrame()
+
+
+def pair_key(kind, a_stat, a_role, b_stat, b_role):
+    a, b = f"{a_stat}@{a_role}", f"{b_stat}@{b_role}"
+    if kind == "self":
+        a, b = a_stat, b_stat
+    return "|".join([kind] + sorted([a, b]))
+
+
+def pairs(lg: pd.DataFrame) -> pd.DataFrame:
+    """All pairs of legs in the same game, labelled by kind."""
+    x = lg.reset_index(drop=True).assign(i=lambda d: np.arange(len(d)))
+    j = x.merge(x, on="game_id", suffixes=("_a", "_b"))
+    j = j[j["i_a"] < j["i_b"]]
+    self_ = j["player_id_a"] == j["player_id_b"]
+    team = (j["team_a"] == j["team_b"]) & ~self_
+    j["kind"] = np.where(self_, "self", np.where(team, "team", "opp"))
+    j["key"] = [pair_key(k, sa, ra, sb, rb) for k, sa, ra, sb, rb in zip(j["kind"], j["stat_a"], j["role_a"], j["stat_b"], j["role_b"])]
+    return j
+
+
+# --------------------------------------------------------------------------
+# Fitting
+# --------------------------------------------------------------------------
+
+def fit_rhos(pr: pd.DataFrame) -> dict:
+    """One correlation per kind of pair, matching the chance both went over."""
+    out = {}
+    for key, g in pr.groupby("key"):
+        n = len(g)
+        if n < MIN_PAIRS:
+            continue
+        target = (g["hit_a"] * g["hit_b"]).mean()
+        f = lambda r: joint_over(g["p_a"].to_numpy(), g["p_b"].to_numpy(), r).mean() - target
+        lo, hi = f(-0.6), f(0.95)
+        if lo > 0:
+            rho = -0.6
+        elif hi < 0:
+            rho = 0.95
+        else:
+            rho = optimize.brentq(f, -0.6, 0.95, xtol=1e-4)
+        out[key] = [round(float(rho * n / (n + SHRINK)), 4), int(n)]
     return out
 
 
-def combo_prob(players, model, legs_with_lines, n: int = 20000, seed: int = 0) -> float:
-    """Chance every leg wins, legs_with_lines = [(row index, stat, line, "over"|"under"), ...]."""
-    sims = simulate(players, model, [(i, st) for i, st, _, _ in legs_with_lines], n, seed)
-    ok = np.ones(n, bool)
-    for j, (_, _, line, side) in enumerate(legs_with_lines):
-        ok &= sims[:, j] > line if side == "over" else sims[:, j] < line
-    return float(ok.mean())
+def rho_for(rhos: dict, kind, a_stat, a_role, b_stat, b_role) -> float:
+    v = rhos.get(pair_key(kind, a_stat, a_role, b_stat, b_role))
+    return float(v[0]) if v else 0.0
+
+
+# --------------------------------------------------------------------------
+# Live use
+# --------------------------------------------------------------------------
+
+def nearest_corr(R: np.ndarray) -> np.ndarray:
+    """Clip negative eigenvalues so the matrix is a valid correlation matrix."""
+    w, v = np.linalg.eigh((R + R.T) / 2)
+    R2 = v @ np.diag(np.maximum(w, 1e-6)) @ v.T
+    d = np.sqrt(np.diag(R2))
+    return R2 / np.outer(d, d)
+
+
+def combo_prob(players: pd.DataFrame, model: P.PropModel, legs_in: list[tuple], n: int = 40000, seed: int = 0) -> dict:
+    """Chance every leg of a same-game combination wins.
+
+    players: one game's board rows (with role columns from roles()). legs_in: [(row label,
+    stat, line, "over"|"under")]. Returns the joint chance, the independent product and each
+    leg's own chance."""
+    rhos = (model.meta.get("correlation") or {}).get("pairs", {})
+    k = len(legs_in)
+    R = np.eye(k)
+    for a in range(k):
+        for b in range(a + 1, k):
+            ia, sa = legs_in[a][0], legs_in[a][1]
+            ib, sb = legs_in[b][0], legs_in[b][1]
+            ra, rb = players.loc[ia], players.loc[ib]
+            kind = "self" if ra["player_id"] == rb["player_id"] else ("team" if ra["team"] == rb["team"] else "opp")
+            r = rho_for(rhos, kind, sa, ra["role"], sb, rb["role"])
+            # an under leg is the mirror image: flip the sign of its correlations
+            if (legs_in[a][3] == "under") != (legs_in[b][3] == "under"):
+                r = -r
+            R[a, b] = R[b, a] = r
+    R = nearest_corr(R)
+    z = np.random.default_rng(seed).multivariate_normal(np.zeros(k), R, size=n)
+    win = np.ones(n, bool)
+    singles = []
+    for j, (i, stat, line, side) in enumerate(legs_in):
+        row = players.loc[[i]].reset_index(drop=True)
+        over, push, under = model.probs(row, stat, row["group"].iloc[0], np.array([line]))
+        p = float(over[0] if side == "over" else under[0])
+        singles.append(p)
+        win &= z[:, j] > stats.norm.ppf(1 - p)      # leg j wins in the top p of its own scale
+    return {"joint": float(win.mean()), "independent": float(np.prod(singles)), "legs": singles}
 
 
 # --------------------------------------------------------------------------
 # Evaluation (experiments/props_calibration.py)
 # --------------------------------------------------------------------------
 
-PAIRS = [   # (stat, group, role in team) x (stat, group, role): same-game pairs scored
-    ("QB pass yds & his top receiver's rec yds", ("pass_yds", "QB", 0), ("rec_yds", None, 1), True),
-    ("QB pass yds & his lead back's rush yds", ("pass_yds", "QB", 0), ("rush_yds", "RB", 1), True),
-    ("Two receivers' rec yds, same team", ("rec_yds", None, 1), ("rec_yds", None, 2), True),
-    ("Both quarterbacks' pass yds", ("pass_yds", "QB", 0), ("pass_yds", "QB", 0), False),
-    ("Top receiver's anytime TD & his QB's pass yds", ("anytime_td", None, 1), ("pass_yds", "QB", 0), True),
+SHOW = [   # pairs reported in the calibration report
+    ("QB pass yds & R1 rec yds", "team|pass_yds@QB|rec_yds@R1"),
+    ("QB pass yds & R2 rec yds", "team|pass_yds@QB|rec_yds@R2"),
+    ("R1 & R2 rec yds", "team|rec_yds@R1|rec_yds@R2"),
+    ("QB pass yds & RB1 rush yds", "team|pass_yds@QB|rush_yds@RB1"),
+    ("Both QBs' pass yds", "opp|pass_yds@QB|pass_yds@QB"),
+    ("QB pass TDs & R1 anytime TD", "team|anytime_td@R1|pass_td@QB"),
+    ("Same player: receptions & rec yds", "self|rec_yds|receptions"),
+    ("Same player: carries & rush yds", "self|carries|rush_yds"),
+    ("Same player: rec yds & anytime TD", "self|anytime_td|rec_yds"),
+    ("QB: completions & pass yds", "self|completions|pass_yds"),
 ]
 
 
 def evaluate(proj: pd.DataFrame, family: dict, tune: list[int], holdout_from: int) -> dict:
-    """Fit loadings on the tuning seasons; on the holdout, score joint 'both over' events
-    at the middle synthetic line, independent product against the copula; and check the
-    simulation reproduces single-prop probabilities."""
+    """Fit correlations on the tuning seasons; on the holdout, score 'both over' for each
+    kind of pair (independent product against the copula) and a three-leg stack."""
     tr = proj[proj.season.isin(tune)]
     m_t = P.PropModel(family).fit(tr)
-    zt = scores_table(tr, m_t)
-    fit = fit_loadings(zt)
-    out = {"loadings": fit, "pairs": []}
+    lt = legs(tr, m_t)
+    rhos = fit_rhos(pairs(lt))
+    corr = {"pairs": rhos, "min_pairs": MIN_PAIRS, "shrink": SHRINK, "fitted_on": [tune[0], tune[-1]]}
 
     ho = proj[proj.season >= holdout_from]
     m_h = P.PropModel(family).fit(proj[proj.season < holdout_from])
-    m_h.meta["correlation"] = fit
-    # each leg at its middle synthetic line
-    legs = []
-    for stat, groups in CORR_STATS.items():
-        for g in groups:
-            if (stat, g) not in m_h.counts and (stat, g) not in m_h.yards:
-                continue
-            d = ho[P.eligible(ho, stat, g)].reset_index(drop=True)
-            if d.empty:
-                continue
-            L = P.test_lines(P.mean(d, stat), stat)
-            mid = L[:, L.shape[1] // 2] if not P.SPECS[stat].fixed_lines else L[:, 0]
-            over, _, _ = m_h.probs(d, stat, g, mid, calibrate=False)
-            legs.append(pd.DataFrame({"game_id": d["game_id"], "team": d["team"], "player_id": d["player_id"], "stat": stat,
-                                      "group": g, "mu": P.mean(d, stat), "p": over, "hit": (P.actual(d, stat) > mid).astype(float),
-                                      "share": d["tgt_share"] if stat in ("rec_yds", "receptions", "anytime_td") else d["car_share"]}))
-    legs = pd.concat(legs, ignore_index=True)
-    legs["rank"] = 0
-    nonqb = legs["group"] != "QB"
-    legs.loc[nonqb, "rank"] = legs[nonqb].groupby(["game_id", "team", "stat"])["share"].rank(ascending=False, method="first").astype(int)
-    load = fit["loadings"]
-    for label, (s1, g1, r1), (s2, g2, r2), same in PAIRS:
-        a = legs[(legs.stat == s1) & (legs["rank"] == r1) & ((legs.group == g1) if g1 else legs.group.isin(["WR", "TE"]))]
-        b = legs[(legs.stat == s2) & (legs["rank"] == r2) & ((legs.group == g2) if g2 else legs.group.isin(["WR", "TE"]))]
-        if same:
-            j = a.merge(b, on=["game_id", "team"], suffixes=("_a", "_b"))
-            j = j[j["player_id_a"] != j["player_id_b"]]
-        else:
-            j = a.merge(b, on="game_id", suffixes=("_a", "_b"))
-            j = j[j["team_a"] < j["team_b"]]
-        if j.empty:
+    lh = legs(ho, m_h)
+    ph = pairs(lh)
+    ph["rho"] = [rhos.get(k, [0.0])[0] for k in ph["key"]]
+    ph["p_ind"] = ph["p_a"] * ph["p_b"]
+    ph["p_cop"] = joint_over(ph["p_a"].to_numpy(), ph["p_b"].to_numpy(), ph["rho"].to_numpy())
+    ph["hit"] = ph["hit_a"] * ph["hit_b"]
+    rows = []
+    for label, key in SHOW:
+        g = ph[ph["key"] == key]
+        if g.empty:
             continue
-        rho = np.array([pair_corr(load, f"{s1}|{ga}", f"{s2}|{gb}", same, fit["cross_team_S"]) for ga, gb in zip(j["group_a"], j["group_b"])])
-        za, zb = stats.norm.ppf(1 - j["p_a"].clip(1e-4, 1 - 1e-4)), stats.norm.ppf(1 - j["p_b"].clip(1e-4, 1 - 1e-4))
-        p_ind = j["p_a"] * j["p_b"]
-        p_cop = bvn_upper(za, zb, rho)
-        hit = j["hit_a"] * j["hit_b"]
-        out["pairs"].append({"pair": label, "n": int(len(j)), "rho": round(float(rho.mean()), 3),
-                             "pred_independent": round(float(p_ind.mean()), 4), "pred_copula": round(float(p_cop.mean()), 4),
-                             "actual": round(float(hit.mean()), 4),
-                             "brier_independent": round(D.brier(p_ind, hit), 5), "brier_copula": round(D.brier(p_cop, hit), 5),
-                             "logloss_independent": round(D.log_loss(p_ind, hit), 5), "logloss_copula": round(D.log_loss(p_cop, hit), 5)})
+        cl = ((g["p_cop"] - g["hit"]) ** 2 - (g["p_ind"] - g["hit"]) ** 2).groupby(g["game_id"]).sum()
+        rows.append({"pair": label, "n": int(len(g)), "rho": round(float(g["rho"].iloc[0]), 3),
+                     "pred_independent": round(float(g["p_ind"].mean()), 4), "pred_copula": round(float(g["p_cop"].mean()), 4),
+                     "actual": round(float(g["hit"].mean()), 4),
+                     "actual_se": round(float(np.sqrt(g["hit"].mean() * (1 - g["hit"].mean()) / len(g))), 4),
+                     "brier_independent": round(D.brier(g["p_ind"], g["hit"]), 5), "brier_copula": round(D.brier(g["p_cop"], g["hit"]), 5),
+                     "brier_diff_se": round(float(cl.std(ddof=1) * np.sqrt(len(cl)) / len(g)), 5)})
+    allp = ph[ph["rho"] != 0]
+    overall = {"n": int(len(allp)), "brier_independent": round(D.brier(allp["p_ind"], allp["hit"]), 5),
+               "brier_copula": round(D.brier(allp["p_cop"], allp["hit"]), 5),
+               "log_loss_independent": round(D.log_loss(allp["p_ind"], allp["hit"]), 5),
+               "log_loss_copula": round(D.log_loss(allp["p_cop"], allp["hit"]), 5)}
 
-    # single props through the simulation: same probabilities as the analytic ones
-    rng = np.random.default_rng(1)
-    chk = []
-    for stat in ("pass_yds", "rec_yds", "rush_yds", "receptions", "anytime_td"):
-        sub = legs[legs.stat == stat]
-        sub = sub.iloc[rng.choice(len(sub), min(150, len(sub)), replace=False)]
-        tab = ho.set_index(["game_id", "player_id"])
-        for r in sub.itertuples():
-            row = tab.loc[[(r.game_id, r.player_id)]].reset_index().iloc[[0]]
-            L = P.test_lines(P.mean(row, stat), stat)
-            line = L[0, L.shape[1] // 2] if not P.SPECS[stat].fixed_lines else L[0, 0]
-            sims = simulate(row, m_h, [(0, stat)], n=4000, seed=int(rng.integers(1e9)))[:, 0]
-            chk.append({"stat": stat, "analytic": float(r.p), "simulated": float((sims > line).mean()), "hit": r.hit})
-    chk = pd.DataFrame(chk)
-    out["single_prop_check"] = {
-        "n": int(len(chk)), "mean_abs_diff": round(float((chk["analytic"] - chk["simulated"]).abs().mean()), 4),
-        "brier_analytic": round(D.brier(chk["analytic"], chk["hit"]), 5), "brier_simulated": round(D.brier(chk["simulated"], chk["hit"]), 5),
-        "note": "4,000 simulated games per row; differences are Monte Carlo noise (about 0.006 at 50%)"}
-    return out
+    # a three-leg stack: QB pass yds, R1 and R2 rec yds, all over
+    trip = []
+    q = lh[(lh.role == "QB") & (lh.stat == "pass_yds")]
+    r1 = lh[(lh.role == "R1") & (lh.stat == "rec_yds")]
+    r2 = lh[(lh.role == "R2") & (lh.stat == "rec_yds")]
+    t = q.merge(r1, on=["game_id", "team"], suffixes=("", "_1")).merge(r2, on=["game_id", "team"], suffixes=("", "_2"))
+    if len(t):
+        R = np.eye(3)
+        R[0, 1] = R[1, 0] = rhos.get("team|pass_yds@QB|rec_yds@R1", [0])[0]
+        R[0, 2] = R[2, 0] = rhos.get("team|pass_yds@QB|rec_yds@R2", [0])[0]
+        R[1, 2] = R[2, 1] = rhos.get("team|rec_yds@R1|rec_yds@R2", [0])[0]
+        z = np.random.default_rng(0).multivariate_normal(np.zeros(3), nearest_corr(R), size=20000)
+        P3 = np.column_stack([t["p"], t["p_1"], t["p_2"]])
+        thr = stats.norm.ppf(1 - np.clip(P3, 1e-6, 1 - 1e-6))
+        pc = np.array([np.mean((z > th).all(1)) for th in thr])
+        hit = (t["hit"] * t["hit_1"] * t["hit_2"]).to_numpy()
+        trip = {"n": int(len(t)), "pred_independent": round(float(P3.prod(1).mean()), 4), "pred_copula": round(float(pc.mean()), 4),
+                "actual": round(float(hit.mean()), 4), "brier_independent": round(D.brier(P3.prod(1), hit), 5),
+                "brier_copula": round(D.brier(pc, hit), 5)}
+
+    # single props are untouched: the copula only joins legs, each keeps its own probability
+    return {"correlation": corr, "pairs": rows, "all_pairs_with_a_fitted_rho": overall, "three_leg_stack": trip,
+            "single_props": "unchanged by construction: each leg's chance is the model's own (see combo_prob)"}

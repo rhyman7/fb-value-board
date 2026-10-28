@@ -35,8 +35,9 @@ MARKET_STAT = {s.odds_key: k for k, s in SPECS.items() if s.odds_key}
 DEFAULT_MARKETS = ["player_pass_yds", "player_rush_yds", "player_reception_yds", "player_receptions", "player_anytime_td"]
 
 MIN_EDGE = 0.05            # in probability; see PROPS.md for how it was chosen
-MIN_BOOKS = 2              # books posting the same line, unless one of them is sharp
-SHARP = {"pinnacle", "betonlineag", "lowvig"}
+MIN_BOOKS = 2              # books posting this player's market (at any line): with DraftKings and
+                           # FanDuel only, both; their lines often differ by a half point
+SHARP: set = set()         # no sharp book in the feed (DraftKings and FanDuel only)
 MAX_HOLD = 0.10            # a two-way market holding more than this is not treated as liquid
 MAX_ODDS = 400             # longshots beyond +400 / -400 are not flagged
 ONE_SIDED_MARGIN = 0.08    # assumed two-way overround for one-sided markets (anytime TD)
@@ -148,6 +149,7 @@ def consensus(o: pd.DataFrame, one_sided_margin: float = ONE_SIDED_MARGIN) -> pd
     wide.loc[lone_u, "fair_power"] = 1 - O.one_sided_fair(wide.loc[lone_u, "under"], one_sided_margin, "power")
     wide["w"] = wide["book"].map(BOOK_WEIGHT).fillna(0.5)
     wide["one_sided"] = ~two
+    books_mkt = wide.groupby(["game_id", "player_id", "market"])["book"].nunique().rename("books_market")
 
     out = []
     for k, g in wide.groupby(key, sort=False):
@@ -169,7 +171,8 @@ def consensus(o: pd.DataFrame, one_sided_margin: float = ONE_SIDED_MARGIN) -> pd
             else:
                 rec[f"best_{side}"], rec[f"best_{side}_book"] = np.nan, None
         out.append(rec)
-    return pd.DataFrame(out)
+    out = pd.DataFrame(out)
+    return out.merge(books_mkt.reset_index(), on=["game_id", "player_id", "market"], how="left")
 
 
 def fit_one_sided_margin(log: pd.DataFrame, default: float = ONE_SIDED_MARGIN) -> float:
@@ -226,7 +229,8 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
 def flag(b: pd.DataFrame) -> pd.DataFrame:
     """Apply the flag rules and size the stakes."""
     b = b.copy()
-    liquid = ((b["n_books"] >= MIN_BOOKS) | b["sharp"]) & ((b["hold"].isna()) | (b["hold"] <= MAX_HOLD))
+    posted = b["books_market"] if "books_market" in b else b["n_books"]
+    liquid = ((posted >= MIN_BOOKS) | b["sharp"]) & ((b["hold"].isna()) | (b["hold"] <= MAX_HOLD))
     in_range = b["price"].abs() <= MAX_ODDS
     reasons = []
     for e, lq, rc, ir, ev in zip(b["edge"], liquid, b["role_clear"], in_range, b["ev"]):

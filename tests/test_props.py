@@ -263,3 +263,28 @@ def test_games_already_started_are_never_priced(tmp_path, monkeypatch):
     run_props.cmd_flag(F(tmp_path), log_it=False)
     run_props.cmd_close(F(tmp_path), log_it=False)
     assert not called
+
+
+# ---- same-game combinations --------------------------------------------------------
+
+def test_bivariate_normal_matches_scipy():
+    from scipy import stats
+    from nflmodel import propsim as S
+    for a, b, r in [(0.3, -0.2, 0.4), (-1.0, 0.5, -0.3), (1.2, 1.5, 0.8)]:
+        ref = stats.multivariate_normal([0, 0], [[1, r], [r, 1]]).cdf([-a, -b])
+        assert abs(float(S.bvn_upper(np.array([a]), np.array([b]), r)[0]) - ref) < 1e-6
+
+
+def test_combo_keeps_each_leg_and_raises_the_joint_chance():
+    from nflmodel import propsim as S
+    m = _toy_model()
+    m.meta["correlation"] = {"pairs": {"self|rec_yds|receptions": [0.7, 1000]}}
+    pl = _toy_board()
+    pl["role"] = "R1"
+    out = S.combo_prob(pl, m, [(0, "rec_yds", 70.5, "over"), (0, "receptions", 5.5, "over")], n=60000)
+    single = [float(m.probs(pl, s, "WR", np.array([l]))[0][0]) for s, l in (("rec_yds", 70.5), ("receptions", 5.5))]
+    assert np.allclose(out["legs"], single)
+    assert out["joint"] > out["independent"] + 0.05
+    assert out["joint"] <= min(single) + 0.01
+    opposite = S.combo_prob(pl, m, [(0, "rec_yds", 70.5, "over"), (0, "receptions", 5.5, "under")], n=60000)
+    assert opposite["joint"] < opposite["independent"]

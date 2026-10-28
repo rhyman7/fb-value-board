@@ -25,14 +25,11 @@ BASE = "https://api.the-odds-api.com/v4"
 SPORT = "americanfootball_nfl"
 USAGE_PATH = C.DATA / "props" / "api_usage.csv"
 
-# Books asked for, sharpest first. Ten or fewer, so a call costs one region per market.
-BOOKS = ["pinnacle", "betonlineag", "lowvig", "fanduel", "draftkings", "betmgm", "williamhill_us",
-         "betrivers", "fanatics", "espnbet"]
-# Weight of each book in the consensus no-vig price. An assumption, not a fit: books known
-# for taking sharp action and low holds count more. Revisit once the log shows which books
-# the closing price tends to move toward.
-BOOK_WEIGHT = {"pinnacle": 3.0, "betonlineag": 1.5, "lowvig": 1.5, "fanduel": 1.25, "draftkings": 1.0,
-               "betmgm": 0.75, "williamhill_us": 0.75, "betrivers": 0.75, "fanatics": 0.75, "espnbet": 0.75}
+# Books asked for: DraftKings and FanDuel only (Ryan's call, Oct 2026). Any one to ten named
+# books cost the same (one region per market), so adding books later costs no credits.
+BOOKS = [b.strip() for b in os.environ.get("PROPS_BOOKS", "draftkings,fanduel").split(",") if b.strip()]
+# Weight of each book in the consensus no-vig price; the two count equally.
+BOOK_WEIGHT = {"draftkings": 1.0, "fanduel": 1.0}
 
 PROPS_RESERVE = int(os.environ.get("PROPS_RESERVE", "40"))   # never spend below this many credits
 

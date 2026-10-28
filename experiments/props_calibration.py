@@ -258,14 +258,33 @@ def run_select(proj):
     print(t.to_string(index=False))
 
 
+def run_sim(proj):
+    """Refit the same-game correlations and update the saved parameters and report."""
+    rep = S.evaluate(proj, FAMILY, TUNE, C.HOLDOUT_FROM)
+    m = P.PropModel.load()
+    if m is not None:
+        m.meta["correlation"] = rep["correlation"]
+        m.save()
+    path = OUT / "props_calibration.json"
+    if path.exists():
+        full = json.loads(path.read_text())
+        full["sim"] = rep
+        path.write_text(json.dumps(full, indent=1, default=float))
+    print(pd.DataFrame(rep["pairs"]).to_string(index=False))
+    print(rep["all_pairs_with_a_fitted_rho"], rep["three_leg_stack"], sep="\n")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--select", action="store_true")
+    ap.add_argument("--sim", action="store_true", help="only refit and score the same-game correlations")
     ap.add_argument("--proj", type=Path, default=None)
     args = ap.parse_args()
     proj = load_proj(args.proj)
     if args.select:
         return run_select(proj)
+    if args.sim:
+        return run_sim(proj)
 
     stats = list(P.SPECS)
     hist = {st: P.recent_history(proj, st) for st in stats}
@@ -326,7 +345,7 @@ def main():
     prod.iso = iso_all.iso
     prod.meta = {"fitted_through": int(proj[proj.played.astype(bool)].season.max()),
                  "tuning": [TUNE[0], TUNE[-1]], "holdout_from": C.HOLDOUT_FROM,
-                 "correlation": sim_report["loadings"]}
+                 "correlation": sim_report["correlation"]}
     prod.save()
 
     # ---- report ------------------------------------------------------------------
@@ -358,8 +377,9 @@ def main():
     # edge threshold, set on the tuning seasons: how far from 50% does the model have to be
     # at the median line before its side wins often enough to beat -110?
     # (each tuning season with its leave-one-out widths and correction)
+    # Touchdowns and interceptions are left out: their line is a fixed 0.5, not a median.
     tmed = pd.concat([median_line_test(tune[tune.season == h], tmodels[h], st, hist[st])
-                      for h in TUNE for st in stats], ignore_index=True)
+                      for h in TUNE for st in stats if not P.SPECS[st].fixed_lines], ignore_index=True)
     thr = []
     for t in (0.0, 0.02, 0.03, 0.04, 0.05, 0.06, 0.08, 0.10):
         x = tmed[(tmed["p_cal"] - 0.5).abs() >= t]
@@ -424,7 +444,8 @@ def print_report(rep):
     print("\n== pushes on whole-number lines")
     print(pd.DataFrame(rep["pushes"]).round(4).to_string(index=False))
     print("\n== game simulation")
-    print(json.dumps(rep["sim"], indent=1, default=float)[:4000])
+    print(pd.DataFrame(rep["sim"]["pairs"]).to_string(index=False))
+    print(rep["sim"]["all_pairs_with_a_fitted_rho"], rep["sim"]["three_leg_stack"], sep="\n")
 
 
 if __name__ == "__main__":
