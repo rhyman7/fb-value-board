@@ -95,6 +95,30 @@ Each piece removed in turn (`python experiments/players_ablation.py`):
 The defense matters less than usage and game situation, the same pattern as
 the game model.
 
+### More inputs tested, October 2026
+
+`python experiments/players_more_test.py` (average miss; tuning 2014-2018, holdout 2019 on):
+
+| Change | Tuning | Holdout | Kept? |
+|---|---|---|---|
+| Team pass attempts with pace and neutral pass rate | 6.445 → 6.431 | 6.176 → 6.179 | No: no gain |
+| Team carries, same | 5.607 → 5.599 | 5.588 → 5.577 | No: too small to matter |
+| Boosted last step for quarterbacks (yards, attempts, completions, TDs) | worse on all four | worse on all four | No |
+| Questionable multiplier (below), rushing yards, RBs and others | 15.07 → 14.05 | 12.61 → 11.88 | Yes, New projections |
+| Same, receiving yards | 20.37 → 19.20 | 18.09 → 17.28 | Yes |
+| Same, carries / targets / receptions | 4.58 → 4.32 / 2.40 → 2.27 / 1.77 → 1.68 | 3.12 → 3.03 / 1.92 → 1.87 / 1.51 → 1.47 | Yes |
+
+Players listed Questionable who play get less than their usual usage, more so the less
+they practiced: about 0.9 of the projection after a full practice, 0.8 after limited, 0.7
+after a week of no practice (receiving yards, all seasons before 2026). The new
+projections, which already see practice status, still ran high on these players. So the
+New projections are scaled by a multiplier per position and practice status, fitted each
+season on earlier seasons only and shrunk toward 1 by n / (n + 200)
+(`players_ml.questionable`). Shrinkage of 50 scored better on the tuning seasons, 200
+since 2019; 200 was taken because 50 overcorrected in recent seasons (projections then ran
+low by about 2.5 yards). Scored on Questionable players who played, which is what a prop
+settles on; a player who sits voids the bet.
+
 ## Limits
 
 - No cornerback-by-receiver matchups: that needs coverage charting (PFF or Next

@@ -6,7 +6,7 @@ positions where it tested better on both the tuning seasons (2014-2018) and sinc
 (experiments/players_roles_test.py), with a gradient-boosted model that also sees the role
 inputs (nflmodel/roles.py): snap share, close-game shares, depth chart, background, team pace
 and neutral pass rate. Walk-forward: each season is predicted by a model trained on earlier
-seasons only. Not used by the board yet.
+seasons only. Shown on the board as the New projections, with the Questionable adjustment below.
 """
 from __future__ import annotations
 
@@ -31,6 +31,47 @@ def add_features(proj: pd.DataFrame, R: dict) -> pd.DataFrame:
     for st in ADOPT:
         out[st + "_recent"] = out[st + "_sum"] / out["one_sum"].replace(0, np.nan)
     return out
+
+
+# Questionable players who play get less than their usual usage (Oct 2026, players_more_test.py):
+# a multiplier per position and practice status, from earlier seasons only, shrunk toward 1
+# by n / (n + Q_SHRINK). Applied after the boosted step.
+Q_STATS = ("carries", "rush_yds", "targets", "receptions", "rec_yds")
+Q_GROUPS = ("RB", "WR", "TE")
+Q_SHRINK = 200
+Q_RANGE = (0.5, 1.2)
+
+
+def questionable(p: pd.DataFrame, first: int = 2014, shrink: float = Q_SHRINK) -> pd.DataFrame:
+    """Scale the projections of players listed Questionable (report_lvl 1), by position and
+    practice status, with multipliers fitted on earlier seasons' Questionable players who
+    played. Players not listed, or with no earlier sample, are left alone."""
+    p = p.copy()
+    if "report_lvl" not in p or "practice_lvl" not in p:
+        return p
+    q = (p["report_lvl"] == 1) & p["group"].isin(Q_GROUPS)
+    played = p["played"].astype(bool) & (p["active"] == 1)
+    p["q_mult"] = 1.0
+    for st in Q_STATS:
+        if st + "_proj" not in p or st not in p:
+            continue
+        mult = pd.Series(1.0, index=p.index)
+        for s in sorted(p.loc[q, "season"].unique()):
+            if s < first:
+                continue
+            tr = p[q & played & (p["season"] < s) & (p[st + "_proj"] > 0.5) & p[st].notna()]
+            if tr.empty:
+                continue
+            g = tr.groupby(["group", "practice_lvl"])
+            n = g.size()
+            m = (1 + n / (n + shrink) * (g[st].sum() / g[st + "_proj"].sum() - 1)).clip(*Q_RANGE)
+            te = q & (p["season"] == s)
+            k = pd.MultiIndex.from_frame(p.loc[te, ["group", "practice_lvl"]])
+            mult[te] = pd.Series(m.reindex(k).to_numpy(), index=p.index[te]).fillna(1.0)
+        p[st + "_proj"] = p[st + "_proj"] * mult
+        if st == "rec_yds":
+            p["q_mult"] = mult
+    return p
 
 
 def _model():

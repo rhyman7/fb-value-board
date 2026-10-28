@@ -62,7 +62,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             from . import players_ml, roles
             R = roles.load_all(games, refresh_current=refresh, verbose=False)
             pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
-            ml = players_ml.walk_forward(players_ml.add_features(pall, R), first=season)
+            ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=season), first=C.FIRST_TEST_SEASON)
             new = ml[ml["season"] == season]
         except Exception as exc:
             print(f"  new projections skipped ({exc})")

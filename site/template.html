@@ -369,6 +369,7 @@ td .act { font-weight: 700; }
 .mx .g-track { stroke: var(--track); } .mx .g-arc { stroke: var(--tc-ink); } .mx .g-needle { stroke: var(--text); } .mx .g-hub { fill: var(--text); }
 .mx .gauge-value { font-size: 1.625rem; line-height: 1.1; font-stretch: 62%; font-weight: 800; }
 .mx .gauge-label, .mx .gauge-rank { font-size: 0.78rem; color: var(--text-dim); }
+.mx .gauge-new { font-size: 0.78rem; font-weight: 700; color: #5598e7; }
 .mx .mini-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; }
 .mx .mini-stat .val { font-size: 1.1875rem; font-stretch: 68%; font-weight: 700; }
 .mx .mini-stat .lbl, .mx .mini-stat .avg { font-size: 0.78rem; color: var(--text-dim); }
@@ -2086,7 +2087,8 @@ const matchups = (() => {
     const rows = [];
     games().forEach(g => ["away", "home"].forEach(s => {
       const ps = playersOf(g, g[s]);
-      rows.push({ key: g.id + "|" + g[s], pass: sum(ps, "pass_yds"), rush: sum(ps, "rush_yds"), pts: ptsFor(g.proj, s),
+      rows.push({ key: g.id + "|" + g[s], pass: sum(ps, "pass_yds"), rush: sum(ps, "rush_yds"),
+        rush_new: ps.reduce((a, p) => a + (p.proj_new && p.proj_new.rush_yds != null ? p.proj_new.rush_yds : p.proj.rush_yds || 0), 0), pts: ptsFor(g.proj, s),
         att: (TP[g.id + "|" + g[s]] || {}).pass_att, car: (TP[g.id + "|" + g[s]] || {}).carries });
     }));
     const byKey = Object.fromEntries(rows.map(r => [r.key, r]));
@@ -2182,7 +2184,7 @@ const matchups = (() => {
       <line class="g-needle" x1="${cx}" y1="${cy}" x2="${nx.toFixed(2)}" y2="${ny.toFixed(2)}" stroke-width="2"/>
       <circle class="g-hub" cx="${cx}" cy="${cy}" r="3.5"/></svg>`;
   }
-  const gauge = (label, v, max, rank, n) => `<div class="gauge-block">${gaugeSvg(v, max)}<div class="gauge-value">${n0(v)}</div><div class="gauge-label">${label}</div><div class="gauge-rank">#${rank} of ${n}</div></div>`;
+  const gauge = (label, v, max, rank, n, nv) => `<div class="gauge-block">${gaugeSvg(v, max)}<div class="gauge-value">${n0(v)}</div><div class="gauge-label">${label}</div><div class="gauge-rank">#${rank} of ${n}</div>${nv != null ? `<div class="gauge-new">New ${n0(nv)}</div>` : ""}</div>`;
   const mini = (label, v, avg) => `<div class="mini-stat"><div class="val">${v}</div><div class="lbl">${label}</div><div class="avg">${avg}</div></div>`;
   const badge = (label, v, cls) => `<div class="badge"><span class="label">${label}</span><span class="value ${cls || ""}">${v}</span></div>`;
   const pctx = x => x == null ? "–" : Math.round(x * 100) + "%";
@@ -2285,7 +2287,7 @@ const matchups = (() => {
       </div>
       <div class="stat-columns">
         <div class="stat-col offense"><h3>Offense, projected</h3>
-          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n)}</div>
+          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n, MX_NEW ? me.rush_new : null)}</div>
           <div class="mini-stats">${mini("Points", n1(me.pts), "avg " + n1(W.avg.pts))}${mini("Pass att", n1(me.att), "avg " + n1(W.avg.att))}${mini("Carries", n1(me.car), "avg " + n1(W.avg.car))}</div>
         </div>
         <div class="center-col">
@@ -2294,7 +2296,7 @@ const matchups = (() => {
           <div class="rank-line"><div class="lbl">Season efficiency rank of ${rk.n}</div></div>` : ""}
         </div>
         <div class="stat-col defense"><h3>Defense, projected to allow</h3>
-          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n)}</div>
+          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n, MX_NEW ? them.rush_new : null)}</div>
           <div class="mini-stats">${mini("Points", n1(them.pts), "avg " + n1(W.avg.pts))}${mini("Pass att", n1(them.att), "avg " + n1(W.avg.att))}${mini("Carries", n1(them.car), "avg " + n1(W.avg.car))}</div>
         </div>
       </div>
@@ -2309,7 +2311,7 @@ const matchups = (() => {
     const where = [dayName(g) + (g.time ? ", " + clock(g.time) + " ET" : ""), (g.detail && g.detail.stadium) || ""].filter(Boolean).join(". ");
     return `<div class="mx-game"><div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
-      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}${MX_NEW ? " New: the new projections (playing time, depth charts, background and team pace, through a machine-learning last step), shown next to the current ones for running backs' rushing and running backs' and wide receivers' receiving; a dash where there is none." : ""}</p>
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}${MX_NEW ? " New: the new projections (playing time, depth charts, background and team pace, through a machine-learning last step), shown next to the current ones for running backs' rushing and running backs' and wide receivers' receiving; a dash where there is none. Under the rushing dials, New is the team's rushing yards with the new numbers where there are any." : ""}</p>
       <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p></div>`;
   }
   function game(g) {
