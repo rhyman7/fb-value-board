@@ -411,3 +411,10 @@ def test_a_player_on_the_board_twice_is_priced_for_the_right_game():
     o = PM.match(_toy_odds(line=60.5), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
     b = PM.price(PM.consensus(o), board, _toy_model())
     assert len(b) == 2 and (b["game_id"] == "2026_09_DAL_PHI").all() and b.loc[b.side == "over", "proj"].iloc[0] == 80.0
+
+
+def test_a_thin_opening_snapshot_is_taken_again():
+    import run_props
+    log = pd.DataFrame({"event_id": ["a", "b", "b", "b"], "snapshot": "open",
+                        "market": ["player_anytime_td", "player_reception_yds", "player_rush_yds", "player_pass_yds"]})
+    assert run_props.complete_opens(log) == {"b"}        # 'a' had only the anytime-TD market: try again

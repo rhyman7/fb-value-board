@@ -253,7 +253,8 @@ not in The Odds API's free data, so none are flagged.
   the main line. Rungs posted over-only assume a 10% two-way margin (`ALT_MARGIN`), to be
   checked against rungs with both sides once the log has them. `PROPS_MARKETS` to change.
 - **Live, three snapshots per game** (`.github/workflows/props.yml`):
-  - open: the first daily run (12:47 UTC) once props are posted, kickoff 3-8 days away;
+  - open: the daily runs (12:47 UTC) with kickoff 3-8 days away, until the snapshot has the main
+    passing, rushing and receiving yards markets (books often post the anytime-TD market first);
   - pricing: the first daily run with kickoff 3 days away or less (Friday for Sunday
     games, when injury reports are mostly out). **Bets are decided here only**;
   - close: runs every 30 minutes in the usual kickoff windows take every game's prices

@@ -112,6 +112,20 @@ def _setup():
     return players, games, season, week, model
 
 
+# Books post a game's props over several days, often the anytime-TD market first. An opening
+# snapshot counts as done only once it has the main yardage markets; until then each daily run
+# takes it again (an empty or thin response costs only the markets it returns).
+OPEN_NEEDS = ("player_reception_yds", "player_rush_yds", "player_pass_yds")
+
+
+def complete_opens(log: pd.DataFrame) -> set:
+    if log.empty:
+        return set()
+    o = log[log["snapshot"] == "open"]
+    got = o.groupby("event_id")["market"].agg(set)
+    return {e for e, m in got.items() if all(x in m for x in OPEN_NEEDS)}
+
+
 def cmd_flag(client, log_it=True, now=None):
     """The daily run. Each game gets an 'open' snapshot once props are posted (kickoff more
     than PROPS_OPEN_DAYS away) and one 'flag' snapshot, where bets are decided, on the first
@@ -121,8 +135,10 @@ def cmd_flag(client, log_it=True, now=None):
         return
     now = now or pd.Timestamp.now(tz="UTC")
     snaps = PLOG.snapshots()
-    have = {k: set(snaps[(snaps["kind"] == k) & (snaps["rows"].astype(int) > 0)]["event_id"]) for k in ("open", "flag")}
-    margin = PM.fit_one_sided_margin(PLOG.read_log())
+    log = PLOG.read_log()
+    have = {"flag": set(snaps[(snaps["kind"] == "flag") & (snaps["rows"].astype(int) > 0)]["event_id"]),
+            "open": complete_opens(log)}
+    margin = PM.fit_one_sided_margin(log)
     mk = markets()
     for ev in client.events():
         days = (_when(ev["commence_time"]) - now).total_seconds() / 86400
