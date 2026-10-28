@@ -71,7 +71,17 @@ def price_event(client, ev, mk, players, games, model, margin):
         return None, 0
     o = PM.match(rows, players, games)
     cons = PM.consensus(o, margin)
-    return PM.price(cons, players, model), len(rows)
+    priced = PM.price(cons, players, model)
+    alt = PM.with_new(players)
+    if alt is not None and not priced.empty:          # the same props at the new projections
+        pn = PM.price(cons, alt, model)
+        if not pn.empty:
+            k = ["game_id", "player_id", "market", "line", "side"]
+            stat_new = {c[: -len("_proj_new")] for c in alt.columns if c.endswith("_proj_new")}
+            pn = pn[pn["stat"].isin(stat_new)]                # only the stats the new projections cover
+            pn = pn[k + ["proj", "our_p", "our_push", "edge", "ev"]].rename(columns={"proj": "proj_new", "our_p": "our_p_new", "our_push": "our_push_new", "edge": "edge_new", "ev": "ev_new"})
+            priced = priced.merge(pn.drop_duplicates(k), on=k, how="left")
+    return priced, len(rows)
 
 
 def _snap(client, ev, kind, mk, players, games, model, margin, season, week, log_it):

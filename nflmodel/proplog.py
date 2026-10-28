@@ -29,6 +29,7 @@ from . import config as C, odds as O, propdist as D
 
 DIR = C.DATA / "props"
 LOG = DIR / "prop_log.csv"
+LOG_NEW = DIR / "prop_log_new.csv"       # our chance from the new projections, by row_id (append-only)
 RESULTS = DIR / "prop_results.csv"
 SNAPS = DIR / "snapshots.csv"
 WEEKLY = DIR / "weekly_summary.csv"
@@ -38,6 +39,7 @@ LOG_COLS = ["row_id", "time", "snapshot", "season", "week", "game_id", "event_id
             "team", "pos", "market", "stat", "line", "side", "proj", "books", "n_books", "sharp", "one_sided", "hold",
             "books_market", "price", "book", "fair", "fair_scaled", "our_p", "our_push", "edge", "ev", "kelly", "stake", "flagged",
             "why_not", "role_clear", "status"]
+NEW_COLS = ["row_id", "proj_new", "our_p_new", "our_push_new", "edge_new", "ev_new"]
 RES_COLS = ["row_id", "graded", "actual", "result", "profit_flat", "close_line", "close_price", "close_fair",
             "clv_fair", "clv_ev", "clv_note"]
 
@@ -74,6 +76,8 @@ def _fmt(v):
 
 
 def append_priced(priced: pd.DataFrame, snapshot: str, season: int, week: int) -> int:
+    """Append priced sides to the log. Rows that carry our_p_new also go to the new-projection
+    log, under the same row_id."""
     if priced is None or priced.empty:
         return 0
     t = _now()
@@ -83,11 +87,17 @@ def append_priced(priced: pd.DataFrame, snapshot: str, season: int, week: int) -
         r["row_id"] = row_id(t, snapshot, r["game_id"], r["player_id"], r["market"], r["line"], r["side"])
         rows.append(r)
     _append(LOG, LOG_COLS, rows)
+    new = [r for r in rows if r.get("our_p_new") is not None and not (isinstance(r.get("our_p_new"), float) and np.isnan(r["our_p_new"]))]
+    _append(LOG_NEW, NEW_COLS, new)
     return len(rows)
 
 
 def read_log() -> pd.DataFrame:
     return pd.read_csv(LOG, dtype={"player_id": str}) if LOG.exists() else pd.DataFrame(columns=LOG_COLS)
+
+
+def read_new() -> pd.DataFrame:
+    return pd.read_csv(LOG_NEW) if LOG_NEW.exists() else pd.DataFrame(columns=NEW_COLS)
 
 
 def read_results() -> pd.DataFrame:

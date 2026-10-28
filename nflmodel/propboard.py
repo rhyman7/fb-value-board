@@ -97,6 +97,15 @@ def records(log: pd.DataFrame, res: pd.DataFrame) -> pd.DataFrame:
     out["why_not"] = first["why_not"]
     out["row_over"], out["row_under"] = o["row_id"], u["row_id"]
     out = out.reset_index()
+    nw = PLOG.read_new()
+    if len(nw):
+        nw = nw.drop_duplicates("row_id").set_index("row_id")
+        pno, pnu = nw["our_p_new"].reindex(out["row_over"]).to_numpy(), nw["our_p_new"].reindex(out["row_under"]).to_numpy()
+        out["pn_over"] = pno
+        out["proj_new"] = nw["proj_new"].reindex(out["row_over"]).to_numpy()
+        out["pn_under"] = np.where(np.isnan(pnu), 1 - pno - nw["our_push_new"].reindex(out["row_over"]).fillna(0).to_numpy(), pnu)
+    else:
+        out["pn_over"] = out["pn_under"] = out["proj_new"] = np.nan
 
     # closing line for the same player and market: same line if the books still had it
     cl = log[log["snapshot"] == "close"]
@@ -159,9 +168,22 @@ def summary(x: pd.DataFrame) -> dict:
         "moved_points": _num(mv.mean(), 2) if len(mv) else None, "moved_n": int(len(mv)),
         "flagged": int((x["flag_over"] | x["flag_under"]).sum()),
         "flag_record": f"{fl.count(1.0)}-{fl.count(-1.0)}-{fl.count(0.0)}",
+        "new": _new_vs(dec, hit, ours),
         "calibration": D.calibration_table(ours, hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
         "calibration_books": D.calibration_table(dec["fair_over"], hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
     }
+
+
+def _new_vs(dec, hit, ours) -> dict | None:
+    """The new projections against the current ones and the books, on the props both priced."""
+    if "pn_over" not in dec:
+        return None
+    m = dec["pn_over"].notna().to_numpy()
+    if not m.any():
+        return None
+    new = dec["pn_over"][m] / (dec["pn_over"][m] + dec["pn_under"][m])
+    return {"n": int(m.sum()), "brier_new": _num(D.brier(new, hit[m]), 5), "brier_ours": _num(D.brier(ours[m], hit[m]), 5),
+            "brier_books": _num(D.brier(dec["fair_over"][m], hit[m]), 5)}
 
 
 def _rec(r) -> dict:
@@ -169,6 +191,7 @@ def _rec(r) -> dict:
         "g": r["game_id"], "id": r["player_id"], "n": r["player"], "t": r["team"], "pos": r["pos"], "s": r["stat"],
         "alt": bool(str(r["market"]).endswith("_alternate")), "L": _num(r["line"], 1), "mu": _num(r["proj"], 1),
         "po": _num(r["p_over"]), "pu": _num(r["p_under"]), "pp": _num(r["p_push"]), "fo": _num(r["fair_over"]),
+        "pno": _num(r.get("pn_over")), "pnu": _num(r.get("pn_under")), "mun": _num(r.get("proj_new"), 1),
         "eo": _num(r["edge_over"]), "eu": _num(r["edge_under"]), "vo": _num(r["ev_over"]), "vu": _num(r["ev_under"]),
         "bk": _books(r["books"]), "fl": "over" if r["flag_over"] else "under" if r["flag_under"] else None,
         "wn": r["why_not"] if isinstance(r["why_not"], str) else "",

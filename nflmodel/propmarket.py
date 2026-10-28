@@ -85,6 +85,9 @@ def board_players(payload: dict) -> pd.DataFrame:
              "active": 1, "played": False, "started": np.nan}
         for k, v in (p.get("proj") or {}).items():
             r[f"{k}_proj"] = v if v is not None else 0.0
+        for k, v in (p.get("proj_new") or {}).items():
+            if v is not None:
+                r[f"{k}_proj_new"] = v
         why = p.get("why") or {}
         for k in ("tgt_share", "car_share", "att_share", "tgt_share_hist", "car_share_hist", "games"):
             r[k] = why.get(k)
@@ -205,12 +208,14 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
         return cons
     cons = cons.copy()
     cons["stat"] = cons["market"].map(MARKET_STAT)
-    pl = players.set_index("player_id")
+    # a player can be on the board for two games (this week's and next week's), so look him up by game too
+    pl = players.drop_duplicates(["game_id", "player_id"]).set_index(["game_id", "player_id"])
+    cons = cons[pd.MultiIndex.from_frame(cons[["game_id", "player_id"]]).isin(pl.index)]
     rows = []
     for (stat, ), g in cons.groupby(["stat"]):
         if stat not in SPECS:
             continue
-        d = pl.loc[g["player_id"]].reset_index()
+        d = pl.loc[list(zip(g["game_id"], g["player_id"]))].reset_index()
         for grp in d["group"].unique():
             m = (d["group"] == grp).to_numpy()
             if (stat, grp) not in model.counts and (stat, grp) not in model.yards:
@@ -236,6 +241,19 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
     if out.empty:
         return out
     return flag(out)
+
+
+def with_new(players: pd.DataFrame) -> pd.DataFrame | None:
+    """The board's players with the new projections (players_ml.py) in place of the current
+    ones where there are any; None if the board has none."""
+    cols = [c for c in players.columns if c.endswith("_proj_new")]
+    if not cols:
+        return None
+    p = players.copy()
+    for c in cols:
+        base = c[: -len("_new")]
+        p[base] = p[c].where(p[c].notna(), p[base])
+    return p
 
 
 def flag(b: pd.DataFrame) -> pd.DataFrame:

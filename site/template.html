@@ -188,6 +188,7 @@ a.bug:hover { border-color: var(--ink); }
 .form-recs b { font: 800 32px/1 var(--display); }
 .form-recs span { font-size: 12.5px; color: var(--ink-3); }
 td.w { font-weight: 700; } td.dim { color: var(--ink-3); }
+td.newp, th.newp { color: var(--s1); } td.newp { font-weight: 700; }
 
 /* ---- charts ---- */
 svg { display: block; width: 100%; height: auto; overflow: visible; }
@@ -842,6 +843,7 @@ const dzEl = p => { const z = dzOf(p); return z ? H("sup", { class: "dz dz-" + z
 const dzHtml = p => { const e = dzEl(p); return e ? e.outerHTML : ""; };
 // a status chip is still shown when the superscript doesn't already say it
 const chipText = p => p.status && !dzFromStatus(p.status) ? p.status : null;
+const NEW_NOTE = " New: the new projections, built with playing time (snap share, its trend, share of carries and targets in close games), depth charts, background (age, draft pick, years in the league) and team pace, through a machine-learning last step. They are shown only where they tested better than the current ones on past seasons: running backs' carries and rushing yards, and wide receivers' and backs' catches and receiving yards; other players show a dash. Both are kept, so they can be compared week by week.";
 const dzReady = Promise.race([
   fetch("designations.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => {
     if (!j || !Array.isArray(j.players) || !j.checked) return;
@@ -1551,8 +1553,15 @@ function diagChart(node, o) {
     WR: [["targets", "Targets", f1], ["receptions", "Rec", f1], ["rec_yds", "Rec yds", f0], ["td", "Anytime TD", null]],
   };
   COLS.TE = COLS.WR;
+  // New projections (role inputs and a machine-learning last step), next to the current ones,
+  // for the stats they cover; only when the data has them (the college board has none yet)
+  const HAS_NEW = P.some(p => p.proj_new);
+  if (HAS_NEW) Object.keys(COLS).forEach(k => {
+    COLS[k] = COLS[k].flatMap(c => ["carries", "rush_yds", "receptions", "rec_yds"].includes(c[0]) ? [c, ["new:" + c[0], "New", c[2]]] : [c]);
+  });
   const score = p => (p.proj.pass_yds || 0) / 2.5 + (p.proj.rush_yds || 0) + (p.proj.rec_yds || 0);
-  const val = (p, k) => k === "score" ? score(p) : k === "td" ? (p.pos === "QB" ? 1 - Math.exp(-(p.proj.rush_td || 0)) : p.td_any) : k === "name" ? p.name : p.proj[k];
+  const newv = (p, k) => (p.proj_new || {})[k];
+  const val = (p, k) => k === "score" ? score(p) : k === "td" ? (p.pos === "QB" ? 1 - Math.exp(-(p.proj.rush_td || 0)) : p.td_any) : k === "name" ? p.name : k.startsWith("new:") ? newv(p, k.slice(4)) : p.proj[k];
   const teams = [...new Set(P.map(p => p.team))].sort();
   $("#p-team").replaceChildren(H("option", { value: "", text: "All teams" }), ...teams.map(t => H("option", { value: t, text: t })));
   $("#p-team").addEventListener("change", e => {
@@ -1606,7 +1615,8 @@ function diagChart(node, o) {
       const chip = chipText(p);
       const name = H("span", {}, document.createTextNode(p.name), dzEl(p), H("span", { class: "rec", text: p.pos + " · " + p.team }), chip ? H("span", { class: "status", text: chip }) : null);
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp })];
-      cols.forEach(c => cells.push(H("td", { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
+      cols.forEach(c => cells.push(H("td", c[0].startsWith("new:") ? { class: "newp", text: newv(p, c[0].slice(4)) == null ? "–" : c[2](newv(p, c[0].slice(4))) }
+        : { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
       const open = ps.open === p.id + p.game;
       const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(open) }, ...cells);
       const toggle = () => { ps.open = open ? null : p.id + p.game; draw(); };
@@ -1616,7 +1626,7 @@ function diagChart(node, o) {
       if (open) tbody.append(H("tr", {}, H("td", { class: "why", colSpan: head.length }, why(p))));
     });
     t.replaceChildren(thead, tbody);
-    $("#players-foot").textContent = rows.length ? `${rows.length} players. Status comes from the weekly roster and injury report; game-day inactives are named about 90 minutes before kickoff, so check late news.` + dzFoot() : "No players match.";
+    $("#players-foot").textContent = rows.length ? `${rows.length} players. Status comes from the weekly roster and injury report; game-day inactives are named about 90 minutes before kickoff, so check late news.` + (HAS_NEW ? NEW_NOTE : "") + dzFoot() : "No players match.";
   }
   draw();
   DZ_REDRAW.push(draw);
@@ -1712,20 +1722,31 @@ const historyView = (function () {
       const xs = all.filter(p => p.act && (p.proj[k] || 0) >= (k === "pass_yds" ? 100 : 10)).map(p => Math.abs(p.proj[k] - p.act[k]));
       return xs.length ? `${({ pass_yds: "passing", rush_yds: "rushing", rec_yds: "receiving" })[k]} yards ${(xs.reduce((a, b) => a + b, 0) / xs.length).toFixed(1)} (${xs.length} players)` : null;
     }).filter(Boolean);
-    $("#hp-note").textContent = "Each player's projection as frozen at kickoff, with what he actually did. " + (miss.length ? "Average miss this week: " + miss.join(", ") + "." : "Results appear once the games are played.");
+    // the new projections against the current ones, on the same players
+    const vs = ["rush_yds", "rec_yds"].map(k => {
+      const xs = all.filter(p => p.act && p.proj_new && p.proj_new[k] != null && (p.proj[k] || 0) >= 10);
+      if (!xs.length) return null;
+      const m = f => xs.reduce((a, p) => a + Math.abs(f(p) - p.act[k]), 0) / xs.length;
+      return `${({ rush_yds: "rushing", rec_yds: "receiving" })[k]} yards, current ${m(p => p.proj[k]).toFixed(1)} against new ${m(p => p.proj_new[k]).toFixed(1)} (${xs.length} players)`;
+    }).filter(Boolean);
+    $("#hp-note").textContent = "Each player's projection as frozen at kickoff, with what he actually did. " + (miss.length ? "Average miss this week: " + miss.join(", ") + "." : "Results appear once the games are played.")
+      + (vs.length ? " Current against new projections, average miss: " + vs.join("; ") + "." : "");
     const cols = COLS[hs.pos];
     let rows = all.filter(p => (hs.pos === "All" || p.pos === hs.pos || (hs.pos === "RB" && p.pos === "FB")) && (!hs.team || p.team === hs.team) && (!hs.q || p.name.toLowerCase().includes(hs.q)));
     // Each stat has a Proj and an Actual column; any of them sorts (first click high to low,
     // A to Z for names; again to flip). Players without that number sort last.
     const tdsOf = p => p.act ? (p.act.rec_td || 0) + (p.act.rush_td || 0) : null;
     const score = src => (src.pass_yds || 0) / 2.5 + (src.rush_yds || 0) + (src.rec_yds || 0);
-    const stats = [...cols.map(c => ({ k: c[0], t: c[1] })), { k: "td", t: "Touchdown", pt: "Chance", at: "Scored" }];
+    const weekNew = all.some(p => p.proj_new);
+    const NEWK = ["carries", "rush_yds", "receptions", "rec_yds"];
+    const stats = [...cols.map(c => ({ k: c[0], t: c[1], nw: weekNew && NEWK.includes(c[0]) })), { k: "td", t: "Touchdown", pt: "Chance", at: "Scored" }];
     const val = (p, key) => {
       if (key === "name") return p.name;
       if (key === "opp") return p.opp;
       if (key === "score") return score(p.proj);
       const [k, side] = key.split("|");
       if (k === "td") return side === "p" ? (p.pos === "QB" ? null : p.td_any) : tdsOf(p);
+      if (side === "n") return p.proj_new && p.proj_new[k] != null ? p.proj_new[k] : null;
       return side === "p" ? p.proj[k] || 0 : p.act ? p.act[k] || 0 : null;
     };
     if (!["name", "opp", "score"].includes(hs.key) && !stats.some(c => hs.key.startsWith(c.k + "|"))) { hs.key = "score"; hs.dir = -1; }
@@ -1743,9 +1764,10 @@ const historyView = (function () {
     const top = H("tr", {},
       H("th", { class: "l stick", scope: "col", rowspan: 2 }, sortBtn("name", "Player", true)),
       H("th", { class: "l", scope: "col", rowspan: 2 }, sortBtn("opp", "Opp", true)),
-      ...stats.map(c => H("th", { class: "grp pair", scope: "colgroup", colspan: 2, text: c.t })));
+      ...stats.map(c => H("th", { class: "grp pair", scope: "colgroup", colspan: c.nw ? 3 : 2, text: c.t })));
     const sub2 = H("tr", {}, ...stats.flatMap(c => [
       H("th", { class: "pair", scope: "col" }, sortBtn(c.k + "|p", c.pt || "Proj")),
+      ...(c.nw ? [H("th", { class: "newp", scope: "col" }, sortBtn(c.k + "|n", "New"))] : []),
       H("th", { scope: "col" }, sortBtn(c.k + "|a", c.at || "Actual"))]));
     const tbody = H("tbody");
     rows.slice(0, 400).forEach(p => {
@@ -1755,14 +1777,15 @@ const historyView = (function () {
       const actual = text => !p.graded ? H("td", { class: "actual", text: "" }) : !p.act ? H("td", { class: "dnp", text: "DNP" }) : H("td", { class: "actual", text });
       cols.forEach(c => {
         const fmt = /yds/.test(c[0]) ? f0 : f1;
-        tds.push(H("td", { class: "pair", text: fmt(p.proj[c[0]]) }), actual(p.act ? fmt(p.act[c[0]]) : ""));
+        const nv = weekNew && NEWK.includes(c[0]) ? [H("td", { class: "newp", text: p.proj_new && p.proj_new[c[0]] != null ? fmt(p.proj_new[c[0]]) : "–" })] : [];
+        tds.push(H("td", { class: "pair", text: fmt(p.proj[c[0]]) }), ...nv, actual(p.act ? fmt(p.act[c[0]]) : ""));
       });
       const n = tdsOf(p);
       tds.push(H("td", { class: "pair", text: p.pos === "QB" ? "–" : Math.round(p.td_any * 100) + "%" }), actual(n == null ? "" : n > 0 ? "Yes" + (n > 1 ? " (" + n + ")" : "") : "No"));
       tbody.append(H("tr", {}, ...tds));
     });
     $("#hist-players").replaceChildren(H("thead", {}, top, sub2), tbody);
-    $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. Touchdown: the projected anytime-TD chance and whether he scored a rushing or receiving touchdown. DNP: no box score (did not play).`;
+    $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. Touchdown: the projected anytime-TD chance and whether he scored a rushing or receiving touchdown. DNP: no box score (did not play).` + (weekNew ? NEW_NOTE : "");
   }
   return { open };
 })();
@@ -1781,6 +1804,8 @@ const propsView = (function () {
   const ORDER = Object.keys(STAT);
   const get = f => cache[f] ? Promise.resolve(cache[f]) : fetch("props/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => (cache[f] = d));
   const dec = p => (p.po == null || p.pu == null) ? p.po : p.po / Math.max(p.po + p.pu, 1e-9);     // our chance of the over, pushes set aside
+  const ndec = p => p.pno == null ? null : p.pnu == null ? p.pno : p.pno / Math.max(p.pno + p.pnu, 1e-9);   // the same, new projections
+  let HASN = false;
   const gap = p => p.fo == null || dec(p) == null ? null : dec(p) - p.fo;                          // ours minus the books', on the over
   const lineTxt = p => p.s === "anytime_td" ? "Scores" : (p.alt ? Math.ceil(p.L) + "+" : String(p.L));
   const opp = p => { const [, , a, h] = p.g.split("_"); return p.t === h ? "vs " + a : "at " + h; };
@@ -1838,10 +1863,12 @@ const propsView = (function () {
   function show() { get(cur).then(d => { if (cache[cur] === d) { drawRec(d); draw(); drawCalls(d); drawCal(d); } }); }
 
   function drawRec(d) {
+    HASN = d.props.some(p => p.pno != null);
     const s = d.summary || {}, box = (v, l) => H("div", {}, H("b", { text: v }), H("span", { text: l }));
     const kids = [box(comma(s.main_lines || 0), "main lines priced"), box(comma(s.ladder_rungs || 0), "ladder rungs"),
       box(s.graded ? comma(s.graded) : "–", s.graded ? "graded" : "graded (after the games)")];
     if (s.brier_ours != null) kids.push(box(s.brier_ours.toFixed(3) + " / " + s.brier_books.toFixed(3), "Brier: ours / books' (lower is better)"));
+    if (s.new && s.new.brier_new != null) kids.push(box(s.new.brier_ours.toFixed(3) + " / " + s.new.brier_new.toFixed(3) + " / " + s.new.brier_books.toFixed(3), `Brier: current / new / books' (${comma(s.new.n)} props both priced)`));
     if (s.moved_toward != null) kids.push(box(pct(s.moved_toward, 0) + " / " + pct(s.moved_away, 0), "lines moved toward / away from us"));
     kids.push(box(index.flags_on ? (s.flagged ? s.flag_record : "None") : "Paused", "flagged bets"));
     $("#props-rec").replaceChildren(...kids);
@@ -1856,9 +1883,10 @@ const propsView = (function () {
   function ladder(d, p) {
     const rungs = d.props.filter(x => x.g === p.g && x.id === p.id && x.s === p.s).sort((a, b) => a.L - b.L);
     const t = H("table", { class: "compact" });
-    table(t, [{ t: "Line", l: 1 }, { t: "Our chance, over" }, { t: "Books', no vig" }, { t: "Ours − books'" }, { t: "DraftKings O / U" }, { t: "FanDuel O / U" }, { t: "EV per $1, over" }, { t: "Result", l: 1 }],
+    const nw = HASN && rungs.some(r => r.pno != null);
+    table(t, [{ t: "Line", l: 1 }, { t: "Our chance, over" }, ...(nw ? [{ t: "New, over" }] : []), { t: "Books', no vig" }, { t: "Ours − books'" }, { t: "DraftKings O / U" }, { t: "FanDuel O / U" }, { t: "EV per $1, over" }, { t: "Result", l: 1 }],
       rungs.map(r => [r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L,
-        pct(dec(r)), r.fo == null ? "–" : pct(r.fo), gap(r) == null ? "–" : (gap(r) >= 0 ? "+" : "−") + pts(gap(r)),
+        pct(dec(r)), ...(nw ? [{ v: ndec(r) == null ? "–" : pct(ndec(r)), cls: "newp" }] : []), r.fo == null ? "–" : pct(r.fo), gap(r) == null ? "–" : (gap(r) >= 0 ? "+" : "−") + pts(gap(r)),
         { v: bookTxt(r, "draftkings"), cls: "px" }, { v: bookTxt(r, "fanduel"), cls: "px" },
         r.vo == null ? "–" : spct(r.vo), r.y == null ? (r.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(r.y)),
           r.res === "push" ? H("span", { class: "res", text: "Push" }) : H("span", { class: "res" + (r.res === "win" ? " w" : ""), text: r.res === "win" ? "Hit" : "Missed" }))]));
@@ -1870,10 +1898,10 @@ const propsView = (function () {
     const d = cache[cur];
     if (!d) return;
     let rows = mainRows(d).filter(p => (ps.stat === "all" || p.s === ps.stat) && (!ps.team || p.t === ps.team) && (!ps.q || p.n.toLowerCase().includes(ps.q)));
-    const val = (p, k) => k === "gap" ? Math.abs(gap(p) || 0) : k === "name" ? p.n : k === "ours" ? dec(p) || 0 : k === "books" ? p.fo || 0 : k === "proj" ? p.mu || 0 : k === "line" ? p.L : 0;
+    const val = (p, k) => k === "gap" ? Math.abs(gap(p) || 0) : k === "name" ? p.n : k === "ours" ? dec(p) || 0 : k === "new" ? ndec(p) || 0 : k === "books" ? p.fo || 0 : k === "proj" ? p.mu || 0 : k === "line" ? p.L : 0;
     rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); return (typeof A === "string" ? A.localeCompare(B) : A - B) * ps.dir; });
     const head = [{ k: "name", t: "Player", l: 1 }, { t: "Game", l: 1 }, { t: "Stat", l: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" },
-      { k: "ours", t: "Ours, over" }, { k: "books", t: "Books'" }, { k: "gap", t: "Lean" }, { t: "DK O / U" }, { t: "FD O / U" }, { t: "Close" }, { t: "Result", l: 1 }];
+      { k: "ours", t: "Ours, over" }, ...(HASN ? [{ k: "new", t: "New, over", cls: "newp" }] : []), { k: "books", t: "Books'" }, { k: "gap", t: "Lean" }, { t: "DK O / U" }, { t: "FD O / U" }, { t: "Close" }, { t: "Result", l: 1 }];
     const thead = H("thead", {}, H("tr", {}, head.map(c => {
       if (!c.k) return H("th", { class: c.l ? "l" : "", scope: "col", text: c.t });
       const btn = H("button", { type: "button", text: c.t, onclick: () => { ps.dir = ps.key === c.k ? -ps.dir : (c.l ? 1 : -1); ps.key = c.k; draw(); } });
@@ -1888,7 +1916,8 @@ const propsView = (function () {
         p.ladder ? H("span", { class: "early", text: "ladder" }) : null);
       const close = p.cL == null || p.alt ? "–" : (p.cL === p.L ? "No move" : String(p.cL) + " (" + (p.cL > p.L ? "+" : "−") + Math.abs(p.cL - p.L).toFixed(1).replace(/\.0$/, "") + ")");
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: STAT[p.s] || p.s }),
-        H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) }), H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
+        H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) + (p.mun != null ? " / " + p.mun : "") }), H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
+        ...(HASN ? [H("td", { class: "newp", text: ndec(p) == null ? "–" : pct(ndec(p), 0) })] : []),
         H("td", { text: p.fo == null ? "–" : pct(p.fo, 0) }), H("td", {}, lean), H("td", { class: "px", text: p.dk }), H("td", { class: "px", text: p.fd }),
         H("td", { text: close }), H("td", { class: "l" }, p.y == null ? document.createTextNode(p.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(p.y)), resBadge(p)))];
       const k = key(p), isOpen = ps.open === k;
@@ -1901,7 +1930,7 @@ const propsView = (function () {
     });
     $("#props-table").replaceChildren(thead, tbody);
     $("#props-foot").textContent = rows.length
-      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}. Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
+      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${HASN ? " New, over: our chance from the new projections (Proj shows current / new where there is one); the lean uses the current ones." : ""} Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
       : "No props match.";
   }
 
@@ -1956,6 +1985,7 @@ const matchups = (() => {
   const WEEK = DATA.slate.weeks[0];
   const RT = Object.fromEntries((DATA.ratings || []).map(r => [r.team, r]));
   const PL = (DATA.players && DATA.players.players) || [];
+  const MX_NEW = PL.some(p => p.proj_new);     // the new projections, shown next to the current ones
   const TP = {};
   ((DATA.players && DATA.players.teams) || []).forEach(t => { TP[t.game + "|" + t.team] = t; });
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -2229,9 +2259,9 @@ const matchups = (() => {
     const tables = [
       table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints) },
         { t: "Cmp", n: 1, f: p => n1(p.proj.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att) }], "pass"),
-      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rush_td) },
+      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds) }, ...(MX_NEW ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rush_yds != null ? n0(p.proj_new.rush_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rush_td) },
         { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries) }], "rush"),
-      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions) },
+      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds) }, ...(MX_NEW ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rec_yds != null ? n0(p.proj_new.rec_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions) },
         LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–" }], "rec"),
     ].join("");
     const d = [];
@@ -2279,7 +2309,7 @@ const matchups = (() => {
     const where = [dayName(g) + (g.time ? ", " + clock(g.time) + " ET" : ""), (g.detail && g.detail.stadium) || ""].filter(Boolean).join(". ");
     return `<div class="mx-game"><div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
-      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}</p>
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}${MX_NEW ? " New: the new projections (playing time, depth charts, background and team pace, through a machine-learning last step), shown next to the current ones for running backs' rushing and running backs' and wide receivers' receiving; a dash where there is none." : ""}</p>
       <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p></div>`;
   }
   function game(g) {

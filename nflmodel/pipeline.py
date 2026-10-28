@@ -54,10 +54,22 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov)
         pproj = players.walk_forward(ptable, first_test=season)
         upcoming_ids = set(frame.loc[~frame.played & frame.spread_line.notna() & (frame.season == season), "game_id"])
-        player_board = players.board(pproj, pinfo, upcoming_ids)
+        # the new projections (players_ml.py), shown next to the current ones: trained on every
+        # earlier season's walk-forward projections, so the full walk-forward runs every time
+        pall, new = None, None
+        try:
+            say("New projections (role inputs, boosted model) ...")
+            from . import players_ml, roles
+            R = roles.load_all(games, refresh_current=refresh, verbose=False)
+            pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
+            ml = players_ml.walk_forward(players_ml.add_features(pall, R), first=season)
+            new = ml[ml["season"] == season]
+        except Exception as exc:
+            print(f"  new projections skipped ({exc})")
+        player_board = players.board(pproj, pinfo, upcoming_ids, new=new)
         if with_backtest:
             say("Backtesting player projections ...")
-            pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
+            pall = pall if pall is not None else players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
             player_board["backtest"] = players.backtest_summary(pall, ptable, C.HOLDOUT_FROM)
         elif prev.get("players") and prev["players"].get("backtest"):
             player_board["backtest"] = prev["players"]["backtest"]
