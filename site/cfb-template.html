@@ -1069,13 +1069,13 @@ function renderBoost() {
   const evMkt = evAt(b.market_prob), evModel = evAt(b.prob);
   const kelly = p => Math.max(0, (p * (dec - 1) - (1 - p)) / (dec - 1));
   const stake = Math.min(kelly(b.prob) * M.kelly_fraction, M.max_stake);
-  out.replaceChildren(
+  out.replaceChildren(...[
     H("strong", { text: b.pick + " at " + odds(Math.round(net)) + (boost || book ? " net" : "") + ". " }),
     document.createTextNode("Against the sharp no-vig chance (" + pct(b.market_prob) + ") the bet is worth " + spct(evMkt) + " per dollar "),
     evMkt > 0 ? H("span", { class: "chip", text: "+EV before the model" }) : null,
     document.createTextNode("; against the model (" + pct(b.prob) + ") " + spct(evModel) + ". Fair price for the market's chance is " + odds(fairOf(b.market_prob)) + ". "
       + (stake > 0 ? "Quarter-Kelly stake on the model's chance: $" + comma(Math.round(stake * state.bankroll)) + " (" + pct(stake) + ")." : "No stake: the model does not make it +EV.")
-      + " Boosts are usually capped by the book; size to the cap, not the Kelly number, when the market says it is +EV."));
+      + " Boosts are usually capped by the book; size to the cap, not the Kelly number, when the market says it is +EV.")].filter(Boolean));
 }
 ["#boost-side", "#boost-odds", "#boost-pct", "#boost-book"].forEach(id => $(id).addEventListener("input", renderBoost));
 function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); renderBoost(); }
