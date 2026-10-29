@@ -75,6 +75,14 @@ class Client:
         """Upcoming NFL events (free)."""
         return self._get(f"/sports/{SPORT}/events", {"dateFormat": "iso"}, "events")
 
+    def sport_odds(self, sport: str, params: dict) -> list[dict]:
+        """Game lines for every upcoming event of a sport (markets x regions credits; named
+        books count as one region). Used by nflmodel/market.py for both leagues."""
+        worst = len(str(params.get("markets", "")).split(",")) * max(1, len(str(params.get("regions", "")).split(",")))
+        if self.remaining is not None and self.remaining - worst < self.reserve:
+            raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}: skipping {sport} odds")
+        return self._get(f"/sports/{sport}/odds", params, f"game odds {sport}")
+
     def event_odds(self, event_id: str, markets: list[str], books: list[str] | None = None) -> dict:
         """Player-prop odds for one event. Refused if the worst-case cost could take the
         account below the reserve (worst case: every market returned)."""

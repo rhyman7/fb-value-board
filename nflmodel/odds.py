@@ -66,6 +66,38 @@ def expected_value(p_win, odds, p_push=0.0):
     return p_win * (american_to_decimal(odds) - 1) - p_lose
 
 
+# ---- Kalshi -----------------------------------------------------------------
+# Kalshi contracts pay $1 and cost the price P in dollars. The exchange charges a fee on top
+# of the price, per contract, of about rate x P x (1 - P): the taker rate (an order that fills
+# at once) is 7%, the maker rate (a resting order) 1.75% on the markets that charge makers
+# (Kalshi's fee schedule, 2026; set KALSHI_TAKER / KALSHI_MAKER to change). A fee is charged
+# on the stake whatever the result, so it lowers the odds the bettor really gets.
+KALSHI_TAKER = 0.07
+KALSHI_MAKER = 0.0175
+
+
+def kalshi_fee(price_prob, maker: bool = False):
+    """Fee per $1 contract at contract price `price_prob` (0-1)."""
+    p = np.clip(np.asarray(price_prob, dtype=float), 0.0, 1.0)
+    return (KALSHI_MAKER if maker else KALSHI_TAKER) * p * (1 - p)
+
+
+def kalshi_effective_odds(odds, maker: bool = False):
+    """American odds net of Kalshi's fee: the contract price plus the fee is what a $1
+    payout really costs, so -150 (60c) becomes about -159 as a taker."""
+    p = implied_prob(odds)
+    cost = p + kalshi_fee(p, maker)
+    cost = np.clip(cost, 1e-6, 1 - 1e-6)
+    return prob_to_american(cost)
+
+
+def prob_to_american(p):
+    """The American price whose implied probability is p."""
+    p = np.asarray(p, dtype=float)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        return np.where(p >= 0.5, -100 * p / (1 - p), 100 * (1 - p) / p)
+
+
 def kelly(p_win, odds, p_push=0.0):
     """Full-Kelly share of bankroll for a bet with a possible push; 0 if not +EV."""
     b = american_to_decimal(odds) - 1

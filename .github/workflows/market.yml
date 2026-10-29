@@ -1,0 +1,46 @@
+name: Market lines
+
+# Snapshots of NFL and college game lines (spreads, totals, moneylines) from Pinnacle,
+# DraftKings, FanDuel, BetMGM and Kalshi through The Odds API (nflmodel/market.py), stored
+# under data/market/. Three a day in season, plus hourly from Sunday night to Tuesday night
+# (US time), when the week's lines open and the model's edge is largest. About 6 credits a
+# snapshot, about 1,400 a month. The board builds read these files; this workflow never builds a board.
+
+on:
+  schedule:
+    - cron: "5 2,14,20 * 8-12,1-2 *"          # three a day (UTC), August to February
+    - cron: "35 0-23 * 8-12,1-2 1,2"          # hourly all day Monday and Tuesday UTC
+    - cron: "35 21-23 * 8-12,1-2 0"           # Sunday evening US (late Sunday UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits      # shared with the board updates and the props, so pushes never collide
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Snapshot
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          python run_market.py snapshot
+          python run_market.py status
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/market data/props/api_usage.csv
+          git diff --cached --quiet || git commit -m "Market lines snapshot"
+          git pull --rebase origin main
+          git push
