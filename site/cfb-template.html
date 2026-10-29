@@ -533,6 +533,20 @@ td .act { font-weight: 700; }
         <div class="scroll"><table id="bets" aria-labelledby="bets-h"></table></div>
         <p class="note"><button class="link" id="bets-more" type="button"></button></p>
       </section>
+
+      <section aria-labelledby="boost-h">
+        <div class="section-head">
+          <h2 id="boost-h">Price a boost or a promo</h2>
+          <p class="note">A book's odds boost, no-sweat bet or profit boost on one of this week's sides, priced against the sharp no-vig number and against the model. Enter the odds the book is offering after the boost; for a profit boost, enter the base odds and the boost percentage.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Boost">
+          <label class="field-label" for="boost-side">Side<select class="money" id="boost-side"></select></label>
+          <label class="field-label" for="boost-odds">Odds offered<input class="money" id="boost-odds" type="number" step="1" placeholder="-110" inputmode="numeric"></label>
+          <label class="field-label" for="boost-pct">Profit boost %<input class="money" id="boost-pct" type="number" step="5" min="0" placeholder="0" inputmode="numeric"></label>
+          <label class="field-label" for="boost-book">Book<select class="money" id="boost-book"><option value="">Any book</option><option value="kalshi">Kalshi (taker fee)</option><option value="kalshi_maker">Kalshi (maker fee)</option></select></label>
+        </div>
+        <p class="note" id="boost-out">Pick a side and enter the odds.</p>
+      </section>
     </div>
 
     <!-- ============ one game ============ -->
@@ -1029,7 +1043,42 @@ $("#bankroll").addEventListener("input", e => {
   try { localStorage.setItem("cfbvb.bankroll", String(state.bankroll)); } catch (err) {}
   renderBets();
 });
-function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); }
+/* ---------------- boost calculator ----------------
+   EV of a price against the anchor's no-vig chance (what the sharp market says) and against
+   the model. A profit boost of x% multiplies the winnings; Kalshi's fee is charged on the
+   contract price (7% x p x (1 - p) as a taker, 1.75% as a maker). */
+const toDec = o => o > 0 ? 1 + o / 100 : 1 + 100 / -o;
+const toAm = p => p >= 0.5 ? -100 * p / (1 - p) : 100 * (1 - p) / p;
+function boostOdds(odds, pct, book) {
+  let dec = toDec(odds);
+  if (pct > 0) dec = 1 + (dec - 1) * (1 + pct / 100);
+  if (book === "kalshi" || book === "kalshi_maker") { const p = 1 / dec, fee = (book === "kalshi" ? 0.07 : 0.0175) * p * (1 - p); dec = 1 / Math.min(0.999, p + fee); }
+  return dec;
+}
+function renderBoost() {
+  const sel = $("#boost-side"), out = $("#boost-out");
+  const opts = games().flatMap(g => g.bets.map(b => ({ g, b })));
+  const cur = sel.value;
+  sel.replaceChildren(...opts.map(({ g, b }, i) => H("option", { value: String(i), text: g.away + " @ " + g.home + ": " + b.pick })));
+  if (cur && opts[+cur]) sel.value = cur;
+  const o = parseFloat($("#boost-odds").value), boost = parseFloat($("#boost-pct").value) || 0, book = $("#boost-book").value;
+  if (!opts.length || !(Math.abs(o) >= 100)) { out.textContent = "Pick a side and enter the odds (American, -110 or +150)."; return; }
+  const { g, b } = opts[+sel.value || 0];
+  const dec = boostOdds(o, boost, book), net = toAm(1 / dec);
+  const evAt = p => p * (dec - 1) - (1 - p);               // pushes are already set aside in the chances
+  const evMkt = evAt(b.market_prob), evModel = evAt(b.prob);
+  const kelly = p => Math.max(0, (p * (dec - 1) - (1 - p)) / (dec - 1));
+  const stake = Math.min(kelly(b.prob) * M.kelly_fraction, M.max_stake);
+  out.replaceChildren(
+    H("strong", { text: b.pick + " at " + odds(Math.round(net)) + (boost || book ? " net" : "") + ". " }),
+    document.createTextNode("Against the sharp no-vig chance (" + pct(b.market_prob) + ") the bet is worth " + spct(evMkt) + " per dollar "),
+    evMkt > 0 ? H("span", { class: "chip", text: "+EV before the model" }) : null,
+    document.createTextNode("; against the model (" + pct(b.prob) + ") " + spct(evModel) + ". Fair price for the market's chance is " + odds(fairOf(b.market_prob)) + ". "
+      + (stake > 0 ? "Quarter-Kelly stake on the model's chance: $" + comma(Math.round(stake * state.bankroll)) + " (" + pct(stake) + ")." : "No stake: the model does not make it +EV.")
+      + " Boosts are usually capped by the book; size to the cap, not the Kelly number, when the market says it is +EV."));
+}
+["#boost-side", "#boost-odds", "#boost-pct", "#boost-book"].forEach(id => $(id).addEventListener("input", renderBoost));
+function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); renderBoost(); }
 seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); renderGames(); });
 seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; redrawBoard(); });
 seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); if (shownGame) renderGame(shownGame); });
