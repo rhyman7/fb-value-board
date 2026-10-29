@@ -98,6 +98,11 @@ boards in detail; this file is the rules.
   or a different starter is named for a game in the next 3 days, it changes only that team's
   entry in rhyman7/cfb's `overrides/qb_starters.json` through a PR there, then re-runs
   **Update college board**. Its task prompt has the rules.
+- **The spread and totals card shows every model input.** A game page's "How the spread is
+  built" rows add up to the raw model spread and total (`matchup.breakdown()`,
+  `cfbmodel/board.py`). A feature added to `MARGIN_FEATS` or `TOTAL_FEATS` needs a row
+  (`MARGIN_ROWS`/`TOTAL_ROWS` in `nflmodel/matchup.py`, `uncovered()` on the college
+  board) or the tests fail; the tests also check that Adjusted lies between market and model.
 - **Out means no projection, on both boards.** A player Out, Doubtful or on injured reserve
   for a game never has a projection for that game: the pipelines leave him out (his usage
   goes to teammates) and list him under "Out" on the team card, the page drops any player row

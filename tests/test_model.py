@@ -326,3 +326,35 @@ def test_game_role_signals_ignore_game_day_inactives():
     R = {"practice": pd.DataFrame({"season": [2025], "week": [2], "team": ["KC"], "player_id": ["b"], "report": [3]})}
     act = game_roles.friday_active(table, R, avail).tolist()
     assert act == [1, 0, 1, 0]      # a: inactive on game day only; b: listed Out; c: plays; d: board has him out
+
+
+def test_spread_card_covers_every_model_feature():
+    """Every margin and total feature has a row on the game page's breakdown card."""
+    from nflmodel import matchup, model
+    assert matchup.uncovered(model.MARGIN_FEATS, model.TOTAL_FEATS) == []
+
+
+def _check_board(path):
+    if not path.exists():
+        return
+    d = json.loads(path.read_text())
+    for g in d["slate"]["games"]:
+        bd = g["detail"]["breakdown"]
+        mm, mt = g["model"]["margin"], g["model"]["total"]
+        assert abs(sum(r["value"] for r in bd["margin"]) - bd["margin_sum"]) < 0.005, g["id"]
+        assert abs(bd["margin_sum"] - mm) < 0.02, (g["id"], bd["margin_sum"], mm)
+        assert abs(bd["total_sum"] - mt) < 0.02, (g["id"], bd["total_sum"], mt)
+        # the adjusted number is the market moved part of the way toward the model
+        for proj, mkt, mod in ((g["proj"]["margin"], g["market"].get("spread"), mm),
+                               (g["proj"]["total"], g["market"].get("total"), mt)):
+            if mkt is None:
+                continue
+            assert min(mkt, mod) - 0.01 <= proj <= max(mkt, mod) + 0.01, (g["id"], mkt, mod, proj)
+
+
+def test_board_breakdown_adds_up_to_the_model():
+    """Both boards: the card's model spread and total are the model's, and Adjusted lies
+    between the market and the model on every game."""
+    root = Path(__file__).resolve().parent.parent / "docs"
+    _check_board(root / "data.json")
+    _check_board(root / "cfb" / "data.json")
