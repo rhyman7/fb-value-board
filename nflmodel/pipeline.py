@@ -42,12 +42,13 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games)
     base = model.build_frame(games, engine, injuries=inj)
     frame, info = model.walk_forward(base)
+    wf_input = base                               # the frame the game model is fitted on (shadow.py refits it)
 
     prev_path = C.DOCS / "data.json"
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
 
     say("Projecting players ...")
-    pg = None
+    pg, ptable, pproj = None, None, None
     try:
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
         avail = players.load_availability(refresh_current=refresh, verbose=verbose)
@@ -59,7 +60,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             R = roles.load_all(games, refresh_current=refresh, verbose=False)
             rows = players.player_rows(players.team_games(frame, pg), pg, avail, pinfo)
             rows = overrides.apply_out(rows, ov) if ov is not None else rows
-            frame, info = model.walk_forward(game_roles.attach(base, game_roles.team_features(rows, R, avail)))
+            wf_input = game_roles.attach(base, game_roles.team_features(rows, R, avail))
+            frame, info = model.walk_forward(wf_input)
         except Exception as exc:
             print(f"  role signals skipped ({exc}); game model runs without them")
         ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov)
@@ -87,6 +89,13 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     except Exception as exc:                      # the game board must not fail because of the player board
         print(f"  player projections skipped ({exc})")
         player_board = None
+
+    try:                                          # shadow test of the defensive inputs: logged, never shown
+        from . import shadow
+        shadow.run(wf_input, frame, games, tg, ptable, pproj, season,
+                   refresh=refresh, verbose=verbose)
+    except Exception as exc:
+        print(f"  shadow test skipped ({exc})")
 
     say("Fitting key numbers ...")
     dist = bets.fit_distribution(games, season)

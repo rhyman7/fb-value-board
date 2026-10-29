@@ -358,3 +358,37 @@ def test_board_breakdown_adds_up_to_the_model():
     root = Path(__file__).resolve().parent.parent / "docs"
     _check_board(root / "data.json")
     _check_board(root / "cfb" / "data.json")
+
+
+def test_shadow_log_freezes_at_kickoff(tmp_path, monkeypatch):
+    """A game's shadow rows are replaced on every refresh until kickoff, never after."""
+    from nflmodel import shadow as SH
+    monkeypatch.setattr(SH, "DIR", tmp_path)
+    path = tmp_path / "g.csv"
+    first = pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [1.0, 2.0]})
+    SH._merge_log(path, first, frozen=set())
+    later = pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [9.0, 3.0]})
+    SH._merge_log(path, later, frozen={"A"})          # A has kicked off
+    got = pd.read_csv(path).set_index("game_id")["margin_shadow"].to_dict()
+    assert got == {"A": 1.0, "B": 3.0}
+
+
+def test_shadow_game_features_are_symmetric():
+    from nflmodel import shadow as SH
+    frame = pd.DataFrame({"game_id": ["G"], "home_team": ["KC"], "away_team": ["BUF"]})
+    T = pd.DataFrame({"game_id": ["G", "G"], "team": ["KC", "BUF"]})
+    for k in {c[6:] for c in SH.MARGIN + SH.TOTAL}:
+        T["miss_" + k], T["mrec_" + k] = [0.03, 0.01], [0.01, 0.01]
+    f = SH.game_features(frame, T)
+    for c in SH.MARGIN:
+        assert close(f[c].iloc[0], 0.02)               # home missing more: positive
+    for c in SH.TOTAL:
+        assert close(f[c].iloc[0], 0.02)
+
+
+def test_shadow_test_stays_off_the_board():
+    """The shadow inputs are not in the board's models (FEATURES.md, Shadow test)."""
+    from nflmodel import model, players as PL, shadow as SH
+    assert not set(SH.MARGIN) & set(model.MARGIN_FEATS) and not set(SH.TOTAL) & set(model.TOTAL_FEATS)
+    for st, extra in SH.PLAYER.items():
+        assert not set(extra) & set(PL.CAL_EXTRA[st])

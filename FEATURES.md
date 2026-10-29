@@ -359,6 +359,28 @@ against an average miss of 12.4. Even knowing exactly which defenders sat out (t
 row, which can't be known in advance) is worth only 0.01 to 0.02. **The college board is
 unchanged**: injured defenders stay listed with no change to the numbers.
 
+### Shadow test (from October 29, 2026)
+
+None of the defensive inputs beat noise on past seasons, so the most promising ones are run
+alongside the board instead of on it (`nflmodel/shadow.py`). On every refresh, the Update board
+Action refits the game model and two player projections with them and logs the results to
+`data/shadow/`. A game's rows are frozen at kickoff, and nothing reaches the page, the bets or
+the props. The inputs and the rule were set on October 29, 2026, before any of these games
+were played:
+
+| Shadow version | Inputs added | Past seasons, tuning / holdout (board's version of the inputs) |
+|---|---|---|
+| Spread | pressures and coverage yards lost to absences beyond the last four games (vs backup level) | −0.004 / −0.015 (2020-2022 / 2023 on) |
+| Total | missed-tackle rate lost, beyond the last four games (vs depth-chart replacement) | −0.020 / +0.006 |
+| Receiving yards | the opponent's missed-tackle rate and yards per target allowed | −0.054 ± 0.008 / −0.005 ± 0.006 |
+| Interceptions | the opponent's pressure rate | −0.002 ± 0.002 / −0.002 ± 0.001 |
+
+The past-season numbers differ a little from the tables above because the board's version
+builds each season from it and the two before, as it will live. **Rule:** a shadow version
+replaces the board's only if its average miss is lower on the rest of 2026 (week 9 on) and,
+separately, on 2027. Score it with `python experiments/shadow_score.py`. Until then, don't
+change the inputs.
+
 ## Player roles in the game model, October 2026
 
 The player work added snap shares, depth charts and team play-calling
@@ -398,8 +420,6 @@ inputs are known in time. Totals unchanged.
   now saved to `data/wind_log.csv`. After a season of logs, re-run the wind
   table on the logged forecast instead of the recorded wind.
 - **Pass catchers.** Re-test after the 2026 season (see above).
-- **Defensive ratings.** Re-run `experiments/def_test.py` after the 2026 season: the PFR
-  window then has a fourth tuning season. The best game-model candidates ("pressures +
-  coverage, change", "pressure rate lost, change") help in 6 of 7 seasons since 2020 but sit
-  inside one standard error.
+- **Defensive ratings.** The shadow test decides (above). Score it with
+  `experiments/shadow_score.py` after the 2026 season and again after 2027.
 - **College football**, where the market is softer and rosters change more.
