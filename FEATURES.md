@@ -207,6 +207,158 @@ is a lead, not a decision: the split was chosen after seeing the results. The
 honest test is to add pass catchers at the end of the 2026 season only if 2026
 also improves, and to judge it on 2027.
 
+## Defensive players, re-tested and rated (late October 2026)
+
+Three questions: do the defensive features rejected above help now that the model also
+has skill starters out, falling snap shares, wind and pace? Do they help if each missing
+defender counts by how good he is instead of one each? And do new defender ratings (PFR
+pressures, coverage and tackling, FTN blitz charting) help the spreads, totals or player
+projections? Same rule as above: each candidate is added alone, walk-forward, and kept only
+if it lowers the average miss on the tuning seasons and holds up on the holdout. Who is
+missing uses only what is known by Friday (Out or Doubtful on the report, or off the
+active roster the week before), as `nflmodel/game_roles.py`. Scripts:
+`experiments/def_retest.py`, `def_ratings.py`, `def_test.py`, `def_se.py`,
+`def_players_test.py`, `def_players_se.py`, `def_players_combined.py`,
+`cfb_def_test.py`; every row, with each season, is in `experiments/out/def_*.csv`.
+
+**Windows.** Head counts and play-by-play pass rush go back to 2013: tuning 2013-2018,
+holdout 2019 on, as in October. PFR's defensive stats start in 2018. A rating needs
+earlier games, and a walk-forward fit only learns a new input from the season after it
+first appears, so 2020 is the first season the model can use them: **tuning 2020-2022
+(838 games), holdout 2023 on (962)**. Three seasons is short, so read these with
+caution. FTN charting starts in 2022, which leaves no tuning window at all; its rows are
+reported for 2024 on and can't earn a place.
+
+### The October rejects, re-tested
+
+Change in the margin's (or total's) average miss when added; negative is better. "Seasons
+better" counts seasons whose miss fell. The 2013-2019 against 2020-on split was chosen after
+seeing the October results (rosters mark game-day inactives only from 2020), so it is
+reported, not used to keep anything.
+
+| Candidate | October tuning | October holdout | Now tuning | Now holdout | 2013-19 (seasons better) | 2020 on (seasons better) | Kept |
+|---|---|---|---|---|---|---|---|
+| Defensive line, missing now | −0.002 | +0.016 | +0.005 | +0.014 | +0.007 (3 of 7) | +0.014 (3 of 7) | no |
+| Defensive line, change | +0.000 | +0.007 | +0.009 | +0.007 | +0.011 (2 of 7) | +0.005 (2 of 7) | no |
+| Linebackers, missing now | −0.003 | −0.003 | +0.005 | −0.002 | +0.002 (4 of 7) | −0.001 (5 of 7) | no |
+| Linebackers, change | −0.007 | −0.004 | +0.000 | −0.004 | −0.003 (3 of 7) | −0.002 (5 of 7) | no |
+| Defensive backs, missing now | +0.015 | −0.009 | +0.017 | −0.008 | +0.014 (3 of 7) | −0.008 (5 of 7) | no |
+| Defensive backs, change | +0.018 | −0.009 | +0.019 | −0.007 | +0.016 (3 of 7) | −0.008 (6 of 7) | no |
+| Pass rush, missing now | +0.018 | −0.005 | +0.017 | −0.000 | +0.015 (1 of 7) | −0.000 (4 of 7) | no |
+| Pass rush, change | +0.013 | −0.009 | +0.011 | −0.005 | +0.012 (4 of 7) | −0.008 (2 of 7) | no |
+| Pass rush in the total, missing now | +0.007 | +0.011 | +0.007 | +0.011 | +0.006 (4 of 7) | +0.012 (4 of 7) | no |
+| Pass rush in the total, change | +0.021 | +0.006 | +0.021 | +0.006 | +0.018 (2 of 7) | +0.007 (3 of 7) | no |
+| All six groups, missing now | +0.037 | −0.027 | +0.089 | −0.000 | +0.080 (1 of 7) | −0.005 (4 of 7) | no |
+| All six groups, change | +0.020 | −0.011 | +0.045 | +0.017 | +0.052 (2 of 7) | +0.005 (4 of 7) | no |
+
+Same answer as October, a little worse: the new skill-player signals already carry part of
+what the counts said. Against openers none helps on both periods.
+
+### Weighted by rating
+
+`experiments/def_ratings.py` rates every defender from earlier games only: decayed (half-life
+10 games, last season x 0.6) and shrunk toward his position group (interior line, edge,
+linebacker, corner, safety). Pass rush is QB hits plus sacks (play-by-play, 2012 on) or PFR
+pressures (2018 on), per estimated pass-rush snap; coverage is yards allowed per estimated
+coverage snap or per target; tackling is missed tackles per attempt. No free source counts
+how many snaps a defender rushed or covered, so both use his defensive snaps times the share
+of the opponent's plays that were dropbacks. A missing defender is worth his expected snap
+share times (his rating minus his replacement's). Two replacements were tried: the group's
+backup level, and the next available player at his depth-chart slot. The backup level did
+better almost everywhere; its rows are below, the depth-chart rows are in the CSV.
+
+| Candidate (vs backup level) | Window | Tuning | Holdout | Seasons better since 2020 | Passes the rule |
+|---|---|---|---|---|---|
+| Pass rush (play-by-play), all defenders, missing now | long | −0.001 | −0.004 | 5 of 7 | yes |
+| Pass rush (play-by-play), all defenders, change | long | −0.001 | −0.004 | 5 of 7 | yes |
+| Pass rush (play-by-play), defensive line, change | long | −0.000 | −0.001 | 4 of 7 | yes |
+| Pass rush (play-by-play), linebackers, missing now | long | −0.000 | −0.003 | 4 of 7 | yes |
+| Pass rush (play-by-play) in the total, missing now | long | −0.002 | −0.000 | 3 of 7 | yes |
+| Coverage, defensive backs, missing now | PFR | −0.003 | −0.010 | 6 of 7 | yes |
+| Coverage, defensive backs, change | PFR | −0.009 | +0.001 | 5 of 7 | no |
+| Coverage, linebackers, missing now | PFR | +0.125 | −0.039 | 4 of 7 | no |
+| Pressures (PFR), defensive line, missing now | PFR | +0.018 | −0.003 | 3 of 7 | no |
+| All defenders, pressures + coverage, change | PFR | −0.012 | −0.016 | 6 of 7 | yes |
+| All defenders, pressures + coverage, missing now | PFR | +0.019 | −0.034 | 3 of 7 | no |
+
+### New ratings and team-level stats
+
+| Candidate (vs backup level) | Model | Tuning | Holdout | Seasons better since 2020 | Passes the rule |
+|---|---|---|---|---|---|
+| Pressure rate lost, change | margin | −0.005 | −0.013 | 6 of 7 | yes |
+| Pressure rate lost, missing now | margin | +0.007 | −0.018 | 5 of 7 | no |
+| Coverage yards per snap lost, change | margin | −0.008 | −0.009 | 5 of 7 | yes |
+| Coverage yards per snap lost, missing now | margin | +0.001 | −0.026 | 4 of 7 | no |
+| Coverage yards per target lost, change | margin | +0.015 | −0.028 | 5 of 7 | no |
+| Missed-tackle rate lost, change | margin | +0.021 | +0.000 | 4 of 7 | no |
+| Missed-tackle rate lost, change (vs depth chart) | total | −0.013 | −0.004 | 4 of 7 | yes |
+| Any of the four ratings, missing now or change | total | +0.004 to +0.11 | | | no |
+| Team pressure rate | margin / total | +0.001 / +0.001 | −0.006 / +0.000 | | no |
+| Team blitz rate | margin / total | +0.067 / −0.012 | −0.013 / +0.005 | | no |
+| Team yards per target allowed | margin / total | +0.008 / +0.016 | −0.005 / −0.002 | | no |
+| Team missed-tackle rate | margin / total | +0.010 / −0.043 | +0.002 / +0.002 | | no |
+| FTN blitzers per dropback (2024 on only) | margin / total | | +0.007 / −0.028 | | can't qualify |
+| FTN pass rushers per dropback (2024 on only) | margin / total | | −0.004 / +0.003 | | can't qualify |
+
+**Is any of it real?** For each candidate that passed, `def_se.py` pairs the two models game
+by game. Every change is within about one standard error: the largest, "pressures + coverage,
+change", is −0.012 ± 0.013 on the tuning seasons and −0.016 ± 0.018 on the holdout; "pressure
+rate lost, change" is −0.005 ± 0.010 and −0.013 ± 0.008. About 80 candidates were tried, so
+a few were bound to pass by chance. The signs are right (losing a team's best pass rusher
+and a starting corner is worth about a point at the 95th percentile), but none of these
+beats noise, and none helps against openers on both periods. **The spread and total models
+are unchanged.**
+
+### Player projections
+
+The projections already scale each player by what the opponent allows per target, carry and
+attempt, and receiving uses the opponent's missing defensive backs and pass rush by head count.
+Each candidate below adds one term to the last calibration step of the stats it should touch
+(`def_players_test.py`; tuning 2020-2022, holdout 2023 on; players who played; standard errors
+clustered by game, `def_players_se.py`).
+
+| Candidate | Stat | Tuning | Holdout | Passes the rule |
+|---|---|---|---|---|
+| Opponent's team missed-tackle rate | receiving yards | −0.013 ± 0.003 | −0.022 ± 0.002 | yes |
+| Opponent's team yards per target allowed | receiving yards | −0.013 ± 0.007 | −0.014 ± 0.005 | yes |
+| Opponent's team pressure rate | interceptions | −0.003 ± 0.002 | −0.002 ± 0.001 | yes |
+| Opponent's tackling lost to injury | receiving yards | −0.004 ± 0.001 | −0.002 ± 0.002 | yes, tiny |
+| Opponent's pass rush lost (play-by-play) | passing, receiving | worse or ±0.002 | | no |
+| Opponent's pressure lost (PFR) | passing yards | +0.20 | −0.02 | no |
+| Opponent's coverage lost (PFR, DBs) | passing, receiving | ±0.01 | worse | no |
+| Opponent's team pressure rate | passing yards | −0.09 | +0.21 | no |
+| Opponent's team missed-tackle rate | rushing yards | +0.001 | −0.002 | no |
+
+Together (`def_players_combined.py`: missed-tackle rate and yards per target in receiving
+yards, pressure rate in interceptions), receiving yards improve by 0.025 ± 0.007 on the tuning
+seasons and 0.025 ± 0.006 on the holdout, against an average miss of about 15 yards; that is
+real but small. It would move this season's receiving projections by a median 0.6 yards
+(5 at most) and interceptions by about 0.02. Not applied yet: these need PFR's weekly
+defensive file in the data pull, and the board changes only after Ryan approves.
+
+### College
+
+College football has no snap counts, no coverage charting and no history of injury
+designations. `experiments/cfb_def_test.py` weights each defender by his share of his team's
+box-score production (sacks plus hurries, passes defended plus interceptions, tackles) and
+marks him missing if he recorded no stat in the team's previous game, the only version that
+can be tested. Tuning 2017-2019, holdout 2021 on:
+
+| Candidate | Margin tuning / holdout | Total tuning / holdout |
+|---|---|---|
+| Pass rush, missed last game | +0.005 / −0.001 | −0.010 / +0.019 |
+| Pass rush, change | −0.004 / +0.003 | −0.013 / +0.018 |
+| Coverage, missed last game | −0.011 / −0.001 | +0.003 / −0.002 |
+| Coverage, change | −0.002 / −0.001 | +0.018 / +0.002 |
+| Tackling, missed last game | +0.001 / −0.001 | −0.007 / +0.013 |
+| Tackling, change | −0.003 / +0.003 | −0.007 / +0.015 |
+| Ceiling: coverage defenders absent from this game (known only after it) | −0.021 / −0.010 | +0.001 / +0.004 |
+
+Coverage, missed last game, passes the rule on the margin, by about a hundredth of a point
+against an average miss of 12.4. Even knowing exactly which defenders sat out (the ceiling
+row, which can't be known in advance) is worth only 0.01 to 0.02. **The college board is
+unchanged**: injured defenders stay listed with no change to the numbers.
+
 ## Player roles in the game model, October 2026
 
 The player work added snap shares, depth charts and team play-calling
@@ -246,4 +398,8 @@ inputs are known in time. Totals unchanged.
   now saved to `data/wind_log.csv`. After a season of logs, re-run the wind
   table on the logged forecast instead of the recorded wind.
 - **Pass catchers.** Re-test after the 2026 season (see above).
+- **Defensive ratings.** Re-run `experiments/def_test.py` after the 2026 season: the PFR
+  window then has a fourth tuning season. The best game-model candidates ("pressures +
+  coverage, change", "pressure rate lost, change") help in 6 of 7 seasons since 2020 but sit
+  inside one standard error.
 - **College football**, where the market is softer and rosters change more.

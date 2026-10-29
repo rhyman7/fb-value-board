@@ -1,0 +1,13 @@
+candidate,model,tune,hold,pre2020,pre2020_better,post2020,post2020_better,open_tune,open_hold,kept
+"dl, missing now",margin,0.0054,0.0142,0.007,3/7,0.0138,3/7,-0.0093,-0.0056,False
+"dl, change",margin,0.0093,0.0074,0.0114,2/7,0.0049,2/7,-0.0076,-0.0056,False
+"lb, missing now",margin,0.0045,-0.0022,0.0021,4/7,-0.0007,5/7,0.0025,-0.0006,False
+"lb, change",margin,0.0,-0.0037,-0.0027,3/7,-0.0015,5/7,0.0034,-0.0022,False
+"db, missing now",margin,0.0167,-0.0076,0.0136,3/7,-0.008,5/7,0.0068,0.0,False
+"db, change",margin,0.0185,-0.0074,0.0156,3/7,-0.0082,6/7,-0.0059,0.0039,False
+"pass rush, missing now",margin,0.0168,-0.0,0.0148,1/7,-0.0004,4/7,-0.0025,0.0022,False
+"pass rush, change",margin,0.0112,-0.0051,0.0121,4/7,-0.0084,2/7,0.0017,-0.0039,False
+"pass rush in total, missing now",total,0.007,0.0106,0.0062,4/7,0.012,4/7,,,False
+"pass rush in total, change",total,0.0211,0.0062,0.0179,2/7,0.0074,3/7,,,False
+"all six groups, missing now",margin,0.0885,-0.0003,0.0801,1/7,-0.0049,4/7,-0.0102,-0.0106,False
+"all six groups, change",margin,0.045,0.0167,0.0522,2/7,0.0051,4/7,-0.0076,-0.0062,False
