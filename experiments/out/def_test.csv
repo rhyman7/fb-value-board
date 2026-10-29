@@ -1,0 +1,81 @@
+part,window,candidate,model,features,tune,hold,pre2020,pre2020_better,post2020,post2020_better,open_tune,open_hold,passes
+A,long,"pass rush (pbp), defensive line, miss, vs bk",margin,d_miss_pr_pbp_bk_dl,0.0003,-0.0015,-0.0002,3/7,-0.0013,4/7,0.0,-0.0006,False
+A,long,"pass rush (pbp), defensive line, chg, vs bk",margin,d_chg_pr_pbp_bk_dl,-0.0004,-0.0009,-0.0004,3/7,-0.0009,4/7,-0.0007,0.0006,True
+A,long,"pass rush (pbp), defensive line, miss, vs dc",margin,d_miss_pr_pbp_dc_dl,-0.0007,-0.0007,-0.002,4/7,0.0006,2/7,0.0021,0.0,True
+A,long,"pass rush (pbp), defensive line, chg, vs dc",margin,d_chg_pr_pbp_dc_dl,-0.0024,-0.0001,-0.0024,6/7,0.0002,2/7,0.0021,-0.0006,True
+A,long,"pass rush (pbp), linebackers, miss, vs bk",margin,d_miss_pr_pbp_bk_lb,-0.0003,-0.0028,0.0006,4/7,-0.0041,4/7,-0.0064,0.0006,True
+A,long,"pass rush (pbp), linebackers, chg, vs bk",margin,d_chg_pr_pbp_bk_lb,0.0039,-0.004,0.0035,3/7,-0.0047,4/7,-0.005,0.0,False
+A,long,"pass rush (pbp), linebackers, miss, vs dc",margin,d_miss_pr_pbp_dc_lb,0.013,0.0015,0.0121,2/7,0.0008,4/7,-0.0093,0.0011,False
+A,long,"pass rush (pbp), linebackers, chg, vs dc",margin,d_chg_pr_pbp_dc_lb,0.0153,-0.0012,0.0129,4/7,-0.0012,4/7,-0.0036,0.0006,False
+A,long,"pass rush (pbp), all defenders, miss, vs bk",margin,d_miss_pr_pbp_bk_all,-0.0013,-0.0043,-0.0016,4/7,-0.0043,5/7,-0.0007,0.0017,True
+A,long,"pass rush (pbp), all defenders, chg, vs bk",margin,d_chg_pr_pbp_bk_all,-0.0012,-0.0035,-0.0013,4/7,-0.0037,5/7,0.0029,-0.0011,True
+A,long,"pass rush (pbp), all defenders, miss, vs dc",margin,d_miss_pr_pbp_dc_all,-0.0,-0.0014,-0.0014,4/7,-0.0002,4/7,-0.0036,-0.0017,True
+A,long,"pass rush (pbp), all defenders, chg, vs dc",margin,d_chg_pr_pbp_dc_all,-0.0008,-0.0016,-0.0015,4/7,-0.0009,4/7,0.0021,-0.0022,True
+A,pfr,"pass rush (PFR), defensive line, miss, vs bk",margin,d_miss_pr_pfr_bk_dl,0.0182,-0.0034,0.0,0/7,0.0067,3/7,-0.0125,0.0061,False
+A,pfr,"coverage, linebackers, miss, vs bk",margin,d_miss_cov_db_bk_lb,0.1254,-0.0393,0.0,0/7,0.0374,4/7,-0.007,0.0073,False
+A,pfr,"coverage, defensive backs, miss, vs bk",margin,d_miss_cov_db_bk_db,-0.003,-0.0095,0.0,0/7,-0.0065,6/7,-0.0014,0.0036,True
+A,pfr,"all defenders (rush + coverage), miss, vs bk",margin,d_miss_pr_pfr_bk_all d_miss_cov_db_bk_all,0.0194,-0.0344,0.0,0/7,-0.0094,3/7,-0.007,0.0024,False
+A,long,"pass rush (pbp) in total, miss, vs bk",total,s_miss_pr_pbp_bk_all,-0.0016,-0.0001,-0.0023,3/7,0.0009,3/7,,,True
+A,pfr,"pass rush (PFR) in total, miss, vs bk",total,s_miss_pr_pfr_bk_all,0.0577,-0.007,0.0,0/7,0.0231,3/7,,,False
+A,pfr,"pass rush (PFR), defensive line, chg, vs bk",margin,d_chg_pr_pfr_bk_dl,0.0037,-0.0009,0.0,0/7,0.0012,1/7,0.0014,0.0,False
+A,pfr,"coverage, linebackers, chg, vs bk",margin,d_chg_cov_db_bk_lb,0.0571,-0.0475,0.0,0/7,0.0012,3/7,-0.0084,0.0122,False
+A,pfr,"coverage, defensive backs, chg, vs bk",margin,d_chg_cov_db_bk_db,-0.0087,0.0013,0.0,0/7,-0.0033,5/7,-0.0139,0.0024,False
+A,pfr,"all defenders (rush + coverage), chg, vs bk",margin,d_chg_pr_pfr_bk_all d_chg_cov_db_bk_all,-0.0124,-0.0158,0.0,0/7,-0.0142,6/7,-0.0084,0.0,True
+A,long,"pass rush (pbp) in total, chg, vs bk",total,s_chg_pr_pbp_bk_all,-0.002,0.0015,-0.0034,2/7,0.0034,2/7,,,False
+A,pfr,"pass rush (PFR) in total, chg, vs bk",total,s_chg_pr_pfr_bk_all,0.0424,0.0038,0.0,0/7,0.0218,3/7,,,False
+A,pfr,"pass rush (PFR), defensive line, miss, vs dc",margin,d_miss_pr_pfr_dc_dl,0.0341,0.0008,0.0,0/7,0.0163,2/7,-0.0153,-0.0024,False
+A,pfr,"coverage, linebackers, miss, vs dc",margin,d_miss_cov_db_dc_lb,0.0975,0.0165,0.0,0/7,0.0542,3/7,-0.0167,0.0,False
+A,pfr,"coverage, defensive backs, miss, vs dc",margin,d_miss_cov_db_dc_db,-0.0024,-0.001,0.0,0/7,-0.0016,3/7,-0.007,-0.0097,True
+A,pfr,"all defenders (rush + coverage), miss, vs dc",margin,d_miss_pr_pfr_dc_all d_miss_cov_db_dc_all,0.053,-0.0014,0.0,0/7,0.0239,2/7,-0.0251,-0.0049,False
+A,long,"pass rush (pbp) in total, miss, vs dc",total,s_miss_pr_pbp_dc_all,0.0016,0.0002,0.0002,3/7,0.0014,2/7,,,False
+A,pfr,"pass rush (PFR) in total, miss, vs dc",total,s_miss_pr_pfr_dc_all,0.0544,-0.0071,0.0,0/7,0.0216,2/7,,,False
+A,pfr,"pass rush (PFR), defensive line, chg, vs dc",margin,d_chg_pr_pfr_dc_dl,0.0194,0.0014,0.0,0/7,0.0098,3/7,0.0042,-0.0012,False
+A,pfr,"coverage, linebackers, chg, vs dc",margin,d_chg_cov_db_dc_lb,0.024,0.0202,0.0,0/7,0.022,4/7,-0.0125,-0.0049,False
+A,pfr,"coverage, defensive backs, chg, vs dc",margin,d_chg_cov_db_dc_db,-0.0081,0.0025,0.0,0/7,-0.0024,4/7,-0.0097,-0.0073,False
+A,pfr,"all defenders (rush + coverage), chg, vs dc",margin,d_chg_pr_pfr_dc_all d_chg_cov_db_dc_all,0.0121,0.0029,0.0,0/7,0.0072,3/7,-0.0125,-0.0122,False
+A,long,"pass rush (pbp) in total, chg, vs dc",total,s_chg_pr_pbp_dc_all,0.0043,0.0029,0.0016,2/7,0.0054,2/7,,,False
+A,pfr,"pass rush (PFR) in total, chg, vs dc",total,s_chg_pr_pfr_dc_all,0.0435,0.0037,0.0,0/7,0.0222,3/7,,,False
+B,pfr,"pressure rate, miss, vs bk",margin,d_miss_pr_pfr_bk_all,0.0073,-0.0178,0.0,0/7,-0.0061,5/7,-0.0111,0.0061,False
+B,pfr,"pressure rate in total, miss, vs bk",total,s_miss_pr_pfr_bk_all,0.0577,-0.007,0.0,0/7,0.0231,3/7,,,False
+B,pfr,"pressure rate, chg, vs bk",margin,d_chg_pr_pfr_bk_all,-0.0053,-0.0128,0.0,0/7,-0.0093,6/7,0.0,-0.0024,True
+B,pfr,"pressure rate in total, chg, vs bk",total,s_chg_pr_pfr_bk_all,0.0424,0.0038,0.0,0/7,0.0218,3/7,,,False
+B,pfr,"pressure rate, miss, vs dc",margin,d_miss_pr_pfr_dc_all,0.0213,-0.0021,0.0,0/7,0.0088,3/7,-0.0139,-0.0012,False
+B,pfr,"pressure rate in total, miss, vs dc",total,s_miss_pr_pfr_dc_all,0.0544,-0.0071,0.0,0/7,0.0216,2/7,,,False
+B,pfr,"pressure rate, chg, vs dc",margin,d_chg_pr_pfr_dc_all,0.0066,-0.0016,0.0,0/7,0.0022,3/7,-0.0042,0.0,False
+B,pfr,"pressure rate in total, chg, vs dc",total,s_chg_pr_pfr_dc_all,0.0435,0.0037,0.0,0/7,0.0222,3/7,,,False
+B,pfr,"coverage yards per snap, miss, vs bk",margin,d_miss_cov_db_bk_all,0.0007,-0.0261,0.0,0/7,-0.0136,4/7,-0.0042,0.0,False
+B,pfr,"coverage yards per snap in total, miss, vs bk",total,s_miss_cov_db_bk_all,0.0832,0.0084,0.0,0/7,0.0432,4/7,,,False
+B,pfr,"coverage yards per snap, chg, vs bk",margin,d_chg_cov_db_bk_all,-0.0083,-0.0091,0.0,0/7,-0.0087,5/7,-0.0084,-0.0024,True
+B,pfr,"coverage yards per snap in total, chg, vs bk",total,s_chg_cov_db_bk_all,0.0378,-0.0031,0.0,0/7,0.0159,4/7,,,False
+B,pfr,"coverage yards per snap, miss, vs dc",margin,d_miss_cov_db_dc_all,0.0128,-0.0037,0.0,0/7,0.004,2/7,-0.0042,-0.0049,False
+B,pfr,"coverage yards per snap in total, miss, vs dc",total,s_miss_cov_db_dc_all,0.0979,0.0185,0.0,0/7,0.0555,3/7,,,False
+B,pfr,"coverage yards per snap, chg, vs dc",margin,d_chg_cov_db_dc_all,-0.0014,0.0022,0.0,0/7,0.0005,3/7,-0.0056,-0.0109,False
+B,pfr,"coverage yards per snap in total, chg, vs dc",total,s_chg_cov_db_dc_all,0.0321,0.0103,0.0,0/7,0.0204,3/7,,,False
+B,pfr,"coverage yards per target, miss, vs bk",margin,d_miss_cov_ypt_bk_all,0.0434,-0.0374,0.0,0/7,0.0002,4/7,0.0014,-0.0024,False
+B,pfr,"coverage yards per target in total, miss, vs bk",total,s_miss_cov_ypt_bk_all,0.1088,-0.0036,0.0,0/7,0.0487,3/7,,,False
+B,pfr,"coverage yards per target, chg, vs bk",margin,d_chg_cov_ypt_bk_all,0.0148,-0.0283,0.0,0/7,-0.0082,5/7,0.0084,-0.0036,False
+B,pfr,"coverage yards per target in total, chg, vs bk",total,s_chg_cov_ypt_bk_all,0.0362,-0.0069,0.0,0/7,0.0131,4/7,,,False
+B,pfr,"coverage yards per target, miss, vs dc",margin,d_miss_cov_ypt_dc_all,0.0789,0.0036,0.0,0/7,0.0387,3/7,0.0028,-0.0109,False
+B,pfr,"coverage yards per target in total, miss, vs dc",total,s_miss_cov_ypt_dc_all,0.0721,0.0059,0.0,0/7,0.0367,2/7,,,False
+B,pfr,"coverage yards per target, chg, vs dc",margin,d_chg_cov_ypt_dc_all,0.0455,0.0052,0.0,0/7,0.024,3/7,0.0042,-0.0085,False
+B,pfr,"coverage yards per target in total, chg, vs dc",total,s_chg_cov_ypt_dc_all,0.0184,0.0074,0.0,0/7,0.0125,4/7,,,False
+B,pfr,"missed-tackle rate, miss, vs bk",margin,d_miss_mt_bk_all,0.0281,0.0037,0.0,0/7,0.015,2/7,-0.0028,-0.0012,False
+B,pfr,"missed-tackle rate in total, miss, vs bk",total,s_miss_mt_bk_all,0.0732,-0.0151,0.0,0/7,0.026,4/7,,,False
+B,pfr,"missed-tackle rate, chg, vs bk",margin,d_chg_mt_bk_all,0.0208,0.0,0.0,0/7,0.0097,4/7,-0.0111,0.0,False
+B,pfr,"missed-tackle rate in total, chg, vs bk",total,s_chg_mt_bk_all,0.0041,-0.0105,0.0,0/7,-0.0037,4/7,,,False
+B,pfr,"missed-tackle rate, miss, vs dc",margin,d_miss_mt_dc_all,0.0216,-0.017,0.0,0/7,0.001,4/7,-0.0028,-0.0036,False
+B,pfr,"missed-tackle rate in total, miss, vs dc",total,s_miss_mt_dc_all,0.078,-0.0177,0.0,0/7,0.0269,4/7,,,False
+B,pfr,"missed-tackle rate, chg, vs dc",margin,d_chg_mt_dc_all,0.02,-0.0166,0.0,0/7,0.0005,5/7,-0.0056,-0.0012,False
+B,pfr,"missed-tackle rate in total, chg, vs dc",total,s_chg_mt_dc_all,-0.0133,-0.0036,0.0,0/7,-0.0081,4/7,,,True
+B,pfr,team pressure rate,margin,d_agg_press,0.0011,-0.0057,0.0,0/7,-0.0025,4/7,-0.0014,-0.0036,False
+B,pfr,team pressure rate in total,total,s_agg_press,0.0011,0.0004,0.0,0/7,0.0007,1/7,,,False
+B,pfr,team blitz rate,margin,d_agg_blitz,0.0674,-0.0131,0.0,0/7,0.0244,4/7,0.007,-0.0085,False
+B,pfr,team blitz rate in total,total,s_agg_blitz,-0.0122,0.0046,0.0,0/7,-0.0032,4/7,,,False
+B,pfr,team yards per target allowed,margin,d_agg_ypt,0.0084,-0.0053,0.0,0/7,0.0011,3/7,-0.0111,-0.0061,False
+B,pfr,team yards per target allowed in total,total,s_agg_ypt,0.0164,-0.0023,0.0,0/7,0.0064,3/7,,,False
+B,pfr,team missed-tackle rate,margin,d_agg_mt,0.0103,0.002,0.0,0/7,0.0058,2/7,-0.0111,-0.0012,False
+B,pfr,team missed-tackle rate in total,total,s_agg_mt,-0.0428,0.0021,0.0,0/7,-0.0188,3/7,,,False
+B,ftn,FTN blitzers per dropback,margin,d_agg_ftn_blitz,0.0069,0.0069,0.0,0/7,0.0026,1/7,,,False
+B,ftn,FTN blitzers per dropback in total,total,s_agg_ftn_blitz,-0.0278,-0.0278,0.0,0/7,-0.0105,3/7,,,False
+B,ftn,FTN pass rushers per dropback,margin,d_agg_ftn_rush,-0.0035,-0.0035,0.0,0/7,-0.0013,2/7,,,False
+B,ftn,FTN pass rushers per dropback in total,total,s_agg_ftn_rush,0.0027,0.0027,0.0,0/7,0.001,1/7,,,False

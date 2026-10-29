@@ -185,5 +185,10 @@ boards in detail; this file is the rules.
 - This repo is the betting model as well as its site. Model, prediction and betting-logic
   work belongs to the CFB/NFL Model project; page, layout and landing-page work belongs to
   the Dashboards project.
+- Exception (Ryan's call, Oct 29, 2026): the defensive-player study (FEATURES.md, "Defensive
+  players, re-tested and rated", scripts `experiments/def_*.py` and `cfb_def_test.py`) is
+  done here, and anything from it that earns a place goes on both boards' games, cards and
+  player projections through its own PR. Ryan sees the results and the plan before anything
+  that changes the board is merged.
 - Every page keeps the disclaimer: for research and entertainment, past results do not
   predict future results, and nothing here is betting advice.
