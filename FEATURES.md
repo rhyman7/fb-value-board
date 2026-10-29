@@ -319,8 +319,8 @@ clustered by game, `def_players_se.py`).
 
 | Candidate | Stat | Tuning | Holdout | Passes the rule |
 |---|---|---|---|---|
-| Opponent's team missed-tackle rate | receiving yards | −0.013 ± 0.003 | −0.022 ± 0.002 | yes |
-| Opponent's team yards per target allowed | receiving yards | −0.013 ± 0.007 | −0.014 ± 0.005 | yes |
+| Opponent's team missed-tackle rate | receiving yards | −0.013 ± 0.003 | −0.022 ± 0.002 | yes (see below) |
+| Opponent's team yards per target allowed | receiving yards | −0.013 ± 0.007 | −0.014 ± 0.005 | yes (see below) |
 | Opponent's team pressure rate | interceptions | −0.003 ± 0.002 | −0.002 ± 0.001 | yes |
 | Opponent's tackling lost to injury | receiving yards | −0.004 ± 0.001 | −0.002 ± 0.002 | yes, tiny |
 | Opponent's pass rush lost (play-by-play) | passing, receiving | worse or ±0.002 | | no |
@@ -330,11 +330,26 @@ clustered by game, `def_players_se.py`).
 | Opponent's team missed-tackle rate | rushing yards | +0.001 | −0.002 | no |
 
 Together (`def_players_combined.py`: missed-tackle rate and yards per target in receiving
-yards, pressure rate in interceptions), receiving yards improve by 0.025 ± 0.007 on the tuning
-seasons and 0.025 ± 0.006 on the holdout, against an average miss of about 15 yards; that is
-real but small. It would move this season's receiving projections by a median 0.6 yards
-(5 at most) and interceptions by about 0.02. Not applied yet: these need PFR's weekly
-defensive file in the data pull, and the board changes only after Ryan approves.
+yards, pressure rate in interceptions), receiving yards improved by 0.025 ± 0.007 on the tuning
+seasons and 0.025 ± 0.006 on the holdout. **That result does not hold up.** Each team's rate
+was measured against an average over all seasons, 2026 included, so the reference used later
+games. Measured against something a projection could know at the time, the receiving gain on
+the holdout is mostly gone:
+
+| Reference for "above or below average" | Receiving yards, tuning / holdout | Interceptions, tuning / holdout |
+|---|---|---|
+| Average of all seasons (uses later games; the first test) | −0.025 / −0.026 | −0.003 / −0.002 |
+| This week's league average | −0.010 ± 0.007 / −0.007 ± 0.005 | −0.002 ± 0.002 / −0.003 ± 0.001 |
+| League average of earlier seasons | −0.054 ± 0.008 / −0.005 ± 0.006 | −0.002 ± 0.002 / −0.002 ± 0.001 |
+
+Every version passes the rule on both periods, but on the holdout the receiving change is
+within about one standard error and the interceptions change about two, against average
+misses of 15 yards and 0.7 interceptions. The receiving result also swings fivefold with the
+choice of reference, which a real effect shouldn't. A board-ready version (PFR's weekly
+defensive file, the earlier-seasons reference) is on the branch
+`feature/defense-in-player-projections`, checked with
+`experiments/def_players_production.py`, and it moves this season's receiving projections
+by a median 0.6 yards (5 at most). **Not applied**; Ryan decides.
 
 ### College
 
