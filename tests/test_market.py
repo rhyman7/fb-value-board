@@ -95,3 +95,60 @@ def test_kalshi_fee_lowers_the_price():
     assert O.expected_value(0.5, O.kalshi_effective_odds(100)) < 0
     assert O.expected_value(0.5, O.kalshi_effective_odds(100, maker=True)) < 0
     assert O.expected_value(0.5, O.kalshi_effective_odds(100, maker=True)) > O.expected_value(0.5, O.kalshi_effective_odds(100))
+
+
+def test_shop_scores_each_book_at_its_own_line():
+    from nflmodel import bets, distributions as D
+    from tests.test_model import DIST, _one_game
+    g = _one_game(proj_margin=5.0, proj_total=44.0)          # line: home -3, total 44 (see test_model)
+    quotes = {g["game_id"].iloc[0]: {
+        "draftkings": {"spread_line": 3.0, "home_spread_odds": -110, "away_spread_odds": -110, "total_line": 44.0, "over_odds": -110, "under_odds": -110},
+        "fanduel": {"spread_line": 2.5, "home_spread_odds": -115, "away_spread_odds": -105, "total_line": 44.5, "over_odds": -108, "under_odds": -112},
+        "kalshi": {"spread_line": 3.0, "home_spread_odds": -110, "away_spread_odds": -110, "home_moneyline": -150, "away_moneyline": 130}}}
+    s = bets.shop(g, DIST, quotes, ["draftkings", "fanduel", "kalshi"], "proj")
+    gid = g["game_id"].iloc[0]
+    home = {q["book"]: q for q in s[(gid, "Spread", "home")]}
+    assert home["fanduel"]["prob"] > home["draftkings"]["prob"]            # -2.5 covers more often than -3
+    assert home["fanduel"]["line"] == -2.5 and home["draftkings"]["line"] == -3.0
+    assert home["kalshi"]["odds_net"] < -110 and home["kalshi"]["ev"] < home["draftkings"]["ev"]   # the fee
+    assert s[(gid, "Spread", "home")][0]["ev"] >= s[(gid, "Spread", "home")][-1]["ev"]
+    # the anchor's own price has no edge against itself; a better line at the same price does
+    assert abs(home["draftkings"]["ev_line"] - bets.O.expected_value(0.5, -110)) < 0.02
+    assert home["fanduel"]["ev_line"] > home["draftkings"]["ev_line"]
+    assert "ev_line" in s[(gid, "Moneyline", "home")][0] and s[(gid, "Moneyline", "home")][0]["book"] == "kalshi"
+
+
+def test_slate_with_market_anchors_and_reblends():
+    from nflmodel import slate
+    from tests.test_model import _one_game
+    g = _one_game(proj_margin=4.0, proj_total=45.0)
+    g["model_margin"], g["model_total"], g["w_margin"], g["w_total"] = 8.0, 50.0, 0.2, 0.05
+    gid = g["game_id"].iloc[0]
+    quotes = {gid: {"pinnacle": {"spread_line": 2.5, "home_spread_odds": -105, "away_spread_odds": -105,
+                                 "total_line": 43.5, "over_odds": -110, "under_odds": -110}}}
+    out = slate.with_market(g, quotes)
+    assert out["anchor"].iloc[0] == "pinnacle" and out["spread_line"].iloc[0] == 2.5
+    assert abs(out["proj_margin"].iloc[0] - (2.5 + 0.2 * (8.0 - 2.5))) < 1e-9
+    assert abs(out["proj_total"].iloc[0] - (43.5 + 0.05 * (50.0 - 43.5))) < 1e-9
+    none = slate.with_market(g, {})
+    assert none["anchor"].iloc[0] == "consensus" and none["spread_line"].iloc[0] == g["spread_line"].iloc[0]
+
+
+def test_closing_value_measures_against_the_sharp_close():
+    from nflmodel import archive, bets
+    from tests.test_model import DIST
+    g = {"id": "g", "market": {"spread": 3.0, "total": 44.5}}
+    curve = lambda df: bets.curves(df, DIST, "line")
+    close = {"spread_line": 4.0, "home_spread_odds": -110, "away_spread_odds": -110, "total_line": 44.5, "over_odds": -110, "under_odds": -110,
+             "home_moneyline": -180, "away_moneyline": 160}
+    # bet home -3 at -110 when the close is -4: positive closing line value
+    home = archive.closing_value({"market": "Spread", "side": "home", "odds": -110}, g, close, curve)
+    away = archive.closing_value({"market": "Spread", "side": "away", "odds": -110}, g, close, curve)
+    assert home["clv"] > 0 > away["clv"] and home["close_line"] == 4.0
+    # the best book's line and price are what count when they are there
+    better = archive.closing_value({"market": "Spread", "side": "home", "odds": -110, "best_line": -2.5, "best_odds": -105, "best_odds_net": -105}, g, close, curve)
+    assert better["clv"] > home["clv"]
+    assert archive.closing_value({"market": "Total", "side": "over", "odds": -110}, g, close, curve)["clv"] < 0   # the vig, no move
+    assert archive.closing_value({"market": "Moneyline", "side": "home", "odds": -160}, g, close, curve)["clv"] > 0
+    assert archive.closing_value({"market": "Spread", "side": "home", "odds": -110}, g, {"total_line": 44.5}, curve) == {}
+    assert archive.closing_value({"market": "Spread", "side": "home", "odds": -110}, g, None, curve) == {}

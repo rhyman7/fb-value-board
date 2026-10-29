@@ -223,6 +223,14 @@ book's price at that book's own line. Kalshi contract prices are charged the exc
 before EV. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
 the published raw model is 2+ points (NFL) or 3+ (college) off Pinnacle's current line.
 
+On the boards, a game Pinnacle quotes is anchored to Pinnacle's line and prices rather than
+the consensus (its card and page say so), each side's table shows the best price among
+DraftKings, FanDuel, BetMGM and Kalshi at that book's own line with a "beats Pinnacle" chip
+when the price is better than the sharp no-vig number on its own, and Past weeks grade every
+flagged bet's closing line value against Pinnacle's close. The Market lines Action posts
+opener alerts (raw model well off Pinnacle early in the week) to a GitHub issue labelled
+`opener-alerts`.
+
 ## Honest limits
 
 - Rating settings were tuned on 2014 to 2018. Some structural choices (adding

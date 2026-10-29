@@ -22,13 +22,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from nflmodel.archive import closing_value
+
 from . import config as C
 
 ARCH = C.DOCS / "archive"
 BOX = ["pass_att", "completions", "pass_yds", "pass_td", "ints", "carries", "rush_yds", "rush_td", "receptions", "rec_yds", "rec_td"]
 GAME_KEYS = ["id", "game_id", "week", "date", "time", "away", "home", "away_name", "home_name", "away_record", "home_record",
              "neutral", "early", "weight", "roof", "wind", "away_qb", "home_qb", "market", "model", "proj", "win", "bets",
-             "opening_spread", "opening_total", "line_source"]
+             "opening_spread", "opening_total", "line_source", "anchor", "sharp_open", "books"]
 
 
 def _path(season, week, root=ARCH):
@@ -97,9 +99,12 @@ def _bet_result(b, g, margin, total):
     return "W", round(o / 100 if o > 0 else 100 / -o, 4)
 
 
-def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH) -> int:
+def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH, close: dict | None = None, curve=None) -> int:
+    """close / curve: the sharp book's closing quotes and the line curve, for closing line value
+    (nflmodel/archive.closing_value)."""
     if not root.exists():
         return 0
+    close = close or {}
     sched = games.set_index("game_id")
     box = pg.set_index("game_id") if pg is not None and len(pg) else None
     n = 0
@@ -118,7 +123,8 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH) -> int:
             bets = []
             for b in g.get("bets") or []:
                 res, units = _bet_result(b, g, margin, total)
-                bets.append({"market": b["market"], "side": b["side"], "result": res, "units": units})
+                bets.append({"market": b["market"], "side": b["side"], "result": res, "units": units,
+                             **closing_value(b, g, close.get(gid), curve)})
             d["results"][key] = {"home_score": hs, "away_score": as_, "bets": bets}
             if box is not None and gid in box.index:
                 b = box.loc[[gid]]
@@ -133,6 +139,7 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH) -> int:
 
 def summarize(d: dict) -> dict:
     rec = {"spread": [0, 0, 0], "total": [0, 0, 0], "bets": 0, "bet_wlp": [0, 0, 0], "units": 0.0, "staked": 0.0, "graded": 0,
+           "clv_n": 0, "clv_sum": 0.0, "beat_close": 0,
            "winners": [0, 0], "line_winners": [0, 0], "miss": {"margin": 0.0, "line_margin": 0.0, "total": 0.0, "line_total": 0.0}}
     for key, g in d["games"].items():
         res = d["results"].get(key)
@@ -155,6 +162,10 @@ def summarize(d: dict) -> dict:
                     rec["bet_wlp"]["WLP".index(r["result"])] += 1
                     rec["staked"] += b["stake"]
                     rec["units"] += b["stake"] * r["units"]
+                    if r.get("clv") is not None:
+                        rec["clv_n"] += 1
+                        rec["clv_sum"] += r["clv"]
+                        rec["beat_close"] += int(r["clv"] > 0)
         margin, total = res["home_score"] - res["away_score"], res["home_score"] + res["away_score"]
         if margin != 0:
             rec["winners"][0 if np.sign(g["proj"]["margin"]) == np.sign(margin) else 1] += 1
@@ -166,6 +177,8 @@ def summarize(d: dict) -> dict:
     if rec["graded"]:
         rec["miss"] = {k: round(v / rec["graded"], 2) for k, v in rec["miss"].items()}
     rec["units"], rec["staked"] = round(rec["units"], 4), round(rec["staked"], 4)
+    rec["clv"] = round(rec["clv_sum"] / rec["clv_n"], 4) if rec["clv_n"] else None
+    del rec["clv_sum"]
     rec["backfilled"] = bool(d["games"]) and all(g.get("backfilled") for g in d["games"].values())
     return rec
 
@@ -181,9 +194,9 @@ def write_index(root=ARCH) -> list:
     return rows
 
 
-def update(out, games, pg, now=None, root=ARCH, verbose=True):
+def update(out, games, pg, now=None, root=ARCH, verbose=True, close=None, curve=None):
     saved = snapshot(out, games, now, root)
-    graded = grade(games, pg, root)
+    graded = grade(games, pg, root, close, curve)
     write_index(root)
     if verbose:
         print(f"  archive: {saved} games saved before kickoff, {graded} newly graded")
