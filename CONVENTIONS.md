@@ -83,6 +83,13 @@ boards in detail; this file is the rules.
   (`archive.closing_value`; `clv` and `beat_close` in each week's record). The Action also runs
   `run_market.py alerts`: raw model 2+ points off Pinnacle's spread (NFL; 3+ college) or 3+ off
   its total goes to `data/market/alerts.csv` and is posted to the open `opener-alerts` issue.
+- **CFBD lines (college board): the `CFBD_API_KEY` repository secret.** Optional. When it is
+  set, the **Update college board** Action passes it to the build and `cfbmodel/cfbd.py`
+  fetches CollegeFootballData.com's lines for the upcoming weeks; a game ESPN's scoreboard has
+  not priced takes CFBD's consensus line, else DraftKings, else the first book listed, and its
+  `line_source` says so ("CFBD DraftKings"). ESPN's price always comes first, the cfbfastR
+  consensus stays the fallback, and without the key or on any failure nothing changes. Never
+  print the key or write it to a file.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model, `out` takes a player
   out of the player projections. Use it only for confirmed news the nflverse schedule or the
