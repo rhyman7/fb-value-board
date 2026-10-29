@@ -245,6 +245,9 @@ nflmodel/
   weather.py              wind forecasts for upcoming games, and the forecast log
   injuries.py             missing starters by position group (reports, rosters, snaps)
   overrides.py            hand-entered starters and outs from data/overrides.csv
+  def_ratings.py          defender ratings and missing-defender features (shadow test only)
+  defense.py              team defensive rates from PFR (shadow test only)
+  shadow.py               the shadow test of the defensive inputs, logged to data/shadow/
   players_data.py         player box scores from play-by-play
   players.py              player projections, backtest summary and board output
   ratings.py              team, quarterback and market-implied ratings

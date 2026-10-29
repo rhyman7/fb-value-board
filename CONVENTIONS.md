@@ -35,8 +35,16 @@ boards in detail; this file is the rules.
   still map every game; their Action logs print the counts.
 - **What commits straight to `main`** (automated, not hand edits): the **Update board** and
   **Update college board** Actions (`.github/workflows/update.yml`, `update-cfb.yml`), which
-  rebuild `docs/` and the committed files under `data/`. They share the `board-commits`
+  rebuild `docs/` and the committed files under `data/` (for the NFL board including the
+  shadow test log, `data/shadow/`). They share the `board-commits`
   concurrency group so they never push at once. Everything else goes through a PR.
+- **Shadow test (NFL): `data/shadow/`.** The **Update board** Action also writes
+  `defense_games.csv` and `defense_players.csv` (`nflmodel/shadow.py`): the game model and two
+  player projections refitted with the defensive-player inputs, logged and never shown on the
+  board. A game's rows are rewritten until kickoff and never after; don't edit or delete rows
+  by hand. The inputs and the rule are fixed until the test is judged (after the 2027 season,
+  FEATURES.md "Shadow test"): don't change `shadow.MARGIN`, `TOTAL` or `PLAYER`, and score it
+  with `experiments/shadow_score.py`. A shadow failure never stops the board build.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
