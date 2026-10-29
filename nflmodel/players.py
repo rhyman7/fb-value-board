@@ -228,7 +228,7 @@ def pregame_active(rows: pd.DataFrame, avail: pd.DataFrame) -> pd.Series:
 def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.DataFrame,
           inj_groups: pd.DataFrame | None = None, pass_rush: pd.DataFrame | None = None,
           games: pd.DataFrame | None = None, overrides: pd.DataFrame | None = None,
-          pregame: bool = False) -> pd.DataFrame:
+          pregame: bool = False, defense_rates: pd.DataFrame | None = None) -> pd.DataFrame:
     """The full player-game table with every pre-game projection input.
 
     overrides (optional) marks players out of upcoming games (see nflmodel/overrides.py).
@@ -346,7 +346,9 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
         pr = pass_rush[["game_id", "team", "miss_pr"]].rename(columns={"team": "opp", "miss_pr": "opp_miss_pr"})
         out = out.merge(pr, on=["game_id", "opp"], how="left")
     out["opp_miss_pr"] = out["opp_miss_pr"].fillna(0.0) if "opp_miss_pr" in out else 0.0
-    return out
+    # the opponent's pressure rate, yards per target and missed-tackle rate (defense.py; PFR, 2019 on)
+    from . import defense
+    return defense.attach(out, defense_rates)
 
 
 # --------------------------------------------------------------------------
@@ -437,9 +439,11 @@ PASS_STATS = ("pass_att", "completions", "pass_yds", "pass_td", "ints")
 
 CAL_EXTRA = {   # extra terms in the calibration of each stat (multiplied by the raw projection).
     # Defensive injuries are kept only where they helped on 2013-2018 (receiving); see FEATURES.md.
+    # The opponent's team rates (defense.py) only where they helped on 2020-2022 and since 2023:
+    # missed-tackle rate and yards per target in receiving yards, pressure rate in interceptions.
     "pass_yds": ["wind"], "completions": ["wind"], "pass_td": [],
-    "rec_yds": ["opp_miss_db", "opp_miss_pr", "wind"], "receptions": ["opp_miss_db", "wind"], "targets": ["wind"],
-    "rush_yds": [], "carries": [], "rec_td": [], "rush_td": [], "ints": [], "pass_att": ["wind"],
+    "rec_yds": ["opp_miss_db", "opp_miss_pr", "wind", "opp_def_mt", "opp_def_ypt"], "receptions": ["opp_miss_db", "wind"], "targets": ["wind"],
+    "rush_yds": [], "carries": [], "rec_td": [], "rush_td": [], "ints": ["opp_def_press"], "pass_att": ["wind"],
 }
 
 
@@ -538,6 +542,7 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
             "imp_pts": r1(first["imp_pts"]), "margin": r1(first["margin"]), "wind": r1(first["wind"]),
             "def_ypa": r3(first["def_ypa"]), "def_ypc": r3(first["def_ypc"]),
             "opp_miss_db": r2(first["opp_miss_db"]), "opp_miss_pr": r2(first["opp_miss_pr"]),
+            "opp_def": {k: {"v": r3(first.get(f"opp_def_{k}_raw")), "lg": r3(first.get(f"opp_lg_{k}"))} for k in ("press", "ypt", "mt")},
             "out": [{"name": info["name"].get(o.player_id, o.player_id), "pos": o.position, "status": status_label(o.status, o.report, upcoming=True) or "Out",
                      "tgt_share": r3(o.tgt_share_raw), "car_share": r3(o.car_share_raw)} for o in out.itertuples()],
         })

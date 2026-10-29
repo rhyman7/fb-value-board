@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import archive, backtest, bets, config as C, data, extra, injuries, matchup, model, overrides, players, players_data, slate, weather
+from . import archive, backtest, bets, config as C, data, defense, extra, injuries, matchup, model, overrides, players, players_data, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -62,7 +62,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             frame, info = model.walk_forward(game_roles.attach(base, game_roles.team_features(rows, R, avail)))
         except Exception as exc:
             print(f"  role signals skipped ({exc}); game model runs without them")
-        ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov)
+        try:
+            drates = defense.team_rates(games, tg, defense.load(refresh_current=refresh, verbose=verbose))
+        except Exception as exc:
+            print(f"  PFR defense skipped ({exc}); projections run without it")
+            drates = None
+        ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov, defense_rates=drates)
         pproj = players.walk_forward(ptable, first_test=season)
         upcoming_ids = set(frame.loc[~frame.played & frame.spread_line.notna() & (frame.season == season), "game_id"])
         # the new projections (players_ml.py), shown next to the current ones: trained on every
