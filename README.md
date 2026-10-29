@@ -19,8 +19,10 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
 - **A page for each game**, opened from its card:
   - game summary: first tracked line, current line, model, market-adjusted
     projection, projected score and win probability
-  - how the spread is built: team ratings, home field, rest and each
-    quarterback, in points
+  - how the spread is built: every input of the game model in points (team
+    ratings, home field, rest, each quarterback, offensive line injuries, skill
+    starters out, falling snap shares), adding up exactly to the raw model spread;
+    the same for the total
   - quarterbacks: rating, effect on the spread and an eight-game EPA log
   - how they match up: each offense against the defense it faces across 15
     stats, with league ranks

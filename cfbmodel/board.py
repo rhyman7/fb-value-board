@@ -157,6 +157,15 @@ class MatchupBuilder:
         v = sum(self.tc.get(f"s_{m}", 0.0) * (r[m]["off"] + r[m]["def"]) for m in self.engine.metrics) + self.tc["s_mkt"] * r["mkt"]["T"]
         return float(v[i])
 
+    @staticmethod
+    def uncovered(margin_feats, total_feats, metrics) -> list[str]:
+        """Model features the spread and totals card has no row for (should be empty;
+        tests/test_cfb.py checks). The totals baseline is what is left over, so a total
+        feature missing here would be hidden inside it."""
+        m_ok = {f"d_{m}" for m in metrics} | {"d_mkt", "d_talent", "d_talent_early", "d_rtprod", "hfa", "rest_diff", "d_qb", "d_qb_early"}
+        t_ok = {f"s_{m}" for m in metrics} | {"s_mkt", "lg_pts", "s_qb", "s_def_rtprod", "indoor", "wind_hi"}
+        return [k for k in margin_feats if k not in m_ok] + [k for k in total_feats if k not in t_ok]
+
     def breakdown(self, g) -> dict:
         mc, tc = self.mc, self.tc
         r = self.ratings(int(g.order))

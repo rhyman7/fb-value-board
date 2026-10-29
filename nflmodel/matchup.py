@@ -40,6 +40,41 @@ def _f(x, nd=2):
     return None if x is None or not np.isfinite(x) else round(float(x), nd)
 
 
+# How each model feature shows on the game page's "How the spread is built" card.
+# Rating features are summed into "Team ratings" (margin) or the two teams' "offense and
+# defense" rows (total); d_qb is split into the two quarterback rows. Every other feature
+# needs an entry here, or breakdown() refuses to build the card (tests check this).
+MARGIN_RATING = {"d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_snaps"}
+MARGIN_ROWS = {
+    "hfa": ("hfa", "Home field"), "rest_diff": ("rest", "Rest"),
+    "d_chg_ol": ("ol", "Offensive line injuries"),
+    "d_depth1_out": ("depth1", "Skill starters out"),
+    "d_snap_drop": ("snaps", "Snap shares falling"),
+}
+TOTAL_RATING = {"s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_snaps"}
+TOTAL_ROWS: dict = {}   # extra total features beyond baseline, teams, quarterbacks, roof and wind
+
+
+def uncovered(margin_feats, total_feats) -> list[str]:
+    """Model features the card has no row for (should be empty)."""
+    m = [k for k in margin_feats if not (k in MARGIN_RATING or k in MARGIN_ROWS or k == "d_qb")]
+    t = [k for k in total_feats if not (k in TOTAL_RATING or k in TOTAL_ROWS or k in ("lg_pts", "s_qb", "indoor", "wind"))]
+    return m + t
+
+
+def _exact(rows: list) -> float:
+    """Round each row to 0.01 so that the rows add up exactly to the rounded sum (the
+    rounding remainder goes to the largest row)."""
+    total = round(sum(x["value"] for x in rows), 2)
+    for x in rows:
+        x["value"] = round(float(x["value"]), 2) + 0.0   # no -0.0 on the card
+    left = round(total - sum(x["value"] for x in rows), 2)
+    if left:
+        big = max(rows, key=lambda x: abs(x["value"]))
+        big["value"] = round(big["value"] + left, 2)
+    return total
+
+
 class MatchupBuilder:
     def __init__(self, games: pd.DataFrame, qb_games: pd.DataFrame, stats: pd.DataFrame, engine, info: dict, season: int):
         self.games, self.engine, self.info, self.season = games, engine, info, season
@@ -74,33 +109,48 @@ class MatchupBuilder:
 
     # ------------------------------------------------------------------ breakdown
     def breakdown(self, g) -> dict:
+        """The model spread and total, one row per model feature, adding up exactly to
+        model_margin and model_total. Every feature in the fitted model needs a row
+        (MARGIN_ROWS / TOTAL_ROWS); tests/test_model.py checks with uncovered()."""
         r = self.ratings(int(g.order))
         h, a = self.engine.tix[g.home_team], self.engine.tix[g.away_team]
+        mc, tc = self.mc, self.tc
+        val = lambda k: float(getattr(g, k, 0.0) or 0.0)
         rh, ra = self.team_rating(r, h), self.team_rating(r, a)
-        qh, qa = self.mc["d_qb"] * g.home_qb_delta, -self.mc["d_qb"] * g.away_qb_delta
+        qcoef = mc.get("d_qb", 0.0)
         margin = [
-            {"key": "ratings", "label": "Team ratings", "value": _f(rh - ra), "home_rating": _f(rh), "away_rating": _f(ra)},
-            {"key": "hfa", "label": "Home field" if not g.neutral else "Home field (neutral site)", "value": _f(self.mc["hfa"] * g.hfa)},
-            {"key": "rest", "label": "Rest", "value": _f(self.mc["rest_diff"] * g.rest_diff)},
-            {"key": "home_qb", "label": f"{g.home_team} quarterback", "value": _f(qh)},
-            {"key": "away_qb", "label": f"{g.away_team} quarterback", "value": _f(qa)},
+            {"key": "ratings", "label": "Team ratings", "value": sum(mc[k] * val(k) for k in mc if k in MARGIN_RATING),
+             "home_rating": _f(rh), "away_rating": _f(ra)},
+            {"key": "hfa", "label": "Home field" if not g.neutral else "Home field (neutral site)", "value": mc.get("hfa", 0.0) * val("hfa")},
+            {"key": "rest", "label": "Rest", "value": mc.get("rest_diff", 0.0) * val("rest_diff")},
+            {"key": "home_qb", "label": f"{g.home_team} quarterback", "value": qcoef * val("home_qb_delta")},
+            {"key": "away_qb", "label": f"{g.away_team} quarterback", "value": -qcoef * val("away_qb_delta")},
         ]
-        if "d_chg_ol" in self.mc:
-            margin.append({"key": "ol", "label": "Offensive line injuries", "value": _f(self.mc["d_chg_ol"] * getattr(g, "d_chg_ol", 0.0))})
+        for k, (key, label) in MARGIN_ROWS.items():
+            if k in mc and key not in ("hfa", "rest"):
+                margin.append({"key": key, "label": label, "value": mc[k] * val(k)})
+
+        # totals: each team's ratings (pace included) from the engine; whatever of the rated
+        # sum is not team-specific (the market's average total) joins the league baseline
         th, ta = self.total_rating(r, h), self.total_rating(r, a)
-        base = self.info["total_intercept"] + self.tc["lg_pts"] * g.lg_pts + self.tc["s_mkt"] * r["mkt"]["avg_total"]
+        rated = sum(tc[k] * val(k) for k in tc if k in TOTAL_RATING)
+        base = self.info["total_intercept"] + tc.get("lg_pts", 0.0) * val("lg_pts") + rated - th - ta
         total = [
-            {"key": "base", "label": "League baseline", "value": _f(base)},
-            {"key": "home", "label": f"{g.home_team} offense and defense", "value": _f(th)},
-            {"key": "away", "label": f"{g.away_team} offense and defense", "value": _f(ta)},
-            {"key": "qb", "label": "Quarterbacks", "value": _f(self.tc["s_qb"] * g.s_qb)},
-            {"key": "roof", "label": "Indoors" if g.indoor else "Outdoors", "value": _f(self.tc["indoor"] * g.indoor)},
+            {"key": "base", "label": "League baseline", "value": base},
+            {"key": "home", "label": f"{g.home_team} offense and defense", "value": th},
+            {"key": "away", "label": f"{g.away_team} offense and defense", "value": ta},
+            {"key": "qb", "label": "Quarterbacks", "value": tc.get("s_qb", 0.0) * val("s_qb")},
+            {"key": "roof", "label": "Indoors" if g.indoor else "Outdoors", "value": tc.get("indoor", 0.0) * val("indoor")},
         ]
-        if "wind" in self.tc:
-            mph = "indoors" if g.indoor else f"{g.wind:.0f} mph" + ("" if getattr(g, "wind_known", 0) else ", typical day assumed")
-            total.append({"key": "wind", "label": f"Wind ({mph})", "value": _f(self.tc["wind"] * g.wind)})
-        return {"margin": margin, "margin_sum": _f(sum(x["value"] for x in margin)),
-                "total": total, "total_sum": _f(sum(x["value"] for x in total)),
+        if "wind" in tc:
+            mph = "indoors" if g.indoor else f"{val('wind'):.0f} mph" + ("" if getattr(g, "wind_known", 0) else ", typical day assumed")
+            total.append({"key": "wind", "label": f"Wind ({mph})", "value": tc["wind"] * val("wind")})
+        for k, (key, label) in TOTAL_ROWS.items():
+            if k in tc:
+                total.append({"key": key, "label": label, "value": tc[k] * val(k)})
+
+        msum, tsum = _exact(margin), _exact(total)
+        return {"margin": margin, "margin_sum": msum, "total": total, "total_sum": tsum,
                 "weight_margin": _f(g.w_margin, 3), "weight_total": _f(g.w_total, 3)}
 
     # ------------------------------------------------------------------ quarterbacks

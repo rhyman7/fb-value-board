@@ -280,3 +280,9 @@ def test_designations_played_through():
     assert sorted(kept["name"]) == ["Never Played", "New Out", "No Date"]
     other = played.assign(team_name="Team B")                        # played for another team: stands
     assert len(D.drop_played(des, other, verbose=False)) == 4
+
+
+def test_spread_card_covers_every_model_feature():
+    from cfbmodel import board, model
+    from nflmodel.ratings import METRICS
+    assert board.MatchupBuilder.uncovered(model.MARGIN_FEATS, model.TOTAL_FEATS, METRICS + ("snaps",)) == []
