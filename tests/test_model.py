@@ -124,7 +124,8 @@ def test_context_features():
 
 def test_wind_forecast_failure_is_harmless(monkeypatch):
     from nflmodel import weather
-    g = _ctx_games().assign(played=False, gameday=pd.Timestamp.now().normalize(), wind=np.nan)
+    # today in UTC, as weather.forecast_wind counts it (the local date differs around midnight UTC)
+    g = _ctx_games().assign(played=False, gameday=pd.Timestamp.now(tz="UTC").tz_localize(None).normalize(), wind=np.nan)
     def boom(*a, **k):
         raise OSError("no network")
     monkeypatch.setattr(weather, "_fetch", boom)
