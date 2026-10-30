@@ -210,6 +210,19 @@ check its first run.
 8. **Pricing** (`nflmodel/bets.py`, `nflmodel/odds.py`). EV per dollar, fair
    price, and a quarter-Kelly stake capped at 3% of bankroll.
 
+## Market lines
+
+`data/market/` holds snapshots of every upcoming game's spread, total and moneyline at
+Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi, from The Odds API (`nflmodel/market.py`,
+`run_market.py`, the **Market lines** Action: three a day in season and hourly from Sunday
+night to Tuesday, when the week's lines open). Only rows that changed are stored, so a
+month of both leagues is a few thousand rows. Pinnacle is the sharp reference: the boards
+anchor their projections to its no-vig price where it quotes the game, and score every other
+book's price at that book's own line. Kalshi contract prices are charged the exchange's fee
+(`odds.kalshi_effective_odds`: 7% x p x (1-p) per contract as a taker, 1.75% as a maker)
+before EV. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
+the published raw model is 2+ points (NFL) or 3+ (college) off Pinnacle's current line.
+
 ## Honest limits
 
 - Rating settings were tuned on 2014 to 2018. Some structural choices (adding
@@ -245,6 +258,7 @@ nflmodel/
   weather.py              wind forecasts for upcoming games, and the forecast log
   injuries.py             missing starters by position group (reports, rosters, snaps)
   overrides.py            hand-entered starters and outs from data/overrides.csv
+  market.py               game lines from several books (Pinnacle, DK, FD, BetMGM, Kalshi), data/market/
   def_ratings.py          defender ratings and missing-defender features (shadow test only)
   defense.py              team defensive rates from PFR (shadow test only)
   shadow.py               the shadow test of the defensive inputs, logged to data/shadow/
@@ -280,6 +294,7 @@ experiments/players_test.py      player projections against baselines
 experiments/players_ablation.py  which pieces of the player model help
 PLAYERS.md                how player projections are built, and how they have done
 run_props.py              player props: price, log, grade, backfill
+run_market.py             game-line snapshots, status and opener alerts
 experiments/props_calibration.py  prop distributions, calibration report, fitted parameters
 experiments/props_real_lines.py   the prop model against past DraftKings and FanDuel lines
 PROPS.md                  player props: method, calibration, market, log

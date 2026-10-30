@@ -63,6 +63,16 @@ boards in detail; this file is the rules.
   Bet flags are off (`propmarket.FLAGS_ON = False`, Oct 2026): against real 2025 lines the
   model did worse than the books. Turning them back on needs an out-of-sample win over the
   books' prices (PROPS.md) and Ryan's go-ahead.
+- **Market lines (both boards): `data/market/`.** The **Market lines** Action
+  (`.github/workflows/market.yml`) snapshots every upcoming NFL and college game's spread,
+  total and moneyline at Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi through The Odds
+  API (`nflmodel/market.py`, `run_market.py snapshot`; 3 credits per league per snapshot, three
+  a day plus hourly Sunday night to Tuesday, about 1,400 credits a month) and commits only the
+  rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
+  a row. It shares the `board-commits` group. The board builds read these files and fall back
+  to their usual lines when a game has no quotes; a failed snapshot never stops anything.
+  Kalshi prices are the contract price; `odds.kalshi_effective_odds` adds the exchange fee
+  (taker 7% x p x (1-p) per contract, maker 1.75%) before any EV is computed.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model, `out` takes a player
   out of the player projections. Use it only for confirmed news the nflverse schedule or the
