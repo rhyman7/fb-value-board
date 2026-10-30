@@ -52,8 +52,9 @@ def _fmt(x: float, signed: bool = True) -> str:
     return f"{x:+g}" if signed else f"{x:g}"
 
 
-def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFrame:
-    """One row per side of each market. source = "proj" (market-adjusted) or "model" (raw)."""
+def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: float = 1.0) -> pd.DataFrame:
+    """One row per side of each market. source = "proj" (market-adjusted) or "model" (raw).
+    haircut: stakes sized from the model probability shrunk toward the market's (nflmodel.bets.stake_prob)."""
     df = df.reset_index(drop=True)
 
     def col(name):
@@ -102,7 +103,7 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFr
         ev = O.expected_value(p_win, price, p_push)
         profit = np.where(outcome > 0, dec - 1, np.where(outcome < 0, -1.0, 0.0))
         profit = np.where(np.isnan(outcome), np.nan, profit)
-        stake = np.minimum(O.kelly(p_win, price, p_push) * C.KELLY_FRACTION, C.MAX_STAKE)
+        stake = np.minimum(O.kelly(NB.stake_prob(p_win, p_push, fair, haircut), price, p_push) * C.KELLY_FRACTION, C.MAX_STAKE)
         line = {"Spread": np.where(side == "home", -spread, spread), "Total": total}.get(market, np.full(len(df), np.nan))
         out.append(pd.DataFrame({
             "game_id": df["game_id"], "season": df["season"], "week": df["week"],
@@ -115,9 +116,10 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFr
     return b[b["odds"].notna() & b["ev"].notna()].reset_index(drop=True)
 
 
-def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: str = "proj", kalshi_maker: bool = False) -> dict:
+def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: str = "proj", kalshi_maker: bool = False,
+         haircut: float = 1.0) -> dict:
     """Line shopping on the college supports and half-point lines (nflmodel.bets.shop)."""
-    return NB.shop(df, dist, quotes, books, source, kalshi_maker, margins=MARGINS, totals=TOTALS, snap=half)
+    return NB.shop(df, dist, quotes, books, source, kalshi_maker, margins=MARGINS, totals=TOTALS, snap=half, haircut=haircut)
 
 
 def curves(df: pd.DataFrame, dist: dict, source: str = "proj", margins=None, totals=None, snap=None) -> dict:

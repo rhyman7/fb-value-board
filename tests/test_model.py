@@ -465,3 +465,70 @@ def test_shadow_test_stays_off_the_board():
     assert not set(SH.MARGIN) & set(model.MARGIN_FEATS) and not set(SH.TOTAL) & set(model.TOTAL_FEATS)
     for st, extra in SH.PLAYER.items():
         assert not set(extra) & set(PL.CAL_EXTRA[st])
+
+
+# ---- edge tests, late October 2026 (FEATURES.md) -------------------------------------
+
+def test_haircut_shrinks_the_stake_but_not_the_ev():
+    """config.EDGE_HAIRCUT: the stake comes from the model probability shrunk toward the
+    market's; EV and probabilities are the model's whatever the factor."""
+    g = _one_game(proj_margin=6.0, proj_total=44.5)
+    full = bets.price_games(g, DIST, "proj", haircut=1.0).set_index("pick")
+    half = bets.price_games(g, DIST, "proj", haircut=0.5).set_index("pick")
+    none = bets.price_games(g, DIST, "proj", haircut=0.0).set_index("pick")
+    home = "HOM -3"
+    assert full.loc[home, "stake"] > half.loc[home, "stake"] > 0 and none.loc[home, "stake"] == 0
+    for c in ("model_prob", "market_prob", "ev", "edge"):
+        assert close(full.loc[home, c], half.loc[home, c]) and close(full.loc[home, c], none.loc[home, c])
+    # the shrunk probability is halfway between the model's and the market's
+    p = bets.stake_prob(full.loc[home, "model_prob"] * (1 - full.loc[home, "p_push"]), full.loc[home, "p_push"], full.loc[home, "market_prob"], 0.5)
+    assert close(p / (1 - full.loc[home, "p_push"]), (full.loc[home, "model_prob"] + full.loc[home, "market_prob"]) / 2)
+    # the same at each book's line
+    quotes = {"g": {"draftkings": {"spread_line": 3.0, "home_spread_odds": -110, "away_spread_odds": -110}}}
+    s1 = bets.shop(g, DIST, quotes, ["draftkings"], "proj", haircut=1.0)[("g", "Spread", "home")][0]
+    s2 = bets.shop(g, DIST, quotes, ["draftkings"], "proj", haircut=0.5)[("g", "Spread", "home")][0]
+    assert s1["stake"] > s2["stake"] > 0 and s1["ev"] == s2["ev"] and s1["prob"] == s2["prob"]
+
+
+def test_edge_haircut_is_the_slope_of_profit_on_claimed_ev():
+    from nflmodel import backtest
+    rng = np.random.default_rng(1)
+    n = 4000
+    ev = rng.uniform(0.0, 0.1, n)
+    # profit = 0.4 x EV + noise: four tenths of the claimed edge is real
+    g = pd.DataFrame({"source": "proj", "market": np.where(np.arange(n) % 2 == 0, "Spread", "Total"), "season": 2018 + np.arange(n) % 8,
+                      "ev": ev, "profit": 0.4 * ev + rng.normal(0, 0.02, n)})
+    h = backtest.edge_haircut(g, 2026)
+    assert abs(h["slope"] - 0.4) < 0.03 and h["factor"] == h["slope"] and h["seasons"] == "2018-2025"
+    assert len(h["by_season"]) == 8 and all(abs(r["slope"] - 0.4) < 0.1 for r in h["by_season"])
+    g["profit"] = -g["ev"]                                   # nothing real: clipped to 0
+    assert backtest.edge_haircut(g, 2026)["factor"] == 0.0
+    g["profit"] = 3 * g["ev"]                                # more than claimed: clipped to 1
+    assert backtest.edge_haircut(g, 2026)["factor"] == 1.0
+    assert backtest.edge_haircut(g.head(10), 2026)["factor"] == 1.0   # too few bets: no haircut
+
+
+def test_game_stake_cap_scales_every_side_together():
+    from nflmodel import config as C, slate
+    bets_ = [{"market": "Spread", "side": "home", "ev": 0.05, "stake": 0.03, "books": [{"book": "fanduel", "stake": 0.03, "ev": 0.06}], "best": "fanduel", "best_ev": 0.06},
+             {"market": "Total", "side": "under", "ev": 0.04, "stake": 0.03, "books": [{"book": "draftkings", "stake": 0.02, "ev": 0.03}], "best": "draftkings", "best_ev": 0.03},
+             {"market": "Moneyline", "side": "home", "ev": 0.02, "stake": 0.02}]
+    r = slate.cap_game(bets_, cap=0.05)
+    assert close(r["game_stake"], 0.08) and close(r["stake_scale"], 0.625)
+    assert close(bets_[0]["stake"], 0.01875) and close(bets_[0]["books"][0]["stake"], 0.01875)
+    assert close(bets_[1]["stake"], 0.01875) and close(bets_[1]["books"][0]["stake"], 0.0125) and close(bets_[2]["stake"], 0.0125)
+    assert close(sum(slate.shown_stake(b) for b in bets_), 0.05, tol=2e-4)   # rounded to 4 places
+    small = [{"market": "Spread", "side": "home", "ev": 0.05, "stake": 0.02}]
+    assert slate.cap_game(small, cap=C.MAX_GAME_STAKE) == {"game_stake": 0.02, "stake_scale": 1.0} and small[0]["stake"] == 0.02
+
+
+def test_pass_catchers_shadow_is_logged_apart_and_off_the_board(tmp_path, monkeypatch):
+    from nflmodel import model, shadow as SH
+    assert SH.MARGIN_PC == ["d_miss_pc"] and not set(SH.MARGIN_PC) & set(model.MARGIN_FEATS)
+    assert SH.MARGIN == ["d_chg_pr_pfr_bk_all", "d_chg_cov_db_bk_all"]      # the first shadow version is unchanged
+    assert SH.PC_LOG != SH.GAMES_LOG
+    monkeypatch.setattr(SH, "DIR", tmp_path)
+    path = tmp_path / "passcatchers_games.csv"
+    SH._merge_log(path, pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [1.0, 2.0]}), frozen=set())
+    SH._merge_log(path, pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [9.0, 3.0]}), frozen={"A"})
+    assert pd.read_csv(path).set_index("game_id")["margin_shadow"].to_dict() == {"A": 1.0, "B": 3.0}

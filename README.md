@@ -212,7 +212,13 @@ check its first run.
    says 3.5%; this says 8.6%). The curve is anchored so that with no
    disagreement each side equals the market's no-vig price.
 8. **Pricing** (`nflmodel/bets.py`, `nflmodel/odds.py`). EV per dollar, fair
-   price, and a quarter-Kelly stake capped at 3% of bankroll.
+   price, and a quarter-Kelly stake capped at 3% of bankroll and 5% a game, all
+   sides together. The stake is sized from the model probability shrunk toward the
+   market's by the share of claimed edge that has shown up in the last eight
+   seasons' graded bets (`backtest.edge_haircut`; 0 on the NFL board as of
+   October 2026, so no NFL stake is sized until that changes); the EV and
+   probabilities shown are the model's. See FEATURES.md, "Edge tests, late
+   October 2026".
 
 ## Market lines
 
@@ -301,6 +307,8 @@ data/line_history.csv     lines as first seen and as they move
 data/wind_log.csv         wind forecasts as fetched
 experiments/feature_test.py  test candidate features walk-forward
 experiments/qb_test.py       quarterback-change settings
+experiments/qb_draft_prior_test.py  a backup's prior by draft round (not kept)
+experiments/line_move_test.py       line movement as a feature and as a bet filter (not kept)
 experiments/injury_test.py   missing starters by position group
 experiments/players_test.py      player projections against baselines
 experiments/players_ablation.py  which pieces of the player model help
@@ -312,7 +320,7 @@ experiments/props_real_lines.py   the prop model against past DraftKings and Fan
 PROPS.md                  player props: method, calibration, market, log
 data/prop_params.json     fitted prop distributions
 data/props/               prop log, results, snapshots, credit usage, past prices
-FEATURES.md               results of the October 2026 feature tests
+FEATURES.md               results of the October 2026 feature tests and the edge tests
 tests/test_model.py
 ```
 

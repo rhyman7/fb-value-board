@@ -411,3 +411,75 @@ def test_a_player_on_the_board_twice_is_priced_for_the_right_game():
     o = PM.match(_toy_odds(line=60.5), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
     b = PM.price(PM.consensus(o), board, _toy_model())
     assert len(b) == 2 and (b["game_id"] == "2026_09_DAL_PHI").all() and b.loc[b.side == "over", "proj"].iloc[0] == 80.0
+
+
+# ---- market-only tags (Oct 2026): book gaps and ladder gaps --------------------------
+
+def _gap_odds():
+    """DraftKings posts A.J. Brown's receiving yards at 60.5 (-110 / -110), FanDuel at 65.5
+    (-105 / -115); DraftKings also posts a ladder: 59.5 at -150, 79.5 at +200."""
+    G = {"event_id": "e1", "commence": "2026-11-01T18:00:00Z", "home_name": "Philadelphia Eagles", "away_name": "Dallas Cowboys",
+         "updated": "", "player": "AJ Brown"}
+    rows = [dict(G, book="draftkings", market="player_reception_yds", side="over", line=60.5, price=-110.0),
+            dict(G, book="draftkings", market="player_reception_yds", side="under", line=60.5, price=-110.0),
+            dict(G, book="fanduel", market="player_reception_yds", side="over", line=65.5, price=-105.0),
+            dict(G, book="fanduel", market="player_reception_yds", side="under", line=65.5, price=-115.0),
+            dict(G, book="draftkings", market="player_reception_yds_alternate", side="over", line=59.5, price=-150.0),
+            dict(G, book="draftkings", market="player_reception_yds_alternate", side="over", line=79.5, price=200.0)]
+    return pd.DataFrame(rows)
+
+
+def test_book_gap_and_ladder_gap_tags():
+    board = _toy_board()
+    o = PM.match(_gap_odds(), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    b = PM.price(PM.consensus(o), board, _toy_model())
+    main = b[~b["market"].str.endswith("_alternate")]
+    assert (main["book_gap"] == "draftkings 60.5 / fanduel 65.5").all()
+    assert (main["middle"] == 0).all()                                   # the under at FanDuel is -115
+    take = main.set_index(["line", "side"])["take"].to_dict()
+    assert take[(60.5, "over")] == "over" and take[(65.5, "under")] == "under"
+    assert take[(60.5, "under")] == "" and take[(65.5, "over")] == ""
+    assert main.set_index(["line", "side"])["tag_book"].to_dict()[(60.5, "over")] == "draftkings"
+    # the rungs are measured against DraftKings's own main line, carried through the model
+    rungs = b[b["market"].str.endswith("_alternate")].set_index("line")
+    dk_main = O.no_vig_power(-110, -110)[0]
+    p_main = main[(main.line == 60.5) & (main.side == "over")]["our_p"].iloc[0]
+    for line, price in ((59.5, -150), (79.5, 200)):
+        implied = dk_main + (rungs.loc[line, "our_p"] - p_main)
+        assert abs(rungs.loc[line, "ladder_gap"] - (O.one_sided_fair(price, PM.ALT_MARGIN, "power") - implied)) < 1e-4   # rounded
+    tagged = rungs[rungs["ladder_gap"].abs() > PM.LADDER_GAP]
+    assert (tagged["tag_book"] == "draftkings").all() and (rungs[rungs["ladder_gap"].abs() <= PM.LADDER_GAP]["tag_book"] == "").all()
+    assert all(t == ("over" if g < 0 else "") for t, g in zip(tagged["take"], tagged["ladder_gap"]))
+    # a half-point apart on a yards prop is no gap; counts need only half a point
+    o = PM.match(_toy_odds(line=60.5).assign(line=[60.5, 60.5, 61.0, 61.0]), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    assert (PM.price(PM.consensus(o), board, _toy_model())["book_gap"] == "").all()
+    o = PM.match(_toy_odds(line=5.5).assign(market="player_receptions", line=[5.5, 5.5, 6.5, 6.5], price=[-110.0, -110.0, -105.0, -110.0]),
+                 board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    c = PM.price(PM.consensus(o), board, _toy_model())
+    assert (c["book_gap"] == "draftkings 5.5 / fanduel 6.5").all() and (c["middle"] == 1).all()   # over 5.5 at -110, under 6.5 at -110
+
+
+def test_tags_go_to_their_own_log_and_old_headers_stay(tmp_path, monkeypatch):
+    for name in ("LOG", "LOG_NEW", "LOG_TAGS", "RESULTS", "SNAPS", "WEEKLY", "SUMMARY"):
+        monkeypatch.setattr(PLOG, name, tmp_path / Path(getattr(PLOG, name)).name)
+    board = _toy_board()
+    # a log created before the tags existed: its header has no tag columns
+    old_cols = [c for c in PLOG.LOG_COLS if c not in PM.TAG_COLS]
+    PLOG.LOG.write_text(",".join(old_cols) + "\n")
+    o = PM.match(_gap_odds(), board, [{"id": "2026_09_DAL_PHI", "home": "PHI", "away": "DAL"}])
+    b = PM.price(PM.consensus(o), board, _toy_model())
+    n = PLOG.append_priced(b, "flag", 2026, 9)
+    log = PLOG.read_log()                                   # still reads: rows match the old header
+    assert len(log) == n and list(log.columns) == old_cols
+    tags = PLOG.read_tags()
+    assert set(tags["row_id"]) <= set(log["row_id"]) and (tags["book_gap"] == "draftkings 60.5 / fanduel 65.5").sum() == 4
+    assert set(tags.columns) == set(PLOG.TAG_COLS)
+    # the Props files carry the tags
+    from nflmodel import propboard
+    rec = propboard.records(log, PLOG.read_results())
+    assert (rec["book_gap"] == "draftkings 60.5 / fanduel 65.5").sum() == 2
+    r = [propboard._rec(x) for x in rec.to_dict("records")]
+    assert any(x["bg"] and x["take"] == "over" for x in r) and any(x["alt"] and x["tb"] == "draftkings" for x in r)
+    propboard.build(tmp_path / "props")
+    body = json.loads((tmp_path / "props" / "2026_w09.json").read_text())
+    assert body["summary"]["book_gaps"] == 2 and body["summary"]["ladder_gaps"] >= 1

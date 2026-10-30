@@ -15,6 +15,17 @@ For each player prop the books post, this works out
 A side is flagged only when the edge clears MIN_EDGE, the line is liquid (two or more
 books at that line, or a sharp book, and a hold that is not extreme) and the player's
 role is clear (see role_clear).
+
+Market-only tags (Oct 2026, `market_tags`; no model opinion, shown as chips on the Props
+section and kept in the prop log's tags file):
+  book_gap    DraftKings and FanDuel post the same player's main line a full step apart
+              (GAP_STEP: 5 yards for yards props, 0.5 for counts). The better line at each
+              book is the side to take: the over at the lower line, the under at the higher.
+              When both of those are -110 or better it is a middle (both can win).
+  ladder_gap  an alternate-ladder rung whose no-vig chance at a book is more than LADDER_GAP
+              off what the same book's main line implies, carried to the rung through the
+              model's distribution (the main line's no-vig chance plus the model's difference
+              between the two lines). Negative: the over is cheaper than the main line says.
 """
 from __future__ import annotations
 
@@ -55,6 +66,11 @@ ALT_MARGIN = 0.10          # the same for a ladder rung posted over-only: an ass
 KELLY_FRACTION = min(C.KELLY_FRACTION, 0.25)
 MAX_STAKE_BET = 0.01       # share of bankroll on any one prop
 MAX_STAKE_GAME = 0.03      # across all props in one game
+GAP_BOOKS = ("draftkings", "fanduel")
+GAP_STEP = {"pass_yds": 5.0, "rush_yds": 5.0, "rec_yds": 5.0}   # a full step; counts (and TDs) 0.5
+GAP_STEP_DEFAULT = 0.5
+LADDER_GAP = 0.05          # a rung more than this (probability) off its own book's main line
+MIDDLE_PRICE = -110        # both sides of a book gap at this or better: a middle
 ROLE_SHIFT = 0.25          # usage moved this much (relative) by teammates' absences = role unclear
 MIN_GAMES = 4.0            # weighted games of history needed for a clear role
 
@@ -240,7 +256,98 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
     out = pd.DataFrame(rows)
     if out.empty:
         return out
-    return flag(out)
+    return market_tags(flag(out))
+
+
+TAG_COLS = ["book_gap", "middle", "ladder_gap", "tag_book", "take"]
+
+
+def _book_fair(prices, alt: bool) -> float:
+    """A book's no-vig chance of the over from its [over, under] prices (power method; a
+    one-sided rung assumes ALT_MARGIN). NaN when it has no over."""
+    ov, un = (None if x is None or pd.isna(x) else float(x) for x in prices)
+    if ov is None:
+        return np.nan
+    if un is not None:
+        return float(O.no_vig_power(ov, un)[0])
+    return float(O.one_sided_fair(ov, ALT_MARGIN if alt else ONE_SIDED_MARGIN, "power"))
+
+
+def _push(v) -> float:
+    return 0.0 if v is None or pd.isna(v) else float(v)
+
+
+def market_tags(b: pd.DataFrame) -> pd.DataFrame:
+    """Add the market-only tags (TAG_COLS) to priced rows: book_gap, middle, ladder_gap,
+    tag_book and take (the side to take on this row, by the tag, else '')."""
+    b = b.copy()
+    for c in TAG_COLS:
+        b[c] = "" if c in ("book_gap", "tag_book", "take") else (0 if c == "middle" else np.nan)
+    if b.empty:
+        return b
+    books = b["books"].map(lambda d: d if isinstance(d, dict) else {})
+    alt = b["market"].astype(str).str.endswith("_alternate")
+    key = ["game_id", "player_id", "stat"]
+    # ---- book gaps on the main line --------------------------------------------------
+    main = b[~alt]
+    for k, g in main.groupby(key, sort=False):
+        lines = {}
+        for i, bk in zip(g.index, books[g.index]):
+            for name in GAP_BOOKS:
+                if name in bk and bk[name][0] is not None:
+                    lines.setdefault(name, (float(b.at[i, "line"]), bk[name]))
+        if len(lines) < 2:
+            continue
+        (lo_book, (lo, lo_px)), (hi_book, (hi, hi_px)) = sorted(lines.items(), key=lambda x: x[1][0])
+        step = GAP_STEP.get(k[2], GAP_STEP_DEFAULT)
+        if hi - lo < step - 1e-9:
+            continue
+        middle = int(lo_px[0] is not None and hi_px[1] is not None and lo_px[0] >= MIDDLE_PRICE and hi_px[1] >= MIDDLE_PRICE)
+        label = f"{lo_book} {lo:g} / {hi_book} {hi:g}"
+        for i in g.index:
+            b.at[i, "book_gap"], b.at[i, "middle"] = label, middle
+            side, line = b.at[i, "side"], float(b.at[i, "line"])
+            if side == "over" and abs(line - lo) < 1e-9:
+                b.at[i, "take"], b.at[i, "tag_book"] = "over", lo_book
+            elif side == "under" and abs(line - hi) < 1e-9:
+                b.at[i, "take"], b.at[i, "tag_book"] = "under", hi_book
+    # ---- ladder rungs against the same book's main line -------------------------------
+    main_over = main[main["side"] == "over"]
+    main_p = {}
+    for i in main_over.index:
+        k = (main_over.at[i, "game_id"], main_over.at[i, "player_id"], main_over.at[i, "stat"])
+        p_main = float(main_over.at[i, "our_p"]) / max(1 - _push(main_over.at[i, "our_push"]), 1e-9)
+        for name, px in books[i].items():
+            if px[0] is not None and px[1] is not None:            # the main line needs both sides
+                main_p.setdefault(k, {})[name] = (float(O.no_vig_power(float(px[0]), float(px[1]))[0]), p_main)
+    rungs = b[alt]
+    for i in rungs.index:
+        k = (rungs.at[i, "game_id"], rungs.at[i, "player_id"], rungs.at[i, "stat"])
+        if k not in main_p:
+            continue
+        p_rung = float(rungs.at[i, "our_p"]) / max(1 - _push(rungs.at[i, "our_push"]), 1e-9)
+        if rungs.at[i, "side"] == "under":
+            p_rung = 1 - p_rung
+        best = None
+        for name, px in books[i].items():
+            if name not in main_p[k]:
+                continue
+            fair_main, p_main = main_p[k][name]
+            fair_rung = _book_fair(px, True)
+            if np.isnan(fair_rung):
+                continue
+            implied = min(max(fair_main + (p_rung - p_main), 0.0), 1.0)
+            gap = fair_rung - implied
+            if best is None or abs(gap) > abs(best[1]):
+                best = (name, gap)
+        if best is None:
+            continue
+        name, gap = best
+        b.at[i, "ladder_gap"] = round(gap, 4)
+        if abs(gap) > LADDER_GAP:
+            b.at[i, "tag_book"] = name
+            b.at[i, "take"] = "over" if (gap < 0 and rungs.at[i, "side"] == "over") else "under" if (gap > 0 and rungs.at[i, "side"] == "under") else ""
+    return b
 
 
 def with_new(players: pd.DataFrame) -> pd.DataFrame | None:
