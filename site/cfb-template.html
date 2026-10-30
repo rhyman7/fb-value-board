@@ -235,6 +235,7 @@ table.players td.why { white-space: normal; text-align: left; padding: 10px 0 16
 sup.dz { font-size: 0.78em; font-weight: 800; line-height: 0; margin-left: 2px; letter-spacing: 0.02em; color: var(--ink); cursor: help; }
 sup.dz-O, sup.dz-D, sup.dz-IR { color: var(--s2); }
 tr.group td { font-weight: 700; padding-top: 16px; color: var(--ink); border-bottom-color: var(--axis); }
+.post { font-size: 12px; color: var(--ink-2); white-space: nowrap; cursor: help; border-bottom: 1px dotted currentColor; }
 th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 th button[aria-sort]::after { content: " \2193"; } th button[aria-sort="ascending"]::after { content: " \2191"; }
 /* A bet worth making is flagged, in the one accent colour. */
@@ -1021,6 +1022,12 @@ const sheetBets = g => g.bets.concat(g.derivs || []);
 const isTotalMk = mk => mk === "Total" || mk === "Team total" || mk === "1H Total";
 /* a book's line as the pick reads: totals as posted, spreads signed, nothing for a moneyline */
 const qLine = (b, q) => b.market === "Moneyline" || b.market === "1H Moneyline" ? "" : (isTotalMk(b.market) ? q.line : line(q.line)) + " ";
+/* Kalshi as a maker: the highest contract price (cents) at which a resting order is still +EV against the board's
+   chance net of the 1.75% maker fee (q.post_at), and the price that matches the best retail book's EV (q.post_match);
+   bets.with_post_at. The quote itself is the taker price. */
+const POST_TIP = "A resting (maker) order on Kalshi at this contract price is +EV against the board's chance after the 1.75% maker fee. It may never fill, and the market can move before it does; check the book before posting.";
+const postText = q => q && q.book === "kalshi" && q.post_at != null ? "Post on Kalshi at " + q.post_at + "\u00a2" + (q.post_match != null && q.post_match !== q.post_at ? " (" + q.post_match + "\u00a2 matches the best retail price)" : "") : "";
+const postNode = (q, lead) => { const t = postText(q); return t ? H("span", { class: "post", title: POST_TIP, text: (lead || "") + t }) : null; };
 /* the pick with the best book's line when it differs from the anchor's */
 const pickOf = b => { if (b.deriv) return b.pick; if (!shopped(b) || b.best_ev < b.ev || b.best_line == null || b.market === "Moneyline") return b.pick; const l = b.best_line, parts = b.pick.split(" "), anchor = parseFloat(parts[1].replace("PK", "0").replace("−", "-").replace("+", "")); return Math.abs(l - anchor) < 0.01 ? b.pick : parts[0] + " " + (b.market === "Total" ? String(l) : line(l)); };
 const bestCell = b => { if (!b.best) return "—"; const q = b.books.find(x => x.book === b.best) || {}; const parts = [document.createTextNode(bookName(b.best) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds))];
@@ -1187,7 +1194,8 @@ $("#bankroll").addEventListener("input", e => {
 /* ---------------- boost calculator ----------------
    EV of a price against the anchor's no-vig chance (what the sharp market says) and against
    the model. A profit boost of x% multiplies the winnings; Kalshi's fee is charged on the
-   contract price (7% x p x (1 - p) as a taker, 1.75% as a maker). */
+   contract price (7% x p x (1 - p) as a taker, 1.75% as a maker: a resting order that fills;
+   odds.py has the schedule). */
 const toDec = o => o > 0 ? 1 + o / 100 : 1 + 100 / -o;
 const toAm = p => p >= 0.5 ? -100 * p / (1 - p) : 100 * (1 - p) / p;
 function boostOdds(odds, pct, book) {
@@ -1334,7 +1342,7 @@ function renderSheet() {
           : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
         return [
           { v: H("span", {}, H("a", { href: "#" + g.id, text: pickOf(b) }), H("br"), H("span", { class: "ko rec", text: g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", "").replace(/^(\w{3}) \w{3} \d+, /, "$1 ") + (hoursTo(g) != null ? " (" + hoursText(hoursTo(g)) + ")" : "") })), cls: "strong" },
-          { v: where },
+          { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where },
           evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)),
           { v: whyNode(g, b), cls: "why" },
           { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "when" },
@@ -1379,7 +1387,7 @@ function renderBestBets() {
         const st = sheetStake(b, q);
         const why = H("span", {}, H("b", { text: TIER[tierOf(b)].h + ". " }), whyNode(g, b));
         return [{ v: String(++n), cls: "n nw" }, { v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home), H("br"), document.createTextNode(kickoff(g).replace(" ET", ""))), cls: "nw" },
-          { v: where, cls: "nw" }, { v: evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)), cls: "nw" },
+          { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where, cls: "nw" }, { v: evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)), cls: "nw" },
           { v: st > 0 ? stakeText({ stake: st }) + ((q ? q.stake : bestStake(b)) <= 0 ? " (bucket)" : "") : "—", cls: "nw" },
           { v: why, cls: "wrap" }, { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "wrap" }];
       }));
@@ -1650,6 +1658,25 @@ function renderGame(g) {
   table(pt, priceHead, g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(priceRow));
   const prices = sec("Every price", priceNote(), H("div", { class: "scroll" }, pt));
 
+  /* --- every book: each side's price at each book, Kalshi with where to post as a maker --- */
+  let books = null;
+  if (g.bets.some(b => b.books && b.books.length)) {
+    const bt = H("table"), rows = [];
+    g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).forEach(b => {
+      if (!b.books || !b.books.length) return;
+      b.books.forEach((q, i) => rows.push({ cls: i === 0 ? "group" : "", cells: [
+        { v: i === 0 ? b.pick : "", cls: "strong" }, bookName(q.book), b.market === "Moneyline" ? "" : (b.market === "Total" ? String(q.line) : line(q.line)),
+        odds(Math.round(q.odds)) + (q.odds_net != null && q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : ""),
+        pct(q.prob), evCell(q.ev), state.basis === "adj" && q.stake > 0 ? stakeText({ stake: q.stake }) : "—",
+        H("span", {}, b.beats_sharp === q.book ? H("span", { class: "chip", text: "beats " + bookName(M.sharp_book || "pinnacle"), title: "This price beats the sharp book's no-vig number at this line on its own, before the model: " + spct(b.sharp_ev) + " per dollar" }) : null,
+          b.beats_sharp === q.book && postText(q) ? document.createTextNode(" ") : null, postNode(q)),
+      ] }));
+    });
+    table(bt, [{ t: "Pick", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "Model" }, { t: "EV per $1" }, { t: "Stake" }, { t: "", l: 1 }], rows);
+    books = sec("Every book", "Each side at each book's own line, best price first, priced from the market-adjusted projection; Kalshi prices are the taker price, net of the 7% taker fee in brackets. A Kalshi row also says where a resting (maker) order is worth posting: the highest contract price that is still +EV against the board's chance after the 1.75% maker fee, and the price that matches the best retail book. A resting order may never fill.",
+      H("div", { class: "scroll" }, bt));
+  }
+
   /* --- derivatives: team totals and first-half lines at every book, off the full-game curves (nflmodel/derivs.py) --- */
   let derivs = null;
   if (g.derivs && g.derivs.length) {
@@ -1665,7 +1692,8 @@ function renderGame(g) {
         b.market === "1H Moneyline" ? "" : (isTotalMk(b.market) ? String(q.line) : line(q.line)),
         odds(Math.round(q.odds)) + (q.odds_net != null && q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : ""),
         pct(q.prob), pct(q.prob_line), q.sharp ? "" : evCell(q.ev),
-        q.sharp ? "" : (b.beats_sharp === q.book && b.sharp_ev >= 0.01 ? H("span", { class: "chip", text: "beats " + sharpName, title: "This price beats the sharp book's no-vig number on its own derivative quote, carried to this line by the curve: " + spct(b.sharp_ev) + " per dollar" }) : (q.ev_line != null && q.ev_line > 0 ? "beats " + sharpName + " (" + spct(q.ev_line) + ")" : "")),
+        q.sharp ? "" : H("span", {}, b.beats_sharp === q.book && b.sharp_ev >= 0.01 ? H("span", { class: "chip", text: "beats " + sharpName, title: "This price beats the sharp book's no-vig number on its own derivative quote, carried to this line by the curve: " + spct(b.sharp_ev) + " per dollar" }) : (q.ev_line != null && q.ev_line > 0 ? document.createTextNode("beats " + sharpName + " (" + spct(q.ev_line) + ")") : null),
+          postNode(q, (b.beats_sharp === q.book && b.sharp_ev >= 0.01) || (q.ev_line != null && q.ev_line > 0) ? " " : "")),
       ] }));
     });
     table(dt, [{ t: "Pick", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "Model" }, { t: "Market, no vig" }, { t: "EV per $1" }, { t: "", l: 1 }], rows);
@@ -1691,7 +1719,7 @@ function renderGame(g) {
       H("div", { class: "split alts" }, H("div", { class: "scroll" }, st), H("div", { class: "scroll" }, tt)), H("div", { class: "scroll alts" }, lt));
   }
 
-  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices, derivs, alts].filter(Boolean));
+  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices, books, derivs, alts].filter(Boolean));
 }
 const C_NAMES = {}; ALL.forEach(g => { C_NAMES[g.away] = g.away_name; C_NAMES[g.home] = g.home_name; });
 

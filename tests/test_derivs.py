@@ -71,6 +71,7 @@ def test_shop_prices_each_book_at_its_own_derivative_line():
     assert tt["pinnacle"]["prob_line"] == pytest.approx(B.O.no_vig(-115, -105)[0], abs=1e-3)
     assert tt["draftkings"]["prob_line"] == tt["pinnacle"]["prob_line"]                      # same line, same market chance
     assert tt["draftkings"]["ev_line"] > 0 and tt["draftkings"]["ev"] > tt["kalshi"]["ev"]   # +100 beats -105 net of a fee
+    assert tt["kalshi"]["post_at"] is not None and tt["kalshi"]["post_match"] is not None    # Kalshi rows say where to post
     assert tt["draftkings"]["prob"] > tt["draftkings"]["prob_line"]                          # the model's extra points show up in home points
     assert s[(gid, "Team total", "away_over")][0]["ev_line"] is None                       # Pinnacle quotes no away total: no "beats"
     # first half: the half curve sits on Pinnacle's first-half line; DK's higher total makes its under likelier

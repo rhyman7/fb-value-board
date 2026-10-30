@@ -30,7 +30,8 @@ Pricing. Every book's derivative price is scored at its own line through the cur
 as bets.shop does for the main markets (`shop` here has the same output shape), with `prob`
 and `ev` from the market-adjusted projection and `ev_line` from the sharp book's own
 derivative quote carried to the book's line by the curve (so "beats Pinnacle" means the same
-as on the main markets, and is only set when Pinnacle quotes that derivative). `entries`
+as on the main markets, and is only set when Pinnacle quotes that derivative). Kalshi quotes carry `post_at` and
+`post_match` like the main markets (bets.with_post_at). `entries`
 turns them into bet-shaped records (`g["derivs"]`), each with `deriv: True`, that the bet
 sheet lists when a price beats the sharp number (sheet.annotate gives them a `price` tier or
 None: the model's opinion on derivatives has no backtest yet, so no opener or model tier) and
@@ -282,9 +283,7 @@ def shop(df: pd.DataFrame, dist: dict, hdist: dict | None, quotes: dict, books: 
                 shown = (-L if side == "home" else L) if market == "Spread" else L
                 out.setdefault((gid, "1H " + market, side), []).append(
                     _quote(book, shown, price, net_of(book, price), p, push, p0, push0, lined[market], haircut))
-    for k in out:
-        out[k].sort(key=lambda x: -x["ev"])
-    return out
+    return B.with_post_at(out)             # best EV first; Kalshi rows get post_at / post_match
 
 
 def _label(market: str, side: str, home: str, away: str, line) -> str:

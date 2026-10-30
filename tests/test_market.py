@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from nflmodel import market as M, odds as O
 
@@ -97,6 +98,19 @@ def test_kalshi_fee_lowers_the_price():
     assert O.expected_value(0.5, O.kalshi_effective_odds(100, maker=True)) > O.expected_value(0.5, O.kalshi_effective_odds(100))
 
 
+def test_kalshi_maker_post_price():
+    """Where to rest a maker order: the highest whole cent still +EV after the 1.75% maker fee."""
+    r = O.kalshi_post_at(0.55)
+    assert r["post_at"] == 54 and r["post_match"] is None
+    assert O.expected_value(0.55, O.kalshi_net_odds_at(54, maker=True)) >= 0 > O.expected_value(0.55, O.kalshi_net_odds_at(55, maker=True))
+    assert O.kalshi_post_at(0.55, match_ev=0.03)["post_match"] == 52           # a cheaper fill to match a retail +3%
+    assert O.kalshi_post_at(0.55, match_ev=-0.5)["post_match"] == 54            # never above the break-even cent
+    assert O.kalshi_post_at(0.004)["post_at"] is None                            # no cent is +EV
+    assert O.kalshi_post_at(0.52, 0.04)["post_at"] == 53                         # pushes set aside, as the quotes carry them
+    # the maker fee is a quarter of the taker fee on the game series
+    assert O.kalshi_fee(0.5, maker=True) == pytest.approx(O.kalshi_fee(0.5) / 4)
+
+
 def test_shop_scores_each_book_at_its_own_line():
     from nflmodel import bets, distributions as D
     from tests.test_model import DIST, _one_game
@@ -116,6 +130,12 @@ def test_shop_scores_each_book_at_its_own_line():
     assert abs(home["draftkings"]["ev_line"] - bets.O.expected_value(0.5, -110)) < 0.02
     assert home["fanduel"]["ev_line"] > home["draftkings"]["ev_line"]
     assert "ev_line" in s[(gid, "Moneyline", "home")][0] and s[(gid, "Moneyline", "home")][0]["book"] == "kalshi"
+    # every Kalshi quote says where a resting order is worth posting, against this side's chance and the best retail price
+    k = home["kalshi"]
+    assert k["post_at"] is not None and k["post_at"] <= 100 * k["prob"] and k["post_match"] is not None
+    assert k["post_match"] <= k["post_at"] and "post_at" not in home["draftkings"]
+    ml = {q["book"]: q for q in s[(gid, "Moneyline", "home")]}["kalshi"]
+    assert ml["post_match"] is None                                              # no retail price on the moneyline here
 
 
 def test_slate_with_market_anchors_and_reblends():

@@ -68,10 +68,17 @@ def expected_value(p_win, odds, p_push=0.0):
 
 # ---- Kalshi -----------------------------------------------------------------
 # Kalshi contracts pay $1 and cost the price P in dollars. The exchange charges a fee on top
-# of the price, per contract, of about rate x P x (1 - P): the taker rate (an order that fills
-# at once) is 7%, the maker rate (a resting order) 1.75% on the markets that charge makers
-# (Kalshi's fee schedule, 2026; set KALSHI_TAKER / KALSHI_MAKER to change). A fee is charged
-# on the stake whatever the result, so it lowers the odds the bettor really gets.
+# of the price, per contract, of rate x P x (1 - P), rounded up to the cent on the order:
+#   taker (an order that fills at once)   fees = round up(M x 0.07   x C x P x (1 - P))
+#   maker (a resting order that fills)    fees = round up(M x 0.0175 x C x P x (1 - P))
+# with C contracts and M the series multiplier, which is 1 for both rates on the game series
+# the boards use, KXNFLGAME (Professional Football Game) and KXNCAAFGAME (College Football
+# Game), so makers do pay on them. Source: Kalshi's fee schedule, "last updated and effective
+# July 7, 2026", https://kalshi.com/docs/kalshi-fee-schedule.pdf (also kalshi.com/fee-schedule;
+# the rounding rule at docs.kalshi.com/getting_started/fee_rounding), read Oct 30, 2026.
+# Cancelling a resting order is free. The rounding (under a cent a contract) is ignored here.
+# A fee is charged on the stake whatever the result, so it lowers the odds the bettor really
+# gets; set KALSHI_TAKER / KALSHI_MAKER if the schedule changes.
 KALSHI_TAKER = 0.07
 KALSHI_MAKER = 0.0175
 
@@ -89,6 +96,29 @@ def kalshi_effective_odds(odds, maker: bool = False):
     cost = p + kalshi_fee(p, maker)
     cost = np.clip(cost, 1e-6, 1 - 1e-6)
     return prob_to_american(cost)
+
+
+def kalshi_net_odds_at(cents, maker: bool = True):
+    """American odds net of the fee for a contract bought at `cents` (1-99), as a maker by default."""
+    p = np.asarray(cents, dtype=float) / 100.0
+    return prob_to_american(np.clip(p + kalshi_fee(p, maker), 1e-6, 1 - 1e-6))
+
+
+def kalshi_post_at(p_win, p_push: float = 0.0, match_ev: float | None = None) -> dict:
+    """Where to rest a maker order on Kalshi for a side the board gives `p_win` (with `p_push`
+    set aside as on the main markets): the highest whole-cent contract price at which the EV
+    net of the maker fee is still >= 0 (`post_at`), and the highest at which the EV equals or
+    beats `match_ev`, the best retail book's EV on the same side (`post_match`; None when no
+    retail price is on file or no price gets there). Both None when no cent is +EV. A resting
+    order may never fill, and the market can move before it does."""
+    cents = np.arange(1, 100)
+    ev = expected_value(float(p_win), kalshi_net_odds_at(cents, maker=True), float(p_push))
+    ok = cents[ev >= 0]
+    out = {"post_at": int(ok.max()) if len(ok) else None, "post_match": None}
+    if match_ev is not None and out["post_at"] is not None:
+        hit = cents[ev >= max(float(match_ev), 0.0)]          # never above the break-even cent
+        out["post_match"] = int(hit.max()) if len(hit) else None
+    return out
 
 
 def prob_to_american(p):
