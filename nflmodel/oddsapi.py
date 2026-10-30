@@ -21,6 +21,8 @@ import csv
 import datetime as dt
 import json
 import os
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -37,10 +39,15 @@ BOOKS = [b.strip() for b in os.environ.get("PROPS_BOOKS", "draftkings,fanduel").
 BOOK_WEIGHT = {"draftkings": 1.0, "fanduel": 1.0}
 
 PROPS_RESERVE = int(os.environ.get("PROPS_RESERVE", "200"))   # never spend below this many credits
+RETRY_WAITS = (2, 6, 15)       # seconds between attempts after a dropped connection, timeout, 429 or 5xx
 
 
 class BudgetError(RuntimeError):
     pass
+
+
+class ApiError(RuntimeError):
+    """The API could not be reached, or answered with an error, after every retry."""
 
 
 class Client:
@@ -59,9 +66,7 @@ class Client:
     def _get(self, path: str, params: dict, what: str):
         q = dict(params, apiKey=self.key)
         url = f"{BASE}{path}?{urllib.parse.urlencode(q)}"
-        with self._open(urllib.request.Request(url, headers={"User-Agent": "fb-value-board"}), timeout=30) as r:
-            body = json.loads(r.read().decode())
-            h = {k.lower(): v for k, v in r.headers.items()}
+        body, h = self._fetch(url, what)
         last = int(float(h.get("x-requests-last", 0) or 0))
         rem = h.get("x-requests-remaining")
         if rem is not None:
@@ -70,6 +75,25 @@ class Client:
         self.last_cost = last
         _log_usage(what, last, self.remaining)
         return body
+
+    def _fetch(self, url: str, what: str):
+        """One request, retried on a dropped connection, a timeout, 429 or a 5xx (the Odds API
+        and GitHub's runners both drop the odd connection). Any other HTTP error, and a failure
+        after the last retry, raise ApiError; the key never appears in the message."""
+        for i in range(len(RETRY_WAITS) + 1):
+            try:
+                with self._open(urllib.request.Request(url, headers={"User-Agent": "fb-value-board"}), timeout=30) as r:
+                    return json.loads(r.read().decode()), {k.lower(): v for k, v in r.headers.items()}
+            except urllib.error.HTTPError as e:
+                if e.code != 429 and e.code < 500:
+                    raise ApiError(f"{what}: HTTP {e.code} {e.reason}") from None
+                why = f"HTTP {e.code}"
+            except (urllib.error.URLError, TimeoutError, ConnectionError, OSError) as e:
+                why = str(getattr(e, "reason", None) or e)
+            if i == len(RETRY_WAITS):
+                raise ApiError(f"{what}: {why}, after {i} retries") from None
+            print(f"  {what}: {why}; retrying in {RETRY_WAITS[i]}s")
+            time.sleep(RETRY_WAITS[i])
 
     def events(self) -> list[dict]:
         """Upcoming NFL events (free)."""

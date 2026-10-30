@@ -265,10 +265,18 @@ not in The Odds API's free data, so none are flagged.
   - open: the first daily run (12:47 UTC) once props are posted, kickoff 3-8 days away;
   - pricing: the first daily run with kickoff 3 days away or less (Friday for Sunday
     games, when injury reports are mostly out). **Bets are decided here only**;
-  - close: runs every 30 minutes in the usual kickoff windows take every game's prices
-    about 45 minutes before kickoff.
+  - close: runs every 10 minutes in the usual kickoff windows; the first run inside 90
+    minutes of a game's kickoff takes its prices (`PROPS_CLOSE_MINUTES`). The window is
+    wide because GitHub starts scheduled runs late, often by an hour or more (the Week 8
+    Thursday game got no closing snapshot with a 45-minute window and runs every 30
+    minutes), so the "close" is usually 10 to 90 minutes before kickoff, not the last price.
   About 15 games x 13 markets x 3 = 585 credits a week, 2,500 a month. Games on unusual
   days (Christmas, a Wednesday) may miss their closing snapshot.
+- **When the API drops a call** (a reset connection, a timeout, a 429 or a 5xx), the client
+  retries three times (2, 6 and 15 seconds apart). If it still fails, a scheduled run prints
+  why and ends without pricing anything, so the job stays green and the next run tries
+  again; any other HTTP error stops the run the same way. Nothing is logged for a failed
+  call, so `api_usage.csv` only has calls that answered.
 - **Backfill** (`.github/workflows/props-backfill.yml`, run by hand; `nflmodel/propbackfill.py`):
   past prices at the same two moments the live run uses, the pricing run (12:47 UTC, first
   day within 3 days) and the close (10 minutes before kickoff). Historical props start in
