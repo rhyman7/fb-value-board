@@ -168,6 +168,7 @@ sub("`Average miss per player-game since ${BTp.from}, scored only with what was 
     "`Average miss per player-game since ${BTp.from} (the model also beat both averages on every stat in 2017 to 2019, the seasons it was set up on), scored only with what was known before each game, on players who played.")
 
 # ---- past weeks -------------------------------------------------------------------------------
+sub('  const LEAGUE_REC = "targets";', '  const LEAGUE_REC = "receptions";')
 sub('''      seg($("#seg-hweek"), index.map(w => ({ v: w.file, t: "Week " + w.week })), () => cur, v => { cur = v; show(); });''',
     '''      seg($("#seg-hweek"), index.map(w => ({ v: w.file, t: "Week " + w.week + (w.backfilled ? "*" : "") })), () => cur, v => { cur = v; show(); });''')
 sub('''      box(String(w.graded) + " of " + w.games, pend ? "games graded (" + pend + " to play)" : "games graded"));''',

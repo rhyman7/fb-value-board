@@ -100,7 +100,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     r = engine.ratings_at(order_now)
 
     say("Projecting players ...")
-    pboard, pg, ptable = None, None, None
+    pboard, pg, pinfo, ptable = None, None, None, None
     try:
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
         des_all = DES.drop_played(des_all, DES.played_from_box(pg, pinfo, games), verbose=verbose)  # everyone else
@@ -155,7 +155,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         close = market.closing_quotes(done, "cfb", {g.game_id: pd.Timestamp(g.kickoff) for g in done.itertuples()},
                                       names={v: k for k, v in names.items()})
         archive.update(out, games, pg, verbose=verbose, close=close,
-                       curve=lambda df: bets.curves(df, dist, "line"))
+                       curve=lambda df: bets.curves(df, dist, "line"), info=pinfo)
         if not have_past or with_backtest:
             backfill(out, frame, games, dist, engine, abbr, names, season, ptable, pg, verbose)
     except Exception as exc:

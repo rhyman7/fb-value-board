@@ -6,7 +6,9 @@ docs/cfb/archive/<season>_w<WW>.json   one file per week:
     players  board id -> that game's player projections at the same moment
     teams    board id -> each team's projected volume and regulars who missed its last game
     results  board id -> final score and each bet's result in units
-    actuals  board id -> player id -> box score
+    actuals  board id -> player id -> box score, every player in it (a player not projected
+             before the game also carries name, pos and team); full lists the board ids whose
+             actuals are the whole box score (see nflmodel/archive.py)
 docs/cfb/archive/index.json            the weeks on file, with each week's record
 
 Grading covers the board's side of each spread and total, the flagged bets, and the
@@ -22,7 +24,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from nflmodel.archive import closing_value
+from nflmodel.archive import box_actuals, closing_value, fill_box, player_misses
 
 from . import config as C
 
@@ -99,14 +101,35 @@ def _bet_result(b, g, margin, total):
     return "W", round(o / 100 if o > 0 else 100 / -o, 4)
 
 
-def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH, close: dict | None = None, curve=None) -> int:
+def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH, close: dict | None = None, curve=None,
+          info: pd.DataFrame | None = None) -> int:
     """close / curve: the sharp book's closing quotes and the line curve, for closing line value
-    (nflmodel/archive.closing_value)."""
+    (nflmodel/archive.closing_value). info (player_id -> name, position) names the box-score
+    players who were not projected; without it only the projected players' lines are kept."""
     if not root.exists():
         return 0
     close = close or {}
     sched = games.set_index("game_id")
     box = pg.set_index("game_id") if pg is not None and len(pg) else None
+    names = info["name"].to_dict() if info is not None and "name" in info else {}
+    poss = info["position"].to_dict() if info is not None and "position" in info else {}
+
+    def actuals(d, key):
+        g = d["games"][key]
+        gid = g.get("game_id")
+        if box is None or gid not in box.index or gid not in sched.index:
+            return None
+        r = sched.loc[gid]
+        side = {int(r["home_id"]): g.get("home"), int(r["away_id"]): g.get("away")} if "home_id" in r else {}
+        ids = {p["id"] for p in d["players"].get(key, [])}
+        b = box.loc[[gid]]
+        if info is None:
+            b = b[b["player_id"].astype(str).isin(ids)]
+        pid = lambda row: str(int(row.player_id))
+        meta = lambda row: {"name": names.get(int(row.player_id)), "pos": poss.get(int(row.player_id)),
+                            "team": side.get(int(row.team_id)) if hasattr(row, "team_id") and pd.notna(row.team_id) else None}
+        return box_actuals(b, BOX, ids, pid, meta)
+
     n = 0
     for path in sorted(root.glob("*_w*.json")):
         d = json.loads(path.read_text())
@@ -126,12 +149,14 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH, close: dict |
                 bets.append({"market": b["market"], "side": b["side"], "result": res, "units": units,
                              **closing_value(b, g, close.get(gid), curve)})
             d["results"][key] = {"home_score": hs, "away_score": as_, "bets": bets}
-            if box is not None and gid in box.index:
-                b = box.loc[[gid]]
-                ids = {p["id"] for p in d["players"].get(key, [])}
-                b = b[b["player_id"].astype(str).isin(ids)]
-                d["actuals"][key] = {str(int(row.player_id)): {k: float(getattr(row, k)) for k in BOX} for row in b.itertuples()}
+            a = actuals(d, key)
+            if a is not None:
+                d["actuals"][key] = a
+                if info is not None:
+                    d["full"] = sorted(set(d.get("full") or []) | {key})
             changed, n = True, n + 1
+        if info is not None and fill_box(d, lambda key: actuals(d, key)):
+            changed = True
         if changed:
             _save(path, d)
     return n
@@ -140,7 +165,8 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root=ARCH, close: dict |
 def summarize(d: dict) -> dict:
     rec = {"spread": [0, 0, 0], "total": [0, 0, 0], "bets": 0, "bet_wlp": [0, 0, 0], "units": 0.0, "staked": 0.0, "graded": 0,
            "clv_n": 0, "clv_sum": 0.0, "beat_close": 0,
-           "winners": [0, 0], "line_winners": [0, 0], "miss": {"margin": 0.0, "line_margin": 0.0, "total": 0.0, "line_total": 0.0}}
+           "winners": [0, 0], "line_winners": [0, 0], "miss": {"margin": 0.0, "line_margin": 0.0, "total": 0.0, "line_total": 0.0},
+           "pmiss": player_misses(d, rec_gate="receptions")}
     for key, g in d["games"].items():
         res = d["results"].get(key)
         if not res:
@@ -194,9 +220,9 @@ def write_index(root=ARCH) -> list:
     return rows
 
 
-def update(out, games, pg, now=None, root=ARCH, verbose=True, close=None, curve=None):
+def update(out, games, pg, now=None, root=ARCH, verbose=True, close=None, curve=None, info=None):
     saved = snapshot(out, games, now, root)
-    graded = grade(games, pg, root, close, curve)
+    graded = grade(games, pg, root, close, curve, info)
     write_index(root)
     if verbose:
         print(f"  archive: {saved} games saved before kickoff, {graded} newly graded")
