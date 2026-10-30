@@ -29,6 +29,8 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      - name: Browser for the best-bets PDF
+        run: pip install playwright && python -m playwright install --with-deps chromium
       - name: Build the college board
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}   # optional: CollegeFootballData lines for games ESPN has not priced
@@ -39,6 +41,8 @@ jobs:
           else
             python run_cfb.py --no-backtest
           fi
+      - name: Best-bets PDF
+        run: python scripts/build_pdf.py cfb
       - run: python -m pytest -q
       - name: Commit the result
         run: |

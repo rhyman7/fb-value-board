@@ -262,6 +262,43 @@ table.sheet .ko { white-space: nowrap; font-weight: 500; font-size: 11.5px; }
 .leg-wong { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--s3); color: #fff; font-size: 11px; font-weight: 800; }
 td.dimp { color: var(--ink-3); }
 .alts table { font-size: 13px; }
+/* best bets: links on the sheet, and the card itself (a document: black on white, portrait) */
+.bb-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 2px 0 0; }
+.btn { display: inline-flex; align-items: center; height: 34px; padding: 0 14px; border: 1px solid var(--axis); border-radius: 4px; background: transparent; color: var(--ink); font: 600 13.5px/1 var(--sans); text-decoration: none; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.bb-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.bb-doc { max-width: 980px; }
+.bb-doc h1 { margin: 0; font: 800 34px/1.05 var(--display); letter-spacing: -0.01em; }
+.bb-doc .stamp { margin: 6px 0 0; font-size: 12.5px; color: var(--ink-3); }
+.bb-doc h2 { margin: 26px 0 4px; font: 800 20px/1.15 var(--display); border-bottom: 2px solid var(--ink); padding-bottom: 4px; }
+.bb-doc h3 { margin: 14px 0 2px; font: 800 15px/1.2 var(--sans); }
+.bb-doc p { margin: 4px 0; font-size: 13px; line-height: 1.45; color: var(--ink-2); max-width: 90ch; }
+.bb-doc table { font-size: 12.5px; margin-top: 4px; }
+.bb-doc td, .bb-doc th { padding: 5px 8px 5px 0; vertical-align: top; white-space: normal; }
+.bb-doc td.wrap, .bb-doc th.wrap { white-space: normal; min-width: 20ch; max-width: 40ch; line-height: 1.4; }
+.bb-doc td.wrap .news { color: var(--s2); font-weight: 700; }
+.bb-doc td.nw { white-space: nowrap; }
+.bb-doc .n { font-weight: 800; }
+.bb-doc .verdict { font-weight: 800; } .bb-doc .verdict.wait { color: var(--s2); }
+.bb-doc .disc { margin-top: 18px; font-size: 11.5px; color: var(--ink-3); }
+.bb-doc .empty { font-style: italic; }
+@media print {
+  :root.bb-print body { background: #fff; }
+  :root.bb-print { --page: #fff; --ink: #111; --ink-2: #333; --ink-3: #555; color-scheme: light; }
+  :root.bb-print .bar, :root.bb-print #hero, :root.bb-print footer, :root.bb-print #tip, :root.bb-print .bb-actions { display: none !important; }
+  :root.bb-print .wrap { max-width: none; padding: 0; }
+  :root.bb-print main { padding-top: 0; }
+  :root.bb-print .bb-doc { max-width: none; zoom: 0.82; }
+  :root.bb-print .bb-doc h1 { font-size: 30px; }
+  :root.bb-print .bb-doc table { width: 100%; table-layout: auto; }
+  :root.bb-print .bb-doc td, :root.bb-print .bb-doc th { white-space: normal; overflow-wrap: anywhere; }
+  :root.bb-print .bb-doc td.nw { white-space: nowrap; overflow-wrap: normal; }
+  :root.bb-print .bb-doc td.wrap, :root.bb-print .bb-doc th.wrap { min-width: 0; max-width: none; width: 31%; }
+  :root.bb-print .bb-doc .ko { white-space: normal; }
+  :root.bb-print .bb-doc h2 { break-after: avoid; }
+  :root.bb-print .bb-doc tr { break-inside: avoid; }
+  :root.bb-print .chip { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 .alts td.mk, .alts tr.mk td { background: var(--turf-pale, rgba(0,0,0,0.04)); font-weight: 700; }
 .bar-cell { display: grid; grid-template-columns: 40px minmax(64px, 1fr); align-items: center; gap: 8px; }
 .bar-track { position: relative; height: 14px; }
@@ -510,6 +547,8 @@ td .act { font-weight: 700; }
 <!-- landscape paper for Print matchup: route() sets media="print" only while a matchup is open.
      Not a named @page: Chrome adds a blank page on each side of a named page. -->
 <style id="mx-page" media="not all">@page { size: letter landscape; margin: 0.35in; }</style>
+<!-- portrait paper for the best-bets card: route() sets media="print" only while #bestbets is open. -->
+<style id="bb-page" media="not all">@page { size: letter portrait; margin: 0.45in; }</style>
 <!--/PAGE-->
 </head>
 <body>
@@ -554,6 +593,7 @@ td .act { font-weight: 700; }
         <div class="section-head">
           <h2 id="sheet-h">Bet sheet</h2>
           <p class="note" id="sheet-note"></p>
+          <p class="bb-links"><a class="btn" id="sheet-pdf" href="best-bets.pdf" download>Download the best bets (PDF)</a><a class="btn" href="#bestbets">Print view</a></p>
         </div>
         <p class="note asof" id="sheet-asof"></p>
         <div id="sheet"></div>
@@ -622,6 +662,11 @@ td .act { font-weight: 700; }
 
     </div>
 
+    <!-- ============ best bets: the week's card, built for paper (#bestbets; the Update Actions render it to best-bets.pdf) ============ -->
+    <div class="view bb" id="view-bestbets" hidden>
+      <p class="bb-actions"><a class="btn" id="bb-pdf" href="best-bets.pdf" download>Download PDF</a><button class="btn" id="bb-print" type="button">Print</button><a class="btn" href="#games">Back to the board</a></p>
+      <div class="bb-doc" id="bb-doc"></div>
+    </div>
     <!-- ============ one game ============ -->
     <div class="view" id="view-game" hidden></div>
     <!-- ============ this week's matchups (dashboard look) ============ -->
@@ -1344,6 +1389,97 @@ function renderSheet() {
     host.append(tier);
   });
 }
+
+/* ---------------- best bets: the week's card on one document ----------------
+   Everything the board knows that bears on a bet this week, in the order a bettor reads it:
+   the sheet's bets by tier, the teaser legs that clear, every game's model lean, prop flags,
+   and the record each kind of bet carries. Rendered at #bestbets, printed by the Print
+   button, and rendered to best-bets.pdf by the Update Actions (scripts/build_pdf.py). */
+const TIER_ORDER = { price: 0, opener: 1, wind: 2, model: 3 };
+let bbPropsTried = false;
+function renderBestBets() {
+  const host = $("#bb-doc"), gs = games(), inp = M.inputs || {};
+  const lg = LG === "nfl" ? "NFL" : "College football";
+  const el = (tag, text, cls) => H(tag, { text, class: cls || "" });
+  const kids = [];
+  kids.push(el("h1", lg + " best bets, Week " + state.week));
+  kids.push(el("p", `Board built ${inp.generated || M.generated}${inp.market ? "; book prices as of " + inp.market + " UTC" : "; no book prices on file"}${inp.injuries ? "; injury report " + inp.injuries : ""}${inp.designations ? "; injury designations checked " + inp.designations : ""}. Results through ${M.games_through}. Bankroll $${comma(state.bankroll)}. Lines move: check the book before betting.`, "stamp"));
+
+  /* 1. the card */
+  const rows = gs.flatMap(g => g.bets.filter(b => tierOf(b)).map(b => ({ g, b }))).sort((x, y) => (TIER_ORDER[tierOf(x.b)] - TIER_ORDER[tierOf(y.b)]) || (evOf(y.b) - evOf(x.b)));
+  kids.push(el("h2", "The card: " + rows.length + (rows.length === 1 ? " bet" : " bets")));
+  const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
+  kids.push(el("p", "In the order to take them: prices that beat Pinnacle's own number first (no model needed), then the model's edges against the opening line, " + (LG === "nfl" ? "wind unders, " : "") + "then the model alone. Moneylines appear only when a price beats the sharp line. Stakes are " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " a bet" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the model's claimed edge were real` : "; the model's own edges carry no stake, since none of their claimed edge has shown up in the graded bets of the last eight seasons") + " — bets marked (bucket) are sized from their bucket's own record instead" : "") + "."));
+  if (!rows.length) kids.push(el("p", "Nothing to bet this week: no price beats the sharp line and the model is not far enough off any opener.", "empty"));
+  else {
+    const t = H("table");
+    let n = 0;
+    table(t, [{ t: "#" }, { t: "Pick", l: 1 }, { t: "Take it at", l: 1 }, { t: "EV" }, { t: "Stake" }, { t: "Why", l: 1 }, { t: "When", l: 1 }],
+      rows.map(({ g, b }) => {
+        const tm = timing(g, b), bk = b.best ? b.books.find(x => x.book === b.best) : null;
+        const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk) : bk;
+        const where = q ? bookName(q.book) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
+        const st = sheetStake(b, q);
+        const why = H("span", {}, H("b", { text: TIER[tierOf(b)].h + ". " }), whyNode(g, b));
+        return [{ v: String(++n), cls: "n nw" }, { v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home), H("br"), document.createTextNode(kickoff(g).replace(" ET", ""))), cls: "nw" },
+          { v: where, cls: "nw" }, { v: evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)), cls: "nw" },
+          { v: st > 0 ? stakeText({ stake: st }) + ((q ? q.stake : bestStake(b)) <= 0 ? " (bucket)" : "") : "—", cls: "nw" },
+          { v: why, cls: "wrap" }, { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "wrap" }];
+      }));
+    kids.push(t);
+    kids.push(el("h3", "What the records say"));
+    const seen = new Set();
+    rows.forEach(({ b }) => { const k = tierOf(b) + "|" + (tierOf(b) === "model" ? b.market + (evOf(b) >= 0.05 ? 5 : evOf(b) >= 0.02 ? 2 : 0) : tierOf(b) === "opener" ? b.market : ""); if (seen.has(k)) return; seen.add(k); kids.push(el("p", TIER[tierOf(b)].h + ": " + bucketText(b))); });
+  }
+
+  /* 2. teasers */
+  const saved = { ...tstate }; tstate.pts = "6"; tstate.odds = -120; tstate.basis = "line";
+  const legs = teaserLegs(), dec = toDec(-120), be = Math.sqrt(1 / dec), good = legs.filter(l => l.p >= be);
+  Object.assign(tstate, saved);
+  kids.push(el("h2", "Teasers: " + good.length + (good.length === 1 ? " leg clears" : " legs clear") + " at −120"));
+  kids.push(el("p", `Six points added, chances from the market's own curve (no model); a two-leg teaser at −120 needs every leg above ${pct(be)}.${LG === "nfl" ? " Wong legs cross both 3 and 7." : ""} Enter your book's price on the board's Teasers section if it differs.`));
+  if (good.length) {
+    const t = H("table");
+    table(t, [{ t: "Teased line", l: 1 }, { t: "Game", l: 1 }, { t: "From" }, { t: "Chance" }], good.slice(0, 12).map(l => [{ v: H("span", {}, document.createTextNode(l.teased), l.wong ? H("span", { class: "leg-wong", text: "Wong" }) : null), cls: "n" }, l.g.away + " @ " + l.g.home, l.mk === "Spread" ? fav(l.g, l.g.market.spread) : String(l.g.market.total), pct(l.p)]));
+    kids.push(t);
+    const pairs = [];
+    for (let i = 0; i < Math.min(good.length, 12); i++) for (let j = i + 1; j < Math.min(good.length, 12); j++) if (good[i].g !== good[j].g) pairs.push({ a: good[i], b: good[j], ev: good[i].p * good[j].p * dec - 1 });
+    pairs.sort((x, y) => y.ev - x.ev);
+    if (pairs.length) kids.push(el("p", "Best pairs (legs treated as independent): " + pairs.slice(0, 4).map(x => `${x.a.teased} + ${x.b.teased} (${spct(x.ev)})`).join("; ") + "."));
+  } else kids.push(el("p", "No leg clears the break-even at −120 this week.", "empty"));
+
+  /* 3. every game */
+  kids.push(el("h2", "Every game: where the model leans"));
+  kids.push(el("p", "The board's side of each spread and total (the market-adjusted projection's), with its chance. Most sit close to 50%: a lean is not a bet, and the bets are the card above."));
+  const gt = H("table");
+  table(gt, [{ t: "Game", l: 1 }, { t: "Kickoff", l: 1 }, { t: "Market" }, { t: "Model" }, { t: "Adjusted" }, { t: "Spread lean", l: 1 }, { t: "Total lean", l: 1 }, { t: "Win" }, { t: "Notes", l: 1 }],
+    gs.map(g => {
+      const ls = lean(g, "Spread"), lt = lean(g, "Total");
+      const notes = [g.early ? "early line" : "", g.wind && g.wind.under_angle ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) : "", g.anchor && g.anchor !== "consensus" ? "" : "no sharp quote"].filter(Boolean).join(", ");
+      const nw = v => ({ v, cls: "nw" });
+      return [{ v: H("b", { text: g.away + " @ " + g.home }), cls: "nw" }, nw(kickoff(g).replace(" ET", "")), nw(fav(g, g.market.spread) + " / " + g.market.total), nw(fav(g, g.model.margin) + " / " + g.model.total.toFixed(1)), nw(fav(g, g.proj.margin) + " / " + g.proj.total.toFixed(1)),
+        nw(ls ? ls.pick + " (" + pct(ls.prob, 0) + ")" : "—"), nw(lt ? lt.pick + " (" + pct(lt.prob, 0) + ")" : "—"), nw(g.home + " " + pct(g.win.adj, 0)), notes];
+    }));
+  kids.push(gt);
+
+  /* 4. props (NFL) */
+/*NFL-ONLY*/  if (views.props) {
+    kids.push(el("h2", "Player props"));
+    const pd = propsView.current();
+    if (!pd && !bbPropsTried) { bbPropsTried = true; propsView.load().then(d => { if (d && location.hash === "#bestbets") renderBestBets(); }); }
+    if (!pd) kids.push(el("p", "No props file for this week is on hand (they arrive with the props run about three days before kickoff).", "empty"));
+    else {
+      const flagged = pd.props.filter(p => p.fl), tagged = pd.props.filter(p => !p.alt && (p.bg || p.mid || p.lg));
+      if (flagged.length) { const t = H("table"); table(t, [{ t: "Prop", l: 1 }, { t: "Side" }, { t: "Line" }, { t: "Ours" }, { t: "Books'" }], flagged.slice(0, 20).map(p => [p.n + " " + (p.s || ""), p.fl, String(p.L), pct(p.fl === "over" ? p.po : p.pu, 0), pct(p.fo, 0)])); kids.push(t); }
+      else kids.push(el("p", "No prop is flagged: against real DraftKings and FanDuel lines the books' prices were the better forecast, so prop flags are off." + (tagged.length ? " Book disagreements worth a look (not model bets): " + tagged.slice(0, 8).map(p => `${p.n} ${STATW(p.s)} ${p.L} (${p.mid ? "middle" : p.bg ? "book gap" : "ladder gap"})`).join("; ") + "." : "")));
+    }
+  }/*/NFL-ONLY*/
+
+  kids.push(el("p", "For research and entertainment. Past results do not predict future results, and nothing here is betting advice. Every number is the board's projection at build time; the live board (rhyman7.github.io/fb-value-board) is current.", "disc"));
+  host.replaceChildren(...kids);
+}
+const STATW = s => ({ pass_yds: "pass yds", pass_att: "pass att", pass_td: "pass TD", completions: "comp", ints: "INT", carries: "carries", rush_yds: "rush yds", receptions: "rec", rec_yds: "rec yds", anytime_td: "anytime TD" })[s] || s;
+$("#bb-print").addEventListener("click", () => window.print());
 
 /* ---------------- teasers and alternate lines ----------------
    Legs are priced off the key-number curve with the line moved the bettor's way; a leg is
@@ -2302,6 +2438,10 @@ const propsView = (function () {
   }
 
   function show() { get(cur).then(d => { if (cache[cur] === d) { drawRec(d); draw(); drawCalls(d); drawCal(d); } }); }
+  /* the props for the board's selected week, for the best-bets card: load() fetches them without drawing the section */
+  const forWeek = () => index && (index.weeks || []).find(w => w.season === M.season && w.week === state.week);
+  function load() { return get("index.json").then(ix => { index = index || ix; const w = forWeek(); return w ? get(w.file) : null; }).catch(() => null); }
+  function current() { const w = forWeek(); return (w && cache[w.file]) || null; }
 
   function drawRec(d) {
     HASN = d.props.some(p => p.pno != null);
@@ -2423,7 +2563,7 @@ const propsView = (function () {
         w.brier_ours == null ? "–" : { v: w.brier_ours.toFixed(4), cls: w.brier_ours <= w.brier_books ? "strong" : "" }, w.brier_books == null ? "–" : w.brier_books.toFixed(4),
         w.moved_toward == null ? "–" : pct(w.moved_toward, 0) + " / " + pct(w.moved_away, 0), index.flags_on ? (w.flagged ? w.flag_record : "None") : "Paused"]));
   }
-  return { open };
+  return { open, load, current };
 })();
 /*/NFL-ONLY*/
 
@@ -2896,7 +3036,7 @@ const matchups = (() => {
 })();
 
 /* ---------------- routing ---------------- */
-const views = { games: $("#view-games"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
+const views = { games: $("#view-games"), bestbets: $("#view-bestbets"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
 /*NFL-ONLY*/views.props = $("#view-props");/*/NFL-ONLY*/
 let shownGame = null;
 function route() {
@@ -2905,10 +3045,13 @@ function route() {
   const mm = /^matchups\/(.+)$/.exec(h), pm = mm && /^(\d{4}_w\d{2})(?:\/(.+))?$/.exec(mm[1]);
   const tok = pm ? pm[1] : null, pid = pm && pm[2] ? decodeURIComponent(pm[2]) : null;
   const mg = mm && !pm ? matchups.find(decodeURIComponent(mm[1])) : null;
-  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || (h === "props" && views.props)) ? h : "games";
+  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "bestbets" || (h === "props" && views.props)) ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
   $("#mx-page").media = name === "matchup" ? "print" : "not all";   // a printed matchup is one landscape page
+  $("#bb-page").media = name === "bestbets" ? "print" : "not all";   // the best-bets card prints portrait
+  document.documentElement.classList.toggle("bb-print", name === "bestbets");
+  if (name === "bestbets") renderBestBets();
   if (name === "matchups") matchups.board(tok);
   if (name === "matchup") matchups.game(tok, mg || pid);
   if (name === "history") historyView.open();
@@ -2922,6 +3065,7 @@ function route() {
   if (g) { shownGame = g; renderGame(g); document.title = g.away + " at " + g.home + " | NFL Value Board"; }
   else if (name === "matchup") { shownGame = null; }   // matchups.game sets the title
   else if (name === "matchups") { shownGame = null; document.title = (tok ? "Past Matchups" : "This Week's Matchups") + " | NFL Value Board"; }
+  else if (name === "bestbets") { shownGame = null; document.title = "NFL Value Board: best bets, Week " + state.week; }
   else { shownGame = null; document.title = "NFL Value Board"; }
   window.scrollTo(0, 0);
 }

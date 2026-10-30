@@ -244,6 +244,11 @@ whether to bet now or wait, the record of bets of that kind, and the stake. The 
   total. Moneylines are not bets outside the price tier: they have lost at every claimed edge
   since the holdout seasons.
 
+The whole week fits on one document, **Best bets** (`#bestbets`): the card in tier order, the
+teaser legs that clear, every game's lean, and the week's prop flags. The Bet sheet links to
+it, the Update Actions render it to `best-bets.pdf` next to each board (`scripts/build_pdf.py`),
+and the landing page links the PDFs.
+
 Every flagged bet goes into the **ledger** (`nflmodel/ledger.py`, `data/ledger.csv`) at the
 book, line and price it was first flagged at, and is graded on the result and on closing line
 value against Pinnacle's close; the Model record page leads with that live record. The

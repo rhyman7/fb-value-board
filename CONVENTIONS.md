@@ -232,6 +232,22 @@ boards in detail; this file is the rules.
 - Both boards share the same sections and anchors, in this order:
   This Week's Matchups `#matchups` | Games `#games` | Players `#players` | Past weeks `#history` |
   Team ratings `#ratings` | Model record `#model`. Each board's nav links to the other board.
+- **Best bets (both boards): `#bestbets` and `best-bets.pdf`** (Oct 30, 2026). The week's card
+  on one document, built from the whole board by `renderBestBets()` in `site/template.html`:
+  the Bet sheet's bets in tier order with book, price, EV, stake, why and when; the 6-point
+  teaser legs that clear −120 and the best pairs; every game's market, model and adjusted
+  numbers with the board's lean; the week's prop flags (NFL; book disagreements when none
+  are flagged); the bucket records and the disclaimer. The Bet sheet's head links to it
+  (**Download the best bets (PDF)** and **Print view**), the landing page's cards link the
+  PDFs, and the view's own buttons are Download PDF, Print and Back. Printing uses the
+  portrait `#bb-page` style, switched on by `route()` only for `#bestbets`, and the
+  `html.bb-print` rules (black on white, nothing but the card). The PDFs
+  (`docs/best-bets.pdf`, `docs/cfb/best-bets.pdf`) are rendered by `scripts/build_pdf.py`
+  (Playwright Chromium, from the generated page on disk) in the Update Actions after each
+  build and committed with `docs/`; a render failure never stops the build. They show the
+  board's first listed week at a $1,000 bankroll; the Print button prints whichever week and
+  bankroll the reader has selected. `#bestbets` is not a nav section (the nav order above
+  stands); don't add it to the landing page's section lists beyond the PDF link.
 - **The Games view's order** (Oct 30, 2026): filters, **Bet sheet**, the boost calculator,
   **Teasers and alternate lines** (legs from `teasers`, the two-leg price entered by the
   reader; the per-game ladders are on each game's page under "Alternate lines and teasers"),
@@ -297,7 +313,8 @@ boards in detail; this file is the rules.
   the Weekly Gridiron Board (rhyman7.github.io); keep it styled consistently with it.
 - College card on the left, NFL on the right. Each card links to its board and to the six
   sections above (the NFL card also to Props); if a section is added, renamed or reordered,
-  update both cards.
+  update both cards. Each card's first link is its board's **Best Bets (PDF)**
+  (`docs/best-bets.pdf`, `docs/cfb/best-bets.pdf`), which the Update Actions write.
 - Logos live in `img/` (copies of rhyman7.github.io's `img/ncaa.png` and `img/nfl.png`).
 - All links are relative (`docs/`, `docs/cfb/`, `img/`) so the page works at
   `/fb-value-board/`.

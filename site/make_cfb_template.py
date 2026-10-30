@@ -31,6 +31,7 @@ sub('        <li><a href="cfb/" data-view="cfb">College board</a></li>\n', '    
 sub(' | NFL Value Board"; }', ' | College Value Board"; }', 2)   # game page, matchups board
 sub(' | NFL Value Board`;', ' | College Value Board`;')              # one matchup (this week or a past week)
 sub('document.title = "NFL Value Board";', 'document.title = "College Value Board";')
+sub('"NFL Value Board: best bets, Week "', '"College Value Board: best bets, Week "')
 sub('"nflvb.bankroll"', '"cfbvb.bankroll"', None)
 sub("No data yet. Run python run.py to build the board.", "No data yet. Run python run_cfb.py to build the board.")
 
@@ -215,7 +216,7 @@ sub('    grid.append(box("The defense", tx(dtext)));', '    grid.append(box("The
 
 # NFL-only parts of the page (the Props section, Oct 2026: props are NFL only, Ryan's call),
 # marked in template.html and cut from the college page: (pattern, expected count).
-NFL_ONLY = [(r"<!--NFL-ONLY-->.*?<!--/NFL-ONLY-->\n?", 2), (r"/\*NFL-ONLY\*/.*?/\*/NFL-ONLY\*/\n?", 4)]
+NFL_ONLY = [(r"<!--NFL-ONLY-->.*?<!--/NFL-ONLY-->\n?", 2), (r"/\*NFL-ONLY\*/.*?/\*/NFL-ONLY\*/\n?", 5)]
 
 
 def main():
