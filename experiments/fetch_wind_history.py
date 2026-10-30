@@ -4,8 +4,9 @@ Open-Meteo's history archive, for experiments/wind_direction_test.py.
     python experiments/fetch_wind_history.py              # everything not yet cached
     python experiments/fetch_wind_history.py --limit 50   # a few calls, to check it works
 
-One request per stadium per game day (the archive returns the whole day, so a doubleheader
-at one stadium is one call) with 0.3 s between calls; a call that fails is printed and
+One request per stadium per season (the archive returns hourly data for any date range, so
+a season's home games at one stadium are one call of a few hundred kilobytes; about 400
+calls in all, a few minutes) with 0.3 s between calls; a call that fails is printed and
 skipped, and the next run tries it again. Results go to data/cache/wind_history.csv, one
 row per game: the archive's 10 m wind speed, gusts and the direction the wind blew from at
 the kickoff hour (Eastern), the field's bearing (nflmodel/stadiums.py) and the along-field
@@ -30,18 +31,29 @@ from nflmodel.weather import at_hour  # noqa: E402
 
 CACHE = C.CACHE / "wind_history.csv"
 FIRST = 2014
-URL = ("https://archive-api.open-meteo.com/v1/archive?latitude={lat}&longitude={lon}&start_date={d}&end_date={d}"
+URL = ("https://archive-api.open-meteo.com/v1/archive?latitude={lat}&longitude={lon}&start_date={d0}&end_date={d1}"
        "&hourly=wind_speed_10m,wind_gusts_10m,wind_direction_10m&wind_speed_unit=mph&timezone=America%2FNew_York")
 COLS = ["game_id", "season", "gameday", "hour", "home_team", "stadium", "lat", "lon", "bearing", "bearing_conf",
         "wind_mph", "gust_mph", "dir_deg", "along_mph", "cross_mph", "fetched"]
 PAUSE = 0.3
 
 
-def fetch_day(lat: float, lon: float, day: str) -> dict:
-    """The archive's hourly block for one place and day (24 hours, Eastern)."""
-    req = urllib.request.Request(URL.format(lat=lat, lon=lon, d=day), headers={"User-Agent": "nfl-model"})
-    with urllib.request.urlopen(req, timeout=30) as r:
+def fetch_range(lat: float, lon: float, start: str, end: str) -> dict:
+    """The archive's hourly block for one place from `start` to `end` (Eastern time): the
+    "time" list ("YYYY-MM-DDTHH:00") and the three series."""
+    req = urllib.request.Request(URL.format(lat=lat, lon=lon, d0=start, d1=end), headers={"User-Agent": "nfl-model"})
+    with urllib.request.urlopen(req, timeout=120) as r:
         return json.loads(r.read())["hourly"]
+
+
+def block_at(hourly: dict, day: str, hour: int) -> dict:
+    """The hourly block cut down to the 24 hours of `day`, so at_hour can read it."""
+    times = hourly.get("time") or []
+    try:
+        i = times.index(f"{day}T00:00")
+    except ValueError:
+        raise KeyError(f"{day} not in the archive block")
+    return {k: v[i:i + 24] for k, v in hourly.items() if k != "time"}
 
 
 def wanted(games: pd.DataFrame) -> pd.DataFrame:
@@ -61,10 +73,11 @@ def wanted(games: pd.DataFrame) -> pd.DataFrame:
 
 
 def rows_for(day_games: pd.DataFrame, hourly: dict, fetched: str) -> list[dict]:
-    """One cache row per game of a stadium-day from the archive's hourly block."""
+    """One cache row per game from the archive's hourly block (a stadium-season range, or a
+    single day's block without a "time" list)."""
     out = []
     for g in day_games.itertuples(index=False):
-        w = at_hour(hourly, int(g.hour))
+        w = at_hour(block_at(hourly, g.gameday, int(g.hour)) if "time" in hourly else hourly, int(g.hour))
         along = cross = None
         if w["dir"] is not None and pd.notna(g.bearing):
             along, cross = stadiums.components(w["mph"], w["dir"], float(g.bearing))
@@ -83,32 +96,33 @@ def load_cache(path=CACHE) -> pd.DataFrame:
     return pd.read_csv(path) if path.exists() else pd.DataFrame(columns=COLS)
 
 
-def run(games: pd.DataFrame, path=CACHE, fetch=fetch_day, limit: int | None = None, pause: float = PAUSE, verbose: bool = True) -> pd.DataFrame:
-    """Fetch what the cache lacks, append as it goes, and return the whole cache."""
+def run(games: pd.DataFrame, path=CACHE, fetch=fetch_range, limit: int | None = None, pause: float = PAUSE, verbose: bool = True) -> pd.DataFrame:
+    """Fetch what the cache lacks, one call per stadium and season, append as it goes, and
+    return the whole cache."""
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     cache = load_cache(path)
     done = set(cache.game_id)
     todo = wanted(games)
     todo = todo[~todo.game_id.isin(done)]
-    days = list(todo.groupby(["lat", "lon", "gameday"], sort=True))
+    groups = list(todo.groupby(["lat", "lon", "season"], sort=True))
     if verbose:
-        print(f"  {len(cache)} games cached, {len(todo)} to fetch in {len(days)} stadium-days")
+        print(f"  {len(cache)} games cached, {len(todo)} to fetch in {len(groups)} stadium-seasons")
     calls = ok = failed = 0
-    for (lat, lon, day), dg in days:
+    for (lat, lon, season), sg in groups:
         if limit is not None and calls >= limit:
             break
         calls += 1
         try:
-            hourly = fetch(lat, lon, day)
-            rows = pd.DataFrame(rows_for(dg, hourly, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")), columns=COLS)
+            hourly = fetch(lat, lon, sg.gameday.min(), sg.gameday.max())
+            rows = pd.DataFrame(rows_for(sg, hourly, datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")), columns=COLS)
             rows.to_csv(path, mode="a", header=not path.exists() or path.stat().st_size == 0, index=False)
             cache = pd.concat([cache, rows], ignore_index=True)
             ok += 1
         except Exception as exc:
             failed += 1
             if verbose:
-                print(f"  {day} {dg.home_team.iloc[0]}: {exc}")
+                print(f"  {season} {sg.home_team.iloc[0]} ({sg.gameday.min()} to {sg.gameday.max()}): {exc}")
         time.sleep(pause)
     if verbose:
         print(f"  {calls} calls, {ok} ok, {failed} failed; {len(cache)} games cached")
