@@ -297,6 +297,13 @@ def test_player_shares_and_starter():
     assert starter([("vet", 0.6), ("rookie", 0.4)], "rookie") == ["rookie"]      # benching sticks
     assert starter([("hurts", 0.85), ("mckee", 0.3)], "mckee") == ["hurts"]      # regular returns from injury
     assert starter([("a", 0.6), ("b", 0.3)], None) == ["a"]                      # no previous starter: largest share
+    # a hand override names the starter outright
+    d = pd.DataFrame([dict(base, player_id=n, group="QB", active=1, att_share_raw=s, prev_qb="backup", qb_force=f)
+                      for n, s, f in [("backup", 0.9, 0), ("returning", 0.5, 1)]])
+    for c in PL.VOL_FEATS:
+        d[c] = 1.0
+    r = PL.raw_projection(d, const, const)
+    assert r.loc[r["att_share"] == 1, "player_id"].tolist() == ["returning"]
 
 
 def test_archive_freezes_at_kickoff_and_grades(tmp_path):
@@ -359,6 +366,11 @@ def test_overrides_starter_and_out(tmp_path):
                          "played": [True, False, False], "active": [1, 1, 1], "report": [np.nan] * 3})
     r = OV.apply_out(rows, ov)
     assert list(r.active) == [1, 0, 1] and r.report.iloc[1] == "Out"
+    qrows = pd.DataFrame({"game_id": ["G1", "G2", "G2"], "player_id": ["qb-new", "qb-new", "qb-old"],
+                          "played": [True, False, False], "active": [1, 0, 1], "report": [np.nan, "Out", np.nan]})
+    q = OV.apply_starters_players(qrows, ov)
+    assert list(q.qb_force) == [0, 1, 0] and list(q.active) == [1, 1, 1]      # the named starter is in, whatever the report said
+    assert q.report.iloc[1] is None
 
 
 def test_overrides_file_is_valid():

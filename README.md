@@ -289,7 +289,8 @@ opener alerts (raw model well off Pinnacle early in the week) to a GitHub issue 
   inactives are not known, so only injured reserve and Out/Doubtful count.
   News the official sources have not caught up with yet (a starting quarterback
   named midweek, a player ruled out before Friday's report) can be entered by hand
-  in `data/overrides.csv`, one row per player per game (see `nflmodel/overrides.py`).
+  in `data/overrides.csv`, one row per player per game (see `nflmodel/overrides.py`). A
+  `starter` row drives both the game model's quarterback and the player projections.
 - Weather is wind only. The backtest uses wind recorded at the game, so the
   wind feature and the wind under will look better in testing than they will
   live, where a forecast is used.

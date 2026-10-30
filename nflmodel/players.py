@@ -242,6 +242,7 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
     rows = player_rows(tg, pg, avail, info)
     if overrides is not None:
         rows = overrides_mod.apply_out(rows, overrides)
+        rows = overrides_mod.apply_starters_players(rows, overrides)
     # who the projection expects to play; history and fitting still use who did play
     rows["active_pre"] = pregame_active(rows, avail) if pregame else rows["active"]
     played_rows = rows[rows["played"] & (rows["active"] == 1)].copy()
@@ -400,11 +401,18 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
     # One starting quarterback takes the passes: last game's starter if he is active, unless
     # another active quarterback is clearly the regular (80%+ of the team's recent passes), as when
     # a starter returns from injury; with neither, the active quarterback with the largest share.
-    # Right on 92.7% of team-games since 2019 (91.1% for largest share alone).
+    # Right on 92.7% of team-games since 2019 (91.1% for largest share alone). A hand
+    # override (data/overrides.csv, kind=starter; qb_force) names the starter outright.
     qb = p[(p["group"] == "QB") & act].copy()
     if len(qb):
         qb = qb.sort_values("att_share_raw", ascending=False)
         starters = set(qb.groupby(["game_id", "team"]).apply(_pick_starter).dropna().astype(int))
+        if "qb_force" in qb.columns:
+            forced = qb[qb["qb_force"].fillna(0).astype(int) == 1].drop_duplicates(["game_id", "team"])
+            if len(forced):
+                keys = set(forced["game_id"] + "|" + forced["team"])
+                st = p.loc[list(starters), ["game_id", "team"]]
+                starters = set(st.index[~(st["game_id"] + "|" + st["team"]).isin(keys)]) | set(forced.index)
         p["att_share"] = 0.0                     # only the starter projects passes (trick plays are noise)
         p.loc[list(starters), "att_share"] = 1.0
     # QB attempts
