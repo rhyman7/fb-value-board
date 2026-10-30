@@ -36,6 +36,7 @@ sub("No data yet. Run python run.py to build the board.", "No data yet. Run pyth
 
 # ---- this week's matchups: college names, conferences and no targets ---------------------------
 sub('  const LEAGUE = "nfl";', '  const LEAGUE = "cfb";')
+sub('const LG = "nfl";', 'const LG = "cfb";')   # the bet sheet: wind unders are an NFL bucket only
 
 # ---- games ---------------------------------------------------------------------------
 sub('$("#stamp").textContent = M.season + " season. Results through " + M.games_through + ". Updated " + M.generated + ".";',

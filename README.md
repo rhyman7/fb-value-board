@@ -223,9 +223,33 @@ check its first run.
    sides together. The stake is sized from the model probability shrunk toward the
    market's by the share of claimed edge that has shown up in the last eight
    seasons' graded bets (`backtest.edge_haircut`; 0 on the NFL board as of
-   October 2026, so no NFL stake is sized until that changes); the EV and
+   October 2026, so no NFL stake is sized until that changes, and 0 whenever
+   the factor has not been measured: it fails closed); the EV and
    probabilities shown are the model's. See FEATURES.md, "Edge tests, late
    October 2026".
+
+## The bet sheet and the ledger
+
+The Games view opens with the **Bet sheet** (`nflmodel/sheet.py`): this week's bets grouped
+by what the edge is made of, with the book and price to take, what the model's number is
+built from (this week's news in red), how the sharp line has moved since the open and
+whether to bet now or wait, the record of bets of that kind, and the stake. The tiers:
+
+- **Price beats Pinnacle.** A retail price beats the sharp book's no-vig number at that line
+  by 1% or more with no model at all. Sized against the sharp line.
+- **Model off the opener.** The model is 2+ points off the opening spread (3+ in college and
+  on totals), where the backtests show the line tends to move its way.
+- **Wind unders** (NFL). An under in 10 to 19 mph of forecast wind.
+- **Model edges.** Everything else the market-adjusted projection makes +EV on a spread or
+  total. Moneylines are not bets outside the price tier: they have lost at every claimed edge
+  since the holdout seasons.
+
+Every flagged bet goes into the **ledger** (`nflmodel/ledger.py`, `data/ledger.csv`) at the
+book, line and price it was first flagged at, and is graded on the result and on closing line
+value against Pinnacle's close; the Model record page leads with that live record. The
+Teasers section prices every leg with 6 or 7 points added off the key-number curve (Wong
+legs marked), and each game's page carries the alternate-line ladder with fair prices
+(`nflmodel/alts.py`).
 
 ## Market lines
 
@@ -283,6 +307,9 @@ nflmodel/
   weather.py              wind forecasts for upcoming games, and the forecast log
   injuries.py             missing starters by position group (reports, rosters, snaps)
   overrides.py            hand-entered starters and outs from data/overrides.csv
+  sheet.py                the bet sheet: tiers, opener gaps, line moves, what each number is made of
+  alts.py                 alternate lines and teaser legs off the key-number curve
+  ledger.py               the bet ledger: flagged bets at their first price, graded against the close
   market.py               game lines from several books (Pinnacle, DK, FD, BetMGM, Kalshi), data/market/
   def_ratings.py          defender ratings and missing-defender features (shadow test only)
   defense.py              team defensive rates from PFR (shadow test only)

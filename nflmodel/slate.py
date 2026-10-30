@@ -6,10 +6,12 @@ import datetime as dt
 import numpy as np
 import pandas as pd
 
+from . import alts as ALT
 from . import config as C
 from . import bets as B
 from . import market as MK
 from . import odds as O
+from . import sheet as SH
 
 LINE_COLS = ["spread_line", "home_spread_odds", "away_spread_odds", "total_line", "over_odds", "under_odds",
              "home_moneyline", "away_moneyline"]
@@ -63,6 +65,12 @@ def track_lines(up: pd.DataFrame, path=None) -> dict:
     moves = hist.groupby("game_id").size()
     return {gid: {"seen": str(r.seen)[:10], "spread": float(r.spread_line), "total": float(r.total_line), "moves": int(moves[gid]) - 1}
             for gid, r in first.iterrows()}
+
+
+def _kick(gameday, gametime) -> str:
+    """Kickoff as a UTC ISO stamp (archive.kickoff), for the page's countdown."""
+    from .archive import kickoff
+    return kickoff(gameday, gametime).strftime("%Y-%m-%dT%H:%MZ")
 
 
 def fair_american(p: float) -> int | None:
@@ -135,7 +143,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
           quotes: dict | None = None, haircut: float = 1.0) -> dict:
     """quotes: nflmodel/market.quotes_for(...) for this frame's unplayed games, or None.
     haircut: the share of claimed edge the stakes are sized from (backtest.edge_haircut; 1 = none)."""
-    quotes = quotes or {"latest": {}, "first": {}}
+    quotes = quotes or {"latest": {}, "first": {}, "path": {}}
     cand = frame[~frame.played].copy()
     sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
     # games with a consensus line, plus any the sharp book already quotes (the week's openers)
@@ -152,6 +160,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
     shopped = B.shop(priced, dist, quotes["latest"], MK.RETAIL, "proj", haircut=haircut)
     key = ["game_id", "market", "side"]
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
+    priced_alts = ALT.price(priced, dist)          # alternate lines and teaser legs off the curve
 
     games = []
     for g in up.sort_values(["week", "gameday", "gametime", "game_id"]).itertuples(index=False):
@@ -180,6 +189,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
         games.append({
             "id": g.game_id, "week": int(g.week), "date": when.strftime("%a %b %-d"),
             "time": g.gametime if isinstance(g.gametime, str) else "",
+            "kickoff": _kick(g.gameday, g.gametime),
             "away": g.away_team, "home": g.home_team, "neutral": bool(g.neutral),
             "away_name": C.TEAM_NAMES.get(g.away_team, g.away_team), "home_name": C.TEAM_NAMES.get(g.home_team, g.home_team),
             "away_record": records.get(g.away_team, "0-0"), "home_record": records.get(g.home_team, "0-0"),
@@ -188,6 +198,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "opening_spread": float(true_open[g.game_id]) if g.game_id in true_open else None,
             "anchor": getattr(g, "anchor", "consensus"),
             "sharp_open": quotes["first"].get(g.game_id),
+            "sharp_path": (quotes.get("path") or {}).get(g.game_id),
             "books": {bk: {k: v for k, v in q.items() if k != "away_spread_point"} for bk, q in (quotes["latest"].get(g.game_id) or {}).items()},
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
@@ -202,9 +213,11 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "win": {"adj": round(float(ml.loc["home", "model_prob"]), 4) if "home" in ml.index else None,
                     "raw": round(float(ml.loc["home", "raw_prob"]), 4) if "home" in ml.index else None,
                     "market": round(float(ml.loc["home", "market_prob"]), 4) if "home" in ml.index else None},
-            "bets": bets, **capped,
+            "bets": bets, **capped, **priced_alts.get(g.game_id, {}),
         })
-    return {"weeks": sorted({g["week"] for g in games}), "games": games, "book_lines": n_book}
+        SH.annotate(games[-1], "nfl")              # tier, gap, opener gap, line move and why, per bet
+    return {"weeks": sorted({g["week"] for g in games}), "games": games, "book_lines": n_book,
+            "market_as_of": MK.as_of(quotes["latest"])}
 
 
 def season_records(games: pd.DataFrame, season: int) -> dict:

@@ -275,3 +275,17 @@ def add_pass_rush_features(df: pd.DataFrame, pr: pd.DataFrame | None) -> pd.Data
     df["d_miss_pr"] = df["h_miss_pr"] - df["a_miss_pr"]
     df["d_chg_pr"] = (df["h_miss_pr"] - df["h_mrec_pr"]) - (df["a_miss_pr"] - df["a_mrec_pr"])
     return df
+
+
+def as_of(season: int) -> str | None:
+    """When the official injury report on disk was last changed (the newest date_modified in
+    nflverse's injuries file for the season), for the boards' "data as of" line; None when the
+    file is not on hand."""
+    ip = C.RAW / f"injuries_{season}.parquet"
+    if not ip.exists():
+        return None
+    try:
+        d = pd.read_parquet(ip, columns=["date_modified"])["date_modified"].dropna()
+        return pd.Timestamp(d.max()).strftime("%Y-%m-%d %H:%M") if len(d) else None
+    except Exception:
+        return None

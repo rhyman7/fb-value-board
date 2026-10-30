@@ -239,6 +239,30 @@ th button { font: inherit; color: inherit; background: none; border: 0; padding:
 th button[aria-sort]::after { content: " \2193"; } th button[aria-sort="ascending"]::after { content: " \2191"; }
 /* A bet worth making is flagged, in the one accent colour. */
 .chip { display: inline-block; padding: 1px 8px; border-radius: 3px; background: var(--flag); color: var(--flag-ink); font-weight: 800; }
+/* bet sheet */
+.asof { margin: -6px 0 10px; font-size: 12.5px; color: var(--ink-3); }
+#sheet { min-width: 0; }
+.sheet-tier { margin: 22px 0 0; min-width: 0; }
+.sheet-tier:first-child { margin-top: 0; }
+.sheet-tier > .th { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin: 0 0 6px; }
+.sheet-tier > .th h3 { margin: 0; font: 800 20px/1.15 var(--display); }
+.sheet-tier > .th .note { margin: 0; }
+.sheet-tier .bucket { font-size: 12.5px; color: var(--ink-2); }
+.sheet-tier .bucket b { color: var(--ink); }
+table.sheet { font-size: 13px; }
+table.sheet td { vertical-align: top; }
+table.sheet td.why, table.sheet td.when { white-space: normal; min-width: 18ch; max-width: 30ch; font-size: 12px; line-height: 1.4; color: var(--ink-2); }
+table.sheet td.when { min-width: 24ch; }
+table.sheet td.why b, table.sheet td.when b { color: var(--ink); font-weight: 700; }
+table.sheet td.why .news { color: var(--s2); font-weight: 700; }
+table.sheet .verdict { display: inline-block; font-weight: 800; color: var(--ink); }
+table.sheet .verdict.wait { color: var(--s2); }
+table.sheet .ko { white-space: nowrap; font-weight: 500; font-size: 11.5px; }
+.sheet-empty { padding: 12px 0; }
+.leg-wong { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--s3); color: #fff; font-size: 11px; font-weight: 800; }
+td.dimp { color: var(--ink-3); }
+.alts table { font-size: 13px; }
+.alts td.mk, .alts tr.mk td { background: var(--turf-pale, rgba(0,0,0,0.04)); font-weight: 700; }
 .bar-cell { display: grid; grid-template-columns: 40px minmax(64px, 1fr); align-items: center; gap: 8px; }
 .bar-track { position: relative; height: 14px; }
 .bar-track::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--axis); }
@@ -518,12 +542,52 @@ td .act { font-weight: 700; }
   <main id="main">
     <!-- ============ games ============ -->
     <div class="view" id="view-games">
-      <section aria-labelledby="slate-h">
+      <section aria-label="Filters">
         <div class="filters" role="group" aria-label="Filters">
           <div class="field-label"><span id="f-week">Week</span><div class="seg" id="seg-week" role="group" aria-labelledby="f-week"></div></div>
           <div class="field-label"><span id="f-basis">Price bets from</span><div class="seg" id="seg-basis" role="group" aria-labelledby="f-basis"></div></div>
           <label class="field-label" for="bankroll">Bankroll ($)<input class="money" id="bankroll" type="number" min="0" step="50" value="1000" inputmode="numeric"></label>
         </div>
+      </section>
+
+      <section aria-labelledby="sheet-h" id="sheet-sec">
+        <div class="section-head">
+          <h2 id="sheet-h">Bet sheet</h2>
+          <p class="note" id="sheet-note"></p>
+        </div>
+        <p class="note asof" id="sheet-asof"></p>
+        <div id="sheet"></div>
+      </section>
+
+      <section aria-labelledby="boost-h">
+        <div class="section-head">
+          <h2 id="boost-h">Price a boost or a promo</h2>
+          <p class="note">A book's odds boost, no-sweat bet or profit boost on one of this week's sides, priced against the sharp no-vig number and against the model. Enter the odds the book is offering after the boost; for a profit boost, enter the base odds and the boost percentage.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Boost">
+          <label class="field-label" for="boost-side">Side<select class="money" id="boost-side"></select></label>
+          <label class="field-label" for="boost-odds">Odds offered<input class="money" id="boost-odds" type="number" step="1" placeholder="-110" inputmode="numeric"></label>
+          <label class="field-label" for="boost-pct">Profit boost %<input class="money" id="boost-pct" type="number" step="5" min="0" placeholder="0" inputmode="numeric"></label>
+          <label class="field-label" for="boost-book">Book<select class="money" id="boost-book"><option value="">Any book</option><option value="kalshi">Kalshi (taker fee)</option><option value="kalshi_maker">Kalshi (maker fee)</option></select></label>
+        </div>
+        <p class="note" id="boost-out">Pick a side and enter the odds.</p>
+      </section>
+
+      <section aria-labelledby="tease-h">
+        <div class="section-head">
+          <h2 id="tease-h">Teasers and alternate lines</h2>
+          <p class="note" id="tease-note"></p>
+        </div>
+        <div class="filters" role="group" aria-label="Teaser">
+          <label class="field-label" for="tease-pts">Points<select class="money" id="tease-pts"><option value="6">6</option><option value="7">7</option></select></label>
+          <label class="field-label" for="tease-odds">Two-leg price<input class="money" id="tease-odds" type="number" step="1" value="-120" inputmode="numeric"></label>
+          <div class="field-label"><span id="f-tbasis">Legs from</span><div class="seg" id="seg-tbasis" role="group" aria-labelledby="f-tbasis"></div></div>
+        </div>
+        <div class="scroll"><table id="tease-legs" aria-labelledby="tease-h"></table></div>
+        <p class="note" id="tease-pairs"></p>
+      </section>
+
+      <section aria-labelledby="slate-h">
         <div class="field">
           <div class="field-top">
             <h2 id="slate-h">Model against the market</h2>
@@ -556,19 +620,6 @@ td .act { font-weight: 700; }
         <p class="note"><button class="link" id="bets-more" type="button"></button></p>
       </section>
 
-      <section aria-labelledby="boost-h">
-        <div class="section-head">
-          <h2 id="boost-h">Price a boost or a promo</h2>
-          <p class="note">A book's odds boost, no-sweat bet or profit boost on one of this week's sides, priced against the sharp no-vig number and against the model. Enter the odds the book is offering after the boost; for a profit boost, enter the base odds and the boost percentage.</p>
-        </div>
-        <div class="filters" role="group" aria-label="Boost">
-          <label class="field-label" for="boost-side">Side<select class="money" id="boost-side"></select></label>
-          <label class="field-label" for="boost-odds">Odds offered<input class="money" id="boost-odds" type="number" step="1" placeholder="-110" inputmode="numeric"></label>
-          <label class="field-label" for="boost-pct">Profit boost %<input class="money" id="boost-pct" type="number" step="5" min="0" placeholder="0" inputmode="numeric"></label>
-          <label class="field-label" for="boost-book">Book<select class="money" id="boost-book"><option value="">Any book</option><option value="kalshi">Kalshi (taker fee)</option><option value="kalshi_maker">Kalshi (maker fee)</option></select></label>
-        </div>
-        <p class="note" id="boost-out">Pick a side and enter the odds.</p>
-      </section>
     </div>
 
     <!-- ============ one game ============ -->
@@ -708,6 +759,16 @@ td .act { font-weight: 700; }
 
     <!-- ============ model record ============ -->
     <div class="view" id="view-model" hidden>
+      <section id="live" aria-labelledby="live-h">
+        <div class="section-head">
+          <h2 id="live-h">Live record</h2>
+          <p class="note" id="live-note"></p>
+        </div>
+        <div class="tiles" id="live-tiles"></div>
+        <div class="scroll"><table id="live-tiers" aria-labelledby="live-h"></table></div>
+        <details class="data"><summary>Every flagged bet</summary><div class="scroll"><table id="live-rows"></table></div></details>
+      </section>
+
       <section id="record" aria-labelledby="record-h">
         <div class="section-head">
           <h2 id="record-h">Track record against closing lines</h2>
@@ -996,6 +1057,9 @@ function renderHero() {
       document.createTextNode(plus.length
         ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", worth " + spct(evOf(top.b)) + " per dollar staked."
         : "No bet clears break-even once the model is weighed against the market. The closest is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", " + spct(evOf(top.b)) + " per dollar staked."));
+    const tiers = all.flatMap(g => g.bets).reduce((a, b) => { if (b.tier) a[b.tier] = (a[b.tier] || 0) + 1; return a; }, {});
+    const tn = Object.values(tiers).reduce((a, b) => a + b, 0);
+    if (tn) lede.append(document.createTextNode(" On the bet sheet: " + [tiers.price ? tiers.price + " where a price beats the sharp line" : "", tiers.opener ? tiers.opener + " off the opener" : "", tiers.wind ? tiers.wind + " wind " + (tiers.wind === 1 ? "under" : "unders") : "", tiers.model ? tiers.model + " on the model alone" : ""].filter(Boolean).join(", ") + "."));
     const sharp = all.filter(g => g.anchor && g.anchor !== "consensus").length, beats = all.flatMap(g => g.bets).filter(b => b.beats_sharp).length;
     if (sharp) lede.append(document.createTextNode(" " + sharp + (sharp === 1 ? " game is" : " games are") + " anchored to " + bookName(all.find(g => g.anchor !== "consensus").anchor) + "'s line and shopped across " + Object.values(BOOK).filter(n => n !== "Pinnacle").join(", ") + (beats ? "; " + beats + (beats === 1 ? " price beats" : " prices beat") + " the sharp number before the model says anything." : ".")));
   }
@@ -1156,7 +1220,173 @@ function renderBoost() {
       + " Boosts are usually capped by the book; size to the cap, not the Kelly number, when the market says it is +EV.")].filter(Boolean));
 }
 ["#boost-side", "#boost-odds", "#boost-pct", "#boost-book"].forEach(id => $(id).addEventListener("input", renderBoost));
-function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); renderBoost(); }
+/* ---------------- bet sheet ----------------
+   Every bet carries a tier from the build (nflmodel/sheet.py): price (a retail price beats
+   Pinnacle's no-vig number with no model), opener (the model is 2+ points off the opening line
+   on this side, 3+ on totals), wind (an under in 10-19 mph), model (everything else the
+   market-adjusted projection makes +EV). Each row says what the model's number is made of,
+   how the sharp line has moved since it opened, when to bet, and how bets of that kind have
+   done, so a pick is never taken on the EV alone. */
+const LG = "nfl";
+const TIER = {
+  price: { h: "Price beats Pinnacle", d: "The book's price beats the sharp book's own no-vig number at this line by at least 1% per dollar, before the model says anything. This is the one kind of bet that makes money with no model at all; take it at the book named, now." },
+  opener: { h: "Model off the opener", d: LG === "nfl" ? "The model is 2 or more points off the opening spread (3 on totals): historically the line has then tended to move its way. The one edge the backtests have found; it is an edge against the opener, so it is worth more the earlier it is bet." : "The model is 3 or more points off the opening line. In college the edge is on totals, which have beaten the opener since 2021; spreads off the opener have not, and the record column says which is which. It is an edge against the opener, so bet it early or not at all." },
+  wind: { h: "Wind unders", d: "Outdoor game with 10 to 19 mph of wind forecast. Unders at the closing total in that band have won far more than they should have since 2014; a lead, graded on recorded wind rather than forecasts." },
+  model: { h: "Model edges", d: "Priced +EV by the market-adjusted projection on its own. The bucket's own record is shown on every row: read it before the EV." },
+};
+const tierOf = b => b.tier || null;
+const hoursTo = g => g.kickoff ? (Date.parse(g.kickoff) - Date.now()) / 36e5 : null;
+const hoursText = h => h == null ? "" : h < 0 ? "kicked off" : h < 1 ? "in " + Math.round(h * 60) + " min" : h < 48 ? "in " + Math.round(h) + " h" : "in " + Math.round(h / 24) + " days";
+const isFav = (g, b) => b.market === "Total" ? b.side === "over" : (b.side === "home" ? g.market.spread > 0 : g.market.spread < 0);
+/* when to bet: the sharp line's move since the open (toward this side is positive), the tier and the clock */
+function timing(g, b) {
+  const h = hoursTo(g), mv = b.move;
+  if (h != null && h < 0) return { t: "Kicked off", d: "", cls: "" };
+  if (h != null && h < 6) return { t: "Now or never", d: "Kickoff " + hoursText(h) + ".", cls: "" };
+  if (tierOf(b) === "price") return { t: "Bet now", d: "Off-market prices get corrected within hours.", cls: "" };
+  if (mv != null && mv >= 1) return { t: "Bet now", d: "The line is coming the model's way; what is left shrinks with every move.", cls: "" };
+  if (mv != null && mv <= -1) return { t: "Wait, or size down", d: "The line has gone against the model since the open: the market disagrees.", cls: "wait" };
+  if (b.market === "Moneyline") return { t: "Bet now", d: "", cls: "" };
+  if (isFav(g, b) && h != null && h > 36) return { t: "Bet now", d: "Favorites and overs usually get more expensive by the weekend.", cls: "" };
+  if (!isFav(g, b) && h != null && h > 24) return { t: "Can wait", d: "Underdogs and unders usually get cheaper close to kickoff; check the price again the morning of the game.", cls: "wait" };
+  return { t: "Bet now", d: "Little time left for the line to improve.", cls: "" };
+}
+const moveText = (g, b) => {
+  const key = b.market === "Total" ? "total" : "spread";
+  const fmtLine = v => key === "total" ? String(v) : fav(g, v);
+  const now = key === "total" ? g.market.total : g.market.spread;
+  const parts = [];
+  if (b.opener_gap != null && b.opener_src) {
+    const o = b.opener_src === "sharp" ? (g.sharp_open || {})[key] : b.opener_src === "board" ? (g.open || {})[key] : (key === "total" ? g.opening_total : g.opening_spread);
+    const when = b.opener_src === "sharp" ? String((g.sharp_open || {}).seen || "").slice(5, 10) : b.opener_src === "board" ? String((g.open || {}).seen || "").slice(5, 10) : "";
+    const src = b.opener_src === "sharp" ? "Pinnacle" : b.opener_src === "board" ? "first seen here" : "opener";
+    if (o != null) parts.push("Opened " + fmtLine(o) + " (" + src + (when ? " " + when.replace("-", "/") : "") + "), now " + fmtLine(now) + (b.move ? ": moved " + Math.abs(b.move).toFixed(1).replace(/\.0$/, "") + (b.move > 0 ? " toward" : " against") + " this side." : ", unmoved."));
+  }
+  const path = g.sharp_path || [];
+  if (path.length > 1 && path[0][key] != null) {
+    const moves = path.filter((x, i) => i && x[key] !== path[i - 1][key]).length;
+    if (moves) parts.push("Pinnacle since " + path[0].at.slice(5, 10).replace("-", "/") + ": " + fmtLine(path[0][key]) + " \u2192 " + fmtLine(path[path.length - 1][key]) + " (" + moves + (moves === 1 ? " move" : " moves") + ").");
+  }
+  return parts.join(" ");
+};
+/* what the model's number is made of: the three largest pieces, this week's news in red */
+const whyNode = (g, b) => {
+  const w = (b.why || []).slice(0, 3);
+  if (!w.length) return document.createTextNode("—");
+  const total = b.market === "Total";
+  const gapTxt = b.gap != null ? " (" + snum(b.gap, 1) + (b.opener_gap != null && Math.abs(b.opener_gap - b.gap) >= 0.5 ? ", " + snum(b.opener_gap, 1) + " at open" : "") + ")" : "";
+  const head = (total ? "Model " + g.model.total.toFixed(1) + " vs " + g.market.total : "Model " + fav(g, g.model.margin) + " vs " + fav(g, g.market.spread)) + gapTxt + ": ";
+  const parts = [H("b", { text: head })];
+  w.forEach((r, i) => { parts.push(H("span", { class: r.news ? "news" : "", text: r.label.replace(" offense and defense", "").replace("Team ratings", "ratings").replace("Home field", "home field") + " " + snum(r.value, 1) }), document.createTextNode(i < w.length - 1 ? ", " : "")); });
+  return H("span", {}, ...parts);
+};
+/* the record of bets of this kind, from the backtest and the live ledger */
+const LEDGER = DATA.ledger || null;
+function bucketText(b) {
+  const live = LEDGER && LEDGER.by_tier && LEDGER.by_tier[tierOf(b)];
+  const liveTxt = live && live.graded ? ` Live since ${LEDGER.since}: ${live.w}-${live.l}${live.p ? "-" + live.p : ""}, ${spct(live.roi)} per unit, CLV ${spct(live.clv)} on ${live.clv_n}.` : "";
+  const t = tierOf(b);
+  if (t === "price") return "+EV against the sharp line by construction; the only bucket that needs no model." + liveTxt;
+  if (t === "opener") {
+    const OP = DATA.openers; if (!OP) return liveTxt.trim();
+    const src = b.market === "Total" && OP.total ? OP.total : OP, r = src.rows.find(x => x.threshold === (b.market === "Total" ? 3 : 2)) || src.rows[src.rows.length - 1];
+    const h = r.holdout;
+    return `${b.market === "Total" ? "Totals" : "Spreads"} ${r.threshold}+ off the opener` + (h ? `, since ${BT ? BT.holdout_from : 2019}: ${pct(h.win_pct)}, ${spct(h.roi)} on ${comma(h.n)}; ` : ": ") + `all seasons ${pct(r.win_pct)}, ${spct(r.roi)} on ${comma(r.n)}.` + liveTxt;
+  }
+  if (t === "wind") {
+    const W = BT && BT.wind_unders; if (!W) return liveTxt.trim();
+    const r = W.eras[W.eras.length - 1], a = W.all;
+    return `Unders in ${W.band[0]}–${W.band[1] - 1} mph: ${a.w}-${a.l}-${a.p} (${pct(a.win_pct)}, ${spct(a.roi)} ± ${pct(a.roi_se)}); ${r.label}: ${r.w}-${r.l} (${pct(r.win_pct)}).` + liveTxt;
+  }
+  const rec = BT && BT.records && BT.records.proj && BT.records.proj[b.market]; if (!rec) return liveTxt.trim();
+  const ev = evOf(b), i = ev >= 0.05 ? 3 : ev >= 0.02 ? 2 : 1, r = rec.rows[i] || rec.rows[rec.rows.length - 1], h = r && r.holdout;
+  if (!r || !r.n) return "No graded bets of this kind." + liveTxt;
+  return `${r.rule}, ${b.market.toLowerCase()}s` + (h && h.n ? `, since ${BT.holdout_from}: ${pct(h.win_pct)}, ${spct(h.roi)} on ${comma(h.n)}; ` : ": ") + `all seasons ${pct(r.win_pct)}, ${spct(r.roi)} on ${comma(r.n)}.` + liveTxt;
+}
+/* the stake shown: the model's (at the book taken) when it sizes one, else the bucket's (sheet.bucket_stakes: quarter
+   Kelly on the bucket's measured win rate shrunk halfway to break-even, at the book's net price) */
+const sheetStake = (b, q) => { const s = q ? (q.stake || 0) : bestStake(b); return s > 0 ? s : (b.bucket_stake || 0); };
+function renderSheet() {
+  const host = $("#sheet"), gs = games();
+  const inp = M.inputs || {};
+  $("#sheet-asof").textContent = "Data as of: board built " + (inp.generated || M.generated) + (inp.market ? "; book prices " + inp.market + " UTC" : "; no book prices on file") + (inp.injuries ? "; injury report " + inp.injuries : "") + (inp.designations ? "; injury designations checked " + inp.designations : "") + ". Lines move: check the book before betting.";
+  const rows = gs.flatMap(g => g.bets.filter(b => tierOf(b)).map(b => ({ g, b })));
+  const byTier = {}; rows.forEach(x => (byTier[tierOf(x.b)] = byTier[tierOf(x.b)] || []).push(x));
+  const n = t => (byTier[t] || []).length;
+  const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
+  $("#sheet-note").textContent = `${rows.length} ${rows.length === 1 ? "bet" : "bets"} this week, by what the edge is made of: ${n("price")} where a price beats Pinnacle, ${n("opener")} where the model is off the opener${LG === "nfl" ? `, ${n("wind")} wind ${n("wind") === 1 ? "under" : "unders"}` : ""}, ${n("model")} on the model alone. Moneylines are only listed when a price beats the sharp line: since ${BT ? BT.holdout_from : 2019} they have lost at every claimed edge. Stakes are `
+    + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the claimed edge were real` : ", and the model's own edges carry no stake: none of their claimed edge has shown up in the graded bets of the last eight seasons") + " (price bets are sized against the sharp line, so they still carry one)" : "") + ".";
+  host.replaceChildren();
+  if (!rows.length) { host.append(H("p", { class: "note sheet-empty", text: "Nothing to bet this week: no price beats the sharp line and the model is not far enough off any opener." })); return; }
+  const evTxt = b => tierOf(b) === "price" && b.sharp_ev != null ? spct(b.sharp_ev) + " vs sharp" + (evOf(b) > 0 ? ", " + spct(evOf(b)) + " vs model" : "") : spct(evOf(b));
+  ["price", "opener", "wind", "model"].forEach(t => {
+    const xs = (byTier[t] || []).sort((a, b) => evOf(b.b) - evOf(a.b));
+    if (!xs.length) return;
+    const tier = H("div", { class: "sheet-tier" }, H("div", { class: "th" }, H("h3", { text: TIER[t].h + " (" + xs.length + ")" }), H("p", { class: "note", text: TIER[t].d })));
+    const tb = H("table", { class: "sheet" });
+    table(tb, [{ t: "Pick", l: 1 }, { t: "Where", l: 1 }, { t: "EV per $1" }, { t: "What the model's number is made of", l: 1 }, { t: "Line and timing", l: 1 }, { t: "Record of this kind", l: 1 }, { t: "Stake" }],
+      xs.map(({ g, b }) => {
+        const tm = timing(g, b), bk = b.best ? b.books.find(x => x.book === b.best) : null;
+        const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk) : bk;
+        const where = q ? bookName(q.book) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") + (q.ev < b.ev - 0.005 ? " (" + spct(q.ev) + " here)" : "")
+          : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
+        return [
+          { v: H("span", {}, H("a", { href: "#" + g.id, text: pickOf(b) }), H("br"), H("span", { class: "ko rec", text: g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", "").replace(/^(\w{3}) \w{3} \d+, /, "$1 ") + (hoursTo(g) != null ? " (" + hoursText(hoursTo(g)) + ")" : "") })), cls: "strong" },
+          { v: where },
+          evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)),
+          { v: whyNode(g, b), cls: "why" },
+          { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "when" },
+          { v: bucketText(b), cls: "why" },
+          sheetStake(b, q) > 0 ? stakeText({ stake: sheetStake(b, q) }) + ((q ? q.stake : bestStake(b)) <= 0 ? " (bucket)" : "") : "—",
+        ];
+      }));
+    tier.append(H("div", { class: "scroll" }, tb));
+    host.append(tier);
+  });
+}
+
+/* ---------------- teasers and alternate lines ----------------
+   Legs are priced off the key-number curve with the line moved the bettor's way; a leg is
+   worth playing in a two-leg teaser at price q when its chance clears sqrt(1 / decimal(q)).
+   Wong legs (NFL, 6 points): favorites of 7.5 to 8.5 and underdogs of +1.5 to +2.5, whose
+   tease crosses both 3 and 7. */
+const tstate = { pts: "6", odds: -120, basis: "line" };
+const wongLeg = (g, b) => { if (LG !== "nfl" || tstate.pts !== "6" || b.market !== "Spread") return false; const laid = b.side === "home" ? g.market.spread : -g.market.spread; return (laid >= 7.5 && laid <= 8.5) || (-laid >= 1.5 && -laid <= 2.5); };
+function teaserLegs() {
+  const out = [];
+  games().forEach(g => {
+    const T = g.teasers && g.teasers[tstate.pts]; if (!T) return;
+    const pts = Number(tstate.pts);
+    [["Spread", "home"], ["Spread", "away"], ["Total", "over"], ["Total", "under"]].forEach(([mk, side]) => {
+      const p = T[side + (tstate.basis === "proj" ? "_proj" : "")]; if (p == null) return;
+      const teased = mk === "Spread" ? (side === "home" ? g.home + " " + line(-g.market.spread + pts) : g.away + " " + line(g.market.spread + pts)) : (side === "over" ? "Over " + (g.market.total - pts) : "Under " + (g.market.total + pts));
+      out.push({ g, mk, side, p, teased, wong: wongLeg(g, { market: mk, side }) });
+    });
+  });
+  return out.sort((a, b) => b.p - a.p);
+}
+function renderTeasers() {
+  const legs = teaserLegs(), dec = toDec(tstate.odds), be = Math.sqrt(1 / dec);
+  $("#tease-note").textContent = `Each leg is the chance the side covers with ${tstate.pts} points added, from the ${tstate.basis === "proj" ? "market-adjusted projection" : "market's own curve (no model)"}; pushes are set aside. A two-leg teaser at ${odds(tstate.odds)} needs every leg above ${pct(be)}. ${LG === "nfl" ? "Wong legs cross both 3 and 7. " : ""}Books' teaser prices differ (DraftKings and FanDuel usually -120 to -135 for two legs of 6): enter yours. Alternate-line ladders with fair prices are on each game's page.`;
+  if (!legs.length) { table($("#tease-legs"), [{ t: "Leg", l: 1 }], []); $("#tease-pairs").textContent = "No games with lines this week."; return; }
+  table($("#tease-legs"), [{ t: "Teased line", l: 1 }, { t: "Game", l: 1 }, { t: "From" }, { t: "Chance" }, { t: "Clears " + pct(be, 0) + "?" }],
+    legs.slice(0, 24).map(l => [{ v: H("span", {}, document.createTextNode(l.teased), l.wong ? H("span", { class: "leg-wong", text: "Wong" }) : null), cls: l.p >= be ? "strong" : "dimp" },
+      { v: H("a", { href: "#" + l.g.id, text: l.g.away + " @ " + l.g.home }) }, l.mk === "Spread" ? fav(l.g, l.g.market.spread) : String(l.g.market.total), pct(l.p), l.p >= be ? "Yes (" + spct(l.p / be - 1, 1) + ")" : "No"]));
+  const good = legs.filter(l => l.p >= be), pairs = [];
+  for (let i = 0; i < Math.min(good.length, 12); i++) for (let j = i + 1; j < Math.min(good.length, 12); j++) {
+    if (good[i].g === good[j].g) continue;
+    pairs.push({ a: good[i], b: good[j], ev: good[i].p * good[j].p * dec - 1 });
+  }
+  pairs.sort((x, y) => y.ev - x.ev);
+  $("#tease-pairs").textContent = pairs.length
+    ? "Best two-leg teasers at " + odds(tstate.odds) + ", legs treated as independent: " + pairs.slice(0, 5).map(x => `${x.a.teased} + ${x.b.teased} (${spct(x.ev)})`).join("; ") + "."
+    : "No leg clears the break-even at this price, so no two-leg teaser is +EV this week.";
+}
+seg($("#seg-tbasis"), [{ v: "line", t: "Market curve" }, { v: "proj", t: "Market-adjusted" }], () => tstate.basis, v => { tstate.basis = v; renderTeasers(); });
+$("#tease-pts").addEventListener("input", e => { tstate.pts = e.target.value; renderTeasers(); });
+$("#tease-odds").addEventListener("input", e => { const v = parseFloat(e.target.value); if (Math.abs(v) >= 100) { tstate.odds = v; renderTeasers(); } });
+
+function renderGames() { renderHero(); renderSheet(); renderCards(); redrawBoard(); renderBets(); renderBoost(); renderTeasers(); }
 seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); renderGames(); });
 seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; redrawBoard(); });
 seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); if (shownGame) renderGame(shownGame); });
@@ -1335,7 +1565,25 @@ function renderGame(g) {
   table(pt, priceHead, g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(priceRow));
   const prices = sec("Every price", priceNote(), H("div", { class: "scroll" }, pt));
 
-  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices].filter(Boolean));
+  /* --- alternate lines and teaser legs: fair prices off the key-number curve --- */
+  let alts = null;
+  if (g.alts) {
+    const fairTxt = p => p > 0 && p < 1 ? odds(fairOf(p)) : "—";
+    const near = (xs, c) => xs.filter(x => Math.abs(x.line - c) <= 7.001);
+    const st = H("table"), tt = H("table");
+    const mkCls = (x, c) => ({ cls: Math.abs(x.line - c) < 0.01 ? "mk" : "" });
+    table(st, [{ t: "Line", l: 1 }, { t: g.home + " market" }, { t: g.home + " model" }, { t: g.away + " market" }, { t: g.away + " model" }],
+      near(g.alts.spread, g.market.spread).map(x => ({ ...mkCls(x, g.market.spread), cells: [fav(g, x.line) + (Math.abs(x.line - g.market.spread) < 0.01 ? " (market)" : ""), fairTxt(x.home), fairTxt(x.home_proj), fairTxt(x.away), fairTxt(x.away_proj)] })));
+    table(tt, [{ t: "Total", l: 1 }, { t: "Over market" }, { t: "Over model" }, { t: "Under market" }, { t: "Under model" }],
+      near(g.alts.total, g.market.total).map(x => ({ ...mkCls(x, g.market.total), cells: [String(x.line) + (Math.abs(x.line - g.market.total) < 0.01 ? " (market)" : ""), fairTxt(x.over), fairTxt(x.over_proj), fairTxt(x.under), fairTxt(x.under_proj)] })));
+    const T = g.teasers || {}, legs = Object.keys(T).flatMap(k => [["home", g.home + " " + line(-g.market.spread + Number(k))], ["away", g.away + " " + line(g.market.spread + Number(k))], ["over", "Over " + (g.market.total - Number(k))], ["under", "Under " + (g.market.total + Number(k))]].map(([side, label]) => ({ k, side, label, p: T[k][side], pp: T[k][side + "_proj"], wong: k === "6" && (side === "home" || side === "away") && wongLeg(g, { market: "Spread", side }) })));
+    const lt = H("table");
+    table(lt, [{ t: "Teaser leg", l: 1 }, { t: "Points" }, { t: "Market curve" }, { t: "Market-adjusted" }], legs.sort((a, b) => b.p - a.p).map(l => [{ v: H("span", {}, document.createTextNode(l.label), l.wong ? H("span", { class: "leg-wong", text: "Wong" }) : null), cls: l.p >= 0.739 ? "strong" : "" }, l.k, pct(l.p), pct(l.pp)]));
+    alts = sec("Alternate lines and teasers", "Fair prices at each alternate line, from the market's own curve (anchored so the main line matches " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) + "'s" : "the market's") + " no-vig price) and from the market-adjusted projection. A book's alternate ladder is value where it beats the market column; a half point through 3 or 7 is worth the most. Teaser legs show the chance the side covers with the points added; a two-leg teaser at -120 needs 73.9% a leg.",
+      H("div", { class: "split alts" }, H("div", { class: "scroll" }, st), H("div", { class: "scroll" }, tt)), H("div", { class: "scroll alts" }, lt));
+  }
+
+  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices, alts].filter(Boolean));
 }
 const C_NAMES = {}; ALL.forEach(g => { C_NAMES[g.away] = g.away_name; C_NAMES[g.home] = g.home_name; });
 
@@ -1483,6 +1731,28 @@ function diagChart(node, o) {
   });
 }
 
+/* ---------------- live record: the ledger ----------------
+   Every bet the board flagged, at the price it was first flagged (nflmodel/ledger.py), graded
+   against the result and Pinnacle's closing line. This is the record that counts: the backtest
+   below is history, this is what the board has done since it went live. */
+(function live() {
+  const L = DATA.ledger;
+  if (!L || !L.rows || !L.rows.length) { $("#live").hidden = true; return; }
+  const a = L.all, tile = (label, value, sub) => H("div", { class: "tile" }, H("div", { class: "label", text: label }), H("div", { class: "value", text: value }), H("div", { class: "sub", text: sub }));
+  $("#live-note").textContent = `Every bet the sheet has flagged since ${L.since}, written down at the book, line and price it was first flagged at and never changed; graded on the result and on closing line value against Pinnacle's last quote before kickoff. CLV is the EV of the price taken at the closing no-vig chance: the one short-run proof that the bets had edge. ${a.n} flagged, ${a.graded} graded.`;
+  $("#live-tiles").replaceChildren(
+    tile("Record", a.graded ? `${a.w}-${a.l}${a.p ? "-" + a.p : ""}` : "—", a.graded ? pct(a.win_pct) + " on " + a.graded + " graded" : "No bet has been graded yet"),
+    tile("Return, one unit a bet", a.graded ? spct(a.roi) : "—", a.graded ? snum(a.units, 1) + " units" : "Claimed EV " + spct(a.claimed_ev)),
+    tile("Closing line value", a.clv != null ? spct(a.clv) : "—", a.clv_n ? `Beat the close on ${a.beat_close} of ${a.clv_n}` : "Needs Pinnacle's closing quote"),
+    tile("Staked", a.staked > 0 ? "$" + comma(Math.round(a.staked * state.bankroll)) : "—", a.staked > 0 ? "at the bankroll above; profit " + spct(a.return) + " of stakes" : "No stake was sized"));
+  const recRow = (label, r) => [label, r.n, r.graded ? `${r.w}-${r.l}${r.p ? "-" + r.p : ""}` : "—", r.graded ? pct(r.win_pct) : "—", r.graded ? spct(r.roi) : "—", r.clv_n ? spct(r.clv) + " (" + r.beat_close + " of " + r.clv_n + ")" : "—", spct(r.claimed_ev)];
+  table($("#live-tiers"), [{ t: "Kind", l: 1 }, { t: "Flagged" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "CLV (beat close)" }, { t: "Claimed EV" }],
+    [...["price", "opener", "wind", "model"].filter(t => L.by_tier[t]).map(t => recRow(TIER[t].h, L.by_tier[t])), ...Object.keys(L.by_market).map(m => recRow(m + "s", L.by_market[m]))]);
+  table($("#live-rows"), [{ t: "Flagged", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "Close" }, { t: "CLV" }],
+    L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick, cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
+      r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.close_line == null ? "" : String(r.close_line), r.clv == null ? "" : spct(r.clv)]));
+})();
+
 /* ---------------- track record ---------------- */
 (function record() {
   if (!BT) { $("#record").hidden = true; return; }
@@ -1539,12 +1809,12 @@ function diagChart(node, o) {
   const rows = []; let lastSrc = null;
   want.forEach(([src, mk, i]) => {
     const r = rec[src][mk].rows[i]; if (!r || !r.n) return;
-    if (src !== lastSrc) { rows.push({ cls: "group", cells: [{ v: src === "model" ? "Raw model" : "Market-adjusted", colspan: 8 }] }); lastSrc = src; }
+    if (src !== lastSrc) { rows.push({ cls: "group", cells: [{ v: src === "model" ? "Raw model" : "Market-adjusted", colspan: 9 }] }); lastSrc = src; }
     const h = r.holdout || {};
-    rows.push([mk, r.rule, comma(r.n), `${comma(r.w)}-${comma(r.l)}-${r.p}`, pct(r.win_pct), spct(r.roi) + " ±" + pct(r.roi_se), h.n ? spct(h.roi) + " (" + comma(h.n) + ")" : "none", spct(r.claimed_ev)]);
+    rows.push([mk, r.rule, h.n ? { v: spct(h.roi) + " (" + comma(h.n) + ")", cls: "strong" } : "none", h.n ? pct(h.win_pct) : "—", comma(r.n), `${comma(r.w)}-${comma(r.l)}-${r.p}`, pct(r.win_pct), spct(r.roi) + " ±" + pct(r.roi_se), spct(r.claimed_ev)]);
   });
-  table($("#records"), [{ t: "Market", l: 1 }, { t: "Bets placed", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "Since " + BT.holdout_from }, { t: "Claimed EV" }], rows);
-  $("#rec-note").textContent = "One unit on every qualifying bet. Return is profit per unit staked, plus or minus one standard error; anything within two standard errors of zero is not evidence of an edge." + (partial.length ? " " + partial.join(", ") + " is included through the games played so far." : "");
+  table($("#records"), [{ t: "Market", l: 1 }, { t: "Bets placed", l: 1 }, { t: "Since " + BT.holdout_from }, { t: "Win rate since " + BT.holdout_from }, { t: "Bets, all" }, { t: "Record, all" }, { t: "Win rate, all" }, { t: "Return, all" }, { t: "Claimed EV" }], rows);
+  $("#rec-note").textContent = "One unit on every qualifying bet. The seasons since " + BT.holdout_from + " come first: the earlier ones were used to choose the model's settings, so the all-seasons columns flatter it. Return is profit per unit staked, plus or minus one standard error; anything within two standard errors of zero is not evidence of an edge." + (partial.length ? " " + partial.join(", ") + " is included through the games played so far." : "");
 })();
 
 /* ---------------- wind and totals ---------------- */
@@ -2071,6 +2341,11 @@ const propsView = (function () {
     const d = cache[cur];
     if (!d) return;
     let rows = mainRows(d).filter(p => (ps.stat === "all" || p.s === ps.stat) && (!ps.team || p.t === ps.team) && (!ps.q || p.n.toLowerCase().includes(ps.q)));
+    // a line on a player the board has ruled out (or a passing line with no projection: not the starter) is dead, not a lean
+    const outs = new Set(((DATA.players && DATA.players.teams) || []).flatMap(t => (t.out || []).map(o => dzKey(t.team, o.name))));
+    const dead = p => { const z = dzFromStatus(dzStatus(p.g, p.t, p.n)); return z === "O" || z === "D" || z === "IR" || outs.has(dzKey(p.t, p.n)) || (p.mu === 0 && /^pass_|^completions$|^ints$/.test(p.s)); };
+    const deadN = rows.filter(dead).length;
+    rows = rows.filter(p => !dead(p));
     const val = (p, k) => k === "gap" ? Math.abs(gap(p) || 0) : k === "name" ? p.n : k === "ours" ? dec(p) || 0 : k === "new" ? ndec(p) || 0 : k === "books" ? p.fo || 0 : k === "proj" ? p.mu || 0 : k === "line" ? p.L : 0;
     rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); return (typeof A === "string" ? A.localeCompare(B) : A - B) * ps.dir; });
     const head = [{ k: "name", t: "Player", l: 1 }, { t: "Game", l: 1 }, { t: "Stat", l: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" },
@@ -2105,7 +2380,7 @@ const propsView = (function () {
     });
     $("#props-table").replaceChildren(thead, tbody);
     $("#props-foot").textContent = rows.length
-      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${HASN ? " New, over: our chance from the new projections (Proj shows current / new where there is one); the lean uses the current ones." : ""} Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
+      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${deadN ? " " + deadN + " line" + (deadN === 1 ? "" : "s") + " on players ruled out (or passing lines with no starter) hidden." : ""}${HASN ? " New, over: our chance from the new projections (Proj shows current / new where there is one); the lean uses the current ones." : ""} Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
       : "No props match.";
   }
 

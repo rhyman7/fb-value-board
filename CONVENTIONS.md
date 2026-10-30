@@ -162,7 +162,42 @@ boards in detail; this file is the rules.
   the last eight seasons' graded bets (`backtest.edge_haircut`, `meta.haircut`); the EV and
   probabilities shown are never shrunk. On the NFL board that share is 0 as of Oct 29, 2026,
   so no NFL stake is sized until it moves (FEATURES.md, "Edge tests, late October 2026");
-  turning the switch off is Ryan's call.
+  turning the switch off is Ryan's call. **The haircut fails closed** (`pipeline.haircut_factor`):
+  it is only measured on a full-backtest run, and a quick refresh with no measured factor on
+  hand (the first refresh after a change, or a lost `meta.haircut`) sizes no model stake at
+  all rather than every stake at the full claimed edge. After merging anything that touches
+  the graded bets, run **Update board** and **Update college board** with the backtest
+  input ticked so the factor is measured again. A price bet (below) is sized against the
+  sharp line, so it carries a stake whatever the factor; opener and wind bets the model
+  sizes nothing for get a `bucket_stake` from their bucket's own record
+  (`sheet.bucket_stakes`: quarter Kelly on the bucket's win rate shrunk halfway to
+  break-even, at the book's net price).
+- **The bet sheet (both boards): `nflmodel/sheet.py`.** Every bet on a game entry carries
+  `tier`, `gap`, `opener_gap`, `opener_src`, `move` and `why` (the docstring has the rules).
+  The tiers are what the page's Bet sheet groups by: `price` (a retail price beats
+  Pinnacle's no-vig number by `PRICE_MIN`, 1%, with no model), `opener` (the model 2+ points
+  off the opener, 3+ in college and on totals), `wind` (NFL only: an under in 10-19 mph), and
+  `model` (anything else +EV on a spread or total). **Moneylines are never a bet outside the
+  price tier**: on the graded bets since the holdout seasons they have lost at every claimed
+  edge. The opener is Pinnacle's first stored quote when the market log caught the open (its
+  first snapshot no later than the day the board first saw the game), else the board's first
+  line, else the data's opener. Each game also carries `kickoff` (UTC), `sharp_path`
+  (Pinnacle's spread and total by snapshot, `market.path`), and `alts`/`teasers`
+  (`nflmodel/alts.py`: P(cover) at every half point within 7 of the line and with 6 or 7
+  points added, on the market curve and the projection); `meta.inputs` says when the board,
+  the book prices, the injury report (NFL) and the designations (college) were last read.
+  The page's timing verdicts (bet now / can wait / wait or size down) are in `timing()` in
+  `site/template.html`; keep them consistent with the sheet's wording if either changes.
+- **The ledger (both boards): `data/ledger.csv`, `data/ledger_results.csv`, and the same
+  under `data/cfb/`** (`nflmodel/ledger.py`). Every bet the sheet flags (a stake on the shown
+  basis, or a price, opener or wind tier) is written down the first time it is flagged, at
+  the retail book, line and net price it would be taken at, and never changed; results are
+  appended once the game is played (W/L/P, units at the price taken, and closing line value
+  against Pinnacle's last quote before kickoff through the key-number curve). Append-only:
+  the Update Actions write them, never edit or delete a row by hand, and a local build run
+  must not commit its rows (they would be sandbox prices). `data.json` carries the summary as
+  `ledger` (records overall, by tier, by market and by week, plus every row) and the Model
+  record page leads with it as **Live record**; `tests/test_sheet.py` checks the files.
 - **The spread and totals card shows every model input.** A game page's "How the spread is
   built" rows add up to the raw model spread and total (`matchup.breakdown()`,
   `cfbmodel/board.py`). A feature added to `MARGIN_FEATS` or `TOTAL_FEATS` needs a row
@@ -197,6 +232,13 @@ boards in detail; this file is the rules.
 - Both boards share the same sections and anchors, in this order:
   This Week's Matchups `#matchups` | Games `#games` | Players `#players` | Past weeks `#history` |
   Team ratings `#ratings` | Model record `#model`. Each board's nav links to the other board.
+- **The Games view's order** (Oct 30, 2026): filters, **Bet sheet**, the boost calculator,
+  **Teasers and alternate lines** (legs from `teasers`, the two-leg price entered by the
+  reader; the per-game ladders are on each game's page under "Alternate lines and teasers"),
+  then Model against the market, the game cards and Every price. The Model record view leads
+  with **Live record** (the ledger), then the backtest with the holdout columns first. The
+  Props view hides lines on players the board has ruled out and passing lines with no
+  projection, and says how many.
 - **Props `#props` is NFL only** (Ryan's call, Oct 2026), between Players and Past weeks. Its
   markup, styles and script in `site/template.html` sit between `<!--NFL-ONLY-->` and
   `<!--/NFL-ONLY-->` (HTML) or `/*NFL-ONLY*/` and `/*/NFL-ONLY*/` (CSS and script), which

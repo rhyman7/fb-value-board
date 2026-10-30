@@ -45,7 +45,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/cfb data/cfb/cache data/cfb/line_history.csv
-          for f in data/cfb/wind_log.csv data/cfb/backtest.json; do if [ -f "$f" ]; then git add "$f"; fi; done
+          for f in data/cfb/wind_log.csv data/cfb/backtest.json data/cfb/ledger.csv data/cfb/ledger_results.csv; do if [ -f "$f" ]; then git add "$f"; fi; done
           git diff --cached --quiet && exit 0
           git commit -m "Update college board"
           for i in 1 2 3; do git pull --rebase origin main && git push && break; sleep 10; done

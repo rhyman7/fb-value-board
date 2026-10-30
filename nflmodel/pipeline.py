@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import archive, backtest, bets, config as C, data, extra, injuries, market, matchup, model, overrides, players, players_data, slate, weather
+from . import archive, backtest, bets, config as C, data, extra, injuries, ledger, market, matchup, model, overrides, players, players_data, sheet, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -128,7 +128,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     # the edge haircut: the share of claimed edge that has shown up in the graded bets of the
     # last eight seasons; stakes are sized from it (config.EDGE_HAIRCUT), EV and probabilities are not
     haircut = backtest.edge_haircut(graded, season) if with_backtest else (prev.get("meta") or {}).get("haircut")
-    h_factor = float(haircut["factor"]) if C.EDGE_HAIRCUT and haircut and haircut.get("factor") is not None else 1.0
+    h_factor = haircut_factor(haircut, verbose)
     today = pd.Timestamp(dt.datetime.now(dt.timezone.utc).date())
     frame = frame.copy()
     frame["early"] = (~frame.played) & ((frame.gameday - today).dt.days >= C.EARLY_DAYS)
@@ -164,6 +164,24 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         graded.round(4).to_csv(C.DATA / "backtest_bets.csv", index=False)
     else:
         out["backtest"] = prev.get("backtest")
+    # when each input was last read, for the bet sheet's "data as of" line
+    out["meta"]["inputs"] = sheet.inputs_stamp(out["meta"]["generated"], market=out["slate"].get("market_as_of"),
+                                              injuries=injuries.as_of(season))
+    sheet.bucket_stakes(out["slate"]["games"], opening, (out.get("backtest") or {}).get("wind_unders"), C.KELLY_FRACTION, C.MAX_STAKE)
+    # the ledger: every flagged bet at the price it was first flagged, graded against the close
+    try:
+        cur = games[games.season == season]
+        kick = {g.game_id: archive.kickoff(g.gameday, g.gametime) for g in cur.itertuples()}
+        n_new = ledger.record(out["slate"]["games"], season, kick, C.DATA / "ledger.csv")
+        done = cur[cur.played]
+        close = market.closing_quotes(done, "nfl", {g: kick[g] for g in done.game_id})
+        scores = {g.game_id: (g.home_score, g.away_score) for g in done.itertuples()}
+        n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, close, lambda df: bets.curves(df, dist, "line"))
+        out["ledger"] = ledger.summary(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv")
+        say(f"  ledger: {n_new} bets flagged, {n_graded} graded")
+    except Exception as exc:
+        print(f"  ledger skipped ({exc})")
+        out["ledger"] = prev.get("ledger")
 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)
@@ -177,6 +195,19 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     build_page(out)
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
+
+
+def haircut_factor(haircut: dict | None, verbose: bool = True) -> float:
+    """The share of claimed edge the stakes are sized from. Fails closed: with the haircut
+    switched on and no measured factor on hand (the first refresh after the switch, before a
+    full backtest has run), no stake is sized rather than every stake at the full claimed edge."""
+    if not C.EDGE_HAIRCUT:
+        return 1.0
+    if haircut and haircut.get("factor") is not None:
+        return float(haircut["factor"])
+    if verbose:
+        print("  edge haircut not measured yet (run the full backtest): no stake is sized this run")
+    return 0.0
 
 
 def build_page(payload: dict | None = None) -> None:
