@@ -7,7 +7,9 @@ for one game, so it lapses by itself once that game is played.
 Columns:
   game_id    e.g. 2026_07_KC_SEA
   team       the player's team
-  kind       starter  - this quarterback starts (the game model's quarterback feature)
+  kind       starter  - this quarterback starts: the game model's quarterback feature, and
+                        he takes the team's passes in the player projections (whoever started
+                        the team's last game)
              out      - the player does not play (the player projections)
   player_id  gsis id, e.g. 00-0034869
   name       display name
@@ -77,4 +79,23 @@ def apply_out(rows: pd.DataFrame, ov: pd.DataFrame) -> pd.DataFrame:
         m = upcoming & (rows["game_id"] == r.game_id) & (rows["player_id"] == r.player_id)
         rows.loc[m, "active"] = 0
         rows.loc[m, "report"] = r.status or "Out"
+    return rows
+
+
+def apply_starters_players(rows: pd.DataFrame, ov: pd.DataFrame) -> pd.DataFrame:
+    """Starter rows in the player table: for that upcoming game the named quarterback is
+    active and takes the passes (qb_force = 1), whoever started the team's last game.
+    Played games are never changed."""
+    rows = rows.copy()
+    rows["qb_force"] = 0
+    s = ov[ov["kind"] == "starter"]
+    if s.empty or rows.empty:
+        return rows
+    rows["report"] = rows["report"].astype(object)
+    upcoming = ~rows["played"].astype(bool) if "played" in rows.columns else np.ones(len(rows), bool)
+    for r in s.itertuples():
+        m = upcoming & (rows["game_id"] == r.game_id) & (rows["player_id"] == r.player_id)
+        rows.loc[m, "active"] = 1
+        rows.loc[m, "report"] = None
+        rows.loc[m, "qb_force"] = 1
     return rows

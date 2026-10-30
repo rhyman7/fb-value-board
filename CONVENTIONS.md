@@ -113,8 +113,10 @@ boards in detail; this file is the rules.
   consensus stays the fallback, and without the key or on any failure nothing changes. Never
   print the key or write it to a file.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
-  `starter` sets that game's starting quarterback for the game model, `out` takes a player
-  out of the player projections. Use it only for confirmed news the nflverse schedule or the
+  `starter` sets that game's starting quarterback for the game model and makes him the
+  quarterback who takes the team's passes in the player projections (whoever started the
+  team's last game, and whatever the injury report says), `out` takes a player out of the
+  player projections. Use it only for confirmed news the nflverse schedule or the
   official injury report hasn't picked up yet, and put the source and date in `source`. Rows
   only touch games not yet played, so they lapse by themselves; delete stale rows when you
   see them. Edits go through a PR like any other change (the Actions never write this
