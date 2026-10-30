@@ -278,14 +278,14 @@ def add_pass_rush_features(df: pd.DataFrame, pr: pd.DataFrame | None) -> pd.Data
 
 
 def as_of(season: int) -> str | None:
-    """When the official injury report on disk was last changed (the newest date_modified in
-    nflverse's injuries file for the season), for the boards' "data as of" line; None when the
-    file is not on hand."""
+    """When the official injury report on disk was last fetched, for the boards' "data as of"
+    line. nflverse's injuries file carries no modified date, so this is the file's own
+    download time (the build refreshes it each run); None when the file is not on hand."""
+    import datetime as dt
     ip = C.RAW / f"injuries_{season}.parquet"
     if not ip.exists():
         return None
     try:
-        d = pd.read_parquet(ip, columns=["date_modified"])["date_modified"].dropna()
-        return pd.Timestamp(d.max()).strftime("%Y-%m-%d %H:%M") if len(d) else None
-    except Exception:
+        return dt.datetime.fromtimestamp(ip.stat().st_mtime, dt.timezone.utc).strftime("%Y-%m-%d %H:%M")
+    except OSError:
         return None
