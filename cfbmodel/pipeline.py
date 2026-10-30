@@ -7,8 +7,8 @@ import json
 import numpy as np
 import pandas as pd
 
-from nflmodel import backtest as NBT, market
-from nflmodel.pipeline import _clean
+from nflmodel import backtest as NBT, ledger, market, sheet
+from nflmodel.pipeline import _clean, haircut_factor
 
 from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
 from .ratings import CFBRatingEngine
@@ -81,7 +81,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     w_early = float(opening["weight"]) if opening and opening.get("weight") is not None else float(info[season]["w_margin"])
     # the edge haircut (nflmodel/backtest.edge_haircut, same graded table layout): stakes only
     haircut = NBT.edge_haircut(graded, season) if with_backtest else (prev.get("meta") or {}).get("haircut")
-    h_factor = float(haircut["factor"]) if C.EDGE_HAIRCUT and haircut and haircut.get("factor") is not None else 1.0
+    h_factor = haircut_factor(haircut, verbose)
     now = pd.Timestamp.now(tz="UTC")
     frame["early_line"] = (~frame.played) & ((pd.to_datetime(frame.kickoff, utc=True) - now).dt.days >= C.EARLY_DAYS)
     e = frame["early_line"] & frame.spread_line.notna()
@@ -145,6 +145,30 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         "key_numbers": backtest.key_number_report(games, dist, season + 1),
         "backtest": bt, "openers": opening, "players": pboard,
     }
+    des_checked = None
+    try:
+        des_checked = json.loads(DES.PATH.read_text()).get("checked") if DES.PATH.exists() else None
+    except Exception:
+        pass
+    out["meta"]["inputs"] = sheet.inputs_stamp(out["meta"]["generated"], market=slate.get("market_as_of"), designations=des_checked)
+    sheet.bucket_stakes(slate["games"], opening, None, C.KELLY_FRACTION, C.MAX_STAKE)
+    try:                                          # the ledger (nflmodel/ledger.py): flagged bets at their first price, graded
+        cur = games[games.season == season]
+        kick = {str(int(g.game_id)): pd.Timestamp(g.kickoff) for g in cur.itertuples()}
+        n_new = ledger.record(slate["games"], season, {g["id"]: kick[str(g["game_id"])] for g in slate["games"] if str(g["game_id"]) in kick},
+                              C.DATA / "ledger.csv")
+        done = cur[cur.played]
+        close = market.closing_quotes(done, "cfb", {g.game_id: pd.Timestamp(g.kickoff) for g in done.itertuples()}, names={v: k for k, v in names.items()})
+        scores = {str(int(g.game_id)): (g.home_score, g.away_score) for g in done.itertuples()}
+        n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, {str(k): v for k, v in close.items()},
+                                lambda df: bets.curves(df, dist, "line"))
+        out["ledger"] = ledger.summary(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv")
+        say(f"  ledger: {n_new} bets flagged, {n_graded} graded")
+    except Exception as exc:
+        import traceback
+        traceback.print_exc()
+        print(f"  ledger skipped ({exc})")
+        out["ledger"] = prev.get("ledger")
     out = _clean(out)
     C.DOCS.mkdir(parents=True, exist_ok=True)
     (C.DOCS / "data.json").write_text(json.dumps(out, separators=(",", ":")))

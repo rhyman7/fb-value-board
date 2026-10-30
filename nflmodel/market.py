@@ -184,7 +184,13 @@ def match_games(rows: pd.DataFrame, games: pd.DataFrame, league: str, names: dic
         r["h"], r["a"] = r["home_name"].map(NFL_NAME_TO_ABBR), r["away_name"].map(NFL_NAME_TO_ABBR)
     else:
         look = {_norm(k): v for k, v in (names or {}).items()}
-        look.update({_norm(k): look[_norm(v)] for k, v in CFB_ALIASES.items() if _norm(v) in look})
+        # aliases work either way round: whichever spelling the board uses, the other matches it
+        for k, v in CFB_ALIASES.items():
+            nk, nv = _norm(k), _norm(v)
+            if nv in look and nk not in look:
+                look[nk] = look[nv]
+            elif nk in look and nv not in look:
+                look[nv] = look[nk]
         r["h"], r["a"] = r["home_name"].map(lambda s: look.get(_norm(s))), r["away_name"].map(lambda s: look.get(_norm(s)))
     g = games.copy()
     when = g["kickoff"] if "kickoff" in g else pd.to_datetime(g["gameday"], utc=True)
@@ -248,7 +254,7 @@ def quotes_for(games: pd.DataFrame, league: str, names: dict | None = None, root
     """The stored quotes for the games given: {"latest": latest(rows), "first": first_seen(rows)},
     both empty when nothing is stored or matching fails. `before` keeps only snapshots taken
     before that time (for closing lines)."""
-    empty = {"latest": {}, "first": {}}
+    empty = {"latest": {}, "first": {}, "path": {}}
     try:
         rows = load(league, root)
         if before is not None and len(rows):
@@ -263,7 +269,40 @@ def quotes_for(games: pd.DataFrame, league: str, names: dict | None = None, root
     miss = unmatched(rows)
     if miss:
         print(f"  market quotes {league}: {len(miss)} unmatched names: {', '.join(miss[:8])}{' ...' if len(miss) > 8 else ''}")
-    return {"latest": latest(rows), "first": first_seen(rows)}
+    return {"latest": latest(rows), "first": first_seen(rows), "path": path(rows)}
+
+
+def as_of(latest_quotes: dict) -> str | None:
+    """The newest snapshot among the quotes (latest()), for the boards' "data as of" line."""
+    stamps = [q.get("updated") for g in (latest_quotes or {}).values() for q in g.values() if q.get("updated")]
+    return max(stamps) if stamps else None
+
+
+def path(rows: pd.DataFrame, book: str = SHARP, max_points: int = 12) -> dict:
+    """{game_id: [{"at": snapshot, "spread": ..., "total": ...}, ...]}: how `book`'s spread
+    and total moved, one point per snapshot where either changed (home-positive spread),
+    thinned to the first, the last and at most max_points in between."""
+    out = {}
+    if rows.empty or "game_id" not in rows:
+        return out
+    r = rows[rows["game_id"].notna() & (rows["book"] == book) & rows["line"].notna()]
+    r = r[((r["market"] == "spreads") & (r["side"] == "home")) | ((r["market"] == "totals") & (r["side"] == "over"))]
+    for gid, q in r.groupby("game_id"):
+        pts, cur = [], {"spread": None, "total": None}
+        for snap, s in q.sort_values("snapshot").groupby("snapshot", sort=True):
+            for x in s.itertuples(index=False):
+                if x.market == "spreads":
+                    cur["spread"] = -float(x.line)
+                else:
+                    cur["total"] = float(x.line)
+            if not pts or pts[-1]["spread"] != cur["spread"] or pts[-1]["total"] != cur["total"]:
+                pts.append({"at": str(snap), **cur})
+        if len(pts) > max_points + 2:
+            step = (len(pts) - 2) / max_points
+            mid = [pts[1 + int(i * step)] for i in range(max_points)]
+            pts = [pts[0], *mid, pts[-1]]
+        out[gid] = pts
+    return out
 
 
 def first_seen(rows: pd.DataFrame, book: str = SHARP) -> dict:

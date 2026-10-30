@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from scipy.special import ndtr, ndtri
 
-from nflmodel import market as MK, odds as O
+from nflmodel import alts as ALT, market as MK, odds as O, sheet as SH
 from nflmodel.slate import _opt, bet_books, cap_game, with_market
 
 from . import bets as B
@@ -328,7 +328,7 @@ def win_probs(df: pd.DataFrame, dist: dict) -> pd.DataFrame:
 def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None, quotes=None, haircut: float = 1.0) -> dict:
     """quotes: nflmodel/market.quotes_for(..., "cfb", names=display name -> school) or None.
     haircut: the share of claimed edge the stakes are sized from (nflmodel.backtest.edge_haircut; 1 = none)."""
-    quotes = quotes or {"latest": {}, "first": {}}
+    quotes = quotes or {"latest": {}, "first": {}, "path": {}}
     cand = frame[~frame.played].copy()
     sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
     up = cand[(cand.spread_line.notna() & cand.total_line.notna()) | cand.game_id.isin(sharp)].copy()
@@ -337,12 +337,12 @@ def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None
     opened = track_lines(up[up.spread_line.notna() & up.total_line.notna()])
     up = with_market(up, quotes["latest"])
     games = entries(up, dist, engine, builder, lambda g: records, abbr, names, opened, quotes, haircut=haircut)
-    return {"weeks": sorted({x["week"] for x in games}), "games": games, "book_lines": 0}
+    return {"weeks": sorted({x["week"] for x in games}), "games": games, "book_lines": 0, "market_as_of": MK.as_of(quotes["latest"])}
 
 
 def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=None, haircut: float = 1.0) -> list[dict]:
     """The board's entry for each game in `up` (records_for(game) gives the records to show)."""
-    quotes = quotes or {"latest": {}, "first": {}}
+    quotes = quotes or {"latest": {}, "first": {}, "path": {}}
     coded = up.assign(home_team=up.home_team.map(lambda t: abbr.get(t, t)), away_team=up.away_team.map(lambda t: abbr.get(t, t)))
     adj = B.price_games(coded, dist, "proj", haircut=haircut)
     raw = B.price_games(coded, dist, "model")
@@ -350,6 +350,7 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
     key = ["game_id", "market", "side"]
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
     wins = win_probs(up, dist).set_index("game_id")
+    priced_alts = ALT.price(coded, dist, margins=B.MARGINS, totals=B.TOTALS, snap=B.half)   # alternate lines and teaser legs off the curve
     games = []
     for g in up.sort_values(["week", "kickoff", "game_id"]).itertuples(index=False):
         gb = b[b.game_id == g.game_id]
@@ -368,6 +369,7 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
         games.append({
             "id": game_key(g.season, g.week, aa, ha), "game_id": int(g.game_id), "week": int(g.week),
             "date": when.strftime("%a %b %-d"), "time": when.strftime("%H:%M"),
+            "kickoff": pd.Timestamp(g.kickoff).tz_convert("UTC").strftime("%Y-%m-%dT%H:%MZ"),
             "away": aa, "home": ha, "neutral": bool(g.neutral),
             "away_name": names.get(g.away_team, g.away_team), "home_name": names.get(g.home_team, g.home_team),
             "away_record": records_for(g).get(g.away_team, "0-0"), "home_record": records_for(g).get(g.home_team, "0-0"),
@@ -378,6 +380,7 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
             "line_source": getattr(g, "line_source", None) if isinstance(getattr(g, "line_source", None), str) else "cfbfastR consensus",
             "anchor": getattr(g, "anchor", "consensus"),
             "sharp_open": quotes["first"].get(g.game_id),
+            "sharp_path": (quotes.get("path") or {}).get(g.game_id),
             "books": {bk: {k: v for k, v in q.items() if k != "away_spread_point"} for bk, q in (quotes["latest"].get(g.game_id) or {}).items()},
             "detail": builder.detail(g) if builder is not None else None,
             "roof": "dome" if g.indoor else "outdoors",
@@ -391,8 +394,9 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
             "model": {"margin": round(float(g.model_margin), 2), "total": round(float(g.model_total), 2)},
             "proj": {"margin": round(float(g.proj_margin), 2), "total": round(float(g.proj_total), 2)},
             "win": {"adj": round(float(w["adj"]), 4), "raw": round(float(w["raw"]), 4), "market": round(float(w["market"]), 4)},
-            "bets": bets, **capped,
+            "bets": bets, **capped, **priced_alts.get(g.game_id, {}),
         })
+        SH.annotate(games[-1], "cfb")              # tier, gap, opener gap, line move and why, per bet
     return games
 
 
