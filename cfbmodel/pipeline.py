@@ -10,7 +10,7 @@ import pandas as pd
 from nflmodel import market
 from nflmodel.pipeline import _clean
 
-from . import archive, backtest, bets, board, config as C, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
+from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
 from .ratings import CFBRatingEngine
 
 PLAYER_PERIODS = {"tuning": (2017, 2019), "holdout": (C.HOLDOUT_FROM, 2100)}
@@ -22,10 +22,18 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     games, tg, qb = data.load_all(refresh=refresh, verbose=verbose)
     season = int(games[games.played].season.max())
     up_weeks = sorted(games[~games.played & (games.season == season)].week.unique())[:2]
-    n_espn = 0
+    n_espn = n_cfbd = 0
     if live and up_weeks:
-        games, n_espn = espn.apply(games, espn.current_lines(up_weeks))
+        espn_lines = espn.current_lines(up_weeks)
+        games, n_espn = espn.apply(games, espn_lines)
         say(f"  ESPN lines for {n_espn} upcoming games")
+        if cfbd.enabled():       # second source, only with the CFBD_API_KEY secret: games ESPN did not price
+            try:
+                have = set(espn_lines.loc[espn_lines.spread_line.notna(), "game_id"]) if len(espn_lines) else set()
+                games, n_cfbd = cfbd.apply(games, cfbd.current_lines(season, up_weeks), have)
+                say(f"  CFBD lines for {n_cfbd} more upcoming games")
+            except Exception as exc:
+                print(f"  CFBD lines skipped ({type(exc).__name__}: {exc})")
         games = weather.fill_wind(games, verbose=verbose)
     else:
         games["wind_source"] = np.where(games["played"], "recorded", "")
@@ -121,9 +129,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
                       "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
-            "lines_from": f"ESPN for {n_espn} games, cfbfastR consensus otherwise" if n_espn else "cfbfastR consensus (an average across books)",
+            "lines_from": lines_from(n_espn, n_cfbd),
             "sources": ["cfbfastR play-by-play, schedules, box scores and lines (sportsdataverse)",
-                        "ESPN scoreboard (current lines and prices)", "Open-Meteo (wind forecasts)"],
+                        "ESPN scoreboard (current lines and prices)",
+                        *(["CollegeFootballData.com (current lines for games ESPN has not priced)"] if n_cfbd else []),
+                        "Open-Meteo (wind forecasts)"],
             "teams": int(len(teams)),
         },
         "slate": slate,
@@ -151,6 +161,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     build_page(out)
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
+
+
+def lines_from(n_espn: int, n_cfbd: int = 0) -> str:
+    """The meta line saying where the upcoming games' lines came from."""
+    parts = ([f"ESPN for {n_espn} games"] if n_espn else []) + ([f"CFBD for {n_cfbd} games"] if n_cfbd else [])
+    return ", ".join(parts) + ", cfbfastR consensus otherwise" if parts else "cfbfastR consensus (an average across books)"
 
 
 def backfill(out, frame, games, dist, engine, abbr, names, season, ptable, pg, verbose=True):

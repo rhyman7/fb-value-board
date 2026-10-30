@@ -141,12 +141,16 @@ the consensus closing line:
 It trails the line by about a point in weeks 0 to 5 and is level from week 6 on. Against
 opening totals (2021 on), betting the model's side when it is 3+ points off went
 694-562-12 (55.3%, +5.4% ± 2.7%). See [CFB_FEATURES.md](CFB_FEATURES.md) for every test
-and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
+(including "Where the edge lives", the record split by conference tier, day of week and
+week of season) and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
 
 College limits: no official injury report (players listed Out or Doubtful on Covers.com,
 read daily into `docs/cfb/designations.json`, get no projection; see
 `cfbmodel/designations.py`), historical lines are consensus averages with no prices, and current
-prices come from ESPN's scoreboard (one book). For research and entertainment.
+prices come from ESPN's scoreboard (one book). When the `CFBD_API_KEY` secret is set, games
+ESPN has not priced take their line from CollegeFootballData.com instead (`cfbmodel/cfbd.py`:
+the consensus line, else DraftKings, else the first book listed; the game's line source says
+which); without the key nothing changes. For research and entertainment.
 
 ## Quick start
 
