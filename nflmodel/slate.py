@@ -9,6 +9,7 @@ import pandas as pd
 from . import alts as ALT
 from . import config as C
 from . import bets as B
+from . import derivs as DV
 from . import market as MK
 from . import odds as O
 from . import sheet as SH
@@ -140,9 +141,10 @@ def cap_game(bets: list[dict], cap: float = C.MAX_GAME_STAKE) -> dict:
 
 
 def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None, openers: pd.DataFrame | None = None,
-          quotes: dict | None = None, haircut: float = 1.0) -> dict:
+          quotes: dict | None = None, haircut: float = 1.0, hdist: dict | None = None) -> dict:
     """quotes: nflmodel/market.quotes_for(...) for this frame's unplayed games, or None.
-    haircut: the share of claimed edge the stakes are sized from (backtest.edge_haircut; 1 = none)."""
+    haircut: the share of claimed edge the stakes are sized from (backtest.edge_haircut; 1 = none).
+    hdist: the first-half curve (derivs.fit_half), or None for team totals only."""
     quotes = quotes or {"latest": {}, "first": {}, "path": {}}
     cand = frame[~frame.played].copy()
     sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
@@ -161,6 +163,8 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
     key = ["game_id", "market", "side"]
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
     priced_alts = ALT.price(priced, dist)          # alternate lines and teaser legs off the curve
+    # derivatives: team totals and first-half lines at every book, off the same curves (derivs.py)
+    derivs = DV.entries(priced, DV.shop(priced, dist, hdist, quotes["latest"], MK.RETAIL + [MK.SHARP], "proj", haircut=haircut))
 
     games = []
     for g in up.sort_values(["week", "gameday", "gametime", "game_id"]).itertuples(index=False):
@@ -175,7 +179,8 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
                 "fair": fair_american(r.model_prob), "stake": round(r.stake, 4),
                 **bet_books(shopped, g.game_id, r.market, r.side),
             })
-        capped = cap_game(bets)
+        dv = derivs.get(g.game_id, [])
+        capped = cap_game(bets + dv)              # the game's cap counts its derivative sides too
 
         def qb(side):
             qid = getattr(g, f"{side}_qb_id")
@@ -213,9 +218,9 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "win": {"adj": round(float(ml.loc["home", "model_prob"]), 4) if "home" in ml.index else None,
                     "raw": round(float(ml.loc["home", "raw_prob"]), 4) if "home" in ml.index else None,
                     "market": round(float(ml.loc["home", "market_prob"]), 4) if "home" in ml.index else None},
-            "bets": bets, **capped, **priced_alts.get(g.game_id, {}),
+            "bets": bets, "derivs": dv, **capped, **priced_alts.get(g.game_id, {}),
         })
-        SH.annotate(games[-1], "nfl")              # tier, gap, opener gap, line move and why, per bet
+        SH.annotate(games[-1], "nfl")              # tier, gap, opener gap, line move and why, per bet (and derivative side)
     return {"weeks": sorted({g["week"] for g in games}), "games": games, "book_lines": n_book,
             "market_as_of": MK.as_of(quotes["latest"])}
 

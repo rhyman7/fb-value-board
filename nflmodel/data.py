@@ -10,6 +10,8 @@ reduced once to two small tables that are cached in data/cache/:
   qb_games_<season>.csv    one row per quarterback per game
   stat_games_<season>.csv  box-score style counts per team per game (last two
                            seasons only), for the matchup pages
+  half_scores_<season>.csv the score at half time, one row per game (the first-half
+                           curves in nflmodel/derivs.py); seasons from 2012
 Only seasons that are missing, or the season in progress, are downloaded again.
 """
 from __future__ import annotations
@@ -29,8 +31,11 @@ PBP_COLS = [
     # box-score style stats for the matchup pages
     "yards_gained", "sack", "interception", "fumble_lost", "third_down_converted", "third_down_failed",
     "fourth_down_converted", "fourth_down_failed", "yardline_100", "fixed_drive", "fixed_drive_result",
+    # the half-time score (half_scores_<season>.csv)
+    "play_id", "game_half", "total_home_score", "total_away_score",
 ]
 STATS_SEASONS = 2   # box-score stats are only kept for the current and previous season
+HALF_FROM = 2012    # first season with a half_scores file (the first-half curves need about ten)
 
 
 def _download(url: str, dest) -> None:
@@ -132,12 +137,34 @@ def _reduce_stats(p: pd.DataFrame, season: int) -> pd.DataFrame:
     return out
 
 
+def half_scores(p: pd.DataFrame, season: int) -> pd.DataFrame:
+    """The score at half time for every game in a play-by-play frame: the running score on
+    the first play of the second half (nflverse's total_*_score is the score before the play),
+    else the last first-half play's score plus whatever it scored. One row per game:
+    game_id, season, home_h1, away_h1."""
+    q = p[p["game_half"].notna()].sort_values(["game_id", "play_id"])
+    h2 = q[q["game_half"] == "Half2"].groupby("game_id").head(1).set_index("game_id")
+    out = pd.DataFrame({"home_h1": h2["total_home_score"], "away_h1": h2["total_away_score"]})
+    missing = sorted(set(q["game_id"]) - set(out.index))
+    if missing:                                   # no second-half play on file: take the last first-half row
+        h1 = q[(q["game_half"] == "Half1") & q["game_id"].isin(missing)].groupby("game_id").tail(1).set_index("game_id")
+        out = pd.concat([out, pd.DataFrame({"home_h1": h1["total_home_score"], "away_h1": h1["total_away_score"]})])
+    out = out.dropna().astype(int).reset_index().rename(columns={"index": "game_id"})
+    out.insert(1, "season", season)
+    return out[["game_id", "season", "home_h1", "away_h1"]]
+
+
 def _reduce_season(season: int, with_stats: bool = False):
     raw = C.RAW / f"pbp_{season}.parquet"
     _download(C.PBP_URL.format(season=season), raw)
     p = pd.read_parquet(raw, columns=PBP_COLS)
     raw.unlink()  # keep the workspace small; the cache holds what we need
     stats = _reduce_stats(p, season) if with_stats else None
+    if season >= HALF_FROM:
+        try:
+            half_scores(p, season).to_csv(C.CACHE / f"half_scores_{season}.csv", index=False)
+        except Exception as exc:                  # the half-time score is a side table: never stops the reduce
+            print(f"  half scores {season} skipped ({exc})")
 
     p = p[((p["pass"] == 1) | (p["rush"] == 1)) & p["epa"].notna() & p["posteam"].notna()]
     p = p[p["two_point_attempt"].fillna(0) == 0].copy()
@@ -205,6 +232,35 @@ def load_pbp_aggregates(refresh_current: bool = False, verbose: bool = True):
             sts.append(pd.read_csv(spath))
     stats = pd.concat(sts, ignore_index=True) if sts else pd.DataFrame()
     return pd.concat(tgs, ignore_index=True), pd.concat(qbs, ignore_index=True), stats
+
+
+HALF_COLS = ["game_id", "season", "home_h1", "away_h1"]
+
+
+def load_half_scores(verbose: bool = True) -> pd.DataFrame:
+    """Half-time scores for every season on file (half_scores_<season>.csv, written when a
+    season's play-by-play is reduced). A season with no file yet is reduced from the
+    play-by-play here, once; a download failure skips it. Columns: HALF_COLS."""
+    C.CACHE.mkdir(parents=True, exist_ok=True)
+    out = []
+    for season in range(HALF_FROM, current_season() + 1):
+        path = C.CACHE / f"half_scores_{season}.csv"
+        if not path.exists():
+            raw = C.RAW / f"pbp_{season}.parquet"
+            try:
+                if verbose:
+                    print(f"  half-time scores {season}: reducing play-by-play ...", flush=True)
+                _download(C.PBP_URL.format(season=season), raw)
+                p = pd.read_parquet(raw, columns=["game_id", "play_id", "game_half", "total_home_score", "total_away_score"])
+                half_scores(p, season).to_csv(path, index=False)
+            except Exception as exc:
+                print(f"  no half-time scores for {season} ({exc})")
+                continue
+            finally:
+                if raw.exists():
+                    raw.unlink()
+        out.append(pd.read_csv(path))
+    return pd.concat(out, ignore_index=True)[HALF_COLS] if out else pd.DataFrame(columns=HALF_COLS)
 
 
 def load_all(refresh: bool = False, verbose: bool = True, with_stats: bool = False):

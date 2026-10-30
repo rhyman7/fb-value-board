@@ -5,6 +5,14 @@ name: Market lines
 # under data/market/. Three a day in season, plus hourly from Sunday night to Tuesday night
 # (US time), when the week's lines open and the model's edge is largest. About 6 credits a
 # snapshot, about 1,400 a month. The board builds read these files; this workflow never builds a board.
+#
+# Derivatives (team totals, first-half lines; nflmodel/derivs.py) ride the 14:05 UTC run:
+# the API serves them one event at a time, so `run_market.py derivatives` spends at most
+# market.DERIV_BUDGET credits a run (NFL 70, about 16 games x 4 markets; college 160, about
+# 50 games x 3 markets), NFL on Thursday, Saturday and Sunday mornings US (about 900 credits
+# a month) and college on Fridays (about 700): the whole workflow stays under about 3,000 a
+# month of the account's 20,000 (the props use about 2,500). The "derivatives" input runs
+# them by hand for both leagues.
 
 on:
   schedule:
@@ -12,6 +20,11 @@ on:
     - cron: "35 0-23 * 8-12,1-2 1,2"          # hourly all day Monday and Tuesday UTC
     - cron: "35 21-23 * 8-12,1-2 0"           # Sunday evening US (late Sunday UTC)
   workflow_dispatch:
+    inputs:
+      derivatives:
+        description: "Also fetch the derivative markets (team totals, first-half lines) for both leagues"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -36,6 +49,15 @@ jobs:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
           python run_market.py snapshot
+          # derivatives on the 14:05 UTC run: NFL Thursday, Saturday and Sunday; college Friday (or when asked)
+          if [ "${{ inputs.derivatives }}" = "true" ]; then
+            python run_market.py derivatives
+          elif [ "${{ github.event.schedule }}" = "5 2,14,20 * 8-12,1-2 *" ] && [ "$(date -u +%H)" = "14" ]; then
+            case "$(date -u +%u)" in
+              4|6|7) python run_market.py derivatives --league nfl ;;
+              5) python run_market.py derivatives --league cfb ;;
+            esac
+          fi
           python run_market.py status
           python run_market.py alerts --out /tmp/alerts.md
       - name: Post opener alerts

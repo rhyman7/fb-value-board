@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import archive, backtest, bets, config as C, data, extra, injuries, ledger, market, matchup, model, overrides, players, players_data, sheet, slate, weather
+from . import archive, backtest, bets, config as C, data, derivs, extra, injuries, ledger, market, matchup, model, overrides, players, players_data, sheet, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -104,6 +104,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
 
     say("Fitting key numbers ...")
     dist = bets.fit_distribution(games, season)
+    half = data.load_half_scores(verbose=verbose)                 # half-time scores, for the first-half curve (derivs.py)
+    hdist = derivs.fit_half(games, half, season)
     upcoming = frame[~frame.played & frame.spread_line.notna()]
     order_now = int(upcoming.order.min()) if len(upcoming) else int(frame.order.max()) + 1
     r = engine.ratings_at(order_now)
@@ -150,9 +152,10 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
             "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)", "nfelo games file (opening lines)",
                         "The Odds API (DraftKings and FanDuel player props)"],
+            "half": derivs.half_summary(hdist),
         },
         "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season), openers,
-                             quotes=market.quotes_for(frame[(frame.season == season) & ~frame.played], "nfl"), haircut=h_factor),
+                             quotes=market.quotes_for(frame[(frame.season == season) & ~frame.played], "nfl"), haircut=h_factor, hdist=hdist),
         "ratings": slate.ratings_table(engine, r, info[season]["margin_coefs"], games, frame, season),
         "key_numbers": backtest.key_number_report(games, dist, season),
     }
@@ -176,7 +179,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         done = cur[cur.played]
         close = market.closing_quotes(done, "nfl", {g: kick[g] for g in done.game_id})
         scores = {g.game_id: (g.home_score, g.away_score) for g in done.itertuples()}
-        n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, close, lambda df: bets.curves(df, dist, "line"))
+        halves = {h.game_id: (h.home_h1, h.away_h1) for h in half.itertuples()} if len(half) else {}
+        n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, close, lambda df: bets.curves(df, dist, "line"), halves=halves)
         out["ledger"] = ledger.summary(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv")
         say(f"  ledger: {n_new} bets flagged, {n_graded} graded")
     except Exception as exc:

@@ -24,6 +24,12 @@ Every bet on the board carries:
            first, each {label, value, news}: news marks the inputs that are this week's
            information (quarterbacks, injuries, snap shares, wind) rather than the
            ratings themselves
+
+A game's derivative sides (`g["derivs"]`, nflmodel/derivs.py: team totals and first-half
+lines, each with deriv: True) get the same keys: tier `price` when a retail price beats the
+sharp book's own derivative quote by PRICE_MIN, else None (no opener, wind or model tier:
+the curve's opinion on derivatives is not backtested against derivative lines yet), and
+empty gap, move and why.
 """
 from __future__ import annotations
 
@@ -104,6 +110,13 @@ def annotate(g: dict, league: str = "nfl") -> None:
             b["tier"] = "model"
         else:
             b["tier"] = None
+    # derivatives (nflmodel/derivs.py): a price bet when a retail price beats the sharp book's
+    # own derivative quote by PRICE_MIN; never an opener, wind or model bet, since the curve's
+    # opinion on derivatives has no graded history yet (FEATURES.md, "Derivative markets")
+    for b in g.get("derivs") or []:
+        b["gap"] = b["opener_gap"] = b["opener_src"] = b["move"] = None
+        b["why"] = []
+        b["tier"] = "price" if b.get("beats_sharp") and (b.get("sharp_ev") or 0.0) >= PRICE_MIN else None
 
 
 def inputs_stamp(generated: str, **as_of) -> dict:

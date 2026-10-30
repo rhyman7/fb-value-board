@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import datetime as dt
 import io
+import re
 import urllib.request
 
 import numpy as np
@@ -250,6 +251,53 @@ def load_season(season: int, refresh: bool = False, verbose: bool = True):
     tg = pd.read_csv(paths[1])
     qb = pd.read_csv(paths[2])
     return g, tg, qb
+
+
+HALF_COLS = ["game_id", "season", "home_h1", "away_h1"]
+
+
+def _half_from_linescores(s: str):
+    """Points in periods 1 and 2 from the schedule file's linescores text
+    ("[{'value': 7.0, ..., 'period': 1}\\n {'value': 14.0, ..., 'period': 2} ...]")."""
+    pts = {int(m.group(2)): float(m.group(1)) for m in re.finditer(r"'value':\s*([\d.]+).*?'period':\s*(\d+)", str(s or ""))}
+    if 1 not in pts or 2 not in pts:
+        return None
+    return int(round(pts[1] + pts[2]))
+
+
+def half_scores(season: int) -> pd.DataFrame:
+    """Half-time scores of the season's finished games from the full schedule file's
+    quarter linescores (ESPN). Columns: HALF_COLS."""
+    def go():
+        req = urllib.request.Request(C.FULL_SCHEDULE.format(s=season), headers={"User-Agent": "cfb-model"})
+        with urllib.request.urlopen(req, timeout=120) as r:
+            return pd.read_csv(io.BytesIO(r.read()), low_memory=False)
+    f = _retry(go)
+    f = f[f["status_type_completed"].fillna(False).astype(bool)]
+    out = pd.DataFrame({"game_id": f["id"].astype(int), "season": season,
+                        "home_h1": f["home_linescores"].map(_half_from_linescores), "away_h1": f["away_linescores"].map(_half_from_linescores)})
+    return out.dropna().astype({"home_h1": int, "away_h1": int})[HALF_COLS]
+
+
+def load_half_scores(refresh: bool = False, verbose: bool = True, last_season: int | None = None) -> pd.DataFrame:
+    """Half-time scores for every season (half_scores_<season>.csv in the cache; the season in
+    progress is refreshed with `refresh`). A download failure keeps the cached file or skips
+    the season."""
+    C.CACHE.mkdir(parents=True, exist_ok=True)
+    now = last_season or current_season()
+    out = []
+    for s in range(C.FIRST_SEASON, now + 1):
+        path = C.CACHE / f"half_scores_{s}.csv"
+        if (refresh and s == now) or not path.exists():
+            try:
+                if verbose:
+                    print(f"  half-time scores {s} ...", flush=True)
+                half_scores(s).to_csv(path, index=False)
+            except Exception as exc:
+                print(f"  no half-time scores for {s} ({exc})" + ("; using cached copy" if path.exists() else ""))
+        if path.exists():
+            out.append(pd.read_csv(path))
+    return pd.concat(out, ignore_index=True)[HALF_COLS] if out else pd.DataFrame(columns=HALF_COLS)
 
 
 def load_all(refresh: bool = False, verbose: bool = True, last_season: int | None = None):

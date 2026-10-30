@@ -18,6 +18,16 @@ the book posts it for that side (home -3.5 means the home side's spread is -3.5)
 h2h. `price` is American odds (Kalshi's contract price converted by the API; fees are not
 in it, see odds.kalshi_effective_odds).
 
+Derivative markets (nflmodel/derivs.py; from Oct 30, 2026) go in the same files with
+`market` team_totals (side home_over, home_under, away_over, away_under), spreads_h1,
+totals_h1 and h2h_h1 (sides as the main markets). The Odds API serves them only one event at
+a time (/sports/{sport}/events/{id}/odds, (markets returned) x (regions) credits, so up to 4
+an event), so `snapshot_derivatives` runs on its own schedule with a credit budget per run
+(DERIV_BUDGET) and takes the soonest games first: NFL three runs a week (Thursday, Saturday
+and Sunday morning US), college one (Friday), about 1,500 credits a month on top of the
+1,400 the main snapshots use. The boards read the latest rows the same way (`latest`: the
+tt_* and h1_* keys).
+
 How the boards use it (slate.build, cfbmodel/board.py): the latest row per book for each
 upcoming game; Pinnacle's line and two-way prices become the anchor the projection is
 blended from when Pinnacle has the game, and every other book's price is scored against the
@@ -45,12 +55,24 @@ BOOKS = ["pinnacle", "draftkings", "fanduel", "betmgm", "kalshi"]
 SHARP = "pinnacle"                       # the anchor, when it has the game
 RETAIL = ["draftkings", "fanduel", "betmgm", "kalshi"]   # where the bets are placed
 MARKETS = ["h2h", "spreads", "totals"]
+# derivative markets, fetched per event (derivs.API_MARKETS); the college run skips the
+# first-half moneyline (a moneyline is only ever a price bet) to cover more games
+DERIV_MARKETS = {"nfl": ["team_totals", "spreads_h1", "totals_h1", "h2h_h1"], "cfb": ["team_totals", "spreads_h1", "totals_h1"]}
+DERIV_BUDGET = {"nfl": 70, "cfb": 160}     # credits one derivative run may spend (about 16 and 50 games)
+DERIV_DAYS = 7                             # only games kicking off within this many days
 COLS = ["snapshot", "league", "event_id", "commence", "home_name", "away_name",
         "book", "market", "side", "line", "price", "updated"]
 # Board column for each (book market, side): the same names slate.LINE_COLS uses.
 LINE_COL = {("spreads", "home"): "home_spread_odds", ("spreads", "away"): "away_spread_odds",
             ("totals", "over"): "over_odds", ("totals", "under"): "under_odds",
-            ("h2h", "home"): "home_moneyline", ("h2h", "away"): "away_moneyline"}
+            ("h2h", "home"): "home_moneyline", ("h2h", "away"): "away_moneyline",
+            # derivatives (derivs.py): the first-half line keys mirror the full-game ones with h1_
+            ("spreads_h1", "home"): "h1_home_spread_odds", ("spreads_h1", "away"): "h1_away_spread_odds",
+            ("totals_h1", "over"): "h1_over_odds", ("totals_h1", "under"): "h1_under_odds",
+            ("h2h_h1", "home"): "h1_home_moneyline", ("h2h_h1", "away"): "h1_away_moneyline",
+            ("team_totals", "home_over"): "tt_home_over_odds", ("team_totals", "home_under"): "tt_home_under_odds",
+            ("team_totals", "away_over"): "tt_away_over_odds", ("team_totals", "away_under"): "tt_away_under_odds"}
+TOTAL_MARKETS = {"totals", "totals_h1"}
 
 NFL_NAME_TO_ABBR = {v: k for k, v in C.TEAM_NAMES.items()}
 # College names The Odds API spells differently from ESPN's display names.
@@ -92,10 +114,17 @@ def flatten(events: list[dict], league: str, snapshot: str) -> pd.DataFrame:
                     if o.get("price") is None:
                         continue
                     name = str(o.get("name", ""))
-                    if mk.get("key") == "totals":
+                    key = mk.get("key")
+                    if key in TOTAL_MARKETS:
                         side = name.lower()
                         if side not in ("over", "under"):
                             continue
+                    elif key == "team_totals":                # name is Over/Under, description the team
+                        team = o.get("description")
+                        who = "home" if team == home else "away" if team == away else None
+                        if who is None or name.lower() not in ("over", "under"):
+                            continue
+                        side = f"{who}_{name.lower()}"
                     else:
                         side = "home" if name == home else "away" if name == away else None
                         if side is None:
@@ -168,6 +197,49 @@ def snapshot(client, league: str, now: dt.datetime | None = None, root: Path = D
     return n
 
 
+def snapshot_derivatives(client, league: str, now: dt.datetime | None = None, root: Path = DIR,
+                         budget: int | None = None, markets: list[str] | None = None, days: int = DERIV_DAYS) -> int:
+    """Fetch and store the derivative markets (DERIV_MARKETS) for the soonest upcoming games,
+    one event at a time, until the run's credit budget would be exceeded. Games the main
+    snapshot has a sharp quote for come first (the rest only if credits are left). Returns
+    rows appended; -1 if nothing could be fetched."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    stamp = now.strftime("%Y-%m-%d %H:%M")
+    budget = DERIV_BUDGET[league] if budget is None else budget
+    markets = markets or DERIV_MARKETS[league]
+    try:
+        events = client.events(SPORTS[league])
+    except Exception as exc:
+        print(f"  derivatives {league}: skipped ({exc})")
+        return -1
+    horizon = now + dt.timedelta(days=days)
+    events = [e for e in (events or []) if _commence(e) is not None and now < _commence(e) <= horizon]
+    stored = load(league, root)
+    sharp_ids = set(stored.loc[stored["book"] == SHARP, "event_id"]) if len(stored) else set()
+    events.sort(key=lambda e: (e.get("id") not in sharp_ids, _commence(e)))
+    rows, used, fetched, bad = [], 0, 0, 0
+    for ev in events:
+        if used + len(markets) > budget:
+            break
+        try:
+            body = client.event_odds(ev["id"], markets, BOOKS, sport=SPORTS[league])
+        except Exception as exc:                  # budget, network, key
+            print(f"  derivatives {league}: stopped at {ev.get('away_team')} at {ev.get('home_team')} ({exc})")
+            bad += 1
+            break
+        used += int(getattr(client, "last_cost", 0) or 0)
+        fetched += 1
+        if body:
+            rows.append(flatten([body], league, stamp))
+    if not fetched:
+        return -1 if bad else 0
+    df = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(columns=COLS)
+    df = df[df["market"].isin(markets)]
+    n = store(df, league, root)
+    print(f"  derivatives {league}: {fetched} of {len(events)} games, {len(df)} quotes, {n} new rows, {used} credits")
+    return n
+
+
 # --------------------------------------------------------------------------
 # Matching to the boards' games and reading the latest quotes
 # --------------------------------------------------------------------------
@@ -210,7 +282,8 @@ def match_games(rows: pd.DataFrame, games: pd.DataFrame, league: str, names: dic
     out["game_id"] = out.index.map(dict(zip(cand["_i"], cand["game_id"])))
     flip = out.index.map(dict(zip(cand["_i"], cand["flip"]))).fillna(False).astype(bool)
     if flip.any():                                            # the book's home is the board's away
-        out.loc[flip, "side"] = out.loc[flip, "side"].map({"home": "away", "away": "home"}).fillna(out.loc[flip, "side"])
+        swap = lambda s: s.replace("home", "AWAY").replace("away", "home").replace("AWAY", "away") if isinstance(s, str) else s
+        out.loc[flip, "side"] = out.loc[flip, "side"].map(swap)
     out["game_id"] = out["game_id"].where(out["game_id"].notna(), None)
     return out
 
@@ -238,13 +311,17 @@ def latest(rows: pd.DataFrame) -> dict:
             if col is None:
                 continue
             d[col] = float(x.price)
-            if x.market == "spreads" and x.side == "home" and pd.notna(x.line):
-                d["spread_line"] = -float(x.line)
-            if x.market == "spreads" and x.side == "away" and pd.notna(x.line):
-                d.setdefault("spread_line", float(x.line))
-                d["away_spread_point"] = float(x.line)
-            if x.market == "totals" and pd.notna(x.line):
-                d["total_line"] = float(x.line)
+            pre = "h1_" if x.market.endswith("_h1") else ""
+            if x.market in ("spreads", "spreads_h1") and x.side == "home" and pd.notna(x.line):
+                d[pre + "spread_line"] = -float(x.line)
+            if x.market in ("spreads", "spreads_h1") and x.side == "away" and pd.notna(x.line):
+                d.setdefault(pre + "spread_line", float(x.line))
+                if not pre:
+                    d["away_spread_point"] = float(x.line)
+            if x.market in TOTAL_MARKETS and pd.notna(x.line):
+                d[pre + "total_line"] = float(x.line)
+            if x.market == "team_totals" and pd.notna(x.line):
+                d[f"tt_{x.side.split('_')[0]}_line"] = float(x.line)
         out.setdefault(gid, {})[book] = d
     return out
 

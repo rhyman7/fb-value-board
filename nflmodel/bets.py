@@ -92,7 +92,7 @@ def curves(df: pd.DataFrame, dist: dict, source: str = "proj", margins=None, tot
     h_win = ndtr((implied + d_margin) / dist["sd_win"]) * (1 - tie)
     a_win = 1 - tie - h_win
     return {"pm": pm, "pt": pt, "tie": tie, "h_win": h_win, "a_win": a_win, "spread": spread, "total": total,
-            "margins": MG, "totals": TT}
+            "margins": MG, "totals": TT, "loc_m": loc_m, "loc_t": loc_t}     # loc_*: the curves' centres (derivs.half_curves)
 
 
 def stake_prob(p_win, p_push, fair, haircut: float):

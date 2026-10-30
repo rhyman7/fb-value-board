@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 from scipy.special import ndtr, ndtri
 
-from nflmodel import alts as ALT, market as MK, odds as O, sheet as SH
+from nflmodel import alts as ALT, derivs as DV, market as MK, odds as O, sheet as SH
 from nflmodel.slate import _opt, bet_books, cap_game, with_market
 
 from . import bets as B
@@ -325,9 +325,10 @@ def win_probs(df: pd.DataFrame, dist: dict) -> pd.DataFrame:
     return out
 
 
-def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None, quotes=None, haircut: float = 1.0) -> dict:
+def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None, quotes=None, haircut: float = 1.0, hdist: dict | None = None) -> dict:
     """quotes: nflmodel/market.quotes_for(..., "cfb", names=display name -> school) or None.
-    haircut: the share of claimed edge the stakes are sized from (nflmodel.backtest.edge_haircut; 1 = none)."""
+    haircut: the share of claimed edge the stakes are sized from (nflmodel.backtest.edge_haircut; 1 = none).
+    hdist: the first-half curve on the college supports (nflmodel.derivs.fit_half), or None."""
     quotes = quotes or {"latest": {}, "first": {}, "path": {}}
     cand = frame[~frame.played].copy()
     sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
@@ -336,11 +337,11 @@ def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None
         return {"weeks": [], "games": [], "book_lines": 0}
     opened = track_lines(up[up.spread_line.notna() & up.total_line.notna()])
     up = with_market(up, quotes["latest"])
-    games = entries(up, dist, engine, builder, lambda g: records, abbr, names, opened, quotes, haircut=haircut)
+    games = entries(up, dist, engine, builder, lambda g: records, abbr, names, opened, quotes, haircut=haircut, hdist=hdist)
     return {"weeks": sorted({x["week"] for x in games}), "games": games, "book_lines": 0, "market_as_of": MK.as_of(quotes["latest"])}
 
 
-def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=None, haircut: float = 1.0) -> list[dict]:
+def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=None, haircut: float = 1.0, hdist: dict | None = None) -> list[dict]:
     """The board's entry for each game in `up` (records_for(game) gives the records to show)."""
     quotes = quotes or {"latest": {}, "first": {}, "path": {}}
     coded = up.assign(home_team=up.home_team.map(lambda t: abbr.get(t, t)), away_team=up.away_team.map(lambda t: abbr.get(t, t)))
@@ -351,6 +352,8 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
     wins = win_probs(up, dist).set_index("game_id")
     priced_alts = ALT.price(coded, dist, margins=B.MARGINS, totals=B.TOTALS, snap=B.half)   # alternate lines and teaser legs off the curve
+    derivs = DV.entries(coded, DV.shop(coded, dist, hdist, quotes["latest"], MK.RETAIL + [MK.SHARP], "proj",
+                                       margins=B.MARGINS, totals=B.TOTALS, snap=B.half, haircut=haircut))   # team totals and first-half lines
     games = []
     for g in up.sort_values(["week", "kickoff", "game_id"]).itertuples(index=False):
         gb = b[b.game_id == g.game_id]
@@ -359,7 +362,8 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
                  "breakeven": round(r.breakeven, 4), "edge": round(r.edge, 4), "ev": round(r.ev, 4), "raw_ev": round(r.raw_ev, 4),
                  "fair": fair_american(r.model_prob), "stake": round(r.stake, 4),
                  **bet_books(shopped, g.game_id, r.market, r.side)} for r in gb.itertuples(index=False)]
-        capped = cap_game(bets, C.MAX_GAME_STAKE)
+        dv = derivs.get(g.game_id, [])
+        capped = cap_game(bets + dv, C.MAX_GAME_STAKE)
         ha, aa = abbr.get(g.home_team, g.home_team), abbr.get(g.away_team, g.away_team)
         when = pd.Timestamp(g.kickoff).tz_convert("America/New_York")
         qb = lambda side: {"name": engine.q_name.get(getattr(g, f"{side}_qb_id"), "Unknown") if isinstance(getattr(g, f"{side}_qb_id"), str) else "Unknown",
@@ -394,9 +398,9 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
             "model": {"margin": round(float(g.model_margin), 2), "total": round(float(g.model_total), 2)},
             "proj": {"margin": round(float(g.proj_margin), 2), "total": round(float(g.proj_total), 2)},
             "win": {"adj": round(float(w["adj"]), 4), "raw": round(float(w["raw"]), 4), "market": round(float(w["market"]), 4)},
-            "bets": bets, **capped, **priced_alts.get(g.game_id, {}),
+            "bets": bets, "derivs": dv, **capped, **priced_alts.get(g.game_id, {}),
         })
-        SH.annotate(games[-1], "cfb")              # tier, gap, opener gap, line move and why, per bet
+        SH.annotate(games[-1], "cfb")              # tier, gap, opener gap, line move and why, per bet (and derivative side)
     return games
 
 
