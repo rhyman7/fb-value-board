@@ -168,3 +168,20 @@ def test_board_data_carries_the_sheet():
         assert "inputs" in d["meta"] and d["meta"]["inputs"].get("generated")
         if d["meta"].get("haircut_on") and not (d["meta"].get("haircut") or {}).get("factor"):
             assert d["meta"]["haircut_factor"] == 0.0                     # fails closed
+
+
+def test_best_bets_card_is_wired():
+    """Both templates carry the best-bets view, its print page style and the buttons; the PDF
+    script parses and names both boards."""
+    import ast
+    for t in (ROOT / "site" / "template.html", ROOT / "site" / "cfb-template.html"):
+        html = t.read_text()
+        assert 'id="view-bestbets"' in html and 'id="bb-page"' in html and 'id="bb-doc"' in html
+        assert 'href="best-bets.pdf"' in html and 'href="#bestbets"' in html
+        assert 'h === "bestbets"' in html and "renderBestBets()" in html
+    assert 'id="view-bestbets"' in (ROOT / "site" / "cfb-template.html").read_text()
+    src = (ROOT / "scripts" / "build_pdf.py").read_text()
+    ast.parse(src)
+    assert '"nfl"' in src and '"cfb"' in src and "best-bets.pdf" in src
+    landing = (ROOT / "index.html").read_text()
+    assert 'href="docs/best-bets.pdf"' in landing and 'href="docs/cfb/best-bets.pdf"' in landing
