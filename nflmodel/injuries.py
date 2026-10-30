@@ -278,14 +278,15 @@ def add_pass_rush_features(df: pd.DataFrame, pr: pd.DataFrame | None) -> pd.Data
 
 
 def as_of(season: int) -> str | None:
-    """When the official injury report on disk was last fetched, for the boards' "data as of"
-    line. nflverse's injuries file carries no modified date, so this is the file's own
-    download time (the build refreshes it each run); None when the file is not on hand."""
+    """When the official injury report was last read, for the boards' "data as of" line:
+    the time the season's injury cache (injury_groups_<season>.csv) was last rebuilt from the
+    downloaded report, which every refresh does for the current season. nflverse's file has
+    no modified date of its own, and the download is deleted once read (_season)."""
     import datetime as dt
-    ip = C.RAW / f"injuries_{season}.parquet"
-    if not ip.exists():
+    path = C.CACHE / f"injury_groups_{season}.csv"
+    if not path.exists():
         return None
     try:
-        return dt.datetime.fromtimestamp(ip.stat().st_mtime, dt.timezone.utc).strftime("%Y-%m-%d %H:%M")
+        return dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc).strftime("%Y-%m-%d %H:%M")
     except OSError:
         return None
