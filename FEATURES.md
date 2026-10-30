@@ -97,12 +97,39 @@ since 2019. Two cautions:
 The board now shows a wind tag on games forecast at 10-19 mph, the forecast in
 each game's header, and this table in the model record.
 
-### Wind direction and gusts (set up Oct 29, 2026, untested)
+### Wind direction and gusts (tested Oct 29, 2026: nothing kept)
 
 The model sees only the wind's speed. A 15 mph wind blowing goal line to goal
 line should hurt passing and kicking far more than the same wind across the
-field, and a gusty 12 mph may play like 20. Nothing is tested yet; this is the
-set-up:
+field, and a gusty 12 mph may play like 20. Tested on the first archive fetch
+(1,115 of the 2,450 outdoor games since 2014; the archive refused the rest on
+the first run, and a later run fills them in). **Nothing earns a place.**
+
+| Added to the total model | Tuning | Holdout | Kept |
+|---|---|---|---|
+| Gusts (mph) | −0.000 | +0.003 | no |
+| Along-field wind (mph) | −0.004 | +0.010 | no |
+| Crosswind (mph) | +0.004 | +0.000 | no |
+| Along-field and crosswind together | −0.001 | +0.009 | no |
+| Archive speed in place of the recorded wind | +0.019 | +0.037 | no |
+
+The wind under by along-field band (10-19 mph) went 51-42 and by crosswind band
+47-31: both directions carry it, so direction adds nothing the speed does not
+say, at least with bearings that are mostly approximate. Gusts are worse than
+useless as a band (15-19 mph gusts: 45% unders).
+
+The finding that matters is the sanity check. The games file's recorded wind
+and the archive's hour-of-kickoff wind at the stadium agree only loosely
+(correlation 0.72, average gap 2.5 mph), and the wind under is weaker on the
+archive's number: 10-19 mph unders 122-107 (53.3%, +2.6% ± 6.5%) against
+402-287 (58.3%) on the recorded wind, on the games that have both. The recorded
+wind is what the stadium reported during the game; a bettor only has a
+forecast. So part of the published wind-under edge may be hindsight, and the
+honest grade is the one on the logged forecasts
+(`experiments/wind_forecast_grade.py`), which needs a season of logs. Until
+then treat the wind tag as a lead, and size it small.
+
+The set-up:
 
 - Both boards' forecast calls now also fetch the gusts and the direction the
   wind blows from (same Open-Meteo call) and log them next to the speed
