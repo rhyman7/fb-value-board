@@ -1,0 +1,49 @@
+name: Wind history
+
+# The wind at kickoff (speed, gusts, direction) for every played outdoor NFL home game since
+# 2014, from Open-Meteo's free history archive, for experiments/wind_direction_test.py.
+# Run by hand only. One call per stadium per game day with 0.3 s between calls (about
+# 2,000 calls the first time, a few minutes); a failed call is skipped and tried again next
+# run, and games already in data/cache/wind_history.csv are not fetched again.
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Most archive calls this run (blank for all)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch
+        run: |
+          if [ -n "${{ inputs.limit }}" ]; then
+            python experiments/fetch_wind_history.py --limit "${{ inputs.limit }}"
+          else
+            python experiments/fetch_wind_history.py
+          fi
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cache/wind_history.csv
+          git diff --cached --quiet || git commit -m "Wind history: archive wind at kickoff"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin HEAD:"$GITHUB_REF_NAME"

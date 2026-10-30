@@ -20,6 +20,13 @@ Logs (data/shadow/, written by the Update board Action):
   defense_games.csv    one row per game: raw model margin and total, current and shadow
   defense_players.csv  one row per player-game: receiving yards and interceptions
 A game's rows are rewritten on every refresh until kickoff and never after, as the archive.
+
+Second spread version, pass catchers (pre-registered Oct 29, 2026; FEATURES.md, "Edge tests,
+late October 2026"): the board's margin features plus d_miss_pc, the share of the team's core
+pass catchers (WR/TE) missing now (injuries.py), which helped in every season since 2020 but
+not before. Logged to passcatchers_games.csv under the same freeze-at-kickoff rule and scored
+by experiments/shadow_score.py; same rule as above: it replaces the board's spread model only
+if its average miss is lower on the rest of 2026 (week 9 on) and, separately, on 2027.
 """
 from __future__ import annotations
 
@@ -34,8 +41,10 @@ from .archive import kickoff
 MARGIN = ["d_chg_pr_pfr_bk_all", "d_chg_cov_db_bk_all"]
 TOTAL = ["s_chg_mt_dc_all"]
 PLAYER = {"rec_yds": ["opp_def_mt", "opp_def_ypt"], "ints": ["opp_def_press"]}
+MARGIN_PC = ["d_miss_pc"]      # the pass-catchers spread version: MARGIN_FEATS + this (fixed Oct 29, 2026)
 DIR = C.DATA / "shadow"
 GAMES_LOG, PLAYERS_LOG = DIR / "defense_games.csv", DIR / "defense_players.csv"
+PC_LOG = DIR / "passcatchers_games.csv"
 
 
 def game_features(frame: pd.DataFrame, T: pd.DataFrame) -> pd.DataFrame:
@@ -114,3 +123,31 @@ def run(wf_input: pd.DataFrame, frame: pd.DataFrame, games: pd.DataFrame, tg: pd
         m = _merge_log(PLAYERS_LOG, rows, frozen)
     if verbose:
         print(f"  shadow test (defense): {n} games, {m} games of player rows logged")
+
+
+def run_passcatchers(wf_input: pd.DataFrame, frame: pd.DataFrame, games: pd.DataFrame, season: int,
+                     verbose: bool = True, now: pd.Timestamp | None = None) -> int:
+    """The pass-catchers spread version, logged to PC_LOG with the same freeze-at-kickoff rule.
+    wf_input carries d_miss_pc already (model.build_frame adds the injury groups)."""
+    now = now or pd.Timestamp(dt.datetime.now(dt.timezone.utc))
+    sched = games.set_index("game_id")
+    ko = {gid: kickoff(r.gameday, r.gametime) for gid, r in sched[sched.season == season].iterrows()}
+    frozen = {gid for gid, t in ko.items() if t <= now}
+    stamp = now.strftime("%Y-%m-%dT%H:%MZ")
+    f = wf_input.copy()
+    for c in MARGIN_PC:
+        if c not in f:
+            f[c] = 0.0
+    sh, _ = model.walk_forward(f, margin_feats=model.MARGIN_FEATS + MARGIN_PC)
+    up = frame[(frame.season == season) & ~frame.played & ~frame.game_id.isin(frozen)]
+    s = sh.set_index("game_id").loc[up.game_id]
+    g = pd.DataFrame({"game_id": up.game_id.to_numpy(), "season": up.season.to_numpy(), "week": up.week.to_numpy(),
+                      "kickoff": [ko[x].strftime("%Y-%m-%dT%H:%MZ") for x in up.game_id], "logged_at": stamp,
+                      "spread_line": up.spread_line.to_numpy(),
+                      "margin_current": up.model_margin.round(3).to_numpy(), "margin_shadow": s.model_margin.round(3).to_numpy()})
+    for c in MARGIN_PC:
+        g[c] = s[c].round(5).to_numpy()
+    n = _merge_log(PC_LOG, g, frozen)
+    if verbose:
+        print(f"  shadow test (pass catchers): {n} games logged")
+    return n

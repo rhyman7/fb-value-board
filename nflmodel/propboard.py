@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 
 from . import config as C, propdist as D, proplog as PLOG
+from .propmarket import LADDER_GAP
 
 OUT = C.DOCS / "props"
 KEY = ["game_id", "player_id", "market", "line"]
@@ -97,6 +98,19 @@ def records(log: pd.DataFrame, res: pd.DataFrame) -> pd.DataFrame:
     out["why_not"] = first["why_not"]
     out["row_over"], out["row_under"] = o["row_id"], u["row_id"]
     out = out.reset_index()
+    # market-only tags (propmarket.market_tags), by the pricing row's id
+    tg = PLOG.read_tags()
+    if len(tg):
+        tg = tg.drop_duplicates("row_id").set_index("row_id")
+        to, tu = tg.reindex(out["row_over"]), tg.reindex(out["row_under"])
+        out["book_gap"] = to["book_gap"].where(to["book_gap"].notna(), tu["book_gap"]).to_numpy()
+        out["middle"] = to["middle"].where(to["middle"].notna(), tu["middle"]).fillna(0).to_numpy()
+        out["ladder_gap"] = to["ladder_gap"].where(to["ladder_gap"].notna(), tu["ladder_gap"]).to_numpy()
+        out["tag_book"] = to["tag_book"].where(to["tag_book"].notna(), tu["tag_book"]).to_numpy()
+        out["take"] = np.where(to["take"].notna() & (to["take"] != ""), to["take"], np.where(tu["take"].notna(), tu["take"], "")).astype(object)
+    else:
+        out["book_gap"] = out["tag_book"] = out["take"] = None
+        out["middle"], out["ladder_gap"] = 0, np.nan
     nw = PLOG.read_new()
     if len(nw):
         nw = nw.drop_duplicates("row_id").set_index("row_id")
@@ -167,6 +181,9 @@ def summary(x: pd.DataFrame) -> dict:
         "moved_away": _num((mv < 0).mean(), 3) if len(mv) else None,
         "moved_points": _num(mv.mean(), 2) if len(mv) else None, "moved_n": int(len(mv)),
         "flagged": int((x["flag_over"] | x["flag_under"]).sum()),
+        "book_gaps": int(x["book_gap"].map(lambda v: isinstance(v, str) and bool(v)).sum()) if "book_gap" in x else 0,
+        "middles": int(x["middle"].fillna(0).astype(bool).sum()) if "middle" in x else 0,
+        "ladder_gaps": int((x["ladder_gap"].abs() > LADDER_GAP).sum()) if "ladder_gap" in x else 0,
         "flag_record": f"{fl.count(1.0)}-{fl.count(-1.0)}-{fl.count(0.0)}",
         "new": _new_vs(dec, hit, ours),
         "calibration": D.calibration_table(ours, hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
@@ -197,6 +214,12 @@ def _rec(r) -> dict:
         "wn": r["why_not"] if isinstance(r["why_not"], str) else "",
         "snap": r["snapshot"], "at": r["time"], "ko": r["commence"],
         "cL": _num(r.get("close_line"), 1), "cfo": _num(r.get("close_fair_over")),
+        # market-only tags: bg = the two books' lines a step apart, mid = a middle, lg = ladder-rung
+        # gap against the book's own main line (over terms), tb = that book, take = the side to take
+        "bg": r.get("book_gap") if isinstance(r.get("book_gap"), str) and r.get("book_gap") else None,
+        "mid": bool(r.get("middle")) if r.get("middle") is not None and not pd.isna(r.get("middle")) else False,
+        "lg": _num(r.get("ladder_gap")), "tb": r.get("tag_book") if isinstance(r.get("tag_book"), str) and r.get("tag_book") else None,
+        "take": r.get("take") if isinstance(r.get("take"), str) and r.get("take") else None,
         "y": _num(r.get("actual"), 1), "res": r.get("result") if isinstance(r.get("result"), str) else None,
     }
 

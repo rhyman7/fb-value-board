@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: board-commits      # shared with the board updates and the props, so pushes never collide
@@ -36,6 +37,20 @@ jobs:
         run: |
           python run_market.py snapshot
           python run_market.py status
+          python run_market.py alerts --out /tmp/alerts.md
+      - name: Post opener alerts
+        if: hashFiles('/tmp/alerts.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # one open issue carries the week's alerts; a new one is opened when none is open
+          n=$(gh issue list --label opener-alerts --state open --json number --jq '.[0].number')
+          if [ -z "$n" ]; then
+            gh label create opener-alerts --color FBCA04 --description "Raw model vs Pinnacle, early in the week" 2>/dev/null || true
+            gh issue create --title "Opener alerts, week of $(date -u +%Y-%m-%d)" --label opener-alerts --body-file /tmp/alerts.md
+          else
+            gh issue comment "$n" --body-file /tmp/alerts.md
+          fi
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"

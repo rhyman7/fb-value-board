@@ -6,7 +6,9 @@ For every logged game that has been played: the raw model's miss on the margin a
 current against shadow; for every logged player who played: receiving yards (non-quarterbacks)
 and interceptions (quarterbacks with 10+ attempts). Shown for the pre-registered windows, the
 rest of 2026 (week 9 on) and 2027, with paired standard errors (players clustered by game).
-The shadow version replaces the board's only if it is lower in both windows.
+The shadow version replaces the board's only if it is lower in both windows. The second
+spread version, pass catchers out (shadow.PC_LOG, FEATURES.md "Edge tests, late October
+2026"), is scored the same way on the margin.
 """
 from __future__ import annotations
 
@@ -46,6 +48,15 @@ def main():
             cur, sh = (x[f"{what}_current"] - x[actual]).abs(), (x[f"{what}_shadow"] - x[actual]).abs()
             m, se, n = paired(cur, sh)
             print(f"{name:16s} {what:7s} n {n:4d}  current {cur.mean():.3f}  shadow {sh.mean():.3f}  change {m:+.4f} ± {se:.4f}")
+    if shadow.PC_LOG.exists():
+        pc = pd.read_csv(shadow.PC_LOG).merge(res, on="game_id")
+        for name, sel in WINDOWS.items():
+            x = pc[sel(pc)]
+            cur, sh = (x["margin_current"] - x["result"]).abs(), (x["margin_shadow"] - x["result"]).abs()
+            m, se, n = paired(cur, sh)
+            print(f"{name:16s} {'margin, pass catchers':22s} n {n:4d}  current {cur.mean():.3f}  shadow {sh.mean():.3f}  change {m:+.4f} ± {se:.4f}")
+    else:
+        print("no pass-catchers shadow log yet")
     if shadow.PLAYERS_LOG.exists():
         pg, _ = PD.load_player_games(verbose=False)
         pl = pd.read_csv(shadow.PLAYERS_LOG, dtype={"player_id": str}).merge(pg[["game_id", "player_id", "rec_yds", "ints", "pass_att"]],

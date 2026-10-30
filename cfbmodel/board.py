@@ -13,7 +13,8 @@ import numpy as np
 import pandas as pd
 from scipy.special import ndtr, ndtri
 
-from nflmodel import odds as O
+from nflmodel import market as MK, odds as O
+from nflmodel.slate import _opt, bet_books, cap_game, with_market
 
 from . import bets as B
 from . import config as C
@@ -324,20 +325,28 @@ def win_probs(df: pd.DataFrame, dist: dict) -> pd.DataFrame:
     return out
 
 
-def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None) -> dict:
-    up = frame[~frame.played & frame.spread_line.notna() & frame.total_line.notna()].copy()
+def build_slate(frame, dist, engine, builder, records, abbr, names, openers=None, quotes=None, haircut: float = 1.0) -> dict:
+    """quotes: nflmodel/market.quotes_for(..., "cfb", names=display name -> school) or None.
+    haircut: the share of claimed edge the stakes are sized from (nflmodel.backtest.edge_haircut; 1 = none)."""
+    quotes = quotes or {"latest": {}, "first": {}}
+    cand = frame[~frame.played].copy()
+    sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
+    up = cand[(cand.spread_line.notna() & cand.total_line.notna()) | cand.game_id.isin(sharp)].copy()
     if up.empty:
         return {"weeks": [], "games": [], "book_lines": 0}
-    opened = track_lines(up)
-    games = entries(up, dist, engine, builder, lambda g: records, abbr, names, opened)
+    opened = track_lines(up[up.spread_line.notna() & up.total_line.notna()])
+    up = with_market(up, quotes["latest"])
+    games = entries(up, dist, engine, builder, lambda g: records, abbr, names, opened, quotes, haircut=haircut)
     return {"weeks": sorted({x["week"] for x in games}), "games": games, "book_lines": 0}
 
 
-def entries(up, dist, engine, builder, records_for, abbr, names, opened) -> list[dict]:
+def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=None, haircut: float = 1.0) -> list[dict]:
     """The board's entry for each game in `up` (records_for(game) gives the records to show)."""
+    quotes = quotes or {"latest": {}, "first": {}}
     coded = up.assign(home_team=up.home_team.map(lambda t: abbr.get(t, t)), away_team=up.away_team.map(lambda t: abbr.get(t, t)))
-    adj = B.price_games(coded, dist, "proj")
+    adj = B.price_games(coded, dist, "proj", haircut=haircut)
     raw = B.price_games(coded, dist, "model")
+    shopped = B.shop(coded, dist, quotes["latest"], MK.RETAIL, "proj", haircut=haircut)
     key = ["game_id", "market", "side"]
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
     wins = win_probs(up, dist).set_index("game_id")
@@ -347,7 +356,9 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened) -> list
         bets = [{"market": r.market, "side": r.side, "pick": r.pick,
                  "odds": int(r.odds), "prob": round(r.model_prob, 4), "raw_prob": round(r.raw_prob, 4), "market_prob": round(r.market_prob, 4),
                  "breakeven": round(r.breakeven, 4), "edge": round(r.edge, 4), "ev": round(r.ev, 4), "raw_ev": round(r.raw_ev, 4),
-                 "fair": fair_american(r.model_prob), "stake": round(r.stake, 4)} for r in gb.itertuples(index=False)]
+                 "fair": fair_american(r.model_prob), "stake": round(r.stake, 4),
+                 **bet_books(shopped, g.game_id, r.market, r.side)} for r in gb.itertuples(index=False)]
+        capped = cap_game(bets, C.MAX_GAME_STAKE)
         ha, aa = abbr.get(g.home_team, g.home_team), abbr.get(g.away_team, g.away_team)
         when = pd.Timestamp(g.kickoff).tz_convert("America/New_York")
         qb = lambda side: {"name": engine.q_name.get(getattr(g, f"{side}_qb_id"), "Unknown") if isinstance(getattr(g, f"{side}_qb_id"), str) else "Unknown",
@@ -365,9 +376,13 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened) -> list
             "opening_spread": _f(g.open_spread, 1) if pd.notna(g.open_spread) else None,
             "opening_total": _f(g.open_total, 1) if pd.notna(g.open_total) else None,
             "line_source": getattr(g, "line_source", None) if isinstance(getattr(g, "line_source", None), str) else "cfbfastR consensus",
+            "anchor": getattr(g, "anchor", "consensus"),
+            "sharp_open": quotes["first"].get(g.game_id),
+            "books": {bk: {k: v for k, v in q.items() if k != "away_spread_point"} for bk, q in (quotes["latest"].get(g.game_id) or {}).items()},
             "detail": builder.detail(g) if builder is not None else None,
             "roof": "dome" if g.indoor else "outdoors",
-            "wind": ({"mph": round(float(g.wind), 1), "source": src, "under_angle": bool(WIND_LO <= g.wind < WIND_HI)}
+            "wind": ({"mph": round(float(g.wind), 1), "source": src, "under_angle": bool(WIND_LO <= g.wind < WIND_HI),
+                      "gust": _opt(getattr(g, "wind_gust", None)), "dir": _opt(getattr(g, "wind_dir", None), 0)}
                      if src in ("forecast", "recorded") and getattr(g, "wind_known", 0) else None),
             "away_qb": qb("away"), "home_qb": qb("home"),
             # the line as a book posts it (the data's consensus is an average across books)
@@ -376,7 +391,7 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened) -> list
             "model": {"margin": round(float(g.model_margin), 2), "total": round(float(g.model_total), 2)},
             "proj": {"margin": round(float(g.proj_margin), 2), "total": round(float(g.proj_total), 2)},
             "win": {"adj": round(float(w["adj"]), 4), "raw": round(float(w["raw"]), 4), "market": round(float(w["market"]), 4)},
-            "bets": bets,
+            "bets": bets, **capped,
         })
     return games
 

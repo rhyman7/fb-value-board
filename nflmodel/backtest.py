@@ -48,6 +48,36 @@ def _record(b: pd.DataFrame) -> dict:
     }
 
 
+def edge_haircut(graded: pd.DataFrame, before_season: int, lookback: int = C.BLEND_LOOKBACK) -> dict:
+    """How much of the claimed edge was real: on the graded market-adjusted bets with EV above
+    0 from the seasons before `before_season`, the slope of realized profit on claimed EV
+    through the origin (profit = h x EV), clipped to [0, 1]. h = 1 means the bets returned
+    what they claimed; h = 0 means none of the edge showed up. Reported per season and over
+    the last `lookback` seasons (`factor`, the one the board uses for stakes:
+    config.EDGE_HAIRCUT). Works on either board's graded table (nflmodel/cfbmodel backtest)."""
+    g = graded[(graded.source == "proj") & (graded.ev > 0) & graded.profit.notna() & (graded.season < before_season)]
+
+    def slope(x: pd.DataFrame) -> dict:
+        ev, pr = x.ev.to_numpy(float), x.profit.to_numpy(float)
+        if len(x) < 50 or not (ev @ ev):
+            return {"n": int(len(x)), "slope": None, "factor": None}
+        h = float(ev @ pr / (ev @ ev))
+        # one standard error of the slope, from the residuals
+        resid = pr - h * ev
+        se = float(np.sqrt((resid @ resid) / max(len(x) - 1, 1) / (ev @ ev)))
+        return {"n": int(len(x)), "slope": round(h, 3), "se": round(se, 3), "factor": round(min(max(h, 0.0), 1.0), 3),
+                "claimed": round(float(ev.mean()), 4), "realized": round(float(pr.mean()), 4)}
+
+    window = g[g.season >= before_season - lookback]
+    out = slope(window)
+    out["seasons"] = f"{int(window.season.min())}-{int(window.season.max())}" if len(window) else None
+    out["by_season"] = [{"season": int(s), **slope(x)} for s, x in g.groupby("season")]
+    out["by_market"] = {m: slope(x) for m, x in window.groupby("market")}
+    if out["factor"] is None:
+        out["factor"] = 1.0
+    return out
+
+
 def leans(b: pd.DataFrame) -> pd.DataFrame:
     """The better side of each market in each game: one bet per game per market."""
     return b.loc[b.groupby(["game_id", "market"]).ev.idxmax()]
