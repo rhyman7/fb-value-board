@@ -34,13 +34,16 @@ def _games():
     })
 
 
-def _fake_archive(calls):
-    def fetch(lat, lon, day):
-        calls.append((lat, lon, day))
-        if day == "2015-09-20":
+def _fake_archive(calls, fail_end="2015-09-20"):
+    """A stadium-season range: the hour of day as the speed, every day the same."""
+    def fetch(lat, lon, start, end):
+        calls.append((lat, lon, start, end))
+        if end == fail_end and start != end:
             raise OSError("archive down")
-        return {"wind_speed_10m": [float(h) for h in range(24)], "wind_gusts_10m": [1.5 * h for h in range(24)],
-                "wind_direction_10m": [90] * 24}
+        days = pd.date_range(start, end, freq="D").strftime("%Y-%m-%d")
+        return {"time": [f"{d}T{h:02d}:00" for d in days for h in range(24)],
+                "wind_speed_10m": [float(h) for _ in days for h in range(24)], "wind_gusts_10m": [1.5 * h for _ in days for h in range(24)],
+                "wind_direction_10m": [90] * (24 * len(days))}
     return fetch
 
 
@@ -49,22 +52,27 @@ def test_fetch_wind_history_cache(tmp_path):
     cache = tmp_path / "wind_history.csv"
     calls = []
     out = fw.run(_games(), cache, fetch=_fake_archive(calls), pause=0, verbose=False)
-    # one call per stadium per day: Lambeau 9/13 (two games), Coliseum 9/13, Lambeau 9/20 (fails); the dome,
-    # the 2013 game and the unplayed game are not wanted
-    assert [c[2] for c in calls] == ["2015-09-13", "2015-09-13", "2015-09-20"]
-    assert list(out.columns) == fw.COLS and sorted(out.game_id) == ["2015_01_A_GB", "2015_01_B_GB", "2015_01_C_LA"]
+    # one call per stadium per season: Lambeau 2015 (9/13 to 9/20, fails), Coliseum 2015; the dome, the 2013 game
+    # and the unplayed game are not wanted
+    assert [(c[2], c[3]) for c in calls] == [("2015-09-13", "2015-09-13"), ("2015-09-13", "2015-09-20")]
+    assert sorted(out.game_id) == ["2015_01_C_LA"]
+    # the Lambeau call succeeds this time: both days come from one block
+    out = fw.run(_games(), cache, fetch=_fake_archive(calls, fail_end="never"), pause=0, verbose=False)
+    assert list(out.columns) == fw.COLS and sorted(out.game_id) == ["2015_01_A_GB", "2015_01_B_GB", "2015_01_C_LA", "2015_02_F_GB"]
     a = out.set_index("game_id")
     assert a.loc["2015_01_A_GB", "wind_mph"] == 13 and a.loc["2015_01_B_GB", "wind_mph"] == 20   # kickoff hours 13 and 20
     assert a.loc["2015_01_A_GB", "gust_mph"] == 19.5 and a.loc["2015_01_A_GB", "dir_deg"] == 90
     assert a.loc["2015_01_A_GB", "bearing"] == 0 and a.loc["2015_01_A_GB", "bearing_conf"] == "measured"
     assert a.loc["2015_01_A_GB", "along_mph"] == 0 and a.loc["2015_01_A_GB", "cross_mph"] == 13   # east wind across a north-south field
     assert a.loc["2015_01_C_LA", "bearing"] == 90 and a.loc["2015_01_C_LA", "along_mph"] == 16 and abs(a.loc["2015_01_C_LA", "lat"] - 34.014) < 1e-6
-    # resumable: the failed day is retried, the cached games are not
+    # resumable: cached games are not fetched again
     calls.clear()
     fetch = _fake_archive(calls)
-    out2 = fw.run(_games(), cache, fetch=lambda lat, lon, day: {"wind_speed_10m": [3.0] * 24}, pause=0, verbose=False)
-    assert len(out2) == 4 and out2.game_id.is_unique and np.isnan(out2.set_index("game_id").loc["2015_02_F_GB", "gust_mph"])
+    out2 = fw.run(_games(), cache, fetch=fetch, pause=0, verbose=False)
+    assert len(calls) == 0 and len(out2) == 4 and out2.game_id.is_unique
     assert len(pd.read_csv(cache)) == 4
+    # a day's block without a "time" list still works (the forecast shape)
+    assert fw.rows_for(fw.wanted(_games()).head(1), {"wind_speed_10m": [3.0] * 24}, "now")[0]["wind_mph"] == 3.0
     # --limit stops after that many calls
     cache2 = tmp_path / "w2.csv"
     calls.clear()
@@ -76,7 +84,7 @@ def test_wind_direction_test_reads_cache(tmp_path):
     fw = _load("fetch_wind_history")
     wt = _load("wind_direction_test")
     cache = tmp_path / "wind_history.csv"
-    fw.run(_games(), cache, fetch=_fake_archive([]), pause=0, verbose=False)
+    fw.run(_games(), cache, fetch=_fake_archive([], fail_end="never"), pause=0, verbose=False)
     arch = wt.load_archive(cache)
     assert list(arch.columns) == ["game_id", "arch_wind", "gust", "dir", "along", "cross", "bearing_conf"]
     g = wt.attach(_games(), arch)

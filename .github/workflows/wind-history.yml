@@ -2,9 +2,10 @@ name: Wind history
 
 # The wind at kickoff (speed, gusts, direction) for every played outdoor NFL home game since
 # 2014, from Open-Meteo's free history archive, for experiments/wind_direction_test.py.
-# Run by hand only. One call per stadium per game day with 0.3 s between calls (about
-# 2,000 calls the first time, a few minutes); a failed call is skipped and tried again next
-# run, and games already in data/cache/wind_history.csv are not fetched again.
+# Run by hand only. One call per stadium per season with 0.3 s between calls (about 400
+# calls the first time, a few minutes); a failed call is skipped and tried again next run,
+# and games already in data/cache/wind_history.csv are not fetched again. The fetch step has
+# its own time limit so the commit step always runs with whatever was fetched.
 
 on:
   workflow_dispatch:
@@ -32,6 +33,8 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Fetch
+        timeout-minutes: 45
+        continue-on-error: true
         run: |
           if [ -n "${{ inputs.limit }}" ]; then
             python experiments/fetch_wind_history.py --limit "${{ inputs.limit }}"
