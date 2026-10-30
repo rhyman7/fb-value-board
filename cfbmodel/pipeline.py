@@ -7,6 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
+from nflmodel import market
 from nflmodel.pipeline import _clean
 
 from . import archive, backtest, bets, board, config as C, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
@@ -81,7 +82,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     builder = board.MatchupBuilder(games, qb, stats, engine, info[season], season, abbr)
     records = board.season_records(games, season)
     cur = frame[frame.season == season]
-    slate = board.build_slate(cur, dist, engine, builder, records, abbr, names)
+    quotes = market.quotes_for(cur[~cur.played], "cfb", names={v: k for k, v in names.items()})
+    slate = board.build_slate(cur, dist, engine, builder, records, abbr, names, quotes=quotes)
     upcoming = frame[~frame.played & frame.spread_line.notna() & (frame.season == season)]
     order_now = int(upcoming.order.min()) if len(upcoming) else int(frame.order.max()) + 1
     r = engine.ratings_at(order_now)
@@ -135,7 +137,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     try:
         week_now = int(order_now % 100)
         have_past = any(int(f.stem.split("_w")[1]) < week_now for f in archive.ARCH.glob(f"{season}_w*.json"))
-        archive.update(out, games, pg, verbose=verbose)
+        done = games[games.played & (games.season == season)]
+        close = market.closing_quotes(done, "cfb", {g.game_id: pd.Timestamp(g.kickoff) for g in done.itertuples()},
+                                      names={v: k for k, v in names.items()})
+        archive.update(out, games, pg, verbose=verbose, close=close,
+                       curve=lambda df: bets.curves(df, dist, "line"))
         if not have_past or with_backtest:
             backfill(out, frame, games, dist, engine, abbr, names, season, ptable, pg, verbose)
     except Exception as exc:

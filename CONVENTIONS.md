@@ -73,6 +73,16 @@ boards in detail; this file is the rules.
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
   Kalshi prices are the contract price; `odds.kalshi_effective_odds` adds the exchange fee
   (taker 7% x p x (1-p) per contract, maker 1.75%) before any EV is computed.
+  **On the boards:** where Pinnacle quotes a game, its line and two-way prices are the anchor
+  the projection is blended from (`slate.with_market`, both boards; the game's `anchor` says
+  which) and the consensus line is only the fallback; a game Pinnacle quotes before the
+  consensus has a line is on the board already. Every side carries each retail book's price at
+  that book's own line (`bets.shop`: `books`, `best*`, and `beats_sharp` when a price beats the
+  anchor's no-vig number with no model at all), the page shows the best book, and the archive
+  grades each flagged bet's closing line value against Pinnacle's last quote before kickoff
+  (`archive.closing_value`; `clv` and `beat_close` in each week's record). The Action also runs
+  `run_market.py alerts`: raw model 2+ points off Pinnacle's spread (NFL; 3+ college) or 3+ off
+  its total goes to `data/market/alerts.csv` and is posted to the open `opener-alerts` issue.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model, `out` takes a player
   out of the player projections. Use it only for confirmed news the nflverse schedule or the

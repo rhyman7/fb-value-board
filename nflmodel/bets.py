@@ -49,6 +49,50 @@ def _fmt(x: float, signed: bool = True) -> str:
     return f"{x:+g}" if signed else f"{x:g}"
 
 
+def curves(df: pd.DataFrame, dist: dict, source: str = "proj", margins=None, totals=None, snap=None) -> dict:
+    """The outcome curves for each game in `df` (reset index first), centred on `source`:
+    the margin and total pmfs (one row per game) and each side's win chance.
+
+    source = "proj"   market-adjusted projection (the one to bet from)
+    source = "model"  raw model, before it is pulled toward the market
+    source = "line"   the market alone (no disagreement): what the anchor's no-vig price says
+    margins, totals: the outcome supports (the NFL's by default); snap: rounds a line to one a
+    book would post (the college board's half-point rounding).
+    """
+    MG = D.MARGINS if margins is None else margins
+    TT = D.TOTALS if totals is None else totals
+
+    def col(name):
+        return df[name].to_numpy(float) if name in df else np.full(len(df), np.nan)
+
+    def price_of(name, default=None):
+        x = col(name)
+        return x if default is None else np.where(np.isnan(x), default, x)
+
+    raw_spread, raw_total = col("spread_line"), col("total_line")     # positive = home favoured
+    spread, total = (snap(raw_spread), snap(raw_total)) if snap else (raw_spread, raw_total)
+    d_margin = np.zeros(len(df)) if source == "line" else col(f"{source}_margin") - raw_spread    # disagreement with the line
+    d_total = np.zeros(len(df)) if source == "line" else col(f"{source}_total") - raw_total
+
+    # Anchor each curve to the market's own no-vig price, then slide it by the disagreement.
+    fair_home, _ = O.no_vig(price_of("home_spread_odds", DEFAULT_PRICE), price_of("away_spread_odds", DEFAULT_PRICE))
+    fair_over, _ = O.no_vig(price_of("over_odds", DEFAULT_PRICE), price_of("under_odds", DEFAULT_PRICE))
+    loc_m = D.anchor(spread, fair_home, dist["sd_margin"], MG, dist["margin"]) + d_margin
+    loc_t = D.anchor(total, fair_over, dist["sd_total"], TT, dist["total"]) + d_total
+    pm = D.pmf(loc_m, dist["sd_margin"], MG, dist["margin"])
+    pt = D.pmf(loc_t, dist["sd_total"], TT, dist["total"])
+
+    # Moneyline: start from the market's no-vig win probability, expressed as a
+    # margin on the win-probability curve, and slide by the same disagreement.
+    tie = pm[:, MG == 0].ravel()
+    fair_ml, _ = O.no_vig(col("home_moneyline"), col("away_moneyline"))
+    implied = np.where(np.isnan(fair_ml), raw_spread, dist["sd_win"] * ndtri(np.clip(fair_ml, 1e-4, 1 - 1e-4)))
+    h_win = ndtr((implied + d_margin) / dist["sd_win"]) * (1 - tie)
+    a_win = 1 - tie - h_win
+    return {"pm": pm, "pt": pt, "tie": tie, "h_win": h_win, "a_win": a_win, "spread": spread, "total": total,
+            "margins": MG, "totals": TT}
+
+
 def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFrame:
     """Return the long table of bets for the games in `df`.
 
@@ -64,28 +108,11 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFr
         x = col(name)
         return x if default is None else np.where(np.isnan(x), default, x)
 
-    spread = col("spread_line")                            # positive = home favoured
-    total = col("total_line")
-    d_margin = col(f"{source}_margin") - spread            # how far we disagree with the line
-    d_total = col(f"{source}_total") - total
-
-    # Anchor each curve to the market's own no-vig price, then slide it by the disagreement.
-    fair_home, _ = O.no_vig(price_of("home_spread_odds", DEFAULT_PRICE), price_of("away_spread_odds", DEFAULT_PRICE))
-    fair_over, _ = O.no_vig(price_of("over_odds", DEFAULT_PRICE), price_of("under_odds", DEFAULT_PRICE))
-    loc_m = D.anchor(spread, fair_home, dist["sd_margin"], D.MARGINS, dist["margin"]) + d_margin
-    loc_t = D.anchor(total, fair_over, dist["sd_total"], D.TOTALS, dist["total"]) + d_total
-    pm = D.pmf(loc_m, dist["sd_margin"], D.MARGINS, dist["margin"])
-    pt = D.pmf(loc_t, dist["sd_total"], D.TOTALS, dist["total"])
+    cv = curves(df, dist, source)
+    spread, total, pm, pt = cv["spread"], cv["total"], cv["pm"], cv["pt"]
     h_cov, s_push, a_cov = D.over_push_under(pm, D.MARGINS, spread)
     over, t_push, under = D.over_push_under(pt, D.TOTALS, total)
-
-    # Moneyline: start from the market's no-vig win probability, expressed as a
-    # margin on the win-probability curve, and slide by the same disagreement.
-    tie = pm[:, D.MARGINS == 0].ravel()
-    fair_ml, _ = O.no_vig(col("home_moneyline"), col("away_moneyline"))
-    implied = np.where(np.isnan(fair_ml), spread, dist["sd_win"] * ndtri(np.clip(fair_ml, 1e-4, 1 - 1e-4)))
-    h_win = ndtr((implied + d_margin) / dist["sd_win"]) * (1 - tie)
-    a_win = 1 - tie - h_win
+    tie, h_win, a_win = cv["tie"], cv["h_win"], cv["a_win"]
 
     res = col("result")
     tot = col("total")
@@ -119,3 +146,63 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFr
         }))
     b = pd.concat(out, ignore_index=True)
     return b[b["odds"].notna() & b["ev"].notna()].reset_index(drop=True)
+
+
+# --------------------------------------------------------------------------
+# Line shopping
+# --------------------------------------------------------------------------
+
+def _side_prob(cv: dict, i: int, market: str, side: str, line) -> tuple[float, float]:
+    """(p_win, p_push) for one side of one market at a book's own line, from the curves."""
+    if market == "Moneyline":
+        return (float(cv["h_win"][i]) if side == "home" else float(cv["a_win"][i])), float(cv["tie"][i])
+    if market == "Spread":
+        h, push, a = D.over_push_under(cv["pm"][i:i + 1], cv["margins"], line)
+        return (float(h[0]) if side == "home" else float(a[0])), float(push[0])
+    o, push, u = D.over_push_under(cv["pt"][i:i + 1], cv["totals"], line)
+    return (float(o[0]) if side == "over" else float(u[0])), float(push[0])
+
+
+def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: str = "proj",
+         kalshi_maker: bool = False, margins=None, totals=None, snap=None) -> dict:
+    """Every book's price on every side, scored at that book's own line.
+
+    quotes: {game_id: {book: {spread_line, home_spread_odds, ..., total_line, over_odds, ...}}}
+    (nflmodel/market.latest). Returns {(game_id, market, side): [quote, ...]} sorted best EV
+    first, each quote {book, line, odds, odds_net, prob, p_push, ev, ev_line, stake}:
+      prob, ev     from `source` (the market-adjusted projection)
+      ev_line      from the anchor's own no-vig price with no model at all: positive means
+                   this book's price beats the sharp reference, whatever the model thinks
+      odds_net     the price after Kalshi's fee (equal to odds elsewhere)
+    """
+    df = df.reset_index(drop=True)
+    cv = curves(df, dist, source, margins, totals, snap)
+    cv0 = curves(df, dist, "line", margins, totals, snap)
+    out: dict = {}
+    for i, gid in enumerate(df["game_id"]):
+        q = quotes.get(gid) or {}
+        for book in books:
+            b = q.get(book)
+            if not b:
+                continue
+            for market, side, line_key, price_key in (
+                    ("Spread", "home", "spread_line", "home_spread_odds"), ("Spread", "away", "spread_line", "away_spread_odds"),
+                    ("Total", "over", "total_line", "over_odds"), ("Total", "under", "total_line", "under_odds"),
+                    ("Moneyline", "home", None, "home_moneyline"), ("Moneyline", "away", None, "away_moneyline")):
+                price = b.get(price_key)
+                line = b.get(line_key) if line_key else None
+                if price is None or (line_key and line is None):
+                    continue
+                net = float(O.kalshi_effective_odds(price, kalshi_maker)) if book == "kalshi" else float(price)
+                p, push = _side_prob(cv, i, market, side, line)
+                p0, push0 = _side_prob(cv0, i, market, side, line)
+                ev = float(O.expected_value(p, net, push))
+                stake = float(min(O.kelly(p, net, push) * C.KELLY_FRACTION, C.MAX_STAKE))
+                shown = (-line if side == "home" else line) if market == "Spread" else line
+                out.setdefault((gid, market, side), []).append({
+                    "book": book, "line": None if shown is None else float(shown), "odds": float(price), "odds_net": round(net, 1),
+                    "prob": round(p / (1 - push), 4), "p_push": round(push, 4), "ev": round(ev, 4),
+                    "ev_line": round(float(O.expected_value(p0, net, push0)), 4), "stake": round(stake, 4)})
+    for k in out:
+        out[k].sort(key=lambda x: -x["ev"])
+    return out

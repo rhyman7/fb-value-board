@@ -233,17 +233,24 @@ def latest(rows: pd.DataFrame) -> dict:
     return out
 
 
-def quotes_for(games: pd.DataFrame, league: str, names: dict | None = None, root: Path = DIR) -> dict:
-    """The latest quotes per book for the games given (load, match, latest), or {}."""
+def quotes_for(games: pd.DataFrame, league: str, names: dict | None = None, root: Path = DIR,
+               before: pd.Timestamp | None = None) -> dict:
+    """The stored quotes for the games given: {"latest": latest(rows), "first": first_seen(rows)},
+    both empty when nothing is stored or matching fails. `before` keeps only snapshots taken
+    before that time (for closing lines)."""
+    empty = {"latest": {}, "first": {}}
     try:
-        rows = match_games(load(league, root), games, league, names)
+        rows = load(league, root)
+        if before is not None and len(rows):
+            rows = rows[pd.to_datetime(rows["snapshot"], utc=True) < before]
+        rows = match_games(rows, games, league, names)
     except Exception as exc:
         print(f"  market quotes {league}: skipped ({exc})")
-        return {}
+        return empty
     miss = unmatched(rows)
     if miss:
         print(f"  market quotes {league}: {len(miss)} unmatched names: {', '.join(miss[:8])}{' ...' if len(miss) > 8 else ''}")
-    return latest(rows)
+    return {"latest": latest(rows), "first": first_seen(rows)}
 
 
 def first_seen(rows: pd.DataFrame, book: str = SHARP) -> dict:
@@ -282,3 +289,29 @@ def anchor(df: pd.DataFrame, quotes: dict, book: str = SHARP) -> tuple[pd.DataFr
                 df.at[i, c] = q[c]
         src[i] = book
     return df, src
+
+
+def closing_quotes(games: pd.DataFrame, league: str, kickoffs: dict, names: dict | None = None,
+                   book: str = SHARP, root: Path = DIR) -> dict:
+    """{game_id: quote} from `book`'s last stored snapshot before each game's kickoff
+    (kickoffs: game_id -> UTC Timestamp). The closing line value of every bet is measured
+    against this."""
+    out: dict = {}
+    try:
+        rows = match_games(load(league, root, months=3), games, league, names)
+    except Exception as exc:
+        print(f"  closing quotes {league}: skipped ({exc})")
+        return out
+    if rows.empty:
+        return out
+    rows = rows[rows["game_id"].notna() & (rows["book"] == book)].copy()
+    rows["ts"] = pd.to_datetime(rows["snapshot"], utc=True)
+    for gid, q in rows.groupby("game_id"):
+        ko = kickoffs.get(gid)
+        if ko is None:
+            continue
+        before = q[q["ts"] < pd.Timestamp(ko)]
+        if before.empty:
+            continue
+        out[gid] = latest(before.assign(game_id=gid)).get(gid, {}).get(book)
+    return {k: v for k, v in out.items() if v}

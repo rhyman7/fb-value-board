@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import archive, backtest, bets, config as C, data, extra, injuries, matchup, model, overrides, players, players_data, slate, weather
+from . import archive, backtest, bets, config as C, data, extra, injuries, market, matchup, model, overrides, players, players_data, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -141,7 +141,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)", "nfelo games file (opening lines)",
                         "The Odds API (DraftKings and FanDuel player props)"],
         },
-        "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season), openers),
+        "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season), openers,
+                             quotes=market.quotes_for(frame[(frame.season == season) & ~frame.played], "nfl")),
         "ratings": slate.ratings_table(engine, r, info[season]["margin_coefs"], games, frame, season),
         "key_numbers": backtest.key_number_report(games, dist, season),
     }
@@ -158,7 +159,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     C.DOCS.mkdir(exist_ok=True)
     (C.DOCS / "data.json").write_text(json.dumps(out, separators=(",", ":")))
     try:                                          # keep each week's predictions, frozen at kickoff
-        archive.update(out, games, pg, verbose=verbose)
+        done = games[games.played & (games.season == season)]
+        close = market.closing_quotes(done, "nfl", {g.game_id: archive.kickoff(g.gameday, g.gametime) for g in done.itertuples()})
+        archive.update(out, games, pg, verbose=verbose, close=close, curve=lambda df: bets.curves(df, dist, "line"))
     except Exception as exc:
         print(f"  archive skipped ({exc})")
     build_page(out)

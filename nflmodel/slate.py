@@ -8,6 +8,7 @@ import pandas as pd
 
 from . import config as C
 from . import bets as B
+from . import market as MK
 from . import odds as O
 
 LINE_COLS = ["spread_line", "home_spread_odds", "away_spread_odds", "total_line", "over_odds", "under_odds",
@@ -74,16 +75,46 @@ def fair_american(p: float) -> int | None:
 WIND_LO, WIND_HI = 10.0, 20.0   # mph band where closing totals have run high (backtest.wind_report)
 
 
-def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None, openers: pd.DataFrame | None = None) -> dict:
-    up = frame[~frame.played & frame.spread_line.notna() & frame.total_line.notna()].copy()
+def with_market(up: pd.DataFrame, quotes: dict) -> pd.DataFrame:
+    """Anchor each game to the sharp book's line and prices where it quotes the game, and
+    re-blend the projection to that anchor: proj = anchor + w x (model - anchor). Games the
+    sharp book does not quote keep their consensus line. Adds `anchor` (pinnacle/consensus)."""
+    up, src = MK.anchor(up, quotes)
+    up["anchor"] = src
+    for what, line in (("margin", "spread_line"), ("total", "total_line")):
+        ok = up[line].notna() & up[f"w_{what}"].notna()
+        up.loc[ok, f"proj_{what}"] = up.loc[ok, line] + up.loc[ok, f"w_{what}"] * (up.loc[ok, f"model_{what}"] - up.loc[ok, line])
+    return up
+
+
+def bet_books(shopped: dict, gid, market: str, side: str) -> dict:
+    """The per-book quotes for one side, with the best price and whether any beats the sharp line."""
+    q = shopped.get((gid, market, side)) or []
+    if not q:
+        return {}
+    by_line = max(q, key=lambda x: x["ev_line"])
+    return {"books": q, "best": q[0]["book"], "best_odds": q[0]["odds"], "best_line": q[0]["line"], "best_ev": q[0]["ev"],
+            "beats_sharp": by_line["book"] if by_line["ev_line"] > 0 else None, "sharp_ev": by_line["ev_line"]}
+
+
+def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None, openers: pd.DataFrame | None = None,
+          quotes: dict | None = None) -> dict:
+    """quotes: nflmodel/market.quotes_for(...) for this frame's unplayed games, or None."""
+    quotes = quotes or {"latest": {}, "first": {}}
+    cand = frame[~frame.played].copy()
+    sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
+    # games with a consensus line, plus any the sharp book already quotes (the week's openers)
+    up = cand[(cand.spread_line.notna() & cand.total_line.notna()) | cand.game_id.isin(sharp)].copy()
     if up.empty:
         return {"weeks": [], "games": [], "book_lines": 0}
-    opened = track_lines(up)
+    opened = track_lines(up[up.spread_line.notna() & up.total_line.notna()])
+    up = with_market(up, quotes["latest"])
     true_open = dict(zip(openers.game_id, openers.open_spread)) if openers is not None and len(openers) else {}
     records = records or {}
     priced, n_book = apply_book_lines(up)
     adj = B.price_games(priced, dist, "proj")
     raw = B.price_games(priced, dist, "model")
+    shopped = B.shop(priced, dist, quotes["latest"], MK.RETAIL, "proj")
     key = ["game_id", "market", "side"]
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
 
@@ -98,6 +129,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
                 "prob": round(r.model_prob, 4), "raw_prob": round(r.raw_prob, 4), "market_prob": round(r.market_prob, 4),
                 "breakeven": round(r.breakeven, 4), "edge": round(r.edge, 4), "ev": round(r.ev, 4), "raw_ev": round(r.raw_ev, 4),
                 "fair": fair_american(r.model_prob), "stake": round(r.stake, 4),
+                **bet_books(shopped, g.game_id, r.market, r.side),
             })
 
         def qb(side):
@@ -118,6 +150,9 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "early": bool(getattr(g, "early", False)), "weight": round(float(g.w_margin), 3),
             "open": opened.get(g.game_id),
             "opening_spread": float(true_open[g.game_id]) if g.game_id in true_open else None,
+            "anchor": getattr(g, "anchor", "consensus"),
+            "sharp_open": quotes["first"].get(g.game_id),
+            "books": {bk: {k: v for k, v in q.items() if k != "away_spread_point"} for bk, q in (quotes["latest"].get(g.game_id) or {}).items()},
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
             "wind": ({"mph": round(float(g.wind), 1), "source": g.wind_source,

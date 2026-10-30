@@ -545,6 +545,20 @@ td .act { font-weight: 700; }
         <div class="scroll"><table id="bets" aria-labelledby="bets-h"></table></div>
         <p class="note"><button class="link" id="bets-more" type="button"></button></p>
       </section>
+
+      <section aria-labelledby="boost-h">
+        <div class="section-head">
+          <h2 id="boost-h">Price a boost or a promo</h2>
+          <p class="note">A book's odds boost, no-sweat bet or profit boost on one of this week's sides, priced against the sharp no-vig number and against the model. Enter the odds the book is offering after the boost; for a profit boost, enter the base odds and the boost percentage.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Boost">
+          <label class="field-label" for="boost-side">Side<select class="money" id="boost-side"></select></label>
+          <label class="field-label" for="boost-odds">Odds offered<input class="money" id="boost-odds" type="number" step="1" placeholder="-110" inputmode="numeric"></label>
+          <label class="field-label" for="boost-pct">Profit boost %<input class="money" id="boost-pct" type="number" step="5" min="0" placeholder="0" inputmode="numeric"></label>
+          <label class="field-label" for="boost-book">Book<select class="money" id="boost-book"><option value="">Any book</option><option value="kalshi">Kalshi (taker fee)</option><option value="kalshi_maker">Kalshi (maker fee)</option></select></label>
+        </div>
+        <p class="note" id="boost-out">Pick a side and enter the odds.</p>
+      </section>
     </div>
 
     <!-- ============ one game ============ -->
@@ -912,7 +926,20 @@ try { const b = parseFloat(localStorage.getItem("nflvb.bankroll")); if (b >= 0) 
 $("#bankroll").value = state.bankroll;
 const ALL = DATA.slate.games;
 const games = () => ALL.filter(g => g.week === state.week);
-const evOf = b => state.basis === "adj" ? b.ev : b.raw_ev;
+/* Line shopping: each side carries every book's price at that book's own line (b.books), the
+   best of them (b.best*), and the book whose price beats the sharp anchor's no-vig number on
+   its own, with no model (b.beats_sharp). The market-adjusted EV uses the best price. */
+const BOOK = { pinnacle: "Pinnacle", draftkings: "DraftKings", fanduel: "FanDuel", betmgm: "BetMGM", kalshi: "Kalshi" };
+const bookName = k => BOOK[k] || k;
+const shopped = b => state.basis === "adj" && b.best != null;
+const evOf = b => state.basis === "adj" ? (b.best != null ? Math.max(b.ev, b.best_ev) : b.ev) : b.raw_ev;
+const oddsOf = b => shopped(b) && b.best_ev >= b.ev ? b.best_odds : b.odds;
+const bookOf = b => shopped(b) && b.best_ev >= b.ev ? bookName(b.best) : null;
+/* the pick with the best book's line when it differs from the anchor's */
+const pickOf = b => { if (!shopped(b) || b.best_ev < b.ev || b.best_line == null || b.market === "Moneyline") return b.pick; const l = b.best_line, parts = b.pick.split(" "), anchor = parseFloat(parts[1].replace("PK", "0").replace("−", "-").replace("+", "")); return Math.abs(l - anchor) < 0.01 ? b.pick : parts[0] + " " + (b.market === "Total" ? String(l) : line(l)); };
+const bestCell = b => { if (!b.best) return "—"; const q = b.books.find(x => x.book === b.best) || {}; const parts = [document.createTextNode(bookName(b.best) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds))];
+  if (b.beats_sharp) { parts.push(document.createTextNode(" ")); parts.push(H("span", { class: "chip", text: "beats " + bookName(M.sharp_book || "pinnacle"), title: "This price beats the sharp book's no-vig number at this line on its own, before the model: " + spct(b.sharp_ev) + " per dollar" })); }
+  return H("span", {}, ...parts); };
 const probOf = b => state.basis === "adj" ? b.prob : b.raw_prob;
 const lean = (g, market) => g.bets.filter(b => b.market === market).sort((a, b) => evOf(b) - evOf(a))[0];
 const best = g => g.bets.slice().sort((a, b) => evOf(b) - evOf(a))[0];
@@ -941,8 +968,10 @@ function renderHero() {
     lede.append(
       H("strong", { text: all.length + (all.length === 1 ? " game" : " games") + " to play. " }),
       document.createTextNode(plus.length
-        ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + top.b.pick + " at " + odds(top.b.odds) + ", worth " + spct(evOf(top.b)) + " per dollar staked."
-        : "No bet clears break-even once the model is weighed against the market. The closest is " + top.b.pick + " at " + odds(top.b.odds) + ", " + spct(evOf(top.b)) + " per dollar staked."));
+        ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", worth " + spct(evOf(top.b)) + " per dollar staked."
+        : "No bet clears break-even once the model is weighed against the market. The closest is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", " + spct(evOf(top.b)) + " per dollar staked."));
+    const sharp = all.filter(g => g.anchor && g.anchor !== "consensus").length, beats = all.flatMap(g => g.bets).filter(b => b.beats_sharp).length;
+    if (sharp) lede.append(document.createTextNode(" " + sharp + (sharp === 1 ? " game is" : " games are") + " anchored to " + bookName(all.find(g => g.anchor !== "consensus").anchor) + "'s line and shopped across " + Object.values(BOOK).filter(n => n !== "Pinnacle").join(", ") + (beats ? "; " + beats + (beats === 1 ? " price beats" : " prices beat") + " the sharp number before the model says anything." : ".")));
   }
 }
 $("#stamp").textContent = M.season + " season. Results through " + M.games_through + ". Updated " + M.generated + ".";
@@ -969,7 +998,7 @@ function renderCards() {
         cell("Spread"), cell(fav(g, g.market.spread), "r"), cell(fav(g, g.model.margin), "r b"),
         cell("Total"), cell(g.market.total.toFixed(1), "r"), cell(g.model.total.toFixed(1), "r b")),
       H("div", { class: "bug-foot" },
-        ev > 0 ? H("span", {}, H("span", { class: "chip", text: spct(ev) }), document.createTextNode(" " + b.pick + " " + odds(b.odds)))
+        ev > 0 ? H("span", {}, H("span", { class: "chip", text: spct(ev) }), document.createTextNode(" " + pickOf(b) + " " + odds(oddsOf(b)) + (bookOf(b) ? " " + bookOf(b) : "")))
                : H("span", { class: "muted", text: "No bet clears break-even" }),
         H("span", { class: "go", text: "Open game" })));
   }));
@@ -1041,12 +1070,13 @@ function drawBoard(W) {
 }
 const redrawBoard = responsive($("#board"), drawBoard);
 
-const priceHead = [{ t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market, no vig" }, { t: "Break-even" }, { t: "EV per $1" }, { t: "Fair price" }, { t: "Stake" }];
-const priceRow = b => { const p = probOf(b); return [{ v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evCell(evOf(b)), odds(fairOf(p)), state.basis === "adj" ? stakeText(b) : "—"]; };
+const priceHead = [{ t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market, no vig" }, { t: "Break-even" }, { t: "EV per $1" }, { t: "Fair price" }, { t: "Best book", l: 1 }, { t: "Stake" }];
+const bestStake = b => shopped(b) && b.best_ev >= b.ev ? ((b.books.find(x => x.book === b.best) || {}).stake || 0) : b.stake;
+const priceRow = b => { const p = probOf(b); return [{ v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evCell(evOf(b)), odds(fairOf(p)), bestCell(b), state.basis === "adj" ? stakeText({ stake: bestStake(b) }) : "—"]; };
 const priceNote = () => (state.basis === "adj"
     ? "Priced from the market-adjusted projection. "
     : "Priced from the raw model alone, which has overstated its edge in every season tested. Stakes are only sized from the market-adjusted numbers. ")
-    + "Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll.";
+    + "Odds and EV are at the anchor line; Best book is the best price across DraftKings, FanDuel, BetMGM and Kalshi at that book's own line (Kalshi net of its fee), and the EV shown is the better of the two. A \u201cbeats\u201d chip means the book's price beats the sharp anchor's no-vig number before the model says anything. Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll.";
 function renderBets() {
   const rows = games().flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
   const shown = state.all ? rows : rows.slice(0, 10);
@@ -1063,7 +1093,42 @@ $("#bankroll").addEventListener("input", e => {
   try { localStorage.setItem("nflvb.bankroll", String(state.bankroll)); } catch (err) {}
   renderBets();
 });
-function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); }
+/* ---------------- boost calculator ----------------
+   EV of a price against the anchor's no-vig chance (what the sharp market says) and against
+   the model. A profit boost of x% multiplies the winnings; Kalshi's fee is charged on the
+   contract price (7% x p x (1 - p) as a taker, 1.75% as a maker). */
+const toDec = o => o > 0 ? 1 + o / 100 : 1 + 100 / -o;
+const toAm = p => p >= 0.5 ? -100 * p / (1 - p) : 100 * (1 - p) / p;
+function boostOdds(odds, pct, book) {
+  let dec = toDec(odds);
+  if (pct > 0) dec = 1 + (dec - 1) * (1 + pct / 100);
+  if (book === "kalshi" || book === "kalshi_maker") { const p = 1 / dec, fee = (book === "kalshi" ? 0.07 : 0.0175) * p * (1 - p); dec = 1 / Math.min(0.999, p + fee); }
+  return dec;
+}
+function renderBoost() {
+  const sel = $("#boost-side"), out = $("#boost-out");
+  const opts = games().flatMap(g => g.bets.map(b => ({ g, b })));
+  const cur = sel.value;
+  sel.replaceChildren(...opts.map(({ g, b }, i) => H("option", { value: String(i), text: g.away + " @ " + g.home + ": " + b.pick })));
+  if (cur && opts[+cur]) sel.value = cur;
+  const o = parseFloat($("#boost-odds").value), boost = parseFloat($("#boost-pct").value) || 0, book = $("#boost-book").value;
+  if (!opts.length || !(Math.abs(o) >= 100)) { out.textContent = "Pick a side and enter the odds (American, -110 or +150)."; return; }
+  const { g, b } = opts[+sel.value || 0];
+  const dec = boostOdds(o, boost, book), net = toAm(1 / dec);
+  const evAt = p => p * (dec - 1) - (1 - p);               // pushes are already set aside in the chances
+  const evMkt = evAt(b.market_prob), evModel = evAt(b.prob);
+  const kelly = p => Math.max(0, (p * (dec - 1) - (1 - p)) / (dec - 1));
+  const stake = Math.min(kelly(b.prob) * M.kelly_fraction, M.max_stake);
+  out.replaceChildren(...[
+    H("strong", { text: b.pick + " at " + odds(Math.round(net)) + (boost || book ? " net" : "") + ". " }),
+    document.createTextNode("Against the sharp no-vig chance (" + pct(b.market_prob) + ") the bet is worth " + spct(evMkt) + " per dollar "),
+    evMkt > 0 ? H("span", { class: "chip", text: "+EV before the model" }) : null,
+    document.createTextNode("; against the model (" + pct(b.prob) + ") " + spct(evModel) + ". Fair price for the market's chance is " + odds(fairOf(b.market_prob)) + ". "
+      + (stake > 0 ? "Quarter-Kelly stake on the model's chance: $" + comma(Math.round(stake * state.bankroll)) + " (" + pct(stake) + ")." : "No stake: the model does not make it +EV.")
+      + " Boosts are usually capped by the book; size to the cap, not the Kelly number, when the market says it is +EV.")].filter(Boolean));
+}
+["#boost-side", "#boost-odds", "#boost-pct", "#boost-book"].forEach(id => $(id).addEventListener("input", renderBoost));
+function renderGames() { renderHero(); renderCards(); redrawBoard(); renderBets(); renderBoost(); }
 seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); renderGames(); });
 seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; redrawBoard(); });
 seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); if (shownGame) renderGame(shownGame); });
@@ -1112,10 +1177,11 @@ function renderGame(g) {
   const place = [d.stadium, g.neutral ? "neutral site" : null, g.roof && g.roof !== "unknown" ? g.roof : null, d.surface ? d.surface.replace("_", " ") : null,
                  d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
   const verdict = H("p", { class: "lede" });
-  if (ev > 0) verdict.append(H("strong", { text: "Best price: " + b.pick + " at " + odds(b.odds) + ". " }),
+  if (ev > 0) verdict.append(H("strong", { text: "Best price: " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ". " }),
     document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
   else verdict.append(H("strong", { text: "No bet clears break-even. " }),
-    document.createTextNode("The closest is " + b.pick + " at " + odds(b.odds) + ": the model gives it " + pct(probOf(b)) + " and it needs " + pct(b.breakeven) + "."));
+    document.createTextNode("The closest is " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ": the model gives it " + pct(probOf(b)) + " and it needs " + pct(b.breakeven) + "."));
+  if (g.anchor && g.anchor !== "consensus") verdict.append(document.createTextNode(" Lines are anchored to " + bookName(g.anchor) + "'s number" + (g.books ? "; " + Object.keys(g.books).filter(k => k !== g.anchor).map(bookName).join(", ") + " shopped." : ".")));
   const hs0 = (g.proj.total + g.proj.margin) / 2, as0 = (g.proj.total - g.proj.margin) / 2, pw = g.win.adj;
   const big = (code, name, rec, rest, score, win, on) => H("div", { class: on ? "fav" : "" }, teamSwatch(code),
     H("div", { class: "who" }, H("span", { class: "nm", text: name }), H("span", { class: "meta", text: rec + (rest != null ? ", " + rest + " days rest" : "") })),

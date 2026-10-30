@@ -14,7 +14,7 @@ import pandas as pd
 from scipy.optimize import minimize_scalar
 from scipy.special import log_ndtr, ndtr, ndtri
 
-from nflmodel import distributions as D
+from nflmodel import bets as NB, distributions as D
 from nflmodel import odds as O
 
 from . import config as C
@@ -113,3 +113,13 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFr
         }))
     b = pd.concat(out, ignore_index=True)
     return b[b["odds"].notna() & b["ev"].notna()].reset_index(drop=True)
+
+
+def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: str = "proj", kalshi_maker: bool = False) -> dict:
+    """Line shopping on the college supports and half-point lines (nflmodel.bets.shop)."""
+    return NB.shop(df, dist, quotes, books, source, kalshi_maker, margins=MARGINS, totals=TOTALS, snap=half)
+
+
+def curves(df: pd.DataFrame, dist: dict, source: str = "proj", margins=None, totals=None, snap=None) -> dict:
+    """The outcome curves on the college supports (nflmodel.bets.curves)."""
+    return NB.curves(df, dist, source, MARGINS if margins is None else margins, TOTALS if totals is None else totals, half if snap is None else snap)
