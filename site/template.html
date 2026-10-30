@@ -991,7 +991,7 @@ function renderCards() {
     const cell = (t, cls) => H("span", { class: cls || "", text: t });
     const team = (code, rec, win, on) => H("div", { class: "bug-team" + (on ? " fav" : "") }, teamSwatch(code), H("span", { class: "code", text: code }), H("span", { class: "rec", text: rec }), H("span", { class: "win", text: pct(win, 0) }));
     return H("a", { class: "bug", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
-      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph", title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null), H("span", { text: "Win chance" })),
+      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph" + gusts(g), title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null), H("span", { text: "Win chance" })),
       team(g.away, g.away_record, 1 - p, p < 0.5), team(g.home, g.home_record, p, p >= 0.5),
       H("div", { class: "bug-lines" },
         cell("", "h"), cell("Market", "h r"), cell("Raw model", "h r"),
@@ -1166,6 +1166,11 @@ function columns(node, o) {
 const rankClass = r => r == null ? "q5" : r <= 6 ? "q1" : r <= 13 ? "q2" : r <= 19 ? "q3" : r <= 26 ? "q4" : "q5";
 const rankCell = c => H("span", {}, document.createTextNode(c.v), H("span", { class: "rk " + rankClass(c.rank), text: c.rank == null ? "n/a" : String(c.rank) }));
 
+/* " (gusts 25)" when the forecast carries gusts above the steady wind, else "" */
+function gusts(g) {
+  return g.wind && g.wind.gust != null && g.wind.gust > g.wind.mph ? " (gusts " + Math.round(g.wind.gust) + ")" : "";
+}
+
 function renderGame(g) {
   const view = $("#view-game"), d = g.detail || {}, bd = d.breakdown;
   const idx = ALL.indexOf(g), prev = ALL[idx - 1], next = ALL[idx + 1];
@@ -1175,7 +1180,7 @@ function renderGame(g) {
   /* --- header --- */
   const b = best(g), ev = evOf(b);
   const place = [d.stadium, g.neutral ? "neutral site" : null, g.roof && g.roof !== "unknown" ? g.roof : null, d.surface ? d.surface.replace("_", " ") : null,
-                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
+                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) + " (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
   const verdict = H("p", { class: "lede" });
   if (ev > 0) verdict.append(H("strong", { text: "Best price: " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ". " }),
     document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
@@ -2225,7 +2230,7 @@ const matchups = (() => {
   }
   function row(g, exact) {
     const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
-    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind` : ""].filter(Boolean);
+    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind${gusts(g)}` : ""].filter(Boolean);
     const stadium = (g.detail && g.detail.stadium) || "";
     return `<a class="game-row" href="#matchups/${encodeURIComponent(g.id)}">
       ${rowTeam(g, "away")}
@@ -2338,7 +2343,7 @@ const matchups = (() => {
     let note = d.length ? `Against <b>${esc(opp)}</b>'s defense, which has allowed ${d.join(" and ")} than average.` : "";
     const miss = [t.opp_miss_db > 0.05 ? pctx(t.opp_miss_db) + " of its usual defensive backs" : "", t.opp_miss_pr > 0.05 ? pctx(t.opp_miss_pr) + " of its pass rush" : ""].filter(Boolean);
     if (miss.length) note += ` Out for ${esc(opp)}: ${miss.join(" and ")}.`;
-    if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
+    if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${gusts(g)}${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
     const out = (t.out || []).map(x => { const tag = [x.pos, /^doubtful/i.test(x.status || "") ? "doubtful" : ""].filter(Boolean).join(", "); return `${esc(x.name)}${tag ? " (" + esc(tag) + ")" : ""}`; });
     return `<div class="team-card" style="${teamVars(abbr)}">
       <div class="team-card-header">

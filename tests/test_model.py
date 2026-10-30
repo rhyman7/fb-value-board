@@ -124,7 +124,7 @@ def test_context_features():
 
 def test_wind_forecast_failure_is_harmless(monkeypatch):
     from nflmodel import weather
-    g = _ctx_games().assign(played=False, gameday=pd.Timestamp.now().normalize(), wind=np.nan)
+    g = _ctx_games().assign(played=False, gameday=pd.Timestamp(pd.Timestamp.now(tz="UTC").date()), wind=np.nan)
     def boom(*a, **k):
         raise OSError("no network")
     monkeypatch.setattr(weather, "_fetch", boom)
@@ -140,9 +140,82 @@ def test_wind_log_appends(tmp_path):
     from nflmodel import weather
     path = tmp_path / "wind_log.csv"
     weather.log_forecasts({"g1": 12.34}, path)
-    weather.log_forecasts({"g1": 14.0, "g2": 3.0}, path)
+    weather.log_forecasts({"g1": {"mph": 14.0, "gust": 22.6, "dir": 270}, "g2": 3.0}, path, home={"g1": "GB"})
     log = pd.read_csv(path)
-    assert len(log) == 3 and list(log.columns) == ["game_id", "fetched", "wind_mph"] and log.wind_mph.iloc[0] == 12.3
+    assert len(log) == 3 and list(log.columns) == weather.LOG_COLS and log.wind_mph.iloc[0] == 12.3
+    assert np.isnan(log.gust_mph.iloc[0]) and log.gust_mph.iloc[1] == 22.6 and log.dir_deg.iloc[1] == 270
+    assert log.along_mph.iloc[1] == 0 and log.cross_mph.iloc[1] == 14.0        # a west wind across Lambeau (north-south)
+    assert np.isnan(log.along_mph.iloc[2])                                    # no direction, no components
+
+
+def test_wind_log_old_rows_stay_readable(tmp_path):
+    """A log written with the three original columns is rewritten with the new header on the
+    first append after the change; the old rows keep blanks in the new columns."""
+    from nflmodel import weather
+    from cfbmodel import weather as cw
+    path = tmp_path / "wind_log.csv"
+    path.write_text("game_id,fetched,wind_mph\nold,2026-10-19 11:06,12.7\n")
+    weather.log_forecasts({"new": {"mph": 9.0, "gust": 15.0, "dir": 180}}, path, home={"new": "CHI"})
+    log = weather.read_log(path)
+    assert list(log.columns) == weather.LOG_COLS and len(log) == 2
+    assert log.loc[0, "game_id"] == "old" and log.loc[0, "wind_mph"] == 12.7 and np.isnan(log.loc[0, "gust_mph"])
+    assert log.loc[1, "gust_mph"] == 15.0 and log.loc[1, "along_mph"] == 9.0 and log.loc[1, "cross_mph"] == 0
+    # the college log has no field bearings, so no along/cross columns
+    cpath = tmp_path / "cfb_wind_log.csv"
+    cpath.write_text("game_id,fetched,wind_mph\n401,2026-10-19 21:05,5.4\n")
+    cw.log_forecasts({402: {"mph": 7.5, "gust": None, "dir": 45.4}}, cpath)
+    clog = pd.read_csv(cpath)
+    assert list(clog.columns) == cw.LOG_COLS and len(clog) == 2 and clog.dir_deg.iloc[1] == 45 and np.isnan(clog.gust_mph.iloc[1])
+
+
+def test_wind_hourly_parse():
+    """Open-Meteo's hourly block: speed, gusts and direction at the kickoff hour; missing
+    series give None; an old-style list of speeds still works."""
+    from nflmodel.weather import at_hour
+    block = {"wind_speed_10m": [float(h) for h in range(24)], "wind_gusts_10m": [2.0 * h for h in range(24)],
+             "wind_direction_10m": [10 * h for h in range(24)]}
+    assert at_hour(block, 13) == {"mph": 13.0, "gust": 26.0, "dir": 130.0}
+    assert at_hour(block, 30)["mph"] == 23.0                                   # clamped to the day
+    assert at_hour({"wind_speed_10m": block["wind_speed_10m"]}, 4) == {"mph": 4.0, "gust": None, "dir": None}
+    assert at_hour(block["wind_speed_10m"], 4) == {"mph": 4.0, "gust": None, "dir": None}
+    block["wind_gusts_10m"][5] = None
+    assert at_hour(block, 5)["gust"] is None
+
+
+def test_wind_forecast_fills_gust_and_direction(monkeypatch):
+    from nflmodel import weather
+    g = _ctx_games().assign(played=False, gameday=pd.Timestamp(pd.Timestamp.now(tz="UTC").date()), wind=np.nan)
+    block = {"wind_speed_10m": [10.0] * 24, "wind_gusts_10m": [18.0] * 24, "wind_direction_10m": [90] * 24}
+    monkeypatch.setattr(weather, "_fetch", lambda *a, **k: block)
+    out = weather.fill_wind(g, verbose=False, log=False)
+    assert out.loc[0, "wind"] == 10 and out.loc[0, "wind_gust"] == 18 and out.loc[0, "wind_dir"] == 90
+    assert np.isnan(out.loc[2, "wind_gust"])                                   # neutral site: nothing fetched
+
+
+def test_crosswind_math():
+    import math
+    from nflmodel import config as C, stadiums
+    assert set(stadiums.FIELDS) == set(C.TEAM_NAMES)                           # every current home field
+    assert all(0 <= b < 180 and c in ("measured", "approx") for b, c in stadiums.FIELDS.values())
+    along, cross = stadiums.components(15, 0, 0)                                # north wind down a north-south field
+    assert math.isclose(along, 15) and math.isclose(cross, 0, abs_tol=1e-9)
+    along, cross = stadiums.components(15, 180, 0)                              # from the south: same thing
+    assert math.isclose(along, 15) and math.isclose(cross, 0, abs_tol=1e-9)
+    along, cross = stadiums.components(15, 90, 0)                               # from the east: pure crosswind
+    assert math.isclose(along, 0, abs_tol=1e-9) and math.isclose(cross, 15)
+    along, cross = stadiums.components(10, 45, 0)
+    assert math.isclose(along, cross) and math.isclose(math.hypot(along, cross), 10)
+    along, cross = stadiums.components(12, 100, 90)                             # 10 degrees off an east-west field
+    assert math.isclose(along, 12 * math.cos(math.radians(10))) and cross > 0
+    assert stadiums.crosswind("GB", 15, 0) == stadiums.components(15, 0, stadiums.FIELDS["GB"][0])
+    assert all(math.isnan(v) for v in stadiums.crosswind("XXX", 15, 0))        # unknown field
+    assert all(math.isnan(v) for v in stadiums.crosswind("GB", 15, None))      # unknown direction
+    assert all(math.isnan(v) for v in stadiums.crosswind("GB", float("nan"), 90))
+    # an old stadium is looked up by the games file's name, with its own location
+    lat, lon, b, conf = stadiums.site("LA", "Los Angeles Memorial Coliseum")
+    assert b == 90 and abs(lat - 34.01) < 0.1
+    assert stadiums.site("LA")[:2] == (33.95, -118.34)                          # today's home (features_ext.SITES)
+    assert stadiums.site("XXX") is None
 
 
 def test_injury_features():

@@ -49,6 +49,24 @@ boards in detail; this file is the rules.
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
   only by hand.
+- The **Wind history** Action (`wind-history.yml`, by hand only) runs
+  `experiments/fetch_wind_history.py` and commits only `data/cache/wind_history.csv`: the
+  archive wind at kickoff (speed, gusts, direction, along-field and crosswind parts) for
+  every played outdoor NFL home game since 2014, one Open-Meteo archive call per stadium per
+  game day, resumable. It shares the `board-commits` group. The test that reads it is
+  `experiments/wind_direction_test.py` (FEATURES.md "Wind direction and gusts").
+- **Wind logs (both boards): `data/wind_log.csv`, `data/cfb/wind_log.csv`.** Every forecast
+  the board builds fetch, one row per game per fetch: `game_id, fetched` (UTC), `wind_mph,
+  gust_mph, dir_deg` (direction the wind blows from), and on the NFL log `along_mph,
+  cross_mph`. Append-only; the Actions write them. Rows logged before Oct 29, 2026 have
+  only the speed (blank in the newer columns); read them with `weather.read_log`. The
+  model uses only `wind_mph`; the gusts show in the game header.
+- **Stadium orientation (NFL): `nflmodel/stadiums.py`.** `FIELDS` gives each current home
+  field's long-axis bearing (0-179, 0 = north-south) with a `measured` or `approx` tag, and
+  `PAST` the location and bearing of outdoor stadiums since 2014 that teams have left, by the
+  games file's stadium name. `crosswind(team, mph, dir)` splits a wind into its along-field
+  and crosswind parts. Keep the tag honest: `measured` only for a bearing known within about
+  10 degrees (checked against a satellite view); `approx` otherwise.
 - If a change touches what those Actions build or where it lands, check their steps and
   wording still match the site structure.
 - **Player props (NFL) and The Odds API** ([PROPS.md](PROPS.md)). The key is the

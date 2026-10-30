@@ -97,6 +97,39 @@ since 2019. Two cautions:
 The board now shows a wind tag on games forecast at 10-19 mph, the forecast in
 each game's header, and this table in the model record.
 
+### Wind direction and gusts (set up Oct 29, 2026, untested)
+
+The model sees only the wind's speed. A 15 mph wind blowing goal line to goal
+line should hurt passing and kicking far more than the same wind across the
+field, and a gusty 12 mph may play like 20. Nothing is tested yet; this is the
+set-up:
+
+- Both boards' forecast calls now also fetch the gusts and the direction the
+  wind blows from (same Open-Meteo call) and log them next to the speed
+  (`data/wind_log.csv`, `data/cfb/wind_log.csv`: `gust_mph`, `dir_deg`). The
+  NFL log also has `along_mph` and `cross_mph`, the wind split along and across
+  the field from `nflmodel/stadiums.py`, which holds each stadium's field
+  bearing with a `measured` or `approx` tag (most are approx: refine them from
+  a satellite view). The game header shows the gusts. The model is unchanged.
+- `experiments/fetch_wind_history.py` (the **Wind history** Action, run by
+  hand) fetches the archive wind at kickoff for every outdoor game since 2014
+  into `data/cache/wind_history.csv`.
+- `experiments/wind_direction_test.py` then (a) checks the games file's
+  recorded wind against the archive, (b) adds gusts, the along-field part and
+  the crosswind part to the total model one at a time, walk-forward, with the
+  rule above (tuning 2014-2018, holdout 2019 on; kept only if better on tuning
+  and not worse on the holdout), and (c) repeats the wind-under table by
+  along-field and crosswind bands. If the along-field bands carry the effect
+  and the crosswind bands don't, direction matters.
+- `experiments/wind_forecast_grade.py` grades the wind under on the forecasts
+  the board actually logged (last forecast before kickoff) against the recorded
+  wind and the closing total. Eleven games so far; it prints what it has.
+
+To run it: start **Wind history** in Actions (about 2,000 archive calls, a few
+minutes, resumable), pull, then `python experiments/wind_direction_test.py`
+(`--no-model` for parts a and c only, `--fixture` to check the script with
+made-up numbers). Results go here when there are any.
+
 ## Quarterback changes
 
 Prompted by Carolina at Philadelphia in week 6: with Jalen Hurts out, the raw
@@ -417,8 +450,10 @@ inputs are known in time. Totals unchanged.
   nobody has tested totals that way yet, and wind forecasts are what a total
   opener cannot know. That needs a source of opening totals.
 - **Grade the wind under on forecasts.** Every forecast the board fetches is
-  now saved to `data/wind_log.csv`. After a season of logs, re-run the wind
-  table on the logged forecast instead of the recorded wind.
+  saved to `data/wind_log.csv`; `experiments/wind_forecast_grade.py` grades the
+  wind under on them. After a season of logs, take its table seriously.
+- **Wind direction and gusts.** Set up above; fetch the archive and run the
+  test.
 - **Pass catchers.** Re-test after the 2026 season (see above).
 - **Defensive ratings.** The shadow test decides (above). Score it with
   `experiments/shadow_score.py` after the 2026 season and again after 2027.
