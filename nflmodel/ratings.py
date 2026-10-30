@@ -43,7 +43,11 @@ class RatingEngine:
                  half_life: float = C.HALF_LIFE_GAMES, carry: float = C.OFFSEASON_CARRY,
                  ridge: dict | None = None, window_seasons: int = 3,
                  games: pd.DataFrame | None = None, market_half_life: float = C.MARKET_HALF_LIFE,
-                 qb_half_life: float = C.QB_HALF_LIFE_DROPBACKS, qb_prior: float = C.QB_PRIOR_DROPBACKS):
+                 qb_half_life: float = C.QB_HALF_LIFE_DROPBACKS, qb_prior: float = C.QB_PRIOR_DROPBACKS,
+                 qb_priors: dict | None = None):
+        # qb_priors: {season: {qb_id: prior EPA/dropback}}: a quarterback's prior for games of that
+        # season when he is listed, else QB_REPLACEMENT (experiments/qb_test.py, the draft prior)
+        self.qb_priors = qb_priors
         tg = team_games.sort_values("order").reset_index(drop=True)
         self.teams = sorted(set(tg["team"]) | set(tg["opp"]))
         self.tix = {t: i for i, t in enumerate(self.teams)}
@@ -144,7 +148,8 @@ class RatingEngine:
         df = pd.DataFrame({"id": qid, "w_db": qw * qdb, "w_epa": qw * (qepa - lg * qdb)})
         s = df.groupby("id").sum()
         P = self.qb_prior
-        qb_val = ((s["w_epa"] + P * self.QB_REPLACEMENT) / (s["w_db"] + P))
+        prior = self._qb_replacement(order_now, s.index)
+        qb_val = ((s["w_epa"] + P * prior) / (s["w_db"] + P))
         out["qb"] = qb_val.to_dict()
         out["qb_n"] = s["w_db"].to_dict()
 
@@ -197,10 +202,19 @@ class RatingEngine:
         b2 = np.linalg.solve(X2.T @ X2w + np.diag(pen) + 1e-9 * np.eye(n + 1), X2w.T @ self.m_total[idx])
         return {"R": b[:n], "T": b2[:n], "hfa": b[n], "avg_total": b2[n]}
 
+    def _qb_replacement(self, order_now: int, ids) -> np.ndarray:
+        """The prior for each quarterback id: QB_REPLACEMENT unless qb_priors lists him."""
+        if not self.qb_priors:
+            return np.full(len(ids), self.QB_REPLACEMENT)
+        table = self.qb_priors.get(int(order_now) // 100, {})
+        return np.array([table.get(i, self.QB_REPLACEMENT) for i in ids], float)
+
     def qb_value(self, r: dict, qb_id) -> float:
         if qb_id is None or (isinstance(qb_id, float) and np.isnan(qb_id)):
             return np.nan
-        return r["qb"].get(qb_id, self.QB_REPLACEMENT)
+        if qb_id in r["qb"]:
+            return r["qb"][qb_id]
+        return float(self._qb_replacement(r["order"], [qb_id])[0])
 
     # ------------------------------------------------------------------
     def features(self, games: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:

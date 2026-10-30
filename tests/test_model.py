@@ -124,7 +124,7 @@ def test_context_features():
 
 def test_wind_forecast_failure_is_harmless(monkeypatch):
     from nflmodel import weather
-    g = _ctx_games().assign(played=False, gameday=pd.Timestamp.now().normalize(), wind=np.nan)
+    g = _ctx_games().assign(played=False, gameday=pd.Timestamp(pd.Timestamp.now(tz="UTC").date()), wind=np.nan)
     def boom(*a, **k):
         raise OSError("no network")
     monkeypatch.setattr(weather, "_fetch", boom)
@@ -140,9 +140,82 @@ def test_wind_log_appends(tmp_path):
     from nflmodel import weather
     path = tmp_path / "wind_log.csv"
     weather.log_forecasts({"g1": 12.34}, path)
-    weather.log_forecasts({"g1": 14.0, "g2": 3.0}, path)
+    weather.log_forecasts({"g1": {"mph": 14.0, "gust": 22.6, "dir": 270}, "g2": 3.0}, path, home={"g1": "GB"})
     log = pd.read_csv(path)
-    assert len(log) == 3 and list(log.columns) == ["game_id", "fetched", "wind_mph"] and log.wind_mph.iloc[0] == 12.3
+    assert len(log) == 3 and list(log.columns) == weather.LOG_COLS and log.wind_mph.iloc[0] == 12.3
+    assert np.isnan(log.gust_mph.iloc[0]) and log.gust_mph.iloc[1] == 22.6 and log.dir_deg.iloc[1] == 270
+    assert log.along_mph.iloc[1] == 0 and log.cross_mph.iloc[1] == 14.0        # a west wind across Lambeau (north-south)
+    assert np.isnan(log.along_mph.iloc[2])                                    # no direction, no components
+
+
+def test_wind_log_old_rows_stay_readable(tmp_path):
+    """A log written with the three original columns is rewritten with the new header on the
+    first append after the change; the old rows keep blanks in the new columns."""
+    from nflmodel import weather
+    from cfbmodel import weather as cw
+    path = tmp_path / "wind_log.csv"
+    path.write_text("game_id,fetched,wind_mph\nold,2026-10-19 11:06,12.7\n")
+    weather.log_forecasts({"new": {"mph": 9.0, "gust": 15.0, "dir": 180}}, path, home={"new": "CHI"})
+    log = weather.read_log(path)
+    assert list(log.columns) == weather.LOG_COLS and len(log) == 2
+    assert log.loc[0, "game_id"] == "old" and log.loc[0, "wind_mph"] == 12.7 and np.isnan(log.loc[0, "gust_mph"])
+    assert log.loc[1, "gust_mph"] == 15.0 and log.loc[1, "along_mph"] == 9.0 and log.loc[1, "cross_mph"] == 0
+    # the college log has no field bearings, so no along/cross columns
+    cpath = tmp_path / "cfb_wind_log.csv"
+    cpath.write_text("game_id,fetched,wind_mph\n401,2026-10-19 21:05,5.4\n")
+    cw.log_forecasts({402: {"mph": 7.5, "gust": None, "dir": 45.4}}, cpath)
+    clog = pd.read_csv(cpath)
+    assert list(clog.columns) == cw.LOG_COLS and len(clog) == 2 and clog.dir_deg.iloc[1] == 45 and np.isnan(clog.gust_mph.iloc[1])
+
+
+def test_wind_hourly_parse():
+    """Open-Meteo's hourly block: speed, gusts and direction at the kickoff hour; missing
+    series give None; an old-style list of speeds still works."""
+    from nflmodel.weather import at_hour
+    block = {"wind_speed_10m": [float(h) for h in range(24)], "wind_gusts_10m": [2.0 * h for h in range(24)],
+             "wind_direction_10m": [10 * h for h in range(24)]}
+    assert at_hour(block, 13) == {"mph": 13.0, "gust": 26.0, "dir": 130.0}
+    assert at_hour(block, 30)["mph"] == 23.0                                   # clamped to the day
+    assert at_hour({"wind_speed_10m": block["wind_speed_10m"]}, 4) == {"mph": 4.0, "gust": None, "dir": None}
+    assert at_hour(block["wind_speed_10m"], 4) == {"mph": 4.0, "gust": None, "dir": None}
+    block["wind_gusts_10m"][5] = None
+    assert at_hour(block, 5)["gust"] is None
+
+
+def test_wind_forecast_fills_gust_and_direction(monkeypatch):
+    from nflmodel import weather
+    g = _ctx_games().assign(played=False, gameday=pd.Timestamp(pd.Timestamp.now(tz="UTC").date()), wind=np.nan)
+    block = {"wind_speed_10m": [10.0] * 24, "wind_gusts_10m": [18.0] * 24, "wind_direction_10m": [90] * 24}
+    monkeypatch.setattr(weather, "_fetch", lambda *a, **k: block)
+    out = weather.fill_wind(g, verbose=False, log=False)
+    assert out.loc[0, "wind"] == 10 and out.loc[0, "wind_gust"] == 18 and out.loc[0, "wind_dir"] == 90
+    assert np.isnan(out.loc[2, "wind_gust"])                                   # neutral site: nothing fetched
+
+
+def test_crosswind_math():
+    import math
+    from nflmodel import config as C, stadiums
+    assert set(stadiums.FIELDS) == set(C.TEAM_NAMES)                           # every current home field
+    assert all(0 <= b < 180 and c in ("measured", "approx") for b, c in stadiums.FIELDS.values())
+    along, cross = stadiums.components(15, 0, 0)                                # north wind down a north-south field
+    assert math.isclose(along, 15) and math.isclose(cross, 0, abs_tol=1e-9)
+    along, cross = stadiums.components(15, 180, 0)                              # from the south: same thing
+    assert math.isclose(along, 15) and math.isclose(cross, 0, abs_tol=1e-9)
+    along, cross = stadiums.components(15, 90, 0)                               # from the east: pure crosswind
+    assert math.isclose(along, 0, abs_tol=1e-9) and math.isclose(cross, 15)
+    along, cross = stadiums.components(10, 45, 0)
+    assert math.isclose(along, cross) and math.isclose(math.hypot(along, cross), 10)
+    along, cross = stadiums.components(12, 100, 90)                             # 10 degrees off an east-west field
+    assert math.isclose(along, 12 * math.cos(math.radians(10))) and cross > 0
+    assert stadiums.crosswind("GB", 15, 0) == stadiums.components(15, 0, stadiums.FIELDS["GB"][0])
+    assert all(math.isnan(v) for v in stadiums.crosswind("XXX", 15, 0))        # unknown field
+    assert all(math.isnan(v) for v in stadiums.crosswind("GB", 15, None))      # unknown direction
+    assert all(math.isnan(v) for v in stadiums.crosswind("GB", float("nan"), 90))
+    # an old stadium is looked up by the games file's name, with its own location
+    lat, lon, b, conf = stadiums.site("LA", "Los Angeles Memorial Coliseum")
+    assert b == 90 and abs(lat - 34.01) < 0.1
+    assert stadiums.site("LA")[:2] == (33.95, -118.34)                          # today's home (features_ext.SITES)
+    assert stadiums.site("XXX") is None
 
 
 def test_injury_features():
@@ -392,3 +465,70 @@ def test_shadow_test_stays_off_the_board():
     assert not set(SH.MARGIN) & set(model.MARGIN_FEATS) and not set(SH.TOTAL) & set(model.TOTAL_FEATS)
     for st, extra in SH.PLAYER.items():
         assert not set(extra) & set(PL.CAL_EXTRA[st])
+
+
+# ---- edge tests, late October 2026 (FEATURES.md) -------------------------------------
+
+def test_haircut_shrinks_the_stake_but_not_the_ev():
+    """config.EDGE_HAIRCUT: the stake comes from the model probability shrunk toward the
+    market's; EV and probabilities are the model's whatever the factor."""
+    g = _one_game(proj_margin=6.0, proj_total=44.5)
+    full = bets.price_games(g, DIST, "proj", haircut=1.0).set_index("pick")
+    half = bets.price_games(g, DIST, "proj", haircut=0.5).set_index("pick")
+    none = bets.price_games(g, DIST, "proj", haircut=0.0).set_index("pick")
+    home = "HOM -3"
+    assert full.loc[home, "stake"] > half.loc[home, "stake"] > 0 and none.loc[home, "stake"] == 0
+    for c in ("model_prob", "market_prob", "ev", "edge"):
+        assert close(full.loc[home, c], half.loc[home, c]) and close(full.loc[home, c], none.loc[home, c])
+    # the shrunk probability is halfway between the model's and the market's
+    p = bets.stake_prob(full.loc[home, "model_prob"] * (1 - full.loc[home, "p_push"]), full.loc[home, "p_push"], full.loc[home, "market_prob"], 0.5)
+    assert close(p / (1 - full.loc[home, "p_push"]), (full.loc[home, "model_prob"] + full.loc[home, "market_prob"]) / 2)
+    # the same at each book's line
+    quotes = {"g": {"draftkings": {"spread_line": 3.0, "home_spread_odds": -110, "away_spread_odds": -110}}}
+    s1 = bets.shop(g, DIST, quotes, ["draftkings"], "proj", haircut=1.0)[("g", "Spread", "home")][0]
+    s2 = bets.shop(g, DIST, quotes, ["draftkings"], "proj", haircut=0.5)[("g", "Spread", "home")][0]
+    assert s1["stake"] > s2["stake"] > 0 and s1["ev"] == s2["ev"] and s1["prob"] == s2["prob"]
+
+
+def test_edge_haircut_is_the_slope_of_profit_on_claimed_ev():
+    from nflmodel import backtest
+    rng = np.random.default_rng(1)
+    n = 4000
+    ev = rng.uniform(0.0, 0.1, n)
+    # profit = 0.4 x EV + noise: four tenths of the claimed edge is real
+    g = pd.DataFrame({"source": "proj", "market": np.where(np.arange(n) % 2 == 0, "Spread", "Total"), "season": 2018 + np.arange(n) % 8,
+                      "ev": ev, "profit": 0.4 * ev + rng.normal(0, 0.02, n)})
+    h = backtest.edge_haircut(g, 2026)
+    assert abs(h["slope"] - 0.4) < 0.03 and h["factor"] == h["slope"] and h["seasons"] == "2018-2025"
+    assert len(h["by_season"]) == 8 and all(abs(r["slope"] - 0.4) < 0.1 for r in h["by_season"])
+    g["profit"] = -g["ev"]                                   # nothing real: clipped to 0
+    assert backtest.edge_haircut(g, 2026)["factor"] == 0.0
+    g["profit"] = 3 * g["ev"]                                # more than claimed: clipped to 1
+    assert backtest.edge_haircut(g, 2026)["factor"] == 1.0
+    assert backtest.edge_haircut(g.head(10), 2026)["factor"] == 1.0   # too few bets: no haircut
+
+
+def test_game_stake_cap_scales_every_side_together():
+    from nflmodel import config as C, slate
+    bets_ = [{"market": "Spread", "side": "home", "ev": 0.05, "stake": 0.03, "books": [{"book": "fanduel", "stake": 0.03, "ev": 0.06}], "best": "fanduel", "best_ev": 0.06},
+             {"market": "Total", "side": "under", "ev": 0.04, "stake": 0.03, "books": [{"book": "draftkings", "stake": 0.02, "ev": 0.03}], "best": "draftkings", "best_ev": 0.03},
+             {"market": "Moneyline", "side": "home", "ev": 0.02, "stake": 0.02}]
+    r = slate.cap_game(bets_, cap=0.05)
+    assert close(r["game_stake"], 0.08) and close(r["stake_scale"], 0.625)
+    assert close(bets_[0]["stake"], 0.01875) and close(bets_[0]["books"][0]["stake"], 0.01875)
+    assert close(bets_[1]["stake"], 0.01875) and close(bets_[1]["books"][0]["stake"], 0.0125) and close(bets_[2]["stake"], 0.0125)
+    assert close(sum(slate.shown_stake(b) for b in bets_), 0.05, tol=2e-4)   # rounded to 4 places
+    small = [{"market": "Spread", "side": "home", "ev": 0.05, "stake": 0.02}]
+    assert slate.cap_game(small, cap=C.MAX_GAME_STAKE) == {"game_stake": 0.02, "stake_scale": 1.0} and small[0]["stake"] == 0.02
+
+
+def test_pass_catchers_shadow_is_logged_apart_and_off_the_board(tmp_path, monkeypatch):
+    from nflmodel import model, shadow as SH
+    assert SH.MARGIN_PC == ["d_miss_pc"] and not set(SH.MARGIN_PC) & set(model.MARGIN_FEATS)
+    assert SH.MARGIN == ["d_chg_pr_pfr_bk_all", "d_chg_cov_db_bk_all"]      # the first shadow version is unchanged
+    assert SH.PC_LOG != SH.GAMES_LOG
+    monkeypatch.setattr(SH, "DIR", tmp_path)
+    path = tmp_path / "passcatchers_games.csv"
+    SH._merge_log(path, pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [1.0, 2.0]}), frozen=set())
+    SH._merge_log(path, pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [9.0, 3.0]}), frozen={"A"})
+    assert pd.read_csv(path).set_index("game_id")["margin_shadow"].to_dict() == {"A": 1.0, "B": 3.0}

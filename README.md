@@ -141,12 +141,16 @@ the consensus closing line:
 It trails the line by about a point in weeks 0 to 5 and is level from week 6 on. Against
 opening totals (2021 on), betting the model's side when it is 3+ points off went
 694-562-12 (55.3%, +5.4% ± 2.7%). See [CFB_FEATURES.md](CFB_FEATURES.md) for every test
-and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
+(including "Where the edge lives", the record split by conference tier, day of week and
+week of season) and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
 
 College limits: no official injury report (players listed Out or Doubtful on Covers.com,
 read daily into `docs/cfb/designations.json`, get no projection; see
 `cfbmodel/designations.py`), historical lines are consensus averages with no prices, and current
-prices come from ESPN's scoreboard (one book). For research and entertainment.
+prices come from ESPN's scoreboard (one book). When the `CFBD_API_KEY` secret is set, games
+ESPN has not priced take their line from CollegeFootballData.com instead (`cfbmodel/cfbd.py`:
+the consensus line, else DraftKings, else the first book listed; the game's line source says
+which); without the key nothing changes. For research and entertainment.
 
 ## Quick start
 
@@ -208,7 +212,13 @@ check its first run.
    says 3.5%; this says 8.6%). The curve is anchored so that with no
    disagreement each side equals the market's no-vig price.
 8. **Pricing** (`nflmodel/bets.py`, `nflmodel/odds.py`). EV per dollar, fair
-   price, and a quarter-Kelly stake capped at 3% of bankroll.
+   price, and a quarter-Kelly stake capped at 3% of bankroll and 5% a game, all
+   sides together. The stake is sized from the model probability shrunk toward the
+   market's by the share of claimed edge that has shown up in the last eight
+   seasons' graded bets (`backtest.edge_haircut`; 0 on the NFL board as of
+   October 2026, so no NFL stake is sized until that changes); the EV and
+   probabilities shown are the model's. See FEATURES.md, "Edge tests, late
+   October 2026".
 
 ## Market lines
 
@@ -222,6 +232,14 @@ book's price at that book's own line. Kalshi contract prices are charged the exc
 (`odds.kalshi_effective_odds`: 7% x p x (1-p) per contract as a taker, 1.75% as a maker)
 before EV. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
 the published raw model is 2+ points (NFL) or 3+ (college) off Pinnacle's current line.
+
+On the boards, a game Pinnacle quotes is anchored to Pinnacle's line and prices rather than
+the consensus (its card and page say so), each side's table shows the best price among
+DraftKings, FanDuel, BetMGM and Kalshi at that book's own line with a "beats Pinnacle" chip
+when the price is better than the sharp no-vig number on its own, and Past weeks grade every
+flagged bet's closing line value against Pinnacle's close. The Market lines Action posts
+opener alerts (raw model well off Pinnacle early in the week) to a GitHub issue labelled
+`opener-alerts`.
 
 ## Honest limits
 
@@ -289,6 +307,8 @@ data/line_history.csv     lines as first seen and as they move
 data/wind_log.csv         wind forecasts as fetched
 experiments/feature_test.py  test candidate features walk-forward
 experiments/qb_test.py       quarterback-change settings
+experiments/qb_draft_prior_test.py  a backup's prior by draft round (not kept)
+experiments/line_move_test.py       line movement as a feature and as a bet filter (not kept)
 experiments/injury_test.py   missing starters by position group
 experiments/players_test.py      player projections against baselines
 experiments/players_ablation.py  which pieces of the player model help
@@ -300,7 +320,7 @@ experiments/props_real_lines.py   the prop model against past DraftKings and Fan
 PROPS.md                  player props: method, calibration, market, log
 data/prop_params.json     fitted prop distributions
 data/props/               prop log, results, snapshots, credit usage, past prices
-FEATURES.md               results of the October 2026 feature tests
+FEATURES.md               results of the October 2026 feature tests and the edge tests
 tests/test_model.py
 ```
 

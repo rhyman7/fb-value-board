@@ -60,37 +60,55 @@ def cmd_status(args) -> int:
 
 
 def cmd_alerts(args) -> int:
-    """Games where the published board's raw model is well off Pinnacle's current line:
-    the model's value is early in the week (README "Against opening lines")."""
+    """Games where the published board's raw model is well off Pinnacle's current line: the
+    model's value is early in the week (README "Against opening lines"). New alerts (a side
+    not alerted before) are appended to data/market/alerts.csv and written as a Markdown
+    table to --out for the Action to post."""
+    thr = {"nfl": (2.0, 3.0), "cfb": (3.0, 3.0)}      # spread, total
     out = []
     for lg, path in (("nfl", C.DOCS / "data.json"), ("cfb", C.DOCS / "cfb" / "data.json")):
         if not path.exists():
             continue
         d = json.loads(path.read_text())
-        games = (d.get("slate") or {}).get("games") or []
-        if not games:
-            continue
-        quotes = {g["id"]: (g.get("books") or {}) for g in games}
-        thr_s, thr_t = (2.0, 3.0) if lg == "nfl" else (3.0, 3.0)
-        for g in games:
-            q = quotes[g["id"]].get(M.SHARP) or {}
-            if not q:
-                continue
+        for g in (d.get("slate") or {}).get("games") or []:
+            q = (g.get("books") or {}).get(M.SHARP) or {}
             raw = g.get("model") or {}
-            if "spread_line" in q and raw.get("margin") is not None and abs(raw["margin"] - q["spread_line"]) >= thr_s:
-                out.append({"league": lg, "game": g["id"], "market": "spread", "model": raw["margin"], "pinnacle": q["spread_line"],
-                            "side": g["home"] if raw["margin"] > q["spread_line"] else g["away"]})
-            if "total_line" in q and raw.get("total") is not None and abs(raw["total"] - q["total_line"]) >= thr_t:
-                out.append({"league": lg, "game": g["id"], "market": "total", "model": raw["total"], "pinnacle": q["total_line"],
-                            "side": "over" if raw["total"] > q["total_line"] else "under"})
+            if not q or not raw:
+                continue
+            label = f"{g['away']} @ {g['home']} ({g['date']})"
+            if "spread_line" in q and raw.get("margin") is not None and abs(raw["margin"] - q["spread_line"]) >= thr[lg][0]:
+                home = raw["margin"] > q["spread_line"]
+                out.append({"league": lg, "game": g["id"], "label": label, "market": "spread",
+                            "side": f"{g['home']} {-q['spread_line']:+g}" if home else f"{g['away']} {q['spread_line']:+g}",
+                            "model": round(raw["margin"], 1), "pinnacle": q["spread_line"], "gap": round(abs(raw["margin"] - q["spread_line"]), 1)})
+            if "total_line" in q and raw.get("total") is not None and abs(raw["total"] - q["total_line"]) >= thr[lg][1]:
+                over = raw["total"] > q["total_line"]
+                out.append({"league": lg, "game": g["id"], "label": label, "market": "total",
+                            "side": f"{'Over' if over else 'Under'} {q['total_line']:g}",
+                            "model": round(raw["total"], 1), "pinnacle": q["total_line"], "gap": round(abs(raw["total"] - q["total_line"]), 1)})
     if not out:
         print("no alerts")
         return 0
-    df = pd.DataFrame(out)
-    print(df.to_string(index=False))
+    df = pd.DataFrame(out).sort_values(["league", "gap"], ascending=[True, False])
     path = C.DATA / "market" / "alerts.csv"
+    seen = set()
+    if path.exists():
+        old = pd.read_csv(path, dtype=str)
+        seen = set(zip(old["league"], old["game"].astype(str), old["market"], old["side"]))
+    new = df[[(r.league, str(r.game), r.market, r.side) not in seen for r in df.itertuples()]]
+    print(df.to_string(index=False))
+    if new.empty:
+        print("no new alerts")
+        return 0
     path.parent.mkdir(parents=True, exist_ok=True)
-    df.assign(at=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M")).to_csv(path, mode="a", header=not path.exists(), index=False)
+    new.assign(at=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M")).to_csv(path, mode="a", header=not path.exists(), index=False)
+    if args.out:
+        lines = ["| League | Game | Side | Raw model | Pinnacle | Gap |", "|---|---|---|---|---|---|"]
+        for r in new.itertuples():
+            lines.append(f"| {r.league.upper()} | {r.label} | **{r.side}** | {r.model} | {r.pinnacle} | {r.gap} |")
+        Path(args.out).write_text("\n".join(lines) + "\n\nRaw model vs Pinnacle's current line, 2+ points on NFL spreads, 3+ on college spreads and all totals. "
+                                  "The model's record against openers is in the README; this is a lead to check, not a bet to take blind.\n")
+    print(f"{len(new)} new alerts")
     return 0
 
 
@@ -99,6 +117,7 @@ def main(argv=None) -> int:
     p.add_argument("command", choices=["snapshot", "status", "alerts"])
     p.add_argument("--league", choices=list(M.SPORTS))
     p.add_argument("--fixture")
+    p.add_argument("--out", help="alerts: write new alerts as a Markdown table here")
     a = p.parse_args(argv)
     return {"snapshot": cmd_snapshot, "status": cmd_status, "alerts": cmd_alerts}[a.command](a)
 

@@ -124,6 +124,64 @@ market-implied ratings and the quarterback adjustment. Offensive line and defens
 absences cannot be seen at all: box scores do not list linemen, and defensive stats are
 only complete from 2023.
 
+## Where the edge lives
+
+The walk-forward backtest split by segment, 2021 on (`python experiments/cfb_segments.py`,
+full output with the 2017-2019 tuning seasons in `experiments/out/cfb_segments.md`). Miss is
+the average absolute error of the raw model and of the closing line. The records bet the raw
+model's side wherever it is 2+ or 3+ points off the spread or 3+ off the total, at −110 at
+the line rounded to the half point; opener records use a run that assumes last week's
+quarterbacks and a typical wind and leave out short-week games, as the board's opener report
+does. P4 is the SEC, Big Ten, Big 12, ACC and Notre Dame, plus the Pac-12 through 2023; days
+are Eastern.
+
+**Spreads** (W-L, win rate, return per bet ± s.e., at -110)
+
+| Segment | Games | Miss: model / close | vs close, 2+ | vs close, 3+ | vs opener, 2+ | vs opener, 3+ |
+|---|---|---|---|---|---|---|
+| Conference tier: P4 vs P4 | 1841 | 12.20 / 11.95 | 519-490 51.4% -1.8% ± 2.9% | 338-341 49.8% -4.9% ± 3.6% | 489-469 51.0% -2.5% ± 3.0% | 327-311 51.3% -2.1% ± 3.7% |
+| Mixed (P4 vs G5) | 586 | 12.31 / 11.64 | 183-169 52.0% -0.7% ± 4.9% | 143-133 51.8% -1.1% ± 5.6% | 199-175 53.2% +1.6% ± 4.9% | 156-130 54.5% +4.1% ± 5.6% |
+| G5 vs G5 | 1776 | 12.52 / 12.27 | 549-499 52.4% +0.0% ± 2.9% | 411-352 53.9% +2.8% ± 3.4% | 503-471 51.6% -1.4% ± 3.0% | 354-334 51.5% -1.7% ± 3.6% |
+| Day of week: Saturday | 3586 | 12.49 / 12.17 | 1068-1001 51.6% -1.4% ± 2.1% | 761-720 51.4% -1.9% ± 2.4% | 1030-989 51.0% -2.6% ± 2.1% | 732-687 51.6% -1.5% ± 2.5% |
+| Midweek (Tue-Fri) | 594 | 11.46 / 11.27 | 178-148 54.6% +4.1% ± 5.1% | 127-99 56.2% +7.0% ± 6.1% | 156-118 56.9% +8.5% ± 5.6% | 100-83 54.6% +4.2% ± 6.9% |
+| Sunday/Monday | 23 | 13.56 / 12.52 | 5-9 35.7% -29.7% ± 23.7% | 4-7 36.4% -28.0% ± 26.6% | 5-8 38.5% -26.6% ± 26.8% | 5-5 50.0% -4.5% ± 31.8% |
+| Week of season: Weeks 0-5 | 1568 | 12.58 / 11.88 | 476-494 49.1% -6.1% ± 3.0% | 355-380 48.3% -7.6% ± 3.4% | 470-498 48.6% -7.2% ± 3.0% | 368-360 50.5% -3.5% ± 3.5% |
+| Weeks 6-10 | 1519 | 12.08 / 11.97 | 447-408 52.3% -0.2% ± 3.2% | 311-268 53.7% +2.5% ± 3.9% | 421-375 52.9% +1.0% ± 3.3% | 281-262 51.7% -1.2% ± 4.0% |
+| Weeks 11+ | 1091 | 12.38 / 12.36 | 322-251 56.2% +7.2% ± 3.9% | 220-174 55.8% +6.5% ± 4.7% | 292-237 55.2% +5.2% ± 4.0% | 183-149 55.1% +5.1% ± 5.1% |
+| Bowls | 25 | 12.87 / 12.90 | 6-5 54.5% +4.1% ± 30.1% | 6-4 60.0% +14.5% ± 31.2% | 8-5 61.5% +17.5% ± 26.8% | 5-4 55.6% +6.1% ± 33.5% |
+| **All games** | **4203** | **12.35 / 12.04** | **1251-1158 51.9% -0.8% ± 1.9%** | **892-826 51.9% -0.9% ± 2.3%** | **1191-1115 51.6% -1.4% ± 2.0%** | **837-775 51.9% -0.9% ± 2.3%** |
+
+**Totals** (W-L, win rate, return per bet ± s.e., at -110)
+
+| Segment | Games | Miss: model / close | vs close, 3+ | vs opener, 3+ |
+|---|---|---|---|---|
+| Conference tier: P4 vs P4 | 1841 | 12.26 / 12.11 | 322-295 52.2% -0.4% ± 3.8% | 283-227 55.5% +5.9% ± 4.2% |
+| Mixed (P4 vs G5) | 586 | 12.32 / 11.94 | 109-107 50.5% -3.6% ± 6.4% | 110-101 52.1% -0.5% ± 6.5% |
+| G5 vs G5 | 1776 | 13.12 / 13.01 | 355-295 54.6% +4.2% ± 3.7% | 313-242 56.4% +7.6% ± 4.0% |
+| Day of week: Saturday | 3586 | 12.63 / 12.49 | 681-592 53.5% +2.1% ± 2.6% | 620-488 56.0% +6.8% ± 2.8% |
+| Midweek (Tue-Fri) | 594 | 12.69 / 12.42 | 99-99 50.0% -4.5% ± 6.7% | 82-77 51.6% -1.5% ± 7.6% |
+| Sunday/Monday | 23 | 11.27 / 10.94 | 6-6 50.0% -4.5% ± 28.8% | 4-5 44.4% -15.2% ± 33.5% |
+| Week of season: Weeks 0-5 | 1568 | 12.57 / 12.40 | 331-279 54.3% +3.5% ± 3.8% | 304-248 55.1% +5.1% ± 4.0% |
+| Weeks 6-10 | 1519 | 12.88 / 12.70 | 251-253 49.8% -4.9% ± 4.2% | 214-194 52.5% +0.1% ± 4.7% |
+| Weeks 11+ | 1091 | 12.37 / 12.25 | 195-160 54.9% +4.8% ± 5.0% | 181-123 59.5% +13.6% ± 5.4% |
+| Bowls | 25 | 12.48 / 12.53 | 9-5 64.3% +22.7% ± 25.4% | 7-5 58.3% +11.4% ± 28.4% |
+| **All games** | **4203** | **12.63 / 12.47** | **786-697 53.0% +1.2% ± 2.4%** | **706-570 55.3% +5.6% ± 2.6%** |
+
+Reading: the only edge that holds up is the one the README reports, **totals against the
+opener**, and it comes from the plain segments: Saturday games (56.0%, +6.8% ± 2.8%),
+G5-vs-G5 (56.4%) and P4-vs-P4 (55.5%) games, and the start and end of the season (weeks
+0-5 at 55.1%, weeks 11+ at 59.5%, +13.6% ± 5.4%); it is absent in midweek games (51.6% on 159
+bets) and in P4-vs-G5 games, and weeks 6-10 are flat. Against the closing total the same
+rule is +1.2% ± 2.4%, so most of that edge is the line moving the model's way, and it could
+not be checked on 2017-2019, which have no openers (there the model lost against closing
+totals, 50.1%). On **spreads** there is no edge overall at either line (51.9%, −0.9% ± 2.3%
+at 3+); midweek games (54.6% to 56.9%, about 180 to 330 bets) and weeks 11+ (55% to 56%,
++5% to +7% ± 4% to 5%) are above water while weeks 0-5 lose (48% to 49%), but the 2017-2019
+splits point the other way (weeks 0-5 won 57%, midweek 50%), so these look like noise rather
+than structure. Every segment's standard error is 2.5 to 7 points of return, so no two
+segments differ significantly, and the Sunday/Monday and bowl rows (12 to 25 games) say
+nothing.
+
 ## Not tested yet
 
 - The wind feature graded on forecasts instead of recorded wind (needs a season of the

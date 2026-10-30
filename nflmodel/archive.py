@@ -28,7 +28,7 @@ BOX = ["pass_att", "completions", "pass_yds", "pass_td", "ints", "carries", "rus
        "targets", "receptions", "rec_yds", "rec_td"]
 GAME_KEYS = ["id", "week", "date", "time", "away", "home", "away_name", "home_name", "away_record", "home_record",
              "neutral", "early", "weight", "roof", "wind", "away_qb", "home_qb", "market", "model", "proj", "win", "bets",
-             "opening_spread"]
+             "opening_spread", "opening_total", "anchor", "sharp_open", "books"]
 
 
 def kickoff(gameday, gametime) -> pd.Timestamp:
@@ -105,10 +105,41 @@ def _bet_result(b: dict, g: dict, margin: float, total: float) -> tuple[str, flo
     return "W", round(o / 100 if o > 0 else 100 / -o, 4)
 
 
-def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root: Path = ARCH) -> int:
-    """Add final scores, bet results and player box scores to archived games now played."""
+def closing_value(b: dict, g: dict, close: dict | None, curve) -> dict:
+    """Closing line value of one bet against the sharp book's closing quote: the EV of the
+    price taken (the best book's, else the anchor's) at the closing no-vig chance carried to
+    the bet's line through the key-number curve. curve(df) -> nflmodel/bets.curves(..., "line")."""
+    if not close or curve is None:
+        return {}
+    mk, side = b["market"], b["side"]
+    need = {"Spread": ("spread_line", "home_spread_odds", "away_spread_odds"), "Total": ("total_line", "over_odds", "under_odds"),
+            "Moneyline": ("home_moneyline", "away_moneyline")}[mk]
+    if any(k not in close for k in need):
+        return {}
+    row = {"game_id": g["id"], "spread_line": close.get("spread_line", g["market"]["spread"]), "total_line": close.get("total_line", g["market"]["total"]),
+           **{k: close.get(k, np.nan) for k in ("home_spread_odds", "away_spread_odds", "over_odds", "under_odds", "home_moneyline", "away_moneyline")}}
+    from . import bets as B
+    cv = curve(pd.DataFrame([row]))
+    if mk == "Spread":
+        line = -b["best_line"] if b.get("best_line") is not None and side == "home" else b.get("best_line") if b.get("best_line") is not None else g["market"]["spread"]
+    elif mk == "Total":
+        line = b["best_line"] if b.get("best_line") is not None else g["market"]["total"]
+    else:
+        line = None
+    p, push = B._side_prob(cv, 0, mk, side, line)
+    odds = b.get("best_odds_net", b.get("best_odds", b["odds"]))
+    from . import odds as O
+    return {"close_line": close.get("spread_line" if mk == "Spread" else "total_line"),
+            "close_prob": round(p / (1 - push), 4), "clv": round(float(O.expected_value(p, odds, push)), 4)}
+
+
+def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root: Path = ARCH, close: dict | None = None, curve=None) -> int:
+    """Add final scores, bet results and player box scores to archived games now played.
+    close: {game_id: sharp closing quote} (nflmodel/market.closing_quotes) and curve (see
+    closing_value) add each bet's closing line value."""
     if not root.exists():
         return 0
+    close = close or {}
     sched = games.set_index("game_id")
     box = None
     if pg is not None and len(pg):
@@ -130,7 +161,8 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root: Path = ARCH) -> in
             bets = []
             for b in g.get("bets") or []:
                 res, units = _bet_result(b, g, margin, total)
-                bets.append({"market": b["market"], "side": b["side"], "result": res, "units": units})
+                bets.append({"market": b["market"], "side": b["side"], "result": res, "units": units,
+                             **closing_value(b, g, close.get(gid), curve)})
             d["results"][gid] = {"home_score": hs, "away_score": as_, "bets": bets,
                                  "home_qb": r.get("home_qb_id") if isinstance(r.get("home_qb_id"), str) else None,
                                  "away_qb": r.get("away_qb_id") if isinstance(r.get("away_qb_id"), str) else None}
@@ -147,7 +179,8 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root: Path = ARCH) -> in
 
 def summarize(d: dict) -> dict:
     """A week's record: the board's side of each spread and total, the flagged bets, player misses."""
-    rec = {"spread": [0, 0, 0], "total": [0, 0, 0], "bets": 0, "bet_wlp": [0, 0, 0], "units": 0.0, "staked": 0.0, "graded": 0}
+    rec = {"spread": [0, 0, 0], "total": [0, 0, 0], "bets": 0, "bet_wlp": [0, 0, 0], "units": 0.0, "staked": 0.0, "graded": 0,
+           "clv_n": 0, "clv_sum": 0.0, "beat_close": 0}
     for gid, g in d["games"].items():
         res = d["results"].get(gid)
         if not res:
@@ -170,7 +203,13 @@ def summarize(d: dict) -> dict:
                     rec["bet_wlp"]["WLP".index(r["result"])] += 1
                     rec["staked"] += b["stake"]
                     rec["units"] += b["stake"] * r["units"]
+                    if r.get("clv") is not None:
+                        rec["clv_n"] += 1
+                        rec["clv_sum"] += r["clv"]
+                        rec["beat_close"] += int(r["clv"] > 0)
     rec["units"], rec["staked"] = round(rec["units"], 4), round(rec["staked"], 4)
+    rec["clv"] = round(rec["clv_sum"] / rec["clv_n"], 4) if rec["clv_n"] else None
+    del rec["clv_sum"]
     return rec
 
 
@@ -186,9 +225,9 @@ def write_index(root: Path = ARCH) -> list:
 
 
 def update(out: dict, games: pd.DataFrame, pg: pd.DataFrame | None, now: pd.Timestamp | None = None,
-           root: Path = ARCH, verbose: bool = True) -> None:
+           root: Path = ARCH, verbose: bool = True, close: dict | None = None, curve=None) -> None:
     saved = snapshot(out, games, now, root)
-    graded = grade(games, pg, root)
+    graded = grade(games, pg, root, close, curve)
     write_index(root)
     if verbose:
         print(f"  archive: {saved} games saved before kickoff, {graded} newly graded")

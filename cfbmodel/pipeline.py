@@ -7,9 +7,10 @@ import json
 import numpy as np
 import pandas as pd
 
+from nflmodel import backtest as NBT, market
 from nflmodel.pipeline import _clean
 
-from . import archive, backtest, bets, board, config as C, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
+from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
 from .ratings import CFBRatingEngine
 
 PLAYER_PERIODS = {"tuning": (2017, 2019), "holdout": (C.HOLDOUT_FROM, 2100)}
@@ -21,10 +22,18 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     games, tg, qb = data.load_all(refresh=refresh, verbose=verbose)
     season = int(games[games.played].season.max())
     up_weeks = sorted(games[~games.played & (games.season == season)].week.unique())[:2]
-    n_espn = 0
+    n_espn = n_cfbd = 0
     if live and up_weeks:
-        games, n_espn = espn.apply(games, espn.current_lines(up_weeks))
+        espn_lines = espn.current_lines(up_weeks)
+        games, n_espn = espn.apply(games, espn_lines)
         say(f"  ESPN lines for {n_espn} upcoming games")
+        if cfbd.enabled():       # second source, only with the CFBD_API_KEY secret: games ESPN did not price
+            try:
+                have = set(espn_lines.loc[espn_lines.spread_line.notna(), "game_id"]) if len(espn_lines) else set()
+                games, n_cfbd = cfbd.apply(games, cfbd.current_lines(season, up_weeks), have)
+                say(f"  CFBD lines for {n_cfbd} more upcoming games")
+            except Exception as exc:
+                print(f"  CFBD lines skipped ({type(exc).__name__}: {exc})")
         games = weather.fill_wind(games, verbose=verbose)
     else:
         games["wind_source"] = np.where(games["played"], "recorded", "")
@@ -70,6 +79,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         graded.round(4).to_csv(C.DATA / "backtest_bets.csv", index=False)
 
     w_early = float(opening["weight"]) if opening and opening.get("weight") is not None else float(info[season]["w_margin"])
+    # the edge haircut (nflmodel/backtest.edge_haircut, same graded table layout): stakes only
+    haircut = NBT.edge_haircut(graded, season) if with_backtest else (prev.get("meta") or {}).get("haircut")
+    h_factor = float(haircut["factor"]) if C.EDGE_HAIRCUT and haircut and haircut.get("factor") is not None else 1.0
     now = pd.Timestamp.now(tz="UTC")
     frame["early_line"] = (~frame.played) & ((pd.to_datetime(frame.kickoff, utc=True) - now).dt.days >= C.EARLY_DAYS)
     e = frame["early_line"] & frame.spread_line.notna()
@@ -81,7 +93,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     builder = board.MatchupBuilder(games, qb, stats, engine, info[season], season, abbr)
     records = board.season_records(games, season)
     cur = frame[frame.season == season]
-    slate = board.build_slate(cur, dist, engine, builder, records, abbr, names)
+    quotes = market.quotes_for(cur[~cur.played], "cfb", names={v: k for k, v in names.items()})
+    slate = board.build_slate(cur, dist, engine, builder, records, abbr, names, quotes=quotes, haircut=h_factor)
     upcoming = frame[~frame.played & frame.spread_line.notna() & (frame.season == season)]
     order_now = int(upcoming.order.min()) if len(upcoming) else int(frame.order.max()) + 1
     r = engine.ratings_at(order_now)
@@ -115,13 +128,16 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
             "season": season, "week": int(order_now % 100),
             "games_through": pd.Timestamp(games[games.played].kickoff.max()).tz_convert("America/New_York").strftime("%b %-d, %Y"),
             "seasons_of_data": f"{C.FIRST_SEASON}-{season}",
-            "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE, "colors": colors,
+            "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE, "max_game_stake": C.MAX_GAME_STAKE, "colors": colors,
+            "haircut": haircut, "haircut_on": bool(C.EDGE_HAIRCUT), "haircut_factor": h_factor,
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
                       "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
-            "lines_from": f"ESPN for {n_espn} games, cfbfastR consensus otherwise" if n_espn else "cfbfastR consensus (an average across books)",
+            "lines_from": lines_from(n_espn, n_cfbd),
             "sources": ["cfbfastR play-by-play, schedules, box scores and lines (sportsdataverse)",
-                        "ESPN scoreboard (current lines and prices)", "Open-Meteo (wind forecasts)"],
+                        "ESPN scoreboard (current lines and prices)",
+                        *(["CollegeFootballData.com (current lines for games ESPN has not priced)"] if n_cfbd else []),
+                        "Open-Meteo (wind forecasts)"],
             "teams": int(len(teams)),
         },
         "slate": slate,
@@ -135,7 +151,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     try:
         week_now = int(order_now % 100)
         have_past = any(int(f.stem.split("_w")[1]) < week_now for f in archive.ARCH.glob(f"{season}_w*.json"))
-        archive.update(out, games, pg, verbose=verbose)
+        done = games[games.played & (games.season == season)]
+        close = market.closing_quotes(done, "cfb", {g.game_id: pd.Timestamp(g.kickoff) for g in done.itertuples()},
+                                      names={v: k for k, v in names.items()})
+        archive.update(out, games, pg, verbose=verbose, close=close,
+                       curve=lambda df: bets.curves(df, dist, "line"))
         if not have_past or with_backtest:
             backfill(out, frame, games, dist, engine, abbr, names, season, ptable, pg, verbose)
     except Exception as exc:
@@ -145,6 +165,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     build_page(out)
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
+
+
+def lines_from(n_espn: int, n_cfbd: int = 0) -> str:
+    """The meta line saying where the upcoming games' lines came from."""
+    parts = ([f"ESPN for {n_espn} games"] if n_espn else []) + ([f"CFBD for {n_cfbd} games"] if n_cfbd else [])
+    return ", ".join(parts) + ", cfbfastR consensus otherwise" if parts else "cfbfastR consensus (an average across books)"
 
 
 def backfill(out, frame, games, dist, engine, abbr, names, season, ptable, pg, verbose=True):
