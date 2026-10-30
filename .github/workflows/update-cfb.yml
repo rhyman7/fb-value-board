@@ -30,6 +30,8 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - name: Build the college board
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}   # optional: CollegeFootballData lines for games ESPN has not priced
         run: |
           # Full backtest on Mondays (Saturday's box scores are in by then) or when asked.
           if [ "$(date -u +%u)" = "1" ] && [ "$(date -u +%H)" = "12" ] || [ "${{ inputs.backtest }}" = "true" ]; then

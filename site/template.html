@@ -275,6 +275,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 #props-table td.ladder { white-space: normal; text-align: left; padding: 8px 0 14px; background: var(--raised); }
 #props-table td.ladder table { margin: 0 12px; width: calc(100% - 24px); background: var(--surface); }
 #props-table .early { display: inline-block; font-size: 11px; font-weight: 700; color: var(--ink-3); border: 1px solid var(--axis); border-radius: 3px; padding: 0 4px; margin-left: 6px; }
+#props-table .tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--turf); background: var(--raised); border-radius: 3px; padding: 0 5px; margin-left: 6px; white-space: nowrap; }
 .props-calls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 18px 32px; }
 .props-calls h3 { margin-bottom: 6px; }
 /*/NFL-ONLY*/
@@ -991,7 +992,7 @@ function renderCards() {
     const cell = (t, cls) => H("span", { class: cls || "", text: t });
     const team = (code, rec, win, on) => H("div", { class: "bug-team" + (on ? " fav" : "") }, teamSwatch(code), H("span", { class: "code", text: code }), H("span", { class: "rec", text: rec }), H("span", { class: "win", text: pct(win, 0) }));
     return H("a", { class: "bug", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
-      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph", title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null), H("span", { text: "Win chance" })),
+      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph" + gusts(g), title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null), H("span", { text: "Win chance" })),
       team(g.away, g.away_record, 1 - p, p < 0.5), team(g.home, g.home_record, p, p >= 0.5),
       H("div", { class: "bug-lines" },
         cell("", "h"), cell("Market", "h r"), cell("Raw model", "h r"),
@@ -1076,7 +1077,9 @@ const priceRow = b => { const p = probOf(b); return [{ v: b.pick, cls: "strong" 
 const priceNote = () => (state.basis === "adj"
     ? "Priced from the market-adjusted projection. "
     : "Priced from the raw model alone, which has overstated its edge in every season tested. Stakes are only sized from the market-adjusted numbers. ")
-    + "Odds and EV are at the anchor line; Best book is the best price across DraftKings, FanDuel, BetMGM and Kalshi at that book's own line (Kalshi net of its fee), and the EV shown is the better of the two. A \u201cbeats\u201d chip means the book's price beats the sharp anchor's no-vig number before the model says anything. Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll.";
+    + "Odds and EV are at the anchor line; Best book is the best price across DraftKings, FanDuel, BetMGM and Kalshi at that book's own line (Kalshi net of its fee), and the EV shown is the better of the two. A \u201cbeats\u201d chip means the book's price beats the sharp anchor's no-vig number before the model says anything. Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll" + (M.max_game_stake ? " and at " + pct(M.max_game_stake, 0) + " on one game, all sides together" : "") + "."
+    + (M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1 ? (M.haircut_factor > 0 ? " Stakes are sized as if only " + pct(M.haircut_factor, 0) + " of the claimed edge were real" : " No stake is sized, because none of the claimed edge")
+      + (M.haircut_factor > 0 ? ", the share that" : "") + " showed up in the graded bets of the last eight seasons (" + (M.haircut && M.haircut.seasons ? M.haircut.seasons + ", " : "") + "realized profit regressed on claimed EV); the EV and chances shown are still the model's." : "");
 function renderBets() {
   const rows = games().flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
   const shown = state.all ? rows : rows.slice(0, 10);
@@ -1166,6 +1169,11 @@ function columns(node, o) {
 const rankClass = r => r == null ? "q5" : r <= 6 ? "q1" : r <= 13 ? "q2" : r <= 19 ? "q3" : r <= 26 ? "q4" : "q5";
 const rankCell = c => H("span", {}, document.createTextNode(c.v), H("span", { class: "rk " + rankClass(c.rank), text: c.rank == null ? "n/a" : String(c.rank) }));
 
+/* " (gusts 25)" when the forecast carries gusts above the steady wind, else "" */
+function gusts(g) {
+  return g.wind && g.wind.gust != null && g.wind.gust > g.wind.mph ? " (gusts " + Math.round(g.wind.gust) + ")" : "";
+}
+
 function renderGame(g) {
   const view = $("#view-game"), d = g.detail || {}, bd = d.breakdown;
   const idx = ALL.indexOf(g), prev = ALL[idx - 1], next = ALL[idx + 1];
@@ -1175,7 +1183,7 @@ function renderGame(g) {
   /* --- header --- */
   const b = best(g), ev = evOf(b);
   const place = [d.stadium, g.neutral ? "neutral site" : null, g.roof && g.roof !== "unknown" ? g.roof : null, d.surface ? d.surface.replace("_", " ") : null,
-                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
+                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) + " (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
   const verdict = H("p", { class: "lede" });
   if (ev > 0) verdict.append(H("strong", { text: "Best price: " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ". " }),
     document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
@@ -1889,7 +1897,9 @@ const propsView = (function () {
       const pool = main.length ? main : gs.slice().sort((a, b) => Math.abs(a.L - (a.mu || 0)) - Math.abs(b.L - (b.mu || 0)));
       const pick = pool.slice().sort((a, b) => Object.keys(b.bk || {}).length - Object.keys(a.bk || {}).length || ("draftkings" in (b.bk || {})) - ("draftkings" in (a.bk || {})))[0];
       const cell = book => { const r = pool.find(x => (x.bk || {})[book]); return r ? (r.L !== pick.L ? r.L + ": " : "") + bookTxt(r, book) : "–"; };
-      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), ladder: gs.some(p => p.alt) };
+      // market-only tags (propmarket.market_tags): a book gap on the main line, ladder rungs off their book's main line
+      const bgap = gs.find(x => !x.alt && x.bg) || null, lgap = gs.filter(x => x.alt && x.tb).length;
+      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), ladder: gs.some(p => p.alt), bgap, lgap };
     });
   }
   const resBadge = p => {
@@ -1933,6 +1943,7 @@ const propsView = (function () {
     HASN = d.props.some(p => p.pno != null);
     const s = d.summary || {}, box = (v, l) => H("div", {}, H("b", { text: v }), H("span", { text: l }));
     const kids = [box(comma(s.main_lines || 0), "main lines priced"), box(comma(s.ladder_rungs || 0), "ladder rungs"),
+      ...(s.book_gaps || s.ladder_gaps ? [box(comma(s.book_gaps || 0) + " / " + comma(s.middles || 0) + " / " + comma(s.ladder_gaps || 0), "book gaps / middles / ladder gaps")] : []),
       box(s.graded ? comma(s.graded) : "–", s.graded ? "graded" : "graded (after the games)")];
     if (s.brier_ours != null) kids.push(box(s.brier_ours.toFixed(3) + " / " + s.brier_books.toFixed(3), "Brier: ours / books' (lower is better)"));
     if (s.new && s.new.brier_new != null) kids.push(box(s.new.brier_ours.toFixed(3) + " / " + s.new.brier_new.toFixed(3) + " / " + s.new.brier_books.toFixed(3), `Brier: current / new / books' (${comma(s.new.n)} props both priced)`));
@@ -1952,7 +1963,8 @@ const propsView = (function () {
     const t = H("table", { class: "compact" });
     const nw = HASN && rungs.some(r => r.pno != null);
     table(t, [{ t: "Line", l: 1 }, { t: "Our chance, over" }, ...(nw ? [{ t: "New, over" }] : []), { t: "Books', no vig" }, { t: "Ours − books'" }, { t: "DraftKings O / U" }, { t: "FanDuel O / U" }, { t: "EV per $1, over" }, { t: "Result", l: 1 }],
-      rungs.map(r => [r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L,
+      rungs.map(r => [H("span", {}, document.createTextNode(r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L),
+          r.alt && r.tb ? H("span", { class: "tag", text: bookName(r.tb) + (r.take ? " " + r.take : "") + " " + pts(r.lg), title: bookName(r.tb) + "'s no-vig chance of this rung is " + pts(r.lg) + (r.lg < 0 ? " below" : " above") + " what its own main line implies through the model's distribution" + (r.take ? "; the " + r.take + " is the better number." : ".") }) : null),
         pct(dec(r)), ...(nw ? [{ v: ndec(r) == null ? "–" : pct(ndec(r)), cls: "newp" }] : []), r.fo == null ? "–" : pct(r.fo), gap(r) == null ? "–" : (gap(r) >= 0 ? "+" : "−") + pts(gap(r)),
         { v: bookTxt(r, "draftkings"), cls: "px" }, { v: bookTxt(r, "fanduel"), cls: "px" },
         r.vo == null ? "–" : spct(r.vo), r.y == null ? (r.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(r.y)),
@@ -1980,7 +1992,9 @@ const propsView = (function () {
       const g = gap(p), side = g == null ? null : g >= 0 ? "Over" : "Under";
       const lean = g == null ? "–" : H("span", { class: "lean " + (g >= 0 ? "o" : "u") }, (p.fl ? H("span", { class: "chip", text: (p.fl === "over" ? "Over" : "Under") + " " + pts(g) }) : document.createTextNode(side + " " + pts(g))));
       const name = H("span", {}, document.createTextNode(p.n), H("span", { class: "rec", text: p.pos + " · " + p.t }), p.snap === "open" ? H("span", { class: "early", text: "early" }) : null,
-        p.ladder ? H("span", { class: "early", text: "ladder" }) : null);
+        p.ladder ? H("span", { class: "early", text: "ladder" }) : null,
+        p.bgap ? H("span", { class: "tag", text: p.bgap.mid ? "middle" : "book gap", title: "DraftKings and FanDuel post this line a full step apart (" + p.bgap.bg + "): the over at the lower line and the under at the higher are the better numbers" + (p.bgap.mid ? ", and both are -110 or better, so both can win (a middle)." : ".") }) : null,
+        p.lgap ? H("span", { class: "tag", text: "ladder gap", title: p.lgap + " rung" + (p.lgap > 1 ? "s" : "") + " priced more than 5 points off what the same book's main line implies; open the ladder." }) : null);
       const close = p.cL == null || p.alt ? "–" : (p.cL === p.L ? "No move" : String(p.cL) + " (" + (p.cL > p.L ? "+" : "−") + Math.abs(p.cL - p.L).toFixed(1).replace(/\.0$/, "") + ")");
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: STAT[p.s] || p.s }),
         H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) + (p.mun != null ? " / " + p.mun : "") }), H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
@@ -2225,7 +2239,7 @@ const matchups = (() => {
   }
   function row(g, exact) {
     const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
-    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind` : ""].filter(Boolean);
+    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind${gusts(g)}` : ""].filter(Boolean);
     const stadium = (g.detail && g.detail.stadium) || "";
     return `<a class="game-row" href="#matchups/${encodeURIComponent(g.id)}">
       ${rowTeam(g, "away")}
@@ -2338,7 +2352,7 @@ const matchups = (() => {
     let note = d.length ? `Against <b>${esc(opp)}</b>'s defense, which has allowed ${d.join(" and ")} than average.` : "";
     const miss = [t.opp_miss_db > 0.05 ? pctx(t.opp_miss_db) + " of its usual defensive backs" : "", t.opp_miss_pr > 0.05 ? pctx(t.opp_miss_pr) + " of its pass rush" : ""].filter(Boolean);
     if (miss.length) note += ` Out for ${esc(opp)}: ${miss.join(" and ")}.`;
-    if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
+    if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${gusts(g)}${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
     const out = (t.out || []).map(x => { const tag = [x.pos, /^doubtful/i.test(x.status || "") ? "doubtful" : ""].filter(Boolean).join(", "); return `${esc(x.name)}${tag ? " (" + esc(tag) + ")" : ""}`; });
     return `<div class="team-card" style="${teamVars(abbr)}">
       <div class="team-card-header">

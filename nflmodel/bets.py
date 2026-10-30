@@ -93,11 +93,22 @@ def curves(df: pd.DataFrame, dist: dict, source: str = "proj", margins=None, tot
             "margins": MG, "totals": TT}
 
 
-def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFrame:
+def stake_prob(p_win, p_push, fair, haircut: float):
+    """The win probability the stake is sized from: the model's, shrunk toward the market's
+    no-vig number by `haircut` (the share of claimed edge that has shown up in results,
+    backtest.edge_haircut; 1 = size from the model's probability as is). Pushes stay as the
+    model has them; the probability is shrunk on the no-push basis."""
+    model_p = p_win / (1 - p_push)
+    return (fair + haircut * (model_p - fair)) * (1 - p_push)
+
+
+def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: float = 1.0) -> pd.DataFrame:
     """Return the long table of bets for the games in `df`.
 
     source = "proj"   market-adjusted projection (the one to bet from)
     source = "model"  raw model, before it is pulled toward the market
+    haircut: stakes are sized from the model probability shrunk toward the market's by this
+    factor (stake_prob); the probabilities and EV reported are the model's either way.
     """
     df = df.reset_index(drop=True)
 
@@ -135,7 +146,7 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj") -> pd.DataFr
         ev = O.expected_value(p_win, price, p_push)
         profit = np.where(outcome > 0, dec - 1, np.where(outcome < 0, -1.0, 0.0))
         profit = np.where(np.isnan(outcome), np.nan, profit)
-        stake = np.minimum(O.kelly(p_win, price, p_push) * C.KELLY_FRACTION, C.MAX_STAKE)
+        stake = np.minimum(O.kelly(stake_prob(p_win, p_push, fair, haircut), price, p_push) * C.KELLY_FRACTION, C.MAX_STAKE)
         line = {"Spread": np.where(side == "home", -spread, spread), "Total": total}.get(market, np.full(len(df), np.nan))
         out.append(pd.DataFrame({
             "game_id": df["game_id"], "season": df["season"], "week": df["week"],
@@ -164,7 +175,7 @@ def _side_prob(cv: dict, i: int, market: str, side: str, line) -> tuple[float, f
 
 
 def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: str = "proj",
-         kalshi_maker: bool = False, margins=None, totals=None, snap=None) -> dict:
+         kalshi_maker: bool = False, margins=None, totals=None, snap=None, haircut: float = 1.0) -> dict:
     """Every book's price on every side, scored at that book's own line.
 
     quotes: {game_id: {book: {spread_line, home_spread_odds, ..., total_line, over_odds, ...}}}
@@ -174,6 +185,8 @@ def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: s
       ev_line      from the anchor's own no-vig price with no model at all: positive means
                    this book's price beats the sharp reference, whatever the model thinks
       odds_net     the price after Kalshi's fee (equal to odds elsewhere)
+      stake        quarter Kelly from `prob` shrunk toward the anchor's no-vig number at this
+                   line by `haircut` (stake_prob), capped
     """
     df = df.reset_index(drop=True)
     cv = curves(df, dist, source, margins, totals, snap)
@@ -197,7 +210,7 @@ def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: s
                 p, push = _side_prob(cv, i, market, side, line)
                 p0, push0 = _side_prob(cv0, i, market, side, line)
                 ev = float(O.expected_value(p, net, push))
-                stake = float(min(O.kelly(p, net, push) * C.KELLY_FRACTION, C.MAX_STAKE))
+                stake = float(min(O.kelly(stake_prob(p, push, p0 / (1 - push0), haircut), net, push) * C.KELLY_FRACTION, C.MAX_STAKE))
                 shown = (-line if side == "home" else line) if market == "Spread" else line
                 out.setdefault((gid, market, side), []).append({
                     "book": book, "line": None if shown is None else float(shown), "odds": float(price), "odds_net": round(net, 1),

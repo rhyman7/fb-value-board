@@ -44,11 +44,31 @@ boards in detail; this file is the rules.
   board. A game's rows are rewritten until kickoff and never after; don't edit or delete rows
   by hand. The inputs and the rule are fixed until the test is judged (after the 2027 season,
   FEATURES.md "Shadow test"): don't change `shadow.MARGIN`, `TOTAL` or `PLAYER`, and score it
-  with `experiments/shadow_score.py`. A shadow failure never stops the board build.
+  with `experiments/shadow_score.py`. A shadow failure never stops the board build. A second
+  spread version, pass catchers out (`shadow.MARGIN_PC`, from Oct 29, 2026), is logged the same
+  way to `passcatchers_games.csv` under the same rule: don't change `MARGIN_PC` either.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
   only by hand.
+- The **Wind history** Action (`wind-history.yml`, by hand only) runs
+  `experiments/fetch_wind_history.py` and commits only `data/cache/wind_history.csv`: the
+  archive wind at kickoff (speed, gusts, direction, along-field and crosswind parts) for
+  every played outdoor NFL home game since 2014, one Open-Meteo archive call per stadium per
+  game day, resumable. It shares the `board-commits` group. The test that reads it is
+  `experiments/wind_direction_test.py` (FEATURES.md "Wind direction and gusts").
+- **Wind logs (both boards): `data/wind_log.csv`, `data/cfb/wind_log.csv`.** Every forecast
+  the board builds fetch, one row per game per fetch: `game_id, fetched` (UTC), `wind_mph,
+  gust_mph, dir_deg` (direction the wind blows from), and on the NFL log `along_mph,
+  cross_mph`. Append-only; the Actions write them. Rows logged before Oct 29, 2026 have
+  only the speed (blank in the newer columns); read them with `weather.read_log`. The
+  model uses only `wind_mph`; the gusts show in the game header.
+- **Stadium orientation (NFL): `nflmodel/stadiums.py`.** `FIELDS` gives each current home
+  field's long-axis bearing (0-179, 0 = north-south) with a `measured` or `approx` tag, and
+  `PAST` the location and bearing of outdoor stadiums since 2014 that teams have left, by the
+  games file's stadium name. `crosswind(team, mph, dir)` splits a wind into its along-field
+  and crosswind parts. Keep the tag honest: `measured` only for a bearing known within about
+  10 degrees (checked against a satellite view); `approx` otherwise.
 - If a change touches what those Actions build or where it lands, check their steps and
   wording still match the site structure.
 - **Player props (NFL) and The Odds API** ([PROPS.md](PROPS.md)). The key is the
@@ -57,8 +77,10 @@ boards in detail; this file is the rules.
   the three yardage ladders, open, pricing and closing snapshots) runs about 2,500 a month; every call's cost is in
   `data/props/api_usage.csv`. **Ask Ryan before** anything that would use most of the
   month's credits (a backfill), changes what the board shows, or can't be undone.
-  `data/props/prop_log.csv` and `prop_results.csv` are append-only: never edit or delete a
-  row. `data/prop_params.json` is written only by `experiments/props_calibration.py`; refit
+  `data/props/prop_log.csv`, `prop_log_new.csv`, `prop_log_tags.csv` (the market-only tags,
+  by `row_id`) and `prop_results.csv` are append-only: never edit or delete a row. The log's
+  header is fixed: `proplog._append` writes an existing file's own columns, so a new column
+  needs a sibling file keyed by `row_id`, as the tags and the new projections have. `data/prop_params.json` is written only by `experiments/props_calibration.py`; refit
   it there (methods chosen on 2013-2018, holdout 2019 on, run once) rather than by hand.
   Bet flags are off (`propmarket.FLAGS_ON = False`, Oct 2026): against real 2025 lines the
   model did worse than the books. Turning them back on needs an out-of-sample win over the
@@ -83,6 +105,13 @@ boards in detail; this file is the rules.
   (`archive.closing_value`; `clv` and `beat_close` in each week's record). The Action also runs
   `run_market.py alerts`: raw model 2+ points off Pinnacle's spread (NFL; 3+ college) or 3+ off
   its total goes to `data/market/alerts.csv` and is posted to the open `opener-alerts` issue.
+- **CFBD lines (college board): the `CFBD_API_KEY` repository secret.** Optional. When it is
+  set, the **Update college board** Action passes it to the build and `cfbmodel/cfbd.py`
+  fetches CollegeFootballData.com's lines for the upcoming weeks; a game ESPN's scoreboard has
+  not priced takes CFBD's consensus line, else DraftKings, else the first book listed, and its
+  `line_source` says so ("CFBD DraftKings"). ESPN's price always comes first, the cfbfastR
+  consensus stays the fallback, and without the key or on any failure nothing changes. Never
+  print the key or write it to a file.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model, `out` takes a player
   out of the player projections. Use it only for confirmed news the nflverse schedule or the
@@ -126,6 +155,14 @@ boards in detail; this file is the rules.
   or a different starter is named for a game in the next 3 days, it changes only that team's
   entry in rhyman7/cfb's `overrides/qb_starters.json` through a PR there, then re-runs
   **Update college board**. Its task prompt has the rules.
+- **Stakes (both boards).** Quarter Kelly, capped at 3% a bet and 5% a game, all sides
+  together (`config.MAX_GAME_STAKE`, `slate.cap_game`: every stake in the game is scaled
+  down by one factor). With `config.EDGE_HAIRCUT` on, the stake is sized from the model
+  probability shrunk toward the market's by the share of claimed edge that has shown up in
+  the last eight seasons' graded bets (`backtest.edge_haircut`, `meta.haircut`); the EV and
+  probabilities shown are never shrunk. On the NFL board that share is 0 as of Oct 29, 2026,
+  so no NFL stake is sized until it moves (FEATURES.md, "Edge tests, late October 2026");
+  turning the switch off is Ryan's call.
 - **The spread and totals card shows every model input.** A game page's "How the spread is
   built" rows add up to the raw model spread and total (`matchup.breakdown()`,
   `cfbmodel/board.py`). A feature added to `MARGIN_FEATS` or `TOTAL_FEATS` needs a row

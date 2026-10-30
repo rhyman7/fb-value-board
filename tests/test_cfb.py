@@ -80,6 +80,49 @@ def test_espn_odds_both_shapes():
     assert new["spread_line"] == 6.5 and new["total_line"] == 51.5 and new["home_spread_odds"] == -105 and new["away_moneyline"] == 205
 
 
+def test_cfbd_lines_parse_and_fall_back_in_order(monkeypatch):
+    """CFBD's lines: the home-view spread is flipped, consensus beats DraftKings beats the first
+    provider, ESPN-priced games are left alone, and nothing happens without the key."""
+    from cfbmodel import cfbd
+    ln = lambda prov, spread, total, hml=None, aml=None: {"provider": prov, "spread": spread, "spreadOpen": spread,
+                                                          "overUnder": total, "overUnderOpen": total,
+                                                          "homeMoneyline": hml, "awayMoneyline": aml, "formattedSpread": ""}
+    payload = [
+        {"id": 1, "homeTeam": "A", "awayTeam": "B", "startDate": "2026-11-07T20:00:00.000Z",
+         "lines": [ln("Bovada", -7.5, 50.5), ln("consensus", -6.5, 51.0), ln("DraftKings", -7.0, 51.5, -280, 230)]},
+        {"id": 2, "homeTeam": "C", "awayTeam": "D", "startDate": "2026-11-07T20:00:00.000Z",
+         "lines": [ln("Bovada", 3.0, 44.0), ln("DraftKings", 3.5, 44.5, 150, -175)]},
+        {"id": 3, "homeTeam": "E", "awayTeam": "F", "startDate": "2026-11-07T20:00:00.000Z",
+         "lines": [ln("ESPN Bet", None, 55.0), ln("Bovada", -1.5, 56.0)]},
+        {"id": 4, "homeTeam": "G", "awayTeam": "H", "startDate": "2026-11-07T20:00:00.000Z", "lines": []},
+        {"id": "bad", "lines": [ln("DraftKings", -3, 40)]},
+    ]
+    L = cfbd.parse(payload).set_index("game_id")
+    assert list(L.index) == [1, 2, 3]
+    assert L.loc[1, "book"] == "CFBD consensus" and L.loc[1, "spread_line"] == 6.5 and L.loc[1, "total_line"] == 51.0
+    assert L.loc[2, "book"] == "CFBD DraftKings" and L.loc[2, "spread_line"] == -3.5 and L.loc[2, "home_moneyline"] == 150
+    assert L.loc[3, "book"] == "CFBD ESPN Bet" and np.isnan(L.loc[3, "spread_line"]) and L.loc[3, "total_line"] == 55.0
+    assert cfbd.parse({"message": "unauthorized"}).empty and cfbd.parse([]).empty
+
+    games = pd.DataFrame({"game_id": [1, 2, 3, 5], "played": [False, False, False, True],
+                          "spread_line": [4.0, np.nan, np.nan, 10.0], "total_line": [49.0, np.nan, np.nan, 50.0],
+                          "line_source": ["DraftKings", np.nan, np.nan, np.nan]})
+    out, n = cfbd.apply(games, L.reset_index(), have={1})
+    assert n == 1
+    assert out.loc[0, "spread_line"] == 4.0 and out.loc[0, "line_source"] == "DraftKings"     # ESPN's price stands
+    assert out.loc[1, "spread_line"] == -3.5 and out.loc[1, "total_line"] == 44.5 and out.loc[1, "line_source"] == "CFBD DraftKings"
+    assert np.isnan(out.loc[2, "spread_line"]) and out.loc[2, "total_line"] == 55.0 and out.loc[2, "line_source"] == "CFBD ESPN Bet"
+    assert out.loc[3, "spread_line"] == 10.0 and pd.isna(out.loc[3, "line_source"])          # played games untouched
+    same, n0 = cfbd.apply(games, pd.DataFrame())
+    assert n0 == 0 and same.equals(games)
+
+    monkeypatch.delenv(cfbd.ENV, raising=False)
+    assert not cfbd.enabled() and cfbd.current_lines(2026, [10]).empty       # no key, no request
+    from cfbmodel import pipeline
+    assert pipeline.lines_from(0) == "cfbfastR consensus (an average across books)"
+    assert pipeline.lines_from(3, 2) == "ESPN for 3 games, CFBD for 2 games, cfbfastR consensus otherwise"
+
+
 def test_board_breakdowns_add_up():
     import json
     path = Path(__file__).resolve().parent.parent / "docs" / "cfb" / "data.json"

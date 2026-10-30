@@ -4,6 +4,14 @@
                                side: the time, every book's price, the vig-free market
                                chance (scaling and power), ours, the edge, EV, stake,
                                whether it was flagged and why not. Rows are never edited.
+  data/props/prop_log_tags.csv append-only. The market-only tags (propmarket.market_tags:
+                               book gap, middle, ladder gap, the book, the side to take) by
+                               row_id, for log rows that carry one. A sibling file, as
+                               prop_log_new.csv, because the log's own header is fixed:
+                               a column added to LOG_COLS is written only to a log file
+                               whose header has it (`_append` writes the columns the file
+                               was created with), so rows never go out of step with the
+                               header, and old rows carry no tags.
   data/props/prop_results.csv  append-only. One row per graded log row (by row_id): the
                                result and, for flagged bets, the closing price and the
                                closing line value.
@@ -30,6 +38,7 @@ from . import config as C, odds as O, propdist as D
 DIR = C.DATA / "props"
 LOG = DIR / "prop_log.csv"
 LOG_NEW = DIR / "prop_log_new.csv"       # our chance from the new projections, by row_id (append-only)
+LOG_TAGS = DIR / "prop_log_tags.csv"     # market-only tags by row_id (append-only; Oct 2026)
 RESULTS = DIR / "prop_results.csv"
 SNAPS = DIR / "snapshots.csv"
 WEEKLY = DIR / "weekly_summary.csv"
@@ -40,6 +49,7 @@ LOG_COLS = ["row_id", "time", "snapshot", "season", "week", "game_id", "event_id
             "books_market", "price", "book", "fair", "fair_scaled", "our_p", "our_push", "edge", "ev", "kelly", "stake", "flagged",
             "why_not", "role_clear", "status"]
 NEW_COLS = ["row_id", "proj_new", "our_p_new", "our_push_new", "edge_new", "ev_new"]
+TAG_COLS = ["row_id", "book_gap", "middle", "ladder_gap", "tag_book", "take"]
 RES_COLS = ["row_id", "graded", "actual", "result", "profit_flat", "close_line", "close_price", "close_fair",
             "clv_fair", "clv_ev", "clv_note"]
 
@@ -52,11 +62,23 @@ def row_id(*parts) -> str:
     return hashlib.sha1("|".join(str(p) for p in parts).encode()).hexdigest()[:16]
 
 
+def _header(path) -> list[str] | None:
+    """The columns an existing append-only file was created with (None if it is new)."""
+    if not path.exists() or path.stat().st_size == 0:
+        return None
+    with path.open(newline="") as f:
+        return next(csv.reader(f))
+
+
 def _append(path, cols, rows: list[dict]):
+    """Append rows. An existing file keeps its own header: columns it was created without
+    are not written to it (a new column goes to new files only), so rows always line up."""
     if not rows:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
-    new = not path.exists()
+    have = _header(path)
+    new = have is None
+    cols = cols if new else have
     with path.open("a", newline="") as f:
         w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
         if new:
@@ -89,7 +111,13 @@ def append_priced(priced: pd.DataFrame, snapshot: str, season: int, week: int) -
     _append(LOG, LOG_COLS, rows)
     new = [r for r in rows if r.get("our_p_new") is not None and not (isinstance(r.get("our_p_new"), float) and np.isnan(r["our_p_new"]))]
     _append(LOG_NEW, NEW_COLS, new)
+    tagged = [r for r in rows if _text(r.get("book_gap")) or _text(r.get("tag_book"))]   # rows with a tag
+    _append(LOG_TAGS, TAG_COLS, tagged)
     return len(rows)
+
+
+def _text(v) -> str:
+    return "" if v is None or (isinstance(v, float) and np.isnan(v)) else str(v)
 
 
 def read_log() -> pd.DataFrame:
@@ -98,6 +126,10 @@ def read_log() -> pd.DataFrame:
 
 def read_new() -> pd.DataFrame:
     return pd.read_csv(LOG_NEW) if LOG_NEW.exists() else pd.DataFrame(columns=NEW_COLS)
+
+
+def read_tags() -> pd.DataFrame:
+    return pd.read_csv(LOG_TAGS, dtype={"book_gap": str, "tag_book": str, "take": str}) if LOG_TAGS.exists() else pd.DataFrame(columns=TAG_COLS)
 
 
 def read_results() -> pd.DataFrame:

@@ -75,6 +75,15 @@ def fair_american(p: float) -> int | None:
 WIND_LO, WIND_HI = 10.0, 20.0   # mph band where closing totals have run high (backtest.wind_report)
 
 
+def _opt(v, nd: int = 1):
+    """A number rounded to nd places, or None when blank (forecast gusts and direction)."""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return None if np.isnan(f) else (int(round(f)) if nd == 0 else round(f, nd))
+
+
 def with_market(up: pd.DataFrame, quotes: dict) -> pd.DataFrame:
     """Anchor each game to the sharp book's line and prices where it quotes the game, and
     re-blend the projection to that anchor: proj = anchor + w x (model - anchor). Games the
@@ -97,9 +106,33 @@ def bet_books(shopped: dict, gid, market: str, side: str) -> dict:
             "beats_sharp": by_line["book"] if by_line["ev_line"] > 0 else None, "sharp_ev": by_line["ev_line"]}
 
 
+def shown_stake(b: dict) -> float:
+    """The stake the page shows for a side: the best book's when its EV beats the anchor's, else the anchor's."""
+    if b.get("books") and b.get("best_ev") is not None and b["best_ev"] >= b["ev"]:
+        q = next((x for x in b["books"] if x["book"] == b["best"]), None)
+        return float(q["stake"]) if q else float(b["stake"])
+    return float(b["stake"])
+
+
+def cap_game(bets: list[dict], cap: float = C.MAX_GAME_STAKE) -> dict:
+    """Scale a game's stakes down together when the sides it flags add up to more than `cap`
+    of bankroll (what the props do per game, propmarket.flag). Every stake in the game, at
+    the anchor and at each book, is multiplied by the same factor. Returns
+    {"game_stake": the sum before the cap, "stake_scale": the factor (1 when under the cap)}."""
+    total = sum(shown_stake(b) for b in bets)
+    scale = 1.0 if total <= cap or total <= 0 else cap / total
+    if scale < 1.0:
+        for b in bets:
+            b["stake"] = round(b["stake"] * scale, 4)
+            for q in b.get("books") or []:
+                q["stake"] = round(q["stake"] * scale, 4)
+    return {"game_stake": round(total, 4), "stake_scale": round(scale, 4)}
+
+
 def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict | None = None, openers: pd.DataFrame | None = None,
-          quotes: dict | None = None) -> dict:
-    """quotes: nflmodel/market.quotes_for(...) for this frame's unplayed games, or None."""
+          quotes: dict | None = None, haircut: float = 1.0) -> dict:
+    """quotes: nflmodel/market.quotes_for(...) for this frame's unplayed games, or None.
+    haircut: the share of claimed edge the stakes are sized from (backtest.edge_haircut; 1 = none)."""
     quotes = quotes or {"latest": {}, "first": {}}
     cand = frame[~frame.played].copy()
     sharp = {gid for gid, q in quotes["latest"].items() if MK.SHARP in q and "spread_line" in q[MK.SHARP] and "total_line" in q[MK.SHARP]}
@@ -112,9 +145,9 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
     true_open = dict(zip(openers.game_id, openers.open_spread)) if openers is not None and len(openers) else {}
     records = records or {}
     priced, n_book = apply_book_lines(up)
-    adj = B.price_games(priced, dist, "proj")
+    adj = B.price_games(priced, dist, "proj", haircut=haircut)
     raw = B.price_games(priced, dist, "model")
-    shopped = B.shop(priced, dist, quotes["latest"], MK.RETAIL, "proj")
+    shopped = B.shop(priced, dist, quotes["latest"], MK.RETAIL, "proj", haircut=haircut)
     key = ["game_id", "market", "side"]
     b = adj.merge(raw[key + ["model_prob", "ev"]].rename(columns={"model_prob": "raw_prob", "ev": "raw_ev"}), on=key)
 
@@ -131,6 +164,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
                 "fair": fair_american(r.model_prob), "stake": round(r.stake, 4),
                 **bet_books(shopped, g.game_id, r.market, r.side),
             })
+        capped = cap_game(bets)
 
         def qb(side):
             qid = getattr(g, f"{side}_qb_id")
@@ -156,7 +190,8 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
             "wind": ({"mph": round(float(g.wind), 1), "source": g.wind_source,
-                      "under_angle": bool(WIND_LO <= g.wind < WIND_HI)}
+                      "under_angle": bool(WIND_LO <= g.wind < WIND_HI),
+                      "gust": _opt(getattr(g, "wind_gust", None)), "dir": _opt(getattr(g, "wind_dir", None), 0)}
                      if getattr(g, "wind_known", 0) and getattr(g, "wind_source", "") else None),
             "away_qb": qb("away"), "home_qb": qb("home"),
             "market": {"spread": float(g.spread_line), "total": float(g.total_line)},
@@ -165,7 +200,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "win": {"adj": round(float(ml.loc["home", "model_prob"]), 4) if "home" in ml.index else None,
                     "raw": round(float(ml.loc["home", "raw_prob"]), 4) if "home" in ml.index else None,
                     "market": round(float(ml.loc["home", "market_prob"]), 4) if "home" in ml.index else None},
-            "bets": bets,
+            "bets": bets, **capped,
         })
     return {"weeks": sorted({g["week"] for g in games}), "games": games, "book_lines": n_book}
 

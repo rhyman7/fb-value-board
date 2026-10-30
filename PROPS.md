@@ -16,6 +16,15 @@ DraftKings and FanDuel lines the model is worse than the books**, and the sides 
 have flagged broke even. Flags are paused (`propmarket.FLAGS_ON = False`); every side is
 still priced and logged. The board shows nothing new.
 
+**Market-only tags (Oct 29, 2026):** with the flags off, the Props section shows two chips
+that need no model opinion (`propmarket.market_tags`): a **book gap** when DraftKings and
+FanDuel post a main line a full step apart (the over at the lower line and the under at the
+higher are the better numbers; a **middle** when both are −110 or better), and a **ladder gap**
+when a rung's no-vig chance at a book is more than 5 points off what its own main line
+implies through the model's distribution. They are kept in `data/props/prop_log_tags.csv`
+by `row_id` (append-only). Nothing is flagged or staked on them; see FEATURES.md, "Edge
+tests, late October 2026".
+
 ## From a mean to a chance
 
 | Stat | Distribution |
