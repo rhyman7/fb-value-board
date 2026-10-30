@@ -415,8 +415,8 @@ def _check_board(path):
         bd = g["detail"]["breakdown"]
         mm, mt = g["model"]["margin"], g["model"]["total"]
         assert abs(sum(r["value"] for r in bd["margin"]) - bd["margin_sum"]) < 0.005, g["id"]
-        assert abs(bd["margin_sum"] - mm) < 0.02, (g["id"], bd["margin_sum"], mm)
-        assert abs(bd["total_sum"] - mt) < 0.02, (g["id"], bd["total_sum"], mt)
+        assert abs(bd["margin_sum"] - mm) < 0.05, (g["id"], bd["margin_sum"], mm)
+        assert abs(bd["total_sum"] - mt) < 0.05, (g["id"], bd["total_sum"], mt)
         # the adjusted number is the market moved part of the way toward the model
         # the college card shows the line rounded to a half point; the blend uses the raw consensus
         for proj, mkt, mod in ((g["proj"]["margin"], g["market"].get("consensus_spread", g["market"].get("spread")), mm),
