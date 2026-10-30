@@ -75,6 +75,15 @@ def fair_american(p: float) -> int | None:
 WIND_LO, WIND_HI = 10.0, 20.0   # mph band where closing totals have run high (backtest.wind_report)
 
 
+def _opt(v, nd: int = 1):
+    """A number rounded to nd places, or None when blank (forecast gusts and direction)."""
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return None if np.isnan(f) else (int(round(f)) if nd == 0 else round(f, nd))
+
+
 def with_market(up: pd.DataFrame, quotes: dict) -> pd.DataFrame:
     """Anchor each game to the sharp book's line and prices where it quotes the game, and
     re-blend the projection to that anchor: proj = anchor + w x (model - anchor). Games the
@@ -156,7 +165,8 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
             "wind": ({"mph": round(float(g.wind), 1), "source": g.wind_source,
-                      "under_angle": bool(WIND_LO <= g.wind < WIND_HI)}
+                      "under_angle": bool(WIND_LO <= g.wind < WIND_HI),
+                      "gust": _opt(getattr(g, "wind_gust", None)), "dir": _opt(getattr(g, "wind_dir", None), 0)}
                      if getattr(g, "wind_known", 0) and getattr(g, "wind_source", "") else None),
             "away_qb": qb("away"), "home_qb": qb("home"),
             "market": {"spread": float(g.spread_line), "total": float(g.total_line)},

@@ -14,7 +14,7 @@ import pandas as pd
 from scipy.special import ndtr, ndtri
 
 from nflmodel import market as MK, odds as O
-from nflmodel.slate import bet_books, with_market
+from nflmodel.slate import _opt, bet_books, with_market
 
 from . import bets as B
 from . import config as C
@@ -379,7 +379,8 @@ def entries(up, dist, engine, builder, records_for, abbr, names, opened, quotes=
             "books": {bk: {k: v for k, v in q.items() if k != "away_spread_point"} for bk, q in (quotes["latest"].get(g.game_id) or {}).items()},
             "detail": builder.detail(g) if builder is not None else None,
             "roof": "dome" if g.indoor else "outdoors",
-            "wind": ({"mph": round(float(g.wind), 1), "source": src, "under_angle": bool(WIND_LO <= g.wind < WIND_HI)}
+            "wind": ({"mph": round(float(g.wind), 1), "source": src, "under_angle": bool(WIND_LO <= g.wind < WIND_HI),
+                      "gust": _opt(getattr(g, "wind_gust", None)), "dir": _opt(getattr(g, "wind_dir", None), 0)}
                      if src in ("forecast", "recorded") and getattr(g, "wind_known", 0) else None),
             "away_qb": qb("away"), "home_qb": qb("home"),
             # the line as a book posts it (the data's consensus is an average across books)
