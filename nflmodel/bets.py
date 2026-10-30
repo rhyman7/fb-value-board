@@ -85,7 +85,9 @@ def curves(df: pd.DataFrame, dist: dict, source: str = "proj", margins=None, tot
     # Moneyline: start from the market's no-vig win probability, expressed as a
     # margin on the win-probability curve, and slide by the same disagreement.
     tie = pm[:, MG == 0].ravel()
-    fair_ml, _ = O.no_vig(col("home_moneyline"), col("away_moneyline"))
+    # power method for the moneyline: proportional scaling overstates a big underdog, which
+    # made longshot prices look as if they beat the sharp book (Oct 2026)
+    fair_ml, _ = O.no_vig_power(col("home_moneyline"), col("away_moneyline"))
     implied = np.where(np.isnan(fair_ml), raw_spread, dist["sd_win"] * ndtri(np.clip(fair_ml, 1e-4, 1 - 1e-4)))
     h_win = ndtr((implied + d_margin) / dist["sd_win"]) * (1 - tie)
     a_win = 1 - tie - h_win
@@ -141,7 +143,7 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: flo
         default = None if market == "Moneyline" else DEFAULT_PRICE
         price, other = price_of(pc, default), price_of(oc, default)
         dec = O.american_to_decimal(price)
-        fair, _ = O.no_vig(price, other)
+        fair, _ = O.no_vig_power(price, other)
         model_p = p_win / (1 - p_push)                      # win probability with pushes set aside
         ev = O.expected_value(p_win, price, p_push)
         profit = np.where(outcome > 0, dec - 1, np.where(outcome < 0, -1.0, 0.0))
@@ -172,6 +174,9 @@ def _side_prob(cv: dict, i: int, market: str, side: str, line) -> tuple[float, f
         return (float(h[0]) if side == "home" else float(a[0])), float(push[0])
     o, push, u = D.over_push_under(cv["pt"][i:i + 1], cv["totals"], line)
     return (float(o[0]) if side == "over" else float(u[0])), float(push[0])
+
+
+FLAG_ODDS = (-400.0, 400.0)      # a "beats the sharp line" flag only inside this price band
 
 
 def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: str = "proj",
@@ -215,7 +220,8 @@ def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: s
                 out.setdefault((gid, market, side), []).append({
                     "book": book, "line": None if shown is None else float(shown), "odds": float(price), "odds_net": round(net, 1),
                     "prob": round(p / (1 - push), 4), "p_push": round(push, 4), "ev": round(ev, 4),
-                    "ev_line": round(float(O.expected_value(p0, net, push0)), 4), "stake": round(stake, 4)})
+                    "ev_line": round(float(O.expected_value(p0, net, push0)), 4) if FLAG_ODDS[0] <= float(price) <= FLAG_ODDS[1] else None,
+                    "stake": round(stake, 4)})
     for k in out:
         out[k].sort(key=lambda x: -x["ev"])
     return out

@@ -101,9 +101,11 @@ def bet_books(shopped: dict, gid, market: str, side: str) -> dict:
     q = shopped.get((gid, market, side)) or []
     if not q:
         return {}
-    by_line = max(q, key=lambda x: x["ev_line"])
+    lined = [x for x in q if x.get("ev_line") is not None]
+    by_line = max(lined, key=lambda x: x["ev_line"]) if lined else None
     return {"books": q, "best": q[0]["book"], "best_odds": q[0]["odds"], "best_line": q[0]["line"], "best_ev": q[0]["ev"],
-            "beats_sharp": by_line["book"] if by_line["ev_line"] > 0 else None, "sharp_ev": by_line["ev_line"]}
+            "beats_sharp": by_line["book"] if by_line and by_line["ev_line"] > 0 else None,
+            "sharp_ev": by_line["ev_line"] if by_line else None}
 
 
 def shown_stake(b: dict) -> float:

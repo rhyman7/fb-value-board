@@ -315,7 +315,7 @@ def win_probs(df: pd.DataFrame, dist: dict) -> pd.DataFrame:
     """Home win chance for the market, the raw model and the adjusted projection. Without a
     moneyline price, the market's chance comes from its spread on the win-probability curve."""
     sp = df["spread_line"].to_numpy(float)
-    fair, _ = O.no_vig(df["home_moneyline"].to_numpy(float) if "home_moneyline" in df else np.full(len(df), np.nan),
+    fair, _ = O.no_vig_power(df["home_moneyline"].to_numpy(float) if "home_moneyline" in df else np.full(len(df), np.nan),
                        df["away_moneyline"].to_numpy(float) if "away_moneyline" in df else np.full(len(df), np.nan))
     implied = np.where(np.isnan(fair), sp, dist["sd_win"] * ndtri(np.clip(fair, 1e-4, 1 - 1e-4)))
     out = pd.DataFrame({"game_id": df["game_id"].to_numpy()})
