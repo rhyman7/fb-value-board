@@ -206,6 +206,8 @@ Pass catchers have helped in every season since the better data starts. That
 is a lead, not a decision: the split was chosen after seeing the results. The
 honest test is to add pass catchers at the end of the 2026 season only if 2026
 also improves, and to judge it on 2027.
+(From October 29, 2026 it runs as a second shadow spread version; see "Edge
+tests, late October 2026".)
 
 ## Defensive players, re-tested and rated (late October 2026)
 
@@ -380,6 +382,8 @@ builds each season from it and the two before, as it will live. **Rule:** a shad
 replaces the board's only if its average miss is lower on the rest of 2026 (week 9 on) and,
 separately, on 2027. Score it with `python experiments/shadow_score.py`. Until then, don't
 change the inputs.
+A second spread version, pass catchers out, was added to the shadow on the same date and
+under the same rule, logged in its own file (see "Edge tests, late October 2026", item 5).
 
 ## Player roles in the game model, October 2026
 
@@ -411,6 +415,169 @@ Better on both periods, but small: the gain since 2019 (+0.6 points) is inside
 the noise for 1,825 games (about ±1.2). Kept because it helps on both and the
 inputs are known in time. Totals unchanged.
 
+## Edge tests, late October 2026
+
+Six questions about where the board's edge is and how much of it to stake, each tested by
+the rule above: a candidate is added alone, walk-forward, and kept only if it lowers the raw
+model's average miss on the tuning seasons and holds on the holdout. Scripts:
+`experiments/line_move_test.py`, `experiments/qb_draft_prior_test.py`,
+`experiments/shadow_score.py`; the haircut and the cap are in `nflmodel/backtest.py`,
+`nflmodel/bets.py` and `nflmodel/slate.py`. Base numbers here come from the production
+engine with the injury groups (margin miss 10.237 tuning, 9.985 holdout, through week 8 of
+2026); they differ a little from the October table, which used the wider test engine.
+
+| Item | Result | Kept |
+|---|---|---|
+| 1. Line movement as a feature | tuning +0.012, holdout −0.014 | no |
+| 1. Line movement as a filter on spread bets | no bucket holds on both periods | no |
+| 2. Edge haircut (share of claimed EV that was real) | NFL 0.00 (slope −0.38 ± 0.28, 2018-2025); college 0.52 (± 0.39) | applied to stakes (`EDGE_HAIRCUT`) |
+| 3. Per-game stake cap | 5% of bankroll per game, all sides together | yes (`MAX_GAME_STAKE`) |
+| 4. Props book-disagreement tags | market-only chips, no model opinion | yes (tags only, flags stay off) |
+| 5. Pass catchers in shadow | second shadow spread version, from Oct 29, 2026 | shadow only |
+| 6. Backup quarterback prior by draft round | tuning −0.007, holdout +0.017 (QB-change games) | no |
+
+### 1. Line movement
+
+`move` is the closing spread less the nfelo opening spread (positive: the market moved toward
+the home team), 0 for the 16% of games without an opener. Added to the margin model alone:
+
+| Candidate | Tuning | Holdout | Seasons better since 2014 |
+|---|---|---|---|
+| move | +0.012 | −0.014 | 8 of 13 |
+| move + its size | +0.008 | −0.008 | 7 of 13 |
+
+Worse on the tuning seasons, so out by the rule. It would also break the board's rule that
+this week's line is never a feature (README): the closing line is not known when the board
+prices a game, and the opener is what the model is supposed to be judged against.
+
+The same opener lets the backtest's market-adjusted spread bets (EV above 0, closing prices)
+be split by whether the line moved toward the bet's side between the opener and the close:
+
+| Line moved | All (1,871 bets) | Tuning 2014-2018 | Holdout 2019 on |
+|---|---|---|---|
+| toward the model's side | 279-267-8, 51.1%, −0.2% ± 4.1% | 142-141-5, 50.2%, −1.7% ± 5.7% | 137-126-3, 52.1%, +1.5% ± 6.0% |
+| did not move | 219-167-8, 56.7%, +10.1% ± 4.8% | 90-60-4, 60.0%, +17.0% ± 7.7% | 129-107-4, 54.7%, +5.7% ± 6.2% |
+| away from it | 475-422-26, 53.0%, +2.9% ± 3.2% | 264-200-14, 56.9%, +10.9% ± 4.4% | 211-222-12, 48.7%, −5.7% ± 4.5% |
+
+The pattern flips between the periods ("away" was the best bucket on the tuning seasons and
+the worst since), and every bucket is within about one standard error of the others on the
+holdout, so there is no filter here. The unmoved bucket is the only one positive in both,
+and it is the smallest.
+
+### 2. Edge haircut
+
+Claimed EV has run ahead of realized returns on every part of the board (props: +14.9%
+claimed, +0.5% realized, PROPS.md). `backtest.edge_haircut` measures the share that was real:
+on the graded market-adjusted bets with EV above 0 from earlier seasons, realized profit is
+regressed on claimed EV through the origin; the slope is the share, clipped to [0, 1]. Over
+the last eight seasons it is the factor the board stakes from.
+
+| Board, 2018-2025 | Bets | Claimed EV | Realized | Slope ± 1 s.e. | Factor |
+|---|---|---|---|---|---|
+| NFL, all markets | 2,364 | +5.5% | −2.5% | −0.38 ± 0.28 | **0.00** |
+| NFL, spreads only | 1,217 | +4.9% | −0.3% | +0.23 ± 0.41 | (0.23) |
+| NFL, moneylines only | 1,145 | +6.1% | −4.8% | −0.71 ± 0.39 | (0.00) |
+| College, spreads (the only market with prices) | 2,432 | +3.6% | +1.7% | +0.52 ± 0.39 | **0.52** |
+
+NFL by season (slope): 2014 1.36, 2015 1.41, 2016 0.87, 2017 −0.41, 2018 1.38, 2019 −0.70,
+2020 −0.88, 2021 0.48, 2022 −0.96, 2023 −2.66, 2024 −0.01, 2025 −2.87. The seasons the
+settings were chosen on returned what they claimed and more; since 2019 the claimed edge has
+not shown up at the close (the same thing the README's 51.9% says), and the moneylines,
+which carry the biggest claimed edges, have been the worst. College by season: 2.27, −0.10,
+0.75, −0.72, 0.86, 0.59, 0.71, 1.64 (2018-2025).
+
+**What it does (`config.EDGE_HAIRCUT = True`, both boards):** the stake of every side, at the
+anchor line and at each book, is the quarter-Kelly stake for the model probability shrunk
+toward the market's no-vig number by the factor (`bets.stake_prob`): with factor h, the
+stake is sized from market + h × (model − market). EV, probabilities, edge and fair price on
+the page are still the model's; only the stake changes. The factor is in `meta.haircut`
+(with the by-season and by-market tables) and `meta.haircut_factor`, and the pricing note
+under the Every price table says what it is. **On the NFL board the factor is 0.0 as of this
+test, so no NFL stake is sized until the claimed edge shows up in results**; the college board
+stakes at about half. The switch is there to turn off (`EDGE_HAIRCUT = False`) if that is not
+wanted; the number is honest either way. The Update board Actions refit it on their backtest
+runs (Tuesday NFL, Monday college) and carry it from the previous `data.json` otherwise. The
+factor's standard error is large (0.3-0.4 on 2,400 bets), so it will move season to season.
+
+### 3. Per-game stake cap
+
+`config.MAX_GAME_STAKE = 0.05` (both boards): when the stakes the page shows for one game,
+all sides together (the best book's stake where its EV beats the anchor's, else the anchor's),
+add up to more than 5% of bankroll, every stake in the game is scaled down by the same factor
+(`slate.cap_game`; the college board calls the same function). This is what the props already
+do per game (`propmarket.flag`, 3%). Each game carries `game_stake` (the sum before the cap)
+and `stake_scale`. The per-bet cap (3%) still applies first. Tested in `tests/test_model.py`;
+on the week 8-9 slates no game reached it (the largest, Baltimore at Buffalo, added up to
+4.8% before the haircut), so it is a guard for the weeks the model likes several sides of one
+game.
+
+### 4. Props: book-disagreement tags
+
+Flags stay off (`FLAGS_ON = False`). Two tags that need no model opinion, from
+`propmarket.market_tags`, shown as small chips in the Props section and kept in the log:
+
+- **book gap**: DraftKings and FanDuel post the same player's main line a full step apart
+  (5 yards on yards props, half a point on counts). The better number at each book is the
+  side to take: the over at the lower line, the under at the higher. When both of those are
+  −110 or better it is a **middle** (both can win on a result between the lines). The log's
+  `book_gap` names the two lines, `take` the side on that row, `middle` whether both prices
+  qualify.
+- **ladder gap**: an alternate-ladder rung whose no-vig chance at a book is more than 5
+  points off what the same book's main line implies through the model's distribution (the
+  main line's no-vig chance plus the model's difference between the two lines, the carry
+  `proplog.grade` already uses for closing line value). `ladder_gap` is the rung's chance
+  minus the implied one (negative: the over is cheaper than the main line says), `tag_book`
+  the book, `take` the side.
+
+The prop log is append-only and its header is fixed, so the tags live in a sibling file,
+`data/props/prop_log_tags.csv`, keyed by `row_id` like `prop_log_new.csv`; only rows priced
+from now on carry them. `proplog._append` now writes an existing file's own columns, so a
+column added to `LOG_COLS` can never put new rows out of step with an old header. The Props
+files (`docs/props/`) carry the tags (`bg`, `mid`, `lg`, `tb`, `take`) and each week's summary
+counts them (`book_gaps`, `middles`, `ladder_gaps`). Whether the tagged sides win is a question
+for the log: nothing is flagged or staked on them. Tested with a fixture in `tests/test_props.py`.
+
+### 5. Pass catchers in shadow (from October 29, 2026)
+
+"Pass catchers, missing now" (`d_miss_pc`, `nflmodel/injuries.py`: the snap-weighted share of a
+team's core WR/TE unavailable) helped the margin in all 7 seasons since 2020 but hurt before,
+and the rule says that split was chosen after the fact. So it joins the shadow test instead of
+the board: `shadow.MARGIN_PC` is the board's margin features plus `d_miss_pc`, refitted on
+every refresh and logged to `data/shadow/passcatchers_games.csv` (raw model margin, current
+and shadow, per game) under the same freeze-at-kickoff rule as the defensive log. The first
+shadow version's inputs (`shadow.MARGIN`, `TOTAL`, `PLAYER`) are unchanged. **Rule, set
+October 29, 2026 before any of these games were played:** the pass-catchers version replaces
+the board's spread model only if its average miss is lower on the rest of 2026 (week 9 on)
+and, separately, on 2027. Score it with `python experiments/shadow_score.py`, which now
+prints the pass-catchers rows next to the defensive ones.
+
+### 6. Backup quarterback prior by draft capital
+
+`config.QB_REPLACEMENT` gives every unknown quarterback the same prior, −0.13 EPA per dropback
+against the league. nflverse's draft file lets the prior depend on where he was drafted:
+round 1, rounds 2-3, later or undrafted. Among the 127 quarterbacks whose first 300 dropbacks
+are in the data (careers from 2007), round 1 picks averaged −0.068 in those dropbacks,
+rounds 2-3 −0.092, later or undrafted −0.091. Two versions, each scored as the quarterback
+test above on games where either team changed starters (`experiments/qb_draft_prior_test.py`;
+the rating engine takes a per-quarterback prior through `qb_priors`):
+
+| Prior | Tuning, QB-change games | Holdout, QB-change games | Holdout, all games |
+|---|---|---|---|
+| Flat −0.13 (current) | 10.362 | 10.341 | 9.991 |
+| Fitted by bucket, walk-forward (first-300 averages, shrunk) | 10.355 | 10.358 | 9.993 |
+| Fixed: round 1 +0.04, late −0.04 | 10.370 | 10.353 | 9.987 |
+| Fixed: round 1 +0.06, late −0.06 | 10.382 | 10.364 | 9.988 |
+| Fixed: round 1 +0.08, late −0.04 | 10.387 | 10.371 | 9.990 |
+| Fixed: round 1 +0.04, late −0.08 | 10.381 | 10.358 | 9.987 |
+| Fixed: round 1 +0.10, late −0.10 | 10.417 | 10.390 | 9.993 |
+| Closing line | 10.345 | 10.112 | 9.803 |
+
+The fitted version helps the tuning seasons by 0.007 and hurts the holdout by 0.017; every
+fixed offset is worse on the tuning seasons. Not kept. The buckets differ less than they
+seem to (a first-round backup is about 0.02 EPA better than a late one over his first 300
+dropbacks, worth under half a point), and the 200-dropback prior already gives way to a
+backup's own games quickly. `QB_REPLACEMENT` stays at −0.13.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;
@@ -419,7 +586,10 @@ inputs are known in time. Totals unchanged.
 - **Grade the wind under on forecasts.** Every forecast the board fetches is
   now saved to `data/wind_log.csv`. After a season of logs, re-run the wind
   table on the logged forecast instead of the recorded wind.
-- **Pass catchers.** Re-test after the 2026 season (see above).
+- **Pass catchers.** In the shadow test from October 29, 2026 (above); score it with
+  `experiments/shadow_score.py` after the 2026 season and again after 2027.
+- **The edge haircut.** Re-read `meta.haircut` each season: the NFL factor is 0.0 now, and
+  the first season whose bets return what they claim will move it.
 - **Defensive ratings.** The shadow test decides (above). Score it with
   `experiments/shadow_score.py` after the 2026 season and again after 2027.
 - **College football**, where the market is softer and rosters change more.

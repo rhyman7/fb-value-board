@@ -96,6 +96,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
                    refresh=refresh, verbose=verbose)
     except Exception as exc:
         print(f"  shadow test skipped ({exc})")
+    try:                                          # second shadow spread version: pass catchers out (Oct 29, 2026)
+        from . import shadow
+        shadow.run_passcatchers(wf_input, frame, games, season, verbose=verbose)
+    except Exception as exc:
+        print(f"  pass-catchers shadow skipped ({exc})")
 
     say("Fitting key numbers ...")
     dist = bets.fit_distribution(games, season)
@@ -120,6 +125,10 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     else:
         opening = prev.get("openers")
     w_early = float(opening["weight"]) if opening and opening.get("weight") is not None else float(info[season]["w_margin"])
+    # the edge haircut: the share of claimed edge that has shown up in the graded bets of the
+    # last eight seasons; stakes are sized from it (config.EDGE_HAIRCUT), EV and probabilities are not
+    haircut = backtest.edge_haircut(graded, season) if with_backtest else (prev.get("meta") or {}).get("haircut")
+    h_factor = float(haircut["factor"]) if C.EDGE_HAIRCUT and haircut and haircut.get("factor") is not None else 1.0
     today = pd.Timestamp(dt.datetime.now(dt.timezone.utc).date())
     frame = frame.copy()
     frame["early"] = (~frame.played) & ((frame.gameday - today).dt.days >= C.EARLY_DAYS)
@@ -133,7 +142,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "season": season, "week": int(order_now % 100),
             "games_through": games[games.played].gameday.max().strftime("%b %-d, %Y"),
             "seasons_of_data": f"{C.FIRST_SEASON}-{season}",
-            "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE,
+            "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE, "max_game_stake": C.MAX_GAME_STAKE,
+            "haircut": haircut, "haircut_on": bool(C.EDGE_HAIRCUT), "haircut_factor": h_factor,
             "colors": {k: list(v) for k, v in C.TEAM_COLORS.items()},
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
                       "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
@@ -142,7 +152,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
                         "The Odds API (DraftKings and FanDuel player props)"],
         },
         "slate": slate.build(frame[frame.season == season], dist, engine, builder, slate.season_records(games, season), openers,
-                             quotes=market.quotes_for(frame[(frame.season == season) & ~frame.played], "nfl")),
+                             quotes=market.quotes_for(frame[(frame.season == season) & ~frame.played], "nfl"), haircut=h_factor),
         "ratings": slate.ratings_table(engine, r, info[season]["margin_coefs"], games, frame, season),
         "key_numbers": backtest.key_number_report(games, dist, season),
     }
