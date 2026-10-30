@@ -1067,8 +1067,13 @@ const shopped = b => state.basis === "adj" && b.best != null;
 const evOf = b => state.basis === "adj" ? (b.best != null ? Math.max(b.ev, b.best_ev) : b.ev) : b.raw_ev;
 const oddsOf = b => shopped(b) && b.best_ev >= b.ev ? b.best_odds : b.odds;
 const bookOf = b => shopped(b) && b.best_ev >= b.ev ? bookName(b.best) : null;
+/* a game's bets and its derivative sides (team totals, first-half lines: nflmodel/derivs.py, each with deriv: true) */
+const sheetBets = g => g.bets.concat(g.derivs || []);
+const isTotalMk = mk => mk === "Total" || mk === "Team total" || mk === "1H Total";
+/* a book's line as the pick reads: totals as posted, spreads signed, nothing for a moneyline */
+const qLine = (b, q) => b.market === "Moneyline" || b.market === "1H Moneyline" ? "" : (isTotalMk(b.market) ? q.line : line(q.line)) + " ";
 /* the pick with the best book's line when it differs from the anchor's */
-const pickOf = b => { if (!shopped(b) || b.best_ev < b.ev || b.best_line == null || b.market === "Moneyline") return b.pick; const l = b.best_line, parts = b.pick.split(" "), anchor = parseFloat(parts[1].replace("PK", "0").replace("−", "-").replace("+", "")); return Math.abs(l - anchor) < 0.01 ? b.pick : parts[0] + " " + (b.market === "Total" ? String(l) : line(l)); };
+const pickOf = b => { if (b.deriv) return b.pick; if (!shopped(b) || b.best_ev < b.ev || b.best_line == null || b.market === "Moneyline") return b.pick; const l = b.best_line, parts = b.pick.split(" "), anchor = parseFloat(parts[1].replace("PK", "0").replace("−", "-").replace("+", "")); return Math.abs(l - anchor) < 0.01 ? b.pick : parts[0] + " " + (b.market === "Total" ? String(l) : line(l)); };
 const bestCell = b => { if (!b.best) return "—"; const q = b.books.find(x => x.book === b.best) || {}; const parts = [document.createTextNode(bookName(b.best) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds))];
   if (b.beats_sharp) { parts.push(document.createTextNode(" ")); parts.push(H("span", { class: "chip", text: "beats " + bookName(M.sharp_book || "pinnacle"), title: "This price beats the sharp book's no-vig number at this line on its own, before the model: " + spct(b.sharp_ev) + " per dollar" })); }
   return H("span", {}, ...parts); };
@@ -1102,7 +1107,7 @@ function renderHero() {
       document.createTextNode(plus.length
         ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", worth " + spct(evOf(top.b)) + " per dollar staked."
         : "No bet clears break-even once the model is weighed against the market. The closest is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", " + spct(evOf(top.b)) + " per dollar staked."));
-    const tiers = all.flatMap(g => g.bets).reduce((a, b) => { if (b.tier) a[b.tier] = (a[b.tier] || 0) + 1; return a; }, {});
+    const tiers = all.flatMap(sheetBets).reduce((a, b) => { if (b.tier) a[b.tier] = (a[b.tier] || 0) + 1; return a; }, {});
     const tn = Object.values(tiers).reduce((a, b) => a + b, 0);
     if (tn) lede.append(document.createTextNode(" On the bet sheet: " + [tiers.price ? tiers.price + " where a price beats the sharp line" : "", tiers.opener ? tiers.opener + " off the opener" : "", tiers.wind ? tiers.wind + " wind " + (tiers.wind === 1 ? "under" : "unders") : "", tiers.model ? tiers.model + " on the model alone" : ""].filter(Boolean).join(", ") + "."));
     const sharp = all.filter(g => g.anchor && g.anchor !== "consensus").length, beats = all.flatMap(g => g.bets).filter(b => b.beats_sharp).length;
@@ -1297,6 +1302,7 @@ function timing(g, b) {
   return { t: "Bet now", d: "Little time left for the line to improve.", cls: "" };
 }
 const moveText = (g, b) => {
+  if (b.deriv) return "";
   const key = b.market === "Total" ? "total" : "spread";
   const fmtLine = v => key === "total" ? String(v) : fav(g, v);
   const now = key === "total" ? g.market.total : g.market.spread;
@@ -1316,6 +1322,8 @@ const moveText = (g, b) => {
 };
 /* what the model's number is made of: the three largest pieces, this week's news in red */
 const whyNode = (g, b) => {
+  if (b.deriv) return H("span", {}, H("b", { text: (b.market === "Team total" ? "Team total" : "First half") + " off the full-game curve: " }),
+    document.createTextNode(b.sharp ? bookName(M.sharp_book || "pinnacle") + " quotes " + (isTotalMk(b.market) ? b.sharp.line : (b.market === "1H Moneyline" ? "" : line(b.sharp.line))) + " " + odds(Math.round(b.sharp.odds)) + " (" + pct(b.sharp.prob_line) + " no vig); the model has it " + pct(b.prob) + "." : "no sharp quote; model " + pct(b.prob) + "."));
   const w = (b.why || []).slice(0, 3);
   if (!w.length) return document.createTextNode("—");
   const total = b.market === "Total";
@@ -1331,7 +1339,7 @@ function bucketText(b) {
   const live = LEDGER && LEDGER.by_tier && LEDGER.by_tier[tierOf(b)];
   const liveTxt = live && live.graded ? ` Live since ${LEDGER.since}: ${live.w}-${live.l}${live.p ? "-" + live.p : ""}, ${spct(live.roi)} per unit, CLV ${spct(live.clv)} on ${live.clv_n}.` : "";
   const t = tierOf(b);
-  if (t === "price") return "+EV against the sharp line by construction; the only bucket that needs no model." + liveTxt;
+  if (t === "price") return (b.deriv ? "+EV against the sharp book's own derivative quote, carried to this line by the curve; derivative lines have no graded history on this board yet." : "+EV against the sharp line by construction; the only bucket that needs no model.") + liveTxt;
   if (t === "opener") {
     const OP = DATA.openers; if (!OP) return liveTxt.trim();
     const src = b.market === "Total" && OP.total ? OP.total : OP, r = src.rows.find(x => x.threshold === (b.market === "Total" ? 3 : 2)) || src.rows[src.rows.length - 1];
@@ -1355,7 +1363,7 @@ function renderSheet() {
   const host = $("#sheet"), gs = games();
   const inp = M.inputs || {};
   $("#sheet-asof").textContent = "Data as of: board built " + (inp.generated || M.generated) + (inp.market ? "; book prices " + inp.market + " UTC" : "; no book prices on file") + (inp.injuries ? "; injury report " + inp.injuries : "") + (inp.designations ? "; injury designations checked " + inp.designations : "") + ". Lines move: check the book before betting.";
-  const rows = gs.flatMap(g => g.bets.filter(b => tierOf(b)).map(b => ({ g, b })));
+  const rows = gs.flatMap(g => sheetBets(g).filter(b => tierOf(b)).map(b => ({ g, b })));
   const byTier = {}; rows.forEach(x => (byTier[tierOf(x.b)] = byTier[tierOf(x.b)] || []).push(x));
   const n = t => (byTier[t] || []).length;
   const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
@@ -1373,7 +1381,7 @@ function renderSheet() {
       xs.map(({ g, b }) => {
         const tm = timing(g, b), bk = b.best ? b.books.find(x => x.book === b.best) : null;
         const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk) : bk;
-        const where = q ? bookName(q.book) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") + (q.ev < b.ev - 0.005 ? " (" + spct(q.ev) + " here)" : "")
+        const where = q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") + (q.ev < b.ev - 0.005 ? " (" + spct(q.ev) + " here)" : "")
           : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
         return [
           { v: H("span", {}, H("a", { href: "#" + g.id, text: pickOf(b) }), H("br"), H("span", { class: "ko rec", text: g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", "").replace(/^(\w{3}) \w{3} \d+, /, "$1 ") + (hoursTo(g) != null ? " (" + hoursText(hoursTo(g)) + ")" : "") })), cls: "strong" },
@@ -1406,7 +1414,7 @@ function renderBestBets() {
   kids.push(el("p", `Board built ${inp.generated || M.generated}${inp.market ? "; book prices as of " + inp.market + " UTC" : "; no book prices on file"}${inp.injuries ? "; injury report " + inp.injuries : ""}${inp.designations ? "; injury designations checked " + inp.designations : ""}. Results through ${M.games_through}. Bankroll $${comma(state.bankroll)}. Lines move: check the book before betting.`, "stamp"));
 
   /* 1. the card */
-  const rows = gs.flatMap(g => g.bets.filter(b => tierOf(b)).map(b => ({ g, b }))).sort((x, y) => (TIER_ORDER[tierOf(x.b)] - TIER_ORDER[tierOf(y.b)]) || (evOf(y.b) - evOf(x.b)));
+  const rows = gs.flatMap(g => sheetBets(g).filter(b => tierOf(b)).map(b => ({ g, b }))).sort((x, y) => (TIER_ORDER[tierOf(x.b)] - TIER_ORDER[tierOf(y.b)]) || (evOf(y.b) - evOf(x.b)));
   kids.push(el("h2", "The card: " + rows.length + (rows.length === 1 ? " bet" : " bets")));
   const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
   kids.push(el("p", "In the order to take them: prices that beat Pinnacle's own number first (no model needed), then the model's edges against the opening line, " + (LG === "nfl" ? "wind unders, " : "") + "then the model alone. Moneylines appear only when a price beats the sharp line. Stakes are " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " a bet" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the model's claimed edge were real` : "; the model's own edges carry no stake, since none of their claimed edge has shown up in the graded bets of the last eight seasons") + " — bets marked (bucket) are sized from their bucket's own record instead" : "") + "."));
@@ -1418,7 +1426,7 @@ function renderBestBets() {
       rows.map(({ g, b }) => {
         const tm = timing(g, b), bk = b.best ? b.books.find(x => x.book === b.best) : null;
         const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk) : bk;
-        const where = q ? bookName(q.book) + " " + (b.market === "Moneyline" ? "" : (b.market === "Total" ? q.line : line(q.line)) + " ") + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
+        const where = q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
         const st = sheetStake(b, q);
         const why = H("span", {}, H("b", { text: TIER[tierOf(b)].h + ". " }), whyNode(g, b));
         return [{ v: String(++n), cls: "n nw" }, { v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home), H("br"), document.createTextNode(kickoff(g).replace(" ET", ""))), cls: "nw" },
@@ -1701,6 +1709,29 @@ function renderGame(g) {
   table(pt, priceHead, g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(priceRow));
   const prices = sec("Every price", priceNote(), H("div", { class: "scroll" }, pt));
 
+  /* --- derivatives: team totals and first-half lines at every book, off the full-game curves (nflmodel/derivs.py) --- */
+  let derivs = null;
+  if (g.derivs && g.derivs.length) {
+    const sharpName = bookName(M.sharp_book || "pinnacle");
+    const dt = H("table");
+    const rows = [];
+    g.derivs.forEach(b => {
+      const qs = (b.books || []).slice().sort((x, y) => y.ev - x.ev);
+      const all = b.sharp ? [{ ...b.sharp, book: M.sharp_book || "pinnacle", sharp: true }, ...qs] : qs;
+      all.forEach((q, i) => rows.push({ cls: i === 0 ? "group" : "", cells: [
+        { v: i === 0 ? b.pick : "", cls: "strong" },
+        bookName(q.book) + (q.sharp ? " (sharp)" : ""),
+        b.market === "1H Moneyline" ? "" : (isTotalMk(b.market) ? String(q.line) : line(q.line)),
+        odds(Math.round(q.odds)) + (q.odds_net != null && q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : ""),
+        pct(q.prob), pct(q.prob_line), q.sharp ? "" : evCell(q.ev),
+        q.sharp ? "" : (b.beats_sharp === q.book && b.sharp_ev >= 0.01 ? H("span", { class: "chip", text: "beats " + sharpName, title: "This price beats the sharp book's no-vig number on its own derivative quote, carried to this line by the curve: " + spct(b.sharp_ev) + " per dollar" }) : (q.ev_line != null && q.ev_line > 0 ? "beats " + sharpName + " (" + spct(q.ev_line) + ")" : "")),
+      ] }));
+    });
+    table(dt, [{ t: "Pick", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "Model" }, { t: "Market, no vig" }, { t: "EV per $1" }, { t: "", l: 1 }], rows);
+    derivs = sec("Derivatives", "Team totals and first-half lines at each book, priced off the full-game curves: a team total is the margin and total curves combined (home points are half of total plus margin), a first-half line uses a half-game curve with the halves' own key numbers" + (M.half ? " (first-half margin about " + pct(M.half.ratio_margin, 0) + " of the spread, first-half total about " + pct(M.half.total_fit[1], 0) + " of the total, fitted on " + comma(M.half.n) + " games)" : "") + ". Model is the market-adjusted projection's chance at that book's line; Market, no vig is " + sharpName + "'s own derivative quote carried to the line where it has one, else the full-game market's curve. A \u201cbeats\u201d chip means the price beats " + sharpName + "'s derivative number before the model says anything; those sides go on the Bet sheet. The curve's opinion on derivatives is not graded yet, so nothing else here is a bet. Limits on these markets are low.",
+      H("div", { class: "scroll" }, dt));
+  }
+
   /* --- alternate lines and teaser legs: fair prices off the key-number curve --- */
   let alts = null;
   if (g.alts) {
@@ -1719,7 +1750,7 @@ function renderGame(g) {
       H("div", { class: "split alts" }, H("div", { class: "scroll" }, st), H("div", { class: "scroll" }, tt)), H("div", { class: "scroll alts" }, lt));
   }
 
-  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices, alts].filter(Boolean));
+  view.replaceChildren(...[head, summary, build, qbs, ranks, form, prices, derivs, alts].filter(Boolean));
 }
 const C_NAMES = {}; ALL.forEach(g => { C_NAMES[g.away] = g.away_name; C_NAMES[g.home] = g.home_name; });
 

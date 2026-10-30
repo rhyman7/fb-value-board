@@ -188,3 +188,8 @@ nothing.
   logged forecasts in `data/cfb/wind_log.csv`).
 - Missing players again once a season or two of game rosters with listed starters exist
   (ESPN's college game rosters only mark starters from late 2025).
+- The derivative curves (team totals and first-half lines, `nflmodel/derivs.py`) are tested
+  on both boards in FEATURES.md, "Derivative markets": the college half curve matches the
+  key numbers at the half, and college overs on team totals and first-half totals hit 2-3
+  points less often than the curve says at the high-chance lines. Grade them against
+  Pinnacle's closing derivative lines once the market log has a season of them.

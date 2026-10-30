@@ -638,6 +638,93 @@ seem to (a first-round backup is about 0.02 EPA better than a late one over his 
 dropbacks, worth under half a point), and the 200-dropback prior already gives way to a
 backup's own games quickly. `QB_REPLACEMENT` stays at −0.13.
 
+## Derivative markets (October 30, 2026)
+
+Team totals and first-half spreads, totals and moneylines, priced off the boards' full-game
+curves (`nflmodel/derivs.py`; the market snapshots in `nflmodel/market.py`; test script
+`experiments/derivs_test.py`). Books derive these from the main line with crude rules and
+limits are low, so they are mispriced more often than full-game lines; the question was
+whether the boards' curves describe them well enough to say when.
+
+**How they are priced.** A team total comes from the margin and total curves combined: home
+points are (total + margin) / 2, so the chance of every whole-number team score is the sum of
+the joint probabilities of the (margin, total) pairs that give it, the two curves taken as
+independent and pairs of different parity dropped. A first-half line uses a half-game curve
+fitted exactly as `distributions.py` fits the full game, on half-time scores (nflverse
+play-by-play for the NFL, ESPN's quarter linescores in the cfbfastR schedule file for
+college; `data/cache/half_scores_<season>.csv` on both boards): the first-half margin is
+centred on a fitted share of the full-game spread, the first-half total on a straight line in
+the full-game total, with the halves' own key-number multipliers and widths. Where Pinnacle
+quotes the derivative, the curve is anchored to its no-vig number at its line (as the
+full-game curve is to the full-game line) and each book's price is read at that book's own
+line, so "beats Pinnacle" means what it means on the main markets; where Pinnacle does not
+quote it, the curve sits at the implied centre and nothing is flagged.
+
+**Does the curve match history?** There are no closing derivative lines in the repo's history
+(the market log began on Oct 29, 2026), so the test is of the curves: walk-forward, every
+played game priced from its closing full-game line alone, scored against actual team points
+and half-time scores at the implied derivative lines and at those lines moved 3.5 and 7
+points each way. A curve matches history when its hit rates equal its chances:
+
+| Curve, both leagues | Lines scored | Log loss | Brier | Predicted chance → hit rate by bucket |
+|---|---|---|---|---|
+| NFL team total, joint pmf | 34,030 | **0.6066** | **0.2088** | 19→21, 27→27, 36→33, 50→49, 63→62, 75→74, 81→79 |
+| NFL team total, normal approximation | 34,030 | 0.6066 | 0.2089 | 19→21, 27→27, 36→34, 50→49, 63→62, 75→74, 81→80 |
+| NFL first-half margin, half curve | 17,015 | **0.6239** | **0.2168** | 28→29, 37→38, 50→51, 61→63, 74→77 |
+| NFL first-half margin, plain normal | 17,015 | 0.6242 | 0.2169 | 26→26, 37→36, 50→51, 63→63, 74→77 |
+| NFL first-half total, half curve | 17,015 | **0.5982** | **0.2051** | 19→20, 27→26, 49→47, 62→61, 77→77, 81→79 |
+| NFL first-half total, plain normal | 17,015 | 0.6002 | 0.2060 | 20→20, 26→24, 36→30, 50→47, 64→60, 74→72 |
+| College team total, joint pmf | 69,144 | **0.6359** | 0.2223 | 28→28, 37→35, 50→48, 61→58, 74→71, 84→81 |
+| College team total, normal approximation | 69,144 | 0.6361 | 0.2223 | 28→28, 37→35, 50→48, 61→58, 74→71, 84→81 |
+| College first-half margin, half curve | 33,800 | **0.6380** | **0.2233** | 29→29, 38→38, 50→50, 60→60, 72→73 |
+| College first-half margin, plain normal | 33,800 | 0.6391 | 0.2238 | 28→28, 39→37, 50→50, 61→60, 72→73 |
+| College first-half total, half curve | 33,800 | **0.6312** | **0.2201** | 29→27, 37→34, 49→47, 59→58, 72→72 |
+| College first-half total, plain normal | 33,800 | 0.6338 | 0.2213 | 27→25, 38→33, 50→47, 62→58, 73→72 |
+
+NFL 2014-2026, college 2017-2026. The joint pmf and the normal approximation are the same
+to three decimals on team totals (the pmfs' mean and variance carry nearly everything); the
+joint pmf is used because it keeps the scoring structure for free. The half curve beats a
+plain normal everywhere, mostly by getting the key numbers right:
+
+| First-half margin | NFL observed | Half curve | Plain normal | College observed | Half curve | Plain normal |
+|---|---|---|---|---|---|---|
+| 0 (tied at the half) | 7.1% | 6.7% | 3.6% | 6.6% | 6.4% | 2.7% |
+| 3 | 12.2% | 11.6% | 6.9% | 10.0% | 8.9% | 5.3% |
+| 7 | 11.5% | 11.5% | 5.9% | 11.7% | 11.1% | 4.8% |
+| 10 | 8.7% | 8.7% | 4.8% | 6.8% | 6.7% | 4.3% |
+
+The fits (through 2025): NFL first-half margin 0.58 x the spread, first-half total
+−0.2 + 0.51 x the total, widths 10.2 and 8.8 points; college 0.59 x the spread, 1.2 + 0.50 x
+the total, widths 12.3 and 11.1. A first-half spread is more than half the full spread on
+both boards: favourites build their lead early and second halves mean-revert. The limits:
+NFL first-half favourites at the high-chance lines cover 2-3 points more often than either
+curve says (74→77); college overs on team totals and first-half totals hit 2-3 points less
+often than the curve says at the high-chance lines (74→71, 61→58: the loser of a college
+blowout scores less than independence implies). Both are within what the anchoring to
+Pinnacle's own quote absorbs, since the curve only carries its number between nearby lines.
+
+**What it does on the boards.** Each game's page has a Derivatives table: every book's team
+totals and first-half lines, the model's chance and the market's no-vig chance at that book's
+line, EV, and a "beats Pinnacle" chip where the price beats Pinnacle's own derivative quote
+by 1%. Those sides are **price-tier bets** on the Bet sheet and in the ledger
+(`ledger.csv` market `Team total`, `1H Spread`, `1H Total`, `1H Moneyline`; first-half rows
+graded on the half-time score, no closing line value yet) and count toward the game's 5% cap.
+The curve's own opinion on a derivative is **not** a bet: the backtest above is of the
+curve's calibration against results, not of an edge against closing derivative lines, and
+there is none to test against until the market log has a season of them. Nothing here
+changes the main-market bets.
+
+**Credits.** The Odds API serves these markets one event at a time, (markets returned) x
+(regions) a call, so `run_market.py derivatives` spends at most `market.DERIV_BUDGET` a run
+(NFL 70: 16 games x 4 markets; college 160: 50 games x 3, the first-half moneyline dropped)
+on the 14:05 UTC run on Thursday, Saturday and Sunday (NFL) and Friday (college): about 900
+and 700 credits a month, the whole market workflow about 3,000 of the account's 20,000.
+
+**Next.** After a season of derivative snapshots: grade the curve against Pinnacle's closing
+derivative lines (the carry between lines is what the price bets rely on), test the model's
+disagreement on first-half lines against the opener the way the full-game openers are
+tested, and add first-quarter lines if the half curve holds.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;
@@ -655,3 +742,6 @@ backup's own games quickly. `QB_REPLACEMENT` stays at −0.13.
 - **Defensive ratings.** The shadow test decides (above). Score it with
   `experiments/shadow_score.py` after the 2026 season and again after 2027.
 - **College football**, where the market is softer and rosters change more.
+- **Derivatives against their own closing lines.** The market log has carried team totals
+  and first-half lines since Oct 30, 2026; after a season, grade the curve's carry between
+  lines and the model's first-half disagreement against Pinnacle's derivative close (above).

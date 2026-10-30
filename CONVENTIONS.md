@@ -95,6 +95,14 @@ boards in detail; this file is the rules.
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
   Kalshi prices are the contract price; `odds.kalshi_effective_odds` adds the exchange fee
   (taker 7% x p x (1-p) per contract, maker 1.75%) before any EV is computed.
+  **Derivatives (both boards, Oct 30, 2026):** the same Action fetches the derivative markets
+  (`team_totals`, `spreads_h1`, `totals_h1`, `h2h_h1`; `nflmodel/derivs.py`) into the same
+  files on its 14:05 UTC run, one event at a time as the API serves them, under
+  `market.DERIV_BUDGET` credits a run (NFL 70 on Thursday, Saturday and Sunday; college 160 on
+  Friday, three markets): about 1,500 credits a month, so the whole market run stays under
+  about 3,000. `run_market.py derivatives` runs it by hand (the workflow's `derivatives`
+  input does both leagues). Don't raise the budgets or add derivative days without checking
+  `data/props/api_usage.csv` against the month's 20,000.
   **On the boards:** where Pinnacle quotes a game, its line and two-way prices are the anchor
   the projection is blended from (`slate.with_market`, both boards; the game's `anchor` says
   which) and the consensus line is only the fallback; a game Pinnacle quotes before the
@@ -184,8 +192,15 @@ boards in detail; this file is the rules.
   line, else the data's opener. Each game also carries `kickoff` (UTC), `sharp_path`
   (Pinnacle's spread and total by snapshot, `market.path`), and `alts`/`teasers`
   (`nflmodel/alts.py`: P(cover) at every half point within 7 of the line and with 6 or 7
-  points added, on the market curve and the projection); `meta.inputs` says when the board,
+  points added, on the market curve and the projection) and `derivs` (`nflmodel/derivs.py`:
+  every book's team totals and first-half lines priced off the curves, bet-shaped records
+  with `deriv: true`; a retail price that beats Pinnacle's own derivative quote by
+  `PRICE_MIN` is a `price` tier bet, nothing else in them is a bet, and the page lists them
+  in the game's Derivatives table); `meta.inputs` says when the board,
   the book prices, the injury report (NFL) and the designations (college) were last read.
+  `meta.half` is the first-half curve's fit (`derivs.fit_half`, on the half-time scores in
+  `data/cache/half_scores_<season>.csv` and `data/cfb/cache/half_scores_<season>.csv`, which
+  the data loaders write and the Actions commit with the rest of the cache).
   The page's timing verdicts (bet now / can wait / wait or size down) are in `timing()` in
   `site/template.html`; keep them consistent with the sheet's wording if either changes.
 - **The ledger (both boards): `data/ledger.csv`, `data/ledger_results.csv`, and the same
@@ -193,7 +208,9 @@ boards in detail; this file is the rules.
   basis, or a price, opener or wind tier) is written down the first time it is flagged, at
   the retail book, line and net price it would be taken at, and never changed; results are
   appended once the game is played (W/L/P, units at the price taken, and closing line value
-  against Pinnacle's last quote before kickoff through the key-number curve). Append-only:
+  against Pinnacle's last quote before kickoff through the key-number curve). Derivative rows
+  (market `Team total`, `1H Spread`, `1H Total`, `1H Moneyline`) are graded on the team's points
+  or the half-time score and carry no closing line value yet. Append-only:
   the Update Actions write them, never edit or delete a row by hand, and a local build run
   must not commit its rows (they would be sandbox prices). `data.json` carries the summary as
   `ledger` (records overall, by tier, by market and by week, plus every row) and the Model

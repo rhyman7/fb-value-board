@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from nflmodel import backtest as NBT, ledger, market, sheet
+from nflmodel import backtest as NBT, derivs, ledger, market, sheet
 from nflmodel.pipeline import _clean, haircut_factor
 
 from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
@@ -64,6 +64,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
 
     say("Fitting key numbers ...")
     dist = bets.fit_distribution(games[games.fbs_game == 1], season)
+    half = data.load_half_scores(refresh=refresh, verbose=verbose)     # half-time scores, for the first-half curve (nflmodel/derivs.py)
+    hdist = derivs.fit_half(games[games.fbs_game == 1], half, season, lookback=8, margins=bets.MARGINS, totals=bets.TOTALS, snap=bets.half,
+                            sd_bounds=((5.0, 16.0), (5.0, 16.0)))
 
     # ---- backtest and opening lines --------------------------------------------------------
     opening = prev.get("openers")
@@ -94,7 +97,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     records = board.season_records(games, season)
     cur = frame[frame.season == season]
     quotes = market.quotes_for(cur[~cur.played], "cfb", names={v: k for k, v in names.items()})
-    slate = board.build_slate(cur, dist, engine, builder, records, abbr, names, quotes=quotes, haircut=h_factor)
+    slate = board.build_slate(cur, dist, engine, builder, records, abbr, names, quotes=quotes, haircut=h_factor, hdist=hdist)
     upcoming = frame[~frame.played & frame.spread_line.notna() & (frame.season == season)]
     order_now = int(upcoming.order.min()) if len(upcoming) else int(frame.order.max()) + 1
     r = engine.ratings_at(order_now)
@@ -138,7 +141,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
                         "ESPN scoreboard (current lines and prices)",
                         *(["CollegeFootballData.com (current lines for games ESPN has not priced)"] if n_cfbd else []),
                         "Open-Meteo (wind forecasts)"],
-            "teams": int(len(teams)),
+            "teams": int(len(teams)), "half": derivs.half_summary(hdist),
         },
         "slate": slate,
         "ratings": board.ratings_table(engine, r, info[season], games, frame[frame.season == season], season, teams),
@@ -160,8 +163,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         done = cur[cur.played]
         close = market.closing_quotes(done, "cfb", {g.game_id: pd.Timestamp(g.kickoff) for g in done.itertuples()}, names={v: k for k, v in names.items()})
         scores = {str(int(g.game_id)): (g.home_score, g.away_score) for g in done.itertuples()}
+        halves = {str(int(h.game_id)): (h.home_h1, h.away_h1) for h in half.itertuples()} if len(half) else {}
         n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, {str(k): v for k, v in close.items()},
-                                lambda df: bets.curves(df, dist, "line"))
+                                lambda df: bets.curves(df, dist, "line"), halves=halves)
         out["ledger"] = ledger.summary(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv")
         say(f"  ledger: {n_new} bets flagged, {n_graded} graded")
     except Exception as exc:

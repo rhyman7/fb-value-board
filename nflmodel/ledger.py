@@ -16,6 +16,11 @@ ledger.csv (append-only, one row per game, market and side, written by the Updat
 ledger_results.csv (append-only, one row per graded row_id):
     row_id, graded_at, home_score, away_score, result (W/L/P), units (on one unit risked),
     close_line, close_prob, clv
+
+Derivative bets (nflmodel/derivs.py, from Oct 30, 2026) are rows like any other, with market
+"Team total" (side home_over, home_under, away_over, away_under; `line` the team's total),
+"1H Spread", "1H Total" or "1H Moneyline". First-half rows are graded on the half-time score
+(`halves` in grade; the row waits until it is on file) and carry no closing line value yet.
 """
 from __future__ import annotations
 
@@ -59,6 +64,11 @@ def _taken(b: dict, g: dict) -> dict:
     return {"book": g.get("anchor") or "consensus", "line": line, "odds": b["odds"], "odds_net": b["odds"], "ev": b["ev"], "stake": b.get("stake", 0.0)}
 
 
+def sheet_bets(g: dict) -> list[dict]:
+    """A game's bets and its derivative sides together (both carry a tier)."""
+    return list(g.get("bets") or []) + list(g.get("derivs") or [])
+
+
 def flagged(b: dict) -> bool:
     """A bet the board would place: a stake on the market-adjusted basis, or a price or
     opener or wind flag (sized or not)."""
@@ -80,7 +90,7 @@ def record(slate_games: list[dict], season: int, kickoffs: dict, path: Path, now
         ko = kickoffs.get(g["id"], kickoffs.get(gid))
         if ko is None or pd.Timestamp(ko) <= pd.Timestamp(now):
             continue
-        for b in g.get("bets") or []:
+        for b in sheet_bets(g):
             rid = f"{gid}|{b['market']}|{b['side']}"
             if rid in have or not flagged(b):
                 continue
@@ -99,24 +109,38 @@ def record(slate_games: list[dict], season: int, kickoffs: dict, path: Path, now
     return len(rows)
 
 
-def settle(market: str, side: str, line, margin: float, total: float) -> tuple[str, float]:
-    """W/L/P and units on one unit risked at even money (the price is applied by the caller)."""
-    s = 1 if side in ("home", "over") else -1
-    if market == "Spread":
-        diff = s * margin + float(line)
-    elif market == "Total":
-        diff = s * (total - float(line))
+def settle(market: str, side: str, line, margin: float, total: float, half: tuple | None = None) -> tuple[str, float] | None:
+    """W/L/P and units on one unit risked at even money (the price is applied by the caller).
+    margin and total are the game's; `half` is (half-time margin, half-time total) for the
+    first-half markets, and None when it is not on file yet (the row is left ungraded).
+    Team totals read the team's points from the margin and total."""
+    if market.startswith("1H "):
+        if half is None:
+            return None
+        margin, total = half
+        market = market[3:]
+    if market == "Team total":
+        team, ou = side.split("_")
+        pts = (total + margin) / 2 if team == "home" else (total - margin) / 2
+        diff = (1 if ou == "over" else -1) * (pts - float(line))
     else:
-        diff = s * margin
+        s = 1 if side in ("home", "over") else -1
+        if market == "Spread":
+            diff = s * margin + float(line)
+        elif market == "Total":
+            diff = s * (total - float(line))
+        else:
+            diff = s * margin
     return ("P", 0.0) if diff == 0 else ("L", -1.0) if diff < 0 else ("W", 1.0)
 
 
 def grade(path: Path, results_path: Path, scores: dict, close: dict | None = None, curve=None,
-          now: dt.datetime | None = None) -> int:
+          now: dt.datetime | None = None, halves: dict | None = None) -> int:
     """Append a result for every ledger row whose game has a final score and no result yet.
     scores: data game id (str) -> (home_score, away_score); close: data game id (str) -> the
     sharp book's closing quote (market.closing_quotes); curve(df) -> bets.curves(..., "line")
-    for the CLV."""
+    for the CLV; halves: data game id (str) -> (home half-time score, away half-time score),
+    for the first-half rows (one with no half-time score on file waits)."""
     led = _read(path, COLS)
     if led.empty:
         return 0
@@ -124,6 +148,7 @@ def grade(path: Path, results_path: Path, scores: dict, close: dict | None = Non
     now = now or dt.datetime.now(dt.timezone.utc)
     stamp = now.strftime("%Y-%m-%d %H:%M")
     close = close or {}
+    halves = halves or {}
     rows = []
     for r in led.itertuples(index=False):
         if r.row_id in done or r.data_id not in scores:
@@ -132,7 +157,12 @@ def grade(path: Path, results_path: Path, scores: dict, close: dict | None = Non
         if hs is None or as_ is None or (isinstance(hs, float) and np.isnan(hs)):
             continue
         margin, total = float(hs) - float(as_), float(hs) + float(as_)
-        res, u = settle(r.market, r.side, r.line, margin, total)
+        h = halves.get(r.data_id)
+        half = (float(h[0]) - float(h[1]), float(h[0]) + float(h[1])) if h is not None and all(x is not None and not (isinstance(x, float) and np.isnan(x)) for x in h) else None
+        settled = settle(r.market, r.side, r.line, margin, total, half)
+        if settled is None:
+            continue
+        res, u = settled
         if res == "W":
             o = float(r.odds_net)
             u = round(o / 100 if o > 0 else 100 / -o, 4)
@@ -151,8 +181,8 @@ def _clv(r, close: dict | None, curve) -> dict:
         return empty
     mk, side = r.market, r.side
     need = {"Spread": ("spread_line", "home_spread_odds", "away_spread_odds"), "Total": ("total_line", "over_odds", "under_odds"),
-            "Moneyline": ("home_moneyline", "away_moneyline")}[mk]
-    if any(k not in close for k in need):
+            "Moneyline": ("home_moneyline", "away_moneyline")}.get(mk)
+    if need is None or any(k not in close for k in need):          # derivative rows: no closing value yet
         return empty
     row = {"game_id": r.data_id, "spread_line": close.get("spread_line", r.anchor_spread), "total_line": close.get("total_line", r.anchor_total),
            **{k: close.get(k, np.nan) for k in ("home_spread_odds", "away_spread_odds", "over_odds", "under_odds", "home_moneyline", "away_moneyline")}}

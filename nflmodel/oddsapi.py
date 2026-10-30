@@ -95,9 +95,9 @@ class Client:
             print(f"  {what}: {why}; retrying in {RETRY_WAITS[i]}s")
             time.sleep(RETRY_WAITS[i])
 
-    def events(self) -> list[dict]:
-        """Upcoming NFL events (free)."""
-        return self._get(f"/sports/{SPORT}/events", {"dateFormat": "iso"}, "events")
+    def events(self, sport: str = SPORT) -> list[dict]:
+        """Upcoming events of a sport (free)."""
+        return self._get(f"/sports/{sport}/events", {"dateFormat": "iso"}, f"events {sport}" if sport != SPORT else "events")
 
     def sport_odds(self, sport: str, params: dict) -> list[dict]:
         """Game lines for every upcoming event of a sport (markets x regions credits; named
@@ -107,15 +107,16 @@ class Client:
             raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}: skipping {sport} odds")
         return self._get(f"/sports/{sport}/odds", params, f"game odds {sport}")
 
-    def event_odds(self, event_id: str, markets: list[str], books: list[str] | None = None) -> dict:
-        """Player-prop odds for one event. Refused if the worst-case cost could take the
-        account below the reserve (worst case: every market returned)."""
+    def event_odds(self, event_id: str, markets: list[str], books: list[str] | None = None, sport: str = SPORT) -> dict:
+        """Odds for one event: player props, or the derivative game markets (nflmodel/market.py,
+        either league). Costs (markets returned) x (regions; the named books are one). Refused
+        if the worst-case cost could take the account below the reserve (every market returned)."""
         worst = len(markets)
         if self.remaining is not None and self.remaining - worst < self.reserve:
             raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}: skipping {event_id}")
         params = {"markets": ",".join(markets), "bookmakers": ",".join(books or BOOKS),
                   "oddsFormat": "american", "dateFormat": "iso"}
-        return self._get(f"/sports/{SPORT}/events/{event_id}/odds", params, f"odds {event_id}")
+        return self._get(f"/sports/{sport}/events/{event_id}/odds", params, f"odds {event_id}")
 
     def historical_events(self, date: str, commence_from: str, commence_to: str) -> list[dict]:
         """Events as listed at `date` with kickoff in [commence_from, commence_to] (1 credit)."""

@@ -256,6 +256,16 @@ Teasers section prices every leg with 6 or 7 points added off the key-number cur
 legs marked), and each game's page carries the alternate-line ladder with fair prices
 (`nflmodel/alts.py`).
 
+Each game's page also has a **Derivatives** table (`nflmodel/derivs.py`): every book's team
+totals and first-half spread, total and moneyline, each priced at its own line off the same
+curves. A team total is the margin and total curves combined (home points are half of total
+plus margin); a first-half line uses a half-game curve fitted on half-time scores with the
+halves' own key numbers (a tie at the half is common). Where Pinnacle quotes the derivative,
+its no-vig number is carried to each book's line and a price that beats it by 1% is a
+**Price beats Pinnacle** bet on the sheet and in the ledger (first-half rows are graded on the
+half-time score). The curve's own opinion on derivatives is not graded yet, so nothing else
+in that table is a bet (FEATURES.md, "Derivative markets").
+
 ## Market lines
 
 `data/market/` holds snapshots of every upcoming game's spread, total and moneyline at
@@ -268,6 +278,10 @@ book's price at that book's own line. Kalshi contract prices are charged the exc
 (`odds.kalshi_effective_odds`: 7% x p x (1-p) per contract as a taker, 1.75% as a maker)
 before EV. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
 the published raw model is 2+ points (NFL) or 3+ (college) off Pinnacle's current line.
+`run_market.py derivatives` adds the derivative markets (team totals, first-half spread, total
+and moneyline) for the soonest games, one event at a time as The Odds API serves them, under
+a credit budget per run (`market.DERIV_BUDGET`): NFL on Thursday, Saturday and Sunday mornings,
+college on Fridays, about 1,500 credits a month on top of the main snapshots' 1,400.
 
 On the boards, a game Pinnacle quotes is anchored to Pinnacle's line and prices rather than
 the consensus (its card and page say so), each side's table shows the best price among

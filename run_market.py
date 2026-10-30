@@ -2,13 +2,17 @@
 
     python run_market.py snapshot            # one snapshot of NFL and college lines (6 credits)
     python run_market.py snapshot --league nfl
+    python run_market.py derivatives --league nfl   # team totals and first-half lines, one event at a time
+                                                    # (market.DERIV_BUDGET credits at most; nfl 70, cfb 160)
     python run_market.py status              # what is stored: games, books, latest snapshot
     python run_market.py alerts              # opener alerts: model vs Pinnacle, from the published boards
 
 Needs ODDS_API_KEY in the environment for snapshot. Rows go to data/market/<league>_<YYYY-MM>.csv
 (only what changed since the last snapshot). See README "Market lines".
 
---fixture FILE   read a saved /sports/{sport}/odds response instead of calling the API.
+--fixture FILE   read a saved /sports/{sport}/odds response instead of calling the API
+                 (for derivatives: a saved list of /events/{id}/odds responses).
+--budget N       derivatives: credits this run may spend (default market.DERIV_BUDGET).
 """
 from __future__ import annotations
 
@@ -25,10 +29,19 @@ from nflmodel import config as C, market as M, oddsapi
 
 class Fixture:
     def __init__(self, path: Path):
-        self.path, self.ready, self.remaining, self.used_this_run = path, True, None, 0
+        self.path, self.ready, self.remaining, self.used_this_run, self.last_cost = path, True, None, 0, 0
 
     def sport_odds(self, sport, params):
         return json.loads(self.path.read_text())
+
+    def events(self, sport):
+        return [{k: e.get(k) for k in ("id", "commence_time", "home_team", "away_team")} for e in json.loads(self.path.read_text())]
+
+    def event_odds(self, event_id, markets, books=None, sport=None):
+        ev = next((e for e in json.loads(self.path.read_text()) if e.get("id") == event_id), {})
+        self.last_cost = len({m["key"] for b in ev.get("bookmakers", []) for m in b.get("markets", []) if m["key"] in markets})
+        self.used_this_run += self.last_cost
+        return ev
 
 
 def cmd_snapshot(args) -> int:
@@ -46,6 +59,22 @@ def cmd_snapshot(args) -> int:
     return 0 if bad < len(leagues) else 1
 
 
+def cmd_derivatives(args) -> int:
+    """Team totals and first-half lines for the soonest games (nflmodel/market.snapshot_derivatives)."""
+    client = Fixture(Path(args.fixture)) if args.fixture else oddsapi.Client()
+    if not client.ready:
+        print("ODDS_API_KEY is not set: no derivatives fetched")
+        return 0
+    leagues = [args.league] if args.league else list(M.SPORTS)
+    bad = 0
+    for lg in leagues:
+        if M.snapshot_derivatives(client, lg, budget=args.budget) < 0:
+            bad += 1
+    if getattr(client, "used_this_run", 0):
+        print(f"  credits used {client.used_this_run}, remaining {client.remaining}")
+    return 0 if bad < len(leagues) else 1
+
+
 def cmd_status(args) -> int:
     for lg in M.SPORTS:
         rows = M.load(lg)
@@ -56,6 +85,9 @@ def cmd_status(args) -> int:
         n_games = rows["event_id"].nunique()
         books = ", ".join(f"{b} {n}" for b, n in rows[rows["snapshot"] == last].groupby("book")["event_id"].nunique().items())
         print(f"{lg}: {len(rows)} rows, {n_games} games, latest snapshot {last} ({books})")
+        dv = rows[rows["market"].isin(sum(M.DERIV_MARKETS.values(), []))]
+        if len(dv):
+            print(f"  derivatives: {len(dv)} rows, {dv['event_id'].nunique()} games, latest {dv['snapshot'].max()}")
     return 0
 
 
@@ -114,12 +146,13 @@ def cmd_alerts(args) -> int:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=["snapshot", "status", "alerts"])
+    p.add_argument("command", choices=["snapshot", "derivatives", "status", "alerts"])
     p.add_argument("--league", choices=list(M.SPORTS))
     p.add_argument("--fixture")
+    p.add_argument("--budget", type=int, help="derivatives: credits this run may spend")
     p.add_argument("--out", help="alerts: write new alerts as a Markdown table here")
     a = p.parse_args(argv)
-    return {"snapshot": cmd_snapshot, "status": cmd_status, "alerts": cmd_alerts}[a.command](a)
+    return {"snapshot": cmd_snapshot, "derivatives": cmd_derivatives, "status": cmd_status, "alerts": cmd_alerts}[a.command](a)
 
 
 if __name__ == "__main__":
