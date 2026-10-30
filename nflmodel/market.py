@@ -107,6 +107,14 @@ def flatten(events: list[dict], league: str, snapshot: str) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=COLS)
 
 
+def _commence(ev: dict):
+    try:
+        t = pd.Timestamp(ev.get("commence_time"))
+        return t.tz_convert("UTC") if t.tzinfo else t.tz_localize("UTC")
+    except Exception:
+        return None
+
+
 def _month_path(league: str, when: str, root: Path = DIR) -> Path:
     return root / f"{league}_{when[:7]}.csv"
 
@@ -152,6 +160,8 @@ def snapshot(client, league: str, now: dt.datetime | None = None, root: Path = D
     except Exception as exc:                      # budget, network, key
         print(f"  market snapshot {league}: skipped ({exc})")
         return -1
+    # only games not yet kicked off: a book's in-game line is not a pre-game quote
+    events = [e for e in (events or []) if _commence(e) is None or _commence(e) > now]
     rows = flatten(events, league, stamp)
     n = store(rows, league, root)
     print(f"  market snapshot {league}: {len(events or [])} games, {len(rows)} quotes, {n} new rows")
@@ -243,6 +253,9 @@ def quotes_for(games: pd.DataFrame, league: str, names: dict | None = None, root
         rows = load(league, root)
         if before is not None and len(rows):
             rows = rows[pd.to_datetime(rows["snapshot"], utc=True) < before]
+        if len(rows):                              # a game that has kicked off has no pre-game quote any more
+            now = pd.Timestamp.now(tz="UTC") if before is None else before
+            rows = rows[pd.to_datetime(rows["commence"], utc=True, errors="coerce") > now]
         rows = match_games(rows, games, league, names)
     except Exception as exc:
         print(f"  market quotes {league}: skipped ({exc})")

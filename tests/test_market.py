@@ -152,3 +152,20 @@ def test_closing_value_measures_against_the_sharp_close():
     assert archive.closing_value({"market": "Moneyline", "side": "home", "odds": -160}, g, close, curve)["clv"] > 0
     assert archive.closing_value({"market": "Spread", "side": "home", "odds": -110}, g, {"total_line": 44.5}, curve) == {}
     assert archive.closing_value({"market": "Spread", "side": "home", "odds": -110}, g, None, curve) == {}
+
+
+def test_snapshot_and_quotes_skip_games_that_kicked_off(tmp_path):
+    import datetime as dt
+
+    class Fx:
+        ready, remaining, used_this_run = True, None, 0
+        def sport_odds(self, sport, params):
+            return EVENTS
+    # e1 kicks off 2026-11-01T17:00Z: a snapshot after that keeps only e2
+    n = M.snapshot(Fx(), "nfl", now=dt.datetime(2026, 11, 1, 18, 0, tzinfo=dt.timezone.utc), root=tmp_path)
+    assert n == 6 and set(M.load("nfl", tmp_path)["event_id"]) == {"e2"}
+    # stored quotes for a game past kickoff are not used at build time either
+    M.store(M.flatten(EVENTS[:1], "nfl", "2026-10-29 12:00"), "nfl", tmp_path)
+    games = pd.DataFrame({"game_id": ["2026_09_DEN_KC"], "home_team": ["KC"], "away_team": ["DEN"], "gameday": ["2026-11-01"]})
+    assert M.quotes_for(games, "nfl", root=tmp_path, before=pd.Timestamp("2026-11-01T16:00Z"))["latest"]
+    assert not M.quotes_for(games, "nfl", root=tmp_path, before=pd.Timestamp("2026-11-01T18:00Z"))["latest"]
