@@ -79,7 +79,7 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: flo
     over, t_push, under = D.over_push_under(pt, TOTALS, total)
 
     tie = pm[:, MARGINS == 0].ravel()
-    fair_ml, _ = O.no_vig(col("home_moneyline"), col("away_moneyline"))
+    fair_ml, _ = O.no_vig_power(col("home_moneyline"), col("away_moneyline"))      # power method: see nflmodel.bets.curves
     implied = np.where(np.isnan(fair_ml), raw_spread, dist["sd_win"] * ndtri(np.clip(fair_ml, 1e-4, 1 - 1e-4)))
     h_win = ndtr((implied + d_margin) / dist["sd_win"]) * (1 - tie)
     a_win = 1 - tie - h_win
@@ -98,7 +98,7 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: flo
         default = None if market == "Moneyline" else DEFAULT_PRICE
         price, other = price_of(pc, default), price_of(oc, default)
         dec = O.american_to_decimal(price)
-        fair, _ = O.no_vig(price, other)
+        fair, _ = O.no_vig_power(price, other)
         model_p = p_win / (1 - p_push)
         ev = O.expected_value(p_win, price, p_push)
         profit = np.where(outcome > 0, dec - 1, np.where(outcome < 0, -1.0, 0.0))
