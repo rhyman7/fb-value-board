@@ -17,7 +17,10 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
   opens a past week from the archive (`#matchups/<season>_w<week>`): the same
   board and cards with the predictions as frozen at kickoff, and under each
   one, in blue, what happened: the final score, the result against the line,
-  team yards, attempts and carries, and every projected player's actual line.
+  team yards, attempts and carries, and every player's actual line (those not
+  projected before the game are tagged). **Past weeks** ends with the season to
+  date: every graded week's record in one table, and the player projections'
+  average miss and bias by position and stat.
 - **Games.** A card for every game with the market and model spread, total and
   win probability, and the best price if one clears break-even.
 - **A page for each game**, opened from its card:

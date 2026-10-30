@@ -48,7 +48,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
 
     say("Projecting players ...")
-    pg, ptable, pproj = None, None, None
+    pg, pinfo, ptable, pproj = None, None, None, None
     try:
         pg, pinfo = players_data.load_player_games(refresh_current=refresh, verbose=verbose)
         avail = players.load_availability(refresh_current=refresh, verbose=verbose)
@@ -171,7 +171,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     try:                                          # keep each week's predictions, frozen at kickoff
         done = games[games.played & (games.season == season)]
         close = market.closing_quotes(done, "nfl", {g.game_id: archive.kickoff(g.gameday, g.gametime) for g in done.itertuples()})
-        archive.update(out, games, pg, verbose=verbose, close=close, curve=lambda df: bets.curves(df, dist, "line"))
+        archive.update(out, games, pg, verbose=verbose, close=close, curve=lambda df: bets.curves(df, dist, "line"), info=pinfo)
     except Exception as exc:
         print(f"  archive skipped ({exc})")
     build_page(out)

@@ -187,6 +187,13 @@ boards in detail; this file is the rules.
 - The pipelines inject the week's data into the template in place of `/*__DATA__*/null`;
   keep that placeholder.
 - `docs/archive/` holds each week's predictions frozen at kickoff. Never rewrite past weeks.
+  Grading adds the results: the final score, each bet's result, and under `actuals` the whole
+  box score (every player with a touch; one not projected before the game carries his name,
+  pos and team), with `full` listing the games whose actuals are complete. The Update Actions
+  fill `full` in for any graded game still missing it. `index.json` carries each week's record
+  and, as `pmiss`, the player projections' average miss and bias by position and stat
+  (`nflmodel/archive.player_misses`), which the Past weeks page's **Season to date** sections
+  read, so the page never has to load every week's file for the season view.
 - Both boards share the same sections and anchors, in this order:
   This Week's Matchups `#matchups` | Games `#games` | Players `#players` | Past weeks `#history` |
   Team ratings `#ratings` | Model record `#model`. Each board's nav links to the other board.
@@ -212,8 +219,8 @@ boards in detail; this file is the rules.
   in blue (`--act`). Season ratings and efficiency ranks are left off past weeks (they are
   today's, not that week's); the result badge and the margin/total comparison take their place.
   This week's board and `#matchups/<game id>` are unchanged, which the dashboards' packets
-  rely on. The archive's `actuals` cover only the players projected before the game, so a
-  team's actual yards can run short of the box score; the foot note says so.
+  rely on. Players in the box score who were not projected are listed too, tagged "Not
+  projected", and count in the team's actual yards.
 - Each matchup (`#matchups/<game id>`) has a **Print matchup** button, like the dashboards'.
   It prints both team cards side by side on one landscape letter page in black on white, with
   a printed heading (week, teams, kickoff, stadium, line) and the disclaimer. The print rules

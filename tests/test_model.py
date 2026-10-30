@@ -327,6 +327,18 @@ def test_archive_freezes_at_kickoff_and_grades(tmp_path):
     assert d["actuals"]["2026_07_A_B"]["p1"]["pass_yds"] == 1.0
     w = A.write_index(tmp_path)[0]
     assert w["spread"] == [1, 0, 0] and w["total"] == [0, 1, 0] and w["bet_wlp"] == [1, 0, 0]
+    # graded without player names: only the projected player's line. A later run with the
+    # names fills in the whole box score, naming the players who were not projected.
+    assert "full" not in d
+    pg = pd.DataFrame([{"game_id": "2026_07_A_B", "player_id": i, "posteam": "B", **{k: v for k in A.BOX}}
+                       for i, v in (("p1", 1.0), ("p2", 3.0), ("p3", 0.0))])
+    info = pd.DataFrame({"name": ["One", "Two", "Three"], "position": ["QB", "RB", np.nan]}, index=["p1", "p2", "p3"])
+    assert A.grade(games, pg, tmp_path, info=info) == 0                    # nothing newly graded
+    d = json.loads((tmp_path / "2026_w07.json").read_text())
+    a = d["actuals"]["2026_07_A_B"]
+    assert d["full"] == ["2026_07_A_B"] and set(a) == {"p1", "p2"}         # p3 had no touch
+    assert "name" not in a["p1"] and a["p2"] == {**{k: 3.0 for k in A.BOX}, "name": "Two", "pos": "RB", "team": "B"}
+    assert A.grade(games, pg, tmp_path, info=info) == 0 and json.loads((tmp_path / "2026_w07.json").read_text())["actuals"] == d["actuals"]
 
 
 def test_overrides_starter_and_out(tmp_path):

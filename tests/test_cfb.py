@@ -329,3 +329,26 @@ def test_spread_card_covers_every_model_feature():
     from cfbmodel import board, model
     from nflmodel.ratings import METRICS
     assert board.MatchupBuilder.uncovered(model.MARGIN_FEATS, model.TOTAL_FEATS, METRICS + ("snaps",)) == []
+
+
+def test_archive_fills_the_whole_box_score(tmp_path):
+    """Graded with only the projected players' lines, a later run with player names keeps every
+    player who had a touch, naming the ones not projected (team rows are left out)."""
+    import json
+    from cfbmodel import archive as A
+    d = {"season": 2026, "week": 3, "games": {"2026_03_X_Y": {"id": "2026_03_X_Y", "game_id": 401, "home": "Y", "away": "X",
+                                                               "market": {"spread": 3.0, "total": 50.5}, "proj": {"margin": 2.0, "total": 48.0}, "bets": []}},
+         "players": {"2026_03_X_Y": [{"id": "11", "team": "Y"}]}, "teams": {}, "results": {}, "actuals": {}}
+    (tmp_path / "2026_w03.json").write_text(json.dumps(d))
+    games = pd.DataFrame([{"game_id": 401, "home_id": 1, "away_id": 2, "home_score": 24.0, "away_score": 20.0}])
+    pg = pd.DataFrame([{"game_id": 401, "team_id": t, "player_id": i, **{k: v for k in A.BOX}}
+                       for t, i, v in ((1, 11, 1.0), (2, 22, 2.0), (1, -5866, 5.0), (2, 33, 0.0))])
+    assert A.grade(games, pg, tmp_path) == 1
+    a = json.loads((tmp_path / "2026_w03.json").read_text())
+    assert set(a["actuals"]["2026_03_X_Y"]) == {"11"} and "full" not in a
+    info = pd.DataFrame({"name": ["Eleven", "Twenty Two", " Team", "Nobody"], "position": ["QB", "WR", np.nan, "RB"]}, index=[11, 22, -5866, 33])
+    assert A.grade(games, pg, tmp_path, info=info) == 0
+    a = json.loads((tmp_path / "2026_w03.json").read_text())
+    act = a["actuals"]["2026_03_X_Y"]
+    assert a["full"] == ["2026_03_X_Y"] and set(act) == {"11", "22"}
+    assert act["22"]["name"] == "Twenty Two" and act["22"]["pos"] == "WR" and act["22"]["team"] == "X" and "name" not in act["11"]
