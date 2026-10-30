@@ -483,3 +483,61 @@ def test_tags_go_to_their_own_log_and_old_headers_stay(tmp_path, monkeypatch):
     propboard.build(tmp_path / "props")
     body = json.loads((tmp_path / "props" / "2026_w09.json").read_text())
     assert body["summary"]["book_gaps"] == 2 and body["summary"]["ladder_gaps"] >= 1
+
+
+def test_api_client_retries_dropped_connections_and_gives_up(monkeypatch):
+    """A reset connection or a 5xx is retried; a 4xx is not; after the last retry ApiError."""
+    import io
+    import urllib.error
+    from nflmodel import oddsapi as OA
+    monkeypatch.setattr(OA, "RETRY_WAITS", (0, 0))
+    monkeypatch.setattr(OA, "_log_usage", lambda *a, **k: None)
+
+    class Resp(io.BytesIO):
+        headers = {"x-requests-last": "1", "x-requests-remaining": "99"}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    calls = []
+
+    def opener(answers):
+        def _open(req, timeout=None):
+            calls.append(req.full_url)
+            a = answers.pop(0)
+            if isinstance(a, Exception):
+                raise a
+            return Resp(json.dumps(a).encode())
+        return _open
+
+    c = OA.Client("k", opener=opener([urllib.error.URLError(ConnectionResetError(104, "reset")), urllib.error.HTTPError("u", 503, "down", {}, None), [{"id": "e1"}]]))
+    assert c.events() == [{"id": "e1"}] and c.remaining == 99 and len(calls) == 3
+    c = OA.Client("k", opener=opener([urllib.error.HTTPError("u", 401, "bad key", {}, None)]))
+    with pytest.raises(OA.ApiError, match="401"):
+        c.events()
+    c = OA.Client("k", opener=opener([TimeoutError("t")] * 3))
+    with pytest.raises(OA.ApiError, match="after 2 retries"):
+        c.events()
+    assert all("apiKey=k" in u for u in calls)
+
+
+def test_close_run_survives_an_api_outage(tmp_path, monkeypatch, capsys):
+    """run_props close: the API down after every retry prints why and prices nothing."""
+    import run_props as R
+    from nflmodel import oddsapi as OA
+
+    class Down:
+        ready, used_this_run, remaining = True, 0, None
+
+        def events(self):
+            raise OA.ApiError("events: reset, after 3 retries")
+
+    monkeypatch.setattr(R, "_setup", lambda: (pd.DataFrame(), [], 2026, 8, object()))
+    monkeypatch.setattr(PLOG, "snapshots", lambda: pd.DataFrame(columns=["event_id", "kind", "rows"]))
+    monkeypatch.setattr(PLOG, "read_log", lambda: pd.DataFrame())
+    monkeypatch.setattr(PM, "fit_one_sided_margin", lambda log: 0.05)
+    R.cmd_close(Down(), log_it=False)
+    assert "not answering" in capsys.readouterr().out

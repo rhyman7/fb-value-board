@@ -3,6 +3,7 @@
     python run_props.py flag      # open and pricing snapshots (bets are decided at pricing,
                                   # kickoff PROPS_OPEN_DAYS away or less), every side logged
     python run_props.py close     # closing prices, every game starting within PROPS_CLOSE_MINUTES
+                                  # (90; the first run inside the window takes the snapshot)
     python run_props.py grade     # grade finished games, closing line value, weekly summary
     python run_props.py all       # grade, then flag, then close (the daily Actions run)
     python run_props.py backfill --season 2025 --max-credits 17500 --markets player_pass_yds,...
@@ -30,7 +31,7 @@ from nflmodel import config as C, oddsapi, propboard, propmarket as PM, proplog 
 from nflmodel.props import PropModel
 
 OPEN_DAYS = float(os.environ.get("PROPS_OPEN_DAYS", "3"))         # price a game this many days out, or nearer
-CLOSE_MIN = float(os.environ.get("PROPS_CLOSE_MINUTES", "45"))    # closing snapshot within this many minutes of kickoff
+CLOSE_MIN = float(os.environ.get("PROPS_CLOSE_MINUTES", "90"))    # closing snapshot within this many minutes of kickoff
 
 
 class Fixture:
@@ -112,6 +113,17 @@ def _setup():
     return players, games, season, week, model
 
 
+def _events(client) -> list[dict]:
+    """The upcoming events, or an empty list (with the reason printed) when the API can't be
+    reached even after the client's retries: a scheduled run then does nothing and the next
+    one tries again, instead of failing the job over a dropped connection."""
+    try:
+        return client.events()
+    except oddsapi.ApiError as e:
+        print(f"  The Odds API is not answering ({e}): nothing priced this run")
+        return []
+
+
 def cmd_flag(client, log_it=True, now=None):
     """The daily run. Each game gets an 'open' snapshot once props are posted (kickoff more
     than PROPS_OPEN_DAYS away) and one 'flag' snapshot, where bets are decided, on the first
@@ -124,7 +136,7 @@ def cmd_flag(client, log_it=True, now=None):
     have = {k: set(snaps[(snaps["kind"] == k) & (snaps["rows"].astype(int) > 0)]["event_id"]) for k in ("open", "flag")}
     margin = PM.fit_one_sided_margin(PLOG.read_log())
     mk = markets()
-    for ev in client.events():
+    for ev in _events(client):
         days = (_when(ev["commence_time"]) - now).total_seconds() / 86400
         if days <= 0 or days > 8:
             continue
@@ -135,6 +147,9 @@ def cmd_flag(client, log_it=True, now=None):
             _snap(client, ev, kind, mk, players, games, model, margin, season, week, log_it)
         except oddsapi.BudgetError as e:
             print(f"  {e}")
+            break
+        except oddsapi.ApiError as e:
+            print(f"  {e}: stopping this run, the next one tries again")
             break
     print(f"  credits used this run: {client.used_this_run}, left: {client.remaining}")
 
@@ -149,7 +164,7 @@ def cmd_close(client, log_it=True, now=None):
     done = set(snaps[snaps["kind"] == "close"]["event_id"])
     margin = PM.fit_one_sided_margin(PLOG.read_log())
     mk = markets()
-    for ev in client.events():
+    for ev in _events(client):
         mins = (_when(ev["commence_time"]) - now).total_seconds() / 60
         if ev["id"] in done or not (0 < mins <= CLOSE_MIN):
             continue
@@ -157,6 +172,9 @@ def cmd_close(client, log_it=True, now=None):
             _snap(client, ev, "close", mk, players, games, model, margin, season, week, log_it)
         except oddsapi.BudgetError as e:
             print(f"  {e}")
+            break
+        except oddsapi.ApiError as e:
+            print(f"  {e}: stopping this run, the next one tries again")
             break
     print(f"  credits used this run: {client.used_this_run}, left: {client.remaining}")
 
