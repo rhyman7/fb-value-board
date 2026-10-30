@@ -222,6 +222,19 @@ def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: s
                     "prob": round(p / (1 - push), 4), "p_push": round(push, 4), "ev": round(ev, 4),
                     "ev_line": round(float(O.expected_value(p0, net, push0)), 4) if FLAG_ODDS[0] <= float(price) <= FLAG_ODDS[1] else None,
                     "stake": round(stake, 4)})
-    for k in out:
-        out[k].sort(key=lambda x: -x["ev"])
+    return with_post_at(out)
+
+
+def with_post_at(out: dict) -> dict:
+    """Sort each side's quotes best EV first and add to every Kalshi quote where a resting
+    (maker) order would be worth posting: `post_at`, the highest contract price in cents that
+    is +EV against this side's probability net of the maker fee, and `post_match`, the highest
+    that matches the best retail book's EV (odds.kalshi_post_at). The Kalshi quote itself stays
+    the taker price."""
+    for k, qs in out.items():
+        qs.sort(key=lambda x: -x["ev"])
+        retail = [q["ev"] for q in qs if q["book"] not in ("kalshi", "pinnacle")]
+        for q in qs:
+            if q["book"] == "kalshi":
+                q.update(O.kalshi_post_at(q["prob"] * (1 - q["p_push"]), q["p_push"], max(retail) if retail else None))
     return out

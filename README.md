@@ -275,8 +275,14 @@ night to Tuesday, when the week's lines open). Only rows that changed are stored
 month of both leagues is a few thousand rows. Pinnacle is the sharp reference: the boards
 anchor their projections to its no-vig price where it quotes the game, and score every other
 book's price at that book's own line. Kalshi contract prices are charged the exchange's fee
-(`odds.kalshi_effective_odds`: 7% x p x (1-p) per contract as a taker, 1.75% as a maker)
-before EV. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
+(`odds.kalshi_effective_odds`: 7% x p x (1-p) per contract as a taker, 1.75% as a maker;
+Kalshi's fee schedule effective July 7, 2026, cited in `odds.py`) before EV. Every Kalshi
+quote also says where a resting (maker) order is worth posting (`odds.kalshi_post_at`,
+`post_at` on the quote): the highest contract price in cents that is still +EV against the
+board's chance after the maker fee, and the price that matches the best retail book's EV
+(`post_match`). The game page's Every book and Derivatives tables, the Bet sheet's Where
+cell and the Best bets card show it as "Post on Kalshi at Xc"; a resting order may never
+fill. The boost calculator's Kalshi options apply the taker or the maker fee. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
 the published raw model is 2+ points (NFL) or 3+ (college) off Pinnacle's current line.
 `run_market.py derivatives` adds the derivative markets (team totals, first-half spread, total
 and moneyline) for the soonest games, one event at a time as The Odds API serves them, under

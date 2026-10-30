@@ -94,7 +94,12 @@ boards in detail; this file is the rules.
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
   Kalshi prices are the contract price; `odds.kalshi_effective_odds` adds the exchange fee
-  (taker 7% x p x (1-p) per contract, maker 1.75%) before any EV is computed.
+  (taker 7% x p x (1-p) per contract, maker 1.75%; the schedule and its date are cited in
+  `odds.py`, check it each season) before any EV is computed. Every Kalshi quote on a side
+  (main markets and derivatives, `bets.with_post_at`) carries `post_at` and `post_match`,
+  the maker prices in cents (`odds.kalshi_post_at`); the page shows them as "Post on Kalshi
+  at Xc" with a tooltip saying a resting order may not fill. The ledger still records a
+  Kalshi bet at the taker price it was flagged at.
   **Derivatives (both boards, Oct 30, 2026):** the same Action fetches the derivative markets
   (`team_totals`, `spreads_h1`, `totals_h1`, `h2h_h1`; `nflmodel/derivs.py`) into the same
   files on its 14:05 UTC run, one event at a time as the API serves them, under
