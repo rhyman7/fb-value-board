@@ -13,7 +13,11 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
   stats: projected points, win chance, line and rating; projected pass and
   rush yards for and against (dials ranked among this week's teams); pass
   attempts and carries; season efficiency ranks from the team ratings; and
-  every player's projected passing, rushing and receiving line.
+  every player's projected passing, rushing and receiving line. The Week select
+  opens a past week from the archive (`#matchups/<season>_w<week>`): the same
+  board and cards with the predictions as frozen at kickoff, and under each
+  one, in blue, what happened: the final score, the result against the line,
+  team yards, attempts and carries, and every projected player's actual line.
 - **Games.** A card for every game with the market and model spread, total and
   win probability, and the best price if one clears break-even.
 - **A page for each game**, opened from its card:

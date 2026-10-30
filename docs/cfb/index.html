@@ -359,6 +359,15 @@ td .act { font-weight: 700; }
 .mx .gauge-value { font-size: 1.625rem; line-height: 1.1; font-stretch: 62%; font-weight: 800; }
 .mx .gauge-label, .mx .gauge-rank { font-size: 0.78rem; color: var(--text-dim); }
 .mx .gauge-new { font-size: 0.78rem; font-weight: 700; color: #5598e7; }
+/* past weeks: what happened, in blue under each projection (--act; darker in print) */
+.mx { --act: #5598e7; }
+.mx .act, .mx .gauge-act, .mx .badge .value.act, .mx .rank-line .val .act { color: var(--act); }
+.mx .gauge-act { font-size: 0.78rem; font-weight: 700; }
+.mx .mini-stat .act { font-size: 0.78rem; font-weight: 600; }
+.mx td.pa .pv, .mx td.pa .av { display: block; line-height: 1.25; }
+.mx td.pa .av { font-size: 0.8125rem; font-weight: 600; color: var(--act); }
+.mx .gr-final { font-weight: 700; }
+.mx .week-filters select#mx-week { font-weight: 600; }
 .mx .mini-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; }
 .mx .mini-stat .val { font-size: 1.1875rem; font-stretch: 68%; font-weight: 700; }
 .mx .mini-stat .lbl, .mx .mini-stat .avg { font-size: 0.78rem; color: var(--text-dim); }
@@ -435,7 +444,7 @@ td .act { font-weight: 700; }
   :root[data-mx] .wrap { max-width: none; padding: 0; }
   .mx-game {
     --bg: #ffffff; --panel: #ffffff; --panel-alt: #ffffff; --border: #b8bfcc; --hair: #d9dde5;
-    --text: #111318; --text-dim: #5b6472; --good: #15803d; --neg: #b91c1c; --track: #d9dde5;
+    --text: #111318; --text-dim: #5b6472; --good: #15803d; --neg: #b91c1c; --track: #d9dde5; --act: #1d4ed8;
     color: var(--text);
   }
   .mx-game .mx-print-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; margin: 0 0 8px; padding-bottom: 6px; border-bottom: 2px solid #111318; font-size: 0.8125rem; color: var(--text-dim); }
@@ -1695,12 +1704,20 @@ function diagChart(node, o) {
 })();
 
 /* ---------------- past weeks ---------------- */
+/* The archive (archive/<season>_w<week>.json, index.json): each week's predictions frozen at
+   kickoff, with the final scores and the players' actual lines once the games are played.
+   Read by Past weeks and by the Matchups view's past weeks. */
+const archive = (() => {
+  const cache = {};
+  const get = f => cache[f] ? Promise.resolve(cache[f]) : fetch("archive/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => (cache[f] = d));
+  return { get, cache, token: f => f.replace(/\.json$/, "") };
+})();
+
 const historyView = (function () {
   let loaded = false, index = [], cur = null;
-  const cache = {}, hs = { pos: "All", team: "", q: "", key: "score", dir: -1 };
+  const cache = archive.cache, get = archive.get, hs = { pos: "All", team: "", q: "", key: "score", dir: -1 };
   const f0 = x => x == null ? "–" : Math.round(x).toString(), f1 = x => x == null ? "–" : x.toFixed(1);
   const badge = r => r ? H("span", { class: "res " + (r === "W" ? "w" : r === "L" ? "l" : ""), text: r === "W" ? "Won" : r === "L" ? "Lost" : "Push" }) : null;
-  const get = f => cache[f] ? Promise.resolve(cache[f]) : fetch("archive/" + f, { cache: "no-cache" }).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => (cache[f] = d));
 
   function open() {
     if (loaded) return;
@@ -1753,7 +1770,7 @@ const historyView = (function () {
         const pm = g.proj.margin, projTxt = `${pm >= 0 ? g.home : g.away} by ${Math.abs(pm).toFixed(1)}, ${g.proj.total.toFixed(1)} total`;
         const flagged = (g.bets || []).filter(b => (b.stake || 0) > 0);
         const fl = flagged.length ? H("span", {}, ...flagged.map((b, i) => H("span", {}, document.createTextNode((i ? "; " : "") + `${b.pick} ${odds(b.odds)}`), r ? badge((res[b.market + "|" + b.side] || {}).result) : null))) : "–";
-        return [H("strong", { text: `${g.away} at ${g.home}` }),
+        return [H("a", { class: "hist-mx", href: `#matchups/${archive.token(cur)}/${encodeURIComponent(g.id)}`, title: "This game's matchup: projected against actual" }, H("strong", { text: `${g.away} at ${g.home}` })),
           r ? `${g.away} ${r.away_score} – ${r.home_score} ${g.home}` : (g.date ? `${g.date}, not played yet` : "Not played yet"),
           `${fav}, ${g.market.total}`, projTxt, pick(side("Spread")), pick(side("Total")), fl];
       }));
@@ -1867,10 +1884,27 @@ const matchups = (() => {
   const LEAGUE = "cfb";
   const WEEK = DATA.slate.weeks[0];
   const RT = Object.fromEntries((DATA.ratings || []).map(r => [r.team, r]));
-  const PL = (DATA.players && DATA.players.players) || [];
-  const MX_NEW = PL.some(p => p.proj_new);     // the new projections, shown next to the current ones
-  const TP = {};
-  ((DATA.players && DATA.players.teams) || []).forEach(t => { TP[t.game + "|" + t.team] = t; });
+  /* The week shown, C: this week from the page's data (LIVE), or a past week from the archive
+     (#matchups/<season>_w<week>, e.g. #matchups/2026_w07), where the predictions are as frozen
+     at kickoff and the results and the players' actual lines sit next to them. */
+  const LIVE = { tok: null, week: WEEK, games: ALL.filter(g => g.week === WEEK), players: (DATA.players && DATA.players.players) || [],
+    teams: {}, actuals: {}, results: {}, when: "updated " + M.generated };
+  ((DATA.players && DATA.players.teams) || []).forEach(t => { LIVE.teams[t.game + "|" + t.team] = t; });
+  LIVE.hasNew = LIVE.players.some(p => p.proj_new);     // the new projections, shown next to the current ones
+  let C = LIVE;
+  const PAST = {};
+  function ctxFrom(tok, d) {
+    const players = Object.values(d.players || {}).flat(), teams = {};
+    Object.values(d.teams || {}).flat().forEach(t => { teams[t.game + "|" + t.team] = t; });
+    const fz = [...new Set(Object.values(d.games).map(g => g.frozen_at))].filter(Boolean).sort();
+    return { tok, week: d.week, games: Object.values(d.games), players, teams, actuals: d.actuals || {}, results: d.results || {}, hasNew: players.some(p => p.proj_new),
+      when: "frozen " + (fz.length > 1 ? "between " + fz[0] + " and " + fz[fz.length - 1] : "at " + (fz[0] || "kickoff")) };
+  }
+  const load = tok => PAST[tok] ? Promise.resolve(PAST[tok]) : archive.get(tok + ".json").then(d => (PAST[tok] = ctxFrom(tok, d)));
+  const past = () => !!C.tok;
+  const result = g => C.results[g.id] || null;
+  const actOf = p => (C.actuals[p.game] || {})[p.id] || null;
+  const OFFLINE = "Past weeks load from the published board; they are not available in a copy opened from disk.";
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const n0 = x => x == null || isNaN(x) ? "–" : Math.round(x).toString();
   const n1 = x => x == null || isNaN(x) ? "–" : (Math.round(x * 10) / 10).toFixed(1);
@@ -1958,28 +1992,31 @@ const matchups = (() => {
   const clock = t => { if (!t) return ""; const [h, m] = t.split(":").map(Number); return `${(h + 11) % 12 + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`; };
   const dayName = g => { const [w, mo, d] = (g.date || "").split(" "); return `${DAYS[w] || w}, ${mo} ${d}`; };
 
-  const games = () => ALL.filter(g => g.week === WEEK).slice().sort((a, b) => order(a) - order(b) || a.id.localeCompare(b.id));
-  const playersOf = (g, abbr) => PL.filter(p => p.game === g.id && p.team === abbr && String(p.name).trim() !== "Team");
+  const games = () => C.games.slice().sort((a, b) => order(a) - order(b) || a.id.localeCompare(b.id));
+  const playersOf = (g, abbr) => C.players.filter(p => p.game === g.id && p.team === abbr && String(p.name).trim() !== "Team");
   const sum = (ps, k) => ps.reduce((a, p) => a + (p.proj[k] || 0), 0);
+  // the same stat as it happened, over the players projected before the game (null until the game is graded)
+  const sumAct = (g, ps, k) => result(g) ? ps.reduce((a, p) => a + ((actOf(p) || {})[k] || 0), 0) : null;
 
-  // projected yards for every team this week, for the dials and their ranks
-  let WK = null;
+  // projected yards for every team of the week shown, for the dials and their ranks
   function weekTable() {
-    if (WK) return WK;
+    if (C.WK) return C.WK;
     const rows = [];
     games().forEach(g => ["away", "home"].forEach(s => {
-      const ps = playersOf(g, g[s]);
+      const ps = playersOf(g, g[s]), r = result(g), t = C.teams[g.id + "|" + g[s]] || {};
       rows.push({ key: g.id + "|" + g[s], pass: sum(ps, "pass_yds"), rush: sum(ps, "rush_yds"),
         rush_new: ps.reduce((a, p) => a + (p.proj_new && p.proj_new.rush_yds != null ? p.proj_new.rush_yds : p.proj.rush_yds || 0), 0), pts: ptsFor(g.proj, s),
-        att: (TP[g.id + "|" + g[s]] || {}).pass_att, car: (TP[g.id + "|" + g[s]] || {}).carries });
+        att: t.pass_att, car: t.carries,
+        a_pass: sumAct(g, ps, "pass_yds"), a_rush: sumAct(g, ps, "rush_yds"), a_att: sumAct(g, ps, "pass_att"), a_car: sumAct(g, ps, "carries"),
+        a_pts: r ? r[s + "_score"] : null });
     }));
     const byKey = Object.fromEntries(rows.map(r => [r.key, r]));
     const rank = (k, dir) => { const v = rows.map(r => r[k]).sort((a, b) => (b - a) * dir); return x => v.indexOf(x) + 1; };
     const avg = k => { const v = rows.map(r => r[k]).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
     const top = k => Math.ceil(Math.max(...rows.map(r => r[k])) * 1.05 / 25) * 25;
-    WK = { byKey, n: rows.length, most: { pass: rank("pass", 1), rush: rank("rush", 1) }, fewest: { pass: rank("pass", -1), rush: rank("rush", -1) },
+    C.WK = { byKey, n: rows.length, most: { pass: rank("pass", 1), rush: rank("rush", 1) }, fewest: { pass: rank("pass", -1), rush: rank("rush", -1) },
       avg: { pts: avg("pts"), att: avg("att"), car: avg("car") }, max: { pass: top("pass"), rush: top("rush") } };
-    return WK;
+    return C.WK;
   }
   // season efficiency ranks from the team ratings (offense: highest EPA first; defense: lowest allowed first)
   let RK = null;
@@ -1996,17 +2033,19 @@ const matchups = (() => {
   const st = { q: "", conf: "" };
   const hit = g => (!st.q || [g.away, g.home, g.away_name, g.home_name, nameOf(g, "away"), nameOf(g, "home")].some(x => String(x || "").toLowerCase().includes(st.q)))
     && (!st.conf || confOf(g.away) === st.conf || confOf(g.home) === st.conf);
-  let wired = false;
-  function board() {
-    const host = $("#view-matchups"), all = games();
+  let wired = false, shownTok = null;   // the week the board is showing (or loading)
+  const hashIs = tok => location.hash === "#matchups" + (tok ? "/" + tok : "");
+  // tok: null for this week, or an archive week token (2026_w07) for a past week
+  function board(tok) {
+    const host = $("#view-matchups");
     if (!wired) {
       wired = true;
-      const confs = [...new Set(all.flatMap(g => [confOf(g.away), confOf(g.home)]).filter(Boolean))].sort();
       host.innerHTML = `<div class="week-head">
-          <div><h1 class="week-title">Week ${WEEK}</h1><p class="week-sub" id="mx-sub"></p></div>
+          <div><h1 class="week-title" id="mx-title">Week ${WEEK}</h1><p class="week-sub" id="mx-sub"></p></div>
           <div class="week-filters" role="group" aria-label="Filter games">
+            <select id="mx-week" aria-label="Week" hidden><option value="">Week ${WEEK}, this week</option></select>
             <input type="search" id="mx-q" placeholder="Find a team" aria-label="Find a team" autocomplete="off">
-            ${confs.length ? `<select id="mx-conf" aria-label="Conference"><option value="">All conferences</option>${confs.map(c => `<option>${esc(c)}</option>`).join("")}</select>` : ""}
+            <select id="mx-conf" aria-label="Conference" hidden><option value="">All conferences</option></select>
             <button class="print-btn" id="mx-print-all-btn" type="button">Print all</button>
           </div>
         </div>
@@ -2014,18 +2053,43 @@ const matchups = (() => {
         <div id="mx-print-all" class="mx-print-all"></div>`;
       $("#mx-print-all-btn").addEventListener("click", printAll);
       $("#mx-q").addEventListener("input", e => { st.q = e.target.value.trim().toLowerCase(); draw(); });
-      if ($("#mx-conf")) $("#mx-conf").addEventListener("change", e => { st.conf = e.target.value; draw(); });
+      $("#mx-conf").addEventListener("change", e => { st.conf = e.target.value; draw(); });
+      $("#mx-week").addEventListener("change", e => { location.hash = "#matchups" + (e.target.value ? "/" + e.target.value : ""); });
+      // past weeks, from the archive's index: the ones before this week, latest first
+      archive.get("index.json").then(ix => {
+        const weeks = ix.weeks.filter(w => w.week < WEEK && w.games > 0).sort((a, b) => b.season - a.season || b.week - a.week);
+        if (!weeks.length) return;
+        $("#mx-week").append(...weeks.map(w => H("option", { value: archive.token(w.file), text: `Week ${w.week}` + (w.graded < w.games ? ` (${w.graded} of ${w.games} played)` : "") })));
+        $("#mx-week").hidden = false;
+        $("#mx-week").value = shownTok || "";
+      }).catch(() => {});
     }
-    draw();
+    shownTok = tok;
+    $("#mx-week").value = tok || "";
+    if (!tok) { C = LIVE; draw(); return; }
+    $("#mx-title").textContent = "Week";
+    $("#mx-sub").textContent = "Loading the archived week…";
+    $("#mx-board").innerHTML = "";
+    load(tok).then(ctx => { if (hashIs(tok)) { C = ctx; draw(); } })
+      .catch(e => { if (hashIs(tok)) { $("#mx-sub").textContent = ""; $("#mx-board").innerHTML = `<div class="empty-note">${esc(e.message === "404" ? "There is no archived week at that address." : OFFLINE)} <a href="#matchups">This week's matchups</a>.</div>`; } });
     function draw() {
-      const shown = all.filter(hit);
+      const all = games(), shown = all.filter(hit);
+      const confs = [...new Set(all.flatMap(g => [confOf(g.away), confOf(g.home)]).filter(Boolean))].sort();
+      const cs = $("#mx-conf");
+      if (!confs.includes(st.conf)) st.conf = "";
+      cs.replaceChildren(H("option", { value: "", text: "All conferences" }), ...confs.map(c => H("option", { value: c, text: c, ...(c === st.conf ? { selected: "" } : {}) })));
+      cs.hidden = !confs.length;
+      $("#mx-title").textContent = "Week " + C.week;
       $("#mx-print-all-btn").textContent = shown.length < all.length ? `Print ${shown.length} shown` : "Print all";
       $("#mx-print-all-btn").disabled = !shown.length;
-      $("#mx-sub").textContent = `${all.length} games${shown.length < all.length ? ", " + shown.length + " shown" : ""}. Projections from the value model, updated ${M.generated}. Implied scores are from the betting line. Pick a game for each team's projected stats.`;
+      const played = all.filter(result).length;
+      $("#mx-sub").textContent = `${all.length} games${shown.length < all.length ? ", " + shown.length + " shown" : ""}. ` + (past()
+        ? `Projections from the value model as ${C.when}, with the final score${played < all.length ? ` (${played} of ${all.length} games played)` : ""}. Pick a game to compare each team's projected stats with what happened.`
+        : `Projections from the value model, ${C.when}. Implied scores are from the betting line. Pick a game for each team's projected stats.`);
       if (!shown.length) { $("#mx-board").innerHTML = `<div class="empty-note">No games match.</div>`; return; }
       const groups = [];
       shown.forEach(g => { const last = groups[groups.length - 1]; if (last && last.date === g.date) last.games.push(g); else groups.push({ date: g.date, games: [g] }); });
-      $("#mx-board").innerHTML = `<div class="board-cols" aria-hidden="true"><span>Away</span><span></span><span>Home</span><span>Spread</span><span>Total</span><span>Implied score</span><span>Where</span></div>`
+      $("#mx-board").innerHTML = `<div class="board-cols" aria-hidden="true"><span>Away</span><span></span><span>Home</span><span>Spread</span><span>Total</span><span>${played ? "Final score" : "Implied score"}</span><span>Where</span></div>`
         + groups.map(grp => {
           const exact = grp.games.every(g => g.time === grp.games[0].time);
           return `<section class="day-group">
@@ -2042,14 +2106,15 @@ const matchups = (() => {
   function row(g, exact) {
     const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
     const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind${gusts(g)}` : ""].filter(Boolean);
-    const stadium = (g.detail && g.detail.stadium) || "";
-    return `<a class="game-row" href="#matchups/${encodeURIComponent(g.id)}">
+    const stadium = (g.detail && g.detail.stadium) || "", r = result(g);
+    return `<a class="game-row" href="${gameHash(g)}">
       ${rowTeam(g, "away")}
       <div class="gr-at">${g.neutral ? "vs" : "at"}</div>
       ${rowTeam(g, "home")}
       <div class="gr-spread"><div class="gr-big">${esc(spreadText(g))}</div></div>
       <div class="gr-total"><div class="gr-big"><span class="ou-pre">O/U </span>${g.market.total != null ? g.market.total : "—"}</div></div>
-      <div class="gr-implied"><span class="imp-pre">Implied </span>${esc(g.away)} ${n1(ptsFor(mkt(g), "away"))}, ${esc(g.home)} ${n1(ptsFor(mkt(g), "home"))}</div>
+      ${r ? `<div class="gr-implied gr-final"><span class="imp-pre">Final </span>${esc(g.away)} ${n0(r.away_score)}, ${esc(g.home)} ${n0(r.home_score)}</div>`
+        : `<div class="gr-implied"><span class="imp-pre">Implied </span>${esc(g.away)} ${n1(ptsFor(mkt(g), "away"))}, ${esc(g.home)} ${n1(ptsFor(mkt(g), "home"))}</div>`}
       <div class="gr-where"><div>${esc(stadium)}</div><div class="gr-sub">${esc(bits.join(". "))}</div></div>
     </a>`;
   }
@@ -2066,18 +2131,22 @@ const matchups = (() => {
       <line class="g-needle" x1="${cx}" y1="${cy}" x2="${nx.toFixed(2)}" y2="${ny.toFixed(2)}" stroke-width="2"/>
       <circle class="g-hub" cx="${cx}" cy="${cy}" r="3.5"/></svg>`;
   }
-  const gauge = (label, v, max, rank, n, nv) => `<div class="gauge-block">${gaugeSvg(v, max)}<div class="gauge-value">${n0(v)}</div><div class="gauge-label">${label}</div><div class="gauge-rank">#${rank} of ${n}</div>${nv != null ? `<div class="gauge-new">New ${n0(nv)}</div>` : ""}</div>`;
-  const mini = (label, v, avg) => `<div class="mini-stat"><div class="val">${v}</div><div class="lbl">${label}</div><div class="avg">${avg}</div></div>`;
+  // av: the same number as it happened (past weeks), shown under the projection
+  const gauge = (label, v, max, rank, n, nv, av) => `<div class="gauge-block">${gaugeSvg(v, max)}<div class="gauge-value">${n0(v)}</div><div class="gauge-label">${label}</div><div class="gauge-rank">#${rank} of ${n}</div>${nv != null ? `<div class="gauge-new">New ${n0(nv)}</div>` : ""}${av != null ? `<div class="gauge-act">Actual ${n0(av)}</div>` : ""}</div>`;
+  const mini = (label, v, avg, av) => `<div class="mini-stat"><div class="val">${v}</div><div class="lbl">${label}</div>${av != null ? `<div class="act">actual ${av}</div>` : `<div class="avg">${avg}</div>`}</div>`;
+  const gameHash = g => `#matchups/${C.tok ? C.tok + "/" : ""}${encodeURIComponent(g.id)}`;
   const badge = (label, v, cls) => `<div class="badge"><span class="label">${label}</span><span class="value ${cls || ""}">${v}</span></div>`;
   const pctx = x => x == null ? "–" : Math.round(x * 100) + "%";
   const factor = x => x == null ? "" : x >= 1 ? `${Math.round((x - 1) * 100)}% more` : `${Math.round((1 - x) * 100)}% fewer`;
 
-  // kind: "pass", "rush" or "rec", the table the name sits in, so hovering it explains that line
-  function table(title, rows, cols, kind) {
+  // kind: "pass", "rush" or "rec", the table the name sits in, so hovering it explains that line.
+  // In a played game each number cell (c.a: the actual) shows the projection over what happened.
+  function table(title, rows, cols, kind, played) {
     if (!rows.length) return `<div class="table-block"><h4>${title}</h4><div class="empty-note">No projection</div></div>`;
+    const num = (c, p) => { const a = played && c.a ? c.a(actOf(p) || {}) : null; return a == null ? `<td class="num">${c.f(p)}</td>` : `<td class="num pa"><span class="pv">${c.f(p)}</span><span class="av">${a}</span></td>`; };
     return `<div class="table-block"><h4>${title}</h4><table><thead><tr>${cols.map(c => `<th class="${c.n ? "num" : ""}" scope="col">${c.t}</th>`).join("")}</tr></thead><tbody>${
-      rows.map(p => `<tr>${cols.map(c => c.n ? `<td class="num">${c.f(p)}</td>`
-        : `<td class="pname" tabindex="0" data-pi="${PL.indexOf(p)}" data-kind="${kind}" aria-label="${esc(p.name)}: how this projection is built">${esc(p.name)}${dzHtml(p)}<span class="ppos">${esc(p.pos)}</span>${chipText(p) ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
+      rows.map(p => `<tr>${cols.map(c => c.n ? num(c, p)
+        : `<td class="pname" tabindex="0" data-pi="${C.players.indexOf(p)}" data-kind="${kind}" aria-label="${esc(p.name)}: how this projection is built">${esc(p.name)}${dzHtml(p)}<span class="ppos">${esc(p.pos)}</span>${chipText(p) ? `<span class="ptag" title="${esc(p.status)}">${esc(p.status)}</span>` : ""}</td>`).join("")}</tr>`).join("")
     }</tbody></table></div>`;
   }
 
@@ -2086,7 +2155,7 @@ const matchups = (() => {
      data has it (the college board exports the chain and recent average; the NFL board not yet). */
   const sgnf = x => (x >= 0 ? "+" : MINUS) + n1(Math.abs(x));
   function tipRows(p, kind) {
-    const w = p.why || {}, t = TP[p.game + "|" + p.team] || {}, rows = [];
+    const w = p.why || {}, t = C.teams[p.game + "|" + p.team] || {}, rows = [];
     const recent = (now, hist) => pctx(now) + (hist != null && Math.abs((now || 0) - hist) >= 0.01 ? ` (${pctx(hist)} recent)` : "");
     let stat, label;
     if (kind === "pass") {
@@ -2110,11 +2179,13 @@ const matchups = (() => {
         { k: "Calibration", v: sgnf((proj || 0) - w.chain[stat]) });
     }
     rows.push({ k: label + ", projected", v: n1(proj) });
+    const a = actOf(p);
+    if (a && a[stat] != null) rows.push({ k: label + ", actual", v: n1(a[stat]) });
     return rows;
   }
   let tipFor = null;   // the name cell the tooltip is showing, so a second tap closes it
   function wireTips(host) {
-    const show = (e, cell) => { const p = PL[+cell.dataset.pi]; if (!p) return; tipFor = cell; showTip(e, `${p.name} · ${p.pos} · ${p.team}`, tipRows(p, cell.dataset.kind)); };
+    const show = (e, cell) => { const p = C.players[+cell.dataset.pi]; if (!p) return; tipFor = cell; showTip(e, `${p.name} · ${p.pos} · ${p.team}`, tipRows(p, cell.dataset.kind)); };
     const close = () => { tipFor = null; hideTip(); };
     host.addEventListener("pointermove", e => { const c = e.target.closest("td.pname"); if (c && e.pointerType === "mouse") show(e, c); else if (!c && tipFor && e.pointerType === "mouse") close(); });
     host.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") close(); });
@@ -2134,52 +2205,70 @@ const matchups = (() => {
 
   function card(g, s) {
     const abbr = g[s], o = other(s), opp = g[o], key = g.id + "|" + abbr, W = weekTable(), me = W.byKey[key], them = W.byKey[g.id + "|" + opp];
-    const t = TP[key] || {}, ps = playersOf(g, abbr), rk = ratingRanks()(abbr), rt = RT[abbr];
+    const t = C.teams[key] || {}, ps = playersOf(g, abbr), rk = past() ? null : ratingRanks()(abbr), rt = past() ? null : RT[abbr];
     const rec = [g[s + "_record"], confOf(abbr)];
-    const passing = ps.filter(p => (p.proj.pass_att || 0) >= 1).sort((a, b) => b.proj.pass_yds - a.proj.pass_yds).slice(0, 3);
-    const rushing = ps.filter(p => (p.proj.carries || 0) >= 0.5).sort((a, b) => b.proj.rush_yds - a.proj.rush_yds).slice(0, 6);
-    const recv = ps.filter(p => (LEAGUE === "nfl" ? p.proj.targets || 0 : p.proj.receptions || 0) >= 0.5).sort((a, b) => b.proj.rec_yds - a.proj.rec_yds).slice(0, 7);
+    // a played game (past weeks): the final score and every projected player's actual line
+    const r = result(g), played = !!r, my = played ? r[s + "_score"] : null, their = played ? r[o + "_score"] : null;
+    const A = p => actOf(p) || {};
+    const passing = ps.filter(p => (p.proj.pass_att || 0) >= 1 || (played && (A(p).pass_att || 0) >= 1)).sort((a, b) => b.proj.pass_yds - a.proj.pass_yds || (A(b).pass_yds || 0) - (A(a).pass_yds || 0)).slice(0, played ? 4 : 3);
+    const rushing = ps.filter(p => (p.proj.carries || 0) >= 0.5 || (played && (A(p).carries || 0) >= 1)).sort((a, b) => b.proj.rush_yds - a.proj.rush_yds || (A(b).rush_yds || 0) - (A(a).rush_yds || 0)).slice(0, 6);
+    const tg = p => LEAGUE === "nfl" ? p.targets || 0 : p.receptions || 0;
+    const recv = ps.filter(p => tg(p.proj) >= 0.5 || (played && tg(A(p)) >= 1)).sort((a, b) => b.proj.rec_yds - a.proj.rec_yds || (A(b).rec_yds || 0) - (A(a).rec_yds || 0)).slice(0, 7);
     const name = { t: "Player" };
     const tables = [
-      table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints) },
-        { t: "Cmp", n: 1, f: p => n1(p.proj.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att) }], "pass"),
-      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds) }, ...(MX_NEW ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rush_yds != null ? n0(p.proj_new.rush_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rush_td) },
-        { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries) }], "rush"),
-      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds) }, ...(MX_NEW ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rec_yds != null ? n0(p.proj_new.rec_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions) },
-        LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–" }], "rec"),
+      table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds), a: a => n0(a.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td), a: a => n0(a.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints), a: a => n0(a.ints) },
+        { t: "Cmp", n: 1, f: p => n1(p.proj.completions), a: a => n0(a.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att), a: a => n0(a.pass_att) }], "pass", played),
+      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds), a: a => n0(a.rush_yds) }, ...(C.hasNew ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rush_yds != null ? n0(p.proj_new.rush_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rush_td), a: a => n0(a.rush_td) },
+        { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–", a: a => a.carries ? n1(a.rush_yds / a.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries), a: a => n0(a.carries) }], "rush", played),
+      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds), a: a => n0(a.rec_yds) }, ...(C.hasNew ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rec_yds != null ? n0(p.proj_new.rec_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rec_td), a: a => n0(a.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions), a: a => n0(a.receptions) },
+        LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets), a: a => n0(a.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–", a: a => a.receptions ? n1(a.rec_yds / a.receptions) : "–" }], "rec", played),
     ].join("");
     const d = [];
     if (t.def_ypa != null) d.push(`${factor(t.def_ypa)} yards per pass`);
     if (t.def_ypc != null) d.push(`${factor(t.def_ypc)} per carry`);
-    let note = d.length ? `Against <b>${esc(opp)}</b>'s defense, which has allowed ${d.join(" and ")} than average.` : "";
+    let note = d.length ? `Against <b>${esc(opp)}</b>'s defense, which ${played ? "had" : "has"} allowed ${d.join(" and ")} than average.` : "";
     const miss = [t.opp_miss_db > 0.05 ? pctx(t.opp_miss_db) + " of its usual defensive backs" : "", t.opp_miss_pr > 0.05 ? pctx(t.opp_miss_pr) + " of its pass rush" : ""].filter(Boolean);
     if (miss.length) note += ` Out for ${esc(opp)}: ${miss.join(" and ")}.`;
     if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${gusts(g)}${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
+    if (played) note += ` <span class="act">Blue numbers are what happened.</span>`;
     const out = (t.out || []).map(x => { const tag = [x.pos, /^doubtful/i.test(x.status || "") ? "doubtful" : ""].filter(Boolean).join(", "); return `${esc(x.name)}${tag ? " (" + esc(tag) + ")" : ""}`; });
+    // the result from this team's side: won or lost by how much, and against the line
+    let res = "";
+    if (played) {
+      const by = my - their, lv = s === "home" ? -g.market.spread : g.market.spread, cv = lv == null ? null : by + lv;
+      const ats = cv == null ? "" : cv > 0 ? ", covered" : cv < 0 ? ", didn't cover" : ", push";
+      res = badge("Result", (by > 0 ? "Won by " + n0(by) : by < 0 ? "Lost by " + n0(-by) : "Tied") + ats, by > 0 ? "pos" : by < 0 ? "neg" : "");
+    }
+    const side = v => s === "home" ? v : -v;       // margins are from the home side
     return `<div class="team-card" style="${teamVars(abbr)}">
       <div class="team-card-header">
         <div class="team-name-block">${slab(abbr)}<h2>${esc(nameOf(g, s))}</h2>
           <div class="record"><b>${esc(rec[0] || "")}</b>${rec[1] ? ` <span class="conf">${esc(rec[1])}</span>` : ""}</div></div>
         <div class="rating-badges">
           ${badge("Proj pts", n1(me.pts))}
+          ${played ? badge("Scored", n0(my), "act") : ""}
           ${badge("Win chance", pctx(winFor(g, s)))}
           ${badge("Line", lineFor(g, s))}
           ${rt ? badge("Rating", sgn(rt.rating), rt.rating > 0 ? "pos" : rt.rating < 0 ? "neg" : "") : ""}
+          ${res}
         </div>
       </div>
       <div class="stat-columns">
-        <div class="stat-col offense"><h3>Offense, projected</h3>
-          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n, MX_NEW ? me.rush_new : null)}</div>
-          <div class="mini-stats">${mini("Points", n1(me.pts), "avg " + n1(W.avg.pts))}${mini("Pass att", n1(me.att), "avg " + n1(W.avg.att))}${mini("Carries", n1(me.car), "avg " + n1(W.avg.car))}</div>
+        <div class="stat-col offense"><h3>Offense, projected${played ? " and actual" : ""}</h3>
+          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n, null, me.a_pass)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n, C.hasNew ? me.rush_new : null, me.a_rush)}</div>
+          <div class="mini-stats">${mini("Points", n1(me.pts), "avg " + n1(W.avg.pts), played ? n0(my) : null)}${mini("Pass att", n1(me.att), "avg " + n1(W.avg.att), played ? n0(me.a_att) : null)}${mini("Carries", n1(me.car), "avg " + n1(W.avg.car), played ? n0(me.a_car) : null)}</div>
         </div>
         <div class="center-col">
           ${rk ? `<div class="rank-line"><div class="lbl">Run game</div><div class="val">#${rk.rush_off} <span>off</span> / #${rk.rush_def} <span>def</span></div></div>
           <div class="rank-line"><div class="lbl">Pass game</div><div class="val">#${rk.pass_off} <span>off</span> / #${rk.pass_def} <span>def</span></div></div>
           <div class="rank-line"><div class="lbl">Season efficiency rank of ${rk.n}</div></div>` : ""}
+          ${played ? `<div class="rank-line"><div class="lbl">Margin</div><div class="val">${sgn(side(g.proj.margin))} <span>proj</span> / <span class="act">${sgn(my - their, 0)}</span> <span>final</span></div></div>
+          <div class="rank-line"><div class="lbl">Total</div><div class="val">${n1(g.proj.total)} <span>proj</span> / <span class="act">${n0(my + their)}</span> <span>final</span></div></div>
+          <div class="rank-line"><div class="lbl">Projected against the final, from ${esc(abbr)}'s side</div></div>` : ""}
         </div>
-        <div class="stat-col defense"><h3>Defense, projected to allow</h3>
-          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n, MX_NEW ? them.rush_new : null)}</div>
-          <div class="mini-stats">${mini("Points", n1(them.pts), "avg " + n1(W.avg.pts))}${mini("Pass att", n1(them.att), "avg " + n1(W.avg.att))}${mini("Carries", n1(them.car), "avg " + n1(W.avg.car))}</div>
+        <div class="stat-col defense"><h3>Defense, projected${played ? " and actual," : ""} to allow</h3>
+          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n, null, them.a_pass)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n, C.hasNew ? them.rush_new : null, them.a_rush)}</div>
+          <div class="mini-stats">${mini("Points", n1(them.pts), "avg " + n1(W.avg.pts), played ? n0(their) : null)}${mini("Pass att", n1(them.att), "avg " + n1(W.avg.att), played ? n0(them.a_att) : null)}${mini("Carries", n1(them.car), "avg " + n1(W.avg.car), played ? n0(them.a_car) : null)}</div>
         </div>
       </div>
       ${note ? `<p class="mx-note">${note}</p>` : ""}
@@ -2191,15 +2280,32 @@ const matchups = (() => {
   // one game: heading (printed only), both team cards, the note and the disclaimer (printed only)
   function gameBlock(g) {
     const where = [dayName(g) + (g.time ? ", " + clock(g.time) + " ET" : ""), (g.detail && g.detail.stadium) || ""].filter(Boolean).join(". ");
-    return `<div class="mx-game"><div class="mx-print-head"><b>Week ${WEEK}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, updated ${esc(M.generated)}.</span></div>
+    const r = result(g);
+    const fin = r ? ` Final ${esc(g.away)} ${n0(r.away_score)}, ${esc(g.home)} ${n0(r.home_score)}.` : "";
+    return `<div class="mx-game"><div class="mx-print-head"><b>Week ${C.week}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, ${esc(C.when)}.${fin}</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
-      <p class="mx-foot">Every number is this game's projection from the value model, not a season average. Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing this week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}${MX_NEW ? " New: the new projections (playing time, depth charts, background and team pace, through a machine-learning last step), shown next to the current ones for running backs' rushing and running backs' and wide receivers' receiving; a dash where there is none. Under the rushing dials, New is the team's rushing yards with the new numbers where there are any." : ""}</p>
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average.${r ? " The blue number under each is what happened: the final score, and the box score of the players projected before the game (a player who was not projected is not shown, so team actuals can run a little short)." : ""} Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing ${past() ? "that" : "this"} week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}${C.hasNew ? " New: the new projections (playing time, depth charts, background and team pace, through a machine-learning last step), shown next to the current ones for running backs' rushing and running backs' and wide receivers' receiving; a dash where there is none. Under the rushing dials, New is the team's rushing yards with the new numbers where there are any." : ""}</p>
       <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p></div>`;
   }
-  function game(g) {
-    $("#view-matchup").innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups">← This week's matchups</a>
-        <button class="print-btn" id="mx-print" type="button">Print matchup</button></div>${gameBlock(g)}`;
-    $("#mx-print").addEventListener("click", () => window.print());
+  // tok: null for this week (g is the game), or an archive week token (g is the game id)
+  function game(tok, g) {
+    const host = $("#view-matchup");
+    const paint = gm => {
+      host.innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups${C.tok ? "/" + C.tok : ""}">← ${C.tok ? "Week " + C.week + " matchups" : "This week's matchups"}</a>
+          <button class="print-btn" id="mx-print" type="button">Print matchup</button></div>${gameBlock(gm)}`;
+      $("#mx-print").addEventListener("click", () => window.print());
+      document.title = `${gm.away} at ${gm.home}, ${result(gm) ? "projected and actual" : "projected"}${C.tok ? ", week " + C.week : ""} | College Value Board`;
+    };
+    if (!tok) { C = LIVE; paint(g); return; }
+    const want = "#matchups/" + tok + "/" + encodeURIComponent(g);
+    host.innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups/${tok}">← Past matchups</a></div><div class="empty-note">Loading the archived week…</div>`;
+    load(tok).then(ctx => {
+      if (location.hash !== want) return;
+      C = ctx;
+      const gm = ctx.games.find(x => x.id === g);
+      if (gm) paint(gm);
+      else host.innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups/${tok}">← Week ${ctx.week} matchups</a></div><div class="empty-note">That game is not in the archive for week ${ctx.week}.</div>`;
+    }).catch(e => { if (location.hash === want) host.innerHTML = `<div class="mx-actions"><a class="back-link" href="#matchups">← This week's matchups</a></div><div class="empty-note">${esc(e.message === "404" ? "There is no archived week at that address." : OFFLINE)}</div>`; });
   }
   wireTips($("#view-matchup"));
 
@@ -2220,7 +2326,7 @@ const matchups = (() => {
     if (!/^#matchups\//.test(location.hash)) $("#mx-page").media = "not all";
   });
 
-  return { board, game, find: id => ALL.find(g => g.id === id && g.week === WEEK) };
+  return { board, game, find: id => LIVE.games.find(g => g.id === id) };
 })();
 
 /* ---------------- routing ---------------- */
@@ -2228,23 +2334,26 @@ const views = { games: $("#view-games"), game: $("#view-game"), matchups: $("#vi
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
-  const mm = /^matchups\/(.+)$/.exec(h), mg = mm ? matchups.find(decodeURIComponent(mm[1])) : null;
-  const name = g ? "game" : mg ? "matchup" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "matchups" || (h === "props" && views.props)) ? h : "games";
+  // #matchups/<id> is this week's game; #matchups/<season>_w<week> and #matchups/<season>_w<week>/<id> are a past week's board and game
+  const mm = /^matchups\/(.+)$/.exec(h), pm = mm && /^(\d{4}_w\d{2})(?:\/(.+))?$/.exec(mm[1]);
+  const tok = pm ? pm[1] : null, pid = pm && pm[2] ? decodeURIComponent(pm[2]) : null;
+  const mg = mm && !pm ? matchups.find(decodeURIComponent(mm[1])) : null;
+  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || (h === "props" && views.props)) ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
-  $("#mx-page").media = mg ? "print" : "not all";   // a printed matchup is one landscape page
-  if (name === "matchups") matchups.board();
-  if (mg) matchups.game(mg);
+  $("#mx-page").media = name === "matchup" ? "print" : "not all";   // a printed matchup is one landscape page
+  if (name === "matchups") matchups.board(tok);
+  if (name === "matchup") matchups.game(tok, mg || pid);
   if (name === "history") historyView.open();
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {
-    if (a.dataset.view === (g ? "games" : mg ? "matchups" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    if (a.dataset.view === (g ? "games" : name === "matchup" ? "matchups" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
   });
   $("#hero").hidden = name !== "games";
   if (g) { shownGame = g; renderGame(g); document.title = g.away + " at " + g.home + " | College Value Board"; }
-  else if (mg) { shownGame = null; document.title = mg.away + " at " + mg.home + ", projected | College Value Board"; }
-  else if (name === "matchups") { shownGame = null; document.title = "This Week's Matchups | College Value Board"; }
+  else if (name === "matchup") { shownGame = null; }   // matchups.game sets the title
+  else if (name === "matchups") { shownGame = null; document.title = (tok ? "Past Matchups" : "This Week's Matchups") + " | College Value Board"; }
   else { shownGame = null; document.title = "College Value Board"; }
   window.scrollTo(0, 0);
 }

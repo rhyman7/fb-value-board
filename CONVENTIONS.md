@@ -203,6 +203,17 @@ boards in detail; this file is the rules.
   game's projections, not season stats. While it is open, `data-mx` on `<html>` switches the
   page tokens to graphite; every other section keeps the board's own look. Its styles are
   all under `.mx`. If the dashboards' week board or team card changes look, bring these along.
+- **Past weeks on the Matchups board.** The board's Week select lists the archived weeks
+  before this one; `#matchups/<season>_w<week>` (e.g. `#matchups/2026_w07`) is that week's
+  board and `#matchups/<season>_w<week>/<game id>` one of its games, read from
+  `docs/archive/<season>_w<week>.json` (the Past weeks table's game names link there too).
+  Nothing is rebuilt for it: the page shows the predictions as frozen at kickoff, and once the
+  game is graded the final score and each projected player's actual line under the projection,
+  in blue (`--act`). Season ratings and efficiency ranks are left off past weeks (they are
+  today's, not that week's); the result badge and the margin/total comparison take their place.
+  This week's board and `#matchups/<game id>` are unchanged, which the dashboards' packets
+  rely on. The archive's `actuals` cover only the players projected before the game, so a
+  team's actual yards can run short of the box score; the foot note says so.
 - Each matchup (`#matchups/<game id>`) has a **Print matchup** button, like the dashboards'.
   It prints both team cards side by side on one landscape letter page in black on white, with
   a printed heading (week, teams, kickoff, stadium, line) and the disclaimer. The print rules
