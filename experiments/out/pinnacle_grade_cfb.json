@@ -1,0 +1,246 @@
+{
+ "league": "cfb",
+ "seasons": [
+  2025
+ ],
+ "price_min": 0.01,
+ "price_tier": {
+  "close": {
+   "all": {
+    "n": 17,
+    "w": 10,
+    "l": 7,
+    "p": 0,
+    "return": 0.1345,
+    "return_se": 0.2374,
+    "claimed": 0.0189,
+    "clv": 0.0189,
+    "clv_se": 0.0024,
+    "beat_close": 1.0
+   },
+   "Total": {
+    "n": 17,
+    "w": 10,
+    "l": 7,
+    "p": 0,
+    "return": 0.1345,
+    "return_se": 0.2374,
+    "claimed": 0.0189,
+    "clv": 0.0189,
+    "clv_se": 0.0024,
+    "beat_close": 1.0
+   },
+   "by_season": {
+    "2025": {
+     "n": 17,
+     "w": 10,
+     "l": 7,
+     "p": 0,
+     "return": 0.1345,
+     "return_se": 0.2374,
+     "claimed": 0.0189,
+     "clv": 0.0189,
+     "clv_se": 0.0024,
+     "beat_close": 1.0
+    }
+   }
+  },
+  "open": {
+   "all": {
+    "n": 25,
+    "w": 13,
+    "l": 12,
+    "p": 0,
+    "return": -0.0127,
+    "return_se": 0.1937,
+    "claimed": 0.0189,
+    "clv": -0.0262,
+    "clv_se": 0.014,
+    "beat_close": 0.32
+   },
+   "Total": {
+    "n": 25,
+    "w": 13,
+    "l": 12,
+    "p": 0,
+    "return": -0.0127,
+    "return_se": 0.1937,
+    "claimed": 0.0189,
+    "clv": -0.0262,
+    "clv_se": 0.014,
+    "beat_close": 0.32
+   },
+   "by_season": {
+    "2025": {
+     "n": 25,
+     "w": 13,
+     "l": 12,
+     "p": 0,
+     "return": -0.0127,
+     "return_se": 0.1937,
+     "claimed": 0.0189,
+     "clv": -0.0262,
+     "clv_se": 0.014,
+     "beat_close": 0.32
+    }
+   }
+  }
+ },
+ "opener_gap": {
+  "spread": [
+   {
+    "threshold": 0,
+    "pinnacle": {
+     "n": 0,
+     "clv_pts": null
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   },
+   {
+    "threshold": 1,
+    "pinnacle": {
+     "n": 0,
+     "clv_pts": null
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   },
+   {
+    "threshold": 3.0,
+    "pinnacle": {
+     "n": 0,
+     "clv_pts": null
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   },
+   {
+    "threshold": 4.0,
+    "pinnacle": {
+     "n": 0,
+     "clv_pts": null
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   }
+  ],
+  "total": [
+   {
+    "threshold": 0,
+    "pinnacle": {
+     "n": 767,
+     "w": 392,
+     "l": 370,
+     "p": 5,
+     "return": -0.0189,
+     "return_se": 0.0343,
+     "claimed": NaN,
+     "clv": -0.0355,
+     "clv_se": 0.003,
+     "beat_close": 0.317,
+     "clv_pts": 0.228
+    },
+    "consensus": {
+     "n": 750,
+     "w": 388,
+     "l": 356,
+     "p": 6,
+     "return": -0.0044,
+     "return_se": 0.0347,
+     "clv_pts": 0.447
+    }
+   },
+   {
+    "threshold": 2,
+    "pinnacle": {
+     "n": 373,
+     "w": 201,
+     "l": 167,
+     "p": 5,
+     "return": 0.0403,
+     "return_se": 0.0489,
+     "claimed": NaN,
+     "clv": -0.0271,
+     "clv_se": 0.0042,
+     "beat_close": 0.357,
+     "clv_pts": 0.417
+    },
+    "consensus": {
+     "n": 355,
+     "w": 188,
+     "l": 165,
+     "p": 2,
+     "return": 0.0166,
+     "return_se": 0.0505,
+     "clv_pts": 0.63
+    }
+   },
+   {
+    "threshold": 3.0,
+    "pinnacle": {
+     "n": 216,
+     "w": 118,
+     "l": 95,
+     "p": 3,
+     "return": 0.056,
+     "return_se": 0.0642,
+     "claimed": NaN,
+     "clv": -0.0143,
+     "clv_se": 0.0056,
+     "beat_close": 0.412,
+     "clv_pts": 0.688
+    },
+    "consensus": {
+     "n": 207,
+     "w": 119,
+     "l": 86,
+     "p": 2,
+     "return": 0.1072,
+     "return_se": 0.0653,
+     "clv_pts": 0.853
+    }
+   },
+   {
+    "threshold": 5.0,
+    "pinnacle": {
+     "n": 69,
+     "w": 37,
+     "l": 30,
+     "p": 2,
+     "return": 0.0538,
+     "return_se": 0.1136,
+     "claimed": NaN,
+     "clv": 0.0096,
+     "clv_se": 0.0108,
+     "beat_close": 0.464,
+     "clv_pts": 1.087
+    },
+    "consensus": {
+     "n": 63,
+     "w": 36,
+     "l": 27,
+     "p": 0,
+     "return": 0.0909,
+     "return_se": 0.12,
+     "clv_pts": 1.655
+    }
+   }
+  ],
+  "games_left_out_short_week": 6
+ },
+ "consensus_vs_pinnacle_close": {
+  "games": 796,
+  "spread_mean_abs": null,
+  "total_mean_abs": 0.433,
+  "spread_differs": null
+ }
+}

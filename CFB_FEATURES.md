@@ -182,15 +182,33 @@ than structure. Every segment's standard error is 2.5 to 7 points of return, so 
 segments differ significantly, and the Sunday/Monday and bowl rows (12 to 25 games) say
 nothing.
 
-## Graded against Pinnacle (backfill set up Oct 30, 2026; results pending)
+## Graded against Pinnacle (2025 totals, Oct 31, 2026)
 
 The college record is graded against cfbfastR's consensus lines (and live, ESPN's one book).
-`experiments/pinnacle_grade.py --league cfb` regrades the price tier, the opener gap (3+ on
-spreads and totals, the one college edge that has held, against Pinnacle's real open) and
-closing line value against Pinnacle's close, from the backfilled lines in
-`data/market/history/cfb/` (FEATURES.md has the method). A college "close" there is 10
-minutes to two hours before kickoff: one snapshot covers every kickoff within two hours, to
-keep a season near 5,000 credits. Results go here once the backfill has run.
+`experiments/pinnacle_grade.py --league cfb --seasons 2025` regrades the one college edge that
+has held, **totals 3+ off the opener**, against Pinnacle's real numbers: the backfilled
+Pinnacle, DraftKings and FanDuel totals in `data/market/history/cfb/2025/` (totals only, to
+fit the month's credits; spreads and 2024 are for a later month). The open is Monday 12:00 UTC;
+a college "close" is 10 minutes to two hours before kickoff (one snapshot covers every kickoff
+within two hours). 796 games matched; results in `experiments/out/pinnacle_grade_cfb.json`.
+
+| Model total off the opener by | Bets at Pinnacle's Monday total and price | W-L-P | Return | Line moved toward the model | CLV (EV) vs Pinnacle's close | Same games, consensus opener at −110 |
+|---|---|---|---|---|---|---|
+| 2+ | 373 | 201-167-5 | +4.0% ± 4.9% | +0.42 pts | −2.7% ± 0.4% | +1.7% ± 5.1% (+0.63 pts) |
+| 3+ | 216 | 118-95-3 | +5.6% ± 6.4% | +0.69 pts | −1.4% ± 0.6% | +10.7% ± 6.5% (+0.85 pts) |
+| 5+ | 69 | 37-30-2 | +5.4% ± 11.4% | +1.09 pts | +1.0% ± 1.1% | +9.1% ± 12.0% (+1.66 pts) |
+
+The direction holds in 2025 (the total moves toward the model, more the bigger the gap) and the
+record is positive, but against Pinnacle's Monday number it is not significant and the move is
+smaller than against the consensus opener: by Monday noon Pinnacle has already taken part of
+it. The edge is in betting the first number, which is what the live market log and the opener
+alerts are for; a Monday price is already late. The consensus close sits 0.43 points from
+Pinnacle's close on totals.
+
+**Price tier** (a DraftKings or FanDuel total beating Pinnacle's no-vig number by 1%): 25 at the
+Monday open (13-12, CLV −2.6% ± 1.4%, 32% beat the close) and 17 at the close. Too few, and at
+the open they did not hold their value: college retail totals that look better than Pinnacle's
+early in the week mostly mean Pinnacle moves first.
 
 ## Not tested yet
 

@@ -90,7 +90,7 @@ class League:
             return None
         from cfbmodel import teams
         t = teams.load_teams(season)
-        return {r.name: school for school, r in t.iterrows()}
+        return {r["name"]: school for school, r in t.iterrows()}
 
     def shop(self, df, dist, quotes):
         if self.league == "nfl":
@@ -127,13 +127,27 @@ def quotes(league: str, season: int, games: pd.DataFrame, names: dict | None) ->
     return M.latest(cat(opens)), M.latest(cat(closes))
 
 
+SPREAD_KEYS = ("spread_line", "home_spread_odds", "away_spread_odds")
+TOTAL_KEYS = ("total_line", "over_odds", "under_odds")
+FALLBACK: dict = {}          # game_id -> consensus spread_line, for a backfill run without spreads
+
+
+def _quote_row(gid: str, b: dict) -> dict | None:
+    """`book`'s quote as a curve row. A totals-only backfill has no spread: the total curve
+    does not depend on it, so the consensus spread at -110 stands in (and no spread is graded)."""
+    if not all(k in b for k in TOTAL_KEYS):
+        return None
+    row = {"game_id": gid, **{k: b.get(k, np.nan) for k in PRICE_COLS}}
+    if not all(k in b for k in SPREAD_KEYS):
+        if gid not in FALLBACK:
+            return None
+        row.update(spread_line=FALLBACK[gid], home_spread_odds=-110.0, away_spread_odds=-110.0)
+    return row
+
+
 def anchor_rows(q: dict, book: str = M.SHARP) -> pd.DataFrame:
-    """One row per game with `book`'s full quote (both spread and total sides priced)."""
-    rows = []
-    for gid, books in q.items():
-        b = books.get(book) or {}
-        if all(k in b for k in NEED):
-            rows.append({"game_id": gid, **{k: b.get(k, np.nan) for k in PRICE_COLS}})
+    """One row per game with `book`'s total priced (and its spread, or the consensus one)."""
+    rows = [r for gid, books in q.items() if (r := _quote_row(gid, books.get(book) or {}))]
     return pd.DataFrame(rows, columns=["game_id", *PRICE_COLS])
 
 
@@ -172,9 +186,12 @@ def clv(lg: League, dist: dict, close_q: dict, gid: str, market: str, side: str,
     c = (close_q.get(gid) or {}).get(M.SHARP) or {}
     if market == "Moneyline" and not ("home_moneyline" in c and "away_moneyline" in c):
         return np.nan
-    if market != "Moneyline" and not all(k in c for k in NEED):
+    if market == "Spread" and not all(k in c for k in SPREAD_KEYS):
         return np.nan
-    df = pd.DataFrame([{"game_id": gid, **{k: c.get(k, np.nan) for k in PRICE_COLS}}])
+    row = _quote_row(gid, c) if market != "Moneyline" else {"game_id": gid, **{k: c.get(k, np.nan) for k in PRICE_COLS}}
+    if row is None:
+        return np.nan
+    df = pd.DataFrame([row])
     cv = lg.curve(df, dist)
     p, push = NB._side_prob(cv, 0, market, side, board_line(market, side, shown))
     return float(O.expected_value(p, odds, push))
@@ -331,6 +348,7 @@ def main(argv=None):
         frame = frame.merge(data.load_openers(refresh=False)[["game_id", "open_spread"]], on="game_id", how="left")
     skip = set(games.loc[early_games(lg, games), "game_id"])
     prices, gaps, cons = [], [], []
+    FALLBACK.update(dict(zip(games["game_id"], games["spread_line"])))
     for s in a.seasons:
         names = lg.team_names(s)
         open_q, close_q = quotes(a.league, s, games, names)
@@ -369,9 +387,10 @@ def main(argv=None):
         X = pd.concat(cons, ignore_index=True)
         report["consensus_vs_pinnacle_close"] = {
             "games": int(len(X)),
-            "spread_mean_abs": round(float((X.spread_line_cons - X.spread_line_pin).abs().mean()), 3),
+            # a totals-only backfill has no Pinnacle spread (the consensus stands in): no spread comparison
+            "spread_mean_abs": round(float((X.spread_line_cons - X.spread_line_pin).abs().mean()), 3) if (X.spread_line_cons - X.spread_line_pin).abs().max() > 0 else None,
             "total_mean_abs": round(float((X.total_line_cons - X.total_line_pin).abs().mean()), 3),
-            "spread_differs": round(float(((X.spread_line_cons - X.spread_line_pin).abs() >= 0.5).mean()), 3)}
+            "spread_differs": round(float(((X.spread_line_cons - X.spread_line_pin).abs() >= 0.5).mean()), 3) if (X.spread_line_cons - X.spread_line_pin).abs().max() > 0 else None}
     OUT.mkdir(exist_ok=True)
     (OUT / f"pinnacle_grade_{a.league}.json").write_text(json.dumps(report, indent=1, default=float))
     print(json.dumps(report, indent=1, default=float))
