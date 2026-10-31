@@ -6,6 +6,10 @@
                                                     # (market.DERIV_BUDGET credits at most; nfl 70, cfb 160)
     python run_market.py status              # what is stored: games, books, latest snapshot
     python run_market.py alerts              # opener alerts: model vs Pinnacle, from the published boards
+    python run_market.py backfill --league nfl --season 2024 --plan
+                                             # past lines (marketbackfill.py): what a run would fetch and cost, free
+    python run_market.py backfill --league nfl --season 2024 --max-credits 4500
+                                             # fetch them (30 credits a snapshot with three markets)
 
 Needs ODDS_API_KEY in the environment for snapshot. Rows go to data/market/<league>_<YYYY-MM>.csv
 (only what changed since the last snapshot). See README "Market lines".
@@ -144,15 +148,46 @@ def cmd_alerts(args) -> int:
     return 0
 
 
+def cmd_backfill(args) -> int:
+    """Past Pinnacle, DraftKings and FanDuel lines from the historical endpoint (marketbackfill.py)."""
+    from nflmodel import marketbackfill as MB
+    if not args.league or not args.season:
+        print("backfill needs --league and --season")
+        return 1
+    markets = [m.strip() for m in (args.markets or ",".join(MB.MARKETS)).split(",") if m.strip()]
+    kinds = tuple(k.strip() for k in (args.kinds or "open,close").split(",") if k.strip())
+    est = MB.estimate(args.league, args.season, markets, args.window, kinds)
+    print(f"  plan: {est}")
+    if args.plan:
+        return 0
+    if not args.max_credits:
+        print("backfill needs --max-credits (or --plan)")
+        return 1
+    client = oddsapi.Client()
+    if not client.ready:
+        print("ODDS_API_KEY is not set: nothing fetched")
+        return 0
+    res = MB.run(client, args.league, args.season, args.max_credits, markets, window_min=args.window, kinds=kinds)
+    print(f"  backfill {args.league} {args.season}: {res}")
+    return 0
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=["snapshot", "derivatives", "status", "alerts"])
+    p.add_argument("command", choices=["snapshot", "derivatives", "status", "alerts", "backfill"])
     p.add_argument("--league", choices=list(M.SPORTS))
     p.add_argument("--fixture")
     p.add_argument("--budget", type=int, help="derivatives: credits this run may spend")
     p.add_argument("--out", help="alerts: write new alerts as a Markdown table here")
+    p.add_argument("--season", type=int, help="backfill: season")
+    p.add_argument("--max-credits", type=int, help="backfill: most credits this run may spend")
+    p.add_argument("--markets", help="backfill: comma separated (default spreads,totals,h2h)")
+    p.add_argument("--kinds", help="backfill: open,close (default both)")
+    p.add_argument("--window", type=int, help="backfill: minutes of kickoffs one close covers (default nfl 30, cfb 120)")
+    p.add_argument("--plan", action="store_true", help="backfill: only show what would be fetched and its cost")
     a = p.parse_args(argv)
-    return {"snapshot": cmd_snapshot, "derivatives": cmd_derivatives, "status": cmd_status, "alerts": cmd_alerts}[a.command](a)
+    return {"snapshot": cmd_snapshot, "derivatives": cmd_derivatives, "status": cmd_status, "alerts": cmd_alerts,
+            "backfill": cmd_backfill}[a.command](a)
 
 
 if __name__ == "__main__":

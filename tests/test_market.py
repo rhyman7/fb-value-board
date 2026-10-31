@@ -189,3 +189,77 @@ def test_snapshot_and_quotes_skip_games_that_kicked_off(tmp_path):
     games = pd.DataFrame({"game_id": ["2026_09_DEN_KC"], "home_team": ["KC"], "away_team": ["DEN"], "gameday": ["2026-11-01"]})
     assert M.quotes_for(games, "nfl", root=tmp_path, before=pd.Timestamp("2026-11-01T16:00Z"))["latest"]
     assert not M.quotes_for(games, "nfl", root=tmp_path, before=pd.Timestamp("2026-11-01T18:00Z"))["latest"]
+
+
+# --------------------------------------------------------------------------
+# Historical backfill (nflmodel/marketbackfill.py): planning and the fetch loop, no API calls
+# --------------------------------------------------------------------------
+
+def test_backfill_plan_open_and_close_times():
+    from nflmodel import marketbackfill as MB
+    ts = lambda s: pd.Timestamp(s, tz="UTC")
+    assert MB.open_time(ts("2025-09-05 00:20")) == ts("2025-09-01 12:00")      # Thursday night: that Monday
+    assert MB.open_time(ts("2025-09-09 00:15")) == ts("2025-09-08 12:00")      # Monday night: that Monday noon
+    assert MB.open_time(ts("2025-09-08 14:00")) == ts("2025-09-01 12:00")      # too close to Monday noon: the one before
+    k = [ts("2025-09-07 17:00")] * 3 + [ts("2025-09-07 20:05"), ts("2025-09-07 20:25"), ts("2025-09-08 00:20")]
+    assert MB.close_times(k, 30) == [ts("2025-09-07 16:50"), ts("2025-09-07 19:55"), ts("2025-09-08 00:10")]
+    g = pd.DataFrame({"game_id": list("abcdef"), "kickoff": k})
+    p = MB.plan(g, "nfl")
+    assert list(p.kind) == ["open", "close", "close", "close"]
+
+
+class _HistClient:
+    """Stands in for oddsapi.Client: serves EVENTS at any date, 10 credits a market."""
+    def __init__(self, fail_at=None, cost=None):
+        self.remaining, self.last_cost, self.calls, self.fail_at, self.cost = 30000, 0, [], fail_at, cost
+
+    def historical_sport_odds(self, sport, markets, date, books):
+        from nflmodel import oddsapi
+        self.calls.append(date)
+        if date == self.fail_at:
+            raise oddsapi.ApiError(f"historical game odds {sport} {date}: HTTP 404 Not Found")
+        self.last_cost = self.cost or 10 * len(markets)
+        self.remaining -= self.last_cost
+        return {"timestamp": date, "data": EVENTS}
+
+
+def test_backfill_run_saves_resumes_and_skips_404(tmp_path, monkeypatch):
+    from nflmodel import marketbackfill as MB
+    monkeypatch.setattr(MB, "HIST", tmp_path)
+    g = pd.DataFrame({"game_id": ["a", "b"], "home_team": ["KC", "BUF"], "away_team": ["DEN", "MIA"],
+                      "kickoff": pd.to_datetime(["2026-11-01T17:00:00Z", "2026-11-01T20:25:00Z"], utc=True)})
+    monkeypatch.setattr(MB, "schedule", lambda league, season: g)
+    plan = MB.plan(g, "nfl")
+    assert len(plan) == 3                                                    # one open, two closes
+    c = _HistClient(fail_at=MB._iso(plan["at"].iloc[1]))
+    r = MB.run(c, "nfl", 2025, 1000, verbose=False)
+    assert r["complete"] and r["spent"] == 60 and r["skipped"] == 1
+    files = sorted(p.name for p in (tmp_path / "nfl" / "2025").iterdir())
+    assert len(files) == 3
+    empty = tmp_path / "nfl" / "2025" / MB.file_name(plan["kind"].iloc[1], plan["at"].iloc[1])
+    assert empty.read_text().strip() == ",".join(M.COLS)                      # the 404 is saved empty
+    c2 = _HistClient()
+    assert MB.run(c2, "nfl", 2025, 1000, verbose=False)["spent"] == 0 and not c2.calls     # nothing fetched twice
+    assert MB.estimate("nfl", 2025)["to_fetch"] == 0
+
+
+def test_backfill_stops_at_the_cap_and_on_a_surprise_cost(tmp_path, monkeypatch):
+    from nflmodel import marketbackfill as MB
+    monkeypatch.setattr(MB, "HIST", tmp_path)
+    g = pd.DataFrame({"game_id": ["a", "b"], "home_team": ["KC", "BUF"], "away_team": ["DEN", "MIA"],
+                      "kickoff": pd.to_datetime(["2026-11-01T17:00:00Z", "2026-11-01T20:25:00Z"], utc=True)})
+    monkeypatch.setattr(MB, "schedule", lambda league, season: g)
+    r = MB.run(_HistClient(), "nfl", 2025, 45, verbose=False)
+    assert not r["complete"] and r["spent"] == 30                            # a second 30 would pass the cap
+    r = MB.run(_HistClient(cost=90), "nfl", 2026, 1000, verbose=False)
+    assert not r["complete"] and r["probe_cost"] == 90                      # more than 30: stop and check
+
+
+def test_backfill_load_drops_games_already_under_way(tmp_path, monkeypatch):
+    from nflmodel import marketbackfill as MB
+    monkeypatch.setattr(MB, "HIST", tmp_path)
+    d = tmp_path / "nfl" / "2026"
+    d.mkdir(parents=True)
+    M.flatten(EVENTS, "nfl", "2026-11-01T18:00:00Z").to_csv(d / "close_20261101T1800.csv", index=False)
+    x = MB.load("nfl", 2026)
+    assert set(x["event_id"]) == {"e2"} and set(x["kind"]) == {"close"}       # e1 kicked off at 17:00
