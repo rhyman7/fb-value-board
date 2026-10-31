@@ -283,7 +283,13 @@ not in The Odds API's free data, so none are flagged.
   May 2023. Plan agreed with Ryan (Oct 27, 2026): the 2025 season's three yardage markets
   first (about 17,100 credits, so most of the first month), then 2024 and 2023 only if
   2025 is worth it. `experiments/props_real_lines.py` then scores the model against those
-  lines (above). The 2025 run used 16,062 credits (578 calls, Oct 27, 2026).
+  lines (above). The 2025 run used 16,062 credits (578 calls, Oct 27, 2026); 2024 and 2023
+  followed on Oct 30, 2026 (about 16,000 each, on a one-month 100,000-credit plan). A
+  snapshot the API answers 404 for (an event re-created under a new id late in the week,
+  usually a playoff game) is saved as an empty file and never asked for again; any other
+  error skips the snapshot and the run goes on. To resume a stopped run, start a **new**
+  run with the same inputs; never use GitHub's **Re-run**, which checks out the commit the
+  first run started from, without the files it saved, and fetches the whole season again.
 
 ## Vig, edge, EV and flags
 

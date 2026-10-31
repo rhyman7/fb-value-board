@@ -4,7 +4,9 @@ name: Prop price backfill
 # the prop model against real lines (experiments/props_real_lines.py). Run by hand only.
 # Cost: 1 credit per week for the event list, then 10 per market per snapshot; two snapshots
 # per game (pricing and close). A season of the three yardage markets is about 17,100 credits.
-# Saved under data/props/history/<season>/; a stopped run picks up where it left off.
+# Saved under data/props/history/<season>/; a stopped run picks up where it left off when
+# started again as a NEW run with the same inputs (not GitHub's Re-run, which checks out the
+# commit the first run started from and fetches the whole season again).
 
 on:
   workflow_dispatch:
@@ -46,7 +48,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # The usage log is append-only and another Action may have added rows since this
+          # run checked out: on a conflict there, keep both sides' rows.
           git add data/props
           git diff --cached --quiet || git commit -m "Prop price backfill ${{ inputs.season }}"
-          git pull --rebase origin main
+          if ! git pull --rebase origin main; then
+            # during the rebase HEAD is origin/main and REBASE_HEAD is this run's commit
+            git show HEAD:data/props/api_usage.csv > /tmp/usage.csv
+            git show REBASE_HEAD:data/props/api_usage.csv | tail -n +2 >> /tmp/usage.csv
+            awk '!seen[$0]++' /tmp/usage.csv > data/props/api_usage.csv
+            git add data/props/api_usage.csv
+            git diff --name-only --diff-filter=U | grep -q . && { echo "unexpected conflict outside the usage log"; exit 1; }
+            GIT_EDITOR=true git rebase --continue
+          fi
           git push

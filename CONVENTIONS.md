@@ -50,7 +50,8 @@ boards in detail; this file is the rules.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
-  only by hand.
+  only by hand; to resume one, start a new run with the same inputs, never **Re-run** (it
+  checks out the old commit and fetches the season again, ~16,000 credits).
 - The **Wind history** Action (`wind-history.yml`, by hand only) runs
   `experiments/fetch_wind_history.py` and commits only `data/cache/wind_history.csv`: the
   archive wind at kickoff (speed, gusts, direction, along-field and crosswind parts) for
@@ -73,7 +74,7 @@ boards in detail; this file is the rules.
   wording still match the site structure.
 - **Player props (NFL) and The Odds API** ([PROPS.md](PROPS.md)). The key is the
   `ODDS_API_KEY` repository secret; never print it or write it to a file. The account has
-  20,000 credits a month (Oct 2026). Live logging (DraftKings and FanDuel, ten markets plus
+  20,000 credits a month (Oct 2026; 100,000 for one month from Oct 30, 2026 for the backfills). Live logging (DraftKings and FanDuel, ten markets plus
   the three yardage ladders, open, pricing and closing snapshots) runs about 2,500 a month; every call's cost is in
   `data/props/api_usage.csv`. **Ask Ryan before** anything that would use most of the
   month's credits (a backfill), changes what the board shows, or can't be undone.

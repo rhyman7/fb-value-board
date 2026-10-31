@@ -69,7 +69,7 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
     out_dir = HIST / str(season)
     events_path = out_dir / "events.csv"
     known = pd.read_csv(events_path) if events_path.exists() else pd.DataFrame(columns=["game_id", "event_id", "commence"])
-    spent, fetched, probe_ok = 0, 0, False
+    spent, fetched, skipped, probe_ok = 0, 0, 0, False
     per_snap = 10 * len(markets)
 
     def room(cost):
@@ -111,13 +111,24 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
                 continue
             if not room(per_snap):
                 say(f"  stopping: {spent} credits spent, cap {max_credits}")
-                return {"spent": spent, "snapshots": fetched, "complete": False}
+                return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": False}
             at = flag_time(g.kickoff) if kind == "flag" else g.kickoff - CLOSE_BEFORE
             try:
                 ev = client.historical_event_odds(eid, markets, _iso(at))
             except oddsapi.BudgetError as e:
                 say(f"  {e}")
-                return {"spent": spent, "snapshots": fetched, "complete": False}
+                return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": False}
+            except oddsapi.ApiError as e:
+                # 404: the API has no snapshot of this event at this minute (an event re-created
+                # under a new id late in the week, usually a playoff game). Save an empty file so
+                # the snapshot is never asked for again. Any other error: skip, keep going.
+                if "HTTP 404" in str(e):
+                    _save(out_dir / f"{g.game_id}_{kind}.csv", _iso(at), None)
+                    say(f"  {g.game_id} {kind} at {_iso(at)}: not available (404), skipped")
+                else:
+                    say(f"  {g.game_id} {kind} at {_iso(at)}: {e}; skipped")
+                skipped += 1
+                continue
             cost = client.last_cost
             spent += cost
             if not probe_ok and cost > 0:
@@ -128,7 +139,9 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
             n = _save(out_dir / f"{g.game_id}_{kind}.csv", ev.get("_snapshot") if ev else "", ev)
             fetched += 1
             say(f"  {g.game_id} {kind} at {_iso(at)}: {n} prices, {cost} credits (total {spent}, left {client.remaining})")
-    return {"spent": spent, "snapshots": fetched, "complete": True}
+    if skipped:
+        say(f"  {skipped} snapshot(s) skipped (see above)")
+    return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": True}
 
 
 def load(season: int, kind: str) -> pd.DataFrame:
