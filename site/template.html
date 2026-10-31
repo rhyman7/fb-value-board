@@ -1187,7 +1187,7 @@ function renderHero() {
       document.createTextNode(plus.length
         ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", worth " + spct(evOf(top.b)) + " per dollar staked."
         : "No bet clears break-even once the model is weighed against the market. The closest is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", " + spct(evOf(top.b)) + " per dollar staked."));
-    const tiers = all.flatMap(sheetBets).reduce((a, b) => { if (b.tier) a[b.tier] = (a[b.tier] || 0) + 1; return a; }, {});
+    const tiers = all.flatMap(sheetBets).reduce((a, b) => { if (ON_CARD(b.tier)) a[b.tier] = (a[b.tier] || 0) + 1; return a; }, {});   // the sheet's own bets: on the NFL board the model's edges are in Model leans
     const tn = Object.values(tiers).reduce((a, b) => a + b, 0);
     if (tn) lede.append(document.createTextNode(" On the bet sheet: " + [tiers.price ? tiers.price + " where a price beats the sharp line" : "", tiers.opener ? tiers.opener + " off the opener" : "", tiers.wind ? tiers.wind + " wind " + (tiers.wind === 1 ? "under" : "unders") : "", tiers.model ? tiers.model + " on the model alone" : ""].filter(Boolean).join(", ") + "."));
     const sharp = all.filter(g => g.anchor && g.anchor !== "consensus").length, beats = all.flatMap(g => g.bets).filter(b => b.beats_sharp).length;
