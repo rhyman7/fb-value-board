@@ -1,0 +1,355 @@
+{
+ "league": "nfl",
+ "seasons": [
+  2024,
+  2025
+ ],
+ "price_min": 0.01,
+ "price_tier": {
+  "close": {
+   "all": {
+    "n": 69,
+    "w": 35,
+    "l": 34,
+    "p": 0,
+    "return": -0.0311,
+    "return_se": 0.1143,
+    "claimed": 0.0208,
+    "clv": 0.0208,
+    "clv_se": 0.0019,
+    "beat_close": 1.0
+   },
+   "Moneyline": {
+    "n": 22,
+    "w": 4,
+    "l": 18,
+    "p": 0,
+    "return": -0.6917,
+    "return_se": 0.1452,
+    "claimed": 0.0225,
+    "clv": 0.0225,
+    "clv_se": 0.0027,
+    "beat_close": 1.0
+   },
+   "Spread": {
+    "n": 32,
+    "w": 24,
+    "l": 8,
+    "p": 0,
+    "return": 0.4556,
+    "return_se": 0.1512,
+    "claimed": 0.0204,
+    "clv": 0.0204,
+    "clv_se": 0.0019,
+    "beat_close": 1.0
+   },
+   "Total": {
+    "n": 15,
+    "w": 7,
+    "l": 8,
+    "p": 0,
+    "return": -0.1003,
+    "return_se": 0.2571,
+    "claimed": 0.0191,
+    "clv": 0.0191,
+    "clv_se": 0.0017,
+    "beat_close": 1.0
+   },
+   "by_season": {
+    "2024": {
+     "n": 29,
+     "w": 16,
+     "l": 13,
+     "p": 0,
+     "return": 0.0319,
+     "return_se": 0.1709,
+     "claimed": 0.0184,
+     "clv": 0.0184,
+     "clv_se": 0.0017,
+     "beat_close": 1.0
+    },
+    "2025": {
+     "n": 40,
+     "w": 19,
+     "l": 21,
+     "p": 0,
+     "return": -0.0767,
+     "return_se": 0.1549,
+     "claimed": 0.0225,
+     "clv": 0.0225,
+     "clv_se": 0.0031,
+     "beat_close": 1.0
+    }
+   }
+  },
+  "open": {
+   "all": {
+    "n": 84,
+    "w": 51,
+    "l": 33,
+    "p": 0,
+    "return": 0.2193,
+    "return_se": 0.1292,
+    "claimed": 0.0193,
+    "clv": 0.0133,
+    "clv_se": 0.0135,
+    "beat_close": 0.631
+   },
+   "Moneyline": {
+    "n": 34,
+    "w": 23,
+    "l": 11,
+    "p": 0,
+    "return": 0.4343,
+    "return_se": 0.2246,
+    "claimed": 0.0212,
+    "clv": -0.007,
+    "clv_se": 0.0221,
+    "beat_close": 0.559
+   },
+   "Spread": {
+    "n": 22,
+    "w": 12,
+    "l": 10,
+    "p": 0,
+    "return": 0.0426,
+    "return_se": 0.2078,
+    "claimed": 0.019,
+    "clv": 0.0185,
+    "clv_se": 0.0279,
+    "beat_close": 0.682
+   },
+   "Total": {
+    "n": 28,
+    "w": 16,
+    "l": 12,
+    "p": 0,
+    "return": 0.0971,
+    "return_se": 0.1829,
+    "claimed": 0.0171,
+    "clv": 0.0339,
+    "clv_se": 0.0229,
+    "beat_close": 0.679
+   },
+   "by_season": {
+    "2024": {
+     "n": 43,
+     "w": 21,
+     "l": 22,
+     "p": 0,
+     "return": 0.0394,
+     "return_se": 0.1998,
+     "claimed": 0.0206,
+     "clv": 0.0101,
+     "clv_se": 0.0181,
+     "beat_close": 0.674
+    },
+    "2025": {
+     "n": 41,
+     "w": 30,
+     "l": 11,
+     "p": 0,
+     "return": 0.408,
+     "return_se": 0.1589,
+     "claimed": 0.0179,
+     "clv": 0.0166,
+     "clv_se": 0.0204,
+     "beat_close": 0.585
+    }
+   }
+  }
+ },
+ "opener_gap": {
+  "spread": [
+   {
+    "threshold": 0,
+    "pinnacle": {
+     "n": 432,
+     "w": 219,
+     "l": 204,
+     "p": 9,
+     "return": 0.0052,
+     "return_se": 0.0463,
+     "claimed": NaN,
+     "clv": -0.0213,
+     "clv_se": 0.0042,
+     "beat_close": 0.377,
+     "clv_pts": 0.181
+    },
+    "consensus": {
+     "n": 377,
+     "w": 188,
+     "l": 178,
+     "p": 11,
+     "return": -0.0188,
+     "return_se": 0.0485,
+     "clv_pts": 0.17
+    }
+   },
+   {
+    "threshold": 1,
+    "pinnacle": {
+     "n": 284,
+     "w": 151,
+     "l": 126,
+     "p": 7,
+     "return": 0.0574,
+     "return_se": 0.0569,
+     "claimed": NaN,
+     "clv": -0.0116,
+     "clv_se": 0.0054,
+     "beat_close": 0.426,
+     "clv_pts": 0.308
+    },
+    "consensus": {
+     "n": 262,
+     "w": 138,
+     "l": 115,
+     "p": 9,
+     "return": 0.0399,
+     "return_se": 0.0578,
+     "clv_pts": 0.185
+    }
+   },
+   {
+    "threshold": 2.0,
+    "pinnacle": {
+     "n": 159,
+     "w": 85,
+     "l": 68,
+     "p": 6,
+     "return": 0.075,
+     "return_se": 0.0753,
+     "claimed": NaN,
+     "clv": -0.0041,
+     "clv_se": 0.0075,
+     "beat_close": 0.484,
+     "clv_pts": 0.393
+    },
+    "consensus": {
+     "n": 153,
+     "w": 84,
+     "l": 63,
+     "p": 6,
+     "return": 0.0873,
+     "return_se": 0.0751,
+     "clv_pts": 0.154
+    }
+   },
+   {
+    "threshold": 3.0,
+    "pinnacle": {
+     "n": 85,
+     "w": 43,
+     "l": 40,
+     "p": 2,
+     "return": 0.0085,
+     "return_se": 0.1051,
+     "claimed": NaN,
+     "clv": -0.015,
+     "clv_se": 0.0117,
+     "beat_close": 0.482,
+     "clv_pts": 0.171
+    },
+    "consensus": {
+     "n": 85,
+     "w": 41,
+     "l": 41,
+     "p": 3,
+     "return": -0.0439,
+     "return_se": 0.1023,
+     "clv_pts": 0.106
+    }
+   }
+  ],
+  "total": [
+   {
+    "threshold": 0,
+    "pinnacle": {
+     "n": 432,
+     "w": 228,
+     "l": 200,
+     "p": 4,
+     "return": 0.0303,
+     "return_se": 0.0463,
+     "claimed": NaN,
+     "clv": -0.0068,
+     "clv_se": 0.0038,
+     "beat_close": 0.442,
+     "clv_pts": 0.404
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   },
+   {
+    "threshold": 2,
+    "pinnacle": {
+     "n": 144,
+     "w": 77,
+     "l": 66,
+     "p": 1,
+     "return": 0.0403,
+     "return_se": 0.0803,
+     "claimed": NaN,
+     "clv": 0.0083,
+     "clv_se": 0.0068,
+     "beat_close": 0.507,
+     "clv_pts": 0.653
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   },
+   {
+    "threshold": 3.0,
+    "pinnacle": {
+     "n": 85,
+     "w": 45,
+     "l": 39,
+     "p": 1,
+     "return": 0.0319,
+     "return_se": 0.1043,
+     "claimed": NaN,
+     "clv": 0.0066,
+     "clv_se": 0.0087,
+     "beat_close": 0.482,
+     "clv_pts": 0.641
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   },
+   {
+    "threshold": 5.0,
+    "pinnacle": {
+     "n": 14,
+     "w": 6,
+     "l": 8,
+     "p": 0,
+     "return": -0.1892,
+     "return_se": 0.2598,
+     "claimed": NaN,
+     "clv": -0.0229,
+     "clv_se": 0.0245,
+     "beat_close": 0.357,
+     "clv_pts": 0.179
+    },
+    "consensus": {
+     "n": 0,
+     "clv_pts": null
+    }
+   }
+  ],
+  "games_left_out_short_week": 75
+ },
+ "consensus_vs_pinnacle_close": {
+  "games": 570,
+  "spread_mean_abs": 0.268,
+  "total_mean_abs": 0.33,
+  "spread_differs": 0.412
+ }
+}

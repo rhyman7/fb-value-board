@@ -725,18 +725,57 @@ derivative lines (the carry between lines is what the price bets rely on), test 
 disagreement on first-half lines against the opener the way the full-game openers are
 tested, and add first-quarter lines if the half curve holds.
 
-## Graded against Pinnacle (backfill set up Oct 30, 2026; results pending)
+## Graded against Pinnacle (NFL 2024-2025, Oct 31, 2026)
 
 Every record above is graded against the nflverse consensus line, and closing line value
-against the consensus close. `experiments/pinnacle_grade.py` regrades the board's three
-edges against Pinnacle's real numbers, from the backfilled lines in
-`data/market/history/` (README "Market lines"): the price tier (a DraftKings or FanDuel price
-that beats Pinnacle's no-vig number by `sheet.PRICE_MIN`, at the Monday open and at the close),
-the opener gap (raw model 2+ points off Pinnacle's open, bet at Pinnacle's open price, graded
-next to the consensus opener on the same games) and closing line value against Pinnacle's
-close, plus how far the consensus close sits from Pinnacle's. The results go here once the
-backfill has run. Derivatives are not in it: the bulk historical endpoint has no team totals
-or first-half lines.
+against the consensus close. `experiments/pinnacle_grade.py` regrades the board's edges against
+Pinnacle's real numbers, from the backfilled lines in `data/market/history/nfl/` (README
+"Market lines"): an "open" snapshot each Monday 12:00 UTC (Pinnacle opens Sunday evening, so
+this is the line a half day in, not the first number) and a close ten minutes before each
+cluster of kickoffs. Two seasons, 570 games. Results in `experiments/out/pinnacle_grade_nfl.json`.
+
+**The consensus close the backtests use is close to Pinnacle's, not the same:** 0.27 points off
+on spreads and 0.33 on totals on average, a half point or more on 41% of games.
+
+**Price tier** (a DraftKings or FanDuel price beating Pinnacle's no-vig number by
+`sheet.PRICE_MIN`, 1%, with no model; one bet per game and side):
+
+| Taken at | Bets | W-L | Return | EV claimed | Closing line value | Beat the close |
+|---|---|---|---|---|---|---|
+| Monday open | 84 | 51-33 | +21.9% ± 12.9% | +1.9% | +1.3% ± 1.4% | 63% |
+| Close | 69 | 35-34 | −3.1% ± 11.4% | +2.1% | (the close itself) | |
+
+At the open, by market: spreads 22 bets, CLV +1.9% ± 2.8%; totals 28, +3.4% ± 2.3%;
+moneylines 34, −0.7% ± 2.2% (their +43% return is luck: they did not beat the close). The
+closing line value roughly matches the edge claimed, which is what a real price edge looks
+like, but 84 bets in two seasons is far too few to prove it, and there are only about 40 such
+prices a season at these two books at those two moments. It stays the Bet sheet's first tier;
+the live ledger, which sees every snapshot, will say more than this backfill can.
+
+**Opener gap** (the raw model's side, run without the week's starters or injuries, at
+Pinnacle's Monday line and price, against Pinnacle's close; games after a Monday night left out):
+
+| Model off Pinnacle's Monday line by | Bets | W-L-P | Return | Line moved toward the model | CLV (EV) | Same games, consensus opener at −110 |
+|---|---|---|---|---|---|---|
+| Spread 1+ | 284 | 151-126-7 | +5.7% ± 5.7% | +0.31 pts | −1.2% ± 0.5% | +4.0% ± 5.8% |
+| Spread 2+ | 159 | 85-68-6 | +7.5% ± 7.5% | +0.39 pts | −0.4% ± 0.8% | +8.7% ± 7.5% |
+| Spread 3+ | 85 | 43-40-2 | +0.9% ± 10.5% | +0.17 pts | −1.5% ± 1.2% | −4.4% ± 10.2% |
+| Total 2+ | 144 | 77-66-1 | +4.0% ± 8.0% | +0.65 pts | +0.8% ± 0.7% | (no consensus opening totals) |
+| Total 3+ | 85 | 45-39-1 | +3.2% ± 10.4% | +0.64 pts | +0.7% ± 0.9% | |
+
+The direction holds (Pinnacle's line moves toward the model after Monday, more on totals than
+on spreads), and the records are positive, but none of it clears two standard errors, and on
+spreads the move is too small to beat Pinnacle's price: closing line value is about zero. The
+2+ point spread rule's record against Pinnacle (+7.5%) matches its record against the
+consensus on the same games (+8.7%), so the old grading did not flatter it; it is simply not
+proven on two seasons. Pinnacle's first number (Sunday evening) would show more of the move
+than a Monday noon snapshot; the live market log has it from Oct 30, 2026.
+
+What this changes: nothing on the board. It confirms that the NFL market is close to efficient
+against the model, that a retail price better than Pinnacle's is the cleanest edge, and that
+the opener edge is real in direction but small. Derivatives are not in it: the bulk historical
+endpoint has no team totals or first-half lines. College (2024-2025, about 3,400 credits with
+spreads and totals) is waiting for the next month's credits.
 
 ## What to try next
 
