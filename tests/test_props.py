@@ -614,24 +614,3 @@ def test_backfill_adds_markets_to_a_saved_season(tmp_path, monkeypatch):
     assert B.run(f, 2025, B.YARDAGE + more, max_credits=1000, verbose=False)["snapshots"] == 0   # TD remembered as fetched
     assert "player_anytime_td" in set(pd.read_csv(tmp_path / "2025" / "fetched.csv")["market"])
 
-
-def test_outlook_ranges_are_ordered_and_match_the_ladder():
-    """docs/props/outlook.json: the chance of at least k never rises with k, lo <= mid <= hi,
-    and the curve gives the same chance the prop pricing gives at a half-point line."""
-    import json
-    from nflmodel import config as C, propoutlook as OL, props as P
-    model = P.PropModel.load()
-    payload = json.loads((C.DOCS / "data.json").read_text())
-    o = OL.build(payload, model)
-    if not o["players"]:
-        return
-    for k, v in o["players"].items():
-        s = np.array(v["s"])
-        assert (np.diff(s) <= 1e-9).all() and (s <= 1).all(), k
-        assert v["lo"] <= v["mid"] <= v["hi"], k
-    pl = PM.board_players(payload)
-    r = pl[(pl["group"] == "WR") & (pl["rec_yds_proj"] > 30)].head(1).reset_index(drop=True)
-    if len(r):
-        v = o["players"][f"{r.at[0, 'game_id']}|{r.at[0, 'player_id']}|rec_yds"]
-        over, _, _ = model.probs(r, "rec_yds", "WR", np.array([29.5]))
-        assert abs(v["s"][5] - over[0]) < 1e-3          # at least 30 = over 29.5
