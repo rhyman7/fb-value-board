@@ -54,7 +54,9 @@ def _taken(b: dict, g: dict) -> dict:
     price (the one beating the sharp line, for a price bet); the anchor's own line and price
     only when no book quotes the side."""
     if b.get("books") and b.get("best") is not None:
-        q = next((x for x in b["books"] if x["book"] == (b.get("beats_sharp") if b.get("tier") == "price" and b.get("beats_sharp") else b["best"])), None)
+        pick = (b.get("beats_sharp") if b.get("tier") == "price" and b.get("beats_sharp")
+                else b.get("bucket_book") or b["best"])     # a bucket stake is placed at the book chosen on price (sheet.bucket_stakes)
+        q = next((x for x in b["books"] if x["book"] == pick), None)
         if q:
             return {"book": q["book"], "line": q.get("line"), "odds": q["odds"], "odds_net": q.get("odds_net", q["odds"]),
                     "ev": q["ev"], "stake": q.get("stake", 0.0)}

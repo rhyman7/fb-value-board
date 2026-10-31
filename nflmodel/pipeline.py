@@ -183,6 +183,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     out["meta"]["inputs"] = sheet.inputs_stamp(out["meta"]["generated"], market=out["slate"].get("market_as_of"),
                                               injuries=injuries.as_of(season))
     sheet.bucket_stakes(out["slate"]["games"], opening, (out.get("backtest") or {}).get("wind_unders"), C.KELLY_FRACTION, C.MAX_STAKE)
+    out["slate"]["moves"] = sheet.line_moves(out["slate"]["games"], "nfl", opening)   # the Line movement section at build time
     # the ledger: every flagged bet at the price it was first flagged, graded against the close
     try:
         cur = games[games.season == season]

@@ -237,12 +237,31 @@ whether to bet now or wait, the record of bets of that kind, and the stake. The 
 
 - **Price beats Pinnacle.** A retail price beats the sharp book's no-vig number at that line
   by 1% or more with no model at all. Sized against the sharp line.
-- **Model off the opener.** The model is 2+ points off the opening spread (3+ in college and
-  on totals), where the backtests show the line tends to move its way.
+- **Model off the opener.** The model is 2+ points off the opening spread (3+ on totals; in
+  college totals only), where the backtests show the line tends to move its way. It counts
+  only while the market has not taken it: once the line has moved more than half a point
+  toward the model and what is left is under the threshold, the bet is marked **Missed**.
 - **Wind unders** (NFL). An under in 10 to 19 mph of forecast wind.
 - **Model edges.** Everything else the market-adjusted projection makes +EV on a spread or
   total. Moneylines are not bets outside the price tier: they have lost at every claimed edge
   since the holdout seasons.
+
+## Line movement and phone alerts
+
+The opener edge is the line moving to the model, so the **Line movement** section under the
+Bet sheet lists every side the model is far enough off the opener to be in that bucket (NFL
+spreads 2+, college totals 3+ and spreads 5+; the rest folded away): model, opened, now, how
+much of the gap the market has closed, and a status. **Live**: bet it now. **Partly gone**:
+the line has come part of the way. **Missed**: it has reached the model. Each row has the
+side's 6-point teaser leg and whether it clears a two-team teaser at -120 (73.9%), with Wong
+legs marked, for when the number has gone.
+
+After every Market lines snapshot the section is re-measured at Pinnacle's newest line
+(`docs/moves.json`), and any side that is new or changes status is pushed to the phone. To
+get the pushes: install the **ntfy** app (iOS or Android), subscribe to a topic name only you
+know (a long random string), and save that name as the repository secret `NTFY_TOPIC`
+(Settings, Secrets and variables, Actions). The same alerts are posted to the open
+`opener-alerts` issue, which mentions the owner, so the GitHub app notifies too.
 
 The whole week fits on one document, **Best bets** (`#bestbets`): the card in tier order, the
 teaser legs that clear, every game's lean, and the week's prop flags. The Bet sheet links to
@@ -282,8 +301,8 @@ quote also says where a resting (maker) order is worth posting (`odds.kalshi_pos
 board's chance after the maker fee, and the price that matches the best retail book's EV
 (`post_match`). The game page's Every book and Derivatives tables, the Bet sheet's Where
 cell and the Best bets card show it as "Post on Kalshi at Xc"; a resting order may never
-fill. The boost calculator's Kalshi options apply the taker or the maker fee. `run_market.py status` says what is stored; `run_market.py alerts` lists games where
-the published raw model is 2+ points (NFL) or 3+ (college) off Pinnacle's current line.
+fill. The boost calculator's Kalshi options apply the taker or the maker fee. `run_market.py status` says what is stored; `run_market.py alerts` measures the line
+movement against the model at Pinnacle's newest line and writes the alerts (Line movement, above).
 `run_market.py derivatives` adds the derivative markets (team totals, first-half spread, total
 and moneyline) for the soonest games, one event at a time as The Odds API serves them, under
 a credit budget per run (`market.DERIV_BUDGET`): NFL on Thursday, Saturday and Sunday mornings,
@@ -293,9 +312,8 @@ On the boards, a game Pinnacle quotes is anchored to Pinnacle's line and prices 
 the consensus (its card and page say so), each side's table shows the best price among
 DraftKings, FanDuel, BetMGM and Kalshi at that book's own line with a "beats Pinnacle" chip
 when the price is better than the sharp no-vig number on its own, and Past weeks grade every
-flagged bet's closing line value against Pinnacle's close. The Market lines Action posts
-opener alerts (raw model well off Pinnacle early in the week) to a GitHub issue labelled
-`opener-alerts`.
+flagged bet's closing line value against Pinnacle's close. The Market lines Action pushes
+line-movement alerts to the phone (ntfy) and posts them to a GitHub issue labelled `opener-alerts`.
 
 **Past seasons' lines** (`nflmodel/marketbackfill.py`, the **Market line backfill** Action, by
 hand only): Pinnacle, DraftKings and FanDuel spreads, totals and moneylines from The Odds API's

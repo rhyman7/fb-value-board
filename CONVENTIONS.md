@@ -131,8 +131,19 @@ boards in detail; this file is the rules.
   anchor's no-vig number with no model at all), the page shows the best book, and the archive
   grades each flagged bet's closing line value against Pinnacle's last quote before kickoff
   (`archive.closing_value`; `clv` and `beat_close` in each week's record). The Action also runs
-  `run_market.py alerts`: raw model 2+ points off Pinnacle's spread (NFL; 3+ college) or 3+ off
-  its total goes to `data/market/alerts.csv` and is posted to the open `opener-alerts` issue.
+  `run_market.py alerts` (Oct 31, 2026): every side the model is off the opener by the
+  `sheet.MOVE_GAP` threshold, measured at Pinnacle's newest stored line (`sheet.line_moves`),
+  is written to `docs/moves.json` and `docs/cfb/moves.json` (the boards' **Line movement**
+  section reads them when their `board` stamp matches the published board, else the
+  `slate.moves` the build wrote). Sides with a backtested edge (`sheet.bucket_record`: the
+  opener report's highest threshold the opener gap clears, when its holdout ROI is positive)
+  that are new or change status (Live, Partly gone, Missed) are alerts: appended to
+  `data/market/gaps.csv`, the last status per side kept in `data/market/gaps_state.json`
+  (both written only by the Action), pushed to the phone through ntfy when the `NTFY_TOPIC`
+  secret is set, and posted to the open `opener-alerts` issue with an @-mention of the owner.
+  `data/market/alerts.csv` is the old raw-model log, no longer written. Step guards in the
+  workflow test `/tmp` files with the shell, never `hashFiles()` (which only sees the
+  workspace).
 - **CFBD lines (college board): the `CFBD_API_KEY` repository secret.** Optional. When it is
   set, the **Update college board** Action passes it to the build and `cfbmodel/cfbd.py`
   fetches CollegeFootballData.com's lines for the upcoming weeks; a game ESPN's scoreboard has
@@ -200,8 +211,11 @@ boards in detail; this file is the rules.
   input ticked so the factor is measured again. A price bet (below) is sized against the
   sharp line, so it carries a stake whatever the factor; opener and wind bets the model
   sizes nothing for get a `bucket_stake` from their bucket's own record
-  (`sheet.bucket_stakes`: quarter Kelly on the bucket's win rate shrunk halfway to
-  break-even, at the book's net price).
+  (`sheet.bucket_stakes`: quarter Kelly on Pinnacle's chance for the side at the book's own
+  line and price, from `ev_line`, plus the bucket's edge over a fair line, its win rate
+  shrunk halfway to break-even less 0.5; the book is the one with the best `ev_line`, written
+  as `bucket_book`, and the ledger records the bet there; once the line has moved toward an
+  opener bet the rate is the bucket's `close_win_pct`).
 - **The bet sheet (both boards): `nflmodel/sheet.py`.** Every bet on a game entry carries
   `tier`, `gap`, `opener_gap`, `opener_src`, `move` and `why` (the docstring has the rules).
   The tiers are what the page's Bet sheet groups by: `price` (a retail price beats
@@ -209,9 +223,16 @@ boards in detail; this file is the rules.
   off the opener, 3+ in college and on totals), `wind` (NFL only: an under in 10-19 mph), and
   `model` (anything else +EV on a spread or total). **Moneylines are never a bet outside the
   price tier**: on the graded bets since the holdout seasons they have lost at every claimed
-  edge. The opener is Pinnacle's first stored quote when the market log caught the open (its
-  first snapshot no later than the day the board first saw the game), else the board's first
-  line, else the data's opener. Each game also carries `kickoff` (UTC), `sharp_path`
+  edge. **College spreads are never the opener tier** (they lost against the opener on the
+  holdout seasons below 5 points; college totals are). **The opener tier is judged at the
+  current line** (Oct 31, 2026): a side stays in it while the line has moved no more than
+  `sheet.MOVED` (half a point) toward it, or the gap at the current line still clears the
+  threshold; once the market has taken it, it drops to the model tier with `missed: True`
+  and the page says "Missed". A wind under drops the same way once the total has fallen
+  `sheet.WIND_MOVED` (1.5) since the open, and wind unders say "Bet now". The opener is the
+  data's opener first (nfelo, cfbfastR: the number the bucket was backtested on), else
+  Pinnacle's first stored quote when the market log caught the open (its first snapshot no
+  later than the day the board first saw the game), else the board's first line. Each game also carries `kickoff` (UTC), `sharp_path`
   (Pinnacle's spread and total by snapshot, `market.path`), and `alts`/`teasers`
   (`nflmodel/alts.py`: P(cover) at every half point within 7 of the line and with 6 or 7
   points added, on the market curve and the projection) and `derivs` (`nflmodel/derivs.py`:
@@ -287,7 +308,10 @@ boards in detail; this file is the rules.
   board's first listed week at a $1,000 bankroll; the Print button prints whichever week and
   bankroll the reader has selected. `#bestbets` is not a nav section (the nav order above
   stands); don't add it to the landing page's section lists beyond the PDF link.
-- **The Games view's order** (Oct 30, 2026): filters, **Bet sheet**, the boost calculator,
+- **The Games view's order** (Oct 31, 2026): filters, **Bet sheet**, **Line movement**
+  (`sheet.line_moves`: the opener-gap sides with opener, now, the share of the gap closed,
+  status and the side's 6-point teaser leg; sides with no backtested edge folded under a
+  details line), the boost calculator,
   **Teasers and alternate lines** (legs from `teasers`, the two-leg price entered by the
   reader; the per-game ladders are on each game's page under "Alternate lines and teasers"),
   then Model against the market, the game cards and Every price. The Model record view leads

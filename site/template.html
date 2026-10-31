@@ -259,6 +259,15 @@ table.sheet .verdict { display: inline-block; font-weight: 800; color: var(--ink
 table.sheet .verdict.wait { color: var(--s2); }
 table.sheet .ko { white-space: nowrap; font-weight: 500; font-size: 11.5px; }
 .sheet-empty { padding: 12px 0; }
+/* line movement (sheet.line_moves): how much of the model's gap off the opener the market has closed */
+table.moves td.st { white-space: nowrap; font-weight: 800; }
+table.moves td.st.partly { color: var(--s2); }
+table.moves td.st.missed { color: var(--ink-2); font-weight: 600; }
+table.moves .closed { display: inline-block; vertical-align: middle; width: 54px; height: 6px; margin-left: 6px; border-radius: 3px; background: var(--rule, #ddd); overflow: hidden; }
+table.moves .closed i { display: block; height: 100%; background: var(--s2); }
+table.moves tr.missed td { opacity: .6; }
+#moves-sec details { margin-top: 14px; }
+#moves-sec summary { cursor: pointer; font-weight: 700; }
 .leg-wong { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 3px; background: var(--s3); color: #fff; font-size: 11px; font-weight: 800; }
 td.dimp { color: var(--ink-3); }
 .alts table { font-size: 13px; }
@@ -619,6 +628,15 @@ td .act { font-weight: 700; }
         </div>
         <p class="note asof" id="sheet-asof"></p>
         <div id="sheet"></div>
+      </section>
+
+      <section aria-labelledby="moves-h" id="moves-sec">
+        <div class="section-head">
+          <h2 id="moves-h">Line movement</h2>
+          <p class="note" id="moves-note"></p>
+        </div>
+        <p class="note asof" id="moves-asof"></p>
+        <div id="moves"></div>
       </section>
 
       <section aria-labelledby="boost-h">
@@ -1314,7 +1332,7 @@ function renderBoost() {
 const LG = "nfl";
 const TIER = {
   price: { h: "Price beats Pinnacle", d: "The book's price beats the sharp book's own no-vig number at this line by at least 1% per dollar, before the model says anything. This is the one kind of bet that makes money with no model at all; take it at the book named, now." },
-  opener: { h: "Model off the opener", d: LG === "nfl" ? "The model is 2 or more points off the opening spread (3 on totals): historically the line has then tended to move its way. The one edge the backtests have found; it is an edge against the opener, so it is worth more the earlier it is bet." : "The model is 3 or more points off the opening line. In college the edge is on totals, which have beaten the opener since 2021; spreads off the opener have not, and the record column says which is which. It is an edge against the opener, so bet it early or not at all." },
+  opener: { h: "Model off the opener", d: LG === "nfl" ? "The model is 2 or more points off the opening spread (3 on totals): historically the line has then tended to move its way. The one edge the backtests have found; it is an edge against the opener, so it is worth more the earlier it is bet." : "The model is 3 or more points off the opening total. In college the edge is on totals, which have beaten the opener since 2021; spreads off the opener have not (below 5 points), so they are listed with the model edges. It is an edge against the opener, so bet it early or not at all: once the line has moved to the model it is marked Missed." },
   wind: { h: "Wind unders", d: "Outdoor game with 10 to 19 mph of wind forecast. Unders at the closing total in that band have won far more than they should have since 2014; a lead, graded on recorded wind rather than forecasts." },
   model: { h: "Model edges", d: "Priced +EV by the market-adjusted projection on its own. The bucket's own record is shown on every row: read it before the EV." },
 };
@@ -1328,6 +1346,8 @@ function timing(g, b) {
   if (h != null && h < 0) return { t: "Kicked off", d: "", cls: "" };
   if (h != null && h < 6) return { t: "Now or never", d: "Kickoff " + hoursText(h) + ".", cls: "" };
   if (tierOf(b) === "price") return { t: "Bet now", d: "Off-market prices get corrected within hours.", cls: "" };
+  if (b.missed) return { t: "Missed", d: b.market === "Total" && b.side === "under" && (g.wind || {}).under_angle && !(b.opener_gap >= 3) ? "The total has already dropped for the wind: the market has priced it." : "The market has moved to the model: the edge at the opener is mostly gone. The 6-point teaser leg on this side (Line movement) is the way in, if it clears.", cls: "wait" };
+  if (tierOf(b) === "wind") return { t: "Bet now", d: "Totals drop as a wind forecast firms up; the under gets worse, not better, closer to kickoff.", cls: "" };
   if (mv != null && mv >= 1) return { t: "Bet now", d: "The line is coming the model's way; what is left shrinks with every move.", cls: "" };
   if (mv != null && mv <= -1) return { t: "Wait, or size down", d: "The line has gone against the model since the open: the market disagrees.", cls: "wait" };
   if (b.market === "Moneyline") return { t: "Bet now", d: "", cls: "" };
@@ -1414,7 +1434,8 @@ function renderSheet() {
     table(tb, [{ t: "Pick", l: 1 }, { t: "Where", l: 1 }, { t: "EV per $1" }, { t: "What the model's number is made of", l: 1 }, { t: "Line and timing", l: 1 }, { t: "Record of this kind", l: 1 }, { t: "Stake" }],
       xs.map(({ g, b }) => {
         const tm = timing(g, b), bk = b.best ? b.books.find(x => x.book === b.best) : null;
-        const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk) : bk;
+        const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk)
+          : b.bucket_book ? (b.books.find(x => x.book === b.bucket_book) || bk) : bk;     // a bucket stake goes at the book chosen on price
         const where = q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") + (q.ev < b.ev - 0.005 ? " (" + spct(q.ev) + " here)" : "")
           : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
         return [
@@ -1431,6 +1452,56 @@ function renderSheet() {
     host.append(tier);
   });
 }
+
+/* ---------------- line movement ----------------
+   The opener edge is the line moving to the model. Every side the model is far enough off the
+   opener (sheet.line_moves): opener -> now, how much of the gap the market has closed, and the
+   side as a 6-point teaser leg. Built into data.json with the board (slate.moves), and refreshed
+   after every Market lines snapshot (moves.json, at Pinnacle's newest line) while the board it
+   was measured on is the one published; the same rows are what the phone alerts are made of. */
+let MOVES = { rows: DATA.slate.moves || [], at: null, fresh: false };
+const movesReady = Promise.race([
+  fetch("moves.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => {
+    if (j && Array.isArray(j.rows) && j.board === M.generated) MOVES = { rows: j.rows, at: j.lines_as_of || j.at, fresh: true };
+  }).catch(() => {}),
+  new Promise(res => setTimeout(res, 2500)),
+]);
+const moveSv = (r, x) => r.market === "Total" ? String(x) : (v => v === 0 ? "PK" : line(v))(r.side === "home" ? -x : x);
+function renderMoves() {
+  const host = $("#moves");
+  const wk = new Set(games().map(g => g.id)), gi = Object.fromEntries(games().map(g => [g.id, g]));
+  const upcoming = MOVES.rows.filter(r => wk.has(r.game) && !(r.kickoff && Date.parse(r.kickoff) < Date.now()));
+  const edge = upcoming.filter(r => r.bucket), other = upcoming.filter(r => !r.bucket);
+  const n = s => edge.filter(r => r.status === s).length;
+  $("#moves-note").textContent = "The edge the backtests found is the line moving to the model. These are the sides the model is far enough off the opener to be in that bucket ("
+    + (LG === "nfl" ? "2+ points on spreads" : "3+ on totals, 5+ on spreads") + "), and how far the market has come since. Live: the gap at today's line still clears the threshold; bet it now. "
+    + "Partly gone: the line has come part of the way, and the edge left is smaller than the record says. Missed: the line has reached the model. Once it has moved, the 6-point teaser leg on the same side is the way in when it clears a two-team teaser at −120 (73.9%)."
+    + ` This week: ${n("Live")} live, ${n("Partly gone")} partly gone, ${n("Missed")} missed.`;
+  $("#moves-asof").textContent = MOVES.fresh && MOVES.at ? "Pinnacle's line as of " + MOVES.at + " UTC, refreshed with every line snapshot. A phone alert goes out when a side is new or changes status." : "Lines as of the board build" + (M.inputs && M.inputs.market ? " (book prices " + M.inputs.market + " UTC)" : "") + ".";
+  const tbl = rows => {
+    const tb = H("table", { class: "sheet moves" });
+    table(tb, [{ t: "Side", l: 1 }, { t: "Model" }, { t: "Opened" }, { t: "Now" }, { t: "Left" }, { t: "Status", l: 1 }, { t: "Teaser leg", l: 1 }, { t: "Record of this kind", l: 1 }],
+      rows.map(r => {
+        const g = gi[r.game], tz = r.tease;
+        const mv = r.move ? (Math.abs(r.move) + (r.move > 0 ? " toward" : " against")) : "unmoved";
+        return { cls: r.status === "Missed" ? "missed" : "", cells: [
+          { v: H("span", {}, g ? H("a", { href: "#" + g.id, text: r.pick }) : document.createTextNode(r.pick), H("br"), H("span", { class: "ko rec", text: r.away + " @ " + r.home + (g ? ", " + kickoff(g).replace(" ET", "").replace(/^(\w{3}) \w{3} \d+, /, "$1 ") + (hoursTo(g) != null ? " (" + hoursText(hoursTo(g)) + ")" : "") : "") })), cls: "strong" },
+          moveSv(r, r.model), moveSv(r, r.opener), moveSv(r, r.now) + " (" + mv + ")", snum(r.left, 1),
+          { v: H("span", {}, document.createTextNode(r.status), r.closed != null && r.closed > 0 ? H("span", { class: "closed", title: Math.round(r.closed * 100) + "% of the gap closed" }, H("i", { style: "width:" + Math.round(r.closed * 100) + "%" })) : null),
+            cls: "st " + (r.status === "Partly gone" ? "partly" : r.status === "Missed" ? "missed" : "") },
+          tz ? H("span", {}, document.createTextNode((r.market === "Total" ? (r.side === "over" ? "Over " : "Under ") + tz.line : r.pick.split(" ")[0] + " " + (tz.line === 0 ? "PK" : line(tz.line))) + ", " + pct(tz.prob) + (tz.clears ? ", clears" : ", short of 73.9%")), tz.wong ? H("span", { class: "leg-wong", text: "Wong" }) : null) : "—",
+          { v: r.bucket ? `${r.market === "Total" ? "Totals" : "Spreads"} ${r.bucket.threshold}+ off the opener: ${pct(r.bucket.win_pct)}, ${spct(r.bucket.roi)} on ${comma(r.bucket.n)}.` : "No backtested edge at this gap.", cls: "why" },
+        ] };
+      }));
+    return H("div", { class: "scroll" }, tb);
+  };
+  host.replaceChildren();
+  if (!edge.length) host.append(H("p", { class: "note sheet-empty", text: "No side this week is far enough off the opener to be in the bucket." }));
+  else host.append(tbl(edge));
+  if (other.length) host.append(H("details", {}, H("summary", { text: `Other sides off the opener, no backtested edge (${other.length})` }),
+    H("p", { class: "note", text: LG === "nfl" ? "NFL totals off the opener have no graded record yet: the data has no opening totals before this season's own log." : "College spreads less than 5 points off the opener have lost on the holdout seasons; they are here for what the market is doing, not as bets." }), tbl(other)));
+}
+movesReady.then(() => { try { renderMoves(); } catch (e) { console.error(e); } });
 
 /* ---------------- best bets: the week's card on one document ----------------
    Everything the board knows that bears on a bet this week, in the order a bettor reads it:
@@ -1459,7 +1530,8 @@ function renderBestBets() {
     table(t, [{ t: "#" }, { t: "Pick", l: 1 }, { t: "Take it at", l: 1 }, { t: "EV" }, { t: "Stake" }, { t: "Why", l: 1 }, { t: "When", l: 1 }],
       rows.map(({ g, b }) => {
         const tm = timing(g, b), bk = b.best ? b.books.find(x => x.book === b.best) : null;
-        const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk) : bk;
+        const q = tierOf(b) === "price" && b.beats_sharp ? (b.books.find(x => x.book === b.beats_sharp) || bk)
+          : b.bucket_book ? (b.books.find(x => x.book === b.bucket_book) || bk) : bk;     // a bucket stake goes at the book chosen on price
         const where = q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
         const st = sheetStake(b, q);
         const why = H("span", {}, H("b", { text: TIER[tierOf(b)].h + ". " }), whyNode(g, b));
@@ -1564,7 +1636,7 @@ seg($("#seg-tbasis"), [{ v: "line", t: "Market curve" }, { v: "proj", t: "Market
 $("#tease-pts").addEventListener("input", e => { tstate.pts = e.target.value; renderTeasers(); });
 $("#tease-odds").addEventListener("input", e => { const v = parseFloat(e.target.value); if (Math.abs(v) >= 100) { tstate.odds = v; renderTeasers(); } });
 
-function renderGames() { renderHero(); renderSheet(); renderCards(); redrawBoard(); renderBets(); renderBoost(); renderTeasers(); }
+function renderGames() { renderHero(); renderSheet(); renderMoves(); renderCards(); redrawBoard(); renderBets(); renderBoost(); renderTeasers(); }
 seg($("#seg-week"), DATA.slate.weeks.map(w => ({ v: w, t: "Week " + w })), () => state.week, v => { state.week = Number(v); renderGames(); });
 seg($("#seg-market"), ["Spread", "Total", "Moneyline"].map(m => ({ v: m, t: m })), () => state.market, v => { state.market = v; redrawBoard(); });
 seg($("#seg-basis"), [{ v: "adj", t: "Market-adjusted" }, { v: "raw", t: "Raw model" }], () => state.basis, v => { state.basis = v; renderGames(); if (shownGame) renderGame(shownGame); });
