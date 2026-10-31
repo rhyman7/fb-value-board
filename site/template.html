@@ -1507,7 +1507,7 @@ function renderBestBets() {
     if (!pd && !bbPropsTried) { bbPropsTried = true; propsView.load().then(d => { if (d && location.hash === "#bestbets") renderBestBets(); }); }
     if (!pd) kids.push(el("p", "No props file for this week is on hand (they arrive with the props run about three days before kickoff).", "empty"));
     else {
-      const flagged = pd.props.filter(p => p.fl), tagged = pd.props.filter(p => !p.alt && (p.bg || p.mid || p.lg));
+      const flagged = pd.props.filter(p => p.fl), tagged = pd.props.filter(p => !p.alt && (p.bg || p.mid));
       if (flagged.length) { const t = H("table"); table(t, [{ t: "Prop", l: 1 }, { t: "Side" }, { t: "Line" }, { t: "Ours" }, { t: "Books'" }], flagged.slice(0, 20).map(p => [p.n + " " + (p.s || ""), p.fl, String(p.L), pct(p.fl === "over" ? p.po : p.pu, 0), pct(p.fo, 0)])); kids.push(t); }
       else kids.push(el("p", "No prop is flagged: against real DraftKings and FanDuel lines the books' prices were the better forecast, so prop flags are off." + (tagged.length ? " Book disagreements worth a look (not model bets): " + tagged.slice(0, 8).map(p => `${p.n} ${STATW(p.s)} ${p.L} (${p.mid ? "middle" : p.bg ? "book gap" : "ladder gap"})`).join("; ") + "." : "")));
     }
@@ -2521,8 +2521,9 @@ const propsView = (function () {
       const pick = pool.slice().sort((a, b) => Object.keys(b.bk || {}).length - Object.keys(a.bk || {}).length || ("draftkings" in (b.bk || {})) - ("draftkings" in (a.bk || {})))[0];
       const cell = book => { const r = pool.find(x => (x.bk || {})[book]); return r ? (r.L !== pick.L ? r.L + ": " : "") + bookTxt(r, book) : "–"; };
       // market-only tags (propmarket.market_tags): a book gap on the main line, ladder rungs off their book's main line
-      const bgap = gs.find(x => !x.alt && x.bg) || null, lgap = gs.filter(x => x.alt && x.tb).length;
-      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), ladder: gs.some(p => p.alt), bgap, lgap };
+      // (the ladder-gap tag is no longer shown: graded on real 2025 rungs it lost 21.7% ± 5.2%, PROPS.md)
+      const bgap = gs.find(x => !x.alt && x.bg) || null;
+      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), ladder: gs.some(p => p.alt), bgap };
     });
   }
   const resBadge = p => {
@@ -2571,7 +2572,7 @@ const propsView = (function () {
     HASN = d.props.some(p => p.pno != null);
     const s = d.summary || {}, box = (v, l) => H("div", {}, H("b", { text: v }), H("span", { text: l }));
     const kids = [box(comma(s.main_lines || 0), "main lines priced"), box(comma(s.ladder_rungs || 0), "ladder rungs"),
-      ...(s.book_gaps || s.ladder_gaps ? [box(comma(s.book_gaps || 0) + " / " + comma(s.middles || 0) + " / " + comma(s.ladder_gaps || 0), "book gaps / middles / ladder gaps")] : []),
+      ...(s.book_gaps ? [box(comma(s.book_gaps || 0) + " / " + comma(s.middles || 0), "book gaps / middles")] : []),
       box(s.graded ? comma(s.graded) : "–", s.graded ? "graded" : "graded (after the games)")];
     if (s.brier_ours != null) kids.push(box(s.brier_ours.toFixed(3) + " / " + s.brier_books.toFixed(3), "Brier: ours / books' (lower is better)"));
     if (s.new && s.new.brier_new != null) kids.push(box(s.new.brier_ours.toFixed(3) + " / " + s.new.brier_new.toFixed(3) + " / " + s.new.brier_books.toFixed(3), `Brier: current / new / books' (${comma(s.new.n)} props both priced)`));
@@ -2591,8 +2592,7 @@ const propsView = (function () {
     const t = H("table", { class: "compact" });
     const nw = HASN && rungs.some(r => r.pno != null);
     table(t, [{ t: "Line", l: 1 }, { t: "Our chance, over" }, ...(nw ? [{ t: "New, over" }] : []), { t: "Books', no vig" }, { t: "Ours − books'" }, { t: "DraftKings O / U" }, { t: "FanDuel O / U" }, { t: "EV per $1, over" }, { t: "Result", l: 1 }],
-      rungs.map(r => [H("span", {}, document.createTextNode(r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L),
-          r.alt && r.tb ? H("span", { class: "tag", text: bookName(r.tb) + (r.take ? " " + r.take : "") + " " + pts(r.lg), title: bookName(r.tb) + "'s no-vig chance of this rung is " + pts(r.lg) + (r.lg < 0 ? " below" : " above") + " what its own main line implies through the model's distribution" + (r.take ? "; the " + r.take + " is the better number." : ".") }) : null),
+      rungs.map(r => [H("span", {}, document.createTextNode(r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L),),
         pct(dec(r)), ...(nw ? [{ v: ndec(r) == null ? "–" : pct(ndec(r)), cls: "newp" }] : []), r.fo == null ? "–" : pct(r.fo), gap(r) == null ? "–" : (gap(r) >= 0 ? "+" : "−") + pts(gap(r)),
         { v: bookTxt(r, "draftkings"), cls: "px" }, { v: bookTxt(r, "fanduel"), cls: "px" },
         r.vo == null ? "–" : spct(r.vo), r.y == null ? (r.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(r.y)),
@@ -2626,8 +2626,7 @@ const propsView = (function () {
       const lean = g == null ? "–" : H("span", { class: "lean " + (g >= 0 ? "o" : "u") }, (p.fl ? H("span", { class: "chip", text: (p.fl === "over" ? "Over" : "Under") + " " + pts(g) }) : document.createTextNode(side + " " + pts(g))));
       const name = H("span", {}, document.createTextNode(p.n), H("span", { class: "rec", text: p.pos + " · " + p.t }), p.snap === "open" ? H("span", { class: "early", text: "early" }) : null,
         p.ladder ? H("span", { class: "early", text: "ladder" }) : null,
-        p.bgap ? H("span", { class: "tag", text: p.bgap.mid ? "middle" : "book gap", title: "DraftKings and FanDuel post this line a full step apart (" + p.bgap.bg + "): the over at the lower line and the under at the higher are the better numbers" + (p.bgap.mid ? ", and both are -110 or better, so both can win (a middle)." : ".") }) : null,
-        p.lgap ? H("span", { class: "tag", text: "ladder gap", title: p.lgap + " rung" + (p.lgap > 1 ? "s" : "") + " priced more than 5 points off what the same book's main line implies; open the ladder." }) : null);
+        p.bgap ? H("span", { class: "tag", text: p.bgap.mid ? "middle" : "book gap", title: "DraftKings and FanDuel post this line a full step apart (" + p.bgap.bg + "): the over at the lower line and the under at the higher are the better numbers" + (p.bgap.mid ? ", and both are -110 or better, so both can win (a middle)." : ".") }) : null,);
       const close = p.cL == null || p.alt ? "–" : (p.cL === p.L ? "No move" : String(p.cL) + " (" + (p.cL > p.L ? "+" : "−") + Math.abs(p.cL - p.L).toFixed(1).replace(/\.0$/, "") + ")");
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: STAT[p.s] || p.s }),
         H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) + (p.mun != null ? " / " + p.mun : "") }),
