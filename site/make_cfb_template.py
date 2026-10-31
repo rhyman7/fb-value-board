@@ -24,6 +24,10 @@ def sub(old, new, n=1):
 
 # ---- names and storage ------------------------------------------------------------
 sub("<title>NFL Value Board</title>", "<title>College Football Value Board</title>")
+# the manual lives once, in docs/manual/: one folder up from the college board
+sub('href="manual/Value_Boards_Manual.pdf"', 'href="../manual/Value_Boards_Manual.pdf"')
+sub('href="manual/" target="_blank"', 'href="../manual/" target="_blank"')
+sub('const MANUAL_DIR = "manual";', 'const MANUAL_DIR = "../manual";')
 sub('href="../favicon', 'href="../../favicon', 2)   # icons: docs/cfb/ is one folder deeper than docs/
 sub('href="../apple-touch-icon', 'href="../../apple-touch-icon')
 sub('<i aria-hidden="true"></i>NFL Value Board</a>', '<i aria-hidden="true"></i>College Value Board</a>')
