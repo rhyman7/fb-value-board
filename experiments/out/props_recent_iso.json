@@ -1,0 +1,659 @@
+{
+ "fit_seasons": [
+  2019,
+  2020,
+  2021,
+  2022,
+  2023
+ ],
+ "season_2024": {
+  "saved": {
+   "near": {
+    "anytime_td|QB": {
+     "n": 406,
+     "brier": 0.13035,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|RB": {
+     "n": 1611,
+     "brier": 0.15292,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|TE": {
+     "n": 1176,
+     "brier": 0.1086,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|WR": {
+     "n": 2335,
+     "brier": 0.14958,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "carries|QB": {
+     "n": 984,
+     "brier": 0.15036,
+     "high_pred": 0.8513,
+     "high_hit": 0.8916
+    },
+    "carries|RB": {
+     "n": 5838,
+     "brier": 0.20501,
+     "high_pred": 0.7826,
+     "high_hit": 0.7627
+    },
+    "completions|QB": {
+     "n": 2510,
+     "brier": 0.21628,
+     "high_pred": 0.7799,
+     "high_hit": 0.7538
+    },
+    "pass_att|QB": {
+     "n": 2510,
+     "brier": 0.23077,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "pass_td|QB": {
+     "n": 1506,
+     "brier": 0.17778,
+     "high_pred": 0.8146,
+     "high_hit": 0.8094
+    },
+    "pass_yds|QB": {
+     "n": 2510,
+     "brier": 0.23809,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "rec_yds|RB": {
+     "n": 3259,
+     "brier": 0.19091,
+     "high_pred": 0.8313,
+     "high_hit": 0.8132
+    },
+    "rec_yds|TE": {
+     "n": 4228,
+     "brier": 0.20571,
+     "high_pred": 0.8018,
+     "high_hit": 0.8207
+    },
+    "rec_yds|WR": {
+     "n": 10734,
+     "brier": 0.21228,
+     "high_pred": 0.7785,
+     "high_hit": 0.7787
+    },
+    "receptions|RB": {
+     "n": 4216,
+     "brier": 0.17577,
+     "high_pred": 0.8346,
+     "high_hit": 0.8551
+    },
+    "receptions|TE": {
+     "n": 4200,
+     "brier": 0.18695,
+     "high_pred": 0.8264,
+     "high_hit": 0.8225
+    },
+    "receptions|WR": {
+     "n": 9716,
+     "brier": 0.18657,
+     "high_pred": 0.8187,
+     "high_hit": 0.8355
+    },
+    "rush_yds|QB": {
+     "n": 1537,
+     "brier": 0.19319,
+     "high_pred": 0.8067,
+     "high_hit": 0.8333
+    },
+    "rush_yds|RB": {
+     "n": 6295,
+     "brier": 0.2104,
+     "high_pred": 0.7842,
+     "high_hit": 0.774
+    }
+   },
+   "ladder": {
+    "anytime_td|QB": {
+     "n": 406,
+     "brier": 0.13035,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|RB": {
+     "n": 1611,
+     "brier": 0.15292,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|TE": {
+     "n": 1176,
+     "brier": 0.1086,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|WR": {
+     "n": 2335,
+     "brier": 0.14958,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "carries|QB": {
+     "n": 2321,
+     "brier": 0.1714,
+     "high_pred": 0.8612,
+     "high_hit": 0.9046
+    },
+    "carries|RB": {
+     "n": 13222,
+     "brier": 0.17751,
+     "high_pred": 0.8824,
+     "high_hit": 0.8815
+    },
+    "completions|QB": {
+     "n": 5522,
+     "brier": 0.11581,
+     "high_pred": 0.93,
+     "high_hit": 0.9232
+    },
+    "pass_att|QB": {
+     "n": 5522,
+     "brier": 0.11051,
+     "high_pred": 0.9321,
+     "high_hit": 0.921
+    },
+    "pass_td|QB": {
+     "n": 1506,
+     "brier": 0.17778,
+     "high_pred": 0.8146,
+     "high_hit": 0.8094
+    },
+    "pass_yds|QB": {
+     "n": 5522,
+     "brier": 0.12705,
+     "high_pred": 0.9375,
+     "high_hit": 0.9296
+    },
+    "rec_yds|RB": {
+     "n": 8250,
+     "brier": 0.21993,
+     "high_pred": 0.8231,
+     "high_hit": 0.8045
+    },
+    "rec_yds|TE": {
+     "n": 10175,
+     "brier": 0.21252,
+     "high_pred": 0.8386,
+     "high_hit": 0.8565
+    },
+    "rec_yds|WR": {
+     "n": 25080,
+     "brier": 0.20693,
+     "high_pred": 0.8446,
+     "high_hit": 0.8586
+    },
+    "receptions|RB": {
+     "n": 10186,
+     "brier": 0.20376,
+     "high_pred": 0.8425,
+     "high_hit": 0.8656
+    },
+    "receptions|TE": {
+     "n": 10131,
+     "brier": 0.20294,
+     "high_pred": 0.8525,
+     "high_hit": 0.8503
+    },
+    "receptions|WR": {
+     "n": 22968,
+     "brier": 0.19321,
+     "high_pred": 0.861,
+     "high_hit": 0.8759
+    },
+    "rush_yds|QB": {
+     "n": 3718,
+     "brier": 0.20653,
+     "high_pred": 0.8188,
+     "high_hit": 0.8557
+    },
+    "rush_yds|RB": {
+     "n": 14696,
+     "brier": 0.20125,
+     "high_pred": 0.8443,
+     "high_hit": 0.861
+    }
+   }
+  },
+  "recent": {
+   "near": {
+    "anytime_td|QB": {
+     "n": 406,
+     "brier": 0.13057,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|RB": {
+     "n": 1611,
+     "brier": 0.15299,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|TE": {
+     "n": 1176,
+     "brier": 0.10863,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|WR": {
+     "n": 2335,
+     "brier": 0.14974,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "carries|QB": {
+     "n": 984,
+     "brier": 0.15103,
+     "high_pred": 0.8729,
+     "high_hit": 0.8774
+    },
+    "carries|RB": {
+     "n": 5838,
+     "brier": 0.205,
+     "high_pred": 0.7877,
+     "high_hit": 0.7635
+    },
+    "completions|QB": {
+     "n": 2510,
+     "brier": 0.2168,
+     "high_pred": 0.7716,
+     "high_hit": 0.7261
+    },
+    "pass_att|QB": {
+     "n": 2510,
+     "brier": 0.23078,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "pass_td|QB": {
+     "n": 1506,
+     "brier": 0.17667,
+     "high_pred": 0.831,
+     "high_hit": 0.8451
+    },
+    "pass_yds|QB": {
+     "n": 2510,
+     "brier": 0.23827,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "rec_yds|RB": {
+     "n": 3259,
+     "brier": 0.19158,
+     "high_pred": 0.8215,
+     "high_hit": 0.8254
+    },
+    "rec_yds|TE": {
+     "n": 4228,
+     "brier": 0.20565,
+     "high_pred": 0.8009,
+     "high_hit": 0.8196
+    },
+    "rec_yds|WR": {
+     "n": 10734,
+     "brier": 0.21277,
+     "high_pred": 0.7776,
+     "high_hit": 0.79
+    },
+    "receptions|RB": {
+     "n": 4216,
+     "brier": 0.17552,
+     "high_pred": 0.8308,
+     "high_hit": 0.8551
+    },
+    "receptions|TE": {
+     "n": 4200,
+     "brier": 0.18678,
+     "high_pred": 0.8195,
+     "high_hit": 0.8155
+    },
+    "receptions|WR": {
+     "n": 9716,
+     "brier": 0.18666,
+     "high_pred": 0.8159,
+     "high_hit": 0.8319
+    },
+    "rush_yds|QB": {
+     "n": 1537,
+     "brier": 0.19304,
+     "high_pred": 0.8397,
+     "high_hit": 0.8303
+    },
+    "rush_yds|RB": {
+     "n": 6295,
+     "brier": 0.21017,
+     "high_pred": 0.8165,
+     "high_hit": 0.7955
+    }
+   },
+   "ladder": {
+    "anytime_td|QB": {
+     "n": 406,
+     "brier": 0.13057,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|RB": {
+     "n": 1611,
+     "brier": 0.15299,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|TE": {
+     "n": 1176,
+     "brier": 0.10863,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "anytime_td|WR": {
+     "n": 2335,
+     "brier": 0.14974,
+     "high_pred": null,
+     "high_hit": null
+    },
+    "carries|QB": {
+     "n": 2321,
+     "brier": 0.17197,
+     "high_pred": 0.8812,
+     "high_hit": 0.8958
+    },
+    "carries|RB": {
+     "n": 13222,
+     "brier": 0.17756,
+     "high_pred": 0.8916,
+     "high_hit": 0.8866
+    },
+    "completions|QB": {
+     "n": 5522,
+     "brier": 0.11601,
+     "high_pred": 0.9269,
+     "high_hit": 0.9263
+    },
+    "pass_att|QB": {
+     "n": 5522,
+     "brier": 0.11047,
+     "high_pred": 0.9361,
+     "high_hit": 0.9287
+    },
+    "pass_td|QB": {
+     "n": 1506,
+     "brier": 0.17667,
+     "high_pred": 0.831,
+     "high_hit": 0.8451
+    },
+    "pass_yds|QB": {
+     "n": 5522,
+     "brier": 0.12706,
+     "high_pred": 0.9238,
+     "high_hit": 0.9231
+    },
+    "rec_yds|RB": {
+     "n": 8250,
+     "brier": 0.22086,
+     "high_pred": 0.813,
+     "high_hit": 0.8166
+    },
+    "rec_yds|TE": {
+     "n": 10175,
+     "brier": 0.21244,
+     "high_pred": 0.838,
+     "high_hit": 0.8571
+    },
+    "rec_yds|WR": {
+     "n": 25080,
+     "brier": 0.20696,
+     "high_pred": 0.8498,
+     "high_hit": 0.8636
+    },
+    "receptions|RB": {
+     "n": 10186,
+     "brier": 0.20345,
+     "high_pred": 0.8392,
+     "high_hit": 0.8656
+    },
+    "receptions|TE": {
+     "n": 10131,
+     "brier": 0.20271,
+     "high_pred": 0.8449,
+     "high_hit": 0.84
+    },
+    "receptions|WR": {
+     "n": 22968,
+     "brier": 0.19323,
+     "high_pred": 0.86,
+     "high_hit": 0.872
+    },
+    "rush_yds|QB": {
+     "n": 3718,
+     "brier": 0.20568,
+     "high_pred": 0.8489,
+     "high_hit": 0.8506
+    },
+    "rush_yds|RB": {
+     "n": 14696,
+     "brier": 0.20101,
+     "high_pred": 0.8745,
+     "high_hit": 0.8717
+    }
+   }
+  }
+ },
+ "real_2025": {
+  "saved": {
+   "brier_model": 0.14469,
+   "brier_books": 0.14202,
+   "model_minus_books": 0.00268,
+   "se": 0.00082,
+   "short_rungs": {
+    "pass_yds": {
+     "n": 2264,
+     "hit": 0.8317,
+     "model": 0.8252
+    },
+    "rec_yds": {
+     "n": 4896,
+     "hit": 0.8329,
+     "model": 0.7971
+    },
+    "rush_yds": {
+     "n": 2784,
+     "hit": 0.8161,
+     "model": 0.7607
+    }
+   },
+   "bands": [
+    {
+     "band": "0.00-0.10",
+     "n": 20252,
+     "predicted": 0.0463,
+     "actual": 0.045
+    },
+    {
+     "band": "0.10-0.25",
+     "n": 15286,
+     "predicted": 0.1675,
+     "actual": 0.1584
+    },
+    {
+     "band": "0.25-0.40",
+     "n": 9899,
+     "predicted": 0.3256,
+     "actual": 0.3253
+    },
+    {
+     "band": "0.40-0.60",
+     "n": 10481,
+     "predicted": 0.5029,
+     "actual": 0.5076
+    },
+    {
+     "band": "0.60-0.75",
+     "n": 7496,
+     "predicted": 0.6779,
+     "actual": 0.6761
+    },
+    {
+     "band": "0.75-0.85",
+     "n": 5832,
+     "predicted": 0.7952,
+     "actual": 0.8078
+    },
+    {
+     "band": "0.85-0.92",
+     "n": 2228,
+     "predicted": 0.8796,
+     "actual": 0.8748
+    },
+    {
+     "band": "0.92-0.97",
+     "n": 434,
+     "predicted": 0.9371,
+     "actual": 0.9171
+    }
+   ],
+   "bets_ev2_in_band": {
+    "bets": 1322,
+    "won": 337,
+    "avg_price": 324.0,
+    "return": -0.0089,
+    "return_se": 0.0546,
+    "claimed": 0.2382,
+    "clv_bets": 1312,
+    "clv_price": 0.0469,
+    "clv_price_se": 0.0045,
+    "beat_close": 0.613,
+    "clv_ev": -0.1543,
+    "clv_ev_se": 0.006
+   },
+   "bets_ev2_any": {
+    "bets": 1569,
+    "won": 165,
+    "avg_price": 1580.0,
+    "return": 0.0596,
+    "return_se": 0.1155,
+    "claimed": 0.522,
+    "clv_bets": 1509,
+    "clv_price": 0.1493,
+    "clv_price_se": 0.0098,
+    "beat_close": 0.667,
+    "clv_ev": -0.229,
+    "clv_ev_se": 0.009
+   }
+  },
+  "recent": {
+   "brier_model": 0.14457,
+   "brier_books": 0.14202,
+   "model_minus_books": 0.00256,
+   "se": 0.00081,
+   "short_rungs": {
+    "pass_yds": {
+     "n": 2264,
+     "hit": 0.8317,
+     "model": 0.8227
+    },
+    "rec_yds": {
+     "n": 4896,
+     "hit": 0.8329,
+     "model": 0.7974
+    },
+    "rush_yds": {
+     "n": 2784,
+     "hit": 0.8161,
+     "model": 0.7699
+    }
+   },
+   "bands": [
+    {
+     "band": "0.00-0.10",
+     "n": 20612,
+     "predicted": 0.0457,
+     "actual": 0.0458
+    },
+    {
+     "band": "0.10-0.25",
+     "n": 15602,
+     "predicted": 0.1715,
+     "actual": 0.165
+    },
+    {
+     "band": "0.25-0.40",
+     "n": 9535,
+     "predicted": 0.3252,
+     "actual": 0.3346
+    },
+    {
+     "band": "0.40-0.60",
+     "n": 10671,
+     "predicted": 0.5059,
+     "actual": 0.5117
+    },
+    {
+     "band": "0.60-0.75",
+     "n": 7177,
+     "predicted": 0.6772,
+     "actual": 0.6827
+    },
+    {
+     "band": "0.75-0.85",
+     "n": 5274,
+     "predicted": 0.7983,
+     "actual": 0.8039
+    },
+    {
+     "band": "0.85-0.92",
+     "n": 2595,
+     "predicted": 0.8824,
+     "actual": 0.8809
+    },
+    {
+     "band": "0.92-0.97",
+     "n": 432,
+     "predicted": 0.9388,
+     "actual": 0.9167
+    }
+   ],
+   "bets_ev2_in_band": {
+    "bets": 1280,
+    "won": 366,
+    "avg_price": 282.0,
+    "return": -0.0249,
+    "return_se": 0.05,
+    "claimed": 0.2252,
+    "clv_bets": 1268,
+    "clv_price": 0.0439,
+    "clv_price_se": 0.0041,
+    "beat_close": 0.617,
+    "clv_ev": -0.1399,
+    "clv_ev_se": 0.0058
+   },
+   "bets_ev2_any": {
+    "bets": 1587,
+    "won": 184,
+    "avg_price": 1200.0,
+    "return": 0.0088,
+    "return_se": 0.1061,
+    "claimed": 0.4576,
+    "clv_bets": 1525,
+    "clv_price": 0.1414,
+    "clv_price_se": 0.0095,
+    "beat_close": 0.656,
+    "clv_ev": -0.2207,
+    "clv_ev_se": 0.009
+   }
+  }
+ }
+}

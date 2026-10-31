@@ -322,6 +322,27 @@ board the top backs' chance of 35+ rushing yards rises about five points (87% �
 does not close it (the 2025 rushing rungs are still about five points short), and it makes no
 prop a bet: the books still price the ladders better.
 
+## What is left of the running-back gap (Oct 31, 2026)
+
+After the 2019-on widths, 2025 rushing rungs at −400 or shorter cleared 81.6% against the
+model's 76.1%. Two more checks, neither shipped:
+
+- **A correction fitted per position on recent seasons** (`experiments/props_recent_iso.py`,
+  ladder of lines, 2019-2023): 2024 running-back rushing lines become exactly calibrated at
+  75%+ (87.5% said, 87.2% happened), but several other stats get slightly worse at the usual
+  lines (receiving yards for backs and wide receivers, completions, quarterback carries, up to
+  0.0007 Brier), and the 2025 rushing rungs move only to 77.0%. Not kept.
+- **The week's news** (game-day projections, which know who is inactive, instead of
+  pregame): 2025 rushing rungs 76.1% → 76.3%. Not the cause.
+
+What the rest is: **selection on the book's price**, not a calibration error. On the same 2025
+rungs the model is calibrated by its own chances (79% said, 82% happened; 88% and 87%), and on
+2024 lines nobody chose, backs are calibrated with the 2019-on widths. Rungs picked because the
+book prices them short are rungs where the book is more confident than the model, and there
+the truth sits between the two (as the book looks too high on rungs picked by the model's
+price). The books know somewhat more than public data shows: overall on these rungs their
+Brier is better by about 0.002. Closing that takes information, not a better curve.
+
 ## Same-game combinations
 
 `nflmodel/propsim.py`. A Gaussian copula: each leg keeps its own distribution (so single
