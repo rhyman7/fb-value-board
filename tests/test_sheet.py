@@ -200,12 +200,15 @@ def test_best_bets_card_is_wired():
         assert 'id="view-bestbets"' in html and 'id="bb-page"' in html and 'id="bb-doc"' in html
         assert 'href="best-bets.pdf"' in html and 'href="#bestbets"' in html
         assert 'h === "bestbets"' in html and "renderBestBets()" in html
+        # the model's opinions that are not bets: their own document, button and PDF
+        assert 'id="view-leans"' in html and 'href="model-leans.pdf"' in html and 'href="#leans"' in html and "renderLeans()" in html
     assert 'id="view-bestbets"' in (ROOT / "site" / "cfb-template.html").read_text()
     src = (ROOT / "scripts" / "build_pdf.py").read_text()
     ast.parse(src)
-    assert '"nfl"' in src and '"cfb"' in src and "best-bets.pdf" in src
+    assert '"nfl"' in src and '"cfb"' in src and "best-bets.pdf" in src and "model-leans.pdf" in src
     landing = (ROOT / "index.html").read_text()
     assert 'href="docs/best-bets.pdf"' in landing and 'href="docs/cfb/best-bets.pdf"' in landing
+    assert 'href="docs/model-leans.pdf"' in landing and 'href="docs/cfb/model-leans.pdf"' in landing
 
 
 def test_bucket_stake_picks_the_book_on_price_and_uses_the_close_rate_after_a_move():
@@ -241,3 +244,48 @@ def test_line_moves_status_teaser_and_bucket():
     cfb_op = {"rows": [{"threshold": 3, "win_pct": 0.519, "roi": -0.009, "holdout": {"n": 1639, "win_pct": 0.519, "roi": -0.009}},
                        {"threshold": 5, "win_pct": 0.543, "roi": 0.036, "holdout": {"n": 735, "win_pct": 0.543, "roi": 0.036}}]}
     assert SH.bucket_record(cfb_op, "Spread", 4.0) is None and SH.bucket_record(cfb_op, "Spread", 6.1)["threshold"] == 5
+
+
+def test_cap_week_scales_a_week_together():
+    g1, g2 = _game(), _game(id="2026_08_X_Y")
+    for g in (g1, g2):
+        SH.annotate(g, "nfl")
+    openers = {"rows": [{"threshold": 2, "win_pct": 0.545, "roi": 0.04, "holdout": {"n": 615, "win_pct": 0.546, "roi": 0.041}}]}
+    SH.bucket_stakes([g1, g2], openers, {"eras": [{"win_pct": 0.592}]}, 0.25, 0.03)
+    before = sum(SH.taken_stake(b) for g in (g1, g2) for b in g["bets"])
+    out = SH.cap_week([g1, g2], 0.03)
+    after = sum(SH.taken_stake(b) for g in (g1, g2) for b in g["bets"])
+    assert out["8"]["stake"] == pytest.approx(before, abs=1e-3) and out["8"]["scale"] < 1
+    assert after == pytest.approx(0.03, abs=2e-3) and g1["week_scale"] == out["8"]["scale"]
+    assert SH.cap_week([_game_annotated()], 1.0)["8"]["scale"] == 1.0
+
+
+def test_ledger_marks_bets_withdrawn_before_kickoff(tmp_path):
+    import datetime as dt
+    path = tmp_path / "ledger.csv"
+    g = _game(); SH.annotate(g, "nfl")
+    ko = {g["id"]: pd.Timestamp("2026-11-01T18:00Z")}
+    t0 = dt.datetime(2026, 10, 30, 12, tzinfo=dt.timezone.utc)
+    assert LG.record([g], 2026, ko, path, now=t0) > 0
+    # the board changes its mind: BUF -3.5 is no longer flagged
+    g2 = _game(); SH.annotate(g2, "nfl"); g2["bets"][0]["tier"] = None
+    LG.record([g2], 2026, ko, path, now=t0 + dt.timedelta(hours=20))
+    st = pd.read_csv(LG.status_path(path), dtype={"row_id": str})
+    assert list(st["on_sheet"]) == [0] and st["row_id"].iloc[0].endswith("|Spread|home")
+    LG.record([g2], 2026, ko, path, now=t0 + dt.timedelta(hours=21))       # no change, no new row
+    assert len(pd.read_csv(LG.status_path(path))) == 1
+    s = LG.summary(path, tmp_path / "ledger_results.csv")
+    assert s["withdrawn"]["n"] == 1 and s["kept"]["n"] == s["all"]["n"] - 1
+    assert next(r for r in s["rows"] if r["row_id"].endswith("|Spread|home"))["kept"] is False
+    # after kickoff nothing is tracked
+    LG.record([g], 2026, ko, path, now=dt.datetime(2026, 11, 2, tzinfo=dt.timezone.utc))
+    assert len(pd.read_csv(LG.status_path(path))) == 1
+
+
+def test_kalshi_post_at_uses_the_haircut_chance():
+    out = {("g", "Spread", "home"): [
+        {"book": "kalshi", "odds": 100.0, "odds_net": 96.0, "prob": 0.60, "p_push": 0.0, "ev": 0.1, "p_post": 0.50},
+        {"book": "draftkings", "odds": -110.0, "odds_net": -110.0, "prob": 0.60, "p_push": 0.0, "ev": 0.14, "p_post": 0.50}]}
+    k = B.with_post_at(out)[("g", "Spread", "home")]
+    k = next(q for q in k if q["book"] == "kalshi")
+    assert k["post_at"] is not None and k["post_at"] <= 50          # against the 50% the stakes are sized from, not the model's 60%

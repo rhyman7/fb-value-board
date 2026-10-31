@@ -104,7 +104,10 @@ boards in detail; this file is the rules.
   (`.github/workflows/market.yml`) snapshots every upcoming NFL and college game's spread,
   total and moneyline at Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi through The Odds
   API (`nflmodel/market.py`, `run_market.py snapshot`; 3 credits per league per snapshot, three
-  a day plus hourly Sunday night to Tuesday, about 1,400 credits a month) and commits only the
+  a day plus hourly Sunday night to Tuesday, about 1,400 credits a month; plus, from Oct 31,
+  2026, hourly game-day snapshots of the league playing: college Saturdays 13-23 UTC, NFL
+  Sundays 13-20 UTC and Thursday nights 21-22 UTC, about 360 credits a month, each followed
+  by a quick rebuild of that board dispatched from the Action, `actions: write`) and commits only the
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
@@ -112,7 +115,10 @@ boards in detail; this file is the rules.
   (taker 7% x p x (1-p) per contract, maker 1.75%; the schedule and its date are cited in
   `odds.py`, check it each season) before any EV is computed. Every Kalshi quote on a side
   (main markets and derivatives, `bets.with_post_at`) carries `post_at` and `post_match`,
-  the maker prices in cents (`odds.kalshi_post_at`); the page shows them as "Post on Kalshi
+  the maker prices in cents (`odds.kalshi_post_at`), computed against the chance the stakes
+  are sized from (`p_post` on each quote, `bets.stake_prob`: the model shrunk toward the sharp
+  no-vig number by the haircut, so Pinnacle's own number on the NFL board while its haircut
+  is 0); derivative quotes, which carry no `p_post`, use the model's chance. The page shows them as "Post on Kalshi
   at Xc" with a tooltip saying a resting order may not fill. The ledger still records a
   Kalshi bet at the taker price it was flagged at.
   **Derivatives (both boards, Oct 30, 2026):** the same Action fetches the derivative markets
@@ -196,9 +202,11 @@ boards in detail; this file is the rules.
   or a different starter is named for a game in the next 3 days, it changes only that team's
   entry in rhyman7/cfb's `overrides/qb_starters.json` through a PR there, then re-runs
   **Update college board**. Its task prompt has the rules.
-- **Stakes (both boards).** Quarter Kelly, capped at 3% a bet and 5% a game, all sides
+- **Stakes (both boards).** Quarter Kelly, capped at 3% a bet, 5% a game, all sides
   together (`config.MAX_GAME_STAKE`, `slate.cap_game`: every stake in the game is scaled
-  down by one factor). With `config.EDGE_HAIRCUT` on, the stake is sized from the model
+  down by one factor), and 10% a week, everything the sheet flags that week together
+  (`config.MAX_WEEK_STAKE`, `sheet.cap_week` after the bucket stakes and before the ledger;
+  `meta.week_cap` per week, `week_scale` per game; the sheet note says when it bit). With `config.EDGE_HAIRCUT` on, the stake is sized from the model
   probability shrunk toward the market's by the share of claimed edge that has shown up in
   the last eight seasons' graded bets (`backtest.edge_haircut`, `meta.haircut`); the EV and
   probabilities shown are never shrunk. On the NFL board that share is 0 as of Oct 29, 2026,
@@ -255,8 +263,12 @@ boards in detail; this file is the rules.
   (market `Team total`, `1H Spread`, `1H Total`, `1H Moneyline`) are graded on the team's points
   or the half-time score and carry no closing line value yet. Append-only:
   the Update Actions write them, never edit or delete a row by hand, and a local build run
-  must not commit its rows (they would be sandbox prices). `data.json` carries the summary as
-  `ledger` (records overall, by tier, by market and by week, plus every row) and the Model
+  must not commit its rows (they would be sandbox prices). From Oct 31, 2026,
+  `ledger_status.csv` beside each ledger (append-only, written by `ledger.track` inside
+  `record`) logs each time a row leaves the sheet or comes back before kickoff, so the record
+  reads both ways: `kept` (still on the sheet at kickoff) and `withdrawn`; each summary row
+  has `kept`. `data.json` carries the summary as
+  `ledger` (records overall, kept, withdrawn, by tier, by market and by week, plus every row) and the Model
   record page leads with it as **Live record**; `tests/test_sheet.py` checks the files.
 - **The spread and totals card shows every model input.** A game page's "How the spread is
   built" rows add up to the raw model spread and total (`matchup.breakdown()`,
@@ -295,8 +307,7 @@ boards in detail; this file is the rules.
 - **Best bets (both boards): `#bestbets` and `best-bets.pdf`** (Oct 30, 2026). The week's card
   on one document, built from the whole board by `renderBestBets()` in `site/template.html`:
   the Bet sheet's bets in tier order with book, price, EV, stake, why and when; the 6-point
-  teaser legs that clear −120 and the best pairs; every game's market, model and adjusted
-  numbers with the board's lean; the week's prop flags (NFL; book disagreements when none
+  teaser legs that clear −120 and the best pairs; the week's prop flags (NFL; book disagreements when none
   are flagged); the bucket records and the disclaimer. The Bet sheet's head links to it
   (**Download the best bets (PDF)** and **Print view**), the landing page's cards link the
   PDFs, and the view's own buttons are Download PDF, Print and Back. Printing uses the
@@ -308,6 +319,16 @@ boards in detail; this file is the rules.
   board's first listed week at a $1,000 bankroll; the Print button prints whichever week and
   bankroll the reader has selected. `#bestbets` is not a nav section (the nav order above
   stands); don't add it to the landing page's section lists beyond the PDF link.
+- **Model leans (both boards): `#leans` and `model-leans.pdf`** (Oct 31, 2026). The model's
+  opinions that are not bets, on their own document so the card holds only bets
+  (`renderLeans()`): on the NFL board the model-tier sides (no stake while the haircut is 0;
+  they are off the Bet sheet and the Best bets card, `ON_CARD` in the template), and on both
+  boards every game's market, model and adjusted numbers with the board's lean. The Bet
+  sheet's head has **Model leans, not bets (PDF)** and **Print the leans**; the landing page
+  links both PDFs; `scripts/build_pdf.py` renders it beside `best-bets.pdf`. Printing uses
+  the same `#bb-page` / `bb-print` rules. Not a nav section.
+- **Stale prices.** A price-tier row is greyed, and its verdict reads "Check the price",
+  when the board's book prices (`meta.inputs.market`) are more than 3 hours old (`STALE_H`).
 - **The Games view's order** (Oct 31, 2026): filters, **Bet sheet**, **Line movement**
   (`sheet.line_moves`: the opener-gap sides with opener, now, the share of the gap closed,
   status and the side's 6-point teaser leg; sides with no backtested edge folded under a

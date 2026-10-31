@@ -13,6 +13,12 @@ ledger.csv (append-only, one row per game, market and side, written by the Updat
     game id; the same as game_id on the NFL board), kickoff (UTC), market, side, pick, tier,
     book, line, odds, odds_net, ev, stake, anchor, anchor_spread, anchor_total, model_margin,
     model_total
+ledger_status.csv (append-only, beside ledger.csv; from Oct 31, 2026): one row each time a
+    ledger row's place on the sheet changes before kickoff: row_id, at (UTC), on_sheet (1 put
+    back, 0 withdrawn). A row is on the sheet when it is first written; its status at kickoff
+    is the last change before then. Lets the live record be read both ways: every bet ever
+    flagged (what a bettor acting on the first word did) and only the bets still on the sheet
+    at kickoff (the board's last word), so the news process can be judged.
 ledger_results.csv (append-only, one row per graded row_id):
     row_id, graded_at, home_score, away_score, result (W/L/P), units (on one unit risked),
     close_line, close_prob, clv
@@ -35,6 +41,7 @@ from . import odds as O
 COLS = ["row_id", "flagged_at", "season", "week", "game_id", "data_id", "kickoff", "market", "side", "pick", "tier",
         "book", "line", "odds", "odds_net", "ev", "stake", "anchor", "anchor_spread", "anchor_total",
         "model_margin", "model_total"]
+STATUS_COLS = ["row_id", "at", "on_sheet"]
 RES_COLS = ["row_id", "graded_at", "home_score", "away_score", "result", "units", "close_line", "close_prob", "clv"]
 FLAG_TIERS = ("price", "opener", "wind")       # flagged even with no stake sized
 
@@ -108,7 +115,49 @@ def record(slate_games: list[dict], season: int, kickoffs: dict, path: Path, now
     if rows:
         path.parent.mkdir(parents=True, exist_ok=True)
         pd.DataFrame(rows, columns=COLS).to_csv(path, mode="a", header=not path.exists(), index=False)
+    track(slate_games, kickoffs, path, now)
     return len(rows)
+
+
+def status_path(path: Path) -> Path:
+    return path.with_name(path.stem + "_status.csv")
+
+
+def _last_status(path: Path) -> dict:
+    """{row_id: (on_sheet bool, at)} from the status log, the last change per row."""
+    sp = status_path(path)
+    if not sp.exists():
+        return {}
+    st = pd.read_csv(sp, dtype={"row_id": str, "at": str}).sort_values("at", kind="stable")
+    return {r.row_id: (bool(int(r.on_sheet)), r.at) for r in st.itertuples(index=False)}
+
+
+def track(slate_games: list[dict], kickoffs: dict, path: Path, now: dt.datetime | None = None) -> int:
+    """For every ledger row whose game is on the board and has not kicked off, note when it
+    leaves the sheet (no longer flagged) or comes back (ledger_status.csv). Returns the changes."""
+    if not path.exists():
+        return 0
+    now = now or dt.datetime.now(dt.timezone.utc)
+    stamp = now.strftime("%Y-%m-%d %H:%M")
+    led = _read(path, COLS)
+    last = _last_status(path)
+    games = {str(g["id"]): g for g in slate_games}
+    changes = []
+    for r in led.itertuples(index=False):
+        g = games.get(str(r.game_id))
+        if g is None:
+            continue
+        ko = kickoffs.get(g["id"], kickoffs.get(str(g["id"])))
+        if ko is None or pd.Timestamp(ko) <= pd.Timestamp(now):
+            continue
+        b = next((x for x in sheet_bets(g) if x["market"] == r.market and x["side"] == r.side), None)
+        on = bool(b is not None and flagged(b))
+        if on != last.get(r.row_id, (True, None))[0]:
+            changes.append({"row_id": r.row_id, "at": stamp, "on_sheet": int(on)})
+    if changes:
+        sp = status_path(path)
+        pd.DataFrame(changes, columns=STATUS_COLS).to_csv(sp, mode="a", header=not sp.exists(), index=False)
+    return len(changes)
 
 
 def settle(market: str, side: str, line, margin: float, total: float, half: tuple | None = None) -> tuple[str, float] | None:
@@ -213,15 +262,25 @@ def _rec(x: pd.DataFrame) -> dict:
 
 
 def summary(path: Path, results_path: Path) -> dict:
-    """The ledger with its results for data.json: rows (newest first) and records overall, by
-    tier, by market and by week."""
+    """The ledger with its results for data.json: rows (newest first, each with `kept`: still on
+    the sheet at kickoff) and records overall, for the rows kept and withdrawn, by tier, by
+    market and by week."""
     led = _read(path, COLS)
     if led.empty:
-        return {"since": None, "rows": [], "all": _rec(led.assign(result=np.nan, units=np.nan, clv=np.nan)), "by_tier": {}, "by_market": {}, "by_week": []}
+        empty = _rec(led.assign(result=np.nan, units=np.nan, clv=np.nan))
+        return {"since": None, "rows": [], "all": empty, "kept": empty, "withdrawn": empty, "by_tier": {}, "by_market": {}, "by_week": []}
     res = _read(results_path, RES_COLS)
     x = led.merge(res.drop(columns=["graded_at"]), on="row_id", how="left")
     x["tier"] = x["tier"].fillna("").replace("", "model")
+    # on the sheet at kickoff: the last status change before kickoff (none: it never left)
+    sp = status_path(path)
+    st = pd.read_csv(sp, dtype={"row_id": str, "at": str}) if sp.exists() else pd.DataFrame(columns=STATUS_COLS)
+    ko = dict(zip(x["row_id"], x["kickoff"].astype(str)))
+    st = st[[str(a).replace(" ", "T") < str(ko.get(rid, "9999")).replace("Z", "") for rid, a in zip(st["row_id"], st["at"])]] if len(st) else st
+    last = st.sort_values("at", kind="stable").groupby("row_id")["on_sheet"].last() if len(st) else pd.Series(dtype=int)
+    x["kept"] = x["row_id"].map(lambda r: bool(int(last[r])) if r in last.index else True)
     out = {"since": str(led["flagged_at"].min())[:10], "all": _rec(x),
+           "kept": _rec(x[x["kept"]]), "withdrawn": _rec(x[~x["kept"]]),
            "by_tier": {t: _rec(y) for t, y in x.groupby("tier")},
            "by_market": {m: _rec(y) for m, y in x.groupby("market")},
            "by_week": [{"season": int(s), "week": int(w), **_rec(y)} for (s, w), y in x.groupby(["season", "week"])]}

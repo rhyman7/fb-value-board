@@ -259,6 +259,8 @@ table.sheet .verdict { display: inline-block; font-weight: 800; color: var(--ink
 table.sheet .verdict.wait { color: var(--s2); }
 table.sheet .ko { white-space: nowrap; font-weight: 500; font-size: 11.5px; }
 .sheet-empty { padding: 12px 0; }
+tr.stale td { opacity: .55; }
+tr.stale td.when, tr.stale td.when * { opacity: 1; }
 /* line movement (sheet.line_moves): how much of the model's gap off the opener the market has closed */
 table.moves td.st { white-space: nowrap; font-weight: 800; }
 table.moves td.st.partly { color: var(--s2); }
@@ -589,7 +591,7 @@ td .act { font-weight: 700; }
         <div class="section-head">
           <h2 id="sheet-h">Bet sheet</h2>
           <p class="note" id="sheet-note"></p>
-          <p class="bb-links"><a class="btn" id="sheet-pdf" href="best-bets.pdf" download>Download the best bets (PDF)</a><a class="btn" href="#bestbets">Print view</a></p>
+          <p class="bb-links"><a class="btn" id="sheet-pdf" href="best-bets.pdf" download>Download the best bets (PDF)</a><a class="btn" href="#bestbets">Print view</a><a class="btn" id="leans-pdf" href="model-leans.pdf" download>Model leans, not bets (PDF)</a><a class="btn" href="#leans">Print the leans</a></p>
         </div>
         <p class="note asof" id="sheet-asof"></p>
         <div id="sheet"></div>
@@ -671,6 +673,11 @@ td .act { font-weight: 700; }
     <div class="view bb" id="view-bestbets" hidden>
       <p class="bb-actions"><a class="btn" id="bb-pdf" href="best-bets.pdf" download>Download PDF</a><button class="btn" id="bb-print" type="button">Print</button><a class="btn" href="#games">Back to the board</a></p>
       <div class="bb-doc" id="bb-doc"></div>
+    </div>
+    <!-- ============ model leans: the model's own opinions, which are not bets (#leans; rendered to model-leans.pdf) ============ -->
+    <div class="view bb" id="view-leans" hidden>
+      <p class="bb-actions"><a class="btn" href="model-leans.pdf" download>Download PDF</a><button class="btn" id="leans-print" type="button">Print</button><a class="btn" href="#games">Back to the board</a></p>
+      <div class="bb-doc" id="leans-doc"></div>
     </div>
     <!-- ============ one game ============ -->
     <div class="view" id="view-game" hidden></div>
@@ -1047,7 +1054,7 @@ const qLine = (b, q) => b.market === "Moneyline" || b.market === "1H Moneyline" 
 /* Kalshi as a maker: the highest contract price (cents) at which a resting order is still +EV against the board's
    chance net of the 1.75% maker fee (q.post_at), and the price that matches the best retail book's EV (q.post_match);
    bets.with_post_at. The quote itself is the taker price. */
-const POST_TIP = "A resting (maker) order on Kalshi at this contract price is +EV against the board's chance after the 1.75% maker fee. It may never fill, and the market can move before it does; check the book before posting.";
+const POST_TIP = "A resting (maker) order on Kalshi at this contract price is +EV after the 1.75% maker fee against the chance the stakes are sized from: the model shrunk toward Pinnacle's no-vig number by the haircut (on the NFL board, where the haircut is 0, Pinnacle's own number). It may never fill, and the market can move before it does; check the book before posting.";
 const postText = q => q && q.book === "kalshi" && q.post_at != null ? "Post on Kalshi at " + q.post_at + "\u00a2" + (q.post_match != null && q.post_match !== q.post_at ? " (" + q.post_match + "\u00a2 matches the best retail price)" : "") : "";
 const postNode = (q, lead) => { const t = postText(q); return t ? H("span", { class: "post", title: POST_TIP, text: (lead || "") + t }) : null; };
 /* the pick with the best book's line when it differs from the anchor's */
@@ -1264,13 +1271,22 @@ const TIER = {
   model: { h: "Model edges", d: "Priced +EV by the market-adjusted projection on its own. The bucket's own record is shown on every row: read it before the EV." },
 };
 const tierOf = b => b.tier || null;
+/* on the NFL board the model's own edges carry no stake (haircut 0: none of their claimed edge has shown up in the
+   graded bets), so they are not on the card: they are in Model leans (#leans), with every game's lean */
+const ON_CARD = t => !!t && !(t === "model" && LG === "nfl");
 const hoursTo = g => g.kickoff ? (Date.parse(g.kickoff) - Date.now()) / 36e5 : null;
 const hoursText = h => h == null ? "" : h < 0 ? "kicked off" : h < 1 ? "in " + Math.round(h * 60) + " min" : h < 48 ? "in " + Math.round(h) + " h" : "in " + Math.round(h / 24) + " days";
 const isFav = (g, b) => b.market === "Total" ? b.side === "over" : (b.side === "home" ? g.market.spread > 0 : g.market.spread < 0);
+/* how old the board's book prices are: the snapshot it was built from (on game days the Market lines
+   Action snapshots hourly and rebuilds). A price bet on a quote older than STALE_H hours is greyed. */
+const STALE_H = 3;
+const priceAgeH = () => { const t = (M.inputs || {}).market; return t ? (Date.now() - Date.parse(String(t).replace(" ", "T") + "Z")) / 36e5 : null; };
+const isStale = b => tierOf(b) === "price" && priceAgeH() != null && priceAgeH() > STALE_H;
 /* when to bet: the sharp line's move since the open (toward this side is positive), the tier and the clock */
 function timing(g, b) {
   const h = hoursTo(g), mv = b.move;
   if (h != null && h < 0) return { t: "Kicked off", d: "", cls: "" };
+  if (isStale(b)) return { t: "Check the price", d: "These prices are " + Math.round(priceAgeH()) + " hours old: a price edge is usually gone within hours. Take it only if the book still shows this price or better.", cls: "wait" };
   if (h != null && h < 6) return { t: "Now or never", d: "Kickoff " + hoursText(h) + ".", cls: "" };
   if (tierOf(b) === "price") return { t: "Bet now", d: "Off-market prices get corrected within hours.", cls: "" };
   if (b.missed) return { t: "Missed", d: b.market === "Total" && b.side === "under" && (g.wind || {}).under_angle && !(b.opener_gap >= 3) ? "The total has already dropped for the wind: the market has priced it." : "The market has moved to the model: the edge at the opener is mostly gone. The 6-point teaser leg on this side (Line movement) is the way in, if it clears.", cls: "wait" };
@@ -1339,17 +1355,22 @@ function bucketText(b) {
 }
 /* the stake shown: the model's (at the book taken) when it sizes one, else the bucket's (sheet.bucket_stakes: quarter
    Kelly on the bucket's measured win rate shrunk halfway to break-even, at the book's net price) */
+/* the weekly cap (sheet.cap_week): when the week's flagged stakes add up to more than max_week_stake, every stake that
+   week was scaled down by one factor; the stakes shown are after it */
+const weekCapText = () => { const c = (M.week_cap || {})[String(state.week)]; return c && c.scale < 1 ? ` This week's bets added up to ${pct(c.stake)} of bankroll, over the ${pct(M.max_week_stake, 0)} weekly cap, so every stake is scaled to ${pct(c.scale, 0)} of its size.` : (M.max_week_stake ? ` Weekly cap ${pct(M.max_week_stake, 0)} of bankroll` + (c ? `; this week ${pct(c.stake)}.` : ".") : ""); };
 const sheetStake = (b, q) => { const s = q ? (q.stake || 0) : bestStake(b); return s > 0 ? s : (b.bucket_stake || 0); };
 function renderSheet() {
   const host = $("#sheet"), gs = games();
   const inp = M.inputs || {};
   $("#sheet-asof").textContent = "Data as of: board built " + (inp.generated || M.generated) + (inp.market ? "; book prices " + inp.market + " UTC" : "; no book prices on file") + (inp.injuries ? "; injury report " + inp.injuries : "") + (inp.designations ? "; injury designations checked " + inp.designations : "") + ". Lines move: check the book before betting.";
-  const rows = gs.flatMap(g => sheetBets(g).filter(b => tierOf(b)).map(b => ({ g, b })));
+  const rows = gs.flatMap(g => sheetBets(g).filter(b => ON_CARD(tierOf(b))).map(b => ({ g, b })));
+  const nModelOff = gs.flatMap(g => sheetBets(g).filter(b => tierOf(b) === "model" && !ON_CARD("model"))).length;
   const byTier = {}; rows.forEach(x => (byTier[tierOf(x.b)] = byTier[tierOf(x.b)] || []).push(x));
   const n = t => (byTier[t] || []).length;
   const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
-  $("#sheet-note").textContent = `${rows.length} ${rows.length === 1 ? "bet" : "bets"} this week, by what the edge is made of: ${n("price")} where a price beats Pinnacle, ${n("opener")} where the model is off the opener${LG === "nfl" ? `, ${n("wind")} wind ${n("wind") === 1 ? "under" : "unders"}` : ""}, ${n("model")} on the model alone. Moneylines are only listed when a price beats the sharp line: since ${BT ? BT.holdout_from : 2019} they have lost at every claimed edge. Stakes are `
-    + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the claimed edge were real` : ", and the model's own edges carry no stake: none of their claimed edge has shown up in the graded bets of the last eight seasons") + " (price bets are sized against the sharp line, so they still carry one)" : "") + ".";
+  $("#sheet-note").textContent = `${rows.length} ${rows.length === 1 ? "bet" : "bets"} this week, by what the edge is made of: ${n("price")} where a price beats Pinnacle, ${n("opener")} where the model is off the opener${LG === "nfl" ? `, ${n("wind")} wind ${n("wind") === 1 ? "under" : "unders"}` : ""}, ${LG === "nfl" ? `the model's own ${nModelOff} ${nModelOff === 1 ? "edge is" : "edges are"} in Model leans (not bets: no stake)` : n("model") + " on the model alone"}. Moneylines are only listed when a price beats the sharp line: since ${BT ? BT.holdout_from : 2019} they have lost at every claimed edge. Stakes are `
+    + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the claimed edge were real` : ", and the model's own edges carry no stake: none of their claimed edge has shown up in the graded bets of the last eight seasons") + " (price bets are sized against the sharp line, so they still carry one)" : "") + "."
+    + weekCapText() + (priceAgeH() != null && priceAgeH() > STALE_H ? ` Book prices are ${Math.round(priceAgeH())} hours old: price bets are greyed until the next snapshot.` : "");
   host.replaceChildren();
   if (!rows.length) { host.append(H("p", { class: "note sheet-empty", text: "Nothing to bet this week: no price beats the sharp line and the model is not far enough off any opener." })); return; }
   const evTxt = b => tierOf(b) === "price" && b.sharp_ev != null ? spct(b.sharp_ev) + " vs sharp" + (evOf(b) > 0 ? ", " + spct(evOf(b)) + " vs model" : "") : spct(evOf(b));
@@ -1365,7 +1386,7 @@ function renderSheet() {
           : b.bucket_book ? (b.books.find(x => x.book === b.bucket_book) || bk) : bk;     // a bucket stake goes at the book chosen on price
         const where = q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") + (q.ev < b.ev - 0.005 ? " (" + spct(q.ev) + " here)" : "")
           : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
-        return [
+        return { cls: isStale(b) ? "stale" : "", cells: [
           { v: H("span", {}, H("a", { href: "#" + g.id, text: pickOf(b) }), H("br"), H("span", { class: "ko rec", text: g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", "").replace(/^(\w{3}) \w{3} \d+, /, "$1 ") + (hoursTo(g) != null ? " (" + hoursText(hoursTo(g)) + ")" : "") })), cls: "strong" },
           { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where },
           evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)),
@@ -1373,7 +1394,7 @@ function renderSheet() {
           { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "when" },
           { v: bucketText(b), cls: "why" },
           sheetStake(b, q) > 0 ? stakeText({ stake: sheetStake(b, q) }) + ((q ? q.stake : bestStake(b)) <= 0 ? " (bucket)" : "") : "—",
-        ];
+        ] };
       }));
     tier.append(H("div", { class: "scroll" }, tb));
     host.append(tier);
@@ -1446,10 +1467,11 @@ function renderBestBets() {
   kids.push(el("p", `Board built ${inp.generated || M.generated}${inp.market ? "; book prices as of " + inp.market + " UTC" : "; no book prices on file"}${inp.injuries ? "; injury report " + inp.injuries : ""}${inp.designations ? "; injury designations checked " + inp.designations : ""}. Results through ${M.games_through}. Bankroll $${comma(state.bankroll)}. Lines move: check the book before betting.`, "stamp"));
 
   /* 1. the card */
-  const rows = gs.flatMap(g => sheetBets(g).filter(b => tierOf(b)).map(b => ({ g, b }))).sort((x, y) => (TIER_ORDER[tierOf(x.b)] - TIER_ORDER[tierOf(y.b)]) || (evOf(y.b) - evOf(x.b)));
+  const rows = gs.flatMap(g => sheetBets(g).filter(b => ON_CARD(tierOf(b))).map(b => ({ g, b }))).sort((x, y) => (TIER_ORDER[tierOf(x.b)] - TIER_ORDER[tierOf(y.b)]) || (evOf(y.b) - evOf(x.b)));
   kids.push(el("h2", "The card: " + rows.length + (rows.length === 1 ? " bet" : " bets")));
   const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
-  kids.push(el("p", "In the order to take them: prices that beat Pinnacle's own number first (no model needed), then the model's edges against the opening line, " + (LG === "nfl" ? "wind unders, " : "") + "then the model alone. Moneylines appear only when a price beats the sharp line. Stakes are " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " a bet" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the model's claimed edge were real` : "; the model's own edges carry no stake, since none of their claimed edge has shown up in the graded bets of the last eight seasons") + " — bets marked (bucket) are sized from their bucket's own record instead" : "") + "."));
+  kids.push(el("p", "In the order to take them: prices that beat Pinnacle's own number first (no model needed), then the model's edges against the opening line, " + (LG === "nfl" ? "wind unders, " : "") + (LG === "nfl" ? "and nothing on the model alone (no stake: those are in Model leans, a separate document). " : "then the model alone. ") + "Moneylines appear only when a price beats the sharp line. Stakes are " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " a bet" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the model's claimed edge were real` : "; the model's own edges carry no stake, since none of their claimed edge has shown up in the graded bets of the last eight seasons") + " — bets marked (bucket) are sized from their bucket's own record instead" : "") + "." + weekCapText()
+    + (priceAgeH() != null && priceAgeH() > STALE_H ? ` Book prices are ${Math.round(priceAgeH())} hours old: check every price bet against the book.` : "")));
   if (!rows.length) kids.push(el("p", "Nothing to bet this week: no price beats the sharp line and the model is not far enough off any opener.", "empty"));
   else {
     const t = H("table");
@@ -1462,10 +1484,10 @@ function renderBestBets() {
         const where = q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) + (q.odds_net !== q.odds ? " (" + odds(Math.round(q.odds_net)) + " net)" : "") : "No book quote; " + (g.anchor && g.anchor !== "consensus" ? bookName(g.anchor) : "consensus") + " " + odds(b.odds);
         const st = sheetStake(b, q);
         const why = H("span", {}, H("b", { text: TIER[tierOf(b)].h + ". " }), whyNode(g, b));
-        return [{ v: String(++n), cls: "n nw" }, { v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home), H("br"), document.createTextNode(kickoff(g).replace(" ET", ""))), cls: "nw" },
+        return { cls: isStale(b) ? "stale" : "", cells: [{ v: String(++n), cls: "n nw" }, { v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home), H("br"), document.createTextNode(kickoff(g).replace(" ET", ""))), cls: "nw" },
           { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where, cls: "nw" }, { v: evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)), cls: "nw" },
           { v: st > 0 ? stakeText({ stake: st }) + ((q ? q.stake : bestStake(b)) <= 0 ? " (bucket)" : "") : "—", cls: "nw" },
-          { v: why, cls: "wrap" }, { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "wrap" }];
+          { v: why, cls: "wrap" }, { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "wrap" }] };
       }));
     kids.push(t);
     kids.push(el("h3", "What the records say"));
@@ -1489,9 +1511,46 @@ function renderBestBets() {
     if (pairs.length) kids.push(el("p", "Best pairs (legs treated as independent): " + pairs.slice(0, 4).map(x => `${x.a.teased} + ${x.b.teased} (${spct(x.ev)})`).join("; ") + "."));
   } else kids.push(el("p", "No leg clears the break-even at −120 this week.", "empty"));
 
-  /* 3. every game */
+  /* 4. props (NFL) */
+
+  kids.push(el("p", "For research and entertainment. Past results do not predict future results, and nothing here is betting advice. Every number is the board's projection at build time; the live board (rhyman7.github.io/fb-value-board) is current.", "disc"));
+  host.replaceChildren(...kids);
+}
+const STATW = s => ({ pass_yds: "pass yds", pass_att: "pass att", pass_td: "pass TD", completions: "comp", ints: "INT", carries: "carries", rush_yds: "rush yds", receptions: "rec", rec_yds: "rec yds", anytime_td: "anytime TD" })[s] || s;
+$("#bb-print").addEventListener("click", () => window.print());
+
+/* ---------------- model leans: the model's opinions, which are not bets ----------------
+   What used to sit under the card: on the NFL board the model's own edges (no stake: the graded
+   bets show none of their claimed edge), and on both boards every game's lean. Kept for what the
+   model thinks and why, on a document of its own so the bet card holds only bets. Rendered at
+   #leans, printed by its Print button, and rendered to model-leans.pdf by the Update Actions. */
+function renderLeans() {
+  const host = $("#leans-doc"), gs = games(), inp = M.inputs || {};
+  const lg = LG === "nfl" ? "NFL" : "College football";
+  const el = (tag, text, cls) => H(tag, { text, class: cls || "" });
+  const kids = [];
+  kids.push(el("h1", lg + " model leans, Week " + state.week));
+  kids.push(el("p", `Board built ${inp.generated || M.generated}${inp.market ? "; book prices as of " + inp.market + " UTC" : ""}. Not bets: these are where the model disagrees with the market and why. The bets are on the Best bets card.`, "stamp"));
+  if (LG === "nfl") {
+    const rows = gs.flatMap(g => sheetBets(g).filter(b => tierOf(b) === "model").map(b => ({ g, b }))).sort((x, y) => evOf(y.b) - evOf(x.b));
+    kids.push(el("h2", "The model's own edges: " + rows.length));
+    kids.push(el("p", "Sides the market-adjusted projection makes +EV with no price edge, no opener gap and no wind. On the NFL board they carry no stake: on the graded bets since " + (BT ? BT.holdout_from : 2019) + " none of the model's claimed edge has shown up (haircut " + (M.haircut_factor != null ? pct(M.haircut_factor, 0) : "0%") + "). Their record is in the last column."));
+    if (!rows.length) kids.push(el("p", "None this week.", "empty"));
+    else {
+      const t = H("table");
+      table(t, [{ t: "Pick", l: 1 }, { t: "Best price", l: 1 }, { t: "EV" }, { t: "Why", l: 1 }, { t: "Line", l: 1 }, { t: "Record of this kind", l: 1 }],
+        rows.map(({ g, b }) => {
+          const q = b.best ? b.books.find(x => x.book === b.best) : null, tm = timing(g, b);
+          return [{ v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", ""))), cls: "nw" },
+            { v: q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) : odds(b.odds), cls: "nw" }, { v: evCell(evOf(b)), cls: "nw" },
+            { v: whyNode(g, b), cls: "wrap" }, { v: H("span", {}, b.missed ? H("span", { class: "verdict wait", text: "Missed. " }) : null, document.createTextNode(moveText(g, b))), cls: "wrap" }, { v: bucketText(b), cls: "wrap" }];
+        }));
+      kids.push(t);
+    }
+  }
+  /* every game */
   kids.push(el("h2", "Every game: where the model leans"));
-  kids.push(el("p", "The board's side of each spread and total (the market-adjusted projection's), with its chance. Most sit close to 50%: a lean is not a bet, and the bets are the card above."));
+  kids.push(el("p", "The board's side of each spread and total (the market-adjusted projection's), with its chance. Most sit close to 50%: a lean is not a bet; the bets are on the Best bets card."));
   const gt = H("table");
   table(gt, [{ t: "Game", l: 1 }, { t: "Kickoff", l: 1 }, { t: "Market" }, { t: "Model" }, { t: "Adjusted" }, { t: "Spread lean", l: 1 }, { t: "Total lean", l: 1 }, { t: "Win" }, { t: "Notes", l: 1 }],
     gs.map(g => {
@@ -1503,13 +1562,10 @@ function renderBestBets() {
     }));
   kids.push(gt);
 
-  /* 4. props (NFL) */
-
-  kids.push(el("p", "For research and entertainment. Past results do not predict future results, and nothing here is betting advice. Every number is the board's projection at build time; the live board (rhyman7.github.io/fb-value-board) is current.", "disc"));
+  kids.push(el("p", "For research and entertainment. Past results do not predict future results, and nothing here is betting advice. Every number is the board's projection at build time.", "disc"));
   host.replaceChildren(...kids);
 }
-const STATW = s => ({ pass_yds: "pass yds", pass_att: "pass att", pass_td: "pass TD", completions: "comp", ints: "INT", carries: "carries", rush_yds: "rush yds", receptions: "rec", rec_yds: "rec yds", anytime_td: "anytime TD" })[s] || s;
-$("#bb-print").addEventListener("click", () => window.print());
+$("#leans-print").addEventListener("click", () => window.print());
 
 /* ---------------- teasers and alternate lines ----------------
    Legs are priced off the key-number curve with the line moved the bettor's way; a leg is
@@ -1956,12 +2012,15 @@ function diagChart(node, o) {
     tile("Record", a.graded ? `${a.w}-${a.l}${a.p ? "-" + a.p : ""}` : "—", a.graded ? pct(a.win_pct) + " on " + a.graded + " graded" : "No bet has been graded yet"),
     tile("Return, one unit a bet", a.graded ? spct(a.roi) : "—", a.graded ? snum(a.units, 1) + " units" : "Claimed EV " + spct(a.claimed_ev)),
     tile("Closing line value", a.clv != null ? spct(a.clv) : "—", a.clv_n ? `Beat the close on ${a.beat_close} of ${a.clv_n}` : "Needs Pinnacle's closing quote"),
+    tile("Still on the sheet at kickoff", L.kept && L.kept.graded ? `${L.kept.w}-${L.kept.l}${L.kept.p ? "-" + L.kept.p : ""}` : (L.kept ? L.kept.n + " bets" : "—"),
+      L.withdrawn ? (L.withdrawn.n ? `${L.withdrawn.n} withdrawn before kickoff` + (L.withdrawn.graded ? `: ${L.withdrawn.w}-${L.withdrawn.l}${L.withdrawn.p ? "-" + L.withdrawn.p : ""}, ${spct(L.withdrawn.roi)}` : "") : "None withdrawn yet") : "Tracked from Oct 31, 2026"),
     tile("Staked", a.staked > 0 ? "$" + comma(Math.round(a.staked * state.bankroll)) : "—", a.staked > 0 ? "at the bankroll above; profit " + spct(a.return) + " of stakes" : "No stake was sized"));
   const recRow = (label, r) => [label, r.n, r.graded ? `${r.w}-${r.l}${r.p ? "-" + r.p : ""}` : "—", r.graded ? pct(r.win_pct) : "—", r.graded ? spct(r.roi) : "—", r.clv_n ? spct(r.clv) + " (" + r.beat_close + " of " + r.clv_n + ")" : "—", spct(r.claimed_ev)];
   table($("#live-tiers"), [{ t: "Kind", l: 1 }, { t: "Flagged" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "CLV (beat close)" }, { t: "Claimed EV" }],
-    [...["price", "opener", "wind", "model"].filter(t => L.by_tier[t]).map(t => recRow(TIER[t].h, L.by_tier[t])), ...Object.keys(L.by_market).map(m => recRow(m + "s", L.by_market[m]))]);
+    [...["price", "opener", "wind", "model"].filter(t => L.by_tier[t]).map(t => recRow(TIER[t].h, L.by_tier[t])), ...Object.keys(L.by_market).map(m => recRow(m + "s", L.by_market[m])),
+     ...(L.kept ? [recRow("Still on the sheet at kickoff", L.kept), recRow("Withdrawn before kickoff", L.withdrawn)] : [])]);
   table($("#live-rows"), [{ t: "Flagged", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "Close" }, { t: "CLV" }],
-    L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick, cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
+    L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick + (r.kept === false ? " (withdrawn)" : ""), cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
       r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.close_line == null ? "" : String(r.close_line), r.clv == null ? "" : spct(r.clv)]));
 })();
 
@@ -2931,7 +2990,7 @@ const matchups = (() => {
 })();
 
 /* ---------------- routing ---------------- */
-const views = { games: $("#view-games"), bestbets: $("#view-bestbets"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
+const views = { games: $("#view-games"), bestbets: $("#view-bestbets"), leans: $("#view-leans"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
@@ -2939,20 +2998,21 @@ function route() {
   const mm = /^matchups\/(.+)$/.exec(h), pm = mm && /^(\d{4}_w\d{2})(?:\/(.+))?$/.exec(mm[1]);
   const tok = pm ? pm[1] : null, pid = pm && pm[2] ? decodeURIComponent(pm[2]) : null;
   const mg = mm && !pm ? matchups.find(decodeURIComponent(mm[1])) : null;
-  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "bestbets" || (h === "props" && views.props)) ? h : "games";
+  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "bestbets" || h === "leans" || (h === "props" && views.props)) ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
   $("#mx-page").media = name === "matchup" ? "print" : "not all";   // a printed matchup is one landscape page
-  $("#bb-page").media = name === "bestbets" ? "print" : "not all";   // the best-bets card prints portrait
-  document.documentElement.classList.toggle("bb-print", name === "bestbets");
+  $("#bb-page").media = name === "bestbets" || name === "leans" ? "print" : "not all";   // the best-bets card and the leans print portrait
+  document.documentElement.classList.toggle("bb-print", name === "bestbets" || name === "leans");
   if (name === "bestbets") renderBestBets();
+  if (name === "leans") renderLeans();
   if (name === "matchups") matchups.board(tok);
   if (name === "matchup") matchups.game(tok, mg || pid);
   if (name === "history") historyView.open();
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {
-    if (a.dataset.view === (g ? "games" : name === "matchup" ? "matchups" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+    if (a.dataset.view === (g ? "games" : name === "matchup" ? "matchups" : name === "leans" || name === "bestbets" ? "games" : name)) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
   });
   $("#hero").hidden = name !== "games";
   if (g) { shownGame = g; renderGame(g); document.title = g.away + " at " + g.home + " | College Value Board"; }

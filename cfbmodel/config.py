@@ -54,5 +54,6 @@ EARLY_DAYS = 4
 KELLY_FRACTION = 0.25
 MAX_STAKE = 0.03
 MAX_GAME_STAKE = 0.05       # cap on one game's flagged stakes together (nflmodel/config.py)
+MAX_WEEK_STAKE = 0.10       # cap on one week's flagged stakes together (nflmodel/config.py)
 EDGE_HAIRCUT = True         # stakes from the model probability shrunk toward the market's (nflmodel/config.py)
 POOL = "FCS"                # every non-FBS opponent is pooled into one team

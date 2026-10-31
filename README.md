@@ -264,12 +264,19 @@ know (a long random string), and save that name as the repository secret `NTFY_T
 `opener-alerts` issue, which mentions the owner, so the GitHub app notifies too.
 
 The whole week fits on one document, **Best bets** (`#bestbets`): the card in tier order, the
-teaser legs that clear, every game's lean, and the week's prop flags. The Bet sheet links to
-it, the Update Actions render it to `best-bets.pdf` next to each board (`scripts/build_pdf.py`),
-and the landing page links the PDFs.
+teaser legs that clear, and the week's prop flags. The Bet sheet links to it, the Update
+Actions render it to `best-bets.pdf` next to each board (`scripts/build_pdf.py`), and the
+landing page links the PDFs. What the model thinks but is not a bet is on a second document,
+**Model leans** (`#leans`, `model-leans.pdf`): every game's lean, and on the NFL board the
+model's own edges, which carry no stake there and are kept off the card.
+
+Stakes are quarter Kelly, capped at 3% a bet, 5% a game and 10% a week: when the week's bets
+add up to more, every stake that week is scaled down by the same factor.
 
 Every flagged bet goes into the **ledger** (`nflmodel/ledger.py`, `data/ledger.csv`) at the
-book, line and price it was first flagged at, and is graded on the result and on closing line
+book, line and price it was first flagged at (and `ledger_status.csv` notes when the board
+withdraws it before kickoff, so the Live record reads both ways: every bet flagged, and only
+those still on the sheet at kickoff), and is graded on the result and on closing line
 value against Pinnacle's close; the Model record page leads with that live record. The
 Teasers section prices every leg with 6 or 7 points added off the key-number curve (Wong
 legs marked), and each game's page carries the alternate-line ladder with fair prices
@@ -290,15 +297,19 @@ in that table is a bet (FEATURES.md, "Derivative markets").
 `data/market/` holds snapshots of every upcoming game's spread, total and moneyline at
 Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi, from The Odds API (`nflmodel/market.py`,
 `run_market.py`, the **Market lines** Action: three a day in season and hourly from Sunday
-night to Tuesday, when the week's lines open). Only rows that changed are stored, so a
+night to Tuesday, when the week's lines open, plus hourly on game days for the league
+playing (college Saturdays, NFL Sundays and Thursday nights), each game-day snapshot followed
+by a quick rebuild of that board so its prices are never much more than an hour old). A
+price bet built on prices more than 3 hours old is greyed on the sheet with "Check the price". Only rows that changed are stored, so a
 month of both leagues is a few thousand rows. Pinnacle is the sharp reference: the boards
 anchor their projections to its no-vig price where it quotes the game, and score every other
 book's price at that book's own line. Kalshi contract prices are charged the exchange's fee
 (`odds.kalshi_effective_odds`: 7% x p x (1-p) per contract as a taker, 1.75% as a maker;
 Kalshi's fee schedule effective July 7, 2026, cited in `odds.py`) before EV. Every Kalshi
 quote also says where a resting (maker) order is worth posting (`odds.kalshi_post_at`,
-`post_at` on the quote): the highest contract price in cents that is still +EV against the
-board's chance after the maker fee, and the price that matches the best retail book's EV
+`post_at` on the quote): the highest contract price in cents that is still +EV after the
+maker fee against the chance the stakes are sized from (the model shrunk toward Pinnacle by
+the haircut: Pinnacle's own number on the NFL board), and the price that matches the best retail book's EV
 (`post_match`). The game page's Every book and Derivatives tables, the Bet sheet's Where
 cell and the Best bets card show it as "Post on Kalshi at Xc"; a resting order may never
 fill. The boost calculator's Kalshi options apply the taker or the maker fee. `run_market.py status` says what is stored; `run_market.py alerts` measures the line
