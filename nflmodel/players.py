@@ -517,8 +517,9 @@ def status_label(roster_status, report, upcoming: bool = False) -> str | None:
 
 def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFrame | None = None) -> dict:
     """Projections for the board's upcoming games, with the inputs behind them. new
-    (optional): players_ml.py's projections, shown next to the current ones as proj_new
-    for the stats and positions where they tested better."""
+    (optional): players_ml.py's projections, which replace the current ones in proj for the
+    stats and positions where they tested better (players_ml.ADOPT). Since Oct 31, 2026 the
+    board shows one set of projections; there is no separate proj_new."""
     p = proj[proj["game_id"].isin(game_ids)].copy()
     newmap = {}
     if new is not None and len(new):
@@ -557,8 +558,8 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
         players.append({
             "id": r.player_id, "name": r.name, "pos": r.position, "team": r.team, "opp": r.opp, "game": r.game_id, "week": int(r.week),
             "status": status_label(r.status, r.report, upcoming=True),
-            "proj": {k: r1(getattr(r, k + "_proj")) for k in STATS},
-            **({"proj_new": newmap[(r.game_id, r.player_id)]} if (r.game_id, r.player_id) in newmap else {}),
+            "proj": {**{k: r1(getattr(r, k + "_proj")) for k in STATS},
+                     **{k: v for k, v in newmap.get((r.game_id, r.player_id), {}).items() if v is not None}},
             "td_any": r3(1 - np.exp(-max(td, 0))),
             "why": {"tgt_share": r3(r.tgt_share), "car_share": r3(r.car_share), "att_share": r3(r.att_share),
                     "tgt_share_hist": r3(r.tgt_share_raw), "car_share_hist": r3(r.car_share_raw),

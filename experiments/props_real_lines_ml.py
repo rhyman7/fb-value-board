@@ -1,6 +1,6 @@
-"""The boosted projections against real 2025 DraftKings and FanDuel lines.
+"""The boosted (New) projections against real DraftKings and FanDuel lines.
 
-    python experiments/props_real_lines_ml.py --season 2025
+    python experiments/props_real_lines_ml.py --season 2025      (2023, 2024: the yardage markets only)
 
 Same scoring as props_real_lines.py (Brier against the books' vig-free chance, at the
 pricing snapshot with pregame projections and at the close), for rushing and receiving
@@ -38,14 +38,15 @@ def main():
     rep = {}
     for name, table, kind in (("pricing", RL.load_pregame(), "flag"), ("close", load_proj(args.proj), "close")):
         table = ML.add_features(table, R)
-        boosted = ML.walk_forward(table)
+        boosted = ML.walk_forward(table, first=args.season)   # only the tested season is needed
         for label, t in (("current", table), ("boosted", boosted)):
             m = P.PropModel(FAMILY).fit(t[(t.season < args.season) & (t.season >= 2014)])
             m.iso = saved.iso
             x = RL.priced(t, m, B.load(args.season, kind), args.season)
-            for stat, groups in (("rush_yds", ("RB",)), ("rec_yds", ("WR", "RB"))):
+            for stat, groups in ML.ADOPT.items():                 # every stat and position the New projections cover
                 y = x[(x["stat"] == stat) & x["group"].isin(groups)]
-                rep.setdefault(name, {}).setdefault(stat, {})[label] = RL.compare(y)
+                if len(y):
+                    rep.setdefault(name, {}).setdefault(stat, {})[label] = RL.compare(y)
             b, s = RL.bets(x[x["stat"].isin(["rush_yds", "rec_yds"]) & x["group"].isin(["RB", "WR"])],
                            RL.priced(t, m, B.load(args.season, "close"), args.season))
             rep[name].setdefault("bets", {})[label] = {k: v for k, v in s.items() if k != "line_moves"}

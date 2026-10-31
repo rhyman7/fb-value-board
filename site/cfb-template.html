@@ -188,7 +188,6 @@ a.bug:hover { border-color: var(--ink); }
 .form-recs b { font: 800 32px/1 var(--display); }
 .form-recs span { font-size: 12.5px; color: var(--ink-3); }
 td.w { font-weight: 700; } td.dim { color: var(--ink-3); }
-td.newp, th.newp { color: var(--s1); } td.newp { font-weight: 700; }
 
 /* ---- charts ---- */
 svg { display: block; width: 100%; height: auto; overflow: visible; }
@@ -940,7 +939,12 @@ const dzEl = p => { const z = dzOf(p); return z ? H("sup", { class: "dz dz-" + z
 const dzHtml = p => { const e = dzEl(p); return e ? e.outerHTML : ""; };
 // a status chip is still shown when the superscript doesn't already say it
 const chipText = p => p.status && !dzFromStatus(p.status) ? p.status : null;
-const NEW_NOTE = " New: the new projections, built with playing time (snap share, its trend, share of carries and targets in close games), depth charts, background (age, draft pick, years in the league) and team pace, through a machine-learning last step. They are shown only where they tested better than the current ones on past seasons: running backs' carries and rushing yards, and wide receivers' and backs' catches and receiving yards; other players show a dash. Both are kept, so they can be compared week by week.";
+/* The New projections (nflmodel/players_ml.py: playing time, depth charts, background and team
+   pace through a machine-learning last step) replaced the old ones on Oct 31, 2026 wherever they
+   exist: a player's projection is the New number. Week files saved before then carry both
+   (proj and proj_new); adoptNew keeps only the New one, so the old number is never shown. */
+const adoptNew = p => { if (p && p.proj_new) { for (const [k, v] of Object.entries(p.proj_new)) if (v != null) p.proj[k] = v; delete p.proj_new; } return p; };
+if (DATA.players && Array.isArray(DATA.players.players)) DATA.players.players.forEach(adoptNew);
 const dzReady = Promise.race([
   fetch("designations.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => {
     if (!j || !Array.isArray(j.players) || !j.checked) return;
@@ -2074,15 +2078,8 @@ function diagChart(node, o) {
     WR: [["receptions", "Rec", f1], ["rec_yds", "Rec yds", f0], ["rec_td", "Rec TD", f1], ["td", "Anytime TD", null]],
   };
   COLS.TE = COLS.WR;
-  // New projections (role inputs and a machine-learning last step), next to the current ones,
-  // for the stats they cover; only when the data has them (the college board has none yet)
-  const HAS_NEW = P.some(p => p.proj_new);
-  if (HAS_NEW) Object.keys(COLS).forEach(k => {
-    COLS[k] = COLS[k].flatMap(c => ["carries", "rush_yds", "receptions", "rec_yds"].includes(c[0]) ? [c, ["new:" + c[0], "New", c[2]]] : [c]);
-  });
   const score = p => (p.proj.pass_yds || 0) / 2.5 + (p.proj.rush_yds || 0) + (p.proj.rec_yds || 0);
-  const newv = (p, k) => (p.proj_new || {})[k];
-  const val = (p, k) => k === "score" ? score(p) : k === "td" ? (p.pos === "QB" ? 1 - Math.exp(-(p.proj.rush_td || 0)) : p.td_any) : k === "name" ? p.name : k.startsWith("new:") ? newv(p, k.slice(4)) : p.proj[k];
+  const val = (p, k) => k === "score" ? score(p) : k === "td" ? (p.pos === "QB" ? 1 - Math.exp(-(p.proj.rush_td || 0)) : p.td_any) : k === "name" ? p.name : p.proj[k];
   const teams = [...new Set(P.map(p => p.team))].sort();
   $("#p-team").replaceChildren(H("option", { value: "", text: "All teams" }), ...teams.map(t => H("option", { value: t, text: t })));
   $("#p-team").addEventListener("change", e => {
@@ -2149,8 +2146,7 @@ function diagChart(node, o) {
       const chip = chipText(p);
       const name = H("span", {}, document.createTextNode(p.name), dzEl(p), H("span", { class: "rec", text: p.pos + " · " + p.team }), chip ? H("span", { class: "status", text: chip }) : null);
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp })];
-      cols.forEach(c => cells.push(H("td", c[0].startsWith("new:") ? { class: "newp", text: newv(p, c[0].slice(4)) == null ? "–" : c[2](newv(p, c[0].slice(4))) }
-        : { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
+      cols.forEach(c => cells.push(H("td", { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
       const open = ps.open === p.id + p.game;
       const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(open) }, ...cells);
       const toggle = () => { ps.open = open ? null : p.id + p.game; draw(); };
@@ -2160,7 +2156,7 @@ function diagChart(node, o) {
       if (open) tbody.append(H("tr", {}, H("td", { class: "why", colSpan: head.length }, why(p))));
     });
     t.replaceChildren(thead, tbody);
-    $("#players-foot").textContent = rows.length ? `${rows.length} players. College football has no official injury report: players listed Out or Doubtful on Covers.com are left out, everyone else who has played lately is projected, so check late news.` + (HAS_NEW ? NEW_NOTE : "") + dzFoot() : "No players match.";
+    $("#players-foot").textContent = rows.length ? `${rows.length} players. College football has no official injury report: players listed Out or Doubtful on Covers.com are left out, everyone else who has played lately is projected, so check late news.` + dzFoot() : "No players match.";
   }
   draw();
   DZ_REDRAW.push(draw);
@@ -2325,7 +2321,7 @@ const historyView = (function () {
     const d = cache[cur];
     if (!d) return;
     const all = [];
-    Object.entries(d.players).forEach(([gid, ps]) => ps.forEach(p => all.push({ ...p, act: (d.actuals[gid] || {})[p.id], graded: !!d.results[gid] })));
+    Object.entries(d.players).forEach(([gid, ps]) => ps.forEach(p => all.push(adoptNew({ ...p, proj: { ...p.proj }, act: (d.actuals[gid] || {})[p.id], graded: !!d.results[gid] }))));
     const teams = [...new Set(all.map(p => p.team))].sort();
     if (hs.team && !teams.includes(hs.team)) hs.team = "";
     $("#hp-team").replaceChildren(H("option", { value: "", text: "All teams" }), ...teams.map(t => H("option", { value: t, text: t, ...(t === hs.team ? { selected: "" } : {}) })));
@@ -2338,31 +2334,20 @@ const historyView = (function () {
       const xs = all.filter(p => p.act && (p.proj[k] || 0) >= (k === "pass_yds" ? 100 : 10)).map(p => Math.abs(p.proj[k] - p.act[k]));
       return xs.length ? `${({ pass_yds: "passing", rush_yds: "rushing", rec_yds: "receiving" })[k]} yards ${(xs.reduce((a, b) => a + b, 0) / xs.length).toFixed(1)} (${xs.length} players)` : null;
     }).filter(Boolean);
-    // the new projections against the current ones, on the same players
-    const vs = ["rush_yds", "rec_yds"].map(k => {
-      const xs = all.filter(p => p.act && p.proj_new && p.proj_new[k] != null && (p.proj[k] || 0) >= 10);
-      if (!xs.length) return null;
-      const m = f => xs.reduce((a, p) => a + Math.abs(f(p) - p.act[k]), 0) / xs.length;
-      return `${({ rush_yds: "rushing", rec_yds: "receiving" })[k]} yards, current ${m(p => p.proj[k]).toFixed(1)} against new ${m(p => p.proj_new[k]).toFixed(1)} (${xs.length} players)`;
-    }).filter(Boolean);
-    $("#hp-note").textContent = "Each player's projection as frozen at kickoff, with what he actually did. " + (miss.length ? "Average miss this week: " + miss.join(", ") + "." : "Results appear once the games are played.")
-      + (vs.length ? " Current against new projections, average miss: " + vs.join("; ") + "." : "");
+    $("#hp-note").textContent = "Each player's projection as frozen at kickoff, with what he actually did. " + (miss.length ? "Average miss this week: " + miss.join(", ") + "." : "Results appear once the games are played.");
     const cols = COLS[hs.pos];
     let rows = all.filter(p => (hs.pos === "All" || p.pos === hs.pos || (hs.pos === "RB" && p.pos === "FB")) && (!hs.team || p.team === hs.team) && (!hs.q || p.name.toLowerCase().includes(hs.q)));
     // Each stat has a Proj and an Actual column; any of them sorts (first click high to low,
     // A to Z for names; again to flip). Players without that number sort last.
     const tdsOf = p => p.act ? (p.act.rec_td || 0) + (p.act.rush_td || 0) : null;
     const score = src => (src.pass_yds || 0) / 2.5 + (src.rush_yds || 0) + (src.rec_yds || 0);
-    const weekNew = all.some(p => p.proj_new);
-    const NEWK = ["carries", "rush_yds", "receptions", "rec_yds"];
-    const stats = [...cols.map(c => ({ k: c[0], t: c[1], nw: weekNew && NEWK.includes(c[0]) })), { k: "td", t: "Touchdown", pt: "Chance", at: "Scored" }];
+    const stats = [...cols.map(c => ({ k: c[0], t: c[1] })), { k: "td", t: "Touchdown", pt: "Chance", at: "Scored" }];
     const val = (p, key) => {
       if (key === "name") return p.name;
       if (key === "opp") return p.opp;
       if (key === "score") return score(p.proj);
       const [k, side] = key.split("|");
       if (k === "td") return side === "p" ? (p.pos === "QB" ? null : p.td_any) : tdsOf(p);
-      if (side === "n") return p.proj_new && p.proj_new[k] != null ? p.proj_new[k] : null;
       return side === "p" ? p.proj[k] || 0 : p.act ? p.act[k] || 0 : null;
     };
     if (!["name", "opp", "score"].includes(hs.key) && !stats.some(c => hs.key.startsWith(c.k + "|"))) { hs.key = "score"; hs.dir = -1; }
@@ -2380,10 +2365,9 @@ const historyView = (function () {
     const top = H("tr", {},
       H("th", { class: "l stick", scope: "col", rowspan: 2 }, sortBtn("name", "Player", true)),
       H("th", { class: "l", scope: "col", rowspan: 2 }, sortBtn("opp", "Opp", true)),
-      ...stats.map(c => H("th", { class: "grp pair", scope: "colgroup", colspan: c.nw ? 3 : 2, text: c.t })));
+      ...stats.map(c => H("th", { class: "grp pair", scope: "colgroup", colspan: 2, text: c.t })));
     const sub2 = H("tr", {}, ...stats.flatMap(c => [
       H("th", { class: "pair", scope: "col" }, sortBtn(c.k + "|p", c.pt || "Proj")),
-      ...(c.nw ? [H("th", { class: "newp", scope: "col" }, sortBtn(c.k + "|n", "New"))] : []),
       H("th", { scope: "col" }, sortBtn(c.k + "|a", c.at || "Actual"))]));
     const tbody = H("tbody");
     rows.slice(0, 400).forEach(p => {
@@ -2393,15 +2377,14 @@ const historyView = (function () {
       const actual = text => !p.graded ? H("td", { class: "actual", text: "" }) : !p.act ? H("td", { class: "dnp", text: "DNP" }) : H("td", { class: "actual", text });
       cols.forEach(c => {
         const fmt = /yds/.test(c[0]) ? f0 : f1;
-        const nv = weekNew && NEWK.includes(c[0]) ? [H("td", { class: "newp", text: p.proj_new && p.proj_new[c[0]] != null ? fmt(p.proj_new[c[0]]) : "–" })] : [];
-        tds.push(H("td", { class: "pair", text: fmt(p.proj[c[0]]) }), ...nv, actual(p.act ? fmt(p.act[c[0]]) : ""));
+        tds.push(H("td", { class: "pair", text: fmt(p.proj[c[0]]) }), actual(p.act ? fmt(p.act[c[0]]) : ""));
       });
       const n = tdsOf(p);
       tds.push(H("td", { class: "pair", text: p.pos === "QB" ? "–" : Math.round(p.td_any * 100) + "%" }), actual(n == null ? "" : n > 0 ? "Yes" + (n > 1 ? " (" + n + ")" : "") : "No"));
       tbody.append(H("tr", {}, ...tds));
     });
     $("#hist-players").replaceChildren(H("thead", {}, top, sub2), tbody);
-    $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. Touchdown: the projected anytime-TD chance and whether he scored a rushing or receiving touchdown. DNP: no box score (did not play).` + (weekNew ? NEW_NOTE : "");
+    $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. Touchdown: the projected anytime-TD chance and whether he scored a rushing or receiving touchdown. DNP: no box score (did not play).`;
   }
   return { open };
 })();
@@ -2421,14 +2404,13 @@ const matchups = (() => {
   const LIVE = { tok: null, week: WEEK, games: ALL.filter(g => g.week === WEEK), players: (DATA.players && DATA.players.players) || [],
     teams: {}, actuals: {}, results: {}, when: "updated " + M.generated };
   ((DATA.players && DATA.players.teams) || []).forEach(t => { LIVE.teams[t.game + "|" + t.team] = t; });
-  LIVE.hasNew = LIVE.players.some(p => p.proj_new);     // the new projections, shown next to the current ones
   let C = LIVE;
   const PAST = {};
   function ctxFrom(tok, d) {
-    const players = Object.values(d.players || {}).flat(), teams = {};
+    const players = Object.values(d.players || {}).flat().map(p => adoptNew({ ...p, proj: { ...p.proj } })), teams = {};
     Object.values(d.teams || {}).flat().forEach(t => { teams[t.game + "|" + t.team] = t; });
     const fz = [...new Set(Object.values(d.games).map(g => g.frozen_at))].filter(Boolean).sort();
-    return { tok, week: d.week, games: Object.values(d.games), players, teams, actuals: d.actuals || {}, results: d.results || {}, hasNew: players.some(p => p.proj_new),
+    return { tok, week: d.week, games: Object.values(d.games), players, teams, actuals: d.actuals || {}, results: d.results || {},
       when: "frozen " + (fz.length > 1 ? "between " + fz[0] + " and " + fz[fz.length - 1] : "at " + (fz[0] || "kickoff")) };
   }
   const load = tok => PAST[tok] ? Promise.resolve(PAST[tok]) : archive.get(tok + ".json").then(d => (PAST[tok] = ctxFrom(tok, d)));
@@ -2547,7 +2529,7 @@ const matchups = (() => {
     games().forEach(g => ["away", "home"].forEach(s => {
       const ps = playersOf(g, g[s]), r = result(g), t = C.teams[g.id + "|" + g[s]] || {};
       rows.push({ key: g.id + "|" + g[s], pass: sum(ps, "pass_yds"), rush: sum(ps, "rush_yds"),
-        rush_new: ps.reduce((a, p) => a + (p.proj_new && p.proj_new.rush_yds != null ? p.proj_new.rush_yds : p.proj.rush_yds || 0), 0), pts: ptsFor(g.proj, s),
+        pts: ptsFor(g.proj, s),
         att: t.pass_att, car: t.carries,
         a_pass: sumAct(g, g[s], "pass_yds"), a_rush: sumAct(g, g[s], "rush_yds"), a_att: sumAct(g, g[s], "pass_att"), a_car: sumAct(g, g[s], "carries"),
         a_pts: r ? r[s + "_score"] : null });
@@ -2764,9 +2746,9 @@ const matchups = (() => {
     const tables = [
       table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds), a: a => n0(a.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td), a: a => n0(a.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints), a: a => n0(a.ints) },
         { t: "Cmp", n: 1, f: p => n1(p.proj.completions), a: a => n0(a.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att), a: a => n0(a.pass_att) }], "pass", played),
-      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds), a: a => n0(a.rush_yds) }, ...(C.hasNew ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rush_yds != null ? n0(p.proj_new.rush_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rush_td), a: a => n0(a.rush_td) },
+      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds), a: a => n0(a.rush_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rush_td), a: a => n0(a.rush_td) },
         { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–", a: a => a.carries ? n1(a.rush_yds / a.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries), a: a => n0(a.carries) }], "rush", played),
-      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds), a: a => n0(a.rec_yds) }, ...(C.hasNew ? [{ t: "New", n: 1, f: p => p.proj_new && p.proj_new.rec_yds != null ? n0(p.proj_new.rec_yds) : "–" }] : []), { t: "TD", n: 1, f: p => n1(p.proj.rec_td), a: a => n0(a.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions), a: a => n0(a.receptions) },
+      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds), a: a => n0(a.rec_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rec_td), a: a => n0(a.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions), a: a => n0(a.receptions) },
         LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets), a: a => n0(a.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–", a: a => a.receptions ? n1(a.rec_yds / a.receptions) : "–" }], "rec", played),
     ].join("");
     const d = [];
@@ -2802,7 +2784,7 @@ const matchups = (() => {
       </div>
       <div class="stat-columns">
         <div class="stat-col offense"><h3>Offense, projected${played ? " and actual" : ""}</h3>
-          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n, null, me.a_pass)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n, C.hasNew ? me.rush_new : null, me.a_rush)}</div>
+          <div class="gauges">${gauge("Pass Yds", me.pass, W.max.pass, W.most.pass(me.pass), W.n, null, me.a_pass)}${gauge("Rush Yds", me.rush, W.max.rush, W.most.rush(me.rush), W.n, null, me.a_rush)}</div>
           <div class="mini-stats">${mini("Points", n1(me.pts), "avg " + n1(W.avg.pts), played ? n0(my) : null)}${mini("Pass att", n1(me.att), "avg " + n1(W.avg.att), played ? n0(me.a_att) : null)}${mini("Carries", n1(me.car), "avg " + n1(W.avg.car), played ? n0(me.a_car) : null)}</div>
         </div>
         <div class="center-col">
@@ -2814,7 +2796,7 @@ const matchups = (() => {
           <div class="rank-line"><div class="lbl">Projected against the final, from ${esc(abbr)}'s side</div></div>` : ""}
         </div>
         <div class="stat-col defense"><h3>Defense, projected${played ? " and actual," : ""} to allow</h3>
-          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n, null, them.a_pass)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n, C.hasNew ? them.rush_new : null, them.a_rush)}</div>
+          <div class="gauges">${gauge("Pass Yds", them.pass, W.max.pass, W.fewest.pass(them.pass), W.n, null, them.a_pass)}${gauge("Rush Yds", them.rush, W.max.rush, W.fewest.rush(them.rush), W.n, null, them.a_rush)}</div>
           <div class="mini-stats">${mini("Points", n1(them.pts), "avg " + n1(W.avg.pts), played ? n0(their) : null)}${mini("Pass att", n1(them.att), "avg " + n1(W.avg.att), played ? n0(them.a_att) : null)}${mini("Carries", n1(them.car), "avg " + n1(W.avg.car), played ? n0(them.a_car) : null)}</div>
         </div>
       </div>
@@ -2831,7 +2813,7 @@ const matchups = (() => {
     const fin = r ? ` Final ${esc(g.away)} ${n0(r.away_score)}, ${esc(g.home)} ${n0(r.home_score)}.` : "";
     return `<div class="mx-game"><div class="mx-print-head"><b>Week ${C.week}: ${esc(nameOf(g, "away"))} ${g.neutral ? "vs" : "at"} ${esc(nameOf(g, "home"))}</b><span>${esc(where)}</span><span>Spread ${esc(spreadText(g))}, total ${g.market.total != null ? g.market.total : "—"}. Projections from the value model, ${esc(C.when)}.${fin}</span></div>
       <div class="cards">${card(g, "away")}${card(g, "home")}</div>
-      <p class="mx-foot">Every number is this game's projection from the value model, not a season average.${r ? " The blue number under each is what happened: the final score and the box score. A player who was not projected before the game is listed with a dash for his projection." : ""} Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing ${past() ? "that" : "this"} week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}${C.hasNew ? " New: the new projections (playing time, depth charts, background and team pace, through a machine-learning last step), shown next to the current ones for running backs' rushing and running backs' and wide receivers' receiving; a dash where there is none. Under the rushing dials, New is the team's rushing yards with the new numbers where there are any." : ""}</p>
+      <p class="mx-foot">Every number is this game's projection from the value model, not a season average.${r ? " The blue number under each is what happened: the final score and the box score. A player who was not projected before the game is listed with a dash for his projection." : ""} Team volume comes from each side's pace, the projected score and the opponent; player lines are the team's volume times the player's share and efficiency, adjusted for this defense. Dial ranks are out of the ${weekTable().n} teams playing ${past() ? "that" : "this"} week. Quarterback lines assume he starts.${LEAGUE === "nfl" ? " Injury tags are from the official report." : " College football has no official injury report: Out and Doubtful come from Covers.com and get no projection, and their usage goes to the teammates who play. Injured linemen and defenders are listed but don't change the numbers."}</p>
       <p class="mx-print-disc">For research and entertainment. Past results do not predict future results, and nothing here is betting advice.</p></div>`;
   }
   // tok: null for this week (g is the game), or an archive week token (g is the game id)
