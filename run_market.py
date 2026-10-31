@@ -5,7 +5,9 @@
     python run_market.py derivatives --league nfl   # team totals and first-half lines, one event at a time
                                                     # (market.DERIV_BUDGET credits at most; nfl 70, cfb 160)
     python run_market.py status              # what is stored: games, books, latest snapshot
-    python run_market.py alerts              # opener alerts: model vs Pinnacle, from the published boards
+    python run_market.py alerts --out a.md --push p.txt
+                                             # line movement vs the model at Pinnacle's newest line: docs/moves.json,
+                                             # docs/cfb/moves.json, and alerts for new or changed sides
     python run_market.py backfill --league nfl --season 2024 --plan
                                              # past lines (marketbackfill.py): what a run would fetch and cost, free
     python run_market.py backfill --league nfl --season 2024 --max-credits 4500
@@ -95,56 +97,114 @@ def cmd_status(args) -> int:
     return 0
 
 
+GAPS_STATE = C.DATA / "market" / "gaps_state.json"     # last status of every side alerted (league|game|market|side)
+GAPS_LOG = C.DATA / "market" / "gaps.csv"              # every alert sent, append-only
+GAPS_COLS = ["at", "league", "game", "pick", "market", "event", "status", "model", "opener", "now", "gap_open", "left", "closed", "tease"]
+
+
+def _fresh_lines(lg: str, games: list[dict]) -> tuple[dict, str | None]:
+    """Pinnacle's newest stored line per board game, {id: {"spread", "total"}} home-positive,
+    and the newest snapshot time among them."""
+    df = pd.DataFrame([{"game_id": g["id"], "home_team": g["home"], "away_team": g["away"], "kickoff": g.get("kickoff")} for g in games])
+    names = None if lg == "nfl" else {**{g.get("home_name"): g["home"] for g in games}, **{g.get("away_name"): g["away"] for g in games}}
+    q = M.quotes_for(df, lg, {k: v for k, v in (names or {}).items() if k}) if len(df) else {"latest": {}}
+    out = {}
+    for gid, books in (q.get("latest") or {}).items():
+        sh = books.get(M.SHARP) or {}
+        if sh.get("spread_line") is not None or sh.get("total_line") is not None:
+            out[gid] = {"spread": sh.get("spread_line"), "total": sh.get("total_line")}
+    return out, M.as_of({k: {M.SHARP: v[M.SHARP]} for k, v in (q.get("latest") or {}).items() if M.SHARP in v})
+
+
+def _sv(e: dict, x: float) -> str:
+    """A line from the side's own view: totals as they are, spreads as the side's handicap."""
+    if e["market"] == "Total":
+        return f"{x:g}"
+    v = -x if e["side"] == "home" else x
+    return "PK" if v == 0 else f"{v:+g}"
+
+
+def _tease_txt(t: dict | None, e: dict | None = None) -> str:
+    if not t:
+        return ""
+    to = f"{'Over' if e['side'] == 'over' else 'Under'} {t['line']:g}" if e and e["market"] == "Total" else f"{t['line']:+g}"
+    return f"6-pt tease to {to} ({t['prob']:.0%}{', Wong' if t['wong'] else ''}{', clears -120' if t['clears'] else ''})"
+
+
 def cmd_alerts(args) -> int:
-    """Games where the published board's raw model is well off Pinnacle's current line: the
-    model's value is early in the week (README "Against opening lines"). New alerts (a side
-    not alerted before) are appended to data/market/alerts.csv and written as a Markdown
-    table to --out for the Action to post."""
-    thr = {"nfl": (2.0, 3.0), "cfb": (3.0, 3.0)}      # spread, total
-    out = []
+    """Line movement against the model, after each snapshot (README "Line movement"). For
+    both boards: every side the model is MOVE_GAP or more off the opener, measured at
+    Pinnacle's newest line (sheet.line_moves), written to docs/moves.json and
+    docs/cfb/moves.json so the boards' Line movement section is as fresh as the snapshot.
+    A side with a backtested edge (sheet.bucket_record) that is new, or whose status has
+    changed (Live -> Partly gone -> Missed), is an alert: logged to data/market/gaps.csv,
+    written as Markdown to --out (the issue comment) and as a phone push to --push (first
+    line the title)."""
+    from nflmodel import sheet as SH
+    now = dt.datetime.now(dt.timezone.utc)
+    stamp = now.strftime("%Y-%m-%d %H:%M")
+    state = json.loads(GAPS_STATE.read_text()) if GAPS_STATE.exists() else {}
+    events, live = [], {}
     for lg, path in (("nfl", C.DOCS / "data.json"), ("cfb", C.DOCS / "cfb" / "data.json")):
         if not path.exists():
             continue
         d = json.loads(path.read_text())
-        for g in (d.get("slate") or {}).get("games") or []:
-            q = (g.get("books") or {}).get(M.SHARP) or {}
-            raw = g.get("model") or {}
-            if not q or not raw:
+        games = [g for g in (d.get("slate") or {}).get("games") or []
+                 if g.get("kickoff") and pd.Timestamp(g["kickoff"]) > pd.Timestamp(now)]
+        fresh, as_of = _fresh_lines(lg, games)
+        rows = SH.line_moves(games, lg, d.get("openers"), fresh)
+        (path.parent / "moves.json").write_text(json.dumps({"at": stamp, "lines_as_of": as_of, "board": (d.get("meta") or {}).get("generated"),
+                                                            "rows": rows}, separators=(",", ":")))
+        live[lg] = [r for r in rows if r["bucket"] and r["status"] != "Missed"]
+        for r in rows:
+            if not r["bucket"]:
                 continue
-            label = f"{g['away']} @ {g['home']} ({g['date']})"
-            if "spread_line" in q and raw.get("margin") is not None and abs(raw["margin"] - q["spread_line"]) >= thr[lg][0]:
-                home = raw["margin"] > q["spread_line"]
-                out.append({"league": lg, "game": g["id"], "label": label, "market": "spread",
-                            "side": f"{g['home']} {-q['spread_line']:+g}" if home else f"{g['away']} {q['spread_line']:+g}",
-                            "model": round(raw["margin"], 1), "pinnacle": q["spread_line"], "gap": round(abs(raw["margin"] - q["spread_line"]), 1)})
-            if "total_line" in q and raw.get("total") is not None and abs(raw["total"] - q["total_line"]) >= thr[lg][1]:
-                over = raw["total"] > q["total_line"]
-                out.append({"league": lg, "game": g["id"], "label": label, "market": "total",
-                            "side": f"{'Over' if over else 'Under'} {q['total_line']:g}",
-                            "model": round(raw["total"], 1), "pinnacle": q["total_line"], "gap": round(abs(raw["total"] - q["total_line"]), 1)})
-    if not out:
-        print("no alerts")
-        return 0
-    df = pd.DataFrame(out).sort_values(["league", "gap"], ascending=[True, False])
-    path = C.DATA / "market" / "alerts.csv"
-    seen = set()
-    if path.exists():
-        old = pd.read_csv(path, dtype=str)
-        seen = set(zip(old["league"], old["game"].astype(str), old["market"], old["side"]))
-    new = df[[(r.league, str(r.game), r.market, r.side) not in seen for r in df.itertuples()]]
-    print(df.to_string(index=False))
-    if new.empty:
+            key = f"{lg}|{r['game']}|{r['market']}|{r['side']}"
+            was = state.get(key)
+            if was == r["status"] or (was is None and r["status"] == "Missed"):
+                continue
+            events.append({"league": lg, "event": "new" if was is None else f"{was} -> {r['status']}", **r})
+            state[key] = r["status"]
+        print(f"{lg}: {len(rows)} sides off the opener, {len(live[lg])} live with a backtested edge; lines as of {as_of}")
+    GAPS_STATE.parent.mkdir(parents=True, exist_ok=True)
+    GAPS_STATE.write_text(json.dumps(state, indent=0, sort_keys=True))
+    if not events:
         print("no new alerts")
         return 0
-    path.parent.mkdir(parents=True, exist_ok=True)
-    new.assign(at=dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d %H:%M")).to_csv(path, mode="a", header=not path.exists(), index=False)
+    pd.DataFrame([{"at": stamp, "league": e["league"], "game": e["game"], "pick": e["pick"], "market": e["market"], "event": e["event"],
+                   "status": e["status"], "model": e["model"], "opener": e["opener"], "now": e["now"], "gap_open": e["gap_open"],
+                   "left": e["left"], "closed": e["closed"], "tease": _tease_txt(e["tease"], e)} for e in events],
+                 columns=GAPS_COLS).to_csv(GAPS_LOG, mode="a", header=not GAPS_LOG.exists(), index=False)
+    by = {lg: [e for e in events if e["league"] == lg] for lg in ("nfl", "cfb")}
+
+    def line(e):
+        mv = "unmoved" if not e["move"] else f"moved {abs(e['move']):g} {'toward' if e['move'] > 0 else 'against'}"
+        return (f"{e['pick']} ({e['away']} @ {e['home']}): model {_sv(e, e['model'])}, opened {_sv(e, e['opener'])}, now {_sv(e, e['now'])} ({mv}); "
+                f"{e['left']:g} left. {e['status']}" + (f" (was {e['event'].split(' -> ')[0]})" if e["event"] != "new" else "")
+                + (f". {_tease_txt(e['tease'], e)}" if e["tease"] else ""))
+    if args.push:
+        head = ", ".join(f"{lg.upper()} {len(xs)}" for lg, xs in by.items() if xs)
+        body = []
+        for lg, xs in by.items():
+            for e in xs[:12]:
+                body.append(f"{lg.upper()} {line(e)}")
+            if len(xs) > 12:
+                body.append(f"{lg.upper()}: {len(xs) - 12} more on the board")
+        Path(args.push).write_text(f"Line movement: {head}\n" + "\n".join(body) + "\n")
     if args.out:
-        lines = ["| League | Game | Side | Raw model | Pinnacle | Gap |", "|---|---|---|---|---|---|"]
-        for r in new.itertuples():
-            lines.append(f"| {r.league.upper()} | {r.label} | **{r.side}** | {r.model} | {r.pinnacle} | {r.gap} |")
-        Path(args.out).write_text("\n".join(lines) + "\n\nRaw model vs Pinnacle's current line, 2+ points on NFL spreads, 3+ on college spreads and all totals. "
-                                  "The model's record against openers is in the README; this is a lead to check, not a bet to take blind.\n")
-    print(f"{len(new)} new alerts")
+        md = []
+        for lg, xs in by.items():
+            if not xs:
+                continue
+            md += [f"**{'NFL' if lg == 'nfl' else 'College'}** ({len(live[lg])} live with a backtested edge)", "",
+                   "| Side | Game | Model | Opened | Now | Left | Status | Teaser leg |", "|---|---|---|---|---|---|---|---|"]
+            md += [f"| **{e['pick']}** | {e['away']} @ {e['home']} | {_sv(e, e['model'])} | {_sv(e, e['opener'])} | {_sv(e, e['now'])} | {e['left']:g} | "
+                   f"{e['status']}{'' if e['event'] == 'new' else ' (was ' + e['event'].split(' -> ')[0] + ')'} | {_tease_txt(e['tease'], e)} |" for e in xs]
+            md.append("")
+        Path(args.out).write_text("\n".join(md) + "\nThe model off the opener by the backtested threshold, at Pinnacle's newest line (spreads home-positive). "
+                                  "Live: the gap at the current line still clears it; Partly gone: the line has come part of the way; Missed: it has reached the model. "
+                                  "The edge is the line moving to the model, so bet a Live side early; once it has moved, the teaser leg is the way in. cc @rhyman7\n")
+    print(f"{len(events)} alerts")
     return 0
 
 
@@ -179,6 +239,7 @@ def main(argv=None) -> int:
     p.add_argument("--fixture")
     p.add_argument("--budget", type=int, help="derivatives: credits this run may spend")
     p.add_argument("--out", help="alerts: write new alerts as a Markdown table here")
+    p.add_argument("--push", help="alerts: write the phone push here (first line the title)")
     p.add_argument("--season", type=int, help="backfill: season")
     p.add_argument("--max-credits", type=int, help="backfill: most credits this run may spend")
     p.add_argument("--markets", help="backfill: comma separated (default spreads,totals,h2h)")

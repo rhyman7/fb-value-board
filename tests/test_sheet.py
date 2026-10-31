@@ -40,9 +40,9 @@ def test_sheet_tiers_and_opener_source():
     g = _game()
     SH.annotate(g, "nfl")
     by = {b["pick"]: b for b in g["bets"]}
-    # the sharp log only caught the game on Oct 30, after the board first saw it: the board's first line is the opener
-    assert by["BUF -3.5"]["opener_src"] == "board" and by["BUF -3.5"]["opener_gap"] == pytest.approx(7.1)
-    assert by["BUF -3.5"]["gap"] == pytest.approx(6.1) and by["BUF -3.5"]["move"] == pytest.approx(1.0)
+    # the data's opener (nfelo) is the one the bucket was backtested on, so it comes first
+    assert by["BUF -3.5"]["opener_src"] == "data" and by["BUF -3.5"]["opener_gap"] == pytest.approx(6.1)
+    assert by["BUF -3.5"]["gap"] == pytest.approx(6.1) and by["BUF -3.5"]["move"] == pytest.approx(0.0)
     assert by["BUF -3.5"]["tier"] == "opener" and by["BAL +3.5"]["tier"] is None
     assert by["BUF ML"]["tier"] is None                       # a +EV moneyline is not a bet unless the price beats the sharp line
     assert by["BAL ML"]["tier"] == "price"
@@ -51,15 +51,35 @@ def test_sheet_tiers_and_opener_source():
     assert by["Under 54"]["tier"] == "wind" and by["Over 54"]["tier"] is None
     assert [w["label"] for w in by["BUF -3.5"]["why"][:2]] == ["Team ratings", "BAL quarterback"] and by["BUF -3.5"]["why"][1]["news"]
     assert all(w["label"] != "League baseline" for w in by["Under 54"]["why"])
-    # college: no wind bucket; a 3-point threshold
+    # college: no wind bucket, and spreads are never the opener bucket (they lost on the holdout seasons)
     g2 = _game(); SH.annotate(g2, "cfb")
     by2 = {b["pick"]: b for b in g2["bets"]}
-    assert by2["Under 54"]["tier"] is None and by2["BUF -3.5"]["tier"] == "opener"
-    g3 = _game(model={"margin": 5.0, "total": 49.1}); SH.annotate(g3, "cfb")
-    assert {b["pick"]: b for b in g3["bets"]}["BUF -3.5"]["tier"] == "model"    # 2.5 off the opener: not the opener bucket in college
-    # the sharp opener counts when the log caught the open
-    g4 = _game(sharp_open={"seen": "2026-10-19 23:00", "spread": 2.0, "total": 53.0}); SH.annotate(g4, "nfl")
+    assert by2["Under 54"]["tier"] is None and by2["BUF -3.5"]["tier"] == "model"
+    # without the data's opener: the sharp opener when the log caught the open, else the board's first line
+    g4 = _game(opening_spread=None, sharp_open={"seen": "2026-10-19 23:00", "spread": 2.0, "total": 53.0}); SH.annotate(g4, "nfl")
     assert {b["pick"]: b for b in g4["bets"]}["BUF -3.5"]["opener_src"] == "sharp"
+    g6 = _game(opening_spread=None); SH.annotate(g6, "nfl")
+    assert {b["pick"]: b for b in g6["bets"]}["BUF -3.5"]["opener_src"] == "board"
+
+
+def test_opener_tier_judged_at_the_current_line():
+    # opened 3.5, model 6.0: 2.5 off. At 4.5 (a point toward, 1.5 left) the market has taken it: model tier, missed
+    g = _game(model={"margin": 6.0, "total": 49.1}, market={"spread": 4.5, "total": 54.0}); SH.annotate(g, "nfl")
+    b = {x["pick"]: x for x in g["bets"]}["BUF -3.5"]
+    assert b["move"] == pytest.approx(1.0) and b["tier"] == "model" and b["missed"]
+    # half a point toward still counts as the opener
+    g = _game(model={"margin": 6.0, "total": 49.1}, market={"spread": 4.0, "total": 54.0}); SH.annotate(g, "nfl")
+    b = {x["pick"]: x for x in g["bets"]}["BUF -3.5"]
+    assert b["tier"] == "opener" and not b["missed"]
+    # a big gap that is still 2+ at the current line stays in the bucket after a move
+    g = _game(model={"margin": 9.0, "total": 49.1}, market={"spread": 5.0, "total": 54.0}); SH.annotate(g, "nfl")
+    assert {x["pick"]: x for x in g["bets"]}["BUF -3.5"]["tier"] == "opener"
+
+
+def test_wind_under_drops_once_the_total_has_moved():
+    g = _game(market={"spread": 3.5, "total": 52.0}, sharp_open={"seen": "2026-10-19 23:00", "spread": 3.5, "total": 54.0}); SH.annotate(g, "nfl")
+    b = {x["pick"]: x for x in g["bets"]}["Under 54"]
+    assert b["move"] == pytest.approx(2.0) and b["tier"] != "wind" and b["missed"]
 
 
 def test_bucket_stakes_size_opener_and_wind_only():
@@ -68,6 +88,7 @@ def test_bucket_stakes_size_opener_and_wind_only():
     wind = {"eras": [{"label": "2014-2018", "win_pct": 0.571}, {"label": "2019-", "win_pct": 0.592}]}
     n = SH.bucket_stakes([g], openers, wind, 0.25, 0.03)
     by = {b["pick"]: b for b in g["bets"]}
+    assert by["BUF -3.5"]["bucket_book"] == "fanduel"
     assert n == 2 and by["BUF -3.5"]["bucket_stake"] > 0 and by["Under 54"]["bucket_stake"] > 0
     assert by["BUF ML"]["bucket_stake"] == 0 and by["BAL ML"]["bucket_stake"] == 0
     assert by["Under 54"]["bucket_stake"] > by["BUF -3.5"]["bucket_stake"]      # the stronger bucket, similar prices
@@ -185,3 +206,38 @@ def test_best_bets_card_is_wired():
     assert '"nfl"' in src and '"cfb"' in src and "best-bets.pdf" in src
     landing = (ROOT / "index.html").read_text()
     assert 'href="docs/best-bets.pdf"' in landing and 'href="docs/cfb/best-bets.pdf"' in landing
+
+
+def test_bucket_stake_picks_the_book_on_price_and_uses_the_close_rate_after_a_move():
+    openers = {"rows": [{"threshold": 2, "win_pct": 0.545, "roi": 0.04, "holdout": {"n": 615, "win_pct": 0.546, "roi": 0.041, "close_win_pct": 0.518}}]}
+    g = _game(); SH.annotate(g, "nfl")
+    b = g["bets"][0]
+    # Kalshi at plus money on a worse number (2.7% under Pinnacle) vs FanDuel at -112 (2% under): FanDuel, on price
+    b["books"] = [{"book": "kalshi", "line": -3.5, "odds": 113, "odds_net": 105.4, "ev": 0.02, "ev_line": -0.027, "stake": 0.0},
+                  {"book": "fanduel", "line": -3.0, "odds": -112, "odds_net": -112, "ev": 0.08, "ev_line": -0.02, "stake": 0.0}]
+    SH.bucket_stakes([g], openers, None, 0.25, 0.03)
+    assert b["bucket_book"] == "fanduel" and 0 < b["bucket_stake"] < 0.02
+    # once the line has moved toward the side (within the half point that keeps it in the bucket), the close rate sizes nothing
+    g = _game(market={"spread": 4.0, "total": 54.0}); SH.annotate(g, "nfl")
+    SH.bucket_stakes([g], openers, None, 0.25, 0.03)
+    assert g["bets"][0]["tier"] == "opener" and g["bets"][0]["bucket_stake"] == 0
+
+
+def test_line_moves_status_teaser_and_bucket():
+    openers = {"rows": [{"threshold": 2, "win_pct": 0.545, "roi": 0.04, "holdout": {"n": 615, "win_pct": 0.546, "roi": 0.041}}]}
+    alts = {"spread": [{"line": float(x) / 2, "home": 0.5 + x / 100, "away": 0.5 - x / 100} for x in range(-30, 31)], "total": []}
+    g = _game(alts=alts)
+    rows = SH.line_moves([g], "nfl", openers)
+    r = next(x for x in rows if x["market"] == "Spread")
+    assert r["side"] == "home" and r["pick"] == "BUF -3.5" and r["status"] == "Live" and r["bucket"]["threshold"] == 2
+    assert r["tease"]["line"] == pytest.approx(2.5) and not r["tease"]["wong"]
+    # a fresher sharp line overrides the board's: BUF -9 has reached the model (9.6 vs 9.0 leaves 0.6, a 5.5 move)
+    r = next(x for x in SH.line_moves([g], "nfl", openers, {g["id"]: {"spread": 9.0}}) if x["market"] == "Spread")
+    assert r["fresh"] and r["status"] == "Partly gone" and r["closed"] == pytest.approx(0.9, abs=0.01)
+    r = next(x for x in SH.line_moves([g], "nfl", openers, {g["id"]: {"spread": 10.0}}) if x["market"] == "Spread")
+    assert r["status"] == "Missed"
+    assert SH.move_status(3.0, 1.0, 2.0) == "Live" and SH.move_status(1.5, 0.5, 2.0) == "Live" and SH.move_status(1.5, 1.0, 2.0) == "Partly gone"
+    # college spreads under 5 off the opener have no backtested edge
+    cfb_op = {"rows": [{"threshold": 3, "win_pct": 0.519, "roi": -0.009, "holdout": {"n": 1639, "win_pct": 0.519, "roi": -0.009}},
+                       {"threshold": 5, "win_pct": 0.543, "roi": 0.036, "holdout": {"n": 735, "win_pct": 0.543, "roi": 0.036}}]}
+    assert SH.bucket_record(cfb_op, "Spread", 4.0) is None and SH.bucket_record(cfb_op, "Spread", 6.1)["threshold"] == 5

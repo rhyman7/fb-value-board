@@ -155,6 +155,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         pass
     out["meta"]["inputs"] = sheet.inputs_stamp(out["meta"]["generated"], market=slate.get("market_as_of"), designations=des_checked)
     sheet.bucket_stakes(slate["games"], opening, None, C.KELLY_FRACTION, C.MAX_STAKE)
+    slate["moves"] = sheet.line_moves(slate["games"], "cfb", opening)   # the Line movement section at build time
     try:                                          # the ledger (nflmodel/ledger.py): flagged bets at their first price, graded
         cur = games[games.season == season]
         kick = {str(int(g.game_id)): pd.Timestamp(g.kickoff) for g in cur.itertuples()}

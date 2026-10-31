@@ -6,6 +6,13 @@ name: Market lines
 # (US time), when the week's lines open and the model's edge is largest. About 6 credits a
 # snapshot, about 1,400 a month. The board builds read these files; this workflow never builds a board.
 #
+# After each snapshot, `run_market.py alerts` measures every side the model is off the opener
+# at Pinnacle's newest line (nflmodel/sheet.line_moves): it writes docs/moves.json and
+# docs/cfb/moves.json (the boards' Line movement section reads them, so it is as fresh as the
+# snapshot without a rebuild), and for sides with a backtested edge that are new or whose
+# status changed (Live, Partly gone, Missed) it pushes to the phone through ntfy (secret
+# NTFY_TOPIC) and comments on the week's opener-alerts issue.
+#
 # Derivatives (team totals, first-half lines; nflmodel/derivs.py) ride the 14:05 UTC run:
 # the API serves them one event at a time, so `run_market.py derivatives` spends at most
 # market.DERIV_BUDGET credits a run (NFL 70, about 16 games x 4 markets; college 160, about
@@ -59,17 +66,31 @@ jobs:
             esac
           fi
           python run_market.py status
-          python run_market.py alerts --out /tmp/alerts.md
-      - name: Post opener alerts
-        if: hashFiles('/tmp/alerts.md') != ''
+          python run_market.py alerts --out /tmp/alerts.md --push /tmp/push.txt
+      - name: Push line-movement alerts to the phone
+        # ntfy (https://ntfy.sh): install the ntfy app, subscribe to the topic named in the
+        # NTFY_TOPIC repository secret, and every new or changed gap arrives as a push. Skipped
+        # when the secret is not set; the issue comment below (which mentions the owner) still goes.
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          [ -s /tmp/push.txt ] || { echo "no alerts"; exit 0; }
+          if [ -z "$NTFY_TOPIC" ]; then echo "NTFY_TOPIC not set: no push"; exit 0; fi
+          title=$(head -n 1 /tmp/push.txt)
+          tail -n +2 /tmp/push.txt | head -c 3800 > /tmp/push_body.txt
+          curl -sS --fail -H "Title: $title" -H "Tags: football" -H "Click: https://rhyman7.github.io/fb-value-board/docs/#moves-sec" \
+            --data-binary @/tmp/push_body.txt "https://ntfy.sh/$NTFY_TOPIC" > /dev/null || echo "push failed"
+      - name: Post line-movement alerts
+        # (hashFiles() only sees the workspace, so the old `if: hashFiles('/tmp/alerts.md')` never ran)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          [ -s /tmp/alerts.md ] || { echo "no alerts"; exit 0; }
           # one open issue carries the week's alerts; a new one is opened when none is open
           n=$(gh issue list --label opener-alerts --state open --json number --jq '.[0].number')
           if [ -z "$n" ]; then
-            gh label create opener-alerts --color FBCA04 --description "Raw model vs Pinnacle, early in the week" 2>/dev/null || true
-            gh issue create --title "Opener alerts, week of $(date -u +%Y-%m-%d)" --label opener-alerts --body-file /tmp/alerts.md
+            gh label create opener-alerts --color FBCA04 --description "Line movement against the model's opener gaps" 2>/dev/null || true
+            gh issue create --title "Line movement alerts, week of $(date -u +%Y-%m-%d)" --label opener-alerts --body-file /tmp/alerts.md
           else
             gh issue comment "$n" --body-file /tmp/alerts.md
           fi
@@ -77,7 +98,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/market data/props/api_usage.csv
+          git add data/market data/props/api_usage.csv $(ls docs/moves.json docs/cfb/moves.json 2>/dev/null)
           git diff --cached --quiet || git commit -m "Market lines snapshot"
           git pull --rebase origin main
           git push
