@@ -41,3 +41,9 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_13_ILL_NU|Spread|home,2026-10-30 09:32,2026,13,2026_13_ILL_NU,401858537,2026-11-28T05:00Z,Spread,home,NU +3.5,opener,consensus,3.5,-110.0,-110.0,0.0876,0.0065,consensus,-3.5,52.5,12.81,52.86
 2026_13_USC_UCLA|Spread|home,2026-10-30 09:32,2026,13,2026_13_USC_UCLA,401858543,2026-11-28T05:00Z,Spread,home,UCLA +10.5,opener,consensus,10.5,-110.0,-110.0,0.0167,0.0,consensus,-10.5,55.5,-3.3,55.22
 2026_15_NAVY_ARMY|Spread|home,2026-10-30 09:32,2026,15,2026_15_NAVY_ARMY,401862844,2026-12-12T20:00Z,Spread,home,ARMY +2.5,opener,consensus,2.5,-110.0,-110.0,0.0031,0.0,consensus,-2.5,37.5,3.43,54.9
+2026_09_CONN_AFA|Spread|home,2026-10-31 00:07,2026,9,2026_09_CONN_AFA,401861966,2026-10-31T19:00Z,Spread,home,AFA -1,model,fanduel,1.5,-114.0,-114.0,0.0482,0.0051,pinnacle,1.0,52.5,5.6,58.29
+2026_09_KU_TCU|Spread|away,2026-10-31 00:07,2026,9,2026_09_KU_TCU,401856845,2026-10-31T19:30Z,Spread,away,KU +6.5,model,betmgm,6.5,-108.0,-108.0,0.0368,0.0032,pinnacle,6.5,45.0,2.85,48.26
+2026_09_USM_ULM|Total|over,2026-10-31 00:07,2026,9,2026_09_USM_ULM,401871095,2026-10-31T19:30Z,Total,over,Over 55.5,opener,fanduel,54.5,-114.0,-114.0,0.01,0.0022,pinnacle,-3.5,55.5,-2.77,57.54
+2026_09_PUR_PSU|Moneyline|away,2026-10-31 00:07,2026,9,2026_09_PUR_PSU,401858506,2026-10-31T20:15Z,Moneyline,away,PUR ML,price,fanduel,,350.0,350.0,-0.025,0.0006,pinnacle,10.0,54.0,12.63,56.64
+2026_10_VT_SMU|Moneyline|home,2026-10-31 00:07,2026,10,2026_10_VT_SMU,401858288,2026-11-07T00:00Z,Moneyline,home,SMU ML,price,kalshi,,-223.0,-239.4,0.0232,0.0126,consensus,7.5,57.5,8.33,56.63
+2026_10_UK_TENN|Moneyline|away,2026-10-31 00:07,2026,10,2026_10_UK_TENN,401856745,2026-11-07T23:15Z,Moneyline,away,UK ML,price,fanduel,,190.0,190.0,-0.0205,0.0003,consensus,5.5,50.5,9.43,54.52
