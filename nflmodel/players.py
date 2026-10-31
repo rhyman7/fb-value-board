@@ -552,8 +552,18 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
         })
 
     a = p[(p["active"] == 1) & ((p["targets_proj"] >= 1.5) | (p["carries_proj"] >= 2) | ((p["group"] == "QB") & (p["att_share"] >= 0.5)))]
+    # the last step, shown on the player card ("From chain to projection", as on the college
+    # board): the volume x share x efficiency x defense chain and his recent average, which the
+    # calibration regression (or, for players_ml.ADOPT stats, the boosted step) turns into the projection
+    SHOWN = ("pass_yds", "rush_yds", "rec_yds")
+    cal_in = {}
+    for st in SHOWN:
+        try:
+            cal_in[st] = calib_X(a, st)[:, :2]
+        except Exception:                  # a frame without the chain columns: nothing to show, never a failed board
+            cal_in[st] = np.full((len(a), 2), np.nan)
     players = []
-    for r in a.itertuples():
+    for i, r in enumerate(a.itertuples()):
         td = (r.rec_td_proj or 0) + (r.rush_td_proj or 0)
         players.append({
             "id": r.player_id, "name": r.name, "pos": r.position, "team": r.team, "opp": r.opp, "game": r.game_id, "week": int(r.week),
@@ -565,7 +575,10 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
                     "tgt_share_hist": r3(r.tgt_share_raw), "car_share_hist": r3(r.car_share_raw),
                     "ypt": r2(r.ypt), "catch": r3(r.catch), "ypc": r2(r.ypc), "ypa": r2(r.ypa), "comp": r3(r.comp),
                     "def_ypt": r3(r.def_ypt), "def_ypc": r3(r.def_ypc), "def_ypa": r3(r.def_ypa),
-                    "games": r1(r.one_sum)},
+                    "games": r1(r.one_sum),
+                    "chain": {k: r1(cal_in[k][i, 0]) for k in SHOWN},
+                    "recent": {k: r1(cal_in[k][i, 1]) for k in SHOWN},
+                    "ml": sorted(k for k, v in newmap.get((r.game_id, r.player_id), {}).items() if v is not None)},
         })
     players.sort(key=lambda x: -(x["proj"]["rec_yds"] or 0) - (x["proj"]["rush_yds"] or 0) - (x["proj"]["pass_yds"] or 0) / 2.5)
     return {"players": players, "teams": teams}

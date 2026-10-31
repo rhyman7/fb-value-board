@@ -339,6 +339,7 @@ boards in detail; this file is the rules.
   the same `#bb-page` / `bb-print` rules. Not a nav section.
 - **Stale prices.** A price-tier row is greyed, and its verdict reads "Check the price",
   when the board's book prices (`meta.inputs.market`) are more than 3 hours old (`STALE_H`).
+- **Same page pieces on both boards** (Oct 31, 2026): the Model record's "By part of the season" table (`backtest.by_week`, holdout seasons; NFL weeks 1-4, 5-9, 10-14, 15-18 and playoffs, measured on full-backtest runs) and the player card's "From chain to projection" box (`why.chain`, `why.recent`, and on the NFL `why.ml` for the stats the boosted step replaced) are in `site/template.html` for both boards, no longer college-only substitutions.
 - **The Games view's order** (Oct 31, 2026): filters, **Bet sheet**, **Line movement**
   (`sheet.line_moves`: the opener-gap sides with opener, now, the share of the gap closed,
   status and the side's 6-point teaser leg; sides with no backtested edge folded under a

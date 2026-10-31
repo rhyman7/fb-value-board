@@ -106,6 +106,12 @@ def summarize(frame: pd.DataFrame, graded: pd.DataFrame) -> dict:
                        "w_margin": round(float(x.w_margin.iloc[0]), 3), "w_total": round(float(x.w_total.iloc[0]), 3)}
                       for s, x in f.groupby("season")],
     }
+    # the holdout seasons by part of the season (as on the college board): where the model is
+    # weaker or stronger than the line through a season; weeks 19 on are the playoffs
+    h = f[f.season >= C.HOLDOUT_FROM]
+    out["by_week"] = [{"weeks": lab, **accuracy(h[m])} for lab, m in (
+        ("1-4", h.week <= 4), ("5-9", (h.week >= 5) & (h.week <= 9)), ("10-14", (h.week >= 10) & (h.week <= 14)),
+        ("15-18", (h.week >= 15) & (h.week <= 18)), ("Playoffs", h.week >= 19)) if m.any()]
 
     # ---- betting records ---------------------------------------------------
     records = {}
