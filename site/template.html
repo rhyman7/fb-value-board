@@ -340,6 +340,18 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 #props-table .tag { display: inline-block; font-size: 11px; font-weight: 700; color: var(--turf); background: var(--raised); border-radius: 3px; padding: 0 5px; margin-left: 6px; white-space: nowrap; }
 .props-calls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 18px 32px; }
 .props-calls h3 { margin-bottom: 6px; }
+/* player outlook: the model's whole range for one player and stat (nflmodel/propoutlook.py) */
+.outlook { margin: 0 12px 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px;
+  position: sticky; left: 12px; box-sizing: border-box; width: min(calc(100% - 24px), calc(100vw - 56px), 880px); }   /* stays in view while the wide ladder table scrolls sideways */
+.outlook h4 { margin: 0 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
+.outlook p { margin: 0 0 8px; font-size: 14px; line-height: 1.5; color: var(--ink-2); max-width: 82ch; } .outlook p b { color: var(--ink); }
+.outlook .marks { display: flex; flex-wrap: wrap; gap: 6px 8px; margin: 0 0 8px; padding: 0; list-style: none; }
+.outlook .marks li { display: grid; gap: 0; min-width: 76px; padding: 4px 8px; border: 1px solid var(--axis); border-radius: 4px; font-variant-numeric: tabular-nums; }
+.outlook .marks b { font-size: 15px; color: var(--ink); } .outlook .marks span { font-size: 12px; color: var(--ink-3); }
+.outlook .ask { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 14px; color: var(--ink-2); margin: 0 0 6px; }
+.outlook .ask input { width: 6em; } .outlook .ask output { font-weight: 700; color: var(--ink); }
+.outlook .fine { font-size: 12.5px; color: var(--ink-3); margin: 0; }
+#props-table td.rng { white-space: nowrap; color: var(--ink-2); }
 /*/NFL-ONLY*/
 .hist-rec div { display: grid; gap: 0; } .hist-rec b { font: 700 26px/1.1 var(--display); font-variant-numeric: tabular-nums; } .hist-rec span { font-size: 12.5px; color: var(--ink-3); }
 td .act { font-weight: 700; }
@@ -2445,6 +2457,48 @@ const propsView = (function () {
   const opp = p => { const [, , a, h] = p.g.split("_"); return p.t === h ? "vs " + a : "at " + h; };
   const bookTxt = (p, b) => { const x = (p.bk || {})[b]; if (!x) return "–"; return (x[0] != null ? odds(x[0]) : "–") + " / " + (x[1] != null ? odds(x[1]) : "–"); };
   const pts = g => (Math.abs(g) * 100).toFixed(0) + " pts";
+  /* player outlook (props/outlook.json): P(at least k x step) for this week's board players */
+  let OUTLOOK = null;
+  const look = p => OUTLOOK && OUTLOOK.players && OUTLOOK.players[p.g + "|" + p.id + "|" + p.s] || null;
+  const atLeast = (o, stat, n) => {                     // the chance of at least n, between grid points by straight line
+    const step = (OUTLOOK.stats[stat] || {}).step || 1, S = i => i <= 0 ? 1 : (o.s[i - 1] ?? 0);
+    if (!(n > 0)) return 1;
+    const x = n / step, i = Math.floor(x), f = x - i;
+    return S(i) + f * (S(i + 1) - S(i));
+  };
+  const fair = q => q == null || q <= 0.005 || q >= 0.995 ? null : q >= 0.5 ? -Math.round(100 * q / (1 - q)) : Math.round(100 * (1 - q) / q);
+  const rangeTxt = p => { const o = look(p); return o && p.s !== "anytime_td" ? o.lo + "–" + o.hi : "–"; };
+  function outlook(p) {
+    const o = look(p);
+    if (!o) return null;
+    const unit = (STAT[p.s] || p.s).toLowerCase();
+    if (p.s === "anytime_td") {
+      const q = o.s[0] ?? 0;
+      return H("div", { class: "outlook" }, H("h4", { text: "Outlook" }),
+        H("p", {}, document.createTextNode("The model gives him a "), H("b", { text: pct(q, 0) }), document.createTextNode(" chance to score" + (fair(q) != null ? " (a fair price is " + odds(fair(q)) + ")." : "."))));
+    }
+    const step = (OUTLOOK.stats[p.s] || {}).step || 1;
+    // round milestones across the likely range, in steps a book would post
+    const span = Math.max(o.hi - o.lo, step), nice = [1, 2, 5, 10, 15, 20, 25, 50, 100].find(v => v >= step && span / v <= 7) || 100;
+    const marks = [];
+    for (let v = Math.max(nice, Math.ceil(Math.max(o.lo, 1) / nice) * nice); v <= o.hi && marks.length < 8; v += nice) marks.push(v);
+    if (!marks.length) marks.push(Math.max(step, o.mid));
+    const out = H("output", { text: "" });
+    const inp = H("input", { class: "money", type: "number", min: "0", step: String(step), inputmode: "numeric", "aria-label": "At least how many " + unit });
+    const say = () => { const n = parseFloat(inp.value); if (!(n >= 0)) { out.textContent = ""; return; }
+      const q = atLeast(o, p.s, Math.ceil(n)); out.textContent = pct(q, 0) + (fair(q) != null ? " · fair price " + odds(fair(q)) : ""); };
+    inp.addEventListener("input", say);
+    inp.value = String(Math.ceil(p.L || o.mid)); say();
+    return H("div", { class: "outlook" }, H("h4", { text: "Outlook: " + (STAT[p.s] || p.s) }),
+      H("p", {}, document.createTextNode("Current projection "), H("b", { text: String(o.mu) }), document.createTextNode(" (from the latest board update). "),
+        ...(o.mid > 0 ? [document.createTextNode("Half the time he gets "), H("b", { text: o.mid + " or more" })]
+          : [document.createTextNode("More often than not he gets "), H("b", { text: "fewer than " + step })]),
+        document.createTextNode("; about 80% of the time he lands between "), H("b", { text: o.lo + " and " + o.hi }), document.createTextNode(".")),
+      H("ul", { class: "marks", "aria-label": "Chance of at least" }, ...marks.map(v => { const q = atLeast(o, p.s, v);
+        return H("li", {}, H("b", { text: v + "+ · " + pct(q, 0) }), H("span", { text: fair(q) != null ? "fair " + odds(fair(q)) : "" })); })),
+      H("label", { class: "ask" }, document.createTextNode("Chance of at least"), inp, out),
+      H("p", { class: "fine", text: "The model's chances from his projection and the range around it, not bets. A high chance only pays at a price better than the fair one: at 85%, anything shorter than −567 loses money over time. The ladder below has the books' prices and the EV at each rung. Against DraftKings and FanDuel the books have been the better forecast so far, so treat these as a guide, not picks." }));
+  }
   // The two books often post a player's main line a half point apart: one row per player and
   // stat, at the line more books share (DraftKings's if they differ), each book's own line in its column.
   const key = p => p.g + "|" + p.id + "|" + p.s;
@@ -2471,6 +2525,7 @@ const propsView = (function () {
   function open() {
     if (loaded) return;
     loaded = true;
+    get("outlook.json").then(o => { OUTLOOK = o; if (cache[cur]) draw(); }).catch(() => {});
     get("index.json").then(ix => {
       index = ix;
       const banner = $("#props-banner");
@@ -2478,7 +2533,7 @@ const propsView = (function () {
         banner.hidden = false;
         banner.replaceChildren(H("strong", { text: "No bets are flagged. " }), document.createTextNode("Against real 2025 DraftKings and FanDuel lines the books' prices were the better forecast, and the props the model would have picked broke even. Every prop is still priced and tracked here, so the record below shows whether that changes. Nothing here is a recommendation."));
       }
-      $("#props-note").textContent = "Every passing, rushing and receiving prop DraftKings and FanDuel post, main lines and alternate ladders, priced by the model about three days before kickoff. Our chance comes from the player's projection and the range around it; the books' chance is their price with the vig taken out. Select a player to see his whole ladder.";
+      $("#props-note").textContent = "Every passing, rushing and receiving prop DraftKings and FanDuel post, main lines and alternate ladders, priced by the model about three days before kickoff. Our chance comes from the player's projection and the range around it; the books' chance is their price with the vig taken out. Select a player for his outlook (how likely every number is, not just the book's line) and his whole ladder.";
       const weeks = (ix.weeks || []).slice().sort((a, b) => a.season - b.season || a.week - b.week);
       if (!weeks.length) {
         $("#props-foot").textContent = "No prices yet. The first ones arrive with the next daily props run (8:47 am Eastern), and each week fills in through the closing prices and the results.";
@@ -2533,7 +2588,7 @@ const propsView = (function () {
         r.vo == null ? "–" : spct(r.vo), r.y == null ? (r.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(r.y)),
           r.res === "push" ? H("span", { class: "res", text: "Push" }) : H("span", { class: "res" + (r.res === "win" ? " w" : ""), text: r.res === "win" ? "Hit" : "Missed" }))]));
     const one = rungs.some(r => r.alt);
-    return H("div", {}, t, H("p", { class: "note", style: "margin: 6px 12px 0", text: (one ? "Rungs posted over-only have no under to take the vig out; their no-vig chance assumes a 10% margin. " : "") + "EV is per $1 at the better of the two books' prices for the over, at our chance. Result: whether the over hit." }));
+    return H("div", {}, outlook(p), t, H("p", { class: "note", style: "margin: 6px 12px 0", text: (one ? "Rungs posted over-only have no under to take the vig out; their no-vig chance assumes a 10% margin. " : "") + "EV is per $1 at the better of the two books' prices for the over, at our chance. Result: whether the over hit." }));
   }
 
   function draw() {
@@ -2547,7 +2602,7 @@ const propsView = (function () {
     rows = rows.filter(p => !dead(p));
     const val = (p, k) => k === "gap" ? Math.abs(gap(p) || 0) : k === "name" ? p.n : k === "ours" ? dec(p) || 0 : k === "new" ? ndec(p) || 0 : k === "books" ? p.fo || 0 : k === "proj" ? p.mu || 0 : k === "line" ? p.L : 0;
     rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); return (typeof A === "string" ? A.localeCompare(B) : A - B) * ps.dir; });
-    const head = [{ k: "name", t: "Player", l: 1 }, { t: "Game", l: 1 }, { t: "Stat", l: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" },
+    const head = [{ k: "name", t: "Player", l: 1 }, { t: "Game", l: 1 }, { t: "Stat", l: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" }, { t: "Range" },
       { k: "ours", t: "Ours, over" }, ...(HASN ? [{ k: "new", t: "New, over", cls: "newp" }] : []), { k: "books", t: "Books'" }, { k: "gap", t: "Lean" }, { t: "DK O / U" }, { t: "FD O / U" }, { t: "Close" }, { t: "Result", l: 1 }];
     const thead = H("thead", {}, H("tr", {}, head.map(c => {
       if (!c.k) return H("th", { class: c.l ? "l" : "", scope: "col", text: c.t });
@@ -2565,7 +2620,9 @@ const propsView = (function () {
         p.lgap ? H("span", { class: "tag", text: "ladder gap", title: p.lgap + " rung" + (p.lgap > 1 ? "s" : "") + " priced more than 5 points off what the same book's main line implies; open the ladder." }) : null);
       const close = p.cL == null || p.alt ? "–" : (p.cL === p.L ? "No move" : String(p.cL) + " (" + (p.cL > p.L ? "+" : "−") + Math.abs(p.cL - p.L).toFixed(1).replace(/\.0$/, "") + ")");
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: STAT[p.s] || p.s }),
-        H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) + (p.mun != null ? " / " + p.mun : "") }), H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
+        H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) + (p.mun != null ? " / " + p.mun : "") }),
+        H("td", { class: "rng", text: rangeTxt(p), title: "About 80% of his outcomes land in this range (the model's); open the row for the whole outlook" }),
+        H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
         ...(HASN ? [H("td", { class: "newp", text: ndec(p) == null ? "–" : pct(ndec(p), 0) })] : []),
         H("td", { text: p.fo == null ? "–" : pct(p.fo, 0) }), H("td", {}, lean), H("td", { class: "px", text: p.dk }), H("td", { class: "px", text: p.fd }),
         H("td", { text: close }), H("td", { class: "l" }, p.y == null ? document.createTextNode(p.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(p.y)), resBadge(p)))];
@@ -2579,7 +2636,7 @@ const propsView = (function () {
     });
     $("#props-table").replaceChildren(thead, tbody);
     $("#props-foot").textContent = rows.length
-      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${deadN ? " " + deadN + " line" + (deadN === 1 ? "" : "s") + " on players ruled out (or passing lines with no starter) hidden." : ""}${HASN ? " New, over: our chance from the new projections (Proj shows current / new where there is one); the lean uses the current ones." : ""} Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
+      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${deadN ? " " + deadN + " line" + (deadN === 1 ? "" : "s") + " on players ruled out (or passing lines with no starter) hidden." : ""}${HASN ? " New, over: our chance from the new projections (Proj shows current / new where there is one); the lean uses the current ones." : ""} Range: where about 80% of his outcomes land, from the model; open a row for his whole outlook (the chance of reaching any number) and the ladder. Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
       : "No props match.";
   }
 

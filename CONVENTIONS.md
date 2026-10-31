@@ -280,6 +280,12 @@ boards in detail; this file is the rules.
   with **Live record** (the ledger), then the backtest with the holdout columns first. The
   Props view hides lines on players the board has ruled out and passing lines with no
   projection, and says how many.
+- **Player outlook (Props section): `docs/props/outlook.json`** (`nflmodel/propoutlook.py`),
+  written by **Update board** (from the data.json it just wrote) and by every props run, never
+  by hand: each board player's median, 80% range and chance of reaching at least every number.
+  The page's Range column and the outlook panel at the top of an open row read it; the panel
+  says these are the model's chances, not bets, and gives the fair price. Keep that wording if
+  the panel changes: the books have been the better forecast on props (PROPS.md).
 - **Props `#props` is NFL only** (Ryan's call, Oct 2026), between Players and Past weeks. Its
   markup, styles and script in `site/template.html` sit between `<!--NFL-ONLY-->` and
   `<!--/NFL-ONLY-->` (HTML) or `/*NFL-ONLY*/` and `/*/NFL-ONLY*/` (CSS and script), which

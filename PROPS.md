@@ -337,6 +337,19 @@ the books' by band, and a week-by-week table. Past weeks stay selectable. The fi
 `docs/props/`, rebuilt by `nflmodel/propboard.py` on every props run, and fetched when the
 section opens (so it works on the published site, not from a copy opened from disk).
 
+**Player outlook (Oct 30, 2026).** A line asks one question; the model holds the whole
+distribution behind the projection. `nflmodel/propoutlook.py` writes
+`docs/props/outlook.json`: for every player and stat on the board, the median, the range
+that holds about 80% of outcomes, and the chance of reaching at least every number (in steps
+of 5 yards, 10 passing yards, or 1). The table's **Range** column shows the 80% range, and an
+open row starts with the outlook: the projection in words ("half the time he gets 90 or
+more; 80% of the time between 40 and 160"), the chance and fair price at round milestones,
+and a box for any number. It uses the board's latest projections and the same distributions
+and correction as the prices, so the outlook and the ladder agree at every rung. It is a
+projection, not a bet: it is written by the props run and by **Update board**, needs no API
+calls, and the page says so. Whether the ladder rungs can be bet on is what
+`experiments/props_ladders.py` tests.
+
 ## The log
 
 `data/props/`, committed by the **Player props** Action (`.github/workflows/props.yml`):
