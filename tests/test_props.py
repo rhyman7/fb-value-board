@@ -541,3 +541,41 @@ def test_close_run_survives_an_api_outage(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(PM, "fit_one_sided_margin", lambda log: 0.05)
     R.cmd_close(Down(), log_it=False)
     assert "not answering" in capsys.readouterr().out
+
+
+def test_backfill_skips_a_snapshot_the_api_does_not_have(tmp_path, monkeypatch):
+    """A 404 (an event the API has no snapshot of at that minute) is saved as an empty file and
+    never asked for again; any other API error skips the snapshot and the run goes on."""
+    from nflmodel import oddsapi, propbackfill as B
+    kick = pd.Timestamp("2024-01-15T01:00:00Z")
+    sched = pd.DataFrame({"game_id": ["2023_19_LA_DET", "2023_19_GB_DAL"], "season": 2023, "week": 19,
+                          "home_team": ["DET", "DAL"], "away_team": ["LA", "GB"], "kickoff": [kick, kick - pd.Timedelta(hours=4)]})
+    monkeypatch.setattr(B, "schedule", lambda s: sched)
+    monkeypatch.setattr(B, "HIST", tmp_path)
+
+    class Fake:
+        remaining, last_cost, used_this_run = 10000, 0, 0
+        calls = []
+
+        def historical_events(self, date, a, b):
+            return [{"id": "e1", "home_team": "Detroit Lions", "away_team": "Los Angeles Rams", "commence_time": "2024-01-15T01:00:00Z"},
+                    {"id": "e2", "home_team": "Dallas Cowboys", "away_team": "Green Bay Packers", "commence_time": "2024-01-14T21:00:00Z"}]
+
+        def historical_event_odds(self, eid, markets, date):
+            self.calls.append((eid, date))
+            self.last_cost = 30
+            if eid == "e1" and date.endswith("00:50:00Z"):
+                raise oddsapi.ApiError("historical odds e1: HTTP 404 Not Found")
+            if eid == "e2" and date.endswith("12:47:00Z"):
+                raise oddsapi.ApiError("historical odds e2: HTTP 422 Unprocessable")
+            return {"id": eid, "_snapshot": date, "bookmakers": [{"key": "draftkings", "markets": [{"key": "player_pass_yds",
+                    "outcomes": [{"name": "Over", "description": "X", "price": -110, "point": 230.5}]}]}]}
+
+    f = Fake()
+    r = B.run(f, 2023, B.YARDAGE, max_credits=1000, verbose=False)
+    assert r["complete"] and r["snapshots"] == 2 and r["skipped"] == 2
+    assert (tmp_path / "2023" / "2023_19_LA_DET_close.csv").exists()            # the 404: an empty file, so it's never retried
+    assert not (tmp_path / "2023" / "2023_19_GB_DAL_flag.csv").exists()         # the other error: retried next run
+    n = len(f.calls)
+    r = B.run(f, 2023, B.YARDAGE, max_credits=1000, verbose=False)
+    assert len(f.calls) == n + 1 and r["snapshots"] == 0 and r["skipped"] == 1   # only the 422 one is asked for again
