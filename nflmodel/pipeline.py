@@ -190,6 +190,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)
     (C.DOCS / "data.json").write_text(json.dumps(out, separators=(",", ":")))
+    try:                                          # the Props section's player outlook, from these projections
+        from . import propoutlook
+        say(f"  props outlook: {propoutlook.write(out)} player-stats")
+    except Exception as exc:
+        print(f"  props outlook skipped ({exc})")
     try:                                          # keep each week's predictions, frozen at kickoff
         done = games[games.played & (games.season == season)]
         close = market.closing_quotes(done, "nfl", {g.game_id: archive.kickoff(g.gameday, g.gametime) for g in done.itertuples()})

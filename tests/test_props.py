@@ -613,3 +613,42 @@ def test_backfill_adds_markets_to_a_saved_season(tmp_path, monkeypatch):
     assert set(x["market"]) == set(B.YARDAGE) | {"player_receptions"} and len(x) == 4
     assert B.run(f, 2025, B.YARDAGE + more, max_credits=1000, verbose=False)["snapshots"] == 0   # TD remembered as fetched
     assert "player_anytime_td" in set(pd.read_csv(tmp_path / "2025" / "fetched.csv")["market"])
+
+
+def test_backfill_looks_again_for_a_game_the_weekly_list_missed(tmp_path, monkeypatch):
+    """Seven 2025 games never got an event id: the week's list (four days before the first
+    kickoff) did not carry them. A game left without an id is looked up again around its own
+    kickoff, and a list with home and away swapped still matches."""
+    from nflmodel import propbackfill as B
+    kick = pd.Timestamp("2025-12-28T18:00:00Z")
+    sched = pd.DataFrame({"game_id": ["2025_17_TB_MIA", "2025_17_NE_NYJ"], "season": 2025, "week": 17,
+                          "home_team": ["MIA", "NYJ"], "away_team": ["TB", "NE"], "kickoff": [kick, kick]})
+    monkeypatch.setattr(B, "schedule", lambda s: sched)
+    monkeypatch.setattr(B, "HIST", tmp_path)
+
+    class Fake:
+        remaining, last_cost, used_this_run = 10000, 0, 0
+        calls = []
+
+        def historical_events(self, date, a, b):
+            self.calls.append(("events", date, a, b))
+            jets = {"id": "e1", "home_team": "New York Jets", "away_team": "New England Patriots", "commence_time": "2025-12-28T18:00:00Z"}
+            if len([c for c in self.calls if c[0] == "events"]) == 1:
+                return [jets]                                              # the week's list: no Miami game
+            return [jets, {"id": "e9", "home_team": "Tampa Bay Buccaneers", "away_team": "Miami Dolphins",
+                           "commence_time": "2025-12-28T18:00:00Z"}]      # listed the other way round
+
+        def historical_event_odds(self, eid, markets, date):
+            self.calls.append((eid, date))
+            self.last_cost = 30
+            return {"id": eid, "_snapshot": date, "bookmakers": [{"key": "draftkings", "markets": [{"key": "player_pass_yds",
+                    "outcomes": [{"name": "Over", "description": "X", "price": -110, "point": 230.5}]}]}]}
+
+    f = Fake()
+    r = B.run(f, 2025, B.YARDAGE, max_credits=1000, verbose=False)
+    ev = [c for c in f.calls if c[0] == "events"]
+    assert len(ev) == 2 and ev[1][1] == B._iso(B.flag_time(kick))                # second look at the pricing-snapshot time
+    assert r["complete"] and r["snapshots"] == 4 and r["spent"] == 2 + 4 * 30
+    assert ("e9", B._iso(kick - B.CLOSE_BEFORE)) in f.calls
+    n = len(f.calls)
+    assert B.run(f, 2025, B.YARDAGE, max_credits=1000, verbose=False)["spent"] == 0 and len(f.calls) == n

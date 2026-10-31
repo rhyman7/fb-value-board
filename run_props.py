@@ -231,6 +231,12 @@ def main():
     if log_it:
         ix = propboard.build()          # the board's Props section (docs/props/)
         print(f"  board props: {len(ix['weeks'])} weeks on file")
+    if args.cmd != "backfill" and (log_it or not args.fixture):
+        try:                            # each player's whole range (docs/props/outlook.json), no API
+            from nflmodel import propoutlook
+            print(f"  outlook: {propoutlook.write()} player-stats")
+        except Exception as exc:
+            print(f"  outlook skipped ({exc})")
     return 0
 
 
