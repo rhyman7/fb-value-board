@@ -14,7 +14,8 @@ methods, the calibration report, the fitted parameters in `data/prop_params.json
 **Status (Oct 27, 2026):** calibrated against outcomes (below), but **against real 2025
 DraftKings and FanDuel lines the model is worse than the books**, and the sides it would
 have flagged broke even. Flags are paused (`propmarket.FLAGS_ON = False`); every side is
-still priced and logged. The board shows nothing new.
+still priced and logged. The board shows nothing new. A market-anchored blend, fitted on
+2023-24 and tested on 2025 (Oct 30, 2026), did not earn them back (below).
 
 **Market-only tags (Oct 29, 2026):** with the flags off, the Props section shows two chips
 that need no model opinion (`propmarket.market_tags`): a **book gap** when DraftKings and
@@ -199,17 +200,59 @@ but no opening totals).
 **A market-anchored blend** (book's chance + w x (ours - book's)) did a little better than
 the books alone at w = 0.2-0.3 (Brier 0.2492 against 0.2500 at the pricing snapshot), but
 that weight was picked on the same season it is scored on, at the snapshot with the
-look-ahead, so it proves nothing yet.
+look-ahead, so it proves nothing yet. Tested out of sample below: it does not earn the
+flags back.
 
 **What this means.** The model knows far more than a player's averages (the calibration
 above), but not more than DraftKings and FanDuel. Flags are paused. To earn them back:
 
 1. Projections as of the pricing snapshot: done (pregame projections, above). Still to
    take out: the closing spread and total in the game model.
-2. Fit the blend weight on one season of real lines and test it on another: backfill
-   2024 (about 16,000 credits, next month), fit on 2024, test on 2025.
+2. Fit the blend weight on one season of real lines and test it on another: done (Oct 30,
+   2026, below), fitted on 2023 and 2024, tested on 2025.
 3. Turn flags back on only if the blend beats the books' prices out of sample, with the
-   closing line value to match.
+   closing line value to match: **not met.** Flags stay off.
+
+## The blend, out of sample (Oct 30, 2026)
+
+`experiments/props_blend.py` (results in `experiments/out/props_blend.json`), on the
+backfilled DraftKings and FanDuel prices for 2023, 2024 and 2025, priced as above (pregame
+projections at the pricing snapshot, widths fitted on earlier seasons). The weight w is the
+least-squares (minimum Brier) one on the training seasons, per market and pooled over the
+yardage markets. The pass rule was written into the script before it ran: on 2025, the blend
+beats the books' Brier score by more than two standard errors **and** the sides it flags show
+closing line value above zero by more than two standard errors.
+
+| Fold | Weights fitted (pass / rush / rec yds) | Props | Brier, books | Brier, blend | Blend minus books |
+|---|---|---|---|---|---|
+| 2023 → 2024 (yardage) | 0.44 / 0.15 / 0.11 | 5,769 | 0.24991 | 0.24940 | −0.00051 ± 0.00034 |
+| 2023-24 → 2025 (yardage, receptions, carries) | 0.53 / 0.22 / 0.08; pooled 0.18 | 10,770 | 0.24862 | 0.24797 | −0.00065 ± 0.00032 |
+
+By market on 2025: carries −0.0033 ± 0.0010 and rushing yards −0.0018 ± 0.0007 gain;
+receiving yards −0.0002 ± 0.0002 and receptions 0.0000 ± 0.0004 are the books; passing yards
++0.0009 ± 0.0018 is worse (its weight, 0.53, was fitted on 1,700 props and did not hold).
+Receptions and carries were backfilled for 2025 only, so they used the pooled yardage weight.
+
+**The Brier gain is real but tiny** (two standard errors, about a quarter of a point of
+probability per prop) **and does not turn into bets.** The sides the blend would flag at
+the pricing snapshot on 2025 (blend 2+ points over the book's vig-free chance, positive EV
+at that book's price, the live liquidity and role rules): 573 bets, 296-277, **return
+−1.9% ± 4.4%**. Their closing line value is **−3.5% ± 0.4%** (25% beat the close), measured
+the way the live log does, with the closing chance carried to the bet's line by the model;
+only counting bets whose exact line was still posted at the close gives −4.7% ± 0.5% on 261
+of them, which leaves out most of the bets whose line moved their way. The closing price did
+lean toward the blend's side (55% of props toward, 39% away), by +0.4 points of probability
+on average: about a tenth of the books' margin. 2024 (fold 1) says the same: 141 bets, return
++9.2% ± 7.5% on a small sample, closing line value −2.6% ± 0.6%.
+
+Anytime TD (2025 only, posted Yes only) was scored with the live code's assumed 8% margin and
+left out of the pooled numbers: the blend's −0.0007 ± 0.0002 there more likely says the
+assumed margin is too small (the books' Yes prices carry more) than that the model knows
+something.
+
+So the model adds a sliver of information to the books' prices, mostly on running backs'
+carries and yards, but nothing that survives the vig. The book-disagreement tags
+(`book_gap`, `middle`, `ladder_gap`) are the only prop signals left, and they need no model.
 
 ## Alternate ladders against real prices (2025, Oct 31, 2026)
 

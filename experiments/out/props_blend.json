@@ -1,0 +1,940 @@
+{
+ "rule": "fold 2 pooled: blend beats book Brier by > 2 SE and flagged sides' CLV > 0 by > 2 SE",
+ "clv_note": "the verdict uses clv_carried (every flagged bet, the live log's definition); avg_clv_ev only grades bets whose exact line is still posted at the close, which drops most bets whose line moved toward them",
+ "fold1": {
+  "train": [
+   2023
+  ],
+  "test": 2024,
+  "weights": {
+   "pass_yds": 0.444,
+   "rec_yds": 0.107,
+   "rush_yds": 0.148
+  },
+  "pooled_w": 0.162,
+  "train_brier": {
+   "pass_yds": {
+    "n": 785,
+    "games": 264,
+    "w": 0.444,
+    "brier_book": 0.25042,
+    "brier_ours": 0.25123,
+    "brier_blend": 0.249,
+    "blend_minus_book": -0.00142,
+    "se": 0.00187,
+    "ours_minus_book": 0.00081,
+    "se_ours": 0.00428
+   },
+   "rec_yds": {
+    "n": 3012,
+    "games": 271,
+    "w": 0.107,
+    "brier_book": 0.25,
+    "brier_ours": 0.25645,
+    "brier_blend": 0.24991,
+    "blend_minus_book": -9e-05,
+    "se": 0.00021,
+    "ours_minus_book": 0.00645,
+    "se_ours": 0.00204
+   },
+   "rush_yds": {
+    "n": 1258,
+    "games": 264,
+    "w": 0.148,
+    "brier_book": 0.25027,
+    "brier_ours": 0.25856,
+    "brier_blend": 0.25001,
+    "blend_minus_book": -0.00026,
+    "se": 0.00058,
+    "ours_minus_book": 0.00829,
+    "se_ours": 0.00387
+   }
+  },
+  "test_eval": {
+   "pooled": {
+    "brier": {
+     "n": 5769,
+     "games": 280,
+     "w": 0.162,
+     "brier_book": 0.24991,
+     "brier_ours": 0.25569,
+     "brier_blend": 0.24959,
+     "blend_minus_book": -0.00031,
+     "se": 0.00029,
+     "ours_minus_book": 0.00578,
+     "se_ours": 0.0018
+    },
+    "brier_own_w": {
+     "n": 5769,
+     "games": 280,
+     "w": "per market",
+     "brier_book": 0.24991,
+     "brier_ours": 0.2494,
+     "brier_blend": 0.2494,
+     "blend_minus_book": -0.00051,
+     "se": 0.00034,
+     "ours_minus_book": -0.00051,
+     "se_ours": 0.00034
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 141,
+      "record": "82-59-0",
+      "return_flat": 0.0921,
+      "return_se": 0.0748,
+      "avg_edge": 0.0465,
+      "avg_ev_claimed": 0.0268,
+      "clv_bets": 29,
+      "avg_clv_ev": -0.0612,
+      "clv_se": 0.0039,
+      "beat_close": 0.0,
+      "overs": 59,
+      "clv_carried_bets": 141,
+      "clv_carried": -0.0257,
+      "clv_carried_se": 0.0061,
+      "beat_close_carried": 0.298
+     },
+     "0.02": {
+      "bets": 141,
+      "record": "82-59-0",
+      "return_flat": 0.0921,
+      "return_se": 0.0748,
+      "avg_edge": 0.0465,
+      "avg_ev_claimed": 0.0268,
+      "clv_bets": 29,
+      "avg_clv_ev": -0.0612,
+      "clv_se": 0.0039,
+      "beat_close": 0.0,
+      "overs": 59,
+      "clv_carried_bets": 141,
+      "clv_carried": -0.0257,
+      "clv_carried_se": 0.0061,
+      "beat_close_carried": 0.298
+     },
+     "0.03": {
+      "bets": 136,
+      "record": "79-57-0",
+      "return_flat": 0.0901,
+      "return_se": 0.0773,
+      "avg_edge": 0.0473,
+      "avg_ev_claimed": 0.0276,
+      "clv_bets": 25,
+      "avg_clv_ev": -0.0641,
+      "clv_se": 0.0035,
+      "beat_close": 0.0,
+      "overs": 58,
+      "clv_carried_bets": 136,
+      "clv_carried": -0.0256,
+      "clv_carried_se": 0.0061,
+      "beat_close_carried": 0.301
+     }
+    },
+    "moves": {
+     "n": 1250,
+     "toward": 0.155,
+     "away": 0.153,
+     "avg_move": -0.0001,
+     "se": 0.0003
+    }
+   },
+   "pass_yds": {
+    "brier": {
+     "n": 872,
+     "games": 271,
+     "w": 0.444,
+     "brier_book": 0.25011,
+     "brier_ours": 0.24866,
+     "brier_blend": 0.24799,
+     "blend_minus_book": -0.00212,
+     "se": 0.00163,
+     "ours_minus_book": -0.00145,
+     "se_ours": 0.00365
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 120,
+      "record": "68-52-0",
+      "return_flat": 0.0639,
+      "return_se": 0.0792,
+      "avg_edge": 0.0479,
+      "avg_ev_claimed": 0.0289,
+      "clv_bets": 22,
+      "avg_clv_ev": -0.0618,
+      "clv_se": 0.0044,
+      "beat_close": 0.0,
+      "overs": 58,
+      "clv_carried_bets": 120,
+      "clv_carried": -0.026,
+      "clv_carried_se": 0.006,
+      "beat_close_carried": 0.308
+     },
+     "0.02": {
+      "bets": 120,
+      "record": "68-52-0",
+      "return_flat": 0.0639,
+      "return_se": 0.0792,
+      "avg_edge": 0.0479,
+      "avg_ev_claimed": 0.0289,
+      "clv_bets": 22,
+      "avg_clv_ev": -0.0618,
+      "clv_se": 0.0044,
+      "beat_close": 0.0,
+      "overs": 58,
+      "clv_carried_bets": 120,
+      "clv_carried": -0.026,
+      "clv_carried_se": 0.006,
+      "beat_close_carried": 0.308
+     },
+     "0.03": {
+      "bets": 117,
+      "record": "66-51-0",
+      "return_flat": 0.0585,
+      "return_se": 0.0825,
+      "avg_edge": 0.0485,
+      "avg_ev_claimed": 0.0294,
+      "clv_bets": 19,
+      "avg_clv_ev": -0.0642,
+      "clv_se": 0.0042,
+      "beat_close": 0.0,
+      "overs": 57,
+      "clv_carried_bets": 117,
+      "clv_carried": -0.0261,
+      "clv_carried_se": 0.006,
+      "beat_close_carried": 0.308
+     }
+    },
+    "moves": {
+     "n": 114,
+     "toward": 0.061,
+     "away": 0.061,
+     "avg_move": -0.0002,
+     "se": 0.0006
+    }
+   },
+   "rec_yds": {
+    "brier": {
+     "n": 3392,
+     "games": 278,
+     "w": 0.107,
+     "brier_book": 0.24993,
+     "brier_ours": 0.25811,
+     "brier_blend": 0.24991,
+     "blend_minus_book": -2e-05,
+     "se": 0.00025,
+     "ours_minus_book": 0.00818,
+     "se_ours": 0.00245
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 2,
+      "record": "2-0-0",
+      "return_flat": 0.8931,
+      "return_se": 0.0159,
+      "avg_edge": 0.0322,
+      "avg_ev_claimed": 0.0074,
+      "clv_bets": 0,
+      "avg_clv_ev": null,
+      "clv_se": null,
+      "beat_close": null,
+      "overs": 0,
+      "clv_carried_bets": 2,
+      "clv_carried": -0.022,
+      "clv_carried_se": 0.0185,
+      "beat_close_carried": 0.0
+     },
+     "0.02": {
+      "bets": 2,
+      "record": "2-0-0",
+      "return_flat": 0.8931,
+      "return_se": 0.0159,
+      "avg_edge": 0.0322,
+      "avg_ev_claimed": 0.0074,
+      "clv_bets": 0,
+      "avg_clv_ev": null,
+      "clv_se": null,
+      "beat_close": null,
+      "overs": 0,
+      "clv_carried_bets": 2,
+      "clv_carried": -0.022,
+      "clv_carried_se": 0.0185,
+      "beat_close_carried": 0.0
+     },
+     "0.03": {
+      "bets": 1,
+      "record": "1-0-0",
+      "return_flat": 0.8772,
+      "return_se": NaN,
+      "avg_edge": 0.037,
+      "avg_ev_claimed": 0.0081,
+      "clv_bets": 0,
+      "avg_clv_ev": null,
+      "clv_se": null,
+      "beat_close": null,
+      "overs": 0,
+      "clv_carried_bets": 1,
+      "clv_carried": -0.0036,
+      "clv_carried_se": null,
+      "beat_close_carried": 0.0
+     }
+    },
+    "moves": {
+     "n": 784,
+     "toward": 0.171,
+     "away": 0.171,
+     "avg_move": -0.0001,
+     "se": 0.0004
+    }
+   },
+   "rush_yds": {
+    "brier": {
+     "n": 1505,
+     "games": 273,
+     "w": 0.148,
+     "brier_book": 0.24974,
+     "brier_ours": 0.25428,
+     "brier_blend": 0.24905,
+     "blend_minus_book": -0.00069,
+     "se": 0.0005,
+     "ours_minus_book": 0.00454,
+     "se_ours": 0.00334
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 19,
+      "record": "12-7-0",
+      "return_flat": 0.1858,
+      "return_se": 0.2013,
+      "avg_edge": 0.0397,
+      "avg_ev_claimed": 0.0162,
+      "clv_bets": 7,
+      "avg_clv_ev": -0.0596,
+      "clv_se": 0.0065,
+      "beat_close": 0.0,
+      "overs": 1,
+      "clv_carried_bets": 19,
+      "clv_carried": -0.0242,
+      "clv_carried_se": 0.0234,
+      "beat_close_carried": 0.263
+     },
+     "0.02": {
+      "bets": 19,
+      "record": "12-7-0",
+      "return_flat": 0.1858,
+      "return_se": 0.2013,
+      "avg_edge": 0.0397,
+      "avg_ev_claimed": 0.0162,
+      "clv_bets": 7,
+      "avg_clv_ev": -0.0596,
+      "clv_se": 0.0065,
+      "beat_close": 0.0,
+      "overs": 1,
+      "clv_carried_bets": 19,
+      "clv_carried": -0.0242,
+      "clv_carried_se": 0.0234,
+      "beat_close_carried": 0.263
+     },
+     "0.03": {
+      "bets": 18,
+      "record": "12-6-0",
+      "return_flat": 0.2517,
+      "return_se": 0.2008,
+      "avg_edge": 0.0404,
+      "avg_ev_claimed": 0.0167,
+      "clv_bets": 6,
+      "avg_clv_ev": -0.0637,
+      "clv_se": 0.0059,
+      "beat_close": 0.0,
+      "overs": 1,
+      "clv_carried_bets": 18,
+      "clv_carried": -0.0237,
+      "clv_carried_se": 0.0247,
+      "beat_close_carried": 0.278
+     }
+    },
+    "moves": {
+     "n": 352,
+     "toward": 0.151,
+     "away": 0.142,
+     "avg_move": 0.0002,
+     "se": 0.0005
+    }
+   }
+  },
+  "test_in_sample_w": {
+   "pass_yds": 0.621,
+   "rec_yds": 0.061,
+   "rush_yds": 0.29
+  }
+ },
+ "fold2": {
+  "train": [
+   2023,
+   2024
+  ],
+  "test": 2025,
+  "weights": {
+   "pass_yds": 0.529,
+   "rec_yds": 0.081,
+   "rush_yds": 0.222
+  },
+  "pooled_w": 0.175,
+  "train_brier": {
+   "pass_yds": {
+    "n": 1657,
+    "games": 535,
+    "w": 0.529,
+    "brier_book": 0.25026,
+    "brier_ours": 0.24988,
+    "brier_blend": 0.24843,
+    "blend_minus_book": -0.00183,
+    "se": 0.00147,
+    "ours_minus_book": -0.00038,
+    "se_ours": 0.00279
+   },
+   "rec_yds": {
+    "n": 6404,
+    "games": 549,
+    "w": 0.081,
+    "brier_book": 0.24996,
+    "brier_ours": 0.25733,
+    "brier_blend": 0.24991,
+    "blend_minus_book": -6e-05,
+    "se": 0.00013,
+    "ours_minus_book": 0.00737,
+    "se_ours": 0.00162
+   },
+   "rush_yds": {
+    "n": 2763,
+    "games": 537,
+    "w": 0.222,
+    "brier_book": 0.24998,
+    "brier_ours": 0.25623,
+    "brier_blend": 0.24942,
+    "blend_minus_book": -0.00056,
+    "se": 0.00057,
+    "ours_minus_book": 0.00625,
+    "se_ours": 0.00253
+   }
+  },
+  "test_eval": {
+   "pooled": {
+    "brier": {
+     "n": 10770,
+     "games": 269,
+     "w": 0.175,
+     "brier_book": 0.24862,
+     "brier_ours": 0.25411,
+     "brier_blend": 0.24793,
+     "blend_minus_book": -0.0007,
+     "se": 0.0003,
+     "ours_minus_book": 0.00549,
+     "se_ours": 0.00174
+    },
+    "brier_own_w": {
+     "n": 10770,
+     "games": 269,
+     "w": "per market",
+     "brier_book": 0.24862,
+     "brier_ours": 0.24797,
+     "brier_blend": 0.24797,
+     "blend_minus_book": -0.00065,
+     "se": 0.00032,
+     "ours_minus_book": -0.00065,
+     "se_ours": 0.00032
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 573,
+      "record": "296-277-0",
+      "return_flat": -0.0187,
+      "return_se": 0.0435,
+      "avg_edge": 0.0445,
+      "avg_ev_claimed": 0.0282,
+      "clv_bets": 261,
+      "avg_clv_ev": -0.0469,
+      "clv_se": 0.0045,
+      "beat_close": 0.157,
+      "overs": 155,
+      "clv_carried_bets": 569,
+      "clv_carried": -0.0346,
+      "clv_carried_se": 0.0039,
+      "beat_close_carried": 0.25
+     },
+     "0.02": {
+      "bets": 573,
+      "record": "296-277-0",
+      "return_flat": -0.0187,
+      "return_se": 0.0435,
+      "avg_edge": 0.0445,
+      "avg_ev_claimed": 0.0282,
+      "clv_bets": 261,
+      "avg_clv_ev": -0.0469,
+      "clv_se": 0.0045,
+      "beat_close": 0.157,
+      "overs": 155,
+      "clv_carried_bets": 569,
+      "clv_carried": -0.0346,
+      "clv_carried_se": 0.0039,
+      "beat_close_carried": 0.25
+     },
+     "0.03": {
+      "bets": 545,
+      "record": "283-262-0",
+      "return_flat": -0.0116,
+      "return_se": 0.045,
+      "avg_edge": 0.0453,
+      "avg_ev_claimed": 0.0295,
+      "clv_bets": 252,
+      "avg_clv_ev": -0.0461,
+      "clv_se": 0.0046,
+      "beat_close": 0.163,
+      "overs": 151,
+      "clv_carried_bets": 541,
+      "clv_carried": -0.0331,
+      "clv_carried_se": 0.004,
+      "beat_close_carried": 0.251
+     }
+    },
+    "moves": {
+     "n": 5188,
+     "toward": 0.552,
+     "away": 0.392,
+     "avg_move": 0.0038,
+     "se": 0.0005
+    }
+   },
+   "anytime_td": {
+    "brier": {
+     "n": 9404,
+     "games": 266,
+     "w": 0.175,
+     "brier_book": 0.1449,
+     "brier_ours": 0.14624,
+     "brier_blend": 0.14418,
+     "blend_minus_book": -0.00072,
+     "se": 0.00017,
+     "ours_minus_book": 0.00134,
+     "se_ours": 0.00095
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 0
+     },
+     "0.02": {
+      "bets": 0
+     },
+     "0.03": {
+      "bets": 0
+     }
+    },
+    "moves": {
+     "n": 9129,
+     "toward": 0.437,
+     "away": 0.445,
+     "avg_move": 0.0045,
+     "se": 0.0005
+    }
+   },
+   "carries": {
+    "brier": {
+     "n": 1181,
+     "games": 238,
+     "w": 0.175,
+     "brier_book": 0.24921,
+     "brier_ours": 0.24903,
+     "brier_blend": 0.24592,
+     "blend_minus_book": -0.00329,
+     "se": 0.00104,
+     "ours_minus_book": -0.00018,
+     "se_ours": 0.00569
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 104,
+      "record": "64-40-0",
+      "return_flat": 0.1749,
+      "return_se": 0.0961,
+      "avg_edge": 0.0457,
+      "avg_ev_claimed": 0.0286,
+      "clv_bets": 83,
+      "avg_clv_ev": -0.0492,
+      "clv_se": 0.0064,
+      "beat_close": 0.205,
+      "overs": 8,
+      "clv_carried_bets": 103,
+      "clv_carried": -0.0353,
+      "clv_carried_se": 0.0082,
+      "beat_close_carried": 0.262
+     },
+     "0.02": {
+      "bets": 104,
+      "record": "64-40-0",
+      "return_flat": 0.1749,
+      "return_se": 0.0961,
+      "avg_edge": 0.0457,
+      "avg_ev_claimed": 0.0286,
+      "clv_bets": 83,
+      "avg_clv_ev": -0.0492,
+      "clv_se": 0.0064,
+      "beat_close": 0.205,
+      "overs": 8,
+      "clv_carried_bets": 103,
+      "clv_carried": -0.0353,
+      "clv_carried_se": 0.0082,
+      "beat_close_carried": 0.262
+     },
+     "0.03": {
+      "bets": 104,
+      "record": "64-40-0",
+      "return_flat": 0.1749,
+      "return_se": 0.0961,
+      "avg_edge": 0.0457,
+      "avg_ev_claimed": 0.0286,
+      "clv_bets": 83,
+      "avg_clv_ev": -0.0492,
+      "clv_se": 0.0064,
+      "beat_close": 0.205,
+      "overs": 8,
+      "clv_carried_bets": 103,
+      "clv_carried": -0.0353,
+      "clv_carried_se": 0.0082,
+      "beat_close_carried": 0.262
+     }
+    },
+    "moves": {
+     "n": 767,
+     "toward": 0.449,
+     "away": 0.368,
+     "avg_move": 0.003,
+     "se": 0.0013
+    }
+   },
+   "pass_yds": {
+    "brier": {
+     "n": 920,
+     "games": 269,
+     "w": 0.529,
+     "brier_book": 0.24999,
+     "brier_ours": 0.25413,
+     "brier_blend": 0.25087,
+     "blend_minus_book": 0.00088,
+     "se": 0.00177,
+     "ours_minus_book": 0.00414,
+     "se_ours": 0.00336
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 196,
+      "record": "95-101-0",
+      "return_flat": -0.0853,
+      "return_se": 0.067,
+      "avg_edge": 0.0478,
+      "avg_ev_claimed": 0.0346,
+      "clv_bets": 27,
+      "avg_clv_ev": -0.0553,
+      "clv_se": 0.003,
+      "beat_close": 0.0,
+      "overs": 104,
+      "clv_carried_bets": 196,
+      "clv_carried": -0.0247,
+      "clv_carried_se": 0.0043,
+      "beat_close_carried": 0.276
+     },
+     "0.02": {
+      "bets": 196,
+      "record": "95-101-0",
+      "return_flat": -0.0853,
+      "return_se": 0.067,
+      "avg_edge": 0.0478,
+      "avg_ev_claimed": 0.0346,
+      "clv_bets": 27,
+      "avg_clv_ev": -0.0553,
+      "clv_se": 0.003,
+      "beat_close": 0.0,
+      "overs": 104,
+      "clv_carried_bets": 196,
+      "clv_carried": -0.0247,
+      "clv_carried_se": 0.0043,
+      "beat_close_carried": 0.276
+     },
+     "0.03": {
+      "bets": 193,
+      "record": "94-99-0",
+      "return_flat": -0.081,
+      "return_se": 0.0675,
+      "avg_edge": 0.0481,
+      "avg_ev_claimed": 0.0351,
+      "clv_bets": 26,
+      "avg_clv_ev": -0.0552,
+      "clv_se": 0.0031,
+      "beat_close": 0.0,
+      "overs": 102,
+      "clv_carried_bets": 193,
+      "clv_carried": -0.0238,
+      "clv_carried_se": 0.0044,
+      "beat_close_carried": 0.28
+     }
+    },
+    "moves": {
+     "n": 127,
+     "toward": 0.551,
+     "away": 0.331,
+     "avg_move": 0.0003,
+     "se": 0.0002
+    }
+   },
+   "rec_yds": {
+    "brier": {
+     "n": 3493,
+     "games": 254,
+     "w": 0.081,
+     "brier_book": 0.2502,
+     "brier_ours": 0.25678,
+     "brier_blend": 0.25004,
+     "blend_minus_book": -0.00016,
+     "se": 0.00018,
+     "ours_minus_book": 0.00657,
+     "se_ours": 0.00227
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 3,
+      "record": "1-2-0",
+      "return_flat": -0.3768,
+      "return_se": 0.6232,
+      "avg_edge": 0.0311,
+      "avg_ev_claimed": 0.0055,
+      "clv_bets": 0,
+      "avg_clv_ev": null,
+      "clv_se": null,
+      "beat_close": null,
+      "overs": 0,
+      "clv_carried_bets": 3,
+      "clv_carried": -0.0246,
+      "clv_carried_se": 0.0214,
+      "beat_close_carried": 0.333
+     },
+     "0.02": {
+      "bets": 3,
+      "record": "1-2-0",
+      "return_flat": -0.3768,
+      "return_se": 0.6232,
+      "avg_edge": 0.0311,
+      "avg_ev_claimed": 0.0055,
+      "clv_bets": 0,
+      "avg_clv_ev": null,
+      "clv_se": null,
+      "beat_close": null,
+      "overs": 0,
+      "clv_carried_bets": 3,
+      "clv_carried": -0.0246,
+      "clv_carried_se": 0.0214,
+      "beat_close_carried": 0.333
+     },
+     "0.03": {
+      "bets": 2,
+      "record": "1-1-0",
+      "return_flat": -0.0652,
+      "return_se": 0.9348,
+      "avg_edge": 0.0323,
+      "avg_ev_claimed": 0.0077,
+      "clv_bets": 0,
+      "avg_clv_ev": null,
+      "clv_se": null,
+      "beat_close": null,
+      "overs": 0,
+      "clv_carried_bets": 2,
+      "clv_carried": -0.0415,
+      "clv_carried_se": 0.0226,
+      "beat_close_carried": 0.0
+     }
+    },
+    "moves": {
+     "n": 910,
+     "toward": 0.571,
+     "away": 0.342,
+     "avg_move": 0.0002,
+     "se": 0.0002
+    }
+   },
+   "receptions": {
+    "brier": {
+     "n": 3374,
+     "games": 244,
+     "w": 0.175,
+     "brier_book": 0.2458,
+     "brier_ours": 0.25482,
+     "brier_blend": 0.24576,
+     "blend_minus_book": -4e-05,
+     "se": 0.00044,
+     "ours_minus_book": 0.00902,
+     "se_ours": 0.0026
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 118,
+      "record": "49-69-0",
+      "return_flat": -0.2006,
+      "return_se": 0.0888,
+      "avg_edge": 0.0415,
+      "avg_ev_claimed": 0.0209,
+      "clv_bets": 103,
+      "avg_clv_ev": -0.0396,
+      "clv_se": 0.0078,
+      "beat_close": 0.233,
+      "overs": 24,
+      "clv_carried_bets": 116,
+      "clv_carried": -0.0346,
+      "clv_carried_se": 0.0075,
+      "beat_close_carried": 0.25
+     },
+     "0.02": {
+      "bets": 118,
+      "record": "49-69-0",
+      "return_flat": -0.2006,
+      "return_se": 0.0888,
+      "avg_edge": 0.0415,
+      "avg_ev_claimed": 0.0209,
+      "clv_bets": 103,
+      "avg_clv_ev": -0.0396,
+      "clv_se": 0.0078,
+      "beat_close": 0.233,
+      "overs": 24,
+      "clv_carried_bets": 116,
+      "clv_carried": -0.0346,
+      "clv_carried_se": 0.0075,
+      "beat_close_carried": 0.25
+     },
+     "0.03": {
+      "bets": 111,
+      "record": "46-65-0",
+      "return_flat": -0.194,
+      "return_se": 0.0945,
+      "avg_edge": 0.0423,
+      "avg_ev_claimed": 0.0221,
+      "clv_bets": 98,
+      "avg_clv_ev": -0.0379,
+      "clv_se": 0.008,
+      "beat_close": 0.245,
+      "overs": 23,
+      "clv_carried_bets": 109,
+      "clv_carried": -0.0327,
+      "clv_carried_se": 0.0079,
+      "beat_close_carried": 0.266
+     }
+    },
+    "moves": {
+     "n": 2996,
+     "toward": 0.577,
+     "away": 0.412,
+     "avg_move": 0.0058,
+     "se": 0.0009
+    }
+   },
+   "rush_yds": {
+    "brier": {
+     "n": 1802,
+     "games": 254,
+     "w": 0.222,
+     "brier_book": 0.24976,
+     "brier_ours": 0.25093,
+     "brier_blend": 0.24794,
+     "blend_minus_book": -0.00182,
+     "se": 0.00074,
+     "ours_minus_book": 0.00118,
+     "se_ours": 0.00333
+    },
+    "flagged": {
+     "0.01": {
+      "bets": 152,
+      "record": "87-65-0",
+      "return_flat": 0.0831,
+      "return_se": 0.0714,
+      "avg_edge": 0.042,
+      "avg_ev_claimed": 0.0258,
+      "clv_bets": 48,
+      "avg_clv_ev": -0.0535,
+      "clv_se": 0.0031,
+      "beat_close": 0.0,
+      "overs": 19,
+      "clv_carried_bets": 151,
+      "clv_carried": -0.047,
+      "clv_carried_se": 0.0074,
+      "beat_close_carried": 0.205
+     },
+     "0.02": {
+      "bets": 152,
+      "record": "87-65-0",
+      "return_flat": 0.0831,
+      "return_se": 0.0714,
+      "avg_edge": 0.042,
+      "avg_ev_claimed": 0.0258,
+      "clv_bets": 48,
+      "avg_clv_ev": -0.0535,
+      "clv_se": 0.0031,
+      "beat_close": 0.0,
+      "overs": 19,
+      "clv_carried_bets": 151,
+      "clv_carried": -0.047,
+      "clv_carried_se": 0.0074,
+      "beat_close_carried": 0.205
+     },
+     "0.03": {
+      "bets": 135,
+      "record": "78-57-0",
+      "return_flat": 0.0945,
+      "return_se": 0.0776,
+      "avg_edge": 0.0436,
+      "avg_ev_claimed": 0.0288,
+      "clv_bets": 45,
+      "avg_clv_ev": -0.0532,
+      "clv_se": 0.0033,
+      "beat_close": 0.0,
+      "overs": 18,
+      "clv_carried_bets": 134,
+      "clv_carried": -0.0449,
+      "clv_carried_se": 0.0076,
+      "beat_close_carried": 0.194
+     }
+    },
+    "moves": {
+     "n": 388,
+     "toward": 0.515,
+     "away": 0.43,
+     "avg_move": -0.0,
+     "se": 0.0003
+    }
+   }
+  },
+  "test_in_sample_w": {
+   "anytime_td": 0.399,
+   "carries": 0.504,
+   "pass_yds": 0.107,
+   "rec_yds": 0.147,
+   "receptions": 0.097,
+   "rush_yds": 0.451
+  }
+ },
+ "verdict": {
+  "brier_pass": true,
+  "clv_pass_at_edges": [],
+  "pass": false,
+  "largest_flag_set": {
+   "bets": 573,
+   "record": "296-277-0",
+   "return_flat": -0.0187,
+   "return_se": 0.0435,
+   "avg_edge": 0.0445,
+   "avg_ev_claimed": 0.0282,
+   "clv_bets": 261,
+   "avg_clv_ev": -0.0469,
+   "clv_se": 0.0045,
+   "beat_close": 0.157,
+   "overs": 155,
+   "clv_carried_bets": 569,
+   "clv_carried": -0.0346,
+   "clv_carried_se": 0.0039,
+   "beat_close_carried": 0.25
+  }
+ }
+}

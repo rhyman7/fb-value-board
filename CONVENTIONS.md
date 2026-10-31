@@ -96,8 +96,10 @@ boards in detail; this file is the rules.
   changed then; PROPS.md "The low end, refitted on recent seasons"); `--production` refits only
   them and keeps the correction and correlations.
   Bet flags are off (`propmarket.FLAGS_ON = False`, Oct 2026): against real 2025 lines the
-  model did worse than the books. Turning them back on needs an out-of-sample win over the
-  books' prices (PROPS.md) and Ryan's go-ahead.
+  model did worse than the books, and a market-anchored blend tested out of sample on 2025
+  (Oct 30, 2026, `experiments/props_blend.py`) did not earn them back. Turning them back on
+  needs an out-of-sample win over the books' prices with closing line value to match
+  (PROPS.md) and Ryan's go-ahead.
 - **Market lines (both boards): `data/market/`.** The **Market lines** Action
   (`.github/workflows/market.yml`) snapshots every upcoming NFL and college game's spread,
   total and moneyline at Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi through The Odds
