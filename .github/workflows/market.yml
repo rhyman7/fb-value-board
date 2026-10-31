@@ -4,7 +4,9 @@ name: Market lines
 # DraftKings, FanDuel, BetMGM and Kalshi through The Odds API (nflmodel/market.py), stored
 # under data/market/. Three a day in season, plus hourly from Sunday night to Tuesday night
 # (US time), when the week's lines open and the model's edge is largest. About 6 credits a
-# snapshot, about 1,400 a month. The board builds read these files; this workflow never builds a board.
+# snapshot, about 1,400 a month. The board builds read these files. On game days (college
+# Saturdays, NFL Sundays and Thursday nights) an hourly snapshot of the league playing (3
+# credits, about 360 a month) is followed by a quick rebuild of that board, started from here.
 #
 # After each snapshot, `run_market.py alerts` measures every side the model is off the opener
 # at Pinnacle's newest line (nflmodel/sheet.line_moves): it writes docs/moves.json and
@@ -26,6 +28,11 @@ on:
     - cron: "5 2,14,20 * 8-12,1-2 *"          # three a day (UTC), August to February
     - cron: "35 0-23 * 8-12,1-2 1,2"          # hourly all day Monday and Tuesday UTC
     - cron: "35 21-23 * 8-12,1-2 0"           # Sunday evening US (late Sunday UTC)
+    # game days (Oct 31, 2026): hourly snapshots of the league playing, each followed by a quick
+    # rebuild of that board, so the prices on the sheet are never more than about an hour old
+    - cron: "50 13-23 * 8-12,1 6"             # college Saturdays, 9:50 a.m. to 7:50 p.m. Eastern
+    - cron: "50 13-20 * 9-12,1-2 0"           # NFL Sundays, 9:50 a.m. to 4:50 p.m. Eastern
+    - cron: "50 21,22 * 9-12,1 4"             # NFL Thursday night, before kickoff
   workflow_dispatch:
     inputs:
       derivatives:
@@ -36,6 +43,7 @@ on:
 permissions:
   contents: write
   issues: write
+  actions: write      # the game-day runs start the board rebuild (workflow_dispatch)
 
 concurrency:
   group: board-commits      # shared with the board updates and the props, so pushes never collide
@@ -55,7 +63,12 @@ jobs:
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         run: |
-          python run_market.py snapshot
+          # game-day runs snapshot only the league playing (3 credits); the others both leagues (6)
+          case "${{ github.event.schedule }}" in
+            "50 13-23 * 8-12,1 6") python run_market.py snapshot --league cfb ;;
+            "50 13-20 * 9-12,1-2 0"|"50 21,22 * 9-12,1 4") python run_market.py snapshot --league nfl ;;
+            *) python run_market.py snapshot ;;
+          esac
           # derivatives on the 14:05 UTC run: NFL Thursday, Saturday and Sunday; college Friday (or when asked)
           if [ "${{ inputs.derivatives }}" = "true" ]; then
             python run_market.py derivatives
@@ -102,3 +115,16 @@ jobs:
           git diff --cached --quiet || git commit -m "Market lines snapshot"
           git pull --rebase origin main
           git push
+      - name: Rebuild the board on game days
+        # a quick (no-backtest) rebuild of the board whose games are on, from the snapshot just
+        # committed. The Update Actions spend no Odds API credits. Dispatching a workflow is one
+        # of the events a workflow's own token may start.
+        if: github.event.schedule == '50 13-23 * 8-12,1 6' || github.event.schedule == '50 13-20 * 9-12,1-2 0' || github.event.schedule == '50 21,22 * 9-12,1 4'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "${{ github.event.schedule }}" in
+            "50 13-23 * 8-12,1 6") wf=update-cfb.yml ;;
+            *) wf=update.yml ;;
+          esac
+          gh api -X POST "repos/${{ github.repository }}/actions/workflows/$wf/dispatches" -f ref=main

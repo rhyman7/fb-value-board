@@ -50,6 +50,7 @@ KELLY_FRACTION = 0.25       # stake = this share of full Kelly
 MAX_STAKE = 0.03            # cap on any single stake, as a share of bankroll
 MAX_GAME_STAKE = 0.05       # cap on the stakes flagged in one game, all sides together (slate.cap_game):
                             # when they add up to more, every stake in the game is scaled down by the same factor
+MAX_WEEK_STAKE = 0.10       # cap on everything the bet sheet flags in one week (sheet.cap_week), scaled down the same way
 EDGE_HAIRCUT = True         # size stakes from the model probability shrunk toward the market's by the share
                             # of claimed edge that has shown up in past results (backtest.edge_haircut: realized
                             # profit on claimed EV, last 8 seasons, clipped to [0, 1]); EV and probabilities shown

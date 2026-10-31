@@ -215,13 +215,14 @@ def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: s
                 p, push = _side_prob(cv, i, market, side, line)
                 p0, push0 = _side_prob(cv0, i, market, side, line)
                 ev = float(O.expected_value(p, net, push))
-                stake = float(min(O.kelly(stake_prob(p, push, p0 / (1 - push0), haircut), net, push) * C.KELLY_FRACTION, C.MAX_STAKE))
+                sp = stake_prob(p, push, p0 / (1 - push0), haircut)
+                stake = float(min(O.kelly(sp, net, push) * C.KELLY_FRACTION, C.MAX_STAKE))
                 shown = (-line if side == "home" else line) if market == "Spread" else line
                 out.setdefault((gid, market, side), []).append({
                     "book": book, "line": None if shown is None else float(shown), "odds": float(price), "odds_net": round(net, 1),
                     "prob": round(p / (1 - push), 4), "p_push": round(push, 4), "ev": round(ev, 4),
                     "ev_line": round(float(O.expected_value(p0, net, push0)), 4) if FLAG_ODDS[0] <= float(price) <= FLAG_ODDS[1] else None,
-                    "stake": round(stake, 4)})
+                    "stake": round(stake, 4), "p_post": round(float(sp), 4)})
     return with_post_at(out)
 
 
@@ -230,11 +231,17 @@ def with_post_at(out: dict) -> dict:
     (maker) order would be worth posting: `post_at`, the highest contract price in cents that
     is +EV against this side's probability net of the maker fee, and `post_match`, the highest
     that matches the best retail book's EV (odds.kalshi_post_at). The Kalshi quote itself stays
-    the taker price."""
+    the taker price. The chance posted against is the one stakes are sized from (`p_post`,
+    stake_prob: the model shrunk toward the sharp no-vig number by the haircut), so on a board
+    whose haircut is 0 (the NFL's) a resting order is +EV against Pinnacle's own number, not
+    against a model the graded bets say adds nothing; quotes without `p_post` (derivatives)
+    use the model's chance. The retail EV matched is on the same chance."""
+    def chance(q):
+        return q["p_post"] if q.get("p_post") is not None else q["prob"] * (1 - q["p_push"])
     for k, qs in out.items():
         qs.sort(key=lambda x: -x["ev"])
-        retail = [q["ev"] for q in qs if q["book"] not in ("kalshi", "pinnacle")]
+        retail = [float(O.expected_value(chance(q), q["odds_net"], q["p_push"])) for q in qs if q["book"] not in ("kalshi", "pinnacle")]
         for q in qs:
             if q["book"] == "kalshi":
-                q.update(O.kalshi_post_at(q["prob"] * (1 - q["p_push"]), q["p_push"], max(retail) if retail else None))
+                q.update(O.kalshi_post_at(chance(q), q["p_push"], max(retail) if retail else None))
     return out

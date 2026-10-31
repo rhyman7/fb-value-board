@@ -312,3 +312,44 @@ def line_moves(games: list[dict], league: str, openers: dict | None = None, now:
             })
     order = {"Live": 0, "Partly gone": 1, "Missed": 2}
     return sorted(rows, key=lambda r: (order[r["status"]], -r["left"], r["kickoff"] or ""))
+
+
+# ---------------- weekly exposure cap ----------------
+
+def taken_stake(b: dict) -> float:
+    """The stake the sheet puts on a bet: at the book it is taken at (the one beating the sharp
+    line for a price bet, else the bucket's book or the best book), else the side's own; the
+    bucket stake when the model sizes nothing."""
+    if not b.get("tier"):
+        return 0.0
+    want = b.get("beats_sharp") if b.get("tier") == "price" and b.get("beats_sharp") else (b.get("bucket_book") or b.get("best"))
+    q = next((x for x in b.get("books") or [] if x["book"] == want), None)
+    s = float((q["stake"] if q else b.get("stake")) or 0.0)
+    return s if s > 0 else float(b.get("bucket_stake") or 0.0)
+
+
+def cap_week(games: list[dict], cap: float) -> dict:
+    """Scale every stake of a week down together when the bets the sheet flags that week add up
+    to more than `cap` of bankroll (on top of the per-bet and per-game caps; slate.cap_game is
+    the same rule per game). Every stake in the week, at the anchor, at each book and the bucket
+    stake, is multiplied by one factor, written as `week_scale` on each game. Returns
+    {week: {"stake": the sum before the cap, "scale": the factor}} for the weeks on the board."""
+    out = {}
+    weeks: dict = {}
+    for g in games:
+        weeks.setdefault(g.get("week"), []).append(g)
+    for wk, gs in weeks.items():
+        bets = [b for g in gs for b in list(g.get("bets") or []) + list(g.get("derivs") or [])]
+        total = sum(taken_stake(b) for b in bets)
+        scale = 1.0 if total <= cap or total <= 0 else cap / total
+        if scale < 1.0:
+            for b in bets:
+                b["stake"] = round(float(b.get("stake") or 0.0) * scale, 4)
+                if b.get("bucket_stake"):
+                    b["bucket_stake"] = round(b["bucket_stake"] * scale, 4)
+                for q in b.get("books") or []:
+                    q["stake"] = round(float(q.get("stake") or 0.0) * scale, 4)
+        for g in gs:
+            g["week_scale"] = round(scale, 4)
+        out[str(wk)] = {"stake": round(total, 4), "scale": round(scale, 4)}
+    return out
