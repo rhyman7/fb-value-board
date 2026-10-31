@@ -777,6 +777,103 @@ the opener edge is real in direction but small. Derivatives are not in it: the b
 endpoint has no team totals or first-half lines. College (2024-2025, about 3,400 credits with
 spreads and totals) is waiting for the next month's credits.
 
+## Where the edge lives (Oct 31, 2026)
+
+The walk-forward backtest split by segment, the way the college board's was (CFB_FEATURES.md,
+"Where the edge lives"): `python experiments/nfl_segments.py`, full output, with the 2014-2018
+tuning seasons, the closing-spread columns, the model's miss per segment and the Pinnacle
+regrade, in `experiments/out/nfl_segments.md`; the segment definitions and the rule are in
+the script's docstring. It rebuilds the board's own two runs and first reproduces the
+headline numbers: 3,403 games, model miss 10.02 against the line's 9.91, the model 2+ off the
+opening spread 982 bets 54.5% +4.0% ± 3.0% (615 since 2019, +4.1%; the same sides at the close
+51.8%), wind unders 498-379-9, and the model edges since 2019 1,070 bets 51.0% −1.3%.
+
+Buckets are the ones the board bets: the raw model 2+ off the opener (graded at the opener's
+price, games after a Monday night left out, as the opener report does), the raw model 3+ off
+the closing total (there are no historical opening totals), the wind under in 10-19 mph at
+the closing total, and the market-adjusted spread bets with EV above 0 at the close (the
+model tier). Holdout seasons, 2019 on (W-L, return per bet ± one standard error):
+
+| Segment | Opener 2+ | Totals 3+ at close | Wind unders | Model edges |
+|---|---|---|---|---|
+| Matchup: Division | 121-109 +0.4% ± 6.1% | 79-70 +2.1% ± 7.9% | 75-65 +3.5% ± 8.2% | 199-176 +2.5% ± 4.9% |
+| Same conference, not division | 119-101 +3.3% ± 6.3% | 79-59 +9.7% ± 8.0% | 100-62 +19.0% ± 7.4% | 199-199 -2.8% ± 4.8% |
+| Other conference | 87-62 +11.1% ± 7.4% | 48-51 -6.5% ± 9.6% | 63-37 +21.3% ± 9.1% | 136-139 -4.2% ± 5.8% |
+| Slot: Prime time (TNF, SNF, MNF) | 61-59 -3.0% ± 8.7% | 41-28 +14.2% ± 11.4% | 43-24 +23.8% ± 11.3% | 101-96 -0.6% ± 6.9% |
+| Sunday day | 231-192 +4.2% ± 4.5% | 152-139 +0.4% ± 5.6% | 175-124 +13.0% ± 5.5% | 389-381 -2.1% ± 3.4% |
+| Saturday | 16-12 +8.9% ± 17.6% | 8-6 +9.8% ± 26.4% | 15-10 +14.8% ± 18.5% | 18-19 -5.8% ± 15.3% |
+| Neutral site | 11-4 +37.8% ± 21.3% | 2-4 -35.2% ± 41.0% | 1-4 -61.3% ± 38.7% | 18-8 +34.3% ± 17.9% |
+| Other (holiday day games, Fri, Tue, Wed) | 8-5 +18.0% ± 27.0% | 3-3 -3.1% ± 43.4% | 4-2 +28.8% ± 40.8% | 8-10 -11.3% ± 20.1% |
+| Rest: Short week (either team 4-5 days) | 22-21 -1.9% ± 14.8% | 14-7 +27.4% ± 20.2% | 12-8 +15.7% ± 21.7% | 30-36 -11.7% ± 11.8% |
+| Normal | 218-195 +0.8% ± 4.5% | 150-133 +1.8% ± 5.7% | 155-118 +9.7% ± 5.8% | 376-365 -1.7% ± 3.5% |
+| Long (either team 10+ days) | 87-56 +15.9% ± 7.7% | 42-40 -0.9% ± 10.7% | 71-38 +25.2% ± 8.6% | 128-113 +2.9% ± 6.1% |
+| Rest gap: Home 2+ days more rest | 42-30 +10.8% ± 10.8% | 25-17 +14.7% ± 14.8% | 35-19 +23.8% ± 12.0% | 60-67 -8.1% ± 8.4% |
+| Within 1 day | 242-213 +1.6% ± 4.3% | 160-140 +2.4% ± 5.5% | 169-126 +10.6% ± 5.6% | 410-399 -1.8% ± 3.3% |
+| Away 2+ days more rest | 43-29 +14.2% ± 11.1% | 21-23 -7.4% ± 14.8% | 34-19 +24.2% ± 12.9% | 64-48 +10.6% ± 9.1% |
+| Roof: Dome or closed | 85-71 +4.0% ± 7.4% | 64-56 +2.4% ± 8.6% | - | 156-147 -0.8% ± 5.5% |
+| Retractable, open | 9-3 +43.1% ± 24.9% | 4-2 +29.5% ± 41.0% | - | 12-6 +29.4% ± 22.2% |
+| Outdoors | 233-198 +3.1% ± 4.5% | 138-122 +2.1% ± 5.9% | 238-164 +14.3% ± 4.7% | 366-361 -2.2% ± 3.5% |
+| Wind: Indoors (incl. open roof) | 94-74 +6.7% ± 7.1% | 68-58 +3.7% ± 8.4% | - | 168-153 +0.9% ± 5.3% |
+| Outdoors, under 10 mph | 143-117 +4.9% ± 5.7% | 75-68 +0.6% ± 8.0% | - | 199-205 -4.5% ± 4.7% |
+| Outdoors, 10-19 mph | 61-57 -1.3% ± 8.7% | 53-35 +16.4% ± 10.2% | 238-164 +14.3% ± 4.7% | 119-104 +4.0% ± 6.4% |
+| Outdoors, 20+ mph | 5-1 +50.6% ± 28.2% | 2-8 -61.8% ± 25.5% | - | 13-8 +19.6% ± 21.0% |
+| Outdoors, no wind recorded | 24-23 -2.4% ± 13.8% | 8-11 -19.7% ± 22.2% | - | 35-44 -13.8% ± 10.8% |
+| Season part: Weeks 1-4 | 89-75 +3.6% ± 7.2% | 52-56 -7.6% ± 9.2% | 46-30 +16.6% ± 10.9% | 114-120 -5.9% ± 6.2% |
+| Weeks 5-9 | 78-71 -0.1% ± 7.6% | 48-44 +0.3% ± 10.0% | 59-45 +10.2% ± 9.4% | 161-130 +7.1% ± 5.6% |
+| Weeks 10-14 | 71-57 +5.5% ± 8.1% | 57-41 +12.3% ± 9.6% | 73-37 +27.7% ± 8.6% | 126-132 -5.1% ± 5.9% |
+| Weeks 15-18 | 74-58 +7.1% ± 8.1% | 43-35 +5.6% ± 10.9% | 45-44 -2.7% ± 10.3% | 114-114 -3.0% ± 6.2% |
+| Playoffs | 15-11 +10.3% ± 18.9% | 6-4 +15.4% ± 31.4% | 15-8 +24.6% ± 18.8% | 19-18 -0.2% ± 16.2% |
+| Line size: Pick'em to 3 | 110-98 +1.1% ± 6.5% | 68-77 -9.7% ± 7.9% | 92-52 +22.8% ± 7.7% | 187-188 -3.1% ± 4.9% |
+| 3.5 to 7 | 130-102 +6.7% ± 6.0% | 91-65 +12.1% ± 7.6% | 94-68 +12.4% ± 7.5% | 218-197 +1.6% ± 4.7% |
+| 7.5 to 10 | 50-43 +2.4% ± 9.8% | 28-27 -2.4% ± 13.1% | 30-27 +1.5% ± 12.4% | 73-72 -2.6% ± 8.0% |
+| 10.5+ | 37-29 +6.8% ± 11.4% | 19-11 +21.5% ± 16.7% | 22-17 +9.2% ± 15.6% | 56-57 -3.8% ± 9.0% |
+| Favourite: Home favourite | 191-167 +1.8% ± 4.9% | 120-108 +1.1% ± 6.3% | 144-98 +14.7% ± 6.0% | 325-317 -1.8% ± 3.7% |
+| Road favourite | 136-105 +7.8% ± 6.1% | 86-72 +4.7% ± 7.6% | 94-66 +13.6% ± 7.5% | 209-197 -0.4% ± 4.7% |
+| Quarterback: Quarterback change | 119-91 +7.9% ± 6.4% | 62-50 +6.5% ± 9.1% | 52-41 +7.8% ± 9.7% | 149-130 +2.9% ± 5.6% |
+| No change | 208-181 +2.1% ± 4.7% | 144-130 +1.0% ± 5.8% | 186-123 +16.3% ± 5.4% | 385-384 -2.8% ± 3.4% |
+| **All games** | **327-272 +4.1% ± 3.8%** | **206-180 +2.6% ± 4.9%** | **238-164 +14.3% ± 4.7%** | **534-514 -1.3% ± 2.9%** |
+
+**The rule** (set before running): a segment is a lead only if its return is above zero in
+both periods, the holdout return is at least two standard errors above zero, and it is still
+above zero against Pinnacle's lines on 2024-2025. 167 segment-by-bucket cells were tested;
+with no edge anywhere about one would pass by chance, and about four would clear the holdout
+bar alone. Ten clear the holdout bar and **four pass**:
+
+| Bucket | Segment | Holdout | 2014-2018 | Pinnacle 2024-25 | Holdout vs rest of bucket |
+|---|---|---|---|---|---|
+| Opener 2+ | Long rest (either team 10+ days) | 87-56 +15.9% ± 7.7% | 50-38 +8.7% ± 10.2% | 29-18 +19.1% ± 13.9% | +15.4% ± 8.8% |
+| Wind unders | Weeks 10-14 | 73-37 +27.7% ± 8.6% | 53-26 +31.0% ± 10.4% | 17-11 +16.1% ± 18.0% | +18.5% ± 10.3% |
+| Wind unders | Prime time | 43-24 +23.8% ± 11.3% | 18-16 +3.0% ± 16.9% | 11-10 +0.8% ± 21.5% | +11.5% ± 12.4% |
+| Wind unders | No quarterback change | 186-123 +16.3% ± 5.4% | 119-98 +7.0% ± 6.6% | 39-33 +4.4% ± 11.3% | +8.5% ± 11.1% |
+
+Reading: **none of the four is evidence that the edge lives somewhere in particular.**
+
+- The three wind passes are the wind under itself. The bucket is +14.3% ± 4.7% on the holdout,
+  so most of its large segments clear two standard errors without being different from the
+  rest; none of the three beats the rest of the bucket by two standard errors. Weeks 10-14 is
+  the most consistent (both periods and Pinnacle), and weeks 15-18 the weakest (−2.7% on the
+  holdout, 8-20 at Pinnacle), which would fit a market that prices December weather better,
+  but that is a story fitted to subsets, not a test.
+- The long-rest opener bets (a team off a bye or ten days after a Thursday) are positive in 10
+  of the 12 full seasons and whichever team the model backs (the rested one 57.7%, the other
+  61.0%, holdout), so it is not a hidden rest feature. But it is 1.75 standard errors better
+  than the rest of the opener bucket with 35 segments tried, which is what the best of 35
+  looks like by chance, and 31-15 of its holdout record is 2024-2025.
+- The Pinnacle check is not a fresh sample: 2024-2025 are the holdout's last two seasons,
+  regraded at better lines. It confirms direction on the same games.
+- New from the regrade: **the wind under itself went 52-52 at Pinnacle's close in 2024-2025**
+  (−3.5% ± 9.3%; 53-52 at the consensus close), the only two-season stretch since 2014 below zero.
+  Two seasons is within its noise, but it is worth reading with the forecast grade
+  (`experiments/wind_forecast_grade.py`) after this season.
+- Splits that look large and do not replicate: neutral-site and open-roof games (dozens of
+  bets), opener bets in other-conference games (+11.1% holdout, +10.3% tuning, but 1.5
+  standard errors), quarterback-change games (opener 2+ +7.9% holdout, −7.3% on 2014-2018).
+  The model edges are flat to negative in almost every segment on the holdout.
+
+What this changes: nothing on the board. No tier is restricted or extended. The two worth
+watching, long-rest opener bets and wind unders in weeks 10-14, are named here so the live
+ledger can be read for them after the 2026 and 2027 seasons without re-searching.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;
