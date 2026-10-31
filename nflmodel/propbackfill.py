@@ -62,6 +62,52 @@ def _save(path, snapshot, ev):
     return len(rows)
 
 
+def _fetched(out_dir) -> dict:
+    """(game_id, kind) -> set of markets already asked for, from fetched.csv. Files saved
+    before that log existed were all fetched with the three yardage markets."""
+    f = {}
+    path = out_dir / "fetched.csv"
+    if path.exists():
+        for r in pd.read_csv(path, dtype=str).itertuples():
+            f.setdefault((r.game_id, r.kind), set()).add(r.market)
+    return f
+
+
+def _note_fetched(out_dir, game_id: str, kind: str, markets: list[str]) -> None:
+    path = out_dir / "fetched.csv"
+    new = not path.exists()
+    with path.open("a", newline="") as fh:
+        w = csv.writer(fh)
+        if new:
+            w.writerow(["game_id", "kind", "market"])
+        for m in markets:
+            w.writerow([game_id, kind, m])
+
+
+def _missing_markets(path, markets: list[str], fetched: set) -> list[str]:
+    """The requested markets a saved snapshot hasn't been asked for yet. A missing file needs
+    them all; a header-only file (a snapshot the API answered 404 for) needs none; an existing
+    file only the markets neither in it nor in fetched.csv (a market the book had no lines for
+    is still fetched, so it isn't billed again), so a season can be extended a market at a time."""
+    if not path.exists():
+        return list(markets)
+    have = pd.read_csv(path, usecols=["market"])["market"]
+    if have.empty:
+        return []
+    done = set(have) | fetched | (set(YARDAGE) if not fetched else set())
+    return [m for m in markets if m not in done]
+
+
+def _append(path, snapshot, ev) -> int:
+    """Add a fetch's rows to an existing snapshot file."""
+    rows = oddsapi.flatten(ev) if ev else []
+    with path.open("a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=COLS, extrasaction="ignore")
+        for r in rows:
+            w.writerow(dict(r, snapshot=snapshot))
+    return len(rows)
+
+
 def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: int, verbose: bool = True) -> dict:
     say = print if verbose else (lambda *a, **k: None)
     games = schedule(season)
@@ -70,7 +116,6 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
     events_path = out_dir / "events.csv"
     known = pd.read_csv(events_path) if events_path.exists() else pd.DataFrame(columns=["game_id", "event_id", "commence"])
     spent, fetched, skipped, probe_ok = 0, 0, 0, False
-    per_snap = 10 * len(markets)
 
     def room(cost):
         return spent + cost <= max_credits
@@ -78,15 +123,17 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
     for week, wk in games.groupby(["week"]):
         week = week[0] if isinstance(week, tuple) else week
         need = []
+        fetched_log = _fetched(out_dir)
         for g in wk.itertuples():
             for kind in ("flag", "close"):
-                if not (out_dir / f"{g.game_id}_{kind}.csv").exists():
-                    need.append((g, kind))
+                want = _missing_markets(out_dir / f"{g.game_id}_{kind}.csv", markets, fetched_log.get((g.game_id, kind), set()))
+                if want:
+                    need.append((g, kind, want))
         if not need:
             continue
         # event ids for the week (1 credit), unless already listed
         ids = dict(zip(known["game_id"], known["event_id"]))
-        if any(g.game_id not in ids for g, _ in need):
+        if any(g.game_id not in ids for g, _, _ in need):
             if not room(1):
                 break
             first, last = wk["kickoff"].min(), wk["kickoff"].max()
@@ -104,7 +151,9 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
                 out_dir.mkdir(parents=True, exist_ok=True)
                 known.to_csv(events_path, index=False)
             ids = dict(zip(known["game_id"], known["event_id"]))
-        for g, kind in need:
+        for g, kind, want in need:
+            path = out_dir / f"{g.game_id}_{kind}.csv"
+            per_snap = 10 * len(want)
             eid = ids.get(g.game_id)
             if eid is None:
                 say(f"  {g.game_id}: no event id found")
@@ -114,7 +163,7 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
                 return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": False}
             at = flag_time(g.kickoff) if kind == "flag" else g.kickoff - CLOSE_BEFORE
             try:
-                ev = client.historical_event_odds(eid, markets, _iso(at))
+                ev = client.historical_event_odds(eid, want, _iso(at))
             except oddsapi.BudgetError as e:
                 say(f"  {e}")
                 return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": False}
@@ -122,8 +171,8 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
                 # 404: the API has no snapshot of this event at this minute (an event re-created
                 # under a new id late in the week, usually a playoff game). Save an empty file so
                 # the snapshot is never asked for again. Any other error: skip, keep going.
-                if "HTTP 404" in str(e):
-                    _save(out_dir / f"{g.game_id}_{kind}.csv", _iso(at), None)
+                if "HTTP 404" in str(e) and not path.exists():
+                    _save(path, _iso(at), None)
                     say(f"  {g.game_id} {kind} at {_iso(at)}: not available (404), skipped")
                 else:
                     say(f"  {g.game_id} {kind} at {_iso(at)}: {e}; skipped")
@@ -136,9 +185,11 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
                     say(f"  first snapshot cost {cost} credits, expected at most {per_snap}: stopping to check")
                     return {"spent": spent, "snapshots": fetched, "complete": False, "probe_cost": cost}
                 probe_ok = True
-            n = _save(out_dir / f"{g.game_id}_{kind}.csv", ev.get("_snapshot") if ev else "", ev)
+            snap = ev.get("_snapshot") if ev else ""
+            n = _append(path, snap, ev) if path.exists() else _save(path, snap, ev)
+            _note_fetched(out_dir, g.game_id, kind, want)
             fetched += 1
-            say(f"  {g.game_id} {kind} at {_iso(at)}: {n} prices, {cost} credits (total {spent}, left {client.remaining})")
+            say(f"  {g.game_id} {kind} at {_iso(at)}: {n} prices ({', '.join(want)}), {cost} credits (total {spent}, left {client.remaining})")
     if skipped:
         say(f"  {skipped} snapshot(s) skipped (see above)")
     return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": True}

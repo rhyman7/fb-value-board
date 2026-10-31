@@ -579,3 +579,37 @@ def test_backfill_skips_a_snapshot_the_api_does_not_have(tmp_path, monkeypatch):
     n = len(f.calls)
     r = B.run(f, 2023, B.YARDAGE, max_credits=1000, verbose=False)
     assert len(f.calls) == n + 1 and r["snapshots"] == 0 and r["skipped"] == 1   # only the 422 one is asked for again
+
+
+def test_backfill_adds_markets_to_a_saved_season(tmp_path, monkeypatch):
+    """A second run with new markets fetches only those and appends them to the saved files;
+    a market the book had no lines for is remembered in fetched.csv and not asked for again."""
+    from nflmodel import propbackfill as B
+    kick = pd.Timestamp("2025-09-07T17:00:00Z")
+    sched = pd.DataFrame({"game_id": ["2025_01_DAL_PHI"], "season": 2025, "week": 1, "home_team": ["PHI"], "away_team": ["DAL"], "kickoff": [kick]})
+    monkeypatch.setattr(B, "schedule", lambda s: sched)
+    monkeypatch.setattr(B, "HIST", tmp_path)
+
+    class Fake:
+        remaining, last_cost, used_this_run = 10000, 0, 0
+        calls = []
+
+        def historical_events(self, date, a, b):
+            return [{"id": "e1", "home_team": "Philadelphia Eagles", "away_team": "Dallas Cowboys", "commence_time": "2025-09-07T17:00:00Z"}]
+
+        def historical_event_odds(self, eid, markets, date):
+            self.calls.append(tuple(markets))
+            self.last_cost = 10 * len(markets)
+            mk = [{"key": m, "outcomes": [{"name": "Over", "description": "X", "price": -110, "point": 1.5}]}
+                  for m in markets if m != "player_anytime_td"]            # the book has no TD lines
+            return {"id": eid, "_snapshot": date, "bookmakers": [{"key": "draftkings", "markets": mk}]}
+
+    f = Fake()
+    assert B.run(f, 2025, B.YARDAGE, max_credits=1000, verbose=False)["snapshots"] == 2
+    more = ["player_receptions", "player_anytime_td"]
+    r = B.run(f, 2025, B.YARDAGE + more, max_credits=1000, verbose=False)
+    assert r["snapshots"] == 2 and f.calls[-1] == tuple(more)                   # only the new markets, appended
+    x = B.load(2025, "flag")
+    assert set(x["market"]) == set(B.YARDAGE) | {"player_receptions"} and len(x) == 4
+    assert B.run(f, 2025, B.YARDAGE + more, max_credits=1000, verbose=False)["snapshots"] == 0   # TD remembered as fetched
+    assert "player_anytime_td" in set(pd.read_csv(tmp_path / "2025" / "fetched.csv")["market"])

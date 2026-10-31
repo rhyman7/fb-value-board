@@ -4,7 +4,8 @@ name: Prop price backfill
 # the prop model against real lines (experiments/props_real_lines.py). Run by hand only.
 # Cost: 1 credit per week for the event list, then 10 per market per snapshot; two snapshots
 # per game (pricing and close). A season of the three yardage markets is about 17,100 credits.
-# Saved under data/props/history/<season>/; a stopped run picks up where it left off when
+# Saved under data/props/history/<season>/. Running a season again with more markets fetches
+# only the new ones and appends them. A stopped run picks up where it left off when
 # started again as a NEW run with the same inputs (not GitHub's Re-run, which checks out the
 # commit the first run started from and fetches the whole season again).
 
