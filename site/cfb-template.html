@@ -784,6 +784,16 @@ td .act { font-weight: 700; }
         <details class="data"><summary>Every flagged bet</summary><div class="scroll"><table id="live-rows"></table></div></details>
       </section>
 
+      <section id="bbrec" aria-labelledby="bbrec-h">
+        <div class="section-head">
+          <h2 id="bbrec-h">Best Bets record</h2>
+          <p class="note" id="bbrec-note"></p>
+        </div>
+        <div class="tiles" id="bbrec-tiles"></div>
+        <div class="scroll"><table id="bbrec-weeks" aria-labelledby="bbrec-h"></table></div>
+        <details class="data"><summary>Every Best Bet</summary><div class="scroll"><table id="bbrec-rows"></table></div></details>
+      </section>
+
       <section id="record" aria-labelledby="record-h">
         <div class="section-head">
           <h2 id="record-h">Track record against closing lines</h2>
@@ -1464,6 +1474,8 @@ function renderBestBets() {
   const el = (tag, text, cls) => H(tag, { text, class: cls || "" });
   const kids = [];
   kids.push(el("h1", lg + " best bets, Week " + state.week));
+  const BR = DATA.best_record && DATA.best_record.all;
+  if (BR && BR.graded) kids.push(el("p", `Best Bets record so far: ${BR.w}-${BR.l}${BR.p ? "-" + BR.p : ""} (${pct(BR.win_pct)}), ${spct(BR.roi)} per unit${BR.clv_n ? ", CLV " + spct(BR.clv) : ""}. Full record on the board's Model record page.`, "stamp"));
   kids.push(el("p", `Board built ${inp.generated || M.generated}${inp.market ? "; book prices as of " + inp.market + " UTC" : "; no book prices on file"}${inp.injuries ? "; injury report " + inp.injuries : ""}${inp.designations ? "; injury designations checked " + inp.designations : ""}. Results through ${M.games_through}. Bankroll $${comma(state.bankroll)}. Lines move: check the book before betting.`, "stamp"));
 
   /* 1. the card */
@@ -2022,6 +2034,29 @@ function diagChart(node, o) {
   table($("#live-rows"), [{ t: "Flagged", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "Close" }, { t: "CLV" }],
     L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick + (r.kept === false ? " (withdrawn)" : ""), cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
       r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.close_line == null ? "" : String(r.close_line), r.clv == null ? "" : spct(r.clv)]));
+})();
+
+/* ---------------- Best Bets record ----------------
+   Only the bets on each week's Best bets card, as the card stood when each game kicked off, at
+   the book, line, price and stake it named (nflmodel/bestbets.py); graded like the ledger. */
+(function bestRecord() {
+  const R = DATA.best_record;
+  if (!R) { $("#bbrec").hidden = true; return; }
+  const a = R.all, tile = (label, value, sub) => H("div", { class: "tile" }, H("div", { class: "label", text: label }), H("div", { class: "value", text: value }), H("div", { class: "sub", text: sub }));
+  $("#bbrec-note").textContent = "Only the bets on the Best bets card (the PDF), as the card stood when each game kicked off: the book, line, price and stake it named, the caps applied. Bets that came off the card before kickoff don't count; the Live record above has every bet ever flagged at its first price. "
+    + (R.since ? `Kept since ${R.since}: ${a.n} bets` + (R.pending ? `, ${R.pending} on this week's card still to kick off` : "") + "." : `Started Oct 31, 2026: the first bets count once their games kick off` + (R.pending ? ` (${R.pending} on the card now)` : "") + ".");
+  $("#bbrec-tiles").replaceChildren(
+    tile("Record", a.graded ? `${a.w}-${a.l}${a.p ? "-" + a.p : ""}` : "—", a.graded ? pct(a.win_pct) + " on " + a.graded + " graded" : "No Best Bet has been graded yet"),
+    tile("Return, one unit a bet", a.graded ? spct(a.roi) : "—", a.graded ? snum(a.units, 1) + " units" : (a.claimed_ev != null ? "Claimed EV " + spct(a.claimed_ev) : "")),
+    tile("Profit at the card's stakes", a.staked > 0 && a.graded ? spct(a.return) : "—", a.staked > 0 ? "$" + comma(Math.round(a.profit * state.bankroll)) + " on $" + comma(Math.round(a.staked * state.bankroll)) + " staked, at the bankroll above" : "No stake yet"),
+    tile("Closing line value", a.clv != null ? spct(a.clv) : "—", a.clv_n ? `Beat the close on ${a.beat_close} of ${a.clv_n}` : "Needs Pinnacle's closing quote"));
+  const rec = r => [r.graded ? `${r.w}-${r.l}${r.p ? "-" + r.p : ""}` : "—", r.graded ? pct(r.win_pct) : "—", r.graded ? spct(r.roi) : "—", r.staked > 0 && r.graded ? spct(r.return) : "—", r.clv_n ? spct(r.clv) + " (" + r.beat_close + " of " + r.clv_n + ")" : "—"];
+  table($("#bbrec-weeks"), [{ t: "Week, then kind", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return per unit" }, { t: "Profit on stakes" }, { t: "CLV (beat close)" }],
+    [...R.by_week.slice().reverse().map(w => ["Week " + w.week + (w.season !== R.by_week[R.by_week.length - 1].season ? ", " + w.season : ""), w.n, ...rec(w)]),
+     ...["price", "opener", "wind", "model"].filter(t => R.by_tier[t]).map(t => [TIER[t].h, R.by_tier[t].n, ...rec(R.by_tier[t])])]);
+  table($("#bbrec-rows"), [{ t: "Kickoff", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "CLV" }],
+    R.rows.map(r => [String(r.kickoff).slice(5, 16).replace("T", " "), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick, cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
+      r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.clv == null ? "" : spct(r.clv)]));
 })();
 
 /* ---------------- track record ---------------- */

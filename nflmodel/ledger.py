@@ -192,7 +192,13 @@ def grade(path: Path, results_path: Path, scores: dict, close: dict | None = Non
     sharp book's closing quote (market.closing_quotes); curve(df) -> bets.curves(..., "line")
     for the CLV; halves: data game id (str) -> (home half-time score, away half-time score),
     for the first-half rows (one with no half-time score on file waits)."""
-    led = _read(path, COLS)
+    return grade_frame(_read(path, COLS), results_path, scores, close, curve, now, halves)
+
+
+def grade_frame(led: pd.DataFrame, results_path: Path, scores: dict, close: dict | None = None, curve=None,
+                now: dt.datetime | None = None, halves: dict | None = None) -> int:
+    """grade() on rows already in hand (ledger columns: row_id, data_id, market, side, line,
+    odds_net, anchor_spread, anchor_total); the Best Bets record (nflmodel/bestbets.py) uses it."""
     if led.empty:
         return 0
     done = set(_read(results_path, RES_COLS)["row_id"]) if results_path.exists() else set()
