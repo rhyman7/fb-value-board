@@ -165,6 +165,10 @@ def summary(x: pd.DataFrame) -> dict:
     dec = x[x["result"].isin(["win", "loss"]) & x["fair_over"].notna() & x["p_over"].notna()]
     hit = (dec["result"] == "win").astype(float)
     ours = dec["p_over"] / (dec["p_over"] + dec["p_under"])
+    old = ours
+    if "pn_over" in dec:                          # weeks priced with both: the page shows only the New chances (Oct 31, 2026)
+        nw = dec["pn_over"] / (dec["pn_over"] + dec["pn_under"])
+        ours = nw.where(nw.notna(), ours)
     mv = main.apply(_move, axis=1).dropna() if len(main) else pd.Series(dtype=float)
     fl = []
     for side in ("over", "under"):
@@ -185,7 +189,7 @@ def summary(x: pd.DataFrame) -> dict:
         "middles": int(x["middle"].fillna(0).astype(bool).sum()) if "middle" in x else 0,
         "ladder_gaps": int((x["ladder_gap"].abs() > LADDER_GAP).sum()) if "ladder_gap" in x else 0,
         "flag_record": f"{fl.count(1.0)}-{fl.count(-1.0)}-{fl.count(0.0)}",
-        "new": _new_vs(dec, hit, ours),
+        "new": _new_vs(dec, hit, old),
         "calibration": D.calibration_table(ours, hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
         "calibration_books": D.calibration_table(dec["fair_over"], hit, np.r_[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0001]) if len(dec) else [],
     }

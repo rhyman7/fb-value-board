@@ -307,6 +307,15 @@ boards in detail; this file is the rules.
   update its count when adding one. The section reads `docs/props/` (one file per week,
   `index.json` for the list), written by `nflmodel/propboard.py` on every props run; it never
   edits past weeks by hand, since the files are rebuilt from the append-only log.
+- **One set of player projections** (Ryan's call, Oct 31, 2026). The New projections
+  (`nflmodel/players_ml.py`) replace the current ones wherever `players_ml.ADOPT` covers the stat
+  and position (RB carries and rushing yards; WR and RB receptions and receiving yards); every
+  other stat keeps the current projection. `players.board` writes them into `proj`; there is no
+  `proj_new` and no "New" column on Players, Past weeks, Matchups or Props. Older files that still
+  carry both (archived weeks' `proj_new`, props weeks with `pno`/`pnu`/`mun`) are shown through the
+  page's normalisers (`adoptNew`, `adoptNewProp`), which put the New values in place of the old ones;
+  the logs themselves are never rewritten. Don't bring back a side-by-side column: test a new
+  projection in `experiments/` and replace, as here, when it wins.
 - **This Week's Matchups** copies the matchup dashboards' look on purpose (graphite colors,
   condensed Archivo, team-color blocks lettered in the secondary color, never black): the
   board of this week's games, and `#matchups/<game id>` with each team's card showing this

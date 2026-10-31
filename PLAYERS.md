@@ -136,12 +136,46 @@ backs who played, the error (mean squared) of the target share:
 
 Targets per game: average miss 1.965 → 1.931 with both. **Three quarters of the gain is free**:
 snap share, which nflverse publishes every week (from Pro Football Reference) and which the
-board's main projections do not use yet (only the New projections, `players_ml.py`, do; on the
-2025 real lines they cut receiving yards' Brier gap to the books from 0.0070 to 0.0041,
+board's main projections did not use then (only the New projections, `players_ml.py`, did; on the
+2025 real lines they cut receiving yards' Brier gap to the books from 0.0070 to 0.0051 in the final run below,
 `experiments/out/props_real_lines_ml_2025.json`). Routes would add under a point more. So the
 next step is the free one: bring snap share into the main projections (or adopt the New
 projections) and test on the 2023-2025 real lines; paid route data is worth considering only
 after that.
+
+### The New projections become the projections (Oct 31, 2026)
+
+The New projections (`players_ml.py`, snap share and the other role inputs) now replace the
+current ones for every stat and position they cover (`players_ml.ADOPT`: RB carries and rushing
+yards; WR and RB receptions and receiving yards), on every page. The Players page's record grades
+them: on backtest runs the boosted step runs walk-forward over the holdout seasons too.
+Passing stays on the current projections: a boosted last step for quarterbacks was worse on all
+four passing stats on both the tuning and holdout seasons (table above), and tight ends were not
+better either, so they keep the current model.
+
+Tested first on the real DraftKings and FanDuel lines, 2023-2025
+(`python experiments/props_real_lines_ml.py --season <year>`; 2023 and 2024 have the yardage
+markets only). Our Brier score minus the books' (lower is better; ± one standard error,
+clustered by game), at the pricing snapshot and at the close:
+
+| Stat (positions) | Season | Pricing: current → New | Close: current → New |
+|---|---|---|---|
+| Rushing yards (RB) | 2023 | +0.0105 → +0.0014 | +0.0117 → +0.0070 |
+| | 2024 | +0.0048 → +0.0101 (worse) | +0.0098 → +0.0134 (worse) |
+| | 2025 | +0.0008 → −0.0008 | +0.0091 → +0.0071 |
+| | **All three** | **+0.0048 → +0.0033** | **+0.0102 → +0.0092** |
+| Receiving yards (WR, RB) | 2023 | +0.0052 → +0.0051 | +0.0094 → +0.0077 |
+| | 2024 | +0.0089 → +0.0092 | +0.0124 → +0.0098 |
+| | 2025 | +0.0070 → +0.0051 | +0.0079 → +0.0067 |
+| | **All three** | **+0.0071 → +0.0065** | **+0.0099 → +0.0081** |
+| Carries (RB) | 2025 | +0.0063 → +0.0018 | +0.0187 → +0.0056 |
+| Receptions (WR, RB) | 2025 | +0.0102 → +0.0043 | +0.0106 → +0.0089 |
+
+New is better on every stat over the three seasons and in 2023 and 2025 on all of them. 2024
+went the other way for RB rushing yards (about one standard error), so the gain there is
+smaller and less certain than for receiving. The books are still the better forecast on every
+line (the gap is above zero almost everywhere), so this narrows the gap; it does not close it,
+and no prop bets are flagged.
 
 ## Limits
 

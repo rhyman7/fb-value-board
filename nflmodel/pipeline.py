@@ -67,15 +67,19 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         ptable = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=ov)
         pproj = players.walk_forward(ptable, first_test=season)
         upcoming_ids = set(frame.loc[~frame.played & frame.spread_line.notna() & (frame.season == season), "game_id"])
-        # the new projections (players_ml.py), shown next to the current ones: trained on every
-        # earlier season's walk-forward projections, so the full walk-forward runs every time
-        pall, new = None, None
+        # the New projections (players_ml.py), which replace the current ones for the stats and
+        # positions in players_ml.ADOPT: trained on every earlier season's walk-forward
+        # projections, so the full walk-forward runs every time. On backtest runs the boosted step
+        # also runs walk-forward over the holdout seasons, so the Players page's record grades
+        # the projections the board shows.
+        pall, new, ml = None, None, None
         try:
             say("New projections (role inputs, boosted model) ...")
             from . import players_ml, roles
             R = R if R is not None else roles.load_all(games, refresh_current=refresh, verbose=False)
             pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
-            ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=season), first=C.FIRST_TEST_SEASON)
+            ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=C.HOLDOUT_FROM if with_backtest else season),
+                                         first=C.FIRST_TEST_SEASON)
             new = ml[ml["season"] == season]
         except Exception as exc:
             print(f"  new projections skipped ({exc})")
@@ -83,6 +87,14 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         if with_backtest:
             say("Backtesting player projections ...")
             pall = pall if pall is not None else players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
+            if ml is not None:
+                from .players_ml import ADOPT
+                key = ["game_id", "player_id"]
+                at = pd.MultiIndex.from_frame(pall[key])
+                for st, groups in ADOPT.items():   # the New projections where they replace the current ones
+                    x = ml[(ml["season"] >= C.HOLDOUT_FROM) & ml["group"].isin(groups)].drop_duplicates(key)
+                    v = pd.Series(x[st + "_proj"].to_numpy(), index=pd.MultiIndex.from_frame(x[key])).reindex(at).to_numpy()
+                    pall[st + "_proj"] = np.where(np.isnan(v), pall[st + "_proj"], v)
             player_board["backtest"] = players.backtest_summary(pall, ptable, C.HOLDOUT_FROM)
         elif prev.get("players") and prev["players"].get("backtest"):
             player_board["backtest"] = prev["players"]["backtest"]
