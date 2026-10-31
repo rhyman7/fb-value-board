@@ -52,3 +52,5 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_09_NIU_UNLV|Spread|home,2026-10-31 13:39,2026,9,2026_09_NIU_UNLV,401864530,2026-11-01T02:30Z,Spread,home,UNLV -22.5,model,fanduel,-22.5,100.0,100.0,0.0092,0.0001,pinnacle,22.5,54.0,23.69,54.3
 2026_09_KSU_COLO|Moneyline|home,2026-10-31 14:09,2026,9,2026_09_KSU_COLO,401856846,2026-10-31T18:00Z,Moneyline,home,COLO ML,price,fanduel,,-140.0,-140.0,-0.0556,0.0,pinnacle,3.0,47.0,-2.4,50.67
 2026_09_FLA_UGA|Spread|away,2026-10-31 14:09,2026,9,2026_09_FLA_UGA,401856734,2026-10-31T19:30Z,Spread,away,FLA +12,model,kalshi,11.5,100.0,-107.3,0.0167,0.0,pinnacle,12.0,56.5,7.8,57.52
+2026_10_UGA_MISS|Spread|home,2026-10-31 16:43,2026,10,2026_10_UGA_MISS,401856741,2026-11-08T00:30Z,Spread,home,MISS +3,model,fanduel,3.5,-115.0,-115.0,0.0067,0.001,consensus,-3.0,56.5,-2.15,59.72
+2026_10_AFA_ARMY|Total|under,2026-10-31 16:43,2026,10,2026_10_AFA_ARMY,401862823,2026-11-08T00:30Z,Total,under,Under 50.5,price,draftkings,51.5,-110.0,-110.0,0.0122,0.0046,consensus,5.5,50.5,7.95,54.49
