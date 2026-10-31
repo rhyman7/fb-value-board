@@ -88,13 +88,19 @@ def _missing_markets(path, markets: list[str], fetched: set) -> list[str]:
     """The requested markets a saved snapshot hasn't been asked for yet. A missing file needs
     them all; a header-only file (a snapshot the API answered 404 for) needs none; an existing
     file only the markets neither in it nor in fetched.csv (a market the book had no lines for
-    is still fetched, so it isn't billed again), so a season can be extended a market at a time."""
+    is still fetched, so it isn't billed again), so a season can be extended a market at a time.
+    A file with no yardage market in fetched.csv predates the log: its yardage markets count
+    as asked for."""
     if not path.exists():
         return list(markets)
     have = pd.read_csv(path, usecols=["market"])["market"]
     if have.empty:
         return []
-    done = set(have) | fetched | (set(YARDAGE) if not fetched else set())
+    # Files saved before fetched.csv existed were fetched with the three yardage markets; the
+    # log's first rows for them are the markets added since (Oct 30, 2026), never a yardage
+    # one, so a file with no yardage market in the log is one of those. (A new snapshot first
+    # fetched without the yardage markets would be taken as having them: fetch yardage first.)
+    done = set(have) | fetched | (set(YARDAGE) if not fetched & set(YARDAGE) else set())
     return [m for m in markets if m not in done]
 
 
@@ -106,6 +112,27 @@ def _append(path, snapshot, ev) -> int:
         for r in rows:
             w.writerow(dict(r, snapshot=snapshot))
     return len(rows)
+
+
+def _match(evs: list[dict], wk: pd.DataFrame, name: dict) -> list[dict]:
+    """(game_id, event_id, commence) for the events naming one of the week's games, either
+    way round (a neutral-site game may be listed with the teams swapped)."""
+    out = []
+    for e in evs or []:
+        h, a = name.get(e.get("home_team")), name.get(e.get("away_team"))
+        m = wk[((wk.home_team == h) & (wk.away_team == a)) | ((wk.home_team == a) & (wk.away_team == h))]
+        if len(m):
+            out.append({"game_id": m.iloc[0]["game_id"], "event_id": e["id"], "commence": e["commence_time"]})
+    return out
+
+
+def _remember(known: pd.DataFrame, add: list[dict], path) -> pd.DataFrame:
+    if not add:
+        return known
+    known = pd.concat([known, pd.DataFrame(add)], ignore_index=True).drop_duplicates("game_id", keep="last")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    known.to_csv(path, index=False)
+    return known
 
 
 def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: int, verbose: bool = True) -> dict:
@@ -140,17 +167,24 @@ def run(client: oddsapi.Client, season: int, markets: list[str], max_credits: in
             evs = client.historical_events(_iso(first - pd.Timedelta(days=4)), _iso(first - pd.Timedelta(hours=1)),
                                            _iso(last + pd.Timedelta(hours=1)))
             spent += 1
-            add = []
-            for e in evs:
-                h, a = name.get(e.get("home_team")), name.get(e.get("away_team"))
-                m = wk[(wk.home_team == h) & (wk.away_team == a)]
-                if len(m):
-                    add.append({"game_id": m.iloc[0]["game_id"], "event_id": e["id"], "commence": e["commence_time"]})
-            if add:
-                known = pd.concat([known, pd.DataFrame(add)], ignore_index=True).drop_duplicates("game_id", keep="last")
-                out_dir.mkdir(parents=True, exist_ok=True)
-                known.to_csv(events_path, index=False)
+            known = _remember(known, _match(evs, wk, name), events_path)
             ids = dict(zip(known["game_id"], known["event_id"]))
+        # A game the week's list missed (the API had not listed it four days before the week's
+        # first kickoff: seven 2025 games, five of them in week 17): ask again around its own
+        # kickoff, at its pricing-snapshot time and then just before kickoff (1 credit each,
+        # nothing if none found).
+        for g in {g.game_id: g for g, _, _ in need if g.game_id not in ids}.values():
+            for at in (flag_time(g.kickoff), g.kickoff - pd.Timedelta(minutes=30)):
+                if not room(1):
+                    break
+                evs = client.historical_events(_iso(at), _iso(g.kickoff - pd.Timedelta(hours=6)), _iso(g.kickoff + pd.Timedelta(hours=6)))
+                spent += 1
+                hit = _match(evs, wk[wk.game_id == g.game_id], name)
+                if hit:
+                    known = _remember(known, hit, events_path)
+                    ids = dict(zip(known["game_id"], known["event_id"]))
+                    say(f"  {g.game_id}: event found on a second look ({hit[0]['event_id']})")
+                    break
         for g, kind, want in need:
             path = out_dir / f"{g.game_id}_{kind}.csv"
             per_snap = 10 * len(want)

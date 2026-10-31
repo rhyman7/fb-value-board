@@ -291,7 +291,9 @@ not in The Odds API's free data, so none are flagged.
   a run asks each saved snapshot only for the markets it hasn't been asked for yet and
   appends them (`history/<season>/fetched.csv` records what was asked, so a market the book
   had no lines for is not billed again; files from before that log count as the three
-  yardage markets). To resume a stopped run, start a **new**
+  yardage markets). A game the week's event list doesn't carry (seven 2025 games and two
+  2024 ones were missing four days before their week's first kickoff) is looked up again around
+  its own kickoff, at 1 credit a look. To resume a stopped run, start a **new**
   run with the same inputs; never use GitHub's **Re-run**, which checks out the commit the
   first run started from, without the files it saved, and fetches the whole season again.
 
