@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import archive, backtest, bets, config as C, data, derivs, extra, injuries, ledger, market, matchup, model, overrides, players, players_data, sheet, slate, weather
+from . import archive, backtest, bestbets, bets, config as C, data, derivs, extra, injuries, ledger, market, matchup, model, overrides, players, players_data, sheet, slate, weather
 from .features_ext import PRODUCTION_METRICS, ExtRatingEngine
 
 
@@ -201,6 +201,15 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     except Exception as exc:
         print(f"  ledger skipped ({exc})")
         out["ledger"] = prev.get("ledger")
+    # the Best Bets record: only the bets on each week's Best bets card, as it stood at kickoff
+    try:
+        bestbets.record(out["slate"]["games"], season, kick, C.DATA / "bestbets.csv", "nfl")
+        n_bb = bestbets.grade(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv", scores, close, lambda df: bets.curves(df, dist, "line"), halves=halves)
+        out["best_record"] = bestbets.summary(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv")
+        say(f"  best bets record: {n_bb} graded")
+    except Exception as exc:
+        print(f"  best bets record skipped ({exc})")
+        out["best_record"] = prev.get("best_record")
 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)

@@ -7,7 +7,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from nflmodel import backtest as NBT, derivs, ledger, market, sheet
+from nflmodel import backtest as NBT, bestbets, derivs, ledger, market, sheet
 from nflmodel.pipeline import _clean, haircut_factor
 
 from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
@@ -176,6 +176,16 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         traceback.print_exc()
         print(f"  ledger skipped ({exc})")
         out["ledger"] = prev.get("ledger")
+    try:                                          # the Best Bets record (nflmodel/bestbets.py): the card as it stood at kickoff
+        kk = {g["id"]: kick[str(g["game_id"])] for g in slate["games"] if str(g["game_id"]) in kick}
+        bestbets.record(slate["games"], season, kk, C.DATA / "bestbets.csv", "cfb")
+        n_bb = bestbets.grade(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv", scores, {str(k): v for k, v in close.items()},
+                              lambda df: bets.curves(df, dist, "line"), halves=halves)
+        out["best_record"] = bestbets.summary(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv")
+        say(f"  best bets record: {n_bb} graded")
+    except Exception as exc:
+        print(f"  best bets record skipped ({exc})")
+        out["best_record"] = prev.get("best_record")
     out = _clean(out)
     C.DOCS.mkdir(parents=True, exist_ok=True)
     (C.DOCS / "data.json").write_text(json.dumps(out, separators=(",", ":")))

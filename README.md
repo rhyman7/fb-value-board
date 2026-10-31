@@ -270,6 +270,11 @@ landing page links the PDFs. What the model thinks but is not a bet is on a seco
 **Model leans** (`#leans`, `model-leans.pdf`): every game's lean, and on the NFL board the
 model's own edges, which carry no stake there and are kept off the card.
 
+The **Best Bets record** (Model record page, `nflmodel/bestbets.py`) counts only the bets on
+the Best bets card, as the card stood when each game kicked off, at the book, line, price and
+stake it named, week by week. Bets that came off the card before kickoff are not in it; the
+Live record keeps every bet ever flagged at its first price.
+
 Stakes are quarter Kelly, capped at 3% a bet, 5% a game and 10% a week: when the week's bets
 add up to more, every stake that week is scaled down by the same factor.
 

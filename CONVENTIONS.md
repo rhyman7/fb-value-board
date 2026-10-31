@@ -270,6 +270,16 @@ boards in detail; this file is the rules.
   has `kept`. `data.json` carries the summary as
   `ledger` (records overall, kept, withdrawn, by tier, by market and by week, plus every row) and the Model
   record page leads with it as **Live record**; `tests/test_sheet.py` checks the files.
+- **The Best Bets record (both boards): `data/bestbets.csv`, `data/bestbets_results.csv`, and
+  the same under `data/cfb/`** (`nflmodel/bestbets.py`, Oct 31, 2026). Only the bets on the
+  Best bets card (`bestbets.on_card`, the page's `ON_CARD`: every tiered bet but the NFL
+  model tier), as the card stood at each game's kickoff: each build appends an entry when a
+  card bet is new, changes book, line, price or stake, or leaves the card (`on_card` 0), for
+  games not yet kicked off; the record reads the last entry before kickoff. Graded by
+  `ledger.grade_frame` like the ledger. Append-only, written by the Update Actions only.
+  `data.json` carries it as `best_record` (all, by week, by tier, by market, rows, `pending`);
+  the Model record page shows it as **Best Bets record** under the Live record, and the Best
+  bets card's header carries the record so far.
 - **The spread and totals card shows every model input.** A game page's "How the spread is
   built" rows add up to the raw model spread and total (`matchup.breakdown()`,
   `cfbmodel/board.py`). A feature added to `MARGIN_FEATS` or `TOTAL_FEATS` needs a row

@@ -289,3 +289,37 @@ def test_kalshi_post_at_uses_the_haircut_chance():
     k = B.with_post_at(out)[("g", "Spread", "home")]
     k = next(q for q in k if q["book"] == "kalshi")
     assert k["post_at"] is not None and k["post_at"] <= 50          # against the 50% the stakes are sized from, not the model's 60%
+
+
+def test_best_bets_record_counts_the_card_at_kickoff(tmp_path):
+    import datetime as dt
+    from nflmodel import bestbets as BB
+    path, res = tmp_path / "bestbets.csv", tmp_path / "bestbets_results.csv"
+    openers = {"rows": [{"threshold": 2, "win_pct": 0.545, "roi": 0.04, "holdout": {"n": 615, "win_pct": 0.546, "roi": 0.041}}]}
+    def board(change=None):
+        g = _game()
+        if change:
+            change(g)
+        SH.annotate(g, "nfl"); SH.bucket_stakes([g], openers, {"eras": [{"win_pct": 0.592}]}, 0.25, 0.03); return g
+    ko = {"2026_08_BAL_BUF": pd.Timestamp("2026-11-01T18:00Z")}
+    t0 = dt.datetime(2026, 10, 30, 12, tzinfo=dt.timezone.utc)
+    g = board()
+    n = BB.record([g], 2026, ko, path, "nfl", now=t0)
+    card = {f"{g['id']}|{b['market']}|{b['side']}" for b in g["bets"] if BB.on_card(b, "nfl")}
+    assert n == len(card) and n > 0
+    assert BB.record([g], 2026, ko, path, "nfl", now=t0 + dt.timedelta(hours=1)) == 0     # nothing changed
+    # the price bet leaves the card before kickoff; BUF -3.5 changes book
+    def change(x):
+        x["bets"][3]["beats_sharp"] = None
+        x["bets"][0]["books"].append({"book": "draftkings", "line": -3.5, "odds": -105, "odds_net": -105, "ev": 0.09, "ev_line": 0.0, "stake": 0.0})
+    g2 = board(change)
+    assert BB.record([g2], 2026, ko, path, "nfl", now=t0 + dt.timedelta(hours=2)) == 2
+    after = dt.datetime(2026, 11, 2, tzinfo=dt.timezone.utc)
+    f = BB.final(path, after)
+    assert "2026_08_BAL_BUF|Moneyline|away" not in set(f["row_id"])
+    assert f.set_index("row_id").loc["2026_08_BAL_BUF|Spread|home", "book"] == "draftkings"
+    # graded on the score like the ledger; nothing logged after kickoff
+    assert BB.grade(path, res, {"2026_08_BAL_BUF": (27, 20)}, now=after) == len(f)
+    s = BB.summary(path, res, after)
+    assert s["all"]["n"] == len(f) and s["all"]["graded"] == len(f) and s["by_week"][0]["week"] == 8
+    assert BB.record([g], 2026, ko, path, "nfl", now=after) == 0
