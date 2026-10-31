@@ -287,7 +287,11 @@ not in The Odds API's free data, so none are flagged.
   followed on Oct 30, 2026 (about 16,000 each, on a one-month 100,000-credit plan). A
   snapshot the API answers 404 for (an event re-created under a new id late in the week,
   usually a playoff game) is saved as an empty file and never asked for again; any other
-  error skips the snapshot and the run goes on. To resume a stopped run, start a **new**
+  error skips the snapshot and the run goes on. A season can be extended with more markets:
+  a run asks each saved snapshot only for the markets it hasn't been asked for yet and
+  appends them (`history/<season>/fetched.csv` records what was asked, so a market the book
+  had no lines for is not billed again; files from before that log count as the three
+  yardage markets). To resume a stopped run, start a **new**
   run with the same inputs; never use GitHub's **Re-run**, which checks out the commit the
   first run started from, without the files it saved, and fetches the whole season again.
 
