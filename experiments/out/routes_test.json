@@ -1,0 +1,101 @@
+{
+ "by_season": {
+  "2019": {
+   "snaps": 0.0236,
+   "snaps+routes": 0.0289,
+   "routes_over_snaps": 0.0055
+  },
+  "2020": {
+   "snaps": 0.0184,
+   "snaps+routes": 0.03,
+   "routes_over_snaps": 0.0118
+  },
+  "2021": {
+   "snaps": 0.0224,
+   "snaps+routes": 0.0296,
+   "routes_over_snaps": 0.0073
+  },
+  "2022": {
+   "snaps": 0.0261,
+   "snaps+routes": 0.0328,
+   "routes_over_snaps": 0.0069
+  },
+  "2023": {
+   "snaps": 0.0238,
+   "snaps+routes": 0.0341,
+   "routes_over_snaps": 0.0105
+  },
+  "2024": {
+   "snaps": 0.0203,
+   "snaps+routes": 0.0304,
+   "routes_over_snaps": 0.0103
+  },
+  "2025": {
+   "snaps": 0.0226,
+   "snaps+routes": 0.0297,
+   "routes_over_snaps": 0.0073
+  }
+ },
+ "by_group": {
+  "all": {
+   "n": 46236,
+   "mse_share_model": 0.00343,
+   "mse_share_current": 0.003424,
+   "mse_share_snaps": 0.003347,
+   "gain_snaps": 0.0225,
+   "mse_share_routes": 0.003319,
+   "improvement": 0.0308,
+   "routes_over_snaps": 0.0085,
+   "rmse_targets_current": 1.965,
+   "rmse_targets_routes": 1.931
+  },
+  "group RB": {
+   "n": 13933,
+   "mse_share_model": 0.002229,
+   "mse_share_current": 0.002229,
+   "mse_share_snaps": 0.002187,
+   "gain_snaps": 0.0187,
+   "mse_share_routes": 0.002171,
+   "improvement": 0.026,
+   "routes_over_snaps": 0.0074,
+   "rmse_targets_current": 1.59,
+   "rmse_targets_routes": 1.568
+  },
+  "group TE": {
+   "n": 12000,
+   "mse_share_model": 0.002707,
+   "mse_share_current": 0.002701,
+   "mse_share_snaps": 0.00263,
+   "gain_snaps": 0.0262,
+   "mse_share_routes": 0.002599,
+   "improvement": 0.0377,
+   "routes_over_snaps": 0.0117,
+   "rmse_targets_current": 1.737,
+   "rmse_targets_routes": 1.7
+  },
+  "group WR": {
+   "n": 20303,
+   "mse_share_model": 0.00468,
+   "mse_share_current": 0.004672,
+   "mse_share_snaps": 0.004567,
+   "gain_snaps": 0.0224,
+   "mse_share_routes": 0.004532,
+   "improvement": 0.03,
+   "routes_over_snaps": 0.0078,
+   "rmse_targets_current": 2.297,
+   "rmse_targets_routes": 2.257
+  },
+  "route share moved 15+ pts last game": {
+   "n": 9330,
+   "mse_share_model": 0.004556,
+   "mse_share_current": 0.004552,
+   "mse_share_snaps": 0.004398,
+   "gain_snaps": 0.034,
+   "mse_share_routes": 0.004391,
+   "improvement": 0.0354,
+   "routes_over_snaps": 0.0015,
+   "rmse_targets_current": 2.263,
+   "rmse_targets_routes": 2.219
+  }
+ }
+}

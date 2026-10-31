@@ -119,6 +119,30 @@ since 2019; 200 was taken because 50 overcorrected in recent seasons (projection
 low by about 2.5 yards). Scored on Questionable players who played, which is what a prop
 settles on; a player who sits voids the bet.
 
+### Route participation and snap share (Oct 31, 2026)
+
+`python experiments/routes_test.py` asks whether route participation (how often a player is on
+the field when his team drops back) would improve the target projections: the role measure PFF
+sells weekly. nflverse publishes who was on the field for every play (NGS 2016-2022, FTN 2023
+on) but only after the season (2026 is not out), so the board cannot use it live. Walk-forward
+by season (fitted on the seasons before, tested 2019-2025), on wide receivers, tight ends and
+backs who played, the error (mean squared) of the target share:
+
+| Added to the model's projected target share | WR | TE | RB | All | Every season 2019-2025 |
+|---|---|---|---|---|---|
+| Snap share, as of the game and last game (free, weekly) | −2.2% | −2.6% | −1.9% | −2.25% | −1.8% to −2.6% |
+| Snap share + route share + targets per route (PFF, weekly) | −3.0% | −3.8% | −2.6% | −3.1% | −2.9% to −3.4% |
+| What routes add over snaps | −0.8% | −1.2% | −0.7% | **−0.85%** | −0.6% to −1.2% |
+
+Targets per game: average miss 1.965 → 1.931 with both. **Three quarters of the gain is free**:
+snap share, which nflverse publishes every week (from Pro Football Reference) and which the
+board's main projections do not use yet (only the New projections, `players_ml.py`, do; on the
+2025 real lines they cut receiving yards' Brier gap to the books from 0.0070 to 0.0041,
+`experiments/out/props_real_lines_ml_2025.json`). Routes would add under a point more. So the
+next step is the free one: bring snap share into the main projections (or adopt the New
+projections) and test on the 2023-2025 real lines; paid route data is worth considering only
+after that.
+
 ## Limits
 
 - No cornerback-by-receiver matchups: that needs coverage charting (PFF or Next
