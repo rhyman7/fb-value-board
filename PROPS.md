@@ -23,7 +23,10 @@ higher are the better numbers; a **middle** when both are −110 or better), and
 when a rung's no-vig chance at a book is more than 5 points off what its own main line
 implies through the model's distribution. They are kept in `data/props/prop_log_tags.csv`
 by `row_id` (append-only). Nothing is flagged or staked on them; see FEATURES.md, "Edge
-tests, late October 2026".
+tests, late October 2026". **The ladder-gap chip was taken off the page on Oct 31, 2026:**
+graded on the real 2025 rungs, the cheap side it pointed to lost 21.7% ± 5.2% (2,595 bets;
+"Alternate ladders against real prices" below). It is still computed and logged, so its record
+can be checked again; only the book-gap and middle chips are shown.
 
 ## From a mean to a chance
 
