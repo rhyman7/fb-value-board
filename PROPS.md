@@ -211,6 +211,47 @@ above), but not more than DraftKings and FanDuel. Flags are paused. To earn them
 3. Turn flags back on only if the blend beats the books' prices out of sample, with the
    closing line value to match.
 
+## Alternate ladders against real prices (2025, Oct 31, 2026)
+
+`experiments/props_ladders.py` (results in `experiments/out/props_ladders_2025.json`), on the
+backfilled DraftKings and FanDuel ladder rungs (receiving, rushing and passing yards; 71,915
+rungs in 273 games at the pricing snapshot, every one posted Over only). Pregame projections,
+widths fitted on earlier seasons; nothing fitted on 2025. The pass rule was set before the data
+existed: return and price closing line value both above zero by two standard errors.
+
+**Nothing passes.** Every kind of rung bet lost:
+
+| Rule | Bets | Median price | Return | Price CLV |
+|---|---|---|---|---|
+| Model EV 2%+ at the posted price, within ±400 | 1,373 | +331 | −1.5% ± 5.4% | +4.7% ± 0.4% |
+| Model EV 2%+, any price | 1,677 | +2200 | −6.3% ± 11.2% | +16.2% ± 1.0% |
+| One book's rung beats the other book's chance by 2%+ (no model) | 793 | +1200 | −26.2% ± 10.2% | +13.7% ± 1.4% |
+| Ladder gap (the Props page's tag, the cheap side) | 2,595 | +546 | **−21.7% ± 5.2%** | +6.3% ± 0.6% |
+
+The model's +EV rungs are nearly all long shots (high rungs); the bets beat the closing price
+more often than not, but by far less than the margin long shots carry. The model never finds
+value on a low rung: it is always below the book there.
+
+**Every rung at its posted price, blind:** −5.7% at −1000 or shorter, −6.9% at −1000 to −400,
+−9.2% at −400 to −200, falling to −23% at +400 to +1000 and −38% beyond +1000. Rungs priced
+−1000 or shorter cleared 88.4% of the time against 93.7% implied; −400 to −1000, 79.5% against
+85.3%. **A "safe" low rung is not safe money: the books charge the most on them, after the long
+shots.** The live code's assumed 10% margin on over-only rungs is too small at both ends.
+
+**How good the model's chances are.** By band the model is well calibrated (79% predicted,
+82% happened; 88% and 87%; 94% and 91%), which is what the player outlook shows. On the
+rungs the books put at 75%+ the truth sat between the two: 82.1% cleared, the books (with the
+assumed margin taken out) said 86.0%, the model 77.7%. By stat, on rungs priced −400 or
+shorter: passing yards cleared 83.2% and the model said 83.0%; receiving yards 83.3% against
+79.0%; rushing yards 81.6% against 73.2%. **The model's low end is too fat for rushing yards
+(and a little for receiving yards)**: the early-exit part of the distribution sends too much
+weight to near-zero games for backs. Brier on all rungs: model 0.1449, books 0.1420 (books
+better by 0.0029 ± 0.0008).
+
+What follows: no ladder rung is flagged, the ladder-gap tag lost and should not be read as a
+bet, and the next model fix is the rushing (and receiving) low tail, refitted on earlier
+seasons and checked on these rungs only as a held-out test.
+
 ## Same-game combinations
 
 `nflmodel/propsim.py`. A Gaussian copula: each leg keeps its own distribution (so single
