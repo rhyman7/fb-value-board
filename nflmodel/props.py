@@ -115,6 +115,22 @@ def test_lines(mu: np.ndarray, stat: str) -> np.ndarray:
     return np.where(L >= 0.5, L, np.nan)
 
 
+# A ladder of lines from far below the projection to well above it, for fitting the correction
+# where the books post alternate ladders (experiments/props_tail.py).
+LADDER_FRACS = (0.2, 0.35, 0.5, 0.65, 0.8, 0.9, 1.0, 1.1, 1.25, 1.45, 1.7)
+
+
+def ladder_lines(mu: np.ndarray, stat: str) -> np.ndarray:
+    """Half-point lines at LADDER_FRACS of each projection (yards on fives, as books post
+    them); NaN below 0.5. Fixed-line stats keep their standard lines."""
+    s = SPECS[stat]
+    if s.fixed_lines:
+        return np.tile(np.array(s.fixed_lines, float), (len(mu), 1))
+    x = np.asarray(mu, float)[:, None] * np.array(LADDER_FRACS)[None, :]
+    L = (np.floor(x / 5) * 5 if s.step >= 5 else np.floor(x)) + 0.5
+    return np.where(L >= 0.5, L, np.nan)
+
+
 # --------------------------------------------------------------------------
 # The model
 # --------------------------------------------------------------------------
@@ -202,10 +218,11 @@ class PropModel:
         f = self.cdf_fn(d, stat, g)
         Lf = np.where(np.isnan(L), 0.5, L)
         over, push, under = settle_probs(f, Lf)
-        if calibrate and stat in self.iso:
+        iso = self.iso.get(f"{stat}|{g}") or self.iso.get(stat)     # per position group where fitted
+        if calibrate and iso is not None:
             # the correction is fitted on half-point lines; keep the push share and rescale the rest
             p_dec = over / np.maximum(over + under, 1e-9)
-            p_dec = self.iso[stat](p_dec)
+            p_dec = iso(p_dec)
             rest = 1 - push
             over, under = p_dec * rest, (1 - p_dec) * rest
         nan = np.isnan(L)
