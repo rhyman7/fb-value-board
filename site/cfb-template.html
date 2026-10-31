@@ -557,6 +557,7 @@ td .act { font-weight: 700; }
     <a class="brand" href="#games"><i aria-hidden="true"></i>College Value Board</a>
     <nav class="sections" aria-label="Sections">
       <ul>
+        <li><a href="#manual" data-view="manual">Manual</a></li>
         <li><a href="#matchups" data-view="matchups">This Week's Matchups</a></li>
         <li><a href="#games" data-view="games">Games</a></li>
         <li><a href="#players" data-view="players">Players</a></li>
@@ -678,6 +679,17 @@ td .act { font-weight: 700; }
     <div class="view bb" id="view-leans" hidden>
       <p class="bb-actions"><a class="btn" href="model-leans.pdf" download>Download PDF</a><button class="btn" id="leans-print" type="button">Print</button><a class="btn" href="#games">Back to the board</a></p>
       <div class="bb-doc" id="leans-doc"></div>
+    </div>
+    <!-- ============ the manual: docs/manual/ (shared by both boards), shown in a frame sized to its content ============ -->
+    <div class="view" id="view-manual" hidden>
+      <section aria-labelledby="manual-h">
+        <div class="section-head">
+          <h2 id="manual-h">The Value Boards manual</h2>
+          <p class="note">A professional's manual for both boards: what every page shows, how to read every number, and what to do with it. Third edition, October 31, 2026. The numbers in it are that day's; the explanations hold until the boards change.</p>
+          <p class="bb-links"><a class="btn" href="../manual/Value_Boards_Manual.pdf" download>Download the manual (PDF)</a><a class="btn" href="../manual/" target="_blank" rel="noopener">Open on its own page</a></p>
+        </div>
+        <iframe id="manual-frame" title="The Value Boards manual" style="width:100%;border:0;display:block;min-height:80vh"></iframe>
+      </section>
     </div>
     <!-- ============ one game ============ -->
     <div class="view" id="view-game" hidden></div>
@@ -3024,8 +3036,22 @@ const matchups = (() => {
   return { board, game, find: id => LIVE.games.find(g => g.id === id) };
 })();
 
+/* ---------------- the manual ----------------
+   docs/manual/index.html (both boards share it) in a frame, loaded the first time the view opens
+   and sized to its content so the page scrolls as one. */
+const MANUAL_DIR = "../manual";
+function openManual() {
+  const f = $("#manual-frame");
+  const fit = () => { try { const d = f.contentDocument; if (d && d.documentElement) f.style.height = d.documentElement.scrollHeight + "px"; } catch (e) {} };
+  if (!f.src) {
+    f.addEventListener("load", () => { fit(); try { f.contentWindow.addEventListener("resize", fit); [...f.contentDocument.images].forEach(i => i.addEventListener("load", fit)); } catch (e) {} });
+    f.src = MANUAL_DIR + "/index.html";
+    window.addEventListener("resize", () => { if (!views.manual.hidden) fit(); });
+  } else setTimeout(fit, 50);
+}
+
 /* ---------------- routing ---------------- */
-const views = { games: $("#view-games"), bestbets: $("#view-bestbets"), leans: $("#view-leans"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
+const views = { games: $("#view-games"), manual: $("#view-manual"), bestbets: $("#view-bestbets"), leans: $("#view-leans"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
@@ -3033,7 +3059,7 @@ function route() {
   const mm = /^matchups\/(.+)$/.exec(h), pm = mm && /^(\d{4}_w\d{2})(?:\/(.+))?$/.exec(mm[1]);
   const tok = pm ? pm[1] : null, pid = pm && pm[2] ? decodeURIComponent(pm[2]) : null;
   const mg = mm && !pm ? matchups.find(decodeURIComponent(mm[1])) : null;
-  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "bestbets" || h === "leans" || (h === "props" && views.props)) ? h : "games";
+  const name = g ? "game" : (mg || pid) ? "matchup" : (tok || h === "matchups") ? "matchups" : (h === "ratings" || h === "model" || h === "players" || h === "history" || h === "bestbets" || h === "leans" || h === "manual" || (h === "props" && views.props)) ? h : "games";
   // the matchup views wear the matchup dashboards' graphite look, top bar included
   document.documentElement.toggleAttribute("data-mx", name === "matchups" || name === "matchup");
   $("#mx-page").media = name === "matchup" ? "print" : "not all";   // a printed matchup is one landscape page
@@ -3041,6 +3067,7 @@ function route() {
   document.documentElement.classList.toggle("bb-print", name === "bestbets" || name === "leans");
   if (name === "bestbets") renderBestBets();
   if (name === "leans") renderLeans();
+  if (name === "manual") openManual();
   if (name === "matchups") matchups.board(tok);
   if (name === "matchup") matchups.game(tok, mg || pid);
   if (name === "history") historyView.open();
