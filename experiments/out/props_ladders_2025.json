@@ -1,0 +1,865 @@
+{
+ "season": 2025,
+ "alt_margin": 0.1,
+ "rule": "return > 2 SE and price CLV > 2 SE, 30+ bets, on a season not fitted on",
+ "calibration": {
+  "n": 71915,
+  "games": 273,
+  "brier_model": 0.14493,
+  "brier_book_fair": 0.14202,
+  "model_minus_book": 0.00292,
+  "se": 0.00081,
+  "high_rungs": {
+   "n": 10688,
+   "hit": 0.8208,
+   "book_fair": 0.86,
+   "model": 0.7769,
+   "model_minus_book": 0.00602,
+   "se": 0.00164
+  },
+  "bands": {
+   "book_raw": [
+    {
+     "band": "0.02-0.10",
+     "n": 17905,
+     "predicted": 0.0561,
+     "actual": 0.0361
+    },
+    {
+     "band": "0.10-0.25",
+     "n": 15569,
+     "predicted": 0.1651,
+     "actual": 0.1326
+    },
+    {
+     "band": "0.25-0.40",
+     "n": 9281,
+     "predicted": 0.3225,
+     "actual": 0.2868
+    },
+    {
+     "band": "0.40-0.60",
+     "n": 9682,
+     "predicted": 0.4978,
+     "actual": 0.4456
+    },
+    {
+     "band": "0.60-0.75",
+     "n": 7188,
+     "predicted": 0.6767,
+     "actual": 0.616
+    },
+    {
+     "band": "0.75-0.85",
+     "n": 5183,
+     "predicted": 0.8007,
+     "actual": 0.7314
+    },
+    {
+     "band": "0.85-0.92",
+     "n": 4250,
+     "predicted": 0.885,
+     "actual": 0.832
+    },
+    {
+     "band": "0.92-0.97",
+     "n": 2557,
+     "predicted": 0.9396,
+     "actual": 0.8928
+    },
+    {
+     "band": "0.97-0.99",
+     "n": 300,
+     "predicted": 0.9812,
+     "actual": 0.9367
+    }
+   ],
+   "book_fair": [
+    {
+     "band": "0.01-0.10",
+     "n": 23585,
+     "predicted": 0.0478,
+     "actual": 0.0497
+    },
+    {
+     "band": "0.10-0.25",
+     "n": 13202,
+     "predicted": 0.1668,
+     "actual": 0.1765
+    },
+    {
+     "band": "0.25-0.40",
+     "n": 8645,
+     "predicted": 0.319,
+     "actual": 0.3287
+    },
+    {
+     "band": "0.40-0.60",
+     "n": 9072,
+     "predicted": 0.4972,
+     "actual": 0.4987
+    },
+    {
+     "band": "0.60-0.75",
+     "n": 6723,
+     "predicted": 0.678,
+     "actual": 0.6493
+    },
+    {
+     "band": "0.75-0.85",
+     "n": 4668,
+     "predicted": 0.8016,
+     "actual": 0.7614
+    },
+    {
+     "band": "0.85-0.92",
+     "n": 3780,
+     "predicted": 0.8836,
+     "actual": 0.8463
+    },
+    {
+     "band": "0.92-0.97",
+     "n": 2007,
+     "predicted": 0.9369,
+     "actual": 0.8989
+    },
+    {
+     "band": "0.97-0.99",
+     "n": 233,
+     "predicted": 0.9814,
+     "actual": 0.927
+    }
+   ],
+   "model": [
+    {
+     "band": "0.00-0.10",
+     "n": 19421,
+     "predicted": 0.0476,
+     "actual": 0.043
+    },
+    {
+     "band": "0.10-0.25",
+     "n": 15945,
+     "predicted": 0.1675,
+     "actual": 0.1538
+    },
+    {
+     "band": "0.25-0.40",
+     "n": 10207,
+     "predicted": 0.3255,
+     "actual": 0.3259
+    },
+    {
+     "band": "0.40-0.60",
+     "n": 10861,
+     "predicted": 0.5032,
+     "actual": 0.5121
+    },
+    {
+     "band": "0.60-0.75",
+     "n": 7575,
+     "predicted": 0.6782,
+     "actual": 0.6882
+    },
+    {
+     "band": "0.75-0.85",
+     "n": 5619,
+     "predicted": 0.7934,
+     "actual": 0.8195
+    },
+    {
+     "band": "0.85-0.92",
+     "n": 1893,
+     "predicted": 0.8788,
+     "actual": 0.8732
+    },
+    {
+     "band": "0.92-0.97",
+     "n": 393,
+     "predicted": 0.9365,
+     "actual": 0.9135
+    }
+   ]
+  }
+ },
+ "calibration_by_stat": {
+  "pass_yds": {
+   "n": 14602,
+   "games": 273,
+   "brier_model": 0.14887,
+   "brier_book_fair": 0.14806,
+   "model_minus_book": 0.00081,
+   "se": 0.0017,
+   "high_rungs": {
+    "n": 2467,
+    "hit": 0.8229,
+    "book_fair": 0.8566,
+    "model": 0.8214,
+    "model_minus_book": -0.00092,
+    "se": 0.00203
+   },
+   "bands": {
+    "book_raw": [
+     {
+      "band": "0.02-0.10",
+      "n": 3430,
+      "predicted": 0.0576,
+      "actual": 0.0446
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 2934,
+      "predicted": 0.1657,
+      "actual": 0.1387
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 1818,
+      "predicted": 0.3226,
+      "actual": 0.2932
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 1987,
+      "predicted": 0.4976,
+      "actual": 0.4821
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 1601,
+      "predicted": 0.6762,
+      "actual": 0.6365
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 1222,
+      "predicted": 0.8015,
+      "actual": 0.7365
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 1025,
+      "predicted": 0.8855,
+      "actual": 0.8488
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 540,
+      "predicted": 0.938,
+      "actual": 0.8907
+     },
+     {
+      "band": "0.97-0.99",
+      "n": 45,
+      "predicted": 0.9789,
+      "actual": 0.8222
+     }
+    ],
+    "book_fair": [
+     {
+      "band": "0.01-0.10",
+      "n": 4457,
+      "predicted": 0.0481,
+      "actual": 0.0556
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 2563,
+      "predicted": 0.1668,
+      "actual": 0.1838
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 1715,
+      "predicted": 0.3205,
+      "actual": 0.3545
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 1913,
+      "predicted": 0.4993,
+      "actual": 0.528
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 1487,
+      "predicted": 0.679,
+      "actual": 0.6664
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 1131,
+      "predicted": 0.8027,
+      "actual": 0.7639
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 903,
+      "predicted": 0.8848,
+      "actual": 0.8671
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 397,
+      "predicted": 0.9351,
+      "actual": 0.8892
+     },
+     {
+      "band": "0.97-0.99",
+      "n": 36,
+      "predicted": 0.9775,
+      "actual": 0.8333
+     }
+    ],
+    "model": [
+     {
+      "band": "0.00-0.10",
+      "n": 3234,
+      "predicted": 0.055,
+      "actual": 0.0405
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 2911,
+      "predicted": 0.1672,
+      "actual": 0.1329
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 2011,
+      "predicted": 0.3214,
+      "actual": 0.2939
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 2439,
+      "predicted": 0.4955,
+      "actual": 0.4957
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 1763,
+      "predicted": 0.6822,
+      "actual": 0.6642
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 1306,
+      "predicted": 0.8013,
+      "actual": 0.8025
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 778,
+      "predicted": 0.881,
+      "actual": 0.8715
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 160,
+      "predicted": 0.932,
+      "actual": 0.8938
+     }
+    ]
+   }
+  },
+  "rec_yds": {
+   "n": 38237,
+   "games": 257,
+   "brier_model": 0.14262,
+   "brier_book_fair": 0.13839,
+   "model_minus_book": 0.00423,
+   "se": 0.00099,
+   "high_rungs": {
+    "n": 5260,
+    "hit": 0.8253,
+    "book_fair": 0.8581,
+    "model": 0.7837,
+    "model_minus_book": 0.00793,
+    "se": 0.00215
+   },
+   "bands": {
+    "book_raw": [
+     {
+      "band": "0.02-0.10",
+      "n": 9607,
+      "predicted": 0.0557,
+      "actual": 0.0319
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 8536,
+      "predicted": 0.1649,
+      "actual": 0.1273
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 5059,
+      "predicted": 0.3226,
+      "actual": 0.2728
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 5203,
+      "predicted": 0.4975,
+      "actual": 0.4284
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 3756,
+      "predicted": 0.6765,
+      "actual": 0.6052
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 2639,
+      "predicted": 0.8004,
+      "actual": 0.7385
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 2080,
+      "predicted": 0.8844,
+      "actual": 0.8308
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 1176,
+      "predicted": 0.9384,
+      "actual": 0.9031
+     },
+     {
+      "band": "0.97-0.99",
+      "n": 181,
+      "predicted": 0.9823,
+      "actual": 0.9503
+     }
+    ],
+    "book_fair": [
+     {
+      "band": "0.01-0.10",
+      "n": 12750,
+      "predicted": 0.0478,
+      "actual": 0.0455
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 7186,
+      "predicted": 0.1669,
+      "actual": 0.1696
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 4712,
+      "predicted": 0.3186,
+      "actual": 0.3143
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 4824,
+      "predicted": 0.4961,
+      "actual": 0.4809
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 3505,
+      "predicted": 0.6772,
+      "actual": 0.6405
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 2352,
+      "predicted": 0.8009,
+      "actual": 0.7674
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 1850,
+      "predicted": 0.8827,
+      "actual": 0.8519
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 907,
+      "predicted": 0.9358,
+      "actual": 0.9019
+     },
+     {
+      "band": "0.97-0.99",
+      "n": 151,
+      "predicted": 0.9819,
+      "actual": 0.9404
+     }
+    ],
+    "model": [
+     {
+      "band": "0.00-0.10",
+      "n": 11822,
+      "predicted": 0.0448,
+      "actual": 0.0474
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 8102,
+      "predicted": 0.1691,
+      "actual": 0.1649
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 5391,
+      "predicted": 0.3288,
+      "actual": 0.3335
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 5013,
+      "predicted": 0.4997,
+      "actual": 0.5031
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 3936,
+      "predicted": 0.6724,
+      "actual": 0.6768
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 2786,
+      "predicted": 0.7987,
+      "actual": 0.8108
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 955,
+      "predicted": 0.8781,
+      "actual": 0.8712
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 231,
+      "predicted": 0.9397,
+      "actual": 0.9264
+     }
+    ]
+   }
+  },
+  "rush_yds": {
+   "n": 19076,
+   "games": 260,
+   "brier_model": 0.14656,
+   "brier_book_fair": 0.14466,
+   "model_minus_book": 0.0019,
+   "se": 0.00161,
+   "high_rungs": {
+    "n": 2961,
+    "hit": 0.8112,
+    "book_fair": 0.866,
+    "model": 0.7278,
+    "model_minus_book": 0.00843,
+    "se": 0.00414
+   },
+   "bands": {
+    "book_raw": [
+     {
+      "band": "0.02-0.10",
+      "n": 4868,
+      "predicted": 0.0557,
+      "actual": 0.0386
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 4099,
+      "predicted": 0.1649,
+      "actual": 0.1393
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 2404,
+      "predicted": 0.3221,
+      "actual": 0.3116
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 2492,
+      "predicted": 0.4988,
+      "actual": 0.4522
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 1831,
+      "predicted": 0.6774,
+      "actual": 0.6204
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 1322,
+      "predicted": 0.8003,
+      "actual": 0.7126
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 1145,
+      "predicted": 0.8858,
+      "actual": 0.8192
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 841,
+      "predicted": 0.9422,
+      "actual": 0.8799
+     },
+     {
+      "band": "0.97-0.99",
+      "n": 74,
+      "predicted": 0.98,
+      "actual": 0.973
+     }
+    ],
+    "book_fair": [
+     {
+      "band": "0.01-0.10",
+      "n": 6378,
+      "predicted": 0.0473,
+      "actual": 0.0541
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 3453,
+      "predicted": 0.1667,
+      "actual": 0.1853
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 2218,
+      "predicted": 0.3185,
+      "actual": 0.3395
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 2335,
+      "predicted": 0.4977,
+      "actual": 0.5113
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 1731,
+      "predicted": 0.6786,
+      "actual": 0.6522
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 1185,
+      "predicted": 0.8021,
+      "actual": 0.7468
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 1027,
+      "predicted": 0.8843,
+      "actual": 0.8179
+     },
+     {
+      "band": "0.92-0.97",
+      "n": 703,
+      "predicted": 0.9395,
+      "actual": 0.9004
+     },
+     {
+      "band": "0.97-0.99",
+      "n": 46,
+      "predicted": 0.983,
+      "actual": 0.9565
+     }
+    ],
+    "model": [
+     {
+      "band": "0.00-0.10",
+      "n": 4365,
+      "predicted": 0.0496,
+      "actual": 0.033
+     },
+     {
+      "band": "0.10-0.25",
+      "n": 4932,
+      "predicted": 0.1652,
+      "actual": 0.148
+     },
+     {
+      "band": "0.25-0.40",
+      "n": 2805,
+      "predicted": 0.3222,
+      "actual": 0.334
+     },
+     {
+      "band": "0.40-0.60",
+      "n": 3409,
+      "predicted": 0.5138,
+      "actual": 0.5371
+     },
+     {
+      "band": "0.60-0.75",
+      "n": 1876,
+      "predicted": 0.6865,
+      "actual": 0.7345
+     },
+     {
+      "band": "0.75-0.85",
+      "n": 1527,
+      "predicted": 0.7771,
+      "actual": 0.85
+     },
+     {
+      "band": "0.85-0.92",
+      "n": 160,
+      "predicted": 0.8728,
+      "actual": 0.8938
+     }
+    ]
+   }
+  }
+ },
+ "model_bets": {
+  "ev2_in_band": {
+   "bets": 1373,
+   "won": 336,
+   "avg_price": 331.0,
+   "return": -0.0152,
+   "return_se": 0.054,
+   "claimed": 0.2358,
+   "clv_bets": 1362,
+   "clv_price": 0.0468,
+   "clv_price_se": 0.0044,
+   "beat_close": 0.607,
+   "clv_ev": -0.1579,
+   "clv_ev_se": 0.0061
+  },
+  "ev2_any_price": {
+   "bets": 1677,
+   "won": 139,
+   "avg_price": 2200.0,
+   "return": -0.0631,
+   "return_se": 0.1124,
+   "claimed": 0.6701,
+   "clv_bets": 1580,
+   "clv_price": 0.1622,
+   "clv_price_se": 0.0104,
+   "beat_close": 0.663,
+   "clv_ev": -0.239,
+   "clv_ev_se": 0.0091
+  },
+  "ev5_in_band": {
+   "bets": 1211,
+   "won": 284,
+   "avg_price": 334.0,
+   "return": -0.0316,
+   "return_se": 0.0572,
+   "claimed": 0.263,
+   "clv_bets": 1201,
+   "clv_price": 0.0502,
+   "clv_price_se": 0.0046,
+   "beat_close": 0.62,
+   "clv_ev": -0.1567,
+   "clv_ev_se": 0.0063
+  },
+  "ev5_any_price": {
+   "bets": 1558,
+   "won": 108,
+   "avg_price": 2500.0,
+   "return": -0.0839,
+   "return_se": 0.1151,
+   "claimed": 0.7187,
+   "clv_bets": 1462,
+   "clv_price": 0.1708,
+   "clv_price_se": 0.011,
+   "beat_close": 0.672,
+   "clv_ev": -0.2426,
+   "clv_ev_se": 0.0095
+  }
+ },
+ "cross_book": {
+  "ev2": {
+   "bets": 793,
+   "won": 276,
+   "avg_price": 1200.0,
+   "return": -0.2623,
+   "return_se": 0.1024,
+   "claimed": 0.1159,
+   "clv_bets": 783,
+   "clv_price": 0.1373,
+   "clv_price_se": 0.014,
+   "beat_close": 0.685,
+   "clv_ev": -0.1401,
+   "clv_ev_se": 0.0094
+  },
+  "ev5": {
+   "bets": 421,
+   "won": 40,
+   "avg_price": 2300.0,
+   "return": -0.4408,
+   "return_se": 0.1578,
+   "claimed": 0.1901,
+   "clv_bets": 415,
+   "clv_price": 0.2087,
+   "clv_price_se": 0.0216,
+   "beat_close": 0.706,
+   "clv_ev": -0.2039,
+   "clv_ev_se": 0.0155
+  }
+ },
+ "ladder_gap": {
+  "bets": 2595,
+  "won": 390,
+  "avg_price": 546.0,
+  "return": -0.2172,
+  "return_se": 0.0518,
+  "claimed": 1.5472,
+  "clv_bets": 2444,
+  "clv_price": 0.0627,
+  "clv_price_se": 0.0058,
+  "beat_close": 0.556,
+  "clv_ev": -0.2233,
+  "clv_ev_se": 0.0068
+ },
+ "model_bets_by_book_chance": {
+  "75%+": {
+   "bets": 0
+  },
+  "40-75%": {
+   "bets": 16,
+   "won": 15,
+   "avg_price": -11.0,
+   "return": 0.6658,
+   "return_se": 0.1355,
+   "claimed": 0.0324,
+   "clv_bets": 16,
+   "clv_price": 0.0192,
+   "clv_price_se": 0.0326,
+   "beat_close": 0.688,
+   "clv_ev": -0.0643,
+   "clv_ev_se": 0.0351
+  },
+  "under 40%": {
+   "bets": 1661,
+   "won": 124,
+   "avg_price": 2300.0,
+   "return": -0.0701,
+   "return_se": 0.1135,
+   "claimed": 0.6763,
+   "clv_bets": 1564,
+   "clv_price": 0.1637,
+   "clv_price_se": 0.0105,
+   "beat_close": 0.663,
+   "clv_ev": -0.2408,
+   "clv_ev_se": 0.0092
+  }
+ },
+ "verdict": {
+  "ev2_in_band": false,
+  "ev2_any_price": false,
+  "ev5_in_band": false,
+  "ev5_any_price": false,
+  "ev2": false,
+  "ev5": false,
+  "ladder_gap": false
+ }
+}
