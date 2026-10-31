@@ -79,16 +79,6 @@ sub("each projected using only earlier seasons and graded at the closing price. 
     "each projected using only earlier games and graded at −110 at the consensus closing line, rounded to the half point (the data has no historical prices). The model's settings and features were chosen on ${BT.tuning[0]} to ${BT.tuning[1]}; the shortened 2020 season is in neither set, so results since ${BT.holdout_from} are the cleaner test.`")
 sub('tile("Average miss on the margin", A.margin_mae.model.toFixed(2) + " pts", "The closing spread missed by " + A.margin_mae.market.toFixed(2)),',
     'tile("Average miss on the margin", A.margin_mae.model.toFixed(2) + " pts", "The closing spread missed by " + A.margin_mae.market.toFixed(2) + ". From week 6 on the two are about even"),')
-sub('''  table($("#records"), [{ t: "Market", l: 1 }''', '''  if (BT.by_week) {
-    const host = $("#records").closest("section"), t = H("table");
-    table(t, [{ t: "Weeks", l: 1 }, { t: "Games" }, { t: "Model miss" }, { t: "Adjusted miss" }, { t: "Line miss" }, { t: "Model picks winner" }, { t: "Line picks winner" }],
-      BT.by_week.filter(w => w.n).map(w => [w.weeks, comma(w.n), w.margin_mae.model.toFixed(2), w.margin_mae.blend.toFixed(2), w.margin_mae.market.toFixed(2), pct(w.winner_pct.model), pct(w.winner_pct.market)]));
-    host.append(H("div", { class: "section-head" }, H("h3", { text: "By part of the season, since " + BT.holdout_from }),
-      H("p", { class: "note", text: "Early in the season the model leans on last year and on talent, and trails the line by about a point. From week 6 on it is level with the closing line on the margin and picks winners slightly better." })),
-      H("div", { class: "scroll" }, t));
-  }
-  table($("#records"), [{ t: "Market", l: 1 }''')
-
 # ---- wind ---------------------------------------------------------------------------------
 sub("$(\"#wind-note\").textContent = `Unders at the closing total in outdoor games with ${W.band[0]} to ${W.band[1] - 1} mph of recorded wind went ${a.w}-${a.l}-${a.p} (${pct(a.win_pct)}), a return of ${spct(a.roi)} plus or minus ${pct(a.roi_se)}. The effect shows up from 2014 on and not before. The band was chosen after looking at every season, and live bets use a forecast rather than the wind measured at the game, so treat it as a lead to keep testing. Games flagged on the board carry a wind tag; wind is also a feature in the total model.`;",
     "$(\"#wind-note\").textContent = `Unders at the closing total in outdoor games with ${W.band[0]} to ${W.band[1] - 1} mph of recorded wind went ${a.w}-${a.l}-${a.p} (${pct(a.win_pct)}), a return of ${spct(a.roi)} plus or minus ${pct(a.roi_se)}. That is much weaker than in the NFL and within noise, so the college board does not tag wind games as a bet. Wind above 10 mph is a feature in the total model (it helped on the tuning seasons), and each outdoor game's forecast shows on its page.`;")
@@ -193,25 +183,7 @@ sub('''    $("#hist-foot").textContent = `"Side" is whichever side the board's m
 sub('''    WR: [["targets", "Targets"], ["receptions", "Rec"], ["rec_yds", "Rec yds"]],''', '''    WR: [["receptions", "Rec"], ["rec_yds", "Rec yds"], ["rec_td", "Rec TD"]],''')
 sub('"No player projections were archived for this week (they start with week 7)."', '"No player projections were archived for this week."')
 
-# ---- player card: the last calibration step ----------------------------------------
-# The chain (volume x share x efficiency x defense) is not the projection: a regression fitted
-# on earlier seasons blends it with the player's recent average. Show both inputs and the gap.
-CAL_BOX = r'''
-    if (w.chain && w.recent) {
-      const keys = (p.pos === "QB" ? [["pass_yds", "Passing yards"], ["rush_yds", "Rushing yards"]]
-        : [["rush_yds", "Rushing yards"], ["rec_yds", "Receiving yards"]])
-        .filter(([k]) => w.chain[k] != null && ((p.proj[k] || 0) >= 10 || (w.chain[k] || 0) >= 10));
-      if (keys.length) {
-        const kids = [tx("The chain is team volume × share × efficiency × defense. The projection comes from a regression on earlier seasons that blends the chain with his recent average.")];
-        keys.forEach(([k, label]) => {
-          const lift = (p.proj[k] || 0) - (w.chain[k] || 0);
-          const rec = p.pos === "QB" && k === "pass_yds" ? "per start" : "per game";
-          kids.push(H("br"), b(label + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(p.proj[k])} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from calibration).`));
-        });
-        grid.append(box("From chain to projection", ...kids));
-      }
-    }'''
-sub('    grid.append(box("The defense", tx(dtext)));', '    grid.append(box("The defense", tx(dtext)));' + CAL_BOX)
+
 
 
 # NFL-only parts of the page (the Props section, Oct 2026: props are NFL only, Ryan's call),

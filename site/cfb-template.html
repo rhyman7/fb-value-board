@@ -2124,7 +2124,7 @@ function diagChart(node, o) {
     table(t, [{ t: "Weeks", l: 1 }, { t: "Games" }, { t: "Model miss" }, { t: "Adjusted miss" }, { t: "Line miss" }, { t: "Model picks winner" }, { t: "Line picks winner" }],
       BT.by_week.filter(w => w.n).map(w => [w.weeks, comma(w.n), w.margin_mae.model.toFixed(2), w.margin_mae.blend.toFixed(2), w.margin_mae.market.toFixed(2), pct(w.winner_pct.model), pct(w.winner_pct.market)]));
     host.append(H("div", { class: "section-head" }, H("h3", { text: "By part of the season, since " + BT.holdout_from }),
-      H("p", { class: "note", text: "Early in the season the model leans on last year and on talent, and trails the line by about a point. From week 6 on it is level with the closing line on the margin and picks winners slightly better." })),
+      H("p", { class: "note", text: LG === "cfb" ? "Early in the season the model leans on last year and on talent, and trails the line by about a point. From week 6 on it is level with the closing line on the margin and picks winners slightly better." : "The holdout seasons' games by part of the season: the average miss on the final margin for the raw model, the market-adjusted projection and the closing line, and how often each picked the winner. Where the model's miss is below the line's, it was the better number in that stretch." })),
       H("div", { class: "scroll" }, t));
   }
   table($("#records"), [{ t: "Market", l: 1 }, { t: "Bets placed", l: 1 }, { t: "Since " + BT.holdout_from }, { t: "Win rate since " + BT.holdout_from }, { t: "Bets, all" }, { t: "Record, all" }, { t: "Win rate, all" }, { t: "Return, all" }, { t: "Claimed EV" }], rows);
@@ -2283,11 +2283,12 @@ function diagChart(node, o) {
         : [["rush_yds", "Rushing yards"], ["rec_yds", "Receiving yards"]])
         .filter(([k]) => w.chain[k] != null && ((p.proj[k] || 0) >= 10 || (w.chain[k] || 0) >= 10));
       if (keys.length) {
-        const kids = [tx("The chain is team volume × share × efficiency × defense. The projection comes from a regression on earlier seasons that blends the chain with his recent average.")];
+        const ml = w.ml || [];
+        const kids = [tx("The chain is team volume × share × efficiency × defense. The projection comes from a regression on earlier seasons that blends the chain with his recent average" + (keys.some(([k]) => ml.includes(k)) ? "; stats marked New come from the machine-learning step, which also sees snap shares, depth chart and team pace." : "."))];
         keys.forEach(([k, label]) => {
           const lift = (p.proj[k] || 0) - (w.chain[k] || 0);
           const rec = p.pos === "QB" && k === "pass_yds" ? "per start" : "per game";
-          kids.push(H("br"), b(label + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(p.proj[k])} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from calibration).`));
+          kids.push(H("br"), b(label + (ml.includes(k) ? " (New)" : "") + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(p.proj[k])} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from the last step).`));
         });
         grid.append(box("From chain to projection", ...kids));
       }
