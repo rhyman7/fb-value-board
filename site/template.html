@@ -352,6 +352,16 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .outlook .ask input { width: 6em; } .outlook .ask output { font-weight: 700; color: var(--ink); }
 .outlook .fine { font-size: 12.5px; color: var(--ink-3); margin: 0; }
 #props-table td.rng { white-space: nowrap; color: var(--ink-2); }
+/* fit the props table: headers and the player cell wrap (tags drop under the name), and on wide
+   screens the table uses more of the window than the 1100px column the rest of the page keeps */
+#props-table th, #props-table td.ladder th { white-space: normal; vertical-align: bottom; line-height: 1.2; }
+#props-table > tbody > tr.prow > td:first-child { white-space: normal; min-width: 11em; max-width: 15em; }
+#props-table > tbody > tr.prow > td:first-child .rec { white-space: nowrap; }
+#props-table > tbody > tr.prow > td:nth-child(3) { white-space: normal; min-width: 5.5em; }
+#props-table > tbody > tr.prow > td:first-child .tag, #props-table > tbody > tr.prow > td:first-child .early { margin: 2px 4px 0 0; }
+#props-table td.ladder td:first-child { white-space: normal; min-width: 9em; }
+#props-table td.ladder td:first-child .tag { margin: 2px 0 0; }
+@media (min-width: 1000px) { #view-props .scroll.props-wide { width: min(1440px, calc(100vw - 64px)); margin-left: calc(50% - min(720px, 50vw - 32px)); } }
 /*/NFL-ONLY*/
 .hist-rec div { display: grid; gap: 0; } .hist-rec b { font: 700 26px/1.1 var(--display); font-variant-numeric: tabular-nums; } .hist-rec span { font-size: 12.5px; color: var(--ink-3); }
 td .act { font-weight: 700; }
@@ -727,7 +737,7 @@ td .act { font-weight: 700; }
           <label class="field-label" for="pr-search">Player<input class="money p-search" id="pr-search" type="search" placeholder="Search" autocomplete="off"></label>
         </div>
         <div class="hist-rec" id="props-rec"></div>
-        <div class="scroll"><table id="props-table" class="compact players" aria-labelledby="props-h"></table></div>
+        <div class="scroll props-wide"><table id="props-table" class="compact players" aria-labelledby="props-h"></table></div>
         <p class="note" id="props-foot"></p>
       </section>
       <section aria-labelledby="prcalls-h">
