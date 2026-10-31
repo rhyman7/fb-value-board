@@ -725,6 +725,19 @@ derivative lines (the carry between lines is what the price bets rely on), test 
 disagreement on first-half lines against the opener the way the full-game openers are
 tested, and add first-quarter lines if the half curve holds.
 
+## Graded against Pinnacle (backfill set up Oct 30, 2026; results pending)
+
+Every record above is graded against the nflverse consensus line, and closing line value
+against the consensus close. `experiments/pinnacle_grade.py` regrades the board's three
+edges against Pinnacle's real numbers, from the backfilled lines in
+`data/market/history/` (README "Market lines"): the price tier (a DraftKings or FanDuel price
+that beats Pinnacle's no-vig number by `sheet.PRICE_MIN`, at the Monday open and at the close),
+the opener gap (raw model 2+ points off Pinnacle's open, bet at Pinnacle's open price, graded
+next to the consensus opener on the same games) and closing line value against Pinnacle's
+close, plus how far the consensus close sits from Pinnacle's. The results go here once the
+backfill has run. Derivatives are not in it: the bulk historical endpoint has no team totals
+or first-half lines.
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;

@@ -182,6 +182,16 @@ than structure. Every segment's standard error is 2.5 to 7 points of return, so 
 segments differ significantly, and the Sunday/Monday and bowl rows (12 to 25 games) say
 nothing.
 
+## Graded against Pinnacle (backfill set up Oct 30, 2026; results pending)
+
+The college record is graded against cfbfastR's consensus lines (and live, ESPN's one book).
+`experiments/pinnacle_grade.py --league cfb` regrades the price tier, the opener gap (3+ on
+spreads and totals, the one college edge that has held, against Pinnacle's real open) and
+closing line value against Pinnacle's close, from the backfilled lines in
+`data/market/history/cfb/` (FEATURES.md has the method). A college "close" there is 10
+minutes to two hours before kickoff: one snapshot covers every kickoff within two hours, to
+keep a season near 5,000 credits. Results go here once the backfill has run.
+
 ## Not tested yet
 
 - The wind feature graded on forecasts instead of recorded wind (needs a season of the

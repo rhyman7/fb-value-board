@@ -52,6 +52,15 @@ boards in detail; this file is the rules.
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
   only by hand; to resume one, start a new run with the same inputs, never **Re-run** (it
   checks out the old commit and fetches the season again, ~16,000 credits).
+- The **Market line backfill** Action (`market-backfill.yml`, by hand only;
+  `nflmodel/marketbackfill.py`) commits only `data/market/history/` and
+  `data/props/api_usage.csv`, in the `board-commits` group: past Pinnacle, DraftKings and
+  FanDuel game lines for one league-season per run, an "open" snapshot each Monday 12:00 UTC
+  and a "close" before each cluster of kickoffs. Its `plan` input (on by default) prints the
+  snapshots and their cost and spends nothing; **ask Ryan before a run that spends credits**.
+  One file per snapshot, never edited; a header-only file is a snapshot the API had nothing
+  for. Resume a stopped run with a new run and the same inputs, never **Re-run**. The boards
+  never read these files; `experiments/pinnacle_grade.py` does.
 - The **Wind history** Action (`wind-history.yml`, by hand only) runs
   `experiments/fetch_wind_history.py` and commits only `data/cache/wind_history.csv`: the
   archive wind at kickoff (speed, gusts, direction, along-field and crosswind parts) for

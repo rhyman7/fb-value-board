@@ -1,0 +1,88 @@
+name: Market line backfill
+
+# Past Pinnacle, DraftKings and FanDuel game lines (spreads, totals, moneylines) from The Odds
+# API's historical endpoint (nflmodel/marketbackfill.py), for grading the boards against
+# Pinnacle's real open and close (experiments/pinnacle_grade.py). Run by hand only.
+# Cost: 10 credits per market per snapshot (the three books are one region), so 30 a snapshot
+# with all three markets. One "open" snapshot per week (Monday 12:00 UTC) and one "close" per
+# cluster of kickoffs (NFL 30 minutes, college 120). Tick "plan" first: it prints the
+# snapshots and their cost and spends nothing. Roughly, with all three markets: NFL about
+# 4,300 a season, college about 5,000.
+# Saved under data/market/history/<league>/<season>/. A stopped run picks up where it left off
+# when started again as a NEW run with the same inputs (not GitHub's Re-run, which checks out
+# the commit the first run started from and fetches everything again).
+
+on:
+  workflow_dispatch:
+    inputs:
+      league:
+        description: "nfl or cfb"
+        default: "nfl"
+      season:
+        description: "Season (2020 or later)"
+        default: "2025"
+      max_credits:
+        description: "Most credits this run may spend"
+        default: "4500"
+      markets:
+        description: "Markets, comma separated"
+        default: "spreads,totals,h2h"
+      kinds:
+        description: "Snapshots: open,close (or one of them)"
+        default: "open,close"
+      window:
+        description: "Minutes of kickoffs one close covers (blank: nfl 30, cfb 120)"
+        default: ""
+      plan:
+        description: "Only show the snapshots and their cost (spends nothing)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          args=(--league "${{ inputs.league }}" --season "${{ inputs.season }}" --markets "${{ inputs.markets }}" --kinds "${{ inputs.kinds }}")
+          [ -n "${{ inputs.window }}" ] && args+=(--window "${{ inputs.window }}")
+          if [ "${{ inputs.plan }}" = "true" ]; then
+            python run_market.py backfill "${args[@]}" --plan
+          else
+            python run_market.py backfill "${args[@]}" --max-credits "${{ inputs.max_credits }}"
+          fi
+      - name: Commit
+        if: always() && inputs.plan != true
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/market/history data/props/api_usage.csv
+          git diff --cached --quiet || git commit -m "Market line backfill ${{ inputs.league }} ${{ inputs.season }}"
+          # The usage log is append-only and another Action may have added rows since this
+          # run checked out: on a conflict there, keep both sides' rows.
+          if ! git pull --rebase origin main; then
+            # during the rebase HEAD is origin/main and REBASE_HEAD is this run's commit
+            git show HEAD:data/props/api_usage.csv > /tmp/usage.csv
+            git show REBASE_HEAD:data/props/api_usage.csv | tail -n +2 >> /tmp/usage.csv
+            awk '!seen[$0]++' /tmp/usage.csv > data/props/api_usage.csv
+            git add data/props/api_usage.csv
+            git diff --name-only --diff-filter=U | grep -q . && { echo "unexpected conflict outside the usage log"; exit 1; }
+            GIT_EDITOR=true git rebase --continue
+          fi
+          git push

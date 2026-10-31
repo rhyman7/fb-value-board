@@ -4,6 +4,8 @@
   GET /v4/sports/americanfootball_nfl/events/{id}/odds                  (markets returned) x (regions)
   GET /v4/historical/sports/americanfootball_nfl/events?date=           1 (0 if none found)
   GET /v4/historical/sports/americanfootball_nfl/events/{id}/odds?date= 10 x (markets returned) x (regions)
+  GET /v4/historical/sports/{sport}/odds?date=                          10 x (markets returned) x (regions)
+                                                                        (game lines, every event; marketbackfill.py)
 
 Historical player props start 2023-05-03, in 5-minute snapshots; a historical call returns
 the snapshot at or before `date`, wrapped in {timestamp, previous_timestamp, next_timestamp, data}.
@@ -140,6 +142,18 @@ class Client:
         if ev:
             ev["_snapshot"] = body.get("timestamp")
         return ev
+
+
+    def historical_sport_odds(self, sport: str, markets: list[str], date: str, books: list[str]) -> dict:
+        """Game lines for every event of a sport as they stood at `date` (the snapshot at or
+        before it): {timestamp, data: [events]}. Costs 10 x (markets returned) x (regions; up
+        to ten named books are one). Used by nflmodel/marketbackfill.py."""
+        worst = 10 * len(markets)
+        if self.remaining is not None and self.remaining - worst < self.reserve:
+            raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}: skipping {sport} {date}")
+        params = {"markets": ",".join(markets), "bookmakers": ",".join(books),
+                  "oddsFormat": "american", "dateFormat": "iso", "date": date}
+        return self._get(f"/historical/sports/{sport}/odds", params, f"historical game odds {sport} {date}")
 
 
 def _log_usage(what: str, cost: int, remaining):

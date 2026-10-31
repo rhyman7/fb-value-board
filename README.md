@@ -297,6 +297,16 @@ flagged bet's closing line value against Pinnacle's close. The Market lines Acti
 opener alerts (raw model well off Pinnacle early in the week) to a GitHub issue labelled
 `opener-alerts`.
 
+**Past seasons' lines** (`nflmodel/marketbackfill.py`, the **Market line backfill** Action, by
+hand only): Pinnacle, DraftKings and FanDuel spreads, totals and moneylines from The Odds API's
+historical endpoint, one "open" snapshot each Monday 12:00 UTC and one "close" ten minutes
+before each cluster of kickoffs (NFL within 30 minutes, college within two hours), saved under
+`data/market/history/<league>/<season>/`. One call returns every game's lines at that minute
+(30 credits with three markets); `run_market.py backfill --league nfl --season 2024 --plan`
+prints what a run would fetch and cost, free. `experiments/pinnacle_grade.py` grades the
+price tier, the opener gap and closing line value against Pinnacle's real open and close
+(FEATURES.md, "Graded against Pinnacle").
+
 ## Honest limits
 
 - Rating settings were tuned on 2014 to 2018. Some structural choices (adding
@@ -337,6 +347,7 @@ nflmodel/
   alts.py                 alternate lines and teaser legs off the key-number curve
   ledger.py               the bet ledger: flagged bets at their first price, graded against the close
   market.py               game lines from several books (Pinnacle, DK, FD, BetMGM, Kalshi), data/market/
+  marketbackfill.py       past game lines (Pinnacle, DK, FD) from the historical endpoint
   def_ratings.py          defender ratings and missing-defender features (shadow test only)
   defense.py              team defensive rates from PFR (shadow test only)
   shadow.py               the shadow test of the defensive inputs, logged to data/shadow/
@@ -374,9 +385,10 @@ experiments/players_test.py      player projections against baselines
 experiments/players_ablation.py  which pieces of the player model help
 PLAYERS.md                how player projections are built, and how they have done
 run_props.py              player props: price, log, grade, backfill
-run_market.py             game-line snapshots, status and opener alerts
+run_market.py             game-line snapshots, status, opener alerts and the past-lines backfill
 experiments/props_calibration.py  prop distributions, calibration report, fitted parameters
 experiments/props_real_lines.py   the prop model against past DraftKings and FanDuel lines
+experiments/pinnacle_grade.py     price tier, opener gap and CLV against Pinnacle's past open and close
 PROPS.md                  player props: method, calibration, market, log
 data/prop_params.json     fitted prop distributions
 data/props/               prop log, results, snapshots, credit usage, past prices
