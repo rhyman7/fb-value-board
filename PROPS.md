@@ -252,6 +252,33 @@ What follows: no ladder rung is flagged, the ladder-gap tag lost and should not 
 bet, and the next model fix is the rushing (and receiving) low tail, refitted on earlier
 seasons and checked on these rungs only as a held-out test.
 
+## The low end, refitted on recent seasons (Oct 31, 2026)
+
+The ladder test found the model's low end too fat for running backs (2025 rushing rungs at
+−400 or shorter cleared 81.6%, the model said 73.2%). Why, in two experiments:
+
+- `experiments/props_tail.py`: refitting the final correction on a ladder of lines (20% to 170%
+  of the projection) instead of only near the projection **did not fix it** (2025 rushing rungs
+  73.2% → 73.9%). The correction was not the cause.
+- The cause is a **change in 2019**. For running backs' rushing yards, lines the model put at
+  75-95% cleared 82-85% of the time in every season from 2013 to 2018 (calibrated) and 87-88%
+  in every season from 2019 to 2024. Backs have had fewer near-zero games since. The widths
+  were fitted on every season since 2013, so the older, more volatile backfields stayed in
+  today's numbers.
+- `experiments/props_window.py`: the same model fitted on 2019 on. On 2024 (fitted 2019-2023,
+  not seen): the backs' gap at the 75%+ ladder lines falls from 4.9 points to 1.7, and no stat
+  is worse at the usual lines (every stat and position within 0.0003 Brier). On the real 2025
+  rungs (fitted 2019-2024): rushing rungs at −400 or shorter 73.2% → 76.1% (81.6% cleared),
+  passing and receiving about the same, and the model's Brier gap to the books 0.00292 →
+  0.00268.
+
+**Kept:** the production widths are now fitted on 2019 on (`props_calibration.FIT_FROM`,
+`--production` refits only them, keeping the correction and the correlations). On this week's
+board the top backs' chance of 35+ rushing yards rises about five points (87% → 92% for a
+91-yard projection) and their likely range tightens at the bottom. It narrows the gap; it
+does not close it (the 2025 rushing rungs are still about five points short), and it makes no
+prop a bet: the books still price the ladders better.
+
 ## Same-game combinations
 
 `nflmodel/propsim.py`. A Gaussian copula: each leg keeps its own distribution (so single

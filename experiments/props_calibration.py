@@ -4,6 +4,10 @@ parameters the board uses.
     python experiments/props_calibration.py --select   # candidate distributions, tuning seasons only
     python experiments/props_calibration.py            # the report, holdout run once; writes
                                                        # data/prop_params.json and experiments/out/
+    python experiments/props_calibration.py --production
+                                                       # only refit the production widths (seasons
+                                                       # FIT_FROM on), keeping the saved correction
+                                                       # and correlations
 
 Seasons: methods are chosen on 2013-2018 (the player model's tuning seasons); 2019 on is
 the holdout. Inside the tuning seasons every season is scored with parameters fitted on
@@ -38,6 +42,12 @@ warnings.filterwarnings("ignore")
 OUT = Path(__file__).resolve().parent / "out"
 CACHE = C.RAW / "players_proj.pkl"
 TUNE = list(range(2013, C.HOLDOUT_FROM))
+# The production widths are fitted on seasons from FIT_FROM on (Oct 31, 2026). From 2019 the
+# running backs' outcomes are steadier: lines the model put at 75-95% cleared 82-85% of the
+# time in every season 2013-2018 and 87-88% in every season 2019-2024. Fitted on 2019 on, the
+# 2024 gap falls from 4.9 to 1.7 points and the 2025 real ladder rungs move toward the books,
+# with no stat worse at the usual lines (experiments/props_window.py, PROPS.md).
+FIT_FROM = 2019
 
 
 def load_proj(path: Path | None) -> pd.DataFrame:
@@ -274,13 +284,29 @@ def run_sim(proj):
     print(rep["all_pairs_with_a_fitted_rho"], rep["three_leg_stack"], sep="\n")
 
 
+def run_production(proj):
+    """Refit the production widths on seasons FIT_FROM on, keeping the saved correction
+    (fitted on the tuning seasons) and the same-game correlations."""
+    saved = P.PropModel.load()
+    prod = P.PropModel(FAMILY).fit(proj[proj.season >= FIT_FROM])
+    prod.iso = saved.iso if saved is not None else {}
+    meta = dict(saved.meta) if saved is not None else {}
+    meta.update({"fitted_through": int(proj[proj.played.astype(bool)].season.max()), "fitted_from": FIT_FROM})
+    prod.meta = meta
+    prod.save()
+    print(f"production widths refitted on {FIT_FROM}-{meta['fitted_through']}; correction and correlations kept")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--select", action="store_true")
     ap.add_argument("--sim", action="store_true", help="only refit and score the same-game correlations")
     ap.add_argument("--proj", type=Path, default=None)
+    ap.add_argument("--production", action="store_true", help="only refit the production widths (seasons FIT_FROM on)")
     args = ap.parse_args()
     proj = load_proj(args.proj)
+    if args.production:
+        return run_production(proj)
     if args.select:
         return run_select(proj)
     if args.sim:
@@ -341,9 +367,9 @@ def main():
 
     # ---- production parameters: every season to date, correction from tuning --------
     print("Fitting production parameters ...", flush=True)
-    prod = P.PropModel(FAMILY).fit(proj[proj.season >= 2013])
+    prod = P.PropModel(FAMILY).fit(proj[proj.season >= FIT_FROM])
     prod.iso = iso_all.iso
-    prod.meta = {"fitted_through": int(proj[proj.played.astype(bool)].season.max()),
+    prod.meta = {"fitted_through": int(proj[proj.played.astype(bool)].season.max()), "fitted_from": FIT_FROM,
                  "tuning": [TUNE[0], TUNE[-1]], "holdout_from": C.HOLDOUT_FROM,
                  "correlation": sim_report["correlation"]}
     prod.save()

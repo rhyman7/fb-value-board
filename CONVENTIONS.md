@@ -91,7 +91,10 @@ boards in detail; this file is the rules.
   by `row_id`) and `prop_results.csv` are append-only: never edit or delete a row. The log's
   header is fixed: `proplog._append` writes an existing file's own columns, so a new column
   needs a sibling file keyed by `row_id`, as the tags and the new projections have. `data/prop_params.json` is written only by `experiments/props_calibration.py`; refit
-  it there (methods chosen on 2013-2018, holdout 2019 on, run once) rather than by hand.
+  it there (methods chosen on 2013-2018, holdout 2019 on, run once) rather than by hand. The
+  production widths are fitted on seasons from `FIT_FROM` (2019, Oct 31, 2026: backs' outcomes
+  changed then; PROPS.md "The low end, refitted on recent seasons"); `--production` refits only
+  them and keeps the correction and correlations.
   Bet flags are off (`propmarket.FLAGS_ON = False`, Oct 2026): against real 2025 lines the
   model did worse than the books. Turning them back on needs an out-of-sample win over the
   books' prices (PROPS.md) and Ryan's go-ahead.
