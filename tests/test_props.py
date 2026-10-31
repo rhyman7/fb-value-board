@@ -613,4 +613,3 @@ def test_backfill_adds_markets_to_a_saved_season(tmp_path, monkeypatch):
     assert set(x["market"]) == set(B.YARDAGE) | {"player_receptions"} and len(x) == 4
     assert B.run(f, 2025, B.YARDAGE + more, max_credits=1000, verbose=False)["snapshots"] == 0   # TD remembered as fetched
     assert "player_anytime_td" in set(pd.read_csv(tmp_path / "2025" / "fetched.csv")["market"])
-
