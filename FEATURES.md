@@ -894,3 +894,30 @@ ledger can be read for them after the 2026 and 2027 seasons without re-searching
 - **Derivatives against their own closing lines.** The market log has carried team totals
   and first-half lines since Oct 30, 2026; after a season, grade the curve's carry between
   lines and the model's first-half disagreement against Pinnacle's derivative close (above).
+
+## Referee crews and Week 18 (Nov 1, 2026)
+
+`python experiments/referee_week18_test.py` (results in `experiments/out/referee_week18.json`).
+
+**Referee crews: nothing.** For each game, the referee's earlier games give his crew's average
+total against the closing total and home margin against the closing spread, shrunk toward 0 by
+30 games. Added to the board's models alone: totals tuning +0.0035 (worse), holdout −0.0005;
+margin tuning −0.0008, holdout +0.024 (worse). Not kept. Against the close the crew's past
+residual predicts nothing (correlation +0.013 ± 0.019 tuning, −0.038 ± 0.023 holdout), and
+betting the over or under whenever a crew leaned a point or more went 734-804. The market prices
+crews, or there is nothing to price.
+
+**Week 18: the market knows something the model does not.** Regular-season Week 18 games
+(2021 on, 80 games): the raw model missed the margin by 9.84 points, the closing line by 8.87, a
+gap of about a point, against 0.11 in weeks 1-17 (10.15 against 10.04). On totals the model was
+no worse (10.34 against 10.57). The blend weight that would have minimized the miss in Week 18
+is 0 (the line alone), against 0.07 on weeks 1-17 of the same seasons. Starters rested and
+teams with nothing to play for are news the play-by-play cannot see. There are no Week 18
+games in the tuning seasons, so the usual rule cannot be applied; the gap is about 2.5 standard
+errors. **Suggested, not done:** price Week 18 spreads and moneylines from the market alone
+(blend weight 0) and keep the model's Week 18 sides off the Bet sheet's model tiers.
+
+**Already tested earlier, not re-run:** cold weather for totals (FEATURES.md, Totals: no), a
+team's pace and neutral-situation pass rate for player volume (PLAYERS.md: no gain), opening
+totals against Pinnacle's Monday number (above, "Graded against Pinnacle": total 2+ +4.0% ±
+8.0%, not significant). Rain and snow need a precipitation history the repo does not have yet.
