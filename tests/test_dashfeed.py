@@ -16,7 +16,8 @@ def _data(league="nfl"):
         }]},
         "players": {"players": [{"id": "1", "name": "Kenneth Walker III", "pos": "RB", "team": "KC", "game": "g",
                                  "week": 8, "status": None,
-                                 "proj": {"rush_yds": 116.84, "rec_yds": 0.0, "carries": 21.2}, "td_any": 0.5123}]},
+                                 "proj": {"rush_yds": 116.84, "rec_yds": 0.0, "carries": 21.2}, "td_any": 0.5123,
+                                 "why": {"def_ypc": 1.0412, "def_ypa": 1.0, "def_ypt": 0.97}}]},
     }
 
 
@@ -45,6 +46,7 @@ def test_players_keyed_by_team_and_name_without_zero_stats(tmp_path, monkeypatch
     p = f["players"]["KC|kenneth walker"]
     assert p["p"] == {"rush_yds": 116.8, "carries": 21.2}
     assert p["td"] == 0.512
+    assert p["f"] == {"ypc": 1.041, "ypt": 0.97}          # 1.0 (no adjustment) is left out
     assert "L" not in p                      # no props file for the week
 
 
