@@ -1,0 +1,164 @@
+{
+ "base_feats": [
+  "team_att_avg",
+  "opp_att_allowed",
+  "team_car_avg",
+  "opp_car_allowed",
+  "margin",
+  "proj_total",
+  "wind",
+  "home"
+ ],
+ "team_att": {
+  "current": {
+   "tune": {
+    "n": 2670,
+    "mae": 6.4448,
+    "vs_current": 0.0,
+    "se": null
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 6.1763,
+    "vs_current": 0.0,
+    "se": null
+   }
+  },
+  "vs usual, swap": {
+   "tune": {
+    "n": 2670,
+    "mae": 6.4251,
+    "vs_current": -0.0197,
+    "se": 0.0115
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 6.177,
+    "vs_current": 0.0006,
+    "se": 0.0054
+   }
+  },
+  "vs usual, add": {
+   "tune": {
+    "n": 2670,
+    "mae": 6.4081,
+    "vs_current": -0.0366,
+    "se": 0.0178
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 6.1851,
+    "vs_current": 0.0087,
+    "se": 0.0054
+   }
+  },
+  "vs expected, swap": {
+   "tune": {
+    "n": 2670,
+    "mae": 6.4387,
+    "vs_current": -0.0061,
+    "se": 0.0081
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 6.1811,
+    "vs_current": 0.0048,
+    "se": 0.0051
+   }
+  },
+  "vs expected, add": {
+   "tune": {
+    "n": 2670,
+    "mae": 6.4232,
+    "vs_current": -0.0216,
+    "se": 0.0068
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 6.1887,
+    "vs_current": 0.0123,
+    "se": 0.0056
+   }
+  },
+  "rating_sd": {
+   "usual": 1.727,
+   "expected": 1.506
+  }
+ },
+ "team_car": {
+  "current": {
+   "tune": {
+    "n": 2670,
+    "mae": 5.6067,
+    "vs_current": 0.0,
+    "se": null
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 5.5862,
+    "vs_current": 0.0,
+    "se": null
+   }
+  },
+  "vs usual, swap": {
+   "tune": {
+    "n": 2670,
+    "mae": 5.5972,
+    "vs_current": -0.0095,
+    "se": 0.0047
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 5.5795,
+    "vs_current": -0.0068,
+    "se": 0.0041
+   }
+  },
+  "vs usual, add": {
+   "tune": {
+    "n": 2670,
+    "mae": 5.599,
+    "vs_current": -0.0077,
+    "se": 0.0046
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 5.5869,
+    "vs_current": 0.0007,
+    "se": 0.0024
+   }
+  },
+  "vs expected, swap": {
+   "tune": {
+    "n": 2670,
+    "mae": 5.6257,
+    "vs_current": 0.019,
+    "se": 0.0054
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 5.5882,
+    "vs_current": 0.0019,
+    "se": 0.0051
+   }
+  },
+  "vs expected, add": {
+   "tune": {
+    "n": 2670,
+    "mae": 5.6125,
+    "vs_current": 0.0058,
+    "se": 0.0036
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 5.5915,
+    "vs_current": 0.0053,
+    "se": 0.0018
+   }
+  },
+  "rating_sd": {
+   "usual": 1.596,
+   "expected": 1.23
+  }
+ }
+}
