@@ -2,7 +2,7 @@
 
 docs/feed/nfl.json and docs/feed/cfb.json carry what the dashboards show from the value board:
 each game's projected line and total (the board's final projection, `proj`), the bets the board
-flags, and each player's projection with this week's main prop line (NFL only; college props are
+flags, and each player's projection and anytime-TD chance with this week's main prop line (NFL only; college props are
 not priced). The dashboards are on the same site, so they read these files directly; the full
 data.json is 0.5-3 MB, these are a few hundred KB at most.
 
@@ -71,7 +71,8 @@ def build(league: str, data: dict | None = None) -> dict:
     for p in pl:
         k = f"{p['team']}|{norm(p['name'])}"
         row = {"n": p["name"], "pos": p["pos"], "g": p["game"], "st": p.get("status"),
-               "p": {s: _r(p["proj"].get(s)) for s in PROJ_STATS if p["proj"].get(s)}}
+               "p": {s: _r(p["proj"].get(s)) for s in PROJ_STATS if p["proj"].get(s)},
+               "td": _r(p.get("td_any"), 3)}                    # chance of a rushing or receiving TD
         ln = {s: lines[(p["team"], norm(p["name"]), s)] for s in LINE_STATS if (p["team"], norm(p["name"]), s) in lines}
         if ln:
             row["L"] = ln

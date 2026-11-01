@@ -16,7 +16,7 @@ def _data(league="nfl"):
         }]},
         "players": {"players": [{"id": "1", "name": "Kenneth Walker III", "pos": "RB", "team": "KC", "game": "g",
                                  "week": 8, "status": None,
-                                 "proj": {"rush_yds": 116.84, "rec_yds": 0.0, "carries": 21.2}}]},
+                                 "proj": {"rush_yds": 116.84, "rec_yds": 0.0, "carries": 21.2}, "td_any": 0.5123}]},
     }
 
 
@@ -44,6 +44,7 @@ def test_players_keyed_by_team_and_name_without_zero_stats(tmp_path, monkeypatch
     f = dashfeed.build("nfl", _data())
     p = f["players"]["KC|kenneth walker"]
     assert p["p"] == {"rush_yds": 116.8, "carries": 21.2}
+    assert p["td"] == 0.512
     assert "L" not in p                      # no props file for the week
 
 
