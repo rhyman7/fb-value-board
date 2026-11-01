@@ -51,3 +51,37 @@ def test_rung_calibration_is_monotone_and_harsh_at_the_ends():
 
 def test_american():
     assert X.american(0.5) == -100 and X.american(0.75) == -300 and X.american(0.2) == 400
+
+
+def test_alternate_ladders_reach_the_legs(tmp_path):
+    """A fetched ladder is stored, matched to the board's game and priced on its legs."""
+    import datetime as dt
+    import pandas as pd
+    from nflmodel import market as M
+
+    class Client:
+        last_cost = 0
+        def events(self, sport):
+            return [{"id": "ev1", "commence_time": "2099-01-01T18:00:00Z", "home_team": "Dallas Cowboys", "away_team": "Arizona Cardinals"}]
+        def event_odds(self, event_id, markets, books=None, sport=None):
+            self.last_cost = 2
+            return {"id": "ev1", "commence_time": "2099-01-01T18:00:00Z", "home_team": "Dallas Cowboys", "away_team": "Arizona Cardinals",
+                    "bookmakers": [{"key": "draftkings", "markets": [
+                        {"key": "alternate_spreads", "outcomes": [{"name": "Dallas Cowboys", "price": -150, "point": -1.5},
+                                                                  {"name": "Arizona Cardinals", "price": 125, "point": 1.5}]},
+                        {"key": "alternate_totals", "outcomes": [{"name": "Over", "price": -200, "point": 42.5},
+                                                                 {"name": "Under", "price": 160, "point": 42.5}]}]}]}
+
+    now = dt.datetime(2098, 12, 30, tzinfo=dt.timezone.utc)
+    assert M.snapshot_alternates(Client(), "nfl", now=now, root=tmp_path, days=5) == 4
+    games = pd.DataFrame([{"game_id": "2026_09_ARI_DAL", "home_team": "DAL", "away_team": "ARI", "kickoff": pd.Timestamp("2099-01-01T18:00Z")}])
+    q = M.alt_quotes(games, "nfl", root=tmp_path)
+    assert q["2026_09_ARI_DAL"]["dk"]["spread"][1.5] == {"home": -150.0, "away": 125.0}
+    assert q["2026_09_ARI_DAL"]["dk"]["total"][42.5] == {"over": -200.0, "under": 160.0}
+    g = {**_game(), "home": "DAL", "away": "ARI"}
+    legs = X.game_legs(g, "nfl", 1.0, q["2026_09_ARI_DAL"])
+    dal = [l for l in legs if l["lab"] == "DAL -1.5"][0]
+    ari = [l for l in legs if l["lab"] == "ARI +1.5"][0]
+    under = [l for l in legs if l["lab"] == "Under 42.5"][0]
+    assert dal["bk"] == {"dk": -150} and ari["bk"] == {"dk": 125} and under["bk"] == {"dk": 160}
+    assert "moved line" not in dal["t"]

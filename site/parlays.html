@@ -479,6 +479,7 @@ function legTags(l, pr) {
   const t = [];
   (l.t || []).forEach(x => t.push(x === "not market-tested" ? `<span class="tag warn">${x}</span>` : `<span class="tag">${esc(x)}</span>`));
   if (pr && pr.est) t.push(`<span class="tag warn">no book price: est.</span>`);
+  if (l.mx) t.push(`<span class="tag" title="This season's box scores, not an input to the chance">${esc(l.mx)}</span>`);
   return t.join("");
 }
 function legRow(l, pr) {

@@ -60,6 +60,15 @@ MARKETS = ["h2h", "spreads", "totals"]
 DERIV_MARKETS = {"nfl": ["team_totals", "spreads_h1", "totals_h1", "h2h_h1"], "cfb": ["team_totals", "spreads_h1", "totals_h1"]}
 DERIV_BUDGET = {"nfl": 70, "cfb": 160}     # credits one derivative run may spend (about 16 and 50 games)
 DERIV_DAYS = 7                             # only games kicking off within this many days
+# Alternate spreads and totals at the two books the bettor uses, for the Parlays page
+# (nflmodel/parlays.py): one event at a time, 2 credits a game (or 0 when a book posts none).
+# Only the latest ladder per game is kept (data/market/alts/<league>.csv): the page needs today's
+# prices, not their history.
+ALT_MARKETS = ["alternate_spreads", "alternate_totals"]
+ALT_BOOKS = ["draftkings", "fanduel"]
+ALT_BUDGET = {"nfl": 40, "cfb": 150}       # credits one run may spend (about 16 and 60 games)
+ALT_DAYS = 8
+ALT_DIR = DIR / "alts"
 COLS = ["snapshot", "league", "event_id", "commence", "home_name", "away_name",
         "book", "market", "side", "line", "price", "updated"]
 # Board column for each (book market, side): the same names slate.LINE_COLS uses.
@@ -72,7 +81,7 @@ LINE_COL = {("spreads", "home"): "home_spread_odds", ("spreads", "away"): "away_
             ("h2h_h1", "home"): "h1_home_moneyline", ("h2h_h1", "away"): "h1_away_moneyline",
             ("team_totals", "home_over"): "tt_home_over_odds", ("team_totals", "home_under"): "tt_home_under_odds",
             ("team_totals", "away_over"): "tt_away_over_odds", ("team_totals", "away_under"): "tt_away_under_odds"}
-TOTAL_MARKETS = {"totals", "totals_h1"}
+TOTAL_MARKETS = {"totals", "totals_h1", "alternate_totals"}
 
 NFL_NAME_TO_ABBR = {v: k for k, v in C.TEAM_NAMES.items()}
 # College names The Odds API spells differently from ESPN's display names.
@@ -238,6 +247,74 @@ def snapshot_derivatives(client, league: str, now: dt.datetime | None = None, ro
     n = store(df, league, root)
     print(f"  derivatives {league}: {fetched} of {len(events)} games, {len(df)} quotes, {n} new rows, {used} credits")
     return n
+
+
+def snapshot_alternates(client, league: str, now: dt.datetime | None = None, root: Path = ALT_DIR,
+                        budget: int | None = None, days: int = ALT_DAYS) -> int:
+    """Fetch DraftKings' and FanDuel's alternate spread and total ladders for the soonest
+    upcoming games, one event at a time within the run's credit budget, and keep the latest
+    ladder per game. Returns rows kept; -1 if nothing could be fetched."""
+    now = now or dt.datetime.now(dt.timezone.utc)
+    stamp = now.strftime("%Y-%m-%d %H:%M")
+    budget = ALT_BUDGET[league] if budget is None else budget
+    try:
+        events = client.events(SPORTS[league])
+    except Exception as exc:
+        print(f"  alternates {league}: skipped ({exc})")
+        return -1
+    horizon = now + dt.timedelta(days=days)
+    events = sorted([e for e in (events or []) if _commence(e) is not None and now < _commence(e) <= horizon], key=_commence)
+    rows, used, fetched, bad = [], 0, 0, 0
+    for ev in events:
+        if used + len(ALT_MARKETS) > budget:
+            break
+        try:
+            body = client.event_odds(ev["id"], ALT_MARKETS, ALT_BOOKS, sport=SPORTS[league])
+        except Exception as exc:                  # budget, network, key
+            print(f"  alternates {league}: stopped at {ev.get('away_team')} at {ev.get('home_team')} ({exc})")
+            bad += 1
+            break
+        used += int(getattr(client, "last_cost", 0) or 0)
+        fetched += 1
+        if body:
+            rows.append(flatten([body], league, stamp))
+    if not fetched:
+        return -1 if bad else 0
+    new = pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(columns=COLS)
+    new = new[new["market"].isin(ALT_MARKETS)]
+    root.mkdir(parents=True, exist_ok=True)
+    path = root / f"{league}.csv"
+    old = pd.read_csv(path, dtype={"event_id": str}) if path.exists() else pd.DataFrame(columns=COLS)
+    if len(old):                                  # keep other games' ladders while they are still to come
+        start = pd.to_datetime(old["commence"], utc=True, errors="coerce")
+        old = old[(start > pd.Timestamp(now)) & ~old["event_id"].isin([e["id"] for e in events[:fetched]])]
+    out = pd.concat([old, new], ignore_index=True)[COLS]
+    out.to_csv(path, index=False)
+    print(f"  alternates {league}: {fetched} of {len(events)} games, {len(new)} prices, {used} credits; {len(out)} kept")
+    return int(len(new))
+
+
+def alt_quotes(games: pd.DataFrame, league: str, names: dict | None = None, root: Path = ALT_DIR) -> dict:
+    """{game_id: {dk|fd: {"spread": {line: {"home"|"away": price}}, "total": {line: {"over"|"under": price}},
+    "at": snapshot}}}, spread lines in the boards' convention (positive = home favoured)."""
+    path = root / f"{league}.csv"
+    if not path.exists() or games.empty:
+        return {}
+    rows = pd.read_csv(path, dtype={"event_id": str})
+    rows = match_games(rows, games, league, names)
+    short = {"draftkings": "dk", "fanduel": "fd"}
+    out: dict = {}
+    for x in rows[rows["game_id"].notna()].itertuples(index=False):
+        b = short.get(x.book)
+        if b is None or pd.isna(x.line):
+            continue
+        q = out.setdefault(x.game_id, {}).setdefault(b, {"spread": {}, "total": {}, "at": x.snapshot})
+        if x.market == "alternate_spreads" and x.side in ("home", "away"):
+            line = -float(x.line) if x.side == "home" else float(x.line)
+            q["spread"].setdefault(line, {})[x.side] = float(x.price)
+        elif x.market == "alternate_totals" and x.side in ("over", "under"):
+            q["total"].setdefault(float(x.line), {})[x.side] = float(x.price)
+    return out
 
 
 # --------------------------------------------------------------------------

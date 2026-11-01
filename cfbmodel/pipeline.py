@@ -97,6 +97,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     records = board.season_records(games, season)
     cur = frame[frame.season == season]
     quotes = market.quotes_for(cur[~cur.played], "cfb", names={v: k for k, v in names.items()})
+    try:                                          # DraftKings and FanDuel alternate ladders, for the Parlays page
+        alt_quotes = market.alt_quotes(cur[~cur.played], "cfb", names={v: k for k, v in names.items()})
+    except Exception as exc:
+        print(f"  alternate ladders skipped ({exc})")
+        alt_quotes = {}
     slate = board.build_slate(cur, dist, engine, builder, records, abbr, names, quotes=quotes, haircut=h_factor, hdist=hdist)
     upcoming = frame[~frame.played & frame.spread_line.notna() & (frame.season == season)]
     order_now = int(upcoming.order.min()) if len(upcoming) else int(frame.order.max()) + 1
@@ -206,7 +211,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     build_page(out)
     try:                                          # the Parlays page's college legs (docs/parlays/cfb.json)
         from nflmodel import parlays
-        parlays.write("cfb")
+        parlays.write("cfb", alt=alt_quotes)
         parlays.copy_page()
     except Exception as exc:
         print(f"  parlays skipped ({exc})")

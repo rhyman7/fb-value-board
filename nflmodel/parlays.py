@@ -115,7 +115,7 @@ def _book_prices(g: dict) -> dict:
     return {BOOKS[b]: q for b, q in (g.get("books") or {}).items() if b in BOOKS}
 
 
-def game_legs(g: dict, league: str, haircut: float = 1.0) -> list[dict]:
+def game_legs(g: dict, league: str, haircut: float = 1.0, alt: dict | None = None) -> list[dict]:
     alts = g.get("alts") or {}
     sp = {round(float(r["line"]) * 2) / 2: r for r in alts.get("spread") or []}
     to = {round(float(r["line"]) * 2) / 2: r for r in alts.get("total") or []}
@@ -148,6 +148,8 @@ def game_legs(g: dict, league: str, haircut: float = 1.0) -> list[dict]:
     for q in bk.values():
         if q.get("spread_line") is not None:
             lines.add(float(q["spread_line"]))
+    for q in (alt or {}).values():
+        lines |= {x for x in q.get("spread", {}) if min(sp, default=0) - 0.5 <= x <= max(sp, default=0) + 0.5}
     for x in sorted(lines):
         # home laying x (x > 0 favourite): home wins if margin > x; push if margin == x (whole x)
         if x == int(x):
@@ -174,6 +176,10 @@ def game_legs(g: dict, league: str, haircut: float = 1.0) -> list[dict]:
                     o = q.get(f"{side}_spread_odds")
                     if o is not None:
                         prices[b] = int(o)
+            for b, q in (alt or {}).items():          # the books' alternate ladders
+                o = (q.get("spread", {}).get(x) or {}).get(side)
+                if o is not None and b not in prices:
+                    prices[b] = int(o)
             main = abs(x - float(mkt.get("spread", 99))) < 1e-9
             legs.append({**base, "m": "spread", "lab": f"{team} {'+' if line > 0 else ''}{line:g}" if line else f"{team} PK",
                          "L": line, "w": _r(w), "h": _r(push), "pk": _r(wk) if wk is not None else None,
@@ -186,6 +192,8 @@ def game_legs(g: dict, league: str, haircut: float = 1.0) -> list[dict]:
     for q in bk.values():
         if q.get("total_line") is not None:
             lines.add(float(q["total_line"]))
+    for q in (alt or {}).values():
+        lines |= {x for x in q.get("total", {}) if min(to, default=0) - 0.5 <= x <= max(to, default=0) + 0.5}
     for x in sorted(lines):
         if x == int(x):
             hi, lo = p_over(x + 0.5), p_over(x - 0.5)
@@ -211,6 +219,10 @@ def game_legs(g: dict, league: str, haircut: float = 1.0) -> list[dict]:
                     o = q.get(f"{side}_odds")
                     if o is not None:
                         prices[b] = int(o)
+            for b, q in (alt or {}).items():
+                o = (q.get("total", {}).get(x) or {}).get(side)
+                if o is not None and b not in prices:
+                    prices[b] = int(o)
             legs.append({**base, "m": "total", "lab": f"{side.title()} {x:g}", "L": x, "w": _r(w), "h": _r(push), "pm": _r(pm),
                          "pk": _r(wk) if wk is not None else None, "bk": prices, "src": "proj",
                          "t": [] if prices or main else ["moved line"], "c": {"k": side}})
@@ -431,6 +443,63 @@ def monotone(legs: list[dict]) -> list[dict]:
 
 
 # --------------------------------------------------------------------------
+# Matchup tags (NFL): what each defense has allowed to each position this season
+# --------------------------------------------------------------------------
+
+MX_KIND = {"rec_yds": ("rec_yds", "rec yds"), "receptions": ("receptions", "catches"),
+           "rush_yds": ("rush_yds", "rush yds"), "carries": ("rush_yds", "rush yds"),
+           "pass_yds": ("pass_yds", "pass yds"), "completions": ("pass_yds", "pass yds"),
+           "pass_att": ("pass_yds", "pass yds"), "pass_td": ("pass_td", "pass TDs")}
+
+
+def defense_table(season: int) -> dict:
+    """{(defense, position, stat): (per game allowed, rank 1 = most allowed, teams)} from this
+    season's box scores (data/cache): the raw numbers the matchup dashboards show. A tag on the
+    page, not an input to any chance (experiments/def_vs_position.py decides that)."""
+    try:
+        g = pd.read_csv(C.DATA / "cache" / f"player_games_{season}.csv")
+        info = pd.read_csv(C.DATA / "cache" / f"player_info_{season}.csv")[["player_id", "position"]]
+    except FileNotFoundError:
+        return {}
+    g = g[g["season_type"] == "REG"].merge(info, on="player_id", how="left")
+    g["position"] = g["position"].replace({"FB": "RB", "HB": "RB"})
+    games = g.groupby("defteam")["game_id"].nunique()
+    out = {}
+    for pos in ("WR", "TE", "RB", "QB"):
+        d = g[g["position"] == pos].groupby("defteam")[["rec_yds", "receptions", "rush_yds", "pass_yds", "pass_td"]].sum()
+        d = d.div(games.reindex(d.index), axis=0)
+        for stat in d.columns:
+            r = d[stat].rank(ascending=False, method="min")
+            for team, v in d[stat].items():
+                out[(team, pos, stat)] = (round(float(v), 1), int(r[team]), int(len(d)))
+    return out
+
+
+def _ordinal(n: int) -> str:
+    return f"{n}{'th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def tag_matchups(legs: list[dict], games: dict, table: dict) -> None:
+    for l in legs:
+        if l.get("m") != "prop" or l.get("s") not in MX_KIND or not table:
+            continue
+        g = games.get(l["g"])
+        pos = l.get("pos")
+        if not g or pos not in ("WR", "TE", "RB", "QB"):
+            continue
+        dfn = g["home"] if l.get("tm") == g["away"] else g["away"]
+        key, word = MX_KIND[l["s"]]
+        if pos == "QB" and key in ("rec_yds", "receptions"):
+            continue
+        v = table.get((dfn, pos, key))
+        if v:
+            n, rank, teams = v
+            most = rank <= teams / 2
+            place = _ordinal(rank if most else teams + 1 - rank)
+            l["mx"] = f"{dfn} allows {n:g} {word}/g to {pos}s ({place} {'most' if most else 'fewest'})"
+
+
+# --------------------------------------------------------------------------
 # College props (model only)
 # --------------------------------------------------------------------------
 
@@ -522,7 +591,7 @@ def compact(l: dict) -> dict:
     elif c.get("k") == "cover":
         c = {"k": "cover", "tm": c["tm"]}
     out = {k: l[k] for k in ("g", "m", "lab", "L", "w", "h", "src") if k in l}
-    for k in ("d", "wv", "pm", "pk", "tm", "s"):
+    for k in ("d", "wv", "pm", "pk", "tm", "s", "mx"):
         if l.get(k) is not None:
             out[k] = l[k]
     if l.get("bk"):
@@ -539,14 +608,17 @@ def compact(l: dict) -> dict:
 # Writing
 # --------------------------------------------------------------------------
 
-def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=None, now: dt.datetime | None = None) -> dict:
+def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=None, now: dt.datetime | None = None,
+          alt: dict | None = None) -> dict:
     now = now or dt.datetime.now(dt.timezone.utc)
     games = [g for g in payload["slate"]["games"] if _upcoming(g, now)]
     legs, gmeta = [], {}
     h = (payload.get("meta") or {}).get("haircut_factor")
     h = 1.0 if h is None or not (payload.get("meta") or {}).get("haircut_on", True) else float(h)
     for g in games:
-        gl = game_legs(g, league, h)
+        a = alt or {}
+        ga = a.get(g["id"]) or a.get(g.get("game_id")) or a.get(str(g.get("game_id"))) or {}
+        gl = game_legs(g, league, h, ga)
         if not gl and league == "cfb":
             continue
         legs += gl
@@ -563,6 +635,10 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
         files = sorted(props_dir.glob(f"{payload['meta']['season']}_w*.json"))
         if files:
             legs += nfl_prop_legs(files[-1], props_dir / "outlook.json", roles, names, now)
+        try:
+            tag_matchups(legs, {k: {"home": v["home"], "away": v["away"]} for k, v in gmeta.items()}, defense_table(int(payload["meta"]["season"])))
+        except Exception as exc:
+            print(f"  parlays: matchup tags skipped ({exc})")
     if league == "cfb" and prop_model is not None:
         legs += [l for l in cfb_prop_legs(payload, prop_model, roles, now) if l["g"] in gmeta]
     legs = [compact(l) for l in legs if l["g"] in gmeta and l.get("w") is not None and GAME_LO <= l["w"] <= GAME_HI]
@@ -575,7 +651,15 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
             "corr": correlations(prop_model)}
 
 
-def write(league: str, payload_path: Path | None = None) -> Path:
+def _nfl_alt(payload: dict) -> dict:
+    """The NFL board's games matched to the stored alternate ladders (names are the teams' own)."""
+    from . import market as M
+    gs = pd.DataFrame([{"game_id": g["id"], "home_team": g["home"], "away_team": g["away"],
+                        "kickoff": pd.Timestamp(g["kickoff"])} for g in payload["slate"]["games"]])
+    return M.alt_quotes(gs, "nfl") if len(gs) else {}
+
+
+def write(league: str, payload_path: Path | None = None, alt: dict | None = None) -> Path:
     from . import props as P
     payload_path = payload_path or (C.DOCS / ("data.json" if league == "nfl" else "cfb/data.json"))
     payload = json.loads(Path(payload_path).read_text())
@@ -583,7 +667,12 @@ def write(league: str, payload_path: Path | None = None) -> Path:
         model = P.PropModel.load()
     except Exception:
         model = None
-    out = build(payload, league, props_dir=C.DOCS / "props", prop_model=model)
+    if alt is None and league == "nfl":
+        try:
+            alt = _nfl_alt(payload)
+        except Exception as exc:
+            print(f"  parlays: alternate ladders skipped ({exc})")
+    out = build(payload, league, props_dir=C.DOCS / "props", prop_model=model, alt=alt)
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"{league}.json"
     path.write_text(json.dumps(out, separators=(",", ":")))

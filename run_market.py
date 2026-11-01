@@ -81,6 +81,22 @@ def cmd_derivatives(args) -> int:
     return 0 if bad < len(leagues) else 1
 
 
+def cmd_alternates(args) -> int:
+    """Alternate spread and total ladders at DraftKings and FanDuel (market.snapshot_alternates)."""
+    client = Fixture(Path(args.fixture)) if args.fixture else oddsapi.Client()
+    if not client.ready:
+        print("ODDS_API_KEY is not set: no alternates fetched")
+        return 0
+    leagues = [args.league] if args.league else list(M.SPORTS)
+    bad = 0
+    for lg in leagues:
+        if M.snapshot_alternates(client, lg, budget=args.budget) < 0:
+            bad += 1
+    if getattr(client, "used_this_run", 0):
+        print(f"  credits used {client.used_this_run}, remaining {client.remaining}")
+    return 0 if bad < len(leagues) else 1
+
+
 def cmd_status(args) -> int:
     for lg in M.SPORTS:
         rows = M.load(lg)
@@ -234,7 +250,7 @@ def cmd_backfill(args) -> int:
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("command", choices=["snapshot", "derivatives", "status", "alerts", "backfill"])
+    p.add_argument("command", choices=["snapshot", "derivatives", "alternates", "status", "alerts", "backfill"])
     p.add_argument("--league", choices=list(M.SPORTS))
     p.add_argument("--fixture")
     p.add_argument("--budget", type=int, help="derivatives: credits this run may spend")
@@ -247,7 +263,7 @@ def main(argv=None) -> int:
     p.add_argument("--window", type=int, help="backfill: minutes of kickoffs one close covers (default nfl 30, cfb 120)")
     p.add_argument("--plan", action="store_true", help="backfill: only show what would be fetched and its cost")
     a = p.parse_args(argv)
-    return {"snapshot": cmd_snapshot, "derivatives": cmd_derivatives, "status": cmd_status, "alerts": cmd_alerts,
+    return {"snapshot": cmd_snapshot, "derivatives": cmd_derivatives, "alternates": cmd_alternates, "status": cmd_status, "alerts": cmd_alerts,
             "backfill": cmd_backfill}[a.command](a)
 
 
