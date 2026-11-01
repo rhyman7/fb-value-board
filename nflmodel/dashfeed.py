@@ -19,7 +19,10 @@ ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 SRC = {"nfl": DOCS / "data.json", "cfb": DOCS / "cfb" / "data.json"}
 OUT = DOCS / "feed"
-PROJ_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions", "carries", "pass_att")
+PROJ_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions", "targets", "carries", "pass_att")
+# the defense factors behind each projection (1.0 = average; shrunk for sample size): yards per
+# target allowed to the player's position (NFL), per carry, and per pass attempt
+DEF_KEYS = {"def_ypt": "ypt", "def_ypc": "ypc", "def_ypa": "ypa"}
 LINE_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions")
 
 
@@ -73,6 +76,10 @@ def build(league: str, data: dict | None = None) -> dict:
         row = {"n": p["name"], "pos": p["pos"], "g": p["game"], "st": p.get("status"),
                "p": {s: _r(p["proj"].get(s)) for s in PROJ_STATS if p["proj"].get(s)},
                "td": _r(p.get("td_any"), 3)}                    # chance of a rushing or receiving TD
+        why = p.get("why") or {}
+        f = {k: _r(why[w], 3) for w, k in DEF_KEYS.items() if why.get(w) is not None and abs(why[w] - 1) > 1e-9}
+        if f:
+            row["f"] = f
         ln = {s: lines[(p["team"], norm(p["name"]), s)] for s in LINE_STATS if (p["team"], norm(p["name"]), s) in lines}
         if ln:
             row["L"] = ln
