@@ -1022,3 +1022,15 @@ projections for the Weekly Edges prop tables in place of their old "opponent all
 multiplier (raw position splits overstated matchups several times over; see the defense-vs-position
 test above). Both pipelines write the feed after data.json, and the props run rewrites the NFL feed
 with new lines. If the feed is missing or for another week, the dashboards hide those pieces.
+
+## Capping long runs in yards per carry (Nov 1, 2026): no
+
+`python experiments/capped_runs_test.py` (results in `experiments/out/capped_runs_test.json`). Every run
+counted at no more than its season's 97.5th percentile (19-21 yards), scaled so the league average is
+unchanged, as the input to each player's yards per carry and each defense's allowed. Keep rule set
+first: holdout miss on rushing yards (RB and QB rows) better by 2 paired standard errors, tuning no
+worse. Result: worse in both. Holdout 13.287 → 13.334 yards (+0.047 ± 0.008), tuning +0.012 ± 0.008;
+RBs alone +0.037 ± 0.013 holdout. Not kept. The player model already shrinks yards per carry toward the
+position average (60 carries of prior), which takes care of a few long runs; capping on top throws away
+real information (who breaks long runs keeps doing it). The matchup sites still show capped yards on
+the team cards as context, labeled as such.
