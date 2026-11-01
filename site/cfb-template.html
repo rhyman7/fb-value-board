@@ -1586,7 +1586,7 @@ function renderLeans() {
   table(gt, [{ t: "Game", l: 1 }, { t: "Kickoff", l: 1 }, { t: "Market" }, { t: "Model" }, { t: "Adjusted" }, { t: "Spread lean", l: 1 }, { t: "Total lean", l: 1 }, { t: "Win" }, { t: "Notes", l: 1 }],
     gs.map(g => {
       const ls = lean(g, "Spread"), lt = lean(g, "Total");
-      const notes = [g.early ? "early line" : "", g.wind && g.wind.under_angle ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) : "", g.anchor && g.anchor !== "consensus" ? "" : "no sharp quote"].filter(Boolean).join(", ");
+      const notes = [g.early ? "early line" : "", g.wind && g.wind.under_angle ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) : "", wetTxt(g), g.anchor && g.anchor !== "consensus" ? "" : "no sharp quote"].filter(Boolean).join(", ");
       const nw = v => ({ v, cls: "nw" });
       return [{ v: H("b", { text: g.away + " @ " + g.home }), cls: "nw" }, nw(kickoff(g).replace(" ET", "")), nw(fav(g, g.market.spread) + " / " + g.market.total), nw(fav(g, g.model.margin) + " / " + g.model.total.toFixed(1)), nw(fav(g, g.proj.margin) + " / " + g.proj.total.toFixed(1)),
         nw(ls ? ls.pick + " (" + pct(ls.prob, 0) + ")" : "—"), nw(lt ? lt.pick + " (" + pct(lt.prob, 0) + ")" : "—"), nw(g.home + " " + pct(g.win.adj, 0)), notes];
@@ -1679,6 +1679,9 @@ const rankClass = r => r == null ? "q5" : r <= RANK_N * 0.2 ? "q1" : r <= RANK_N
 const rankCell = c => H("span", {}, document.createTextNode(c.v), H("span", { class: "rk " + rankClass(c.rank), text: c.rank == null ? "n/a" : String(c.rank) }));
 
 /* " (gusts 25)" when the forecast carries gusts above the steady wind, else "" */
+function wetTxt(g) {   // the rain or snow forecast for the game window, when it makes a wet game (weather.WET_RAIN)
+  return g && g.wet ? (g.wet.snow_cm > 0 ? "snow forecast" : "rain " + g.wet.rain_mm + " mm forecast") : "";
+}
 function gusts(g) {
   return g.wind && g.wind.gust != null && g.wind.gust > g.wind.mph ? " (gusts " + Math.round(g.wind.gust) + ")" : "";
 }
@@ -1692,7 +1695,7 @@ function renderGame(g) {
   /* --- header --- */
   const b = best(g), ev = evOf(b);
   const place = [d.stadium, g.neutral ? "neutral site" : null, g.roof && g.roof !== "unknown" ? g.roof : null, d.surface ? d.surface.replace("_", " ") : null,
-                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) + " (" + g.wind.source + ")" : null)].filter(Boolean).join(", ");
+                 d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) + " (" + g.wind.source + ")" : null), wetTxt(g) || null].filter(Boolean).join(", ");
   const verdict = H("p", { class: "lede" });
   if (ev > 0) verdict.append(H("strong", { text: "Best price: " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ". " }),
     document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
@@ -2815,7 +2818,7 @@ const matchups = (() => {
   }
   function row(g, exact) {
     const indoor = g.roof && g.roof !== "outdoors" && g.roof !== "open";
-    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind${gusts(g)}` : ""].filter(Boolean);
+    const bits = [exact ? "" : clock(g.time) + " ET", indoor ? "Indoors" : g.wind && g.wind.mph != null ? `${n0(g.wind.mph)} mph wind${gusts(g)}` : "", indoor ? "" : wetTxt(g)].filter(Boolean);
     const stadium = (g.detail && g.detail.stadium) || "", r = result(g);
     return `<a class="game-row" href="${gameHash(g)}">
       ${rowTeam(g, "away")}
@@ -2944,6 +2947,7 @@ const matchups = (() => {
     const miss = [t.opp_miss_db > 0.05 ? pctx(t.opp_miss_db) + " of its usual defensive backs" : "", t.opp_miss_pr > 0.05 ? pctx(t.opp_miss_pr) + " of its pass rush" : ""].filter(Boolean);
     if (miss.length) note += ` Out for ${esc(opp)}: ${miss.join(" and ")}.`;
     if (g.wind && g.wind.mph != null && !(g.roof && g.roof !== "outdoors" && g.roof !== "open")) note += ` Wind ${n0(g.wind.mph)} mph${gusts(g)}${g.wind.source === "forecast" ? " (forecast)" : ""}.`;
+    if (g.wet) note += ` ${esc(wetTxt(g).replace(/^./, c => c.toUpperCase()))}.`;
     if (played) note += ` <span class="act">Blue numbers are what happened.</span>`;
     if (played && !playersOf(g, abbr).length && ps.length) note += " No player projections were archived for this game; the box score is shown alone.";
     const out = (t.out || []).map(x => { const tag = [x.pos, /^doubtful/i.test(x.status || "") ? "doubtful" : ""].filter(Boolean).join(", "); return `${esc(x.name)}${tag ? " (" + esc(tag) + ")" : ""}`; });
