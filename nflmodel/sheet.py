@@ -121,8 +121,11 @@ def annotate(g: dict, league: str = "nfl") -> None:
         wind_under = is_total and side == "under" and windy and league == "nfl"
         taken = off and b["move"] > MOVED and b["gap"] < need
         priced = wind_under and b["move"] is not None and b["move"] >= WIND_MOVED
+        final_side = g.get("final_week") and not is_total      # config.FINAL_WEEK_MARKET: the market knows the final week better
         if b.get("beats_sharp") and (b.get("sharp_ev") or 0.0) >= PRICE_MIN:
             b["tier"] = "price"
+        elif final_side:
+            b["tier"] = None
         elif mk == "Moneyline":
             b["tier"] = None                      # a moneyline is only a bet when its price beats the sharp line
         elif off and plus and not taken:
@@ -284,6 +287,8 @@ def line_moves(games: list[dict], league: str, openers: dict | None = None, now:
         model = g.get("model") or {}
         for market, mkey, key in (("Spread", "margin", "spread"), ("Total", "total", "total")):
             m = model.get(mkey)
+            if market == "Spread" and g.get("final_week"):
+                continue                                  # config.FINAL_WEEK_MARKET: no model sides in the final week
             fresh = ((now or {}).get(g["id"]) or {}).get(key)
             cur = fresh if fresh is not None else (g.get("market") or {}).get(key)
             opened, src = _open_line(g, market)

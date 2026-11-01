@@ -323,3 +323,23 @@ def test_best_bets_record_counts_the_card_at_kickoff(tmp_path):
     s = BB.summary(path, res, after)
     assert s["all"]["n"] == len(f) and s["all"]["graded"] == len(f) and s["by_week"][0]["week"] == 8
     assert BB.record([g], 2026, ko, path, "nfl", now=after) == 0
+
+
+def test_final_week_sides_only_on_price():
+    """Final regular-season week: spreads off the opener or the model are not bets; prices still are."""
+    from nflmodel import sheet as S
+    g = {"final_week": True, "model": {"margin": 6.0, "total": 44.0}, "market": {"spread": 2.0, "total": 44.0},
+         "open": {"spread": 2.0, "total": 44.0}, "opening_spread": 2.0, "detail": None, "wind": None, "roof": "dome",
+         "bets": [{"market": "Spread", "side": "home", "ev": 0.05},
+                  {"market": "Spread", "side": "away", "ev": 0.01, "beats_sharp": True, "sharp_ev": 0.02}]}
+    S.annotate(g, "nfl")
+    assert g["bets"][0]["tier"] is None
+    assert g["bets"][1]["tier"] == "price"
+
+
+def test_final_week_mask():
+    import pandas as pd
+    from nflmodel import model as M
+    df = pd.DataFrame({"season": [2020, 2020, 2023, 2023, 2023], "week": [17, 18, 17, 18, 19],
+                       "game_type": ["REG", "WC", "REG", "REG", "WC"]})
+    assert M.final_week(df).tolist() == [False, False, False, True, False]

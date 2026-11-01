@@ -19,6 +19,13 @@ PBP_URL = "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_
 FIRST_SEASON = 2006         # first season of play-by-play pulled (burn-in for ratings)
 FIRST_MODEL_SEASON = 2008   # first season whose games are used to train the game model
 FIRST_TEST_SEASON = 2014    # first season scored in the walk-forward backtest
+# Week 18 of the 17-game seasons (2021 on; the old Week 17 showed nothing): starters rested and teams with
+# nothing to play for are news the ratings cannot see. On 2021-2025 Week 18 the raw model missed
+# the margin by about a point more than the closing line (0.11 in weeks 1-17), and the best blend
+# weight was 0 (FEATURES.md, "Referee crews and Week 18"). With this on, that week's spreads and
+# moneylines are priced from the market alone and its model sides stay off the Bet sheet's model
+# and opener tiers; totals are unchanged (the model was no worse there).
+FINAL_WEEK_MARKET = True
 HOLDOUT_FROM = 2019         # settings were chosen on seasons before this one
 
 # Franchise moves: map old abbreviations to the current one.

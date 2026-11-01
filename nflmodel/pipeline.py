@@ -160,6 +160,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     frame = frame.copy()
     frame["early"] = (~frame.played) & ((frame.gameday - today).dt.days >= C.EARLY_DAYS)
     e = frame["early"] & frame.spread_line.notna()
+    if C.FINAL_WEEK_MARKET and "final_week" in frame:
+        e &= ~frame["final_week"].fillna(False).astype(bool)   # the final week stays at the market (config.FINAL_WEEK_MARKET)
     frame.loc[e, "w_margin"] = w_early
     frame.loc[e, "proj_margin"] = frame.loc[e, "spread_line"] + w_early * (frame.loc[e, "model_margin"] - frame.loc[e, "spread_line"])
 

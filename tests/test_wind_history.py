@@ -116,3 +116,17 @@ def test_wind_forecast_grade_last_before_kickoff():
     played = fc.reset_index().merge(_games(), on="game_id")
     lines = wg.under_record(played, "wind_mph")
     assert any("10-14 mph" in ln and "1-0-0" in ln for ln in lines) and any("0-9 mph" in ln and "0-1-0" in ln for ln in lines)
+
+
+def test_weather_history_rows():
+    """Rain and snow are summed over the kickoff hour and the three after it."""
+    import sys
+    from pathlib import Path
+    import pandas as pd
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "experiments"))
+    import fetch_weather_history as W
+    hourly = {"time": [f"2024-12-01T{h:02d}:00" for h in range(24)], "precipitation": [0.0] * 13 + [1.0, 2.0, 0.5, 0.5, 9.0] + [0.0] * 6,
+              "snowfall": [0.0] * 24, "temperature_2m": [40.0] * 24}
+    g = pd.DataFrame([{"game_id": "x", "season": 2024, "gameday": "2024-12-01", "hour": 13, "home_team": "BUF"}])
+    r = W.rows_for(g, hourly, "now")[0]
+    assert r["precip_mm"] == 4.0 and r["snow_cm"] == 0.0 and r["temp_f"] == 40.0
