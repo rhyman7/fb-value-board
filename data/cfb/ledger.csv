@@ -60,3 +60,7 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_10_CMU_EMU|Spread|away,2026-10-31 22:56,2026,10,2026_10_CMU_EMU,401866456,2026-11-05T00:30Z,Spread,away,CMU +1.5,model,fanduel,2.5,-110.0,-110.0,0.0644,0.0083,consensus,1.5,46.5,-7.19,45.14
 2026_10_VT_SMU|Spread|away,2026-10-31 23:44,2026,10,2026_10_VT_SMU,401858288,2026-11-07T00:00Z,Spread,away,VT +6.5,price,draftkings,7.5,-110.0,-110.0,0.06,0.0179,consensus,6.5,56.5,7.74,57.02
 2026_10_VT_SMU|Moneyline|away,2026-10-31 23:44,2026,10,2026_10_VT_SMU,401858288,2026-11-07T00:00Z,Moneyline,away,VT ML,price,draftkings,,225.0,225.0,0.0635,0.0079,consensus,6.5,56.5,7.74,57.02
+2026_10_UTSA_FAU|Spread|home,2026-11-01 02:43,2026,10,2026_10_UTSA_FAU,401862817,2026-11-06T00:30Z,Spread,home,FAU +6.5,price,fanduel,7.5,-124.0,-124.0,0.0141,0.0036,consensus,-6.5,70.5,-6.34,70.24
+2026_10_UTSA_FAU|Total|under,2026-11-01 02:43,2026,10,2026_10_UTSA_FAU,401862817,2026-11-06T00:30Z,Total,under,Under 70.5,price,fanduel,72.5,-112.0,-112.0,0.0447,0.0107,consensus,-6.5,70.5,-6.34,70.24
+2026_10_JMU_USM|Spread|away,2026-11-01 02:43,2026,10,2026_10_JMU_USM,401869964,2026-11-06T01:00Z,Spread,away,JMU -15.5,price,fanduel,-12.5,-115.0,-115.0,0.0565,0.0145,consensus,-15.5,56.5,-14.94,59.42
+2026_10_JMU_USM|Total|over,2026-11-01 02:43,2026,10,2026_10_JMU_USM,401869964,2026-11-06T01:00Z,Total,over,Over 56.5,price,fanduel,54.5,-115.0,-115.0,0.0508,0.0117,consensus,-15.5,56.5,-14.94,59.42
