@@ -524,3 +524,28 @@ refreshes daily.
   80-90% (receiving yards: 83.5% predicted, 84.6% happened) but slightly overconfident at
   90-95% (90.8% against 87.8%, 123 lines). Rungs far below the projection were not tested.
 - College: not started.
+
+## How far the model may move a prop (Nov 1, 2026)
+
+The Parlays page (`nflmodel/parlays.py`) prices an NFL prop leg as the books' vig-free chance
+moved toward the model by the blend weight and at most `PULL_MAX`. That ceiling started as a
+judgment call (3 points); `experiments/props_cap.py` fits it on the same folds as the blend
+(results in `experiments/out/props_cap.json`). Rule, set before running: the cap with the lowest
+training Brier is chosen and replaces 3 points only if it is no worse on 2025, a difference
+within one standard error counting as a tie that keeps the smaller cap.
+
+| Cap (fold 2: fit 2023-24, test 2025) | Brier minus books | Minus the 3-point cap | +EV sides (1+ pt) | Return | CLV (carried) |
+|---|---|---|---|---|---|
+| 0 (the books) | 0 | +0.00060 ± 0.00024 | | | |
+| 1 point | −0.00036 ± 0.00012 | +0.00024 ± 0.00013 | 0 | | |
+| 2 points | −0.00052 ± 0.00019 | +0.00007 ± 0.00006 | 0 | | |
+| **3 points** | **−0.00060 ± 0.00024** | 0 | 436 | −4.0% ± 4.7% | −4.1% ± 0.4% |
+| 5 points | −0.00065 ± 0.00029 | −0.00005 ± 0.00006 | 585 | −2.8% ± 4.3% | −3.7% ± 0.4% |
+| no cap | −0.00066 ± 0.00032 | −0.00006 ± 0.00011 | 585 | −2.6% ± 4.3% | −3.4% ± 0.4% |
+
+Fold 1 (2023 → 2024) reads the same. **Three points stays**: caps of 1-2 points give up
+accuracy, and anything above 3 is a tie with it (the training seasons picked 10 points, within
+a standard error of 3 on 2025). **But the sides the capped number makes +EV still lose to the
+close by about 4%**, at every cap. The blend is the better chance on average; picking props
+because it disagrees with the books selects the props where it is wrong more often than not.
+So the chance is right to show, and wrong to bet on: a prop's value has to come from its price.
