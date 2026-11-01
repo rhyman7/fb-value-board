@@ -81,6 +81,15 @@ def _blend_weight(model: np.ndarray, market: np.ndarray, actual: np.ndarray) -> 
     return min(max(w, 0.0), 1.0)
 
 
+def final_week(df: pd.DataFrame) -> pd.Series:
+    """Week 18 of the regular season, 2021 on (config.FINAL_WEEK_MARKET). Only the 17-game
+    seasons: in the old Week 17 (2011-2020, 160 games) the model was no worse than the line
+    (-0.19 +- 0.31 points of miss), so the effect is the Week 18 of a 7-team playoff, not the
+    last week as such."""
+    reg = df["game_type"].eq("REG") if "game_type" in df else pd.Series(True, index=df.index)
+    return reg & (df["season"] >= 2021) & (df["week"] == 18)
+
+
 def walk_forward(df: pd.DataFrame, alpha: float = 20.0, margin_feats: list[str] | None = None,
                  total_feats: list[str] | None = None) -> tuple[pd.DataFrame, dict]:
     """Add model, blend and spread columns to every game from FIRST_OOS on."""
@@ -92,6 +101,7 @@ def walk_forward(df: pd.DataFrame, alpha: float = 20.0, margin_feats: list[str] 
             df[col] = 0.0
     for col in ("model_margin", "model_total", "proj_margin", "proj_total", "w_margin", "w_total"):
         df[col] = np.nan
+    df["final_week"] = final_week(df)
     info = {}
     seasons = sorted(s for s in df.season.unique() if s >= FIRST_OOS)
     for s in seasons:
@@ -115,6 +125,11 @@ def walk_forward(df: pd.DataFrame, alpha: float = 20.0, margin_feats: list[str] 
         df.loc[has_line, "proj_margin"] = df.loc[has_line, "spread_line"] + wm * (df.loc[has_line, "model_margin"] - df.loc[has_line, "spread_line"])
         has_tot = test & df["total_line"].notna()
         df.loc[has_tot, "proj_total"] = df.loc[has_tot, "total_line"] + wt * (df.loc[has_tot, "model_total"] - df.loc[has_tot, "total_line"])
+
+        if C.FINAL_WEEK_MARKET:
+            fw = test & final_week(df)
+            df.loc[fw & df["spread_line"].notna(), "proj_margin"] = df.loc[fw & df["spread_line"].notna(), "spread_line"]
+            df.loc[fw, "w_margin"] = 0.0
 
         info[int(s)] = {
             "margin_coefs": m.raw_coefs(MF), "total_coefs": t.raw_coefs(TF),

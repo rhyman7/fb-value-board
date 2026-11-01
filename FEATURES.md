@@ -914,8 +914,12 @@ no worse (10.34 against 10.57). The blend weight that would have minimized the m
 is 0 (the line alone), against 0.07 on weeks 1-17 of the same seasons. Starters rested and
 teams with nothing to play for are news the play-by-play cannot see. There are no Week 18
 games in the tuning seasons, so the usual rule cannot be applied; the gap is about 2.5 standard
-errors. **Suggested, not done:** price Week 18 spreads and moneylines from the market alone
-(blend weight 0) and keep the model's Week 18 sides off the Bet sheet's model tiers.
+errors. **Done (Nov 1, 2026, `config.FINAL_WEEK_MARKET`):** Week 18 spreads and moneylines are priced
+from the market alone (blend weight 0), and the model's Week 18 sides stay off the Bet sheet's
+opener and model tiers and the line-movement alerts; price-tier bets still count, and totals are
+unchanged. The old final week (Week 17, 2011-2020, 160 games) showed nothing (model minus line
+−0.19 ± 0.31), so it applies to Week 18 of the 17-game seasons only. Every other regular-season
+week since 2011, for comparison: +0.13 ± 0.04. Eighty games found after looking: the live record should confirm it.
 
 **Already tested earlier, not re-run:** cold weather for totals (FEATURES.md, Totals: no), a
 team's pace and neutral-situation pass rate for player volume (PLAYERS.md: no gain), opening

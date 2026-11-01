@@ -192,7 +192,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
 
         when = pd.Timestamp(g.gameday)
         games.append({
-            "id": g.game_id, "week": int(g.week), "date": when.strftime("%a %b %-d"),
+            "id": g.game_id, "week": int(g.week), "final_week": bool(getattr(g, "final_week", False) or False), "date": when.strftime("%a %b %-d"),
             "time": g.gametime if isinstance(g.gametime, str) else "",
             "kickoff": _kick(g.gameday, g.gametime),
             "away": g.away_team, "home": g.home_team, "neutral": bool(g.neutral),
