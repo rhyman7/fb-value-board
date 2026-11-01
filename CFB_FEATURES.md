@@ -221,3 +221,37 @@ early in the week mostly mean Pinnacle moves first.
   key numbers at the half, and college overs on team totals and first-half totals hit 2-3
   points less often than the curve says at the high-chance lines. Grade them against
   Pinnacle's closing derivative lines once the market log has a season of them.
+
+## Graded against Pinnacle: spreads and totals, 2024-2025 (Nov 1, 2026)
+
+The 2024 and 2025 backfills now hold Pinnacle, DraftKings and FanDuel spreads and totals at a
+Monday 12:00 UTC open and a close before each cluster of kickoffs. `python experiments/pinnacle_grade.py
+--league cfb --seasons 2024 2025` (results in `experiments/out/pinnacle_grade_cfb.json`), 1,499
+games with a Pinnacle Monday number; the model's side bet at Pinnacle's Monday line and price,
+graded on the result and on closing line value against Pinnacle's close. Games after a short week
+are left out (21).
+
+| Model off Pinnacle's Monday number by | Bets | W-L | Return | CLV vs Pinnacle's close | Line moved toward the model |
+|---|---|---|---|---|---|
+| Spread, any | 1,499 | 735-732 | −3.5% ± 2.5% | −2.7% ± 0.2% | +0.21 pts |
+| Spread 3+ | 537 | 270-255 | −0.9% ± 4.1% | −1.9% ± 0.4% | +0.36 pts |
+| Spread 4+ | 368 | 191-170 | +1.8% ± 5.0% | −1.8% ± 0.4% | +0.38 pts |
+| Total, any | 1,499 | 778-709 | −0.2% ± 2.5% | −3.5% ± 0.2% | +0.22 pts |
+| Total 2+ | 718 | 400-309 | +7.5% ± 3.5% | −2.7% ± 0.3% | +0.40 pts |
+| Total 3+ | 418 | 233-179 | +7.7% ± 4.6% | −1.7% ± 0.4% | +0.61 pts |
+| Total 5+ | 125 | 64-57 | +1.1% ± 8.4% | −0.5% ± 0.8% | +0.82 pts |
+
+**College spreads have no edge against Pinnacle.** The line drifts toward the model after
+Monday, but by about a third of a point, short of Pinnacle's margin: closing line value is
+negative at every gap and the record is flat. The model's college spread edge (CFB_FEATURES
+above, the 0.52 haircut) was measured against consensus averages and one book's prices; against
+the sharp number it is not there. **Totals are better but not proven**: 2+ and 3+ point gaps
+won (+7.5% ± 3.5%, about two standard errors) and the line moves toward the model more the
+bigger the gap, yet the price at Pinnacle's Monday number still did not beat its close. As with
+the NFL, the edge, if any, is in the first number, which a Monday noon snapshot is already late for.
+
+**Price tier** (a DraftKings or FanDuel price beating Pinnacle's no-vig number by 1%): 82 at the
+open (44-38, CLV −1.8% ± 1.1%) and 62 at the close (30-32, CLV +2.5% ± 0.7%). Too few to say more.
+
+The consensus close the backtests use sits 0.40 points from Pinnacle's close on spreads and 0.42
+on totals, and differs on 33% of games.
