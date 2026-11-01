@@ -1,0 +1,171 @@
+{
+ "chain": [
+  {
+   "projections": "chain",
+   "group": "WR",
+   "stat": "rec_yds",
+   "b": 0.268,
+   "n": 21533,
+   "mae": 19.906,
+   "gain": -0.0895,
+   "se": 0.0075,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "TE",
+   "stat": "rec_yds",
+   "b": 0.095,
+   "n": 12808,
+   "mae": 12.437,
+   "gain": -0.0505,
+   "se": 0.0044,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "RB",
+   "stat": "rec_yds",
+   "b": 0.223,
+   "n": 14744,
+   "mae": 8.974,
+   "gain": -0.1195,
+   "se": 0.0063,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "WR",
+   "stat": "receptions",
+   "b": 0.315,
+   "n": 21533,
+   "mae": 1.338,
+   "gain": -0.0023,
+   "se": 0.0004,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "TE",
+   "stat": "receptions",
+   "b": 0.208,
+   "n": 12808,
+   "mae": 1.039,
+   "gain": -0.0027,
+   "se": 0.0004,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "RB",
+   "stat": "receptions",
+   "b": 0.498,
+   "n": 14744,
+   "mae": 0.988,
+   "gain": -0.0072,
+   "se": 0.0008,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "RB",
+   "stat": "rush_yds",
+   "b": 0.257,
+   "n": 14744,
+   "mae": 16.411,
+   "gain": -0.1131,
+   "se": 0.0095,
+   "passes": true
+  },
+  {
+   "projections": "chain",
+   "group": "QB",
+   "stat": "pass_yds",
+   "b": 0.112,
+   "n": 4136,
+   "mae": 68.931,
+   "gain": -0.2144,
+   "se": 0.1376,
+   "passes": false
+  },
+  {
+   "projections": "chain",
+   "group": "RB",
+   "stat": "carries",
+   "b": 0.227,
+   "n": 14744,
+   "mae": 3.011,
+   "gain": -0.0061,
+   "se": 0.0011,
+   "passes": true
+  }
+ ],
+ "new": [
+  {
+   "projections": "New",
+   "group": "RB",
+   "stat": "carries",
+   "b": 0.34,
+   "n": 8644,
+   "mae": 2.83,
+   "gain": -0.0084,
+   "se": 0.0021,
+   "passes": true
+  },
+  {
+   "projections": "New",
+   "group": "RB",
+   "stat": "rush_yds",
+   "b": 0.216,
+   "n": 8644,
+   "mae": 15.963,
+   "gain": -0.0696,
+   "se": 0.0098,
+   "passes": true
+  },
+  {
+   "projections": "New",
+   "group": "WR",
+   "stat": "receptions",
+   "b": 0.154,
+   "n": 12969,
+   "mae": 1.264,
+   "gain": -0.001,
+   "se": 0.0003,
+   "passes": true
+  },
+  {
+   "projections": "New",
+   "group": "RB",
+   "stat": "receptions",
+   "b": 0.216,
+   "n": 8644,
+   "mae": 0.933,
+   "gain": -0.003,
+   "se": 0.0004,
+   "passes": true
+  },
+  {
+   "projections": "New",
+   "group": "WR",
+   "stat": "rec_yds",
+   "b": 0.117,
+   "n": 12969,
+   "mae": 18.686,
+   "gain": -0.0208,
+   "se": 0.0035,
+   "passes": true
+  },
+  {
+   "projections": "New",
+   "group": "RB",
+   "stat": "rec_yds",
+   "b": 0.255,
+   "n": 8644,
+   "mae": 8.552,
+   "gain": -0.1282,
+   "se": 0.0087,
+   "passes": true
+  }
+ ]
+}

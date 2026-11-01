@@ -83,6 +83,19 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             new = ml[ml["season"] == season]
         except Exception as exc:
             print(f"  new projections skipped ({exc})")
+        try:                                      # defense against each position (dvp.py), the last multiplier
+            from . import dvp
+            from .players_ml import ADOPT
+            pall = pall if pall is not None else players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
+            shown_new = {(g, st) for st, gs in ADOPT.items() for g in gs} if new is not None else set()
+            rt = dvp.ratings(pall)
+            pproj = dvp.apply(pproj, rt, dvp.fit(pall, rt, range(C.FIRST_TEST_SEASON, season)), pairs=dvp.APPLY - shown_new)
+            if new is not None and ml is not None:
+                rt_ml = dvp.ratings(ml)
+                new = dvp.apply(new, rt_ml, dvp.fit(ml, rt_ml, range(C.HOLDOUT_FROM, season)), pairs=dvp.APPLY & shown_new)
+            say(f"  defense vs position applied ({len(dvp.APPLY)} position-stats)")
+        except Exception as exc:
+            print(f"  defense vs position skipped ({exc})")
         player_board = players.board(pproj, pinfo, upcoming_ids, new=new)
         if with_backtest:
             say("Backtesting player projections ...")

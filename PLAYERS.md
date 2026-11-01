@@ -187,3 +187,33 @@ and no prop bets are flagged.
 - A quarterback's line assumes he starts. The starter pick is wrong about one
   game in fourteen, mostly benchings announced during the week; check the news.
 - Prop probabilities and the comparison with sportsbook lines: [PROPS.md](PROPS.md).
+
+### Defense against each position (Nov 1, 2026)
+
+The matchup dashboards split pass defense by position (yards allowed to wide receivers, tight
+ends and backs). `experiments/def_vs_position.py` built that split as a rating per defense,
+position and stat: the log of what it allowed over what the projections expected those players
+to get (so it is already adjusted for the offenses it faced), averaged over its earlier games
+(6-game half-life, last season at half weight) and shrunk toward 0 by 4 games. The projection
+is multiplied by exp(b x rating), b fitted on earlier seasons (`nflmodel/dvp.py`).
+
+| Position, stat | Chain projections, holdout 2019 on (b fitted 2013-2018) | New projections, 2022 on (b fitted 2019-2021) |
+|---|---|---|
+| WR receiving yards | 19.91 → −0.09 ± 0.01 | 18.69 → −0.02 ± 0.004 |
+| TE receiving yards | 12.44 → −0.05 ± 0.004 | (chain shown) |
+| RB receiving yards | 8.97 → −0.12 ± 0.006 | 8.55 → −0.13 ± 0.009 |
+| WR / TE / RB receptions | −0.0023 / −0.0027 / −0.0072 | −0.0010 / (chain) / −0.0030 |
+| RB rushing yards | 16.41 → −0.11 ± 0.01 | 15.96 → −0.07 ± 0.01 |
+| RB carries | −0.0061 ± 0.0011 | −0.0084 ± 0.0021 |
+| QB passing yards | 68.93 → −0.21 ± 0.14 (not kept) | |
+
+Every pair but passing yards clears two standard errors on both sets of projections
+(`experiments/dvp_ml_test.py`), so it is applied to the projections the board shows: the chain
+for tight ends, the New projections for the stats in `players_ml.ADOPT`. Gains are small, as
+the defense's were before: usage and game script still do most of the work.
+
+**It is not an edge against the books.** On 2025 DraftKings and FanDuel main lines the rating
+tied the books' own chance (pooled Brier −0.00003 ± 0.00018), and the props it moved 2+ points
+off the books went 155-162, −7.4% ± 4.8%, closing line value −4.7% ± 0.4%. The books price
+the matchup. Receiving yards alone scored better than the books on 2025 (−0.00061 ± 0.00021),
+one of several stats tried: a lead for the live prop log, not a result.
