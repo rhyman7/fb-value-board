@@ -479,6 +479,32 @@ def _ordinal(n: int) -> str:
     return f"{n}{'th' if 11 <= n % 100 <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
 
 
+SHARE_OF = {"rec_yds": "tgt", "receptions": "tgt", "rush_yds": "car", "carries": "car", "anytime_td": None}
+
+
+def share_tags(legs: list[dict], players: list[dict], teams: list[dict] | None = None) -> None:
+    """The player's share of his team's targets or carries, as the projection uses it this game
+    and as his recent games had it (recent games weighted more), on each prop leg: 'sh'."""
+    why = {(p["game"], str(p["id"])): (p.get("why") or {}, p.get("pos")) for p in players}
+    outs = {(t.get("game"), t.get("team")): bool(t.get("out")) for t in (teams or [])}
+    for l in legs:
+        if l.get("m") != "prop" or l.get("s") not in SHARE_OF:
+            continue
+        w, pos = why.get((l["g"], str(l["c"]["p"])), ({}, None))
+        kind = SHARE_OF[l["s"]] or ("car" if pos == "RB" else "tgt")
+        if pos == "QB":
+            continue
+        now = w.get(f"{kind}_share") if kind == "car" else w.get("tgt_share", w.get("rec_share"))
+        usual = w.get(f"{kind}_share_hist") if kind == "car" else w.get("tgt_share_hist", w.get("rec_share_hist"))
+        if not now:
+            continue
+        word = "carries" if kind == "car" else "targets"
+        txt = f"{round(100 * now)}% of {word}"
+        if usual is not None and abs(now - usual) >= 0.02:
+            txt += f" (usually {round(100 * usual)}%{', teammates out' if now > usual and outs.get((l['g'], l.get('tm'))) else ''})"
+        l["sh"] = txt
+
+
 def tag_matchups(legs: list[dict], games: dict, table: dict) -> None:
     for l in legs:
         if l.get("m") != "prop" or l.get("s") not in MX_KIND or not table:
@@ -591,7 +617,7 @@ def compact(l: dict) -> dict:
     elif c.get("k") == "cover":
         c = {"k": "cover", "tm": c["tm"]}
     out = {k: l[k] for k in ("g", "m", "lab", "L", "w", "h", "src") if k in l}
-    for k in ("d", "wv", "pm", "pk", "tm", "s", "mx"):
+    for k in ("d", "wv", "pm", "pk", "tm", "s", "mx", "sh"):
         if l.get(k) is not None:
             out[k] = l[k]
     if l.get("bk"):
@@ -641,6 +667,10 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
             print(f"  parlays: matchup tags skipped ({exc})")
     if league == "cfb" and prop_model is not None:
         legs += [l for l in cfb_prop_legs(payload, prop_model, roles, now) if l["g"] in gmeta]
+    try:
+        share_tags(legs, players, (payload.get("players") or {}).get("teams"))
+    except Exception as exc:
+        print(f"  parlays: share tags skipped ({exc})")
     legs = [compact(l) for l in legs if l["g"] in gmeta and l.get("w") is not None and GAME_LO <= l["w"] <= GAME_HI]
     for i, l in enumerate(legs):
         l["i"] = i
