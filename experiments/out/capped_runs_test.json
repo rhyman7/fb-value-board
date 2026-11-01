@@ -1,0 +1,31 @@
+{
+ "tuning RB+QB": {
+  "n": 20406,
+  "mae_raw": 12.293,
+  "mae_capped": 12.305,
+  "change": 0.0124,
+  "se": 0.008
+ },
+ "tuning RB": {
+  "n": 12822,
+  "mae_raw": 16.266,
+  "mae_capped": 16.264,
+  "change": -0.0025,
+  "se": 0.0124
+ },
+ "holdout RB+QB": {
+  "n": 23200,
+  "mae_raw": 13.287,
+  "mae_capped": 13.334,
+  "change": 0.0469,
+  "se": 0.0084
+ },
+ "holdout RB": {
+  "n": 14744,
+  "mae_raw": 16.411,
+  "mae_capped": 16.448,
+  "change": 0.0369,
+  "se": 0.0129
+ },
+ "keep": false
+}
