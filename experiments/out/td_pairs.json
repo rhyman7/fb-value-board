@@ -1,0 +1,452 @@
+{
+ "fit_tuning": {
+  "R1|0.5": [
+   1.1294,
+   1.2638,
+   1054
+  ],
+  "R1|1.5": [
+   0.9733,
+   1.0028,
+   1054
+  ],
+  "R1|2.5": [
+   0.6298,
+   0.9629,
+   1054
+  ],
+  "R2|0.5": [
+   0.8782,
+   1.6051,
+   853
+  ],
+  "R2|1.5": [
+   1.1037,
+   1.2315,
+   853
+  ],
+  "R2|2.5": [
+   0.6795,
+   1.0053,
+   853
+  ],
+  "R3|0.5": [
+   1.7451,
+   0.8614,
+   653
+  ],
+  "R3|1.5": [
+   1.0418,
+   0.6565,
+   653
+  ],
+  "R3|2.5": [
+   0.8318,
+   1.0901,
+   653
+  ],
+  "RB1|0.5": [
+   -0.1971,
+   1.139,
+   1181
+  ],
+  "RB1|1.5": [
+   0.0373,
+   1.2181,
+   1181
+  ],
+  "RB1|2.5": [
+   0.0705,
+   1.2528,
+   1181
+  ]
+ },
+ "holdout": [
+  {
+   "role": "R1",
+   "line": 0.5,
+   "n": 4136,
+   "actual": 0.3138,
+   "independent": {
+    "said": 0.2318,
+    "brier": 0.21638,
+    "log_loss": 0.62796
+   },
+   "copula": {
+    "said": 0.2912,
+    "brier": 0.21152,
+    "log_loss": 0.61334
+   },
+   "nested": {
+    "said": 0.2741,
+    "brier": 0.21198,
+    "log_loss": 0.61486
+   },
+   "nested_wins": false
+  },
+  {
+   "role": "R1",
+   "line": 1.5,
+   "n": 4136,
+   "actual": 0.2275,
+   "independent": {
+    "said": 0.1336,
+    "brier": 0.1783,
+    "log_loss": 0.55366
+   },
+   "copula": {
+    "said": 0.2776,
+    "brier": 0.17353,
+    "log_loss": 0.52906
+   },
+   "nested": {
+    "said": 0.1974,
+    "brier": 0.17082,
+    "log_loss": 0.52302
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R1",
+   "line": 2.5,
+   "n": 4136,
+   "actual": 0.1059,
+   "independent": {
+    "said": 0.0548,
+    "brier": 0.09401,
+    "log_loss": 0.34283
+   },
+   "copula": {
+    "said": 0.1609,
+    "brier": 0.0944,
+    "log_loss": 0.33279
+   },
+   "nested": {
+    "said": 0.0886,
+    "brier": 0.0914,
+    "log_loss": 0.32347
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R2",
+   "line": 0.5,
+   "n": 4136,
+   "actual": 0.2459,
+   "independent": {
+    "said": 0.1884,
+    "brier": 0.18345,
+    "log_loss": 0.55695
+   },
+   "copula": {
+    "said": 0.2366,
+    "brier": 0.1814,
+    "log_loss": 0.54862
+   },
+   "nested": {
+    "said": 0.2244,
+    "brier": 0.18125,
+    "log_loss": 0.54871
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R2",
+   "line": 1.5,
+   "n": 4136,
+   "actual": 0.1811,
+   "independent": {
+    "said": 0.1087,
+    "brier": 0.14857,
+    "log_loss": 0.48163
+   },
+   "copula": {
+    "said": 0.2299,
+    "brier": 0.14694,
+    "log_loss": 0.46731
+   },
+   "nested": {
+    "said": 0.1636,
+    "brier": 0.14376,
+    "log_loss": 0.45874
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R2",
+   "line": 2.5,
+   "n": 4136,
+   "actual": 0.0912,
+   "independent": {
+    "said": 0.0446,
+    "brier": 0.08273,
+    "log_loss": 0.31165
+   },
+   "copula": {
+    "said": 0.1488,
+    "brier": 0.08406,
+    "log_loss": 0.30548
+   },
+   "nested": {
+    "said": 0.0717,
+    "brier": 0.0807,
+    "log_loss": 0.29368
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R3",
+   "line": 0.5,
+   "n": 4136,
+   "actual": 0.1811,
+   "independent": {
+    "said": 0.1479,
+    "brier": 0.14741,
+    "log_loss": 0.47279
+   },
+   "copula": {
+    "said": 0.1858,
+    "brier": 0.14748,
+    "log_loss": 0.47033
+   },
+   "nested": {
+    "said": 0.1761,
+    "brier": 0.14713,
+    "log_loss": 0.46976
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R3",
+   "line": 1.5,
+   "n": 4136,
+   "actual": 0.1347,
+   "independent": {
+    "said": 0.0853,
+    "brier": 0.11652,
+    "log_loss": 0.40124
+   },
+   "copula": {
+    "said": 0.1829,
+    "brier": 0.11849,
+    "log_loss": 0.39917
+   },
+   "nested": {
+    "said": 0.1321,
+    "brier": 0.11487,
+    "log_loss": 0.38856
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "R3",
+   "line": 2.5,
+   "n": 4136,
+   "actual": 0.0704,
+   "independent": {
+    "said": 0.0349,
+    "brier": 0.06506,
+    "log_loss": 0.25637
+   },
+   "copula": {
+    "said": 0.1313,
+    "brier": 0.06766,
+    "log_loss": 0.26062
+   },
+   "nested": {
+    "said": 0.0573,
+    "brier": 0.06378,
+    "log_loss": 0.24319
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "RB1",
+   "line": 0.5,
+   "n": 4136,
+   "actual": 0.3257,
+   "independent": {
+    "said": 0.3187,
+    "brier": 0.20876,
+    "log_loss": 0.60586
+   },
+   "copula": {
+    "said": 0.3407,
+    "brier": 0.20933,
+    "log_loss": 0.60722
+   },
+   "nested": {
+    "said": 0.3171,
+    "brier": 0.20853,
+    "log_loss": 0.60531
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "RB1",
+   "line": 1.5,
+   "n": 4136,
+   "actual": 0.1922,
+   "independent": {
+    "said": 0.1804,
+    "brier": 0.14732,
+    "log_loss": 0.46437
+   },
+   "copula": {
+    "said": 0.2104,
+    "brier": 0.14754,
+    "log_loss": 0.46542
+   },
+   "nested": {
+    "said": 0.1798,
+    "brier": 0.14709,
+    "log_loss": 0.46389
+   },
+   "nested_wins": true
+  },
+  {
+   "role": "RB1",
+   "line": 2.5,
+   "n": 4136,
+   "actual": 0.0803,
+   "independent": {
+    "said": 0.0722,
+    "brier": 0.0706,
+    "log_loss": 0.25894
+   },
+   "copula": {
+    "said": 0.0919,
+    "brier": 0.07059,
+    "log_loss": 0.2598
+   },
+   "nested": {
+    "said": 0.0583,
+    "brier": 0.07104,
+    "log_loss": 0.26222
+   },
+   "nested_wins": false
+  }
+ ],
+ "conditional_holdout": [
+  {
+   "role": "R1",
+   "line": 0.5,
+   "n_scored": 1395,
+   "q_said": 0.942,
+   "q_happened": 0.9305,
+   "se": 0.0068,
+   "receiver_said": 0.2912,
+   "receiver_happened": 0.3373
+  },
+  {
+   "role": "R1",
+   "line": 1.5,
+   "n_scored": 1395,
+   "q_said": 0.6812,
+   "q_happened": 0.6746,
+   "se": 0.0125,
+   "receiver_said": 0.2912,
+   "receiver_happened": 0.3373
+  },
+  {
+   "role": "R1",
+   "line": 2.5,
+   "n_scored": 1395,
+   "q_said": 0.3083,
+   "q_happened": 0.314,
+   "se": 0.0124,
+   "receiver_said": 0.2912,
+   "receiver_happened": 0.3373
+  },
+  {
+   "role": "R2",
+   "line": 0.5,
+   "n_scored": 1090,
+   "q_said": 0.9499,
+   "q_happened": 0.933,
+   "se": 0.0076,
+   "receiver_said": 0.2366,
+   "receiver_happened": 0.2635
+  },
+  {
+   "role": "R2",
+   "line": 1.5,
+   "n_scored": 1090,
+   "q_said": 0.6967,
+   "q_happened": 0.6872,
+   "se": 0.014,
+   "receiver_said": 0.2366,
+   "receiver_happened": 0.2635
+  },
+  {
+   "role": "R2",
+   "line": 2.5,
+   "n_scored": 1090,
+   "q_said": 0.3074,
+   "q_happened": 0.3459,
+   "se": 0.0144,
+   "receiver_said": 0.2366,
+   "receiver_happened": 0.2635
+  },
+  {
+   "role": "R3",
+   "line": 0.5,
+   "n_scored": 796,
+   "q_said": 0.9486,
+   "q_happened": 0.941,
+   "se": 0.0084,
+   "receiver_said": 0.1858,
+   "receiver_happened": 0.1925
+  },
+  {
+   "role": "R3",
+   "line": 1.5,
+   "n_scored": 796,
+   "q_said": 0.7139,
+   "q_happened": 0.6997,
+   "se": 0.0162,
+   "receiver_said": 0.1858,
+   "receiver_happened": 0.1925
+  },
+  {
+   "role": "R3",
+   "line": 2.5,
+   "n_scored": 796,
+   "q_said": 0.3154,
+   "q_happened": 0.3656,
+   "se": 0.0171,
+   "receiver_said": 0.1858,
+   "receiver_happened": 0.1925
+  },
+  {
+   "role": "RB1",
+   "line": 0.5,
+   "n_scored": 1787,
+   "q_said": 0.7906,
+   "q_happened": 0.7538,
+   "se": 0.0102,
+   "receiver_said": 0.4043,
+   "receiver_happened": 0.4321
+  },
+  {
+   "role": "RB1",
+   "line": 1.5,
+   "n_scored": 1787,
+   "q_said": 0.4546,
+   "q_happened": 0.4449,
+   "se": 0.0118,
+   "receiver_said": 0.4043,
+   "receiver_happened": 0.4321
+  },
+  {
+   "role": "RB1",
+   "line": 2.5,
+   "n_scored": 1787,
+   "q_said": 0.1499,
+   "q_happened": 0.1858,
+   "se": 0.0092,
+   "receiver_said": 0.4043,
+   "receiver_happened": 0.4321
+  }
+ ]
+}

@@ -387,6 +387,21 @@ receiver's still run short (29.0% against 33.8%): the correlation is at the copu
 closing that needs a copula with tail dependence. The game-line pairs (`data/parlay_corr.json`)
 were refitted the same way (a lead back's carries with his team covering: 31.7% against 31.8%).
 
+**A quarterback's TD passes with a teammate's anytime TD (Nov 1, 2026).** One correlation per
+pair cannot describe this one: a receiving touchdown *is* one of the quarterback's touchdown
+passes. Unshrunk, the copula's correlation for it sits at its 0.95 ceiling, which makes the two
+almost the same event at the 0.5 line and overstates both going over at 1.5 and 2.5 (holdout,
+top receiver: 27.8% said against 22.8% at 1.5; 16.1% against 10.6% at 2.5). `experiments/td_pairs.py`
+models it as nested: P(both) = P(receiver scores) × q, with q = P(QB over L | the receiver
+scored) a logistic in the quarterback's own chance, fitted per role (R1-R3, RB1) and line on
+2013-2018. On the holdout q is right to within 1-4 points (top receiver: 94.2% said, 93.0%
+happened at 0.5; 68.1% and 67.5% at 1.5; 30.8% and 31.4% at 2.5), and the nested chance has the
+lower Brier score on 10 of the 12 role-and-line cells. The two where it does not (top receiver at
+0.5, lead back at 2.5) trace to the model's own anytime-TD chance for those players running low
+(top receivers scored 33.7% against 29.1% said), not to the pairing: on the Parlays page the
+receiver's chance is the books', so the nested form is used for every cell
+(`data/td_pairs.json`; `tdNested` on the page). Single props are unchanged.
+
 Combinations are priced on request (`propsim.combo_prob`); the books' same-game prices are
 not in The Odds API's free data, so none are flagged.
 
