@@ -80,6 +80,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
     <button role="tab" aria-selected="true" data-tab="suggest">Leg finder</button>
     <button role="tab" aria-selected="false" data-tab="boost">Boost finder</button>
     <button role="tab" aria-selected="false" data-tab="build">Builder</button>
+    <button role="tab" aria-selected="false" data-tab="record">Record</button>
     <button role="tab" aria-selected="false" data-tab="how">How it works</button>
   </div>
 
@@ -138,6 +139,13 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
       </div>
       <div id="slip-out"></div>
     </div>
+  </section>
+
+  <section id="record" hidden>
+    <div class="panel explain">
+      <p style="margin-top:0">What the tools would have suggested, logged before kickoff at the price they had then and graded afterwards, one unit on each (<code>nflmodel/parlaylog.py</code>). <b>Legs</b>: every leg with a DraftKings or FanDuel price worth at least break-even, 35-95% to win. <b>Best 2-leg</b> and <b>Best 3-leg</b>: the Leg finder's top value parlay from different games, at each book. A pushed leg or a player who did not play drops out, as the books settle it. <b>Claimed</b> is the average value the tool showed; a record that keeps up with it is the test.</p>
+    </div>
+    <div id="record-body"></div>
   </section>
 
   <section id="how" hidden>
@@ -592,10 +600,39 @@ function drawSlip() {
      ${r.sameGame ? `<p class="note">Same-game legs: the chance includes how these legs move together${r.known ? "" : " (some pairs have no fitted correlation and count as independent)"}. The book prices same-game parlays itself: enter its price above.</p>` : ""}`;
 }
 
+// ---------------------------------------------------------------- the record
+let RECORD = null;
+function drawRecord() {
+  const host = $("#record-body");
+  if (RECORD === null) {
+    host.innerHTML = `<p class="muted">Loading…</p>`;
+    Promise.all(["nfl", "cfb"].map(lg => fetch(`parlays/record_${lg}.json`, { cache: "no-store" }).then(r => r.ok ? r.json() : null).catch(() => null)))
+      .then(r => { RECORD = r; drawRecord(); });
+    return;
+  }
+  const names = { leg: "Legs", p2: "Best 2-leg", p3: "Best 3-leg" };
+  const row = (label, b) => `<tr><td>${label}</td><td class="num">${b.logged}</td><td class="num">${b.graded}</td><td class="num">${b.w}-${b.l}-${b.p}</td>
+    <td class="num">${b.hit == null ? "—" : pct(b.hit)}</td><td class="num">${b.chance == null ? "—" : pct(b.chance)}</td>
+    <td class="num ${b.units > 0 ? "good" : b.units < 0 ? "bad" : ""}">${b.graded ? (b.units >= 0 ? "+" : "−") + Math.abs(b.units).toFixed(2) : "—"}</td>
+    <td class="num">${b.roi == null ? "—" : sgn(b.roi) + (b.roi_se != null ? ` <span class="muted">± ${(100 * b.roi_se).toFixed(1)}%</span>` : "")}</td>
+    <td class="num">${b.claimed == null ? "—" : sgn(b.claimed)}</td></tr>`;
+  const head = `<thead><tr><th></th><th>Logged</th><th>Graded</th><th>W-L-P</th><th>Hit</th><th>Chance said</th><th>Units</th><th>Return</th><th>Claimed</th></tr></thead>`;
+  host.innerHTML = RECORD.map((d, i) => {
+    const lg = ["NFL", "College"][i];
+    if (!d) return `<div class="panel"><h2 style="margin-top:0">${lg}</h2><p class="muted">No record yet.</p></div>`;
+    const weeks = (d.by_week || []).slice().reverse().map(w => Object.keys(names).map(k => row(`Week ${w.week}: ${names[k]}`, w[k])).join("")).join("");
+    return `<div class="panel"><h2 style="margin-top:0">${lg}</h2>
+      <table>${head}<tbody>${Object.keys(names).map(k => row(names[k] + " (season)", d.kinds[k])).join("")}</tbody></table>
+      ${weeks ? `<h2>By week</h2><table>${head}<tbody>${weeks}</tbody></table>` : ""}
+      <p class="note">${d.pending} waiting for results. Updated ${esc(d.built || "")}.</p></div>`;
+  }).join("");
+}
+
 // ---------------------------------------------------------------- wiring
 function setTab(t) {
   document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === t)));
   $("#finder").hidden = !(t === "suggest" || t === "boost"); $("#builder").hidden = t !== "build"; $("#how").hidden = t !== "how";
+  $("#record").hidden = t !== "record"; if (t === "record") drawRecord();
   $("#tab-mode").value = t === "boost" ? "boost" : "suggest";
   document.querySelectorAll(".boost-only").forEach(e => e.hidden = t !== "boost");
   $("#lab-legs").hidden = t === "boost";

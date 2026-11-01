@@ -49,7 +49,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add docs/cfb data/cfb/cache data/cfb/line_history.csv
-          if [ -d docs/parlays ]; then git add docs/parlays docs/parlays.html; fi   # the Parlays page (nflmodel/parlays.py)
+          if [ -d docs/parlays ]; then git add docs/parlays docs/parlays.html; fi
+          if [ -d data/parlays ]; then git add data/parlays; fi   # the Parlays page (nflmodel/parlays.py)
           for f in data/cfb/wind_log.csv data/cfb/backtest.json data/cfb/ledger.csv data/cfb/ledger_results.csv data/cfb/ledger_status.csv data/cfb/bestbets.csv data/cfb/bestbets_results.csv; do if [ -f "$f" ]; then git add "$f"; fi; done
           git diff --cached --quiet && exit 0
           git commit -m "Update college board"
