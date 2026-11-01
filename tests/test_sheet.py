@@ -343,3 +343,36 @@ def test_final_week_mask():
     df = pd.DataFrame({"season": [2020, 2020, 2023, 2023, 2023], "week": [17, 18, 17, 18, 19],
                        "game_type": ["REG", "WC", "REG", "REG", "WC"]})
     assert M.final_week(df).tolist() == [False, False, False, True, False]
+
+
+def test_clv_guard_mutes_a_kind_losing_to_the_close():
+    from nflmodel import sheet as S
+    games = [{"bets": [{"tier": "opener", "stake": 0.02, "bucket_stake": 0.01, "books": [{"stake": 0.02}]},
+                       {"tier": "price", "stake": 0.01, "books": []}]}]
+    summary = {"by_tier": {"opener": {"clv_n": 60, "clv": -0.03, "clv_se": 0.01},     # -3% +- 1%: off
+                           "price": {"clv_n": 60, "clv": -0.01, "clv_se": 0.01},      # within 2 SE: stays
+                           "wind": {"clv_n": 20, "clv": -0.10, "clv_se": 0.02}}}      # too few bets: stays
+    muted = S.clv_guard(games, summary)
+    assert set(muted) == {"opener"}
+    o, p = games[0]["bets"]
+    assert o["muted"] and o["stake"] == 0 and o["bucket_stake"] == 0 and o["books"][0]["stake"] == 0
+    assert p["stake"] == 0.01 and not p.get("muted")
+    assert S.clv_guard(games, None) == {}
+
+
+def test_wind_bucket_stake_is_halved():
+    from nflmodel import sheet as S
+    def bet(tier):
+        return {"tier": tier, "stake": 0.0, "odds": -110, "market": "Total", "side": "under", "best": "dk", "opener_gap": 3.5, "move": 0.0,
+                "books": [{"book": "dk", "stake": 0.0, "ev_line": 0.0, "odds_net": -110, "p_push": 0.0}]}
+    g = [{"bets": [bet("wind")]}]
+    S.bucket_stakes(g, None, {"eras": [{"win_pct": 0.57}]}, 0.25, 0.03)
+    half = g[0]["bets"][0]["bucket_stake"]
+    S.WIND_STAKE_SCALE, keep = 1.0, S.WIND_STAKE_SCALE
+    try:
+        g2 = [{"bets": [bet("wind")]}]
+        S.bucket_stakes(g2, None, {"eras": [{"win_pct": 0.57}]}, 0.25, 0.03)
+        full = g2[0]["bets"][0]["bucket_stake"]
+    finally:
+        S.WIND_STAKE_SCALE = keep
+    assert full > 0 and abs(half - full / 2) < 1e-3

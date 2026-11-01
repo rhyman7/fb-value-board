@@ -979,3 +979,18 @@ in `data/wind_log.csv` (`precip_mm`, `snow_cm`). Games forecast wet (2+ mm or an
 `python experiments/precip_forecast_grade.py` grades the wet under on those forecasts. Rule, set
 now: it joins the Bet sheet only if, after a full season of logged forecasts, the forecast version
 is positive with closing line value above zero, the same bar the wind under has to clear.
+
+
+## Staking rules from the audit (Nov 1, 2026)
+
+Two rules, approved by Ryan, in `nflmodel/sheet.py` (both boards):
+
+- **Wind unders at half stake** (`WIND_STAKE_SCALE = 0.5`). Their record was measured on wind
+  recorded at the game; live they are bet on forecasts, and in 2024-2025 they went 52-52 at
+  Pinnacle's close. Half stake until `experiments/wind_forecast_grade.py` has a full season.
+- **A closing-line-value guard** (`clv_guard`, `CLV_GUARD_N = 50`, `CLV_GUARD_Z = 2`). Any kind of
+  bet on the Bet sheet (price, opener, wind, model) whose live ledger shows 50 or more graded
+  bets with closing line value, averaging below zero by more than two standard errors, carries
+  no stake: the bets stay on the sheet, marked, and in the ledger, so the kind is still graded and
+  comes back once it recovers. `meta.muted_tiers` names the kinds and the numbers; the Bet sheet
+  says so. As of this change no kind has 50 graded bets yet.

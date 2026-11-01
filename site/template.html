@@ -1300,6 +1300,12 @@ const priceNote = () => (state.basis === "adj"
     + (M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1 && M.haircut_note ? " No stake is sized from the model: " + M.haircut_note + ". The EV and chances shown are still the model's."
     : M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1 ? (M.haircut_factor > 0 ? " Stakes are sized as if only " + pct(M.haircut_factor, 0) + " of the claimed edge were real" : " No stake is sized, because none of the claimed edge")
       + (M.haircut_factor > 0 ? ", the share that" : "") + " showed up in the graded bets of the last eight seasons (" + (M.haircut && M.haircut.seasons ? M.haircut.seasons + ", " : "") + "realized profit regressed on claimed EV); the EV and chances shown are still the model's." : "");
+function mutedText() {
+  const mt = M.muted_tiers || {}, names = { price: "prices that beat Pinnacle", opener: "opener bets", wind: "wind unders", model: "model edges" };
+  const parts = Object.keys(mt).map(t => (names[t] || t) + " (" + mt[t] + ")");
+  return (LG === "nfl" ? " Wind unders are staked at half until they have a season graded on forecasts." : "")
+    + (parts.length ? " No stake on " + parts.join("; ") + ": they lose to the closing line, so they stay on the sheet, marked, until that recovers." : "");
+}
 function renderBets() {
   const rows = games().flatMap(g => g.bets.map(b => ({ g, b }))).sort((a, b) => evOf(b.b) - evOf(a.b));
   const shown = state.all ? rows : rows.slice(0, 10);
@@ -1568,7 +1574,7 @@ function renderBestBets() {
   const rows = gs.flatMap(g => sheetBets(g).filter(b => ON_CARD(tierOf(b))).map(b => ({ g, b }))).sort((x, y) => (TIER_ORDER[tierOf(x.b)] - TIER_ORDER[tierOf(y.b)]) || (evOf(y.b) - evOf(x.b)));
   kids.push(el("h2", "The card: " + rows.length + (rows.length === 1 ? " bet" : " bets")));
   const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
-  kids.push(el("p", "In the order to take them: prices that beat Pinnacle's own number first (no model needed), then the model's edges against the opening line, " + (LG === "nfl" ? "wind unders, " : "") + (LG === "nfl" ? "and nothing on the model alone (no stake: those are in Model leans, a separate document). " : "then the model alone. ") + "Moneylines appear only when a price beats the sharp line. Stakes are " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " a bet" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the model's claimed edge were real` : "; the model's own edges carry no stake, since " + (M.haircut_note || "none of their claimed edge has shown up in the graded bets of the last eight seasons")) + " — bets marked (bucket) are sized from their bucket's own record instead" : "") + "." + weekCapText()
+  kids.push(el("p", "In the order to take them: prices that beat Pinnacle's own number first (no model needed), then the model's edges against the opening line, " + (LG === "nfl" ? "wind unders, " : "") + (LG === "nfl" ? "and nothing on the model alone (no stake: those are in Model leans, a separate document). " : "then the model alone. ") + "Moneylines appear only when a price beats the sharp line. Stakes are " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " a bet" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the model's claimed edge were real` : "; the model's own edges carry no stake, since " + (M.haircut_note || "none of their claimed edge has shown up in the graded bets of the last eight seasons")) + " — bets marked (bucket) are sized from their bucket's own record instead" : "") + "." + weekCapText() + mutedText()
     + (priceAgeH() != null && priceAgeH() > STALE_H ? ` Book prices are ${Math.round(priceAgeH())} hours old: check every price bet against the book.` : "")));
   if (!rows.length) kids.push(el("p", "Nothing to bet this week: no price beats the sharp line and the model is not far enough off any opener.", "empty"));
   else {

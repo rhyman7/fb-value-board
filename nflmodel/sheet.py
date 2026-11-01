@@ -49,6 +49,10 @@ WIND_LO, WIND_HI = 10.0, 20.0
 # breakdown keys that carry this week's news rather than the standing ratings
 NEWS_KEYS = {"home_qb", "away_qb", "qb", "ol", "depth1", "snaps", "wind", "rest", "pre", "ret"}
 TIERS = ["price", "opener", "wind", "model"]
+# Staking rules from the audit (Nov 1, 2026, Ryan approved):
+WIND_STAKE_SCALE = 0.5     # wind-under stakes at half until the forecast grade has a season (FEATURES.md, "The wind under")
+CLV_GUARD_N = 50           # a kind of bet whose live closing line value, over at least this many graded bets,
+CLV_GUARD_Z = 2.0          # is below zero by more than this many standard errors carries no stake until it recovers
 MOVED = 0.5                # points toward the model after which an opener bet counts as taken by the market
 WIND_MOVED = 1.5           # points the total has dropped after which the wind is priced in
 # line movement (line_moves): the gap off the opener that makes a side worth watching, (spread, total)
@@ -213,10 +217,37 @@ def bucket_stakes(games: list[dict], openers: dict | None, wind: dict | None, ke
             else:
                 p = 0.5 + lift
             k = float(O.kelly(p, price, push))
-            b["bucket_stake"] = round(min(k * kelly, max_stake), 4)
+            scale = WIND_STAKE_SCALE if b.get("tier") == "wind" else 1.0
+            b["bucket_stake"] = round(min(k * kelly * scale, max_stake), 4)
             b["bucket_book"] = q["book"] if q and b["bucket_stake"] > 0 else None
             n += int(b["bucket_stake"] > 0)
     return n
+
+
+def clv_guard(games: list[dict], ledger_summary: dict | None, n_min: int = CLV_GUARD_N, z: float = CLV_GUARD_Z) -> dict:
+    """Turn off the stake of every bet of a kind the live ledger says is losing to the close:
+    over at least n_min bets with closing line value, the average below zero by more than z
+    standard errors. The bets stay on the sheet, marked, at no stake. Returns {tier: reason} for
+    the kinds turned off (meta.muted_tiers), {} when none is."""
+    muted = {}
+    for tier, r in ((ledger_summary or {}).get("by_tier") or {}).items():
+        n, clv, se = r.get("clv_n") or 0, r.get("clv"), r.get("clv_se")
+        if n >= n_min and clv is not None and se and clv + z * se < 0:
+            muted[tier] = f"closing line value {clv:+.1%} ± {se:.1%} over {n} graded bets"
+    if not muted:
+        return {}
+    for g in games:
+        for b in list(g.get("bets") or []) + list(g.get("derivs") or []):
+            if (b.get("tier") or "model") not in muted:
+                continue
+            b["muted"] = True
+            for key in ("stake", "bucket_stake"):
+                if b.get(key):
+                    b[key] = 0.0
+            for x in b.get("books") or []:
+                if x.get("stake"):
+                    x["stake"] = 0.0
+    return muted
 
 
 # ---------------- line movement ----------------
