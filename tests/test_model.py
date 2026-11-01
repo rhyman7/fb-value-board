@@ -174,9 +174,9 @@ def test_wind_hourly_parse():
     from nflmodel.weather import at_hour
     block = {"wind_speed_10m": [float(h) for h in range(24)], "wind_gusts_10m": [2.0 * h for h in range(24)],
              "wind_direction_10m": [10 * h for h in range(24)]}
-    assert at_hour(block, 13) == {"mph": 13.0, "gust": 26.0, "dir": 130.0}
+    assert at_hour(block, 13) == {"mph": 13.0, "gust": 26.0, "dir": 130.0, "rain": None, "snow": None}
     assert at_hour(block, 30)["mph"] == 23.0                                   # clamped to the day
-    assert at_hour({"wind_speed_10m": block["wind_speed_10m"]}, 4) == {"mph": 4.0, "gust": None, "dir": None}
+    assert at_hour({"wind_speed_10m": block["wind_speed_10m"]}, 4) == {"mph": 4.0, "gust": None, "dir": None, "rain": None, "snow": None}
     assert at_hour(block["wind_speed_10m"], 4) == {"mph": 4.0, "gust": None, "dir": None}
     block["wind_gusts_10m"][5] = None
     assert at_hour(block, 5)["gust"] is None

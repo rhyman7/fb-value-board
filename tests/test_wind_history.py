@@ -130,3 +130,13 @@ def test_weather_history_rows():
     g = pd.DataFrame([{"game_id": "x", "season": 2024, "gameday": "2024-12-01", "hour": 13, "home_team": "BUF"}])
     r = W.rows_for(g, hourly, "now")[0]
     assert r["precip_mm"] == 4.0 and r["snow_cm"] == 0.0 and r["temp_f"] == 40.0
+
+
+def test_forecast_rain_and_snow_in_the_game_window():
+    from nflmodel import weather as W
+    hourly = {"wind_speed_10m": [5.0] * 24, "precipitation": [0.0] * 13 + [1.0, 0.5, 0.5, 0.25, 9.0] + [0.0] * 6,
+              "snowfall": [0.0] * 24}
+    r = W.at_hour(hourly, 13)
+    assert r["mph"] == 5.0 and r["rain"] == 2.25 and r["snow"] == 0.0
+    rows = W.log_rows({"g1": r}, now="2026-11-01 12:00")
+    assert rows.loc[0, "precip_mm"] == 2.25 and list(rows.columns) == W.LOG_COLS

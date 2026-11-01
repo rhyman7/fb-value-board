@@ -971,3 +971,11 @@ already priced. **Not on the board yet**: the live board would need a precipitat
 (the Open-Meteo forecast it already calls for wind carries one), and as with the wind under, the
 forecast version has to be logged and graded before it is trusted. Rain and wind overlap
 (stormy games are both); the next step is a wet under tested alongside the wind under.
+
+**Logging from Nov 1, 2026.** The board's Open-Meteo forecast call now also returns rain and snow,
+summed over the kickoff hour and the three after it (`weather.GAME_HOURS`), logged with the wind
+in `data/wind_log.csv` (`precip_mm`, `snow_cm`). Games forecast wet (2+ mm or any snow) carry a
+"Rain N mm" or "Snow forecast" tag on the NFL board's game cards; nothing is staked on it.
+`python experiments/precip_forecast_grade.py` grades the wet under on those forecasts. Rule, set
+now: it joins the Bet sheet only if, after a full season of logged forecasts, the forecast version
+is positive with closing line value above zero, the same bar the wind under has to clear.

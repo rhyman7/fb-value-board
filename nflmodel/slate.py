@@ -18,6 +18,18 @@ LINE_COLS = ["spread_line", "home_spread_odds", "away_spread_odds", "total_line"
              "home_moneyline", "away_moneyline"]
 
 
+def _wet(g) -> dict | None:
+    """The rain and snow forecast for the game window when it makes a wet game (weather.WET_RAIN):
+    shown on the board and logged, never a bet until graded on forecasts (FEATURES.md, "Rain and snow")."""
+    from .weather import WET_RAIN, WET_SNOW
+    rain, snow = getattr(g, "precip_fc", None), getattr(g, "snow_fc", None)
+    rain = None if rain is None or pd.isna(rain) else float(rain)
+    snow = None if snow is None or pd.isna(snow) else float(snow)
+    if (rain or 0) >= WET_RAIN or (snow or 0) > WET_SNOW:
+        return {"rain_mm": round(rain or 0, 1), "snow_cm": round(snow or 0, 1)}
+    return None
+
+
 def apply_book_lines(df: pd.DataFrame, path=None) -> tuple[pd.DataFrame, int]:
     """Price bets at your own book's numbers, if lines.csv is present.
 
@@ -207,6 +219,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
             "books": {bk: {k: v for k, v in q.items() if k != "away_spread_point"} for bk, q in (quotes["latest"].get(g.game_id) or {}).items()},
             "detail": builder.detail(g) if builder is not None else None,
             "roof": g.roof if isinstance(g.roof, str) else "unknown",
+            "wet": _wet(g),
             "wind": ({"mph": round(float(g.wind), 1), "source": g.wind_source,
                       "under_angle": bool(WIND_LO <= g.wind < WIND_HI),
                       "gust": _opt(getattr(g, "wind_gust", None)), "dir": _opt(getattr(g, "wind_dir", None), 0)}

@@ -29,9 +29,14 @@ from . import config as C, stadiums
 from .features_ext import SITES
 
 LOG = C.DATA / "wind_log.csv"   # every forecast as fetched, so the wind under can be graded on forecasts
-LOG_COLS = ["game_id", "fetched", "wind_mph", "gust_mph", "dir_deg", "along_mph", "cross_mph"]
+LOG_COLS = ["game_id", "fetched", "wind_mph", "gust_mph", "dir_deg", "along_mph", "cross_mph", "precip_mm", "snow_cm"]
 
-HOURLY = ("wind_speed_10m", "wind_gusts_10m", "wind_direction_10m")
+# Rain and snow ride the same call (Nov 1, 2026): the archive test found the closing total does not
+# fully price heavy rain (FEATURES.md, "Rain and snow"), so the forecast is logged here to grade a
+# wet under on forecasts (experiments/precip_forecast_grade.py) before anything is bet on it.
+HOURLY = ("wind_speed_10m", "wind_gusts_10m", "wind_direction_10m", "precipitation", "snowfall")
+GAME_HOURS = 4                  # rain and snow are summed over the kickoff hour and the three after it
+WET_RAIN, WET_SNOW = 2.0, 0.0   # a wet game: 2+ mm of rain or any snow in the game window
 URL = ("https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}"
        "&hourly=" + ",".join(HOURLY) + "&wind_speed_unit=mph&timezone=America%2FNew_York&start_date={d}&end_date={d}")
 MAX_DAYS = 7
@@ -64,6 +69,11 @@ def at_hour(hourly, hour: int) -> dict:
         series = hourly.get(name)
         if series is not None and len(series) > h:
             out[key] = _num(series[h])
+    for key, name in (("rain", "precipitation"), ("snow", "snowfall")):
+        series = hourly.get(name)
+        vals = [_num(x) for x in (series or [])[h:h + GAME_HOURS]]
+        vals = [x for x in vals if x is not None]
+        out[key] = round(sum(vals), 2) if vals else None
     return out
 
 
@@ -90,8 +100,9 @@ def forecast_wind(games: pd.DataFrame, today=None) -> dict:
 def _rec(v) -> dict:
     """A forecast value as a record: a bare number is a speed with nothing else known."""
     if isinstance(v, dict):
-        return {"mph": _num(v.get("mph")), "gust": _num(v.get("gust")), "dir": _num(v.get("dir"))}
-    return {"mph": _num(v), "gust": None, "dir": None}
+        return {"mph": _num(v.get("mph")), "gust": _num(v.get("gust")), "dir": _num(v.get("dir")),
+                "rain": _num(v.get("rain")), "snow": _num(v.get("snow"))}
+    return {"mph": _num(v), "gust": None, "dir": None, "rain": None, "snow": None}
 
 
 def _r1(v):
@@ -112,7 +123,9 @@ def log_rows(fc: dict, home: dict | None = None, now: str | None = None) -> pd.D
             along, cross = (None, None) if math.isnan(a) else (a, c)
         rows.append({"game_id": gid, "fetched": now, "wind_mph": _r1(r["mph"]), "gust_mph": _r1(r["gust"]),
                      "dir_deg": None if r["dir"] is None else int(round(r["dir"])),
-                     "along_mph": _r1(along), "cross_mph": _r1(cross)})
+                     "along_mph": _r1(along), "cross_mph": _r1(cross),
+                     "precip_mm": None if r["rain"] is None else round(r["rain"], 2),
+                     "snow_cm": None if r["snow"] is None else round(r["snow"], 2)})
     return pd.DataFrame(rows, columns=LOG_COLS)
 
 
@@ -170,4 +183,6 @@ def fill_wind(games: pd.DataFrame, verbose: bool = True, log: bool = True) -> pd
     games.loc[blank, "wind_gust"] = games.loc[blank, "game_id"].map({k: v["gust"] for k, v in recs.items()}).astype(float)
     games.loc[blank, "wind_dir"] = games.loc[blank, "game_id"].map({k: v["dir"] for k, v in recs.items()}).astype(float)
     games.loc[blank, "wind_source"] = "forecast"
+    games["precip_fc"] = games["game_id"].map({k: v["rain"] for k, v in recs.items()}).astype(float)
+    games["snow_fc"] = games["game_id"].map({k: v["snow"] for k, v in recs.items()}).astype(float)
     return games
