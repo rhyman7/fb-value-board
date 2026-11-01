@@ -377,6 +377,16 @@ zero and fitted at one line. Price those combinations as a little more likely th
 An earlier version, with two shared factors per team instead of one correlation per kind
 of pair, was further off (27% against 32% for the first pair) and was replaced.
 
+**Unshrunk, Nov 1, 2026.** The shrinkage toward zero (300 pseudo-pairs) was costing the
+tightest pairs: every kind of pair has 1,400 or more past pairs, so it is now off (`SHRINK = 0`).
+Fitted on 2013-2018 again and scored on the holdout: carries & rushing yards 36.4% → 39.0%
+(actual 39.8%), completions & passing yards 36.8% → 38.5% (39.2%), receptions & receiving yards
+36.5% → 37.2% (36.8%), quarterback's yards & top receiver's 29.6% → 30.3% (32.1%); log loss over all
+1.3 million pairs 0.50461 → 0.50458, Brier unchanged. A quarterback's touchdowns with his top
+receiver's still run short (29.0% against 33.8%): the correlation is at the copula's ceiling, and
+closing that needs a copula with tail dependence. The game-line pairs (`data/parlay_corr.json`)
+were refitted the same way (a lead back's carries with his team covering: 31.7% against 31.8%).
+
 Combinations are priced on request (`propsim.combo_prob`); the books' same-game prices are
 not in The Odds API's free data, so none are flagged.
 

@@ -32,7 +32,9 @@ LEG_STATS = {   # the stats a combination can use, by role
     "RB1": ("rush_yds", "carries", "rec_yds", "receptions", "anytime_td"),
 }
 MIN_PAIRS = 300
-SHRINK = 300.0          # rho x n / (n + SHRINK)
+SHRINK = 0.0            # rho x n / (n + SHRINK). Was 300 until Nov 1, 2026: every kind of pair has
+                        # 1,400+ past pairs, and unshrunk the tightest pairs come out right
+                        # (PROPS.md, "Same-game combinations")
 
 
 # --------------------------------------------------------------------------
