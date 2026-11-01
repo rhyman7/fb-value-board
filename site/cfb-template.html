@@ -796,6 +796,16 @@ td .act { font-weight: 700; }
         <details class="data"><summary>Every flagged bet</summary><div class="scroll"><table id="live-rows"></table></div></details>
       </section>
 
+      <section id="clvdash" aria-labelledby="clvdash-h">
+        <div class="section-head">
+          <h2 id="clvdash-h">Closing line value</h2>
+          <p class="note" id="clvdash-note"></p>
+        </div>
+        <div class="tiles" id="clvdash-tiles"></div>
+        <div class="scroll"><table id="clvdash-kinds" aria-labelledby="clvdash-h"></table></div>
+        <figure id="clvdash-fig"></figure>
+      </section>
+
       <section id="bbrec" aria-labelledby="bbrec-h">
         <div class="section-head">
           <h2 id="bbrec-h">Best Bets record</h2>
@@ -2056,6 +2066,61 @@ function diagChart(node, o) {
   table($("#live-rows"), [{ t: "Flagged", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "Close" }, { t: "CLV" }],
     L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick + (r.kept === false ? " (withdrawn)" : ""), cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
       r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.close_line == null ? "" : String(r.close_line), r.clv == null ? "" : spct(r.clv)]));
+})();
+
+/* ---------------- closing line value dashboard ----------------
+   Results take hundreds of bets to separate skill from luck; closing line value (the EV of the
+   price taken at the sharp book's closing no-vig chance) shows up in dozens. One row per kind of
+   bet: how many have a closing value, its average with a standard error, how often the bet beat
+   the close, and what the stake rule (sheet.clv_guard) is doing with it. The chart is each kind's
+   running average in the order the bets kicked off. */
+(function clvDash() {
+  const L = DATA.ledger;
+  if (!L || !L.rows || !L.rows.length) { $("#clvdash").hidden = true; return; }
+  const N = 50, Z = 2, muted = M.muted_tiers || {};
+  const rows = L.rows.filter(r => r.clv != null).slice().sort((a, b) => String(a.kickoff).localeCompare(String(b.kickoff)));
+  const stat = xs => {
+    const n = xs.length, m = n ? xs.reduce((a, b) => a + b, 0) / n : null;
+    const se = n > 1 ? Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / (n - 1) / n) : null;
+    return { n, m, se, beat: xs.filter(x => x > 0).length };
+  };
+  const all = stat(rows.map(r => r.clv));
+  const tile = (label, value, sub) => H("div", { class: "tile" }, H("div", { class: "label", text: label }), H("div", { class: "value", text: value }), H("div", { class: "sub", text: sub }));
+  $("#clvdash-note").textContent = "Closing line value is the expected return of the price a bet was taken at, measured at the sharp book's closing no-vig number"
+    + " (Pinnacle's; DraftKings' or FanDuel's when Pinnacle never quoted the game, as for most college games). It shows whether the board is beating the market long before"
+    + " the win-loss record can: a kind of bet that keeps losing to the close is not an edge, whatever its record. Any kind with " + N + " or more bets graded this way whose average is below zero by more than "
+    + Z + " standard errors carries no stake until it recovers.";
+  $("#clvdash-tiles").replaceChildren(
+    tile("Bets with a closing value", String(all.n), all.n ? "of " + L.rows.filter(r => r.result).length + " graded" : "Fills in as games are graded"),
+    tile("Average closing line value", all.n ? spct(all.m) : "—", all.se ? "± " + pct(all.se, 1) + " (one standard error)" : "—"),
+    tile("Beat the close", all.n ? pct(all.beat / all.n, 0) : "—", all.n ? all.beat + " of " + all.n : "—"));
+  const kinds = ["price", "opener", "wind", "model"].filter(t => L.rows.some(r => r.tier === t));
+  const status = (t, st) => muted[t] ? { v: "No stake: losing to the close", cls: "dim" }
+    : st.n < N ? `Watching (${st.n} of ${N})` : (st.m - Z * st.se < 0 && st.m < 0 ? "Close to the line" : "Staked") + (t === "wind" && LG === "nfl" ? ", half stake" : "");
+  table($("#clvdash-kinds"), [{ t: "Kind", l: 1 }, { t: "With closing value" }, { t: "Average" }, { t: "± 1 s.e." }, { t: "Beat the close" }, { t: "Stake rule", l: 1 }],
+    [...kinds.map(t => { const st = stat(rows.filter(r => r.tier === t).map(r => r.clv));
+        return [TIER[t] ? TIER[t].h : t, st.n, st.n ? spct(st.m) : "—", st.se ? pct(st.se, 1) : "—", st.n ? pct(st.beat / st.n, 0) : "—", status(t, st)]; }),
+     ...[...new Set(L.rows.map(r => r.market))].map(mk => { const st = stat(rows.filter(r => r.market === mk).map(r => r.clv));
+        return [mk.charAt(0).toUpperCase() + mk.slice(1) + "s", st.n, st.n ? spct(st.m) : "—", st.se ? pct(st.se, 1) : "—", st.n ? pct(st.beat / st.n, 0) : "—", ""]; })]);
+  // running average by kind
+  const fig = $("#clvdash-fig");
+  if (all.n < 5) { fig.replaceChildren(H("figcaption", { text: "The running average appears once a few bets have a closing value." })); return; }
+  const W = 640, Hh = 220, P = 36, series = kinds.map((t, i) => {
+    const xs = rows.filter(r => r.tier === t).map(r => r.clv); let sum = 0;
+    return { t, pts: xs.map((x, j) => (sum += x, sum / (j + 1))), color: ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)"][i % 4] };
+  }).filter(s => s.pts.length);
+  const maxN = Math.max(...series.map(s => s.pts.length)), vals = series.flatMap(s => s.pts), lo = Math.min(-0.02, ...vals), hi = Math.max(0.02, ...vals);
+  const x = i => P + (W - 2 * P) * (maxN > 1 ? i / (maxN - 1) : 0), y = v => Hh - P + (P * 2 - Hh) * (v - lo) / (hi - lo);
+  const NS = "http://www.w3.org/2000/svg", el2 = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const svg = el2("svg", { viewBox: `0 0 ${W} ${Hh}`, width: "100%", role: "img", "aria-label": "Running average closing line value by kind of bet" });
+  svg.append(el2("line", { x1: P, x2: W - P, y1: y(0), y2: y(0), stroke: "var(--axis)", "stroke-dasharray": "4 3" }));
+  const lab = (t, xx, yy, anchor) => { const e = el2("text", { x: xx, y: yy, "font-size": 11, fill: "var(--ink-3)", "text-anchor": anchor || "start" }); e.textContent = t; return e; };
+  svg.append(lab(spct(hi), 2, y(hi) + 4), lab(spct(lo), 2, y(lo)), lab("0", 2, y(0) + 4), lab("bets in order of kickoff →", W - P, Hh - 6, "end"));
+  series.forEach(s => svg.append(el2("polyline", { points: s.pts.map((v, i) => `${x(i)},${y(v)}`).join(" "), fill: "none", stroke: s.color, "stroke-width": 2 })));
+  const key = H("div", { class: "clvkey", style: "display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px;margin:0 0 6px" },
+    ...series.map(s => H("span", {}, H("span", { style: `display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:6px;background:${s.color}` }),
+      document.createTextNode((TIER[s.t] ? TIER[s.t].h : s.t) + " " + spct(s.pts[s.pts.length - 1]) + " (" + s.pts.length + ")"))));
+  fig.replaceChildren(key, svg, H("figcaption", { text: "Each kind's average closing line value so far, bet by bet. Above the dashed line the board's prices beat the close." }));
 })();
 
 /* ---------------- Best Bets record ----------------

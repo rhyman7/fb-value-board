@@ -994,3 +994,15 @@ Two rules, approved by Ryan, in `nflmodel/sheet.py` (both boards):
   no stake: the bets stay on the sheet, marked, and in the ledger, so the kind is still graded and
   comes back once it recovers. `meta.muted_tiers` names the kinds and the numbers; the Bet sheet
   says so. As of this change no kind has 50 graded bets yet.
+
+## Closing line value dashboard (Nov 1, 2026)
+
+The Model record page of both boards now opens with a closing-line-value section: how many graded bets
+have a closing value, the average with its standard error, the share that beat the close, a table by kind
+of bet and by market with each kind's stake-rule status (watching until 50 bets, staked, half stake for
+wind unders, or no stake while the CLV guard has it muted), and a running-average chart per kind.
+
+College bets had almost no closing value because Pinnacle rarely quotes college games. `closing_quotes`
+now falls back to DraftKings' and then FanDuel's closing no-vig number for any game Pinnacle never quoted,
+and records which book closed it (`close_book`). Those books' closes are softer than Pinnacle's, so college
+CLV is a weaker signal than NFL CLV. Rows already graded stay blank; the ledger log is append-only.
