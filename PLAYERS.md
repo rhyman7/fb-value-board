@@ -217,3 +217,28 @@ tied the books' own chance (pooled Brier −0.00003 ± 0.00018), and the props i
 off the books went 155-162, −7.4% ± 4.8%, closing line value −4.7% ± 0.4%. The books price
 the matchup. Receiving yards alone scored better than the books on 2025 (−0.00061 ± 0.00021),
 one of several stats tried: a lead for the live prop log, not a result.
+
+### What a defense allows in volume, against what its opponents usually do (Nov 1, 2026)
+
+The team-volume regression uses the raw pass attempts and carries a defense's opponents have had
+against it. That count also carries the schedule (the offenses it happened to face) and those
+games' script. `python experiments/volume_allowed_test.py` (results in
+`experiments/out/volume_allowed_test.json`) tried two cleaner versions, from the defense's earlier
+games only: opponents' attempts against it minus those offenses' own recent averages ("vs
+usual"), and minus what the volume model predicted for those games, which also knows their
+projected margin and total ("vs expected"). Each replaced or joined the raw count. Average miss
+on team-games (tuning 2014-2018 / holdout 2019 on; current 6.445 / 6.176 pass attempts, 5.607 /
+5.586 carries):
+
+| Variant | Pass attempts, tuning | holdout | Carries, tuning | holdout |
+|---|---|---|---|---|
+| vs usual, replacing the raw count | −0.020 ± 0.012 | +0.001 ± 0.005 | −0.010 ± 0.005 | −0.007 ± 0.004 |
+| vs usual, added | −0.037 ± 0.018 | +0.009 ± 0.005 | −0.008 ± 0.005 | +0.001 ± 0.002 |
+| vs expected, replacing | −0.006 ± 0.008 | +0.005 ± 0.005 | +0.019 ± 0.005 | +0.002 ± 0.005 |
+| vs expected, added | −0.022 ± 0.007 | +0.012 ± 0.006 | +0.006 ± 0.004 | +0.005 ± 0.002 |
+
+**Not kept.** For pass attempts every version helped the tuning seasons and none held on the
+holdout. For carries "vs usual" in place of the raw count passes the rule by a hair, but the gain is
+under a hundredth of a carry per team-game (5.586 → 5.580), too small to change any projection.
+Defenses' tendencies to face more or fewer passes are mostly the offenses they meet and the score:
+the raw count, the team's own averages and the projected margin already carry what there is.
