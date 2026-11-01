@@ -42,7 +42,18 @@ def _game(g: dict) -> dict:
     return {"id": g["id"], "away": g["away"], "home": g["home"],
             "margin": _r(g["proj"]["margin"]), "total": _r(g["proj"]["total"]),   # home minus away
             "mkt_spread": _r((g.get("market") or {}).get("spread")), "mkt_total": _r((g.get("market") or {}).get("total")),
-            "bets": flagged}
+            "bets": flagged, "open": _open(g)}
+
+
+def _open(g: dict) -> dict | None:
+    """The first line the board saw for the game (its line history): home-favored spread positive,
+    total, and the date. NFL games carry it as g["open"]; college as opening_spread/opening_total too."""
+    o = g.get("open") if isinstance(g.get("open"), dict) else {}
+    sp = o.get("spread", g.get("opening_spread"))
+    tot = o.get("total", g.get("opening_total"))
+    if sp is None and tot is None:
+        return None
+    return {"spread": _r(sp), "total": _r(tot), "at": o.get("seen")}
 
 
 def _lines(week: int | None, season: int | None) -> dict:

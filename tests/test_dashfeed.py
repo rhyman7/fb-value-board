@@ -11,6 +11,7 @@ def _data(league="nfl"):
         "slate": {"games": [{
             "id": "2026_08_BAL_BUF", "game_id": 401, "away": "BAL", "home": "BUF",
             "proj": {"margin": 3.81, "total": 54.36}, "market": {"spread": 3.0, "total": 54.5},
+            "open": {"seen": "2026-10-20", "spread": 3.5, "total": 53.5, "moves": 4},
             "bets": [bet, {**bet, "pick": "Over 54.5", "tier": None},            # not on the bet sheet
                      {**bet, "pick": "BAL +3", "missed": True}],                   # missed: off the sheet
         }]},
@@ -32,6 +33,7 @@ def test_games_keep_projection_and_only_bet_sheet_bets():
     g = f["games"]["2026_08_BAL_BUF"]
     assert (g["margin"], g["total"], g["mkt_spread"]) == (3.8, 54.4, 3.0)
     assert [b["pick"] for b in g["bets"]] == ["BUF -3"]
+    assert g["open"] == {"spread": 3.5, "total": 53.5, "at": "2026-10-20"}
     assert f["week"] == 8 and f["season"] == 2026
 
 
