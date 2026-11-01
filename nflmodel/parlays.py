@@ -678,6 +678,11 @@ def write(league: str, payload_path: Path | None = None, alt: dict | None = None
     path.write_text(json.dumps(out, separators=(",", ":")))
     n = len(out["legs"])
     print(f"parlays: {league} {n} legs in {len(out['games'])} games -> {path} ({path.stat().st_size // 1024} KB)")
+    try:                                          # the page's own record (parlaylog.py)
+        from . import parlaylog
+        parlaylog.update(out, league)
+    except Exception as exc:
+        print(f"  parlay record skipped ({exc})")
     return path
 
 

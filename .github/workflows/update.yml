@@ -48,6 +48,7 @@ jobs:
           if [ -f data/wind_log.csv ]; then git add data/wind_log.csv; fi
           for f in data/ledger.csv data/ledger_results.csv data/ledger_status.csv data/bestbets.csv data/bestbets_results.csv; do if [ -f "$f" ]; then git add "$f"; fi; done   # the bet ledger (nflmodel/ledger.py)
           if [ -d data/shadow ]; then git add data/shadow; fi   # shadow test log (nflmodel/shadow.py)
+          if [ -d data/parlays ]; then git add data/parlays; fi   # the Parlays page record (nflmodel/parlaylog.py)
           git diff --cached --quiet || git commit -m "Update board"
           git pull --rebase origin main
           git push
