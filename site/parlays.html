@@ -97,7 +97,8 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
         <label>Min parlay odds<input id="f-minodds" type="text" placeholder="e.g. +200" value=""></label>
         <label>Min odds per leg<input id="f-minleg" type="text" placeholder="e.g. -300" value=""></label>
         <label class="boost-only" hidden>Max wager ($)<input id="f-maxbet" type="number" min="0" step="5" value="25"></label>
-        <label>Same game<select id="f-sgp"><option value="none">Different games only</option><option value="allow">Allowed</option><option value="require">Same game only (SGP)</option></select></label>
+        <label>Same game<select id="f-sgp"><option value="none">Different games only</option><option value="allow">Allowed</option><option value="require">All legs from one game (any game)</option></select></label>
+        <label title="For a boost that names one game (Thursday, Sunday or Monday night, say): every leg comes from it">Only this game<select id="f-game"><option value="">Any game</option></select></label>
         <label>Rank by<select id="f-rank"><option value="value">Value (expected return)</option><option value="hit">Chance of cashing</option></select></label>
         <label>Min chance per leg (%)<input id="f-minp" type="number" min="0" max="99" step="5" value="40"></label>
         <label class="chk"><input id="m-spread" type="checkbox" checked> Spreads</label>
@@ -106,7 +107,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
         <label class="chk"><input id="m-prop" type="checkbox" checked> Player props</label>
         <label class="chk"><input id="f-fair" type="checkbox"> Include legs with no book price</label>
         <label class="chk"><input id="f-untested" type="checkbox" checked> Include college props (not market-tested)</label>
-        <label class="chk boost-only" hidden><input id="f-boostsgp" type="checkbox"> Boost is for a same-game parlay</label>
+
         <div><button class="btn" id="go">Find parlays</button></div>
       </div>
       <p class="note" id="finder-note"></p>
@@ -180,6 +181,18 @@ function setWeeks() {
     if (g.week == null || Date.parse(g.ko) <= now) continue;
     THIS_WEEK[lg] = THIS_WEEK[lg] == null ? g.week : Math.min(THIS_WEEK[lg], g.week);
   }
+}
+function fillGames() {
+  const sel = $("#f-game"), keep = sel.value, lg = $("#f-league").value, wk = $("#f-week").value, now = Date.now();
+  const rows = Object.entries(GAMES).filter(([k, g]) => (lg === "both" || k.startsWith(lg)) && Date.parse(g.ko) > now
+      && inWeek({ lg: k.slice(0, 3), g: k.slice(3) }, wk))
+    .sort((a, b) => Date.parse(a[1].ko) - Date.parse(b[1].ko));
+  sel.innerHTML = `<option value="">Any game</option>` + rows.map(([k, g]) => {
+    const d = new Date(g.ko).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+    return `<option value="${k}">${k.slice(0, 3).toUpperCase()} · ${g.away} @ ${g.home} · ${d}</option>`;
+  }).join("");
+  sel.value = rows.some(([k]) => k === keep) ? keep : "";
+  $("#f-sgp").disabled = !!sel.value;
 }
 function inWeek(l, which) {
   if (which === "both") return true;
@@ -387,7 +400,7 @@ function readForm(mode) {
   const minOdds = parseOdds($("#f-minodds").value), minLeg = parseOdds($("#f-minleg").value);
   const n = +$("#f-legs").value;
   return {
-    mode, week: $("#f-week").value, league: $("#f-league").value, book: $("#f-book").value, sgp: mode === "boost" && $("#f-boostsgp").checked ? "require" : $("#f-sgp").value,
+    mode, week: $("#f-week").value, league: $("#f-league").value, book: $("#f-book").value, game: $("#f-game").value, sgp: $("#f-game").value ? "require" : $("#f-sgp").value,
     nmin: mode === "boost" ? +$("#f-minlegs").value : n, nmax: mode === "boost" ? Math.max(+$("#f-maxlegs").value, +$("#f-minlegs").value) : n,
     minD: minOdds == null ? 1 : dec(minOdds), minLegD: minLeg == null ? 1 : dec(minLeg),
     rank: $("#f-rank").value, minP: (+$("#f-minp").value || 0) / 100, fair: $("#f-fair").checked, untested: $("#f-untested").checked,
@@ -399,7 +412,8 @@ function pool(o) {
   const now = Date.now(), out = [];
   for (const l of LEGS) {
     if (o.league !== "both" && l.lg !== o.league) continue;
-    if (!inWeek(l, o.week)) continue;
+    if (o.game && l.lg + l.g !== o.game) continue;
+    if (!o.game && !inWeek(l, o.week)) continue;
     if (!o.markets[l.m]) continue;
     if (!o.untested && l.src === "model") continue;
     if (Date.parse(GAMES[l.lg + l.g].ko) <= now) continue;
@@ -532,7 +546,7 @@ function runFinder() {
   const t0 = performance.now();
   const { out, pool: n } = search(o);
   const ms = Math.round(performance.now() - t0);
-  const sgpNote = o.sgp !== "none" ? " Same-game parlays: the books price these with their own correlations, so check the app's price against the Needs column." : "";
+  const sgpNote = (o.game ? " Every leg is from the game you picked." : "") + (o.sgp !== "none" ? " Same-game parlays: the books price these with their own correlations, so check the app's price against the Needs column." : "");
   $("#finder-note").textContent = `${out.length} parlays from ${n} legs in ${ms} ms.` + sgpNote +
     (o.rank === "hit" ? " Ranked by chance of cashing: red cards lose money on average." : "");
   $("#results").innerHTML = out.length ? out.map((x, i) => card(x, o, i + 1)).join("") :
@@ -613,6 +627,9 @@ Promise.all(["nfl", "cfb"].map(lg => fetch(`parlays/${lg}.json`, { cache: "no-st
       parts.push(`${lg.toUpperCase()} week ${d.week}: lines as of ${d.market_as_of || "?"}, legs built ${d.built}`);
     }
     setWeeks();
+    fillGames();
+    ["#f-league", "#f-week"].forEach(x => $(x).addEventListener("change", fillGames));
+    $("#f-game").addEventListener("change", () => { $("#f-sgp").disabled = !!$("#f-game").value; });
     $("#asof").textContent = parts.join(" · ") + ". Prices move: check each one in the app before betting.";
     setTab((location.hash || "#suggest").slice(1) || "suggest");
     drawSlip();
