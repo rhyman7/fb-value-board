@@ -1006,3 +1006,19 @@ College bets had almost no closing value because Pinnacle rarely quotes college 
 now falls back to DraftKings' and then FanDuel's closing no-vig number for any game Pinnacle never quoted,
 and records which book closed it (`close_book`). Those books' closes are softer than Pinnacle's, so college
 CLV is a weaker signal than NFL CLV. Rows already graded stay blank; the ledger log is append-only.
+
+## Feed for the matchup dashboards (Nov 1, 2026)
+
+`nflmodel/dashfeed.py` writes `docs/feed/nfl.json` and `docs/feed/cfb.json` (about 50 KB and 220 KB)
+for rhyman7/nfl and rhyman7/cfb, which read them from the same site:
+
+- each game's projected line and total (the board's final projection) with the market's, keyed by
+  the dashboards' game id (nflverse id for NFL, ESPN id for college), and the bets on its Bet sheet;
+- each player's projection, keyed `TEAM|name` (lower case, no punctuation or Jr./III), with the
+  books' main prop line for NFL players.
+
+The dashboards show the line and bets on their game board and matchup header, and use the player
+projections for the Weekly Edges prop tables in place of their old "opponent allowed ÷ average"
+multiplier (raw position splits overstated matchups several times over; see the defense-vs-position
+test above). Both pipelines write the feed after data.json, and the props run rewrites the NFL feed
+with new lines. If the feed is missing or for another week, the dashboards hide those pieces.

@@ -252,6 +252,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         parlays.copy_page()
     except Exception as exc:
         print(f"  parlays skipped ({exc})")
+    try:                                          # the matchup dashboards' feed (docs/feed/nfl.json)
+        from . import dashfeed
+        dashfeed.write("nfl", out)
+    except Exception as exc:
+        print(f"  dashboard feed skipped ({exc})")
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
 

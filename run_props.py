@@ -231,6 +231,11 @@ def main():
     if log_it:
         ix = propboard.build()          # the board's Props section (docs/props/)
         print(f"  board props: {len(ix['weeks'])} weeks on file")
+        try:                            # the matchup dashboards' feed carries the new prop lines
+            from nflmodel import dashfeed
+            print(f"  dashboard feed: {dashfeed.write('nfl')}")
+        except Exception as exc:
+            print(f"  dashboard feed skipped ({exc})")
     if args.cmd != "backfill" and (log_it or not args.fixture):
         try:                            # each player's whole range (docs/props/outlook.json), no API
             from nflmodel import propoutlook
