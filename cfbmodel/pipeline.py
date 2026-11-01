@@ -85,6 +85,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     # the edge haircut (nflmodel/backtest.edge_haircut, same graded table layout): stakes only
     haircut = NBT.edge_haircut(graded, season) if with_backtest else (prev.get("meta") or {}).get("haircut")
     h_factor = haircut_factor(haircut, verbose)
+    if C.EDGE_HAIRCUT and getattr(C, "HAIRCUT_CAP", None) is not None and h_factor > C.HAIRCUT_CAP:
+        say(f"  edge haircut {h_factor:.2f} capped at {C.HAIRCUT_CAP:.2f} (cfbmodel/config.HAIRCUT_CAP: Pinnacle regrade)")
+        h_factor = float(C.HAIRCUT_CAP)
     now = pd.Timestamp.now(tz="UTC")
     frame["early_line"] = (~frame.played) & ((pd.to_datetime(frame.kickoff, utc=True) - now).dt.days >= C.EARLY_DAYS)
     e = frame["early_line"] & frame.spread_line.notna()
@@ -138,6 +141,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
             "seasons_of_data": f"{C.FIRST_SEASON}-{season}",
             "kelly_fraction": C.KELLY_FRACTION, "max_stake": C.MAX_STAKE, "max_game_stake": C.MAX_GAME_STAKE, "colors": colors,
             "haircut": haircut, "haircut_on": bool(C.EDGE_HAIRCUT), "haircut_factor": h_factor,
+            "haircut_note": ("its edge against consensus lines did not hold against Pinnacle's real 2024-2025 numbers (Model record, method)"
+                             if getattr(C, "HAIRCUT_CAP", None) is not None and h_factor <= C.HAIRCUT_CAP < ((haircut or {}).get("factor") or 0) else None),
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
                       "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
