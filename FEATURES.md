@@ -925,3 +925,22 @@ week since 2011, for comparison: +0.13 ± 0.04. Eighty games found after looking
 team's pace and neutral-situation pass rate for player volume (PLAYERS.md: no gain), opening
 totals against Pinnacle's Monday number (above, "Graded against Pinnacle": total 2+ +4.0% ±
 8.0%, not significant). Rain and snow need a precipitation history the repo does not have yet.
+
+## Moved lines: is the curve calibrated? (Nov 1, 2026)
+
+The Parlays page prices every spread and total within 7 points of the market off the key-number
+curve. `python experiments/alt_calibration.py` (results in `experiments/out/alt_calibration.json`)
+scores it walk-forward: each season's curve fitted on earlier seasons, centred on the closing
+line, every played game at the line moved 1 to 7 points each way in half points (NFL 2014 on,
+194,351 lines; college 2017 on, 399,183), pushes left out.
+
+**The shape is right.** In every band from 20% to 80% the share that covered is within about a
+point and a half of what the curve said, on spreads and totals in both leagues, and the gap does
+not grow as the line moves further from the market: a moved line costs what the curve says it does.
+
+**There is a lean, and it does not last.** Home sides and overs won about a point less often than
+a 50/50 split at the consensus close implies, on every band, which looked like a correction to
+make. By period it is not stable: NFL home sides −1.0 points to 2018, −2.5 in 2019-2022, +0.4 since
+2023; NFL overs −2.0, −1.8, +0.8; college overs −2.6, −1.4, +0.2. The consensus close used to lean
+toward home teams and overs and no longer does. **Nothing changed**: the parlay legs keep the curve
+as it is, centred on the sharp book's own no-vig price.
