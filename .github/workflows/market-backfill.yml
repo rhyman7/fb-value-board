@@ -50,6 +50,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
+      - name: Main only
+        # The commit step rebases onto main and pushes the branch it ran on. From any other
+        # branch the shallow checkout has no history in common with main, the rebase fails and
+        # the fetched files are lost after the credits are spent (Nov 1, 2026: 5,060 credits).
+        if: github.ref != 'refs/heads/main' && inputs.plan != true
+        run: |
+          echo "Run this workflow from main: from ${{ github.ref }} its files could not be committed."
+          exit 1
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
