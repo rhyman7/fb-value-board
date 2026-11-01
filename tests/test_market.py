@@ -279,3 +279,18 @@ def test_backfill_adds_only_missing_markets(tmp_path):
     assert MB.missing_markets(tmp_path, "close", at, ["spreads", "totals"]) == []
     (tmp_path / MB.file_name("open", at)).write_text(",".join(M.COLS) + "\n")      # the API had nothing
     assert MB.missing_markets(tmp_path, "open", at, ["spreads", "totals"]) == []
+
+
+def test_closing_quotes_fall_back_when_pinnacle_has_none(tmp_path):
+    import pandas as pd
+    from nflmodel import market as M
+    rows = pd.DataFrame([
+        {"snapshot": "2099-01-01 12:00", "league": "nfl", "event_id": "e1", "commence": "2099-01-01T18:00:00Z", "home_name": "Dallas Cowboys",
+         "away_name": "Arizona Cardinals", "book": "draftkings", "market": "spreads", "side": "home", "line": -3.5, "price": -110.0, "updated": "x"},
+        {"snapshot": "2099-01-01 12:00", "league": "nfl", "event_id": "e1", "commence": "2099-01-01T18:00:00Z", "home_name": "Dallas Cowboys",
+         "away_name": "Arizona Cardinals", "book": "draftkings", "market": "spreads", "side": "away", "line": 3.5, "price": -110.0, "updated": "x"}])
+    M.store(rows, "nfl", tmp_path)
+    games = pd.DataFrame([{"game_id": "G", "home_team": "DAL", "away_team": "ARI", "kickoff": pd.Timestamp("2099-01-01T18:00Z")}])
+    q = M.closing_quotes(games, "nfl", {"G": pd.Timestamp("2099-01-01T18:00Z")}, root=tmp_path)
+    assert q["G"]["close_book"] == "draftkings" and q["G"]["spread_line"] == 3.5
+    assert M.closing_quotes(games, "nfl", {"G": pd.Timestamp("2099-01-01T18:00Z")}, root=tmp_path, fallback=()) == {}

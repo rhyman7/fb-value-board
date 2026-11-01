@@ -497,11 +497,27 @@ def anchor(df: pd.DataFrame, quotes: dict, book: str = SHARP) -> tuple[pd.DataFr
     return df, src
 
 
+CLOSE_FALLBACK = ("draftkings", "fanduel")   # when Pinnacle has no quote for the game (most college games)
+
+
 def closing_quotes(games: pd.DataFrame, league: str, kickoffs: dict, names: dict | None = None,
-                   book: str = SHARP, root: Path = DIR) -> dict:
+                   book: str = SHARP, root: Path = DIR, fallback=CLOSE_FALLBACK) -> dict:
     """{game_id: quote} from `book`'s last stored snapshot before each game's kickoff
-    (kickoffs: game_id -> UTC Timestamp). The closing line value of every bet is measured
-    against this."""
+    (kickoffs: game_id -> UTC Timestamp), or, when that book never quoted the game, from the
+    first of `fallback` that did (the quote's `close_book` says which). The closing line value
+    of every bet is measured against this. Pinnacle quotes only a handful of college games, so
+    before Nov 1, 2026 most college bets had no closing line value at all."""
+    out = _closing(games, league, kickoffs, names, book, root)
+    for fb in fallback or ():
+        missing = [g for g in kickoffs if g not in out]
+        if not missing:
+            break
+        extra = _closing(games, league, {g: kickoffs[g] for g in missing}, names, fb, root)
+        out.update({k: {**v, "close_book": fb} for k, v in extra.items()})
+    return {k: ({**v, "close_book": v.get("close_book", book)}) for k, v in out.items()}
+
+
+def _closing(games: pd.DataFrame, league: str, kickoffs: dict, names: dict | None, book: str, root: Path) -> dict:
     out: dict = {}
     try:
         rows = match_games(load(league, root, months=3), games, league, names)
