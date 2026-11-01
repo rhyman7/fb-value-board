@@ -204,6 +204,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         traceback.print_exc()
         print(f"  archive skipped ({exc})")
     build_page(out)
+    try:                                          # the Parlays page's college legs (docs/parlays/cfb.json)
+        from nflmodel import parlays
+        parlays.write("cfb")
+        parlays.copy_page()
+    except Exception as exc:
+        print(f"  parlays skipped ({exc})")
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
 

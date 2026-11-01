@@ -226,6 +226,12 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     except Exception as exc:
         print(f"  archive skipped ({exc})")
     build_page(out)
+    try:                                          # the Parlays page's legs (docs/parlays/), and the page itself
+        from . import parlays
+        parlays.write("nfl")
+        parlays.copy_page()
+    except Exception as exc:
+        print(f"  parlays skipped ({exc})")
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
 
