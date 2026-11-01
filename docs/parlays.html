@@ -292,6 +292,23 @@ function pairRho(a, b) {
   return { rho: r, known: true };
 }
 
+// A quarterback's TD passes over L with a teammate's anytime TD: nested, not merely correlated
+// (a receiving TD is one of his TD passes). P(both) = P(receiver scores) x q, with
+// logit q = a + b x logit(P(QB over L)) fitted per role and line (experiments/td_pairs.py).
+// Returns that chance, or null when the pair is not of this kind.
+function tdNested(a, b) {
+  const T = (CORR[a.lg] || {}).td;
+  if (!T || a.m !== "prop" || b.m !== "prop" || a.tm !== b.tm) return null;
+  const qb = a.s === "pass_td" ? a : b.s === "pass_td" ? b : null, rc = qb === a ? b : a;
+  if (!qb || rc.s !== "anytime_td" || qb.d !== "over" || rc.d !== "over" || qb.c.r !== "QB") return null;
+  const lines = [0.5, 1.5, 2.5], L = lines.reduce((x, y) => Math.abs(y - qb.L) < Math.abs(x - qb.L) ? y : x);
+  const ab = T[`${rc.c.r}|${L}`];
+  if (!ab) return null;
+  const pq = Math.min(Math.max(qb.w + (qb.h || 0), 1e-4), 1 - 1e-4), z = Math.log(pq / (1 - pq));
+  const q = 1 / (1 + Math.exp(-(ab[0] + ab[1] * z)));
+  return Math.min(rc.w * q, rc.w, pq);
+}
+
 // Joint chance that every leg of one game wins: pairwise copula for two legs, a seeded
 // simulation for three or more (the copula with every pair's correlation).
 let NORMALS = null;
@@ -312,15 +329,17 @@ function cholesky(R) {
 function jointGroup(legs, exact) {
   const ws = legs.map(l => l.w + (l.h || 0));
   if (legs.length === 1) return { p: ws[0], known: true, ok: true };
-  const R = legs.map(() => legs.map(() => 0)); let known = true;
+  const R = legs.map(() => legs.map(() => 0)), NEST = {}; let known = true;
   for (let i = 0; i < legs.length; i++) { R[i][i] = 1; for (let j = i + 1; j < legs.length; j++) {
     const r = pairRho(legs[i], legs[j]); if (r === null) return { ok: false };
     if (!r.known) known = false; R[i][j] = R[j][i] = Math.max(-0.9, Math.min(0.95, r.rho));
+    const nest = tdNested(legs[i], legs[j]); if (nest != null) NEST[i + "," + j] = nest;
   } }
-  if (legs.length === 2) return { p: bothWin(ws[0], ws[1], R[0][1]), known, ok: true };
-  if (!exact) { // pairwise approximation for the search
+  const pair2 = (i, j) => NEST[i + "," + j] ?? bothWin(ws[i], ws[j], R[i][j]);
+  if (legs.length === 2) return { p: pair2(0, 1), known, ok: true };
+  if (!exact || Object.keys(NEST).length) { // pairwise approximation (the search; and any group with a nested TD pair)
     let p = ws.reduce((a, b) => a * b, 1);
-    for (let i = 0; i < legs.length; i++) for (let j = i + 1; j < legs.length; j++) p *= bothWin(ws[i], ws[j], R[i][j]) / (ws[i] * ws[j]);
+    for (let i = 0; i < legs.length; i++) for (let j = i + 1; j < legs.length; j++) p *= pair2(i, j) / (ws[i] * ws[j]);
     return { p: Math.min(p, Math.min(...ws)), known, ok: true };
   }
   let L = cholesky(R);

@@ -59,6 +59,7 @@ from . import odds as O
 
 OUT = C.DOCS / "parlays"
 CORR = C.ROOT / "data" / "parlay_corr.json"
+TD_PAIRS = C.ROOT / "data" / "td_pairs.json"   # a quarterback's TD passes with a teammate's anytime TD (experiments/td_pairs.py)
 BOOKS = {"draftkings": "dk", "fanduel": "fd"}
 W_MAIN = 0.2          # model weight on two-sided prop lines (PROPS.md, "The blend, out of sample")
 W_RUNG = 0.25         # model weight on over-only ladder rungs, after the calibrated price below
@@ -577,7 +578,9 @@ def _cfb_leg(row, stat, L, side, w, ko, roles):
 def correlations(prop_model) -> dict:
     pairs = dict(((prop_model.meta or {}).get("correlation") or {}).get("pairs") or {}) if prop_model else {}
     gl = json.loads(CORR.read_text()).get("pairs", {}) if CORR.exists() else {}
-    return {"props": {k: v[0] for k, v in pairs.items()}, "game": {k: v[0] for k, v in gl.items()}}
+    td = json.loads(TD_PAIRS.read_text()).get("ab", {}) if TD_PAIRS.exists() else {}
+    return {"props": {k: v[0] for k, v in pairs.items()}, "game": {k: v[0] for k, v in gl.items()},
+            "td": {k: v[:2] for k, v in td.items()}}
 
 
 GAME_LO, GAME_HI = 0.15, 0.97     # legs outside these chances are left out (nobody parlays them)
