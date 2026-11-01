@@ -264,6 +264,7 @@ def _rec(x: pd.DataFrame) -> dict:
             "staked": round(staked, 4), "profit": round(profit, 4),
             "return": round(profit / staked, 4) if staked > 0 else None,
             "clv_n": int(len(clv)), "clv": round(float(clv["clv"].mean()), 4) if len(clv) else None,
+            "clv_se": round(float(clv["clv"].std(ddof=1) / np.sqrt(len(clv))), 4) if len(clv) > 1 else None,
             "beat_close": int((clv["clv"] > 0).sum()), "claimed_ev": round(float(x["ev"].mean()), 4) if len(x) else None}
 
 

@@ -166,6 +166,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     out["meta"]["inputs"] = sheet.inputs_stamp(out["meta"]["generated"], market=slate.get("market_as_of"), designations=des_checked)
     sheet.bucket_stakes(slate["games"], opening, None, C.KELLY_FRACTION, C.MAX_STAKE)
     slate["moves"] = sheet.line_moves(slate["games"], "cfb", opening)   # the Line movement section at build time
+    try:                                          # kinds of bet the live ledger says lose to the close carry no stake (sheet.clv_guard)
+        out["meta"]["muted_tiers"] = sheet.clv_guard(slate["games"], ledger.summary(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv"))
+    except Exception as exc:
+        print(f"  CLV guard skipped ({exc})")
+        out["meta"]["muted_tiers"] = {}
     out["meta"]["max_week_stake"] = C.MAX_WEEK_STAKE
     out["meta"]["week_cap"] = sheet.cap_week(slate["games"], C.MAX_WEEK_STAKE)   # after the bucket stakes, before the ledger
     try:                                          # the ledger (nflmodel/ledger.py): flagged bets at their first price, graded
