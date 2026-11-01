@@ -13,6 +13,7 @@ A leg is one side at one line:
   m     market: spread, total, ml, prop
   L     the line (spreads in the picked team's terms: -3.5 lays 3.5)
   w, h  the chance it wins and the chance it pushes (a push drops the leg from a parlay)
+  wv    NFL props only: the chance value is scored on, the books' own number (below)
   pm    the model's own chance where there is one; pk the market's no-vig chance
   bk    {dk, fd}: the American price at that exact line where the book posts it
   src   where w comes from (below); t: tags shown on the page
@@ -32,7 +33,10 @@ Where w comes from, and why. A parlay is only as honest as its legs' chances:
                89%, a +1500 rung under 4%), then moved a quarter of the way to the model. A prop at a line the books
                do not post carries the same correction from the player's main line through
                the model's distribution from the nearest line the books do price, and has
-               no price ("fair odds only").
+               no price ("fair odds only"). Value is scored on the books' number alone (wv):
+               sides the nudged chance made +EV lost about 4% to the close at every cap
+               (PROPS.md, "How far the model may move a prop"), so the nudge is shown as the
+               chance and never counted as an edge.
   college      no prop prices exist (CFB_PLAYERS.md), so college props are the model's chance
   props        alone, from the NFL prop distributions on the college projections, tagged
                "not market-tested".
@@ -313,7 +317,7 @@ def nfl_prop_legs(props_path: Path, outlook_path: Path, roles: dict, names: dict
                 continue
             w = f + _pull(po - f, W_TD)
             prices = {BOOKS[b]: int(q[0]) for b, q in bk.items() if b in BOOKS and q and q[0] is not None}
-            legs.append({**base, "lab": f"{r['n']} anytime TD", "L": 0.5, "d": "over", "w": _r(w), "h": 0.0, "pm": _r(po),
+            legs.append({**base, "lab": f"{r['n']} anytime TD", "L": 0.5, "d": "over", "w": _r(w), "wv": _r(f), "h": 0.0, "pm": _r(po),
                          "pk": _r(f), "bk": prices, "src": "blend", "t": [],
                          "c": {"k": "prop", "p": r["id"], "tm": r["t"], "r": role, "s": stat, "dir": "over"}})
             continue
@@ -326,12 +330,12 @@ def nfl_prop_legs(props_path: Path, outlook_path: Path, roles: dict, names: dict
                 continue                 # the model and the books see different players (injury, role): leave it out
             w_o = nv * (1 - pp) + _pull(po - nv * (1 - pp), W_MAIN)
             w_u = nvu * (1 - pp) + _pull(pu - nvu * (1 - pp), W_MAIN)
-            offset.setdefault((r["g"], r["id"], stat), []).append((float(r["L"]), w_o - po))
+            offset.setdefault((r["g"], r["id"], stat), []).append((float(r["L"]), w_o, nv * (1 - pp)))
             main_line[(r["g"], r["id"], stat)] = float(r["L"])
-            for side, w, pm, pk, j in (("over", w_o, po, nv, 0), ("under", w_u, pu, nvu, 1)):
+            for side, w, pm, pk, j, wv in (("over", w_o, po, nv, 0, nv * (1 - pp)), ("under", w_u, pu, nvu, 1, nvu * (1 - pp))):
                 prices = {BOOKS[b]: int(q[j]) for b, q in bk.items() if b in BOOKS and q and q[j] is not None}
                 legs.append({**base, "lab": f"{r['n']} {side} {r['L']:g} {STAT_LABEL.get(stat, stat)}", "L": r["L"], "d": side,
-                             "w": _r(w), "h": _r(pp), "pm": _r(pm), "pk": _r(pk), "bk": prices, "src": "blend", "t": [],
+                             "w": _r(w), "wv": _r(wv), "h": _r(pp), "pm": _r(pm), "pk": _r(pk), "bk": prices, "src": "blend", "t": [],
                              "c": {"k": "prop", "p": r["id"], "tm": r["t"], "r": role, "s": stat, "dir": side}})
                 seen.add((r["g"], r["id"], stat, side, float(r["L"])))
         elif r["alt"]:
@@ -347,9 +351,9 @@ def nfl_prop_legs(props_path: Path, outlook_path: Path, roles: dict, names: dict
             if key in seen:
                 continue
             seen.add(key)
-            offset.setdefault((r["g"], r["id"], stat), []).append((float(r["L"]), w - po))
+            offset.setdefault((r["g"], r["id"], stat), []).append((float(r["L"]), w, f))
             legs.append({**base, "lab": f"{r['n']} {r['L']:g}+ {STAT_LABEL.get(stat, stat)}".replace(".5+", "+").replace(f"{r['L']:g}+", f"{int(r['L'] + 0.5)}+"),
-                         "L": r["L"], "d": "over", "w": _r(w), "h": 0.0, "pm": _r(po), "pk": _r(f), "bk": prices,
+                         "L": r["L"], "d": "over", "w": _r(w), "wv": _r(f), "h": 0.0, "pm": _r(po), "pk": _r(f), "bk": prices,
                          "src": "blend", "t": ["alt rung"], "c": {"k": "prop", "p": r["id"], "tm": r["t"], "r": role, "s": stat, "dir": "over"}})
     # ---- moved lines the books don't post: the model's curve plus the main line's correction
     for key, cur in (outlook.get("players") or {}).items():
@@ -368,19 +372,25 @@ def nfl_prop_legs(props_path: Path, outlook_path: Path, roles: dict, names: dict
             for k in range(1, len(s) + 1):
                 L = k * step - 0.5                       # over L means at least k x step
                 p_model = s[k - 1] if side == "over" else 1 - s[k - 1]
-                off = min(known, key=lambda t: abs(t[0] - L))[1]      # the correction at the nearest priced line
+                # the correction at the nearest priced line, measured against today's curve there
+                # (the prices may be from an earlier snapshot, made with an earlier projection)
+                Lp, wp, wvp = min(known, key=lambda t: abs(t[0] - L))
+                kp = int(round((Lp + 0.5) / step))
+                now_p = s[kp - 1] if 1 <= kp <= len(s) else (1.0 if kp < 1 else 0.0)
+                off, offv = wp - now_p, wvp - now_p
                 w = p_model + (off if side == "over" else -off)
+                wv = p_model + (offv if side == "over" else -offv)
                 if not (MOVE_LO <= w <= MOVE_HI) or (g, pid, stat, side, float(L)) in seen or abs(L - L0) < 1e-9:
                     continue
-                cand.append((L, w, p_model))
+                cand.append((L, w, p_model, wv))
             if len(cand) > MOVE_MAX:
                 idx = np.unique(np.linspace(0, len(cand) - 1, MOVE_MAX).round().astype(int))
                 cand = [cand[i] for i in idx]
-            for L, w, pm in cand:
+            for L, w, pm, wv in cand:
                 lab = (f"{info.get('n', pid)} {int(L + 0.5)}+ {STAT_LABEL.get(stat, stat)}" if side == "over"
                        else f"{info.get('n', pid)} under {L:g} {STAT_LABEL.get(stat, stat)}")
                 legs.append({"lg": "nfl", "g": g, "ko": ko, "m": "prop", "pl": info.get("n", pid), "tm": info.get("tm"), "pos": info.get("pos"),
-                             "s": stat, "lab": lab, "L": L, "d": side, "w": _r(w), "h": 0.0, "pm": _r(pm), "pk": None, "bk": {},
+                             "s": stat, "lab": lab, "L": L, "d": side, "w": _r(w), "wv": _r(min(max(wv, 0.005), 0.995)), "h": 0.0, "pm": _r(pm), "pk": None, "bk": {},
                              "src": "carry", "t": ["moved line"],
                              "c": {"k": "prop", "p": pid, "tm": info.get("tm"), "r": roles.get((g, pid)), "s": stat, "dir": side}})
     return monotone(legs)
@@ -410,10 +420,13 @@ def monotone(legs: list[dict]) -> list[dict]:
             groups.setdefault((l["g"], l["c"]["p"], l["s"], l["d"]), []).append(l)
     for (_, _, _, side), ls in groups.items():
         ls.sort(key=lambda l: l["L"])
-        ys = [l["w"] for l in ls]
-        fit = _pav(ys) if side == "over" else _pav(ys[::-1])[::-1]
-        for l, w in zip(ls, fit):
-            l["w"] = _r(w)
+        for key in ("w", "wv"):
+            if any(l.get(key) is None for l in ls):
+                continue
+            ys = [l[key] for l in ls]
+            fit = _pav(ys) if side == "over" else _pav(ys[::-1])[::-1]
+            for l, w in zip(ls, fit):
+                l[key] = _r(w)
     return legs
 
 
@@ -509,7 +522,7 @@ def compact(l: dict) -> dict:
     elif c.get("k") == "cover":
         c = {"k": "cover", "tm": c["tm"]}
     out = {k: l[k] for k in ("g", "m", "lab", "L", "w", "h", "src") if k in l}
-    for k in ("d", "pm", "pk", "tm", "s"):
+    for k in ("d", "wv", "pm", "pk", "tm", "s"):
         if l.get(k) is not None:
             out[k] = l[k]
     if l.get("bk"):

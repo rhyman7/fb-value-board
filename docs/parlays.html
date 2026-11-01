@@ -149,7 +149,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
       <h2>Where the chances come from</h2>
       <ul>
         <li><b>Spreads, totals, moneylines and moved lines:</b> the board's market-adjusted projection, read off the key-number curve, so moving a spread through 3 or 7 costs what those numbers are worth.</li>
-        <li><b>NFL props:</b> DraftKings and FanDuel have been the better forecasters (PROPS.md), so the chance is the books' no-vig number moved 20% toward the model on main lines and halfway on alternate rungs. A prop line the books do not post carries the same correction from the player's main line and has no price.</li>
+        <li><b>NFL props:</b> DraftKings and FanDuel have been the better forecasters (PROPS.md), so the chance shown is the books' no-vig number nudged toward the model (at most 3 points). <b>Value is scored on the books' number alone</b>: in 2025, props the nudge made look +EV lost about 4% to the closing line, so a prop only shows value when its price earns it (one book better than the other, a rung priced better than its neighbours, or a boost). A prop line the books do not post carries the correction from the nearest line they do price, and has no price.</li>
         <li><b>College props:</b> the model's own distribution only. They have never been compared with sportsbook prices, so they are tagged <span class="tag warn">not market-tested</span> and priced at fair odds.</li>
       </ul>
       <h2>Why "chance of cashing" is not the goal</h2>
@@ -310,7 +310,17 @@ function estPrice(l) {
 
 // ---------------------------------------------------------------- a whole parlay
 // legs at prices; boost as a fraction; sgp: whether the book prices same-game legs itself
+// The chance a leg's value is scored on: the books' own number for NFL props (wv), else w.
+const vleg = l => l.wv != null ? { ...l, w: l.wv } : l;
 function evaluate(legs, prices, boost, exact) {
+  const r = evaluateAt(legs, prices, boost, exact);
+  if (!r || !legs.some(l => l.wv != null)) return r && { ...r, Pv: r.P };
+  const v = evaluateAt(legs.map(vleg), prices, boost, exact);
+  if (!v) return null;
+  // shown: the chance (P, fair price); scored: value, break-even and stake on the books' chance
+  return { ...r, Pv: v.P, ev: v.ev, need: v.need, Deff: v.Deff, D: v.D };
+}
+function evaluateAt(legs, prices, boost, exact) {
   const byGame = {};
   legs.forEach((l, i) => (byGame[l.lg + l.g] = byGame[l.lg + l.g] || []).push(i));
   let P = 1, known = true, sameGame = false, D = 1, Deff = 1, est = false, Dprod = 1;
@@ -343,7 +353,7 @@ function evaluate(legs, prices, boost, exact) {
 }
 function stakeUnits(r, boost, maxBet) {
   if (r.ev <= 0) return 0;
-  const b = (r.Deff - 1) * (1 + boost), f = (r.P * b - (1 - r.P)) / b;
+  const p = r.Pv ?? r.P, b = (r.Deff - 1) * (1 + boost), f = (p * b - (1 - p)) / b;
   let u = Math.round(2 * KELLY * f * BANKROLL_UNITS) / 2;
   if (u < 0.5 && r.ev > 0.02) u = 0.5;
   u = Math.min(u, MAX_UNITS);
@@ -375,7 +385,7 @@ function pool(o) {
     let pr = legPrice(l, o.book);
     if (!pr) { if (!o.fair) continue; pr = estPrice(l); }
     if (pr.d < o.minLegD) continue;
-    const mult = l.w * pr.d + (l.h || 0);
+    const mult = (l.wv ?? l.w) * pr.d + (l.h || 0);
     out.push({ l, pr, mult, score: o.rank === "value" ? Math.log(mult) : Math.log(l.w + (l.h || 0)) });
   }
   return out;
@@ -472,7 +482,7 @@ function legTags(l, pr) {
   return t.join("");
 }
 function legRow(l, pr) {
-  const ev = pr ? l.w * pr.d + (l.h || 0) - 1 : null;
+  const ev = pr ? (l.wv ?? l.w) * pr.d + (l.h || 0) - 1 : null;
   return `<li><span>${esc(l.lab)} ${legTags(l, pr)}<span class="gm">${esc(gameLabel(l))}</span></span>
     <span class="num" title="Chance this leg wins">${pct(l.w)}${l.h ? ` <span class="muted">(push ${pct(l.h, 0)})</span>` : ""}</span>
     <span class="num" title="Price${pr && pr.book ? " at " + pr.book.toUpperCase() : ""}">${pr ? (pr.est ? "~" : "") + fmtA(pr.a) + (pr.book ? ` <span class="muted">${pr.book.toUpperCase()}</span>` : "") : "—"}</span>
@@ -532,7 +542,7 @@ function drawSlip() {
   const quoted = parseOdds($("#s-price").value);
   let D = quoted != null ? dec(quoted) : r.D;
   // with a quoted price, the expected payout uses it (pushes ignored)
-  const ev = quoted != null ? r.P * (1 + (D - 1) * (1 + boost)) - 1 : r.ev;
+  const ev = quoted != null ? r.Pv * (1 + (D - 1) * (1 + boost)) - 1 : r.ev;
   const rr = { ...r, ev, Deff: quoted != null ? D : r.Deff };
   const u = stakeUnits(rr, boost, 0);
   $("#slip-out").innerHTML = `<div class="stats" style="margin-top:12px">
