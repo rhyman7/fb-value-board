@@ -944,3 +944,30 @@ make. By period it is not stable: NFL home sides −1.0 points to 2018, −2.5 i
 2023; NFL overs −2.0, −1.8, +0.8; college overs −2.6, −1.4, +0.2. The consensus close used to lean
 toward home teams and overs and no longer does. **Nothing changed**: the parlay legs keep the curve
 as it is, centred on the sharp book's own no-vig price.
+
+## Rain and snow (Nov 1, 2026)
+
+`data/cache/weather_history.csv` (the **Weather history** Action, Open-Meteo's free archive)
+holds the rain (mm), snow (cm) and temperature during 2,187 of the 2,397 outdoor home games
+since 2014 (the rest are still being fetched); `python experiments/precip_test.py` (results in
+`experiments/out/precip_test.json`). Like the wind test, it uses the weather that fell, not a
+forecast, so it flatters both checks.
+
+| Added to the total model | Tuning (to 2018) | Holdout (2019 on) | Kept by the rule |
+|---|---|---|---|
+| Rain, mm during the game | −0.0095 | −0.0101 | passes |
+| Snow, cm | +0.324 | +0.009 | no |
+| Wet (2+ mm of rain or any snow) | +0.004 | −0.027 | no |
+
+| Unders at the closing total | Tuning | Holdout | Points under the line |
+|---|---|---|---|
+| Wet (2+ mm or snow) | 46-29, +17.1% | 75-53, +11.9% | −2.8 / −2.4 |
+| Rain 5+ mm | 9-6 | 29-17, +20.4% | −4.2 / −5.1 |
+| Snow | 14-8 | 19-17, +0.8% | −1.3 / −1.4 |
+
+Rain helps the total model a little on both periods, and the closing total does not fully price
+heavy rain: wet-game unders went 121-82 (59.6%, about +14% ± 7%) over both periods. Snow is
+already priced. **Not on the board yet**: the live board would need a precipitation forecast
+(the Open-Meteo forecast it already calls for wind carries one), and as with the wind under, the
+forecast version has to be logged and graded before it is trusted. Rain and wind overlap
+(stormy games are both); the next step is a wet under tested alongside the wind under.
