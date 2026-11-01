@@ -56,4 +56,11 @@ MAX_STAKE = 0.03
 MAX_GAME_STAKE = 0.05       # cap on one game's flagged stakes together (nflmodel/config.py)
 MAX_WEEK_STAKE = 0.10       # cap on one week's flagged stakes together (nflmodel/config.py)
 EDGE_HAIRCUT = True         # stakes from the model probability shrunk toward the market's (nflmodel/config.py)
+# Ceiling on the measured haircut (Nov 1, 2026). The backtest measures the share of claimed edge
+# that showed up against consensus lines (0.52); graded against Pinnacle's real 2024-2025 numbers
+# the college spread edge is not there (closing line value negative at every gap) and the totals
+# edge is not proven (CFB_FEATURES.md, "Graded against Pinnacle: spreads and totals"). Stakes and
+# the Parlays page's college game legs use the market's number until a season of the live ledger
+# against Pinnacle says otherwise. None lets the measured factor through.
+HAIRCUT_CAP = 0.0
 POOL = "FCS"                # every non-FBS opponent is pooled into one team
