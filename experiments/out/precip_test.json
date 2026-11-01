@@ -1,0 +1,64 @@
+{
+ "base": {
+  "tune": 10.571636759256894,
+  "hold": 10.45415072609992
+ },
+ "features": {
+  "rain": {
+   "tune": -0.0095,
+   "hold": -0.0101
+  },
+  "snow": {
+   "tune": 0.3238,
+   "hold": 0.0089
+  },
+  "wet": {
+   "tune": 0.0043,
+   "hold": -0.0273
+  }
+ },
+ "unders": {
+  "wet (2+ mm or snow)": {
+   "tune": {
+    "w": 46,
+    "l": 29,
+    "return_at_110": 0.1709,
+    "avg_total_minus_line": -2.77
+   },
+   "hold": {
+    "w": 75,
+    "l": 53,
+    "return_at_110": 0.1186,
+    "avg_total_minus_line": -2.41
+   }
+  },
+  "rain 5+ mm": {
+   "tune": {
+    "w": 9,
+    "l": 6,
+    "return_at_110": 0.1455,
+    "avg_total_minus_line": -4.17
+   },
+   "hold": {
+    "w": 29,
+    "l": 17,
+    "return_at_110": 0.2036,
+    "avg_total_minus_line": -5.12
+   }
+  },
+  "snow": {
+   "tune": {
+    "w": 14,
+    "l": 8,
+    "return_at_110": 0.2149,
+    "avg_total_minus_line": -1.27
+   },
+   "hold": {
+    "w": 19,
+    "l": 17,
+    "return_at_110": 0.0076,
+    "avg_total_minus_line": -1.35
+   }
+  }
+ }
+}
