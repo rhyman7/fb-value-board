@@ -623,7 +623,7 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
             continue
         legs += gl
         mkt = g.get("market") or {}
-        gmeta[g["id"]] = {"away": g["away"], "home": g["home"], "ko": g["kickoff"], "date": g.get("date"), "time": g.get("time"),
+        gmeta[g["id"]] = {"away": g["away"], "home": g["home"], "ko": g["kickoff"], "week": g.get("week"), "date": g.get("date"), "time": g.get("time"),
                           "spread": mkt.get("spread"), "total": mkt.get("total"), "early": bool(g.get("early")),
                           "dk": "dk" in _book_prices(g), "fd": "fd" in _book_prices(g)}
     players = (payload.get("players") or {}).get("players") or []

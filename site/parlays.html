@@ -87,6 +87,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
   <section id="finder">
     <div class="panel">
       <div class="form">
+        <label>Games<select id="f-week"><option value="this">This week</option><option value="next">Next week (early lines)</option><option value="both">Both weeks</option></select></label>
         <label>League<select id="f-league"><option value="both">NFL and college</option><option value="nfl">NFL</option><option value="cfb">College</option></select></label>
         <label>Book<select id="f-book"><option value="dk">DraftKings</option><option value="fd">FanDuel</option><option value="best">Best of the two</option></select></label>
         <label id="lab-legs">Legs<select id="f-legs"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
@@ -118,6 +119,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
     <div class="panel">
       <div class="form">
         <label style="grid-column: span 2">Find a leg<input id="b-q" type="search" placeholder="team, player, 'over', 'anytime'…"></label>
+        <label>Games<select id="b-week"><option value="this">This week</option><option value="next">Next week</option><option value="both">Both weeks</option></select></label>
         <label>League<select id="b-league"><option value="both">Both</option><option value="nfl">NFL</option><option value="cfb">College</option></select></label>
         <label class="chk"><input id="b-moved" type="checkbox"> Show moved lines</label>
       </div>
@@ -166,6 +168,25 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const UNIT = 10, BANKROLL_UNITS = 100, MAX_UNITS = 2, KELLY = 0.25;
 const EST_HOLD = { game: 0.05, prop: 0.10 };
 let DATA = { nfl: null, cfb: null }, LEGS = [], GAMES = {}, CORR = { nfl: null, cfb: null };
+
+// ---------------------------------------------------------------- which week a game is in
+// The boards carry this week's games and, from the night the lines open, next week's. "This
+// week" is each league's earliest week with a game still to kick off.
+const THIS_WEEK = {};
+function setWeeks() {
+  const now = Date.now();
+  for (const k in GAMES) {
+    const g = GAMES[k], lg = k.slice(0, 3);
+    if (g.week == null || Date.parse(g.ko) <= now) continue;
+    THIS_WEEK[lg] = THIS_WEEK[lg] == null ? g.week : Math.min(THIS_WEEK[lg], g.week);
+  }
+}
+function inWeek(l, which) {
+  if (which === "both") return true;
+  const w = (GAMES[l.lg + l.g] || {}).week, cur = THIS_WEEK[l.lg];
+  if (w == null || cur == null) return which === "this";
+  return which === "this" ? w === cur : w > cur;
+}
 
 // ---------------------------------------------------------------- odds math
 const dec = a => a == null ? null : (a > 0 ? 1 + a / 100 : 1 + 100 / -a);
@@ -366,7 +387,7 @@ function readForm(mode) {
   const minOdds = parseOdds($("#f-minodds").value), minLeg = parseOdds($("#f-minleg").value);
   const n = +$("#f-legs").value;
   return {
-    mode, league: $("#f-league").value, book: $("#f-book").value, sgp: mode === "boost" && $("#f-boostsgp").checked ? "require" : $("#f-sgp").value,
+    mode, week: $("#f-week").value, league: $("#f-league").value, book: $("#f-book").value, sgp: mode === "boost" && $("#f-boostsgp").checked ? "require" : $("#f-sgp").value,
     nmin: mode === "boost" ? +$("#f-minlegs").value : n, nmax: mode === "boost" ? Math.max(+$("#f-maxlegs").value, +$("#f-minlegs").value) : n,
     minD: minOdds == null ? 1 : dec(minOdds), minLegD: minLeg == null ? 1 : dec(minLeg),
     rank: $("#f-rank").value, minP: (+$("#f-minp").value || 0) / 100, fair: $("#f-fair").checked, untested: $("#f-untested").checked,
@@ -378,6 +399,7 @@ function pool(o) {
   const now = Date.now(), out = [];
   for (const l of LEGS) {
     if (o.league !== "both" && l.lg !== o.league) continue;
+    if (!inWeek(l, o.week)) continue;
     if (!o.markets[l.m]) continue;
     if (!o.untested && l.src === "model") continue;
     if (Date.parse(GAMES[l.lg + l.g].ko) <= now) continue;
@@ -521,10 +543,10 @@ function runFinder() {
 let SLIP = [];
 function findLeg(code) { const [lg, i] = code.split(":"); return LEGS.find(l => l.lg === lg && l.i === +i); }
 function drawSearch() {
-  const q = $("#b-q").value.trim().toLowerCase(), lg = $("#b-league").value, moved = $("#b-moved").checked, now = Date.now();
+  const q = $("#b-q").value.trim().toLowerCase(), lg = $("#b-league").value, moved = $("#b-moved").checked, now = Date.now(), wk = $("#b-week").value;
   if (q.length < 2) { $("#search-results").innerHTML = `<p class="muted">Type at least two letters.</p>`; return; }
   const words = q.split(/\s+/);
-  const hits = LEGS.filter(l => (lg === "both" || l.lg === lg) && Date.parse(GAMES[l.lg + l.g].ko) > now
+  const hits = LEGS.filter(l => (lg === "both" || l.lg === lg) && Date.parse(GAMES[l.lg + l.g].ko) > now && inWeek(l, wk)
     && (moved || !(l.t || []).includes("moved line"))
     && words.every(w => (l.lab + " " + gameLabel(l)).toLowerCase().includes(w))).slice(0, 150);
   $("#search-results").innerHTML = `<table><thead><tr><th>Leg</th><th>Chance</th><th>DK</th><th>FD</th><th>Fair</th><th></th></tr></thead><tbody>${hits.map(l =>
@@ -574,7 +596,7 @@ document.addEventListener("click", e => {
   const rm = e.target.closest("[data-rm]"); if (rm) { SLIP.splice(+rm.dataset.rm, 1); drawSlip(); return; }
 });
 $("#go").addEventListener("click", runFinder);
-["#b-q", "#b-league", "#b-moved"].forEach(s => { $(s).addEventListener("input", drawSearch); $(s).addEventListener("change", drawSearch); });
+["#b-q", "#b-league", "#b-moved", "#b-week"].forEach(s => { $(s).addEventListener("input", drawSearch); $(s).addEventListener("change", drawSearch); });
 ["#s-book", "#s-price", "#s-boost", "#s-stake"].forEach(s => $(s).addEventListener("input", drawSlip));
 $("#s-clear").addEventListener("click", () => { SLIP = []; drawSlip(); });
 
@@ -590,6 +612,7 @@ Promise.all(["nfl", "cfb"].map(lg => fetch(`parlays/${lg}.json`, { cache: "no-st
       for (const l of d.legs) { l.lg = lg; LEGS.push(l); }
       parts.push(`${lg.toUpperCase()} week ${d.week}: lines as of ${d.market_as_of || "?"}, legs built ${d.built}`);
     }
+    setWeeks();
     $("#asof").textContent = parts.join(" · ") + ". Prices move: check each one in the app before betting.";
     setTab((location.hash || "#suggest").slice(1) || "suggest");
     drawSlip();
