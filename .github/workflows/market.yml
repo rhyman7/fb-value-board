@@ -39,6 +39,10 @@ on:
         description: "Also fetch the derivative markets (team totals, first-half lines) for both leagues"
         type: boolean
         default: false
+      alternates:
+        description: "Also fetch DraftKings' and FanDuel's alternate spreads and totals for both leagues"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -78,6 +82,25 @@ jobs:
               5) python run_market.py derivatives --league cfb ;;
             esac
           fi
+          # alternate spread and total ladders at DraftKings and FanDuel, for the Parlays page
+          # (market.ALT_BUDGET: NFL up to 40 credits a run, college 150). NFL: Monday, Wednesday and
+          # Friday 14:05 UTC, Saturday 20:05, Sunday 14:05 and the 16:50 and 19:50 game-day runs, and
+          # the Thursday-night run (about 1,000 a month); college: Tuesday, Thursday and Friday 20:05
+          # and the first Saturday game-day run, 14:50 UTC (about 2,400 a month).
+          dow=$(date -u +%u); hr=$(date -u +%H)
+          case "${{ github.event.schedule }}" in
+            "5 2,14,20 * 8-12,1-2 *")
+              case "$dow-$hr" in
+                1-14|3-14|5-14|6-20|7-14) python run_market.py alternates --league nfl ;;
+              esac
+              case "$dow-$hr" in
+                2-20|4-20|5-20) python run_market.py alternates --league cfb ;;
+              esac ;;
+            "50 13-23 * 8-12,1 6") [ "$hr" = "14" ] && python run_market.py alternates --league cfb ;;
+            "50 13-20 * 9-12,1-2 0") case "$hr" in 16|19) python run_market.py alternates --league nfl ;; esac ;;
+            "50 21,22 * 9-12,1 4") [ "$hr" = "21" ] && python run_market.py alternates --league nfl ;;
+          esac
+          if [ "${{ inputs.alternates }}" = "true" ]; then python run_market.py alternates; fi
           python run_market.py status
           python run_market.py alerts --out /tmp/alerts.md --push /tmp/push.txt
       - name: Push line-movement alerts to the phone

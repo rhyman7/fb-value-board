@@ -1,0 +1,202 @@
+{
+ "settings": {
+  "half_life": 6.0,
+  "last_season": 0.5,
+  "shrink": 4.0
+ },
+ "accuracy": [
+  {
+   "group": "WR",
+   "stat": "rec_yds",
+   "b": 0.268,
+   "n_holdout": 21533,
+   "rating_sd": 0.094,
+   "tune_mae": 20.66,
+   "tune_gain": -0.0976,
+   "tune_se": 0.0087,
+   "holdout_mae": 19.906,
+   "holdout_gain": -0.0895,
+   "holdout_se": 0.0075,
+   "into_projections": true
+  },
+  {
+   "group": "TE",
+   "stat": "rec_yds",
+   "b": 0.095,
+   "n_holdout": 12808,
+   "rating_sd": 0.178,
+   "tune_mae": 13.593,
+   "tune_gain": -0.0614,
+   "tune_se": 0.0053,
+   "holdout_mae": 12.437,
+   "holdout_gain": -0.0505,
+   "holdout_se": 0.0044,
+   "into_projections": true
+  },
+  {
+   "group": "RB",
+   "stat": "rec_yds",
+   "b": 0.223,
+   "n_holdout": 14744,
+   "rating_sd": 0.192,
+   "tune_mae": 9.634,
+   "tune_gain": -0.1105,
+   "tune_se": 0.0064,
+   "holdout_mae": 8.974,
+   "holdout_gain": -0.1195,
+   "holdout_se": 0.0063,
+   "into_projections": true
+  },
+  {
+   "group": "WR",
+   "stat": "receptions",
+   "b": 0.315,
+   "n_holdout": 21533,
+   "rating_sd": 0.067,
+   "tune_mae": 1.365,
+   "tune_gain": -0.0037,
+   "tune_se": 0.0005,
+   "holdout_mae": 1.338,
+   "holdout_gain": -0.0023,
+   "holdout_se": 0.0004,
+   "into_projections": true
+  },
+  {
+   "group": "TE",
+   "stat": "receptions",
+   "b": 0.208,
+   "n_holdout": 12808,
+   "rating_sd": 0.097,
+   "tune_mae": 1.074,
+   "tune_gain": -0.0029,
+   "tune_se": 0.0005,
+   "holdout_mae": 1.039,
+   "holdout_gain": -0.0027,
+   "holdout_se": 0.0004,
+   "into_projections": true
+  },
+  {
+   "group": "RB",
+   "stat": "receptions",
+   "b": 0.499,
+   "n_holdout": 14744,
+   "rating_sd": 0.104,
+   "tune_mae": 1.016,
+   "tune_gain": -0.007,
+   "tune_se": 0.0009,
+   "holdout_mae": 0.988,
+   "holdout_gain": -0.0073,
+   "holdout_se": 0.0008,
+   "into_projections": true
+  },
+  {
+   "group": "RB",
+   "stat": "rush_yds",
+   "b": 0.257,
+   "n_holdout": 14744,
+   "rating_sd": 0.112,
+   "tune_mae": 16.266,
+   "tune_gain": -0.1213,
+   "tune_se": 0.0101,
+   "holdout_mae": 16.411,
+   "holdout_gain": -0.1131,
+   "holdout_se": 0.0095,
+   "into_projections": true
+  },
+  {
+   "group": "QB",
+   "stat": "pass_yds",
+   "b": 0.112,
+   "n_holdout": 4136,
+   "rating_sd": 0.244,
+   "tune_mae": 67.676,
+   "tune_gain": -0.1288,
+   "tune_se": 0.1344,
+   "holdout_mae": 68.931,
+   "holdout_gain": -0.2144,
+   "holdout_se": 0.1376,
+   "into_projections": false
+  },
+  {
+   "group": "RB",
+   "stat": "carries",
+   "b": 0.227,
+   "n_holdout": 14744,
+   "rating_sd": 0.069,
+   "tune_mae": 3.115,
+   "tune_gain": -0.0076,
+   "tune_se": 0.0011,
+   "holdout_mae": 3.011,
+   "holdout_gain": -0.0061,
+   "holdout_se": 0.0011,
+   "into_projections": true
+  }
+ ],
+ "vs_books": {
+  "coefs_2023_24": {
+   "pass_yds": -0.023,
+   "rec_yds": 0.2,
+   "rush_yds": 1.294
+  },
+  "by_stat_2025": [
+   {
+    "stat": "carries",
+    "n": 1207,
+    "c": 0.0,
+    "brier_minus_book": -0.0,
+    "se": 0.0
+   },
+   {
+    "stat": "pass_yds",
+    "n": 936,
+    "c": -0.023,
+    "brier_minus_book": -1.7e-05,
+    "se": 7.7e-05
+   },
+   {
+    "stat": "rec_yds",
+    "n": 3556,
+    "c": 0.2,
+    "brier_minus_book": -0.00061,
+    "se": 0.000212
+   },
+   {
+    "stat": "receptions",
+    "n": 3435,
+    "c": 0.0,
+    "brier_minus_book": -0.0,
+    "se": 0.0
+   },
+   {
+    "stat": "rush_yds",
+    "n": 1837,
+    "c": 1.294,
+    "brier_minus_book": 0.00099,
+    "se": 0.000955
+   }
+  ],
+  "pooled_2025": {
+   "n": 10971,
+   "brier_minus_book": -3.3e-05,
+   "se": 0.000175
+  },
+  "flagged_2025": {
+   "bets": 317,
+   "record": "155-162-0",
+   "return_flat": -0.0741,
+   "return_se": 0.0475,
+   "avg_edge": 0.0508,
+   "avg_ev_claimed": 0.0427,
+   "clv_bets": 85,
+   "avg_clv_ev": -0.0538,
+   "clv_se": 0.0032,
+   "beat_close": 0.0,
+   "overs": 23,
+   "clv_carried_bets": 317,
+   "clv_carried": -0.0471,
+   "clv_carried_se": 0.0039,
+   "beat_close_carried": 0.183
+  },
+  "counted_as_edge": false
+ }
+}

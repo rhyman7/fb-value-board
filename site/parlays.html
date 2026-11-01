@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<title>Parlays · Weekly Value Boards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Big+Shoulders+Display:wght@700;800&display=swap">
+<style>
+:root {
+  --page: #f2f4f1; --surface: #fff; --raised: #e7ebe7; --ink: #0f1713; --ink-2: #44514a; --ink-3: #68756d;
+  --rule: #d2d9d4; --turf: #1b5e3a; --chalk: #f6f8f3; --flag: #ffd21f; --flag-ink: #241d00; --link: #17643b;
+  --good: #1b7f4b; --bad: #b3261e; --warn: #9a6a00;
+  --display: "Big Shoulders Display", "Archivo", "Arial Narrow", sans-serif;
+  --sans: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --page: #0a0e0c; --surface: #121815; --raised: #1d2621; --ink: #eef3ef; --ink-2: #b3bfb8; --ink-3: #85938b;
+    --rule: #29342d; --turf: #174f31; --link: #74d19b; --good: #4cc483; --bad: #ff7b70; --warn: #e2b23c; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.45 var(--sans); }
+a { color: var(--link); }
+.bar { background: var(--turf); color: var(--chalk); padding: 12px clamp(16px, 4vw, 40px); display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap; }
+.bar b { font: 800 22px/1 var(--display); letter-spacing: .02em; text-transform: uppercase; }
+.bar a { color: var(--chalk); opacity: .85; text-decoration: none; font-size: 14px; }
+.bar a:hover { opacity: 1; text-decoration: underline; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 18px clamp(16px, 4vw, 40px) 60px; }
+h1 { font: 800 34px/1.05 var(--display); text-transform: uppercase; margin: 6px 0 4px; }
+h2 { font: 800 22px/1.1 var(--display); text-transform: uppercase; margin: 22px 0 8px; }
+.sub { color: var(--ink-2); margin: 0 0 14px; max-width: 820px; }
+.tabs { display: flex; gap: 6px; border-bottom: 2px solid var(--rule); margin: 14px 0 16px; flex-wrap: wrap; }
+.tabs button { font: 700 15px var(--sans); background: none; border: 0; padding: 10px 14px; color: var(--ink-2); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--turf); }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; margin-bottom: 14px; }
+.form { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 14px; align-items: end; }
+.form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; letter-spacing: .03em; }
+.form .chk { flex-direction: row; align-items: center; gap: 8px; text-transform: none; font-size: 14px; color: var(--ink); font-weight: 500; }
+input, select { font: 15px var(--sans); padding: 7px 9px; border: 1px solid var(--rule); border-radius: 6px; background: var(--page); color: var(--ink); }
+.btn { font: 700 15px var(--sans); background: var(--turf); color: var(--chalk); border: 0; border-radius: 6px; padding: 9px 16px; cursor: pointer; }
+.btn.ghost { background: var(--raised); color: var(--ink); }
+.btn.small { padding: 4px 9px; font-size: 13px; }
+.muted { color: var(--ink-3); font-size: 13px; }
+.note { font-size: 13px; color: var(--ink-2); margin: 8px 0 0; }
+.cards { display: grid; gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px; }
+.card.neg { border-left: 4px solid var(--bad); }
+.card.pos { border-left: 4px solid var(--good); }
+.card h3 { margin: 0 0 6px; font-size: 15px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.stats { display: flex; gap: 16px; flex-wrap: wrap; font-size: 14px; margin: 4px 0 8px; }
+.stats b { font-variant-numeric: tabular-nums; }
+.legs { margin: 0; padding: 0; list-style: none; }
+.legs li { display: grid; grid-template-columns: 1fr repeat(4, auto); gap: 10px; padding: 5px 0; border-top: 1px solid var(--rule); font-size: 14px; align-items: baseline; }
+.legs li .gm { color: var(--ink-3); font-size: 12px; display: block; }
+.num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+.tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 9px; background: var(--raised); color: var(--ink-2); margin-left: 4px; white-space: nowrap; }
+.tag.warn { background: #fff1c2; color: #6b4b00; }
+.tag.bad { background: #ffd9d5; color: #8a1c14; }
+.tag.good { background: #d4f2df; color: #0f5130; }
+.good { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); }
+th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spacing: .03em; }
+#search-results { max-height: 340px; overflow: auto; margin-top: 8px; }
+#search-results tr:hover { background: var(--raised); }
+.explain { font-size: 14px; color: var(--ink-2); }
+.explain li { margin: 4px 0; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="bar"><b>Parlays</b><a href="./">NFL board</a><a href="cfb/">College board</a><a href="../">All boards</a></div>
+<div class="wrap">
+  <h1>Parlay tools</h1>
+  <p class="sub">Every leg here is priced the same way the boards price bets: game lines off the market-adjusted projection, NFL props from the books' no-vig number moved toward the model, college props from the model alone. <span id="asof" class="muted"></span></p>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="suggest">Leg finder</button>
+    <button role="tab" aria-selected="false" data-tab="boost">Boost finder</button>
+    <button role="tab" aria-selected="false" data-tab="build">Builder</button>
+    <button role="tab" aria-selected="false" data-tab="how">How it works</button>
+  </div>
+
+  <!-- ===== Leg finder / Boost finder share one form ===== -->
+  <section id="finder">
+    <div class="panel">
+      <div class="form">
+        <label>League<select id="f-league"><option value="both">NFL and college</option><option value="nfl">NFL</option><option value="cfb">College</option></select></label>
+        <label>Book<select id="f-book"><option value="dk">DraftKings</option><option value="fd">FanDuel</option><option value="best">Best of the two</option></select></label>
+        <label id="lab-legs">Legs<select id="f-legs"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+        <label class="boost-only" hidden>Profit boost %<input id="f-boost" type="number" min="0" max="500" step="5" value="30"></label>
+        <label class="boost-only" hidden>Min legs<select id="f-minlegs"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+        <label class="boost-only" hidden>Max legs<select id="f-maxlegs"><option>2</option><option>3</option><option>4</option><option selected>5</option></select></label>
+        <label>Min parlay odds<input id="f-minodds" type="text" placeholder="e.g. +200" value=""></label>
+        <label>Min odds per leg<input id="f-minleg" type="text" placeholder="e.g. -300" value=""></label>
+        <label class="boost-only" hidden>Max wager ($)<input id="f-maxbet" type="number" min="0" step="5" value="25"></label>
+        <label>Same game<select id="f-sgp"><option value="none">Different games only</option><option value="allow">Allowed</option><option value="require">Same game only (SGP)</option></select></label>
+        <label>Rank by<select id="f-rank"><option value="value">Value (expected return)</option><option value="hit">Chance of cashing</option></select></label>
+        <label>Min chance per leg (%)<input id="f-minp" type="number" min="0" max="99" step="5" value="40"></label>
+        <label class="chk"><input id="m-spread" type="checkbox" checked> Spreads</label>
+        <label class="chk"><input id="m-total" type="checkbox" checked> Totals</label>
+        <label class="chk"><input id="m-ml" type="checkbox" checked> Moneylines</label>
+        <label class="chk"><input id="m-prop" type="checkbox" checked> Player props</label>
+        <label class="chk"><input id="f-fair" type="checkbox"> Include legs with no book price</label>
+        <label class="chk"><input id="f-untested" type="checkbox" checked> Include college props (not market-tested)</label>
+        <label class="chk boost-only" hidden><input id="f-boostsgp" type="checkbox"> Boost is for a same-game parlay</label>
+        <div><button class="btn" id="go">Find parlays</button></div>
+      </div>
+      <p class="note" id="finder-note"></p>
+    </div>
+    <div id="results" class="cards"></div>
+  </section>
+
+  <!-- ===== Builder ===== -->
+  <section id="builder" hidden>
+    <div class="panel">
+      <div class="form">
+        <label style="grid-column: span 2">Find a leg<input id="b-q" type="search" placeholder="team, player, 'over', 'anytime'…"></label>
+        <label>League<select id="b-league"><option value="both">Both</option><option value="nfl">NFL</option><option value="cfb">College</option></select></label>
+        <label class="chk"><input id="b-moved" type="checkbox"> Show moved lines</label>
+      </div>
+      <div id="search-results"></div>
+    </div>
+    <div class="panel">
+      <h2 style="margin-top:0">Your slip</h2>
+      <div id="slip"></div>
+      <div class="form" style="margin-top:10px">
+        <label>Book<select id="s-book"><option value="dk">DraftKings</option><option value="fd">FanDuel</option></select></label>
+        <label>Price the book quotes<input id="s-price" type="text" placeholder="e.g. +450"></label>
+        <label>Profit boost %<input id="s-boost" type="number" min="0" step="5" value="0"></label>
+        <label>Stake ($)<input id="s-stake" type="number" min="0" step="5" value="10"></label>
+        <div><button class="btn ghost" id="s-clear">Clear slip</button></div>
+      </div>
+      <div id="slip-out"></div>
+    </div>
+  </section>
+
+  <section id="how" hidden>
+    <div class="panel explain">
+      <h2 style="margin-top:0">What the numbers mean</h2>
+      <ul>
+        <li><b>Chance</b> is the chance every leg wins (a pushed leg drops out of the parlay, as the books settle it). Legs in different games are independent, so their chances multiply. Legs in the same game move together; their joint chance comes from correlations fitted on past games (a quarterback's yards with his receivers', a side with the total, a player's yards with his team covering), and the card says so.</li>
+        <li><b>Value</b> is the expected return per dollar at the book's price: +8% means $10 returns $10.80 on average over many bets. Negative value is the book's edge. A boost pays extra on the profit and is often the only thing that makes a parlay worth betting.</li>
+        <li><b>Needs</b> is the price the parlay has to pay to break even. If the app quotes more than that, it is a good bet; less, it is not.</li>
+        <li><b>Stake</b> is quarter Kelly on a 100-unit bankroll ($1,000 at $10 a unit), in half units, capped at 2 units and at the boost's maximum wager. Nothing is staked on a negative-value parlay.</li>
+      </ul>
+      <h2>Where the chances come from</h2>
+      <ul>
+        <li><b>Spreads, totals, moneylines and moved lines:</b> the board's market-adjusted projection, read off the key-number curve, so moving a spread through 3 or 7 costs what those numbers are worth.</li>
+        <li><b>NFL props:</b> DraftKings and FanDuel have been the better forecasters (PROPS.md), so the chance shown is the books' no-vig number nudged toward the model (at most 3 points). <b>Value is scored on the books' number alone</b>: in 2025, props the nudge made look +EV lost about 4% to the closing line, so a prop only shows value when its price earns it (one book better than the other, a rung priced better than its neighbours, or a boost). A prop line the books do not post carries the correction from the nearest line they do price, and has no price.</li>
+        <li><b>College props:</b> the model's own distribution only. They have never been compared with sportsbook prices, so they are tagged <span class="tag warn">not market-tested</span> and priced at fair odds.</li>
+      </ul>
+      <h2>Why "chance of cashing" is not the goal</h2>
+      <p>Heavy favourites parlayed together lose more than they win. In 2025, DraftKings and FanDuel alternate rungs priced −400 to −1000 cleared 79.5% of the time against the 85.3% their prices implied: about −7% a leg, −13% for two and −19% for three. Ranking by chance shows those parlays honestly, with their value next to them; ranking by value finds the legs closest to a fair price, which is what makes a boost pay.</p>
+      <p>Legs with no book price are scored at an estimated price (the fair price with a 5% hold on game lines and 10% on props) so they can be ranked; the card marks them and says what price to ask for.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const UNIT = 10, BANKROLL_UNITS = 100, MAX_UNITS = 2, KELLY = 0.25;
+const EST_HOLD = { game: 0.05, prop: 0.10 };
+let DATA = { nfl: null, cfb: null }, LEGS = [], GAMES = {}, CORR = { nfl: null, cfb: null };
+
+// ---------------------------------------------------------------- odds math
+const dec = a => a == null ? null : (a > 0 ? 1 + a / 100 : 1 + 100 / -a);
+const amer = d => d == null || !isFinite(d) || d <= 1 ? null : (d >= 2 ? Math.round((d - 1) * 100) : Math.round(-100 / (d - 1)));
+const fmtA = a => a == null ? "—" : (a > 0 ? "+" + a : String(a));
+const pct = (p, n = 1) => p == null ? "—" : (100 * p).toFixed(n) + "%";
+const sgn = (x, n = 1) => x == null ? "—" : (x >= 0 ? "+" : "−") + Math.abs(100 * x).toFixed(n) + "%";
+function parseOdds(s) {
+  if (s == null) return null; s = String(s).trim().replace("−", "-"); if (!s) return null;
+  const v = Number(s); if (!isFinite(v) || Math.abs(v) < 100) return null; return v;
+}
+
+// ---------------------------------------------------------------- normal and bivariate normal
+function Phi(x) { // standard normal cdf
+  const t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989422804014327 * Math.exp(-x * x / 2);
+  const p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+  return x > 0 ? 1 - p : p;
+}
+function PhiInv(p) { // Acklam
+  p = Math.min(Math.max(p, 1e-9), 1 - 1e-9);
+  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+  const pl = 0.02425; let q, r;
+  if (p < pl) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+  if (p > 1 - pl) { q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+  q = p - 0.5; r = q * q;
+  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+}
+// P(both win) for legs with chances pa, pb and latent correlation rho (Gaussian copula)
+function bothWin(pa, pb, rho) {
+  if (!rho) return pa * pb;
+  const h = PhiInv(pa), k = PhiInv(pb);   // win iff Z < PhiInv(p)
+  const N = 24; let s = 0;
+  for (let i = 0; i <= N; i++) {        // Simpson over r in [0, rho]
+    const r = rho * i / N, w = (i === 0 || i === N) ? 1 : (i % 2 ? 4 : 2), q = 1 - r * r;
+    s += w * Math.exp(-(h * h - 2 * r * h * k + k * k) / (2 * q)) / Math.sqrt(q);
+  }
+  return Math.min(Math.max(pa * pb + (rho / N / 3) * s / (2 * Math.PI), 0), Math.min(pa, pb));
+}
+
+// ---------------------------------------------------------------- correlations between two legs
+function bucket(s) { s = Math.abs(s || 0); return s <= 3 ? "0-3" : s <= 7 ? "3.5-7" : "7.5+"; }
+function propKey(kind, a, b) {
+  if (kind === "self") return "self|" + [a.s, b.s].sort().join("|");
+  return kind + "|" + [`${a.s}@${a.c.r}`, `${b.s}@${b.c.r}`].sort().join("|");
+}
+// Returns {rho, known} for two legs of the same game, or null if the books would not allow the pair.
+function pairRho(a, b) {
+  const C = CORR[a.lg] || { props: {}, game: {} };
+  const ga = a.m !== "prop", gb = b.m !== "prop";
+  if (ga && gb) {
+    const sideA = a.m === "total", sideB = b.m === "total";
+    if (sideA === sideB) return null;                          // two sides, or two totals, of one game
+    const sd = sideA ? b : a, tt = sideA ? a : b;
+    const g = GAMES[a.lg + a.g] || {};
+    const favTeam = (g.spread || 0) >= 0 ? g.home : g.away;
+    let r = C.game[`gg|fav|over|${bucket(g.spread)}`];
+    if (r == null) return { rho: 0, known: false };
+    if (sd.c.tm !== favTeam) r = -r;
+    if (tt.c.k === "under") r = -r;
+    return { rho: r, known: true };
+  }
+  if (!ga && !gb) {
+    if (a.c.p === b.c.p && a.s === b.s) return null;           // one player's stat twice
+    const kind = a.c.p === b.c.p ? "self" : (a.tm === b.tm ? "team" : "opp");
+    if (kind !== "self" && (!a.c.r || !b.c.r)) return { rho: 0, known: false };
+    let r = C.props[propKey(kind, a, b)];
+    if (r == null) return { rho: 0, known: false };
+    if ((a.d === "under") !== (b.d === "under")) r = -r;
+    return { rho: r, known: true };
+  }
+  const p = ga ? b : a, gl = ga ? a : b;
+  if (!p.c.r) return { rho: 0, known: false };
+  const what = gl.m === "total" ? "over" : "cover";
+  let r = C.game[`gl|${p.s}@${p.c.r}|${what}`];
+  if (r == null) return { rho: 0, known: false };
+  if (what === "cover" && gl.c.tm !== p.tm) r = -r;
+  if (gl.c.k === "under") r = -r;
+  if (p.d === "under") r = -r;
+  return { rho: r, known: true };
+}
+
+// Joint chance that every leg of one game wins: pairwise copula for two legs, a seeded
+// simulation for three or more (the copula with every pair's correlation).
+let NORMALS = null;
+function normals(n, k) {
+  if (NORMALS && NORMALS.n === n && NORMALS.k >= k) return NORMALS.z;
+  let s = 12345; const rnd = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const z = []; for (let i = 0; i < n; i++) { const row = []; for (let j = 0; j < k; j++) { const u = rnd() || 1e-9, v = rnd(); row.push(Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v)); } z.push(row); }
+  NORMALS = { n, k, z }; return z;
+}
+function cholesky(R) {
+  const n = R.length, L = R.map(r => r.map(() => 0));
+  for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) {
+    let s = R[i][j]; for (let k = 0; k < j; k++) s -= L[i][k] * L[j][k];
+    if (i === j) { if (s <= 1e-6) return null; L[i][j] = Math.sqrt(s); } else L[i][j] = s / L[j][j];
+  }
+  return L;
+}
+function jointGroup(legs, exact) {
+  const ws = legs.map(l => l.w + (l.h || 0));
+  if (legs.length === 1) return { p: ws[0], known: true, ok: true };
+  const R = legs.map(() => legs.map(() => 0)); let known = true;
+  for (let i = 0; i < legs.length; i++) { R[i][i] = 1; for (let j = i + 1; j < legs.length; j++) {
+    const r = pairRho(legs[i], legs[j]); if (r === null) return { ok: false };
+    if (!r.known) known = false; R[i][j] = R[j][i] = Math.max(-0.9, Math.min(0.95, r.rho));
+  } }
+  if (legs.length === 2) return { p: bothWin(ws[0], ws[1], R[0][1]), known, ok: true };
+  if (!exact) { // pairwise approximation for the search
+    let p = ws.reduce((a, b) => a * b, 1);
+    for (let i = 0; i < legs.length; i++) for (let j = i + 1; j < legs.length; j++) p *= bothWin(ws[i], ws[j], R[i][j]) / (ws[i] * ws[j]);
+    return { p: Math.min(p, Math.min(...ws)), known, ok: true };
+  }
+  let L = cholesky(R);
+  if (!L) { for (let i = 0; i < R.length; i++) for (let j = 0; j < R.length; j++) if (i !== j) R[i][j] *= 0.9; L = cholesky(R); if (!L) return { ok: false }; }
+  const n = 20000, Z = normals(n, 8), th = ws.map(PhiInv); let hit = 0;
+  for (let s = 0; s < n; s++) {
+    let ok = true;
+    for (let i = 0; i < legs.length && ok; i++) { let x = 0; for (let k = 0; k <= i; k++) x += L[i][k] * Z[s][k]; if (x > th[i]) ok = false; }
+    if (ok) hit++;
+  }
+  return { p: hit / n, known, ok: true };
+}
+
+// ---------------------------------------------------------------- one leg at a book
+function legPrice(l, book) {
+  const bk = l.bk || {};
+  if (book === "best") {
+    const c = ["dk", "fd"].filter(b => bk[b] != null);
+    if (!c.length) return null;
+    const b = c.reduce((x, y) => dec(bk[x]) >= dec(bk[y]) ? x : y);
+    return { a: bk[b], d: dec(bk[b]), book: b, est: false };
+  }
+  return bk[book] != null ? { a: bk[book], d: dec(bk[book]), book, est: false } : null;
+}
+function estPrice(l) {
+  const hold = l.m === "prop" ? EST_HOLD.prop : EST_HOLD.game, d = 1 / Math.min(0.99, (l.w + (l.h || 0)) * (1 + hold));
+  return { a: amer(d), d, book: null, est: true };
+}
+
+// ---------------------------------------------------------------- a whole parlay
+// legs at prices; boost as a fraction; sgp: whether the book prices same-game legs itself
+// The chance a leg's value is scored on: the books' own number for NFL props (wv), else w.
+const vleg = l => l.wv != null ? { ...l, w: l.wv } : l;
+function evaluate(legs, prices, boost, exact) {
+  const r = evaluateAt(legs, prices, boost, exact);
+  if (!r || !legs.some(l => l.wv != null)) return r && { ...r, Pv: r.P };
+  const v = evaluateAt(legs.map(vleg), prices, boost, exact);
+  if (!v) return null;
+  // shown: the chance (P, fair price); scored: value, break-even and stake on the books' chance
+  return { ...r, Pv: v.P, ev: v.ev, need: v.need, Deff: v.Deff, D: v.D };
+}
+function evaluateAt(legs, prices, boost, exact) {
+  const byGame = {};
+  legs.forEach((l, i) => (byGame[l.lg + l.g] = byGame[l.lg + l.g] || []).push(i));
+  let P = 1, known = true, sameGame = false, D = 1, Deff = 1, est = false, Dprod = 1;
+  for (const k in byGame) {
+    const idx = byGame[k];
+    const j = jointGroup(idx.map(i => legs[i]), exact);
+    if (!j.ok) return null;
+    if (!j.known) known = false;
+    P *= j.p;
+    // what the legs pay: each leg's price, pushes counted through its expected multiplier
+    let d = 1, deff = 1, ratio = 1;
+    for (const i of idx) {
+      const l = legs[i], pr = prices[i], w = l.w, h = l.h || 0;
+      d *= pr.d; deff *= (w * pr.d + h) / (w + h); ratio *= (w * pr.d + h); if (pr.est) est = true;
+    }
+    Dprod *= d;
+    if (idx.length > 1) {
+      // a same-game parlay is priced by the book with its own correlations: estimate it as a
+      // book that gets the correlation right and keeps each leg's margin (fair joint price x
+      // each leg's price-to-chance ratio). The real price is in the app.
+      sameGame = true; est = true;
+      d = ratio / j.p; deff = d;
+    }
+    D *= d; Deff *= deff;
+  }
+  const payout = 1 + (Deff - 1) * (1 + boost);
+  const ev = P * payout - 1;
+  const need = (1 / P - 1) / (1 + boost) + 1;                   // decimal price that breaks even
+  return { P, D, Deff, Dprod, ev, need, known, sameGame, est, fair: 1 / P };
+}
+function stakeUnits(r, boost, maxBet) {
+  if (r.ev <= 0) return 0;
+  const p = r.Pv ?? r.P, b = (r.Deff - 1) * (1 + boost), f = (p * b - (1 - p)) / b;
+  let u = Math.round(2 * KELLY * f * BANKROLL_UNITS) / 2;
+  if (u < 0.5 && r.ev > 0.02) u = 0.5;
+  u = Math.min(u, MAX_UNITS);
+  if (maxBet) u = Math.min(u, Math.floor(2 * maxBet / UNIT) / 2);
+  return u;
+}
+
+// ---------------------------------------------------------------- the search
+function readForm(mode) {
+  const minOdds = parseOdds($("#f-minodds").value), minLeg = parseOdds($("#f-minleg").value);
+  const n = +$("#f-legs").value;
+  return {
+    mode, league: $("#f-league").value, book: $("#f-book").value, sgp: mode === "boost" && $("#f-boostsgp").checked ? "require" : $("#f-sgp").value,
+    nmin: mode === "boost" ? +$("#f-minlegs").value : n, nmax: mode === "boost" ? Math.max(+$("#f-maxlegs").value, +$("#f-minlegs").value) : n,
+    minD: minOdds == null ? 1 : dec(minOdds), minLegD: minLeg == null ? 1 : dec(minLeg),
+    rank: $("#f-rank").value, minP: (+$("#f-minp").value || 0) / 100, fair: $("#f-fair").checked, untested: $("#f-untested").checked,
+    markets: { spread: $("#m-spread").checked, total: $("#m-total").checked, ml: $("#m-ml").checked, prop: $("#m-prop").checked },
+    boost: mode === "boost" ? Math.max(0, +$("#f-boost").value || 0) / 100 : 0, maxBet: mode === "boost" ? +$("#f-maxbet").value || 0 : 0,
+  };
+}
+function pool(o) {
+  const now = Date.now(), out = [];
+  for (const l of LEGS) {
+    if (o.league !== "both" && l.lg !== o.league) continue;
+    if (!o.markets[l.m]) continue;
+    if (!o.untested && l.src === "model") continue;
+    if (Date.parse(GAMES[l.lg + l.g].ko) <= now) continue;
+    if (l.w < o.minP) continue;
+    let pr = legPrice(l, o.book);
+    if (!pr) { if (!o.fair) continue; pr = estPrice(l); }
+    if (pr.d < o.minLegD) continue;
+    const mult = (l.wv ?? l.w) * pr.d + (l.h || 0);
+    out.push({ l, pr, mult, score: o.rank === "value" ? Math.log(mult) : Math.log(l.w + (l.h || 0)) });
+  }
+  return out;
+}
+function search(o) {
+  if (o.rank !== "hit") return searchOnce(o, 0, 1);
+  // chance of cashing under a minimum price is a knapsack: run the beam with a few weights on
+  // price and keep the likeliest parlays that meet the minimum
+  const all = [], seen = new Set(); let n = 0;
+  const per = Math.pow(o.minD, 1 / o.nmax);       // the price each leg needs if they share the minimum evenly
+  const runs = [[0, 1], [0.35, 1], [1.2, 1]];
+  if (o.minD > 1) for (const f of [1, 0.95, 0.9, 0.85]) runs.push([0, Math.max(1, per * f)]);
+  for (const [mu, dmin] of runs) {
+    const r = searchOnce(o, mu, dmin); n = Math.max(n, r.pool);
+    for (const x of r.out) { const k = x.legs.map(l => l.lg + l.i).sort().join(); if (!seen.has(k)) { seen.add(k); all.push(x); } }
+  }
+  all.sort((a, b) => b.r.P - a.r.P);
+  return { out: all.slice(0, 12), pool: n };
+}
+function searchOnce(o, mu, dmin = 1) {
+  let cands = pool(o).filter(c => c.pr.d >= dmin);
+  cands.forEach(c => c.s2 = c.score + mu * Math.log(c.pr.d));
+  const K = 260, B = 220;
+  // value: the legs closest to (or better than) a fair price; hit: the likeliest legs, but keep
+  // some longer prices in the pool so a minimum parlay price can be met
+  cands.sort((a, b) => b.s2 - a.s2);
+  if (o.rank === "hit" && mu === 0) {
+    const byPrice = [...cands].sort((a, b) => b.mult - a.mult).slice(0, 80);
+    cands = [...new Set([...cands.slice(0, K - 60), ...byPrice])];
+  }
+  cands = cands.slice(0, K);
+  const gid = c => c.l.lg + c.l.g;
+  let beam = [{ idx: [], score: 0, games: new Set(), D: 1 }];
+  const done = [];
+  for (let size = 1; size <= o.nmax; size++) {
+    const next = [];
+    for (const s of beam) {
+      const start = s.idx.length ? s.idx[s.idx.length - 1] + 1 : 0;
+      for (let j = start; j < cands.length; j++) {
+        const c = cands[j], g = gid(c);
+        if (o.sgp === "none" && s.games.has(g)) continue;
+        if (o.sgp === "require" && s.idx.length && !s.games.has(g)) continue;
+        if (o.sgp !== "none" && s.games.has(g)) {      // the books block some pairs
+          let bad = false;
+          for (const i of s.idx) { const x = cands[i]; if (gid(x) === g && pairRho(x.l, c.l) === null) { bad = true; break; } }
+          if (bad) continue;
+        }
+        const idx = [...s.idx, j];
+        next.push({ idx, score: s.score + c.s2, games: new Set([...s.games, g]), D: s.D * c.pr.d });
+      }
+    }
+    next.sort((a, b) => b.score - a.score);
+    beam = next.slice(0, B);
+    if (size >= o.nmin) for (const s of beam) done.push(s);
+    if (!beam.length) break;
+  }
+  // score the finished parlays properly (correlations, pushes, the boost)
+  const rows = [];
+  for (const s of done) {
+    const legs = s.idx.map(i => cands[i].l), prices = s.idx.map(i => cands[i].pr);
+    const r = evaluate(legs, prices, o.boost, false);
+    if (!r || r.D < o.minD) continue;
+    rows.push({ legs, prices, r, idx: s.idx });
+  }
+  const key = x => o.rank === "value" ? x.r.ev : x.r.P;
+  rows.sort((a, b) => key(b) - key(a));
+  // keep the list varied: within each number of legs, a leg appears in at most three of the
+  // parlays shown, and each number of legs the rules allow gets its own best few
+  const out = [], per = Math.max(3, Math.ceil(12 / (o.nmax - o.nmin + 1)));
+  for (let n = o.nmin; n <= o.nmax; n++) {
+    const used = {}; let k = 0;
+    for (const x of rows) {
+      if (x.legs.length !== n || x.idx.some(i => (used[i] || 0) >= 3)) continue;
+      const r = evaluate(x.legs, x.prices, o.boost, true);          // exact joint chance for the shown ones
+      if (!r || r.D < o.minD) continue;
+      x.r = r; out.push(x); x.idx.forEach(i => used[i] = (used[i] || 0) + 1);
+      if (++k >= per) break;
+    }
+  }
+  out.sort((a, b) => key(b) - key(a));
+  return { out: out.slice(0, 12), pool: cands.length };
+}
+
+// ---------------------------------------------------------------- drawing
+function gameLabel(l) {
+  const g = GAMES[l.lg + l.g]; if (!g) return l.g;
+  const d = new Date(g.ko); const when = d.toLocaleString(undefined, { weekday: "short", hour: "numeric", minute: "2-digit" });
+  return `${l.lg.toUpperCase()} · ${g.away} @ ${g.home} · ${when}`;
+}
+function legTags(l, pr) {
+  const t = [];
+  (l.t || []).forEach(x => t.push(x === "not market-tested" ? `<span class="tag warn">${x}</span>` : `<span class="tag">${esc(x)}</span>`));
+  if (pr && pr.est) t.push(`<span class="tag warn">no book price: est.</span>`);
+  if (l.mx) t.push(`<span class="tag" title="This season's box scores, not an input to the chance">${esc(l.mx)}</span>`);
+  return t.join("");
+}
+function legRow(l, pr) {
+  const ev = pr ? (l.wv ?? l.w) * pr.d + (l.h || 0) - 1 : null;
+  return `<li><span>${esc(l.lab)} ${legTags(l, pr)}<span class="gm">${esc(gameLabel(l))}</span></span>
+    <span class="num" title="Chance this leg wins">${pct(l.w)}${l.h ? ` <span class="muted">(push ${pct(l.h, 0)})</span>` : ""}</span>
+    <span class="num" title="Price${pr && pr.book ? " at " + pr.book.toUpperCase() : ""}">${pr ? (pr.est ? "~" : "") + fmtA(pr.a) + (pr.book ? ` <span class="muted">${pr.book.toUpperCase()}</span>` : "") : "—"}</span>
+    <span class="num ${ev == null ? "" : ev >= 0 ? "good" : "bad"}" title="Value of this leg alone">${ev == null ? "" : sgn(ev)}</span></li>`;
+}
+function card(x, o, n) {
+  const r = x.r, units = stakeUnits(r, o.boost, o.maxBet), neg = r.ev <= 0;
+  const book = o.book === "best" ? "" : ` at ${o.book === "dk" ? "DraftKings" : "FanDuel"}`;
+  const priceTxt = r.sameGame ? `~${fmtA(amer(r.D))} est. <span class="muted">(the book sets same-game prices; product of legs ${fmtA(amer(r.Dprod))})</span>` : `${fmtA(amer(r.D))}${book}`;
+  const flags = [];
+  if (r.sameGame) flags.push(`<span class="tag">same game${r.known ? "" : ": some correlations unknown"}</span>`);
+  if (r.est) flags.push(`<span class="tag warn">uses estimated prices</span>`);
+  if (neg) flags.push(`<span class="tag bad">negative value</span>`);
+  return `<div class="card ${neg ? "neg" : "pos"}"><h3><span>#${n} · ${x.legs.length} legs</span>${flags.join("")}</h3>
+    <div class="stats"><span>Chance <b>${pct(r.P)}</b></span><span>Price <b>${priceTxt}</b></span>
+    ${o.boost ? `<span>Boosted <b>${fmtA(amer(1 + (r.D - 1) * (1 + o.boost)))}</b></span>` : ""}
+    <span>Value <b class="${neg ? "bad" : "good"}">${sgn(r.ev)}</b></span><span>Needs <b>${fmtA(amer(r.need))}</b>${o.boost ? " before the boost" : ""}</span>
+    <span>Fair <b>${fmtA(amer(r.fair))}</b></span><span>Stake <b>${units ? units + " u ($" + (units * UNIT).toFixed(0) + ")" : "0 u"}</b></span></div>
+    <ul class="legs">${x.legs.map((l, i) => legRow(l, x.prices[i])).join("")}</ul>
+    <p class="note"><button class="btn small ghost" data-load='${JSON.stringify(x.legs.map(l => l.lg + ":" + l.i))}'>Open in the builder</button></p></div>`;
+}
+function runFinder() {
+  const mode = $("#tab-mode").value, o = readForm(mode);
+  const t0 = performance.now();
+  const { out, pool: n } = search(o);
+  const ms = Math.round(performance.now() - t0);
+  const sgpNote = o.sgp !== "none" ? " Same-game parlays: the books price these with their own correlations, so check the app's price against the Needs column." : "";
+  $("#finder-note").textContent = `${out.length} parlays from ${n} legs in ${ms} ms.` + sgpNote +
+    (o.rank === "hit" ? " Ranked by chance of cashing: red cards lose money on average." : "");
+  $("#results").innerHTML = out.length ? out.map((x, i) => card(x, o, i + 1)).join("") :
+    `<div class="panel">Nothing meets those requirements. Try fewer legs, a lower minimum price, more markets, or include legs with no book price.</div>`;
+}
+
+// ---------------------------------------------------------------- builder
+let SLIP = [];
+function findLeg(code) { const [lg, i] = code.split(":"); return LEGS.find(l => l.lg === lg && l.i === +i); }
+function drawSearch() {
+  const q = $("#b-q").value.trim().toLowerCase(), lg = $("#b-league").value, moved = $("#b-moved").checked, now = Date.now();
+  if (q.length < 2) { $("#search-results").innerHTML = `<p class="muted">Type at least two letters.</p>`; return; }
+  const words = q.split(/\s+/);
+  const hits = LEGS.filter(l => (lg === "both" || l.lg === lg) && Date.parse(GAMES[l.lg + l.g].ko) > now
+    && (moved || !(l.t || []).includes("moved line"))
+    && words.every(w => (l.lab + " " + gameLabel(l)).toLowerCase().includes(w))).slice(0, 150);
+  $("#search-results").innerHTML = `<table><thead><tr><th>Leg</th><th>Chance</th><th>DK</th><th>FD</th><th>Fair</th><th></th></tr></thead><tbody>${hits.map(l =>
+    `<tr><td>${esc(l.lab)} ${legTags(l)}<div class="muted">${esc(gameLabel(l))}</div></td><td class="num">${pct(l.w)}</td>
+     <td class="num">${fmtA((l.bk || {}).dk)}</td><td class="num">${fmtA((l.bk || {}).fd)}</td><td class="num">${fmtA(amer(1 / (l.w + (l.h || 0))))}</td>
+     <td><button class="btn small" data-add="${l.lg}:${l.i}">Add</button></td></tr>`).join("")}</tbody></table>` +
+    (hits.length === 150 ? `<p class="muted">First 150 shown; add words to narrow it.</p>` : "");
+}
+function drawSlip() {
+  const book = $("#s-book").value, boost = Math.max(0, +$("#s-boost").value || 0) / 100, stake = +$("#s-stake").value || 0;
+  if (!SLIP.length) { $("#slip").innerHTML = `<p class="muted">Add legs from the search above, or open a parlay from the finders.</p>`; $("#slip-out").innerHTML = ""; return; }
+  const prices = SLIP.map(l => legPrice(l, book) || estPrice(l));
+  $("#slip").innerHTML = `<ul class="legs">${SLIP.map((l, i) => legRow(l, prices[i]).replace("</li>", ` <button class="btn small ghost" data-rm="${i}">✕</button></li>`)).join("")}</ul>`;
+  const r = evaluate(SLIP, prices, boost, true);
+  if (!r) { $("#slip-out").innerHTML = `<p class="bad">The books do not allow this combination (two sides or two totals of one game, or one player's stat twice).</p>`; return; }
+  const quoted = parseOdds($("#s-price").value);
+  let D = quoted != null ? dec(quoted) : r.D;
+  // with a quoted price, the expected payout uses it (pushes ignored)
+  const ev = quoted != null ? r.Pv * (1 + (D - 1) * (1 + boost)) - 1 : r.ev;
+  const rr = { ...r, ev, Deff: quoted != null ? D : r.Deff };
+  const u = stakeUnits(rr, boost, 0);
+  $("#slip-out").innerHTML = `<div class="stats" style="margin-top:12px">
+     <span>Chance all win <b>${pct(r.P)}</b></span><span>Fair price <b>${fmtA(amer(r.fair))}</b></span>
+     <span>Product of the legs <b>${fmtA(amer(r.Dprod))}</b>${r.sameGame ? ` <span class="muted">(same-game estimate ~${fmtA(amer(r.D))})</span>` : ""}${r.est && !r.sameGame ? ` <span class="tag warn">some prices estimated</span>` : ""}</span>
+     <span>Needs <b>${fmtA(amer(r.need))}</b>${boost ? " before the boost" : ""}</span>
+     <span>Value at ${quoted != null ? "the quoted price" : "the product"} <b class="${ev > 0 ? "good" : "bad"}">${sgn(ev)}</b></span>
+     <span>Expected profit on $${stake} <b class="${ev > 0 ? "good" : "bad"}">${ev < 0 ? "−" : ""}$${Math.abs(stake * ev).toFixed(2)}</b></span>
+     <span>Suggested stake <b>${u ? u + " u ($" + (u * UNIT) + ")" : "0 u"}</b></span></div>
+     ${r.sameGame ? `<p class="note">Same-game legs: the chance includes how these legs move together${r.known ? "" : " (some pairs have no fitted correlation and count as independent)"}. The book prices same-game parlays itself: enter its price above.</p>` : ""}`;
+}
+
+// ---------------------------------------------------------------- wiring
+function setTab(t) {
+  document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === t)));
+  $("#finder").hidden = !(t === "suggest" || t === "boost"); $("#builder").hidden = t !== "build"; $("#how").hidden = t !== "how";
+  $("#tab-mode").value = t === "boost" ? "boost" : "suggest";
+  document.querySelectorAll(".boost-only").forEach(e => e.hidden = t !== "boost");
+  $("#lab-legs").hidden = t === "boost";
+  $("#results").innerHTML = ""; $("#finder-note").textContent = "";
+  if (t === "boost") { $("#f-rank").value = "value"; $("#f-fair").checked = false; }
+  history.replaceState(null, "", "#" + t);
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab]"); if (t) return setTab(t.dataset.tab);
+  const ld = e.target.closest("[data-load]"); if (ld) { SLIP = JSON.parse(ld.dataset.load).map(findLeg).filter(Boolean); setTab("build"); drawSlip(); return; }
+  const ad = e.target.closest("[data-add]"); if (ad) { const l = findLeg(ad.dataset.add); if (l && !SLIP.includes(l)) SLIP.push(l); drawSlip(); return; }
+  const rm = e.target.closest("[data-rm]"); if (rm) { SLIP.splice(+rm.dataset.rm, 1); drawSlip(); return; }
+});
+$("#go").addEventListener("click", runFinder);
+["#b-q", "#b-league", "#b-moved"].forEach(s => { $(s).addEventListener("input", drawSearch); $(s).addEventListener("change", drawSearch); });
+["#s-book", "#s-price", "#s-boost", "#s-stake"].forEach(s => $(s).addEventListener("input", drawSlip));
+$("#s-clear").addEventListener("click", () => { SLIP = []; drawSlip(); });
+
+const hidden = document.createElement("input"); hidden.type = "hidden"; hidden.id = "tab-mode"; hidden.value = "suggest"; document.body.appendChild(hidden);
+
+Promise.all(["nfl", "cfb"].map(lg => fetch(`parlays/${lg}.json`, { cache: "no-store" }).then(r => r.ok ? r.json() : null).catch(() => null)))
+  .then(([nfl, cfb]) => {
+    const parts = [];
+    for (const [lg, d] of [["nfl", nfl], ["cfb", cfb]]) {
+      if (!d) continue;
+      DATA[lg] = d; CORR[lg] = d.corr;
+      for (const id in d.games) GAMES[lg + id] = { ...d.games[id] };
+      for (const l of d.legs) { l.lg = lg; LEGS.push(l); }
+      parts.push(`${lg.toUpperCase()} week ${d.week}: lines as of ${d.market_as_of || "?"}, legs built ${d.built}`);
+    }
+    $("#asof").textContent = parts.join(" · ") + ". Prices move: check each one in the app before betting.";
+    setTab((location.hash || "#suggest").slice(1) || "suggest");
+    drawSlip();
+  });
+</script>
+</body>
+</html>

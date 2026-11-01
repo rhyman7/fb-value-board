@@ -237,6 +237,11 @@ def main():
             print(f"  outlook: {propoutlook.write()} player-stats")
         except Exception as exc:
             print(f"  outlook skipped ({exc})")
+        try:                            # the Parlays page's NFL legs carry the new prop prices
+            from nflmodel import parlays
+            parlays.write("nfl")
+        except Exception as exc:
+            print(f"  parlays skipped ({exc})")
     return 0
 
 
