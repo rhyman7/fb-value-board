@@ -120,16 +120,17 @@ class Client:
                   "oddsFormat": "american", "dateFormat": "iso"}
         return self._get(f"/sports/{sport}/events/{event_id}/odds", params, f"odds {event_id}")
 
-    def historical_events(self, date: str, commence_from: str, commence_to: str) -> list[dict]:
+    def historical_events(self, date: str, commence_from: str, commence_to: str, sport: str = SPORT) -> list[dict]:
         """Events as listed at `date` with kickoff in [commence_from, commence_to] (1 credit)."""
         if self.remaining is not None and self.remaining - 1 < self.reserve:
             raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}")
-        body = self._get(f"/historical/sports/{SPORT}/events",
+        body = self._get(f"/historical/sports/{sport}/events",
                          {"date": date, "commenceTimeFrom": commence_from, "commenceTimeTo": commence_to, "dateFormat": "iso"},
                          f"historical events {date[:10]}")
         return body.get("data") or []
 
-    def historical_event_odds(self, event_id: str, markets: list[str], date: str, books: list[str] | None = None) -> dict:
+    def historical_event_odds(self, event_id: str, markets: list[str], date: str, books: list[str] | None = None,
+                              sport: str = SPORT) -> dict:
         """Player-prop odds for one event as they stood at `date` (10 credits per market
         returned). Returns the event object, with the snapshot time under '_snapshot'."""
         worst = 10 * len(markets)
@@ -137,7 +138,7 @@ class Client:
             raise BudgetError(f"{self.remaining} credits left, reserve {self.reserve}: skipping {event_id}")
         params = {"markets": ",".join(markets), "bookmakers": ",".join(books or BOOKS),
                   "oddsFormat": "american", "dateFormat": "iso", "date": date}
-        body = self._get(f"/historical/sports/{SPORT}/events/{event_id}/odds", params, f"historical odds {event_id} {date}")
+        body = self._get(f"/historical/sports/{sport}/events/{event_id}/odds", params, f"historical odds {event_id} {date}")
         ev = body.get("data") or {}
         if ev:
             ev["_snapshot"] = body.get("timestamp")

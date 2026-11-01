@@ -14,6 +14,9 @@ on:
       max_credits:
         description: "Most credits this run may spend"
         default: "120"
+      past:
+        description: "A past Saturday, YYYY-MM-DD, to check the archive instead (10x cost; use max_credits 700)"
+        default: ""
 
 permissions:
   contents: write
@@ -41,13 +44,16 @@ jobs:
       - name: Probe
         env:
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-        run: python experiments/cfb_props_probe.py --days "${{ inputs.days }}" --max-credits "${{ inputs.max_credits }}"
+        run: |
+          args=(--days "${{ inputs.days }}" --max-credits "${{ inputs.max_credits }}")
+          [ -n "${{ inputs.past }}" ] && args+=(--past "${{ inputs.past }}")
+          python experiments/cfb_props_probe.py "${args[@]}"
       - name: Commit
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add experiments/out/cfb_props_probe.json data/props/api_usage.csv
+          git add experiments/out/cfb_props_probe*.json data/props/api_usage.csv
           git diff --cached --quiet || git commit -m "College props probe"
           # The usage log is append-only and another Action may have added rows since this
           # run checked out: on a conflict there, keep both sides' rows.
