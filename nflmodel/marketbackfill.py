@@ -23,7 +23,8 @@ moneylines. Two kinds of snapshot per league-season:
 Saved as data/market/history/<league>/<season>/<kind>_<YYYYMMDDTHHMM>.csv (the requested
 time, UTC), with market.COLS: `snapshot` is the API's own timestamp. A header-only file means
 the API had nothing (or answered 404) and is never asked for again; any other error skips the
-snapshot and the run goes on. Files that exist are never fetched again, so a stopped run is
+snapshot and the run goes on. A file that exists is never fetched again; asking for markets it does not hold fetches only those,
+saved beside it as <kind>_<YYYYMMDDTHHMM>_<markets>.csv. A stopped run is
 resumed by starting a NEW run with the same inputs (never GitHub's Re-run, which checks out
 the old commit without the saved files). Games already under way at a snapshot carry live
 prices; `load` drops them (commence at or before the snapshot).
@@ -89,19 +90,41 @@ def plan(games: pd.DataFrame, league: str, window_min: int | None = None, kinds=
     return p.sort_values(["at", "kind"]).reset_index(drop=True)
 
 
-def file_name(kind: str, at: pd.Timestamp) -> str:
-    return f"{kind}_{pd.Timestamp(at):%Y%m%dT%H%M}.csv"
+def file_name(kind: str, at: pd.Timestamp, markets=None) -> str:
+    """kind_YYYYMMDDTHHMM.csv; with markets, a second file for the same moment that adds
+    markets an earlier run did not fetch (kind_YYYYMMDDTHHMM_spreads.csv)."""
+    tail = f"_{'-'.join(markets)}" if markets else ""
+    return f"{kind}_{pd.Timestamp(at):%Y%m%dT%H%M}{tail}.csv"
+
+
+def missing_markets(d, kind: str, at: pd.Timestamp, markets) -> list[str]:
+    """The requested markets no saved file for this moment holds yet. A header-only file
+    (the API had nothing) settles the moment for good."""
+    stem = file_name(kind, at)[:-4]
+    have = set()
+    for f in d.glob(f"{stem}*.csv"):
+        x = pd.read_csv(f, usecols=["market"])
+        if x.empty:
+            return []
+        have |= set(x["market"].dropna())
+    return [m for m in markets if m not in have]
+
+
+def target(d, kind: str, at: pd.Timestamp, todo: list[str]):
+    """Where a fetch of `todo` is saved: the plain name if nothing is saved for the moment yet."""
+    base = d / file_name(kind, at)
+    return base if not base.exists() else d / file_name(kind, at, todo)
 
 
 def estimate(league: str, season: int, markets=MARKETS, window_min: int | None = None, kinds=("open", "close")) -> dict:
     """Snapshots still to fetch and their worst-case cost (every market returned)."""
     p = plan(schedule(league, season), league, window_min, kinds)
     d = HIST / league / str(season)
-    todo = p[[not (d / file_name(r.kind, r.at)).exists() for r in p.itertuples()]]
-    per = 10 * len(markets)
+    miss = [missing_markets(d, r.kind, r.at, markets) for r in p.itertuples()]
+    todo = p[[bool(m) for m in miss]]
     return {"league": league, "season": season, "snapshots": int(len(p)), "to_fetch": int(len(todo)),
             "open": int((todo.kind == "open").sum()), "close": int((todo.kind == "close").sum()),
-            "credits_per_snapshot": per, "credits": int(len(todo) * per)}
+            "credits_per_snapshot": 10 * len(markets), "credits": int(10 * sum(len(m) for m in miss))}
 
 
 def _iso(t: pd.Timestamp) -> str:
@@ -128,14 +151,15 @@ def run(client, league: str, season: int, max_credits: int, markets=MARKETS, boo
     spent, fetched, skipped, probe_ok = 0, 0, 0, False
     say(f"  {league} {season}: {len(p)} snapshots planned, up to {per} credits each")
     for r in p.itertuples():
-        path = out_dir / file_name(r.kind, r.at)
-        if path.exists():
+        todo = missing_markets(out_dir, r.kind, r.at, markets)
+        if not todo:
             continue
+        path, per = target(out_dir, r.kind, r.at, todo), 10 * len(todo)
         if spent + per > max_credits:
             say(f"  stopping: {spent} credits spent, cap {max_credits}")
             return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": False}
         try:
-            body = client.historical_sport_odds(M.SPORTS[league], list(markets), _iso(r.at), list(books))
+            body = client.historical_sport_odds(M.SPORTS[league], list(todo), _iso(r.at), list(books))
         except oddsapi.BudgetError as e:
             say(f"  {e}")
             return {"spent": spent, "snapshots": fetched, "skipped": skipped, "complete": False}
@@ -173,6 +197,7 @@ def load(league: str, season: int) -> pd.DataFrame:
     parts = []
     for f in sorted(d.glob("*_*.csv")):
         kind, stamp = f.stem.split("_", 1)
+        stamp = stamp.split("_", 1)[0]                     # kind_STAMP_spreads.csv adds markets to kind_STAMP.csv
         if kind not in ("open", "close"):
             continue
         x = pd.read_csv(f)

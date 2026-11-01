@@ -263,3 +263,19 @@ def test_backfill_load_drops_games_already_under_way(tmp_path, monkeypatch):
     M.flatten(EVENTS, "nfl", "2026-11-01T18:00:00Z").to_csv(d / "close_20261101T1800.csv", index=False)
     x = MB.load("nfl", 2026)
     assert set(x["event_id"]) == {"e2"} and set(x["kind"]) == {"close"}       # e1 kicked off at 17:00
+
+
+def test_backfill_adds_only_missing_markets(tmp_path):
+    """A moment saved with totals only fetches spreads alone, into a second file load() merges."""
+    import pandas as pd
+    from nflmodel import market as M, marketbackfill as MB
+    at = pd.Timestamp("2025-09-06T15:50Z")
+    row = dict(zip(M.COLS, ["2025-09-06T15:45:00Z", "cfb", "e1", "2025-09-06T16:00:00Z", "A", "B", "pinnacle", "totals", "over", 50.5, -110, "x"]))
+    pd.DataFrame([row])[M.COLS].to_csv(tmp_path / MB.file_name("close", at), index=False)
+    assert MB.missing_markets(tmp_path, "close", at, ["spreads", "totals"]) == ["spreads"]
+    t = MB.target(tmp_path, "close", at, ["spreads"])
+    assert t.name == "close_20250906T1550_spreads.csv"
+    pd.DataFrame([{**row, "market": "spreads", "side": "home", "line": -3.5}])[M.COLS].to_csv(t, index=False)
+    assert MB.missing_markets(tmp_path, "close", at, ["spreads", "totals"]) == []
+    (tmp_path / MB.file_name("open", at)).write_text(",".join(M.COLS) + "\n")      # the API had nothing
+    assert MB.missing_markets(tmp_path, "open", at, ["spreads", "totals"]) == []
