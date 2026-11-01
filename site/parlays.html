@@ -472,7 +472,7 @@ function searchOnce(o, mu, dmin = 1) {
 // ---------------------------------------------------------------- drawing
 function gameLabel(l) {
   const g = GAMES[l.lg + l.g]; if (!g) return l.g;
-  const d = new Date(g.ko); const when = d.toLocaleString(undefined, { weekday: "short", hour: "numeric", minute: "2-digit" });
+  const d = new Date(g.ko); const when = d.toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
   return `${l.lg.toUpperCase()} · ${g.away} @ ${g.home} · ${when}`;
 }
 function legTags(l, pr) {
