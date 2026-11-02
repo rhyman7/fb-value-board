@@ -1,0 +1,216 @@
+{
+ "games": 2681,
+ "weight_on_nfelo_chosen_2014_2018": 0.95,
+ "tuning_miss_by_weight": {
+  "0.0": 10.136,
+  "0.05": 10.122,
+  "0.1": 10.11,
+  "0.15": 10.097,
+  "0.2": 10.085,
+  "0.25": 10.073,
+  "0.3": 10.063,
+  "0.35": 10.053,
+  "0.4": 10.043,
+  "0.45": 10.035,
+  "0.5": 10.028,
+  "0.55": 10.022,
+  "0.6": 10.016,
+  "0.65": 10.011,
+  "0.7": 10.007,
+  "0.75": 10.003,
+  "0.8": 10.0,
+  "0.85": 9.999,
+  "0.9": 9.998,
+  "0.95": 9.997,
+  "1.0": 9.997
+ },
+ "miss": {
+  "ours": {
+   "tune": 10.136,
+   "hold": 10.124
+  },
+  "nfelo": {
+   "tune": 9.997,
+   "hold": 9.934
+  },
+  "nfelo_line": {
+   "tune": 9.985,
+   "hold": 9.924
+  },
+  "blend": {
+   "tune": 9.997,
+   "hold": 9.932
+  },
+  "blend_half": {
+   "tune": 10.028,
+   "hold": 9.978
+  },
+  "open_spread": {
+   "tune": 10.056,
+   "hold": 9.961
+  },
+  "spread_line": {
+   "tune": 10.056,
+   "hold": 9.831
+  }
+ },
+ "bets_2plus": {
+  "ours": {
+   "tune": {
+    "bets": 366,
+    "record": "195-163-8",
+    "return": 0.0397,
+    "return_se": 0.0493,
+    "move_toward": 0.719
+   },
+   "hold": {
+    "bets": 615,
+    "record": "327-272-16",
+    "return": 0.0414,
+    "return_se": 0.0379,
+    "move_toward": 0.552
+   }
+  },
+  "nfelo": {
+   "tune": {
+    "bets": 104,
+    "record": "61-41-2",
+    "return": 0.1418,
+    "return_se": 0.0916,
+    "move_toward": 1.236
+   },
+   "hold": {
+    "bets": 191,
+    "record": "110-78-3",
+    "return": 0.1159,
+    "return_se": 0.0678,
+    "move_toward": 1.531
+   }
+  },
+  "blend": {
+   "tune": {
+    "bets": 104,
+    "record": "63-39-2",
+    "return": 0.1789,
+    "return_se": 0.0908,
+    "move_toward": 1.317
+   },
+   "hold": {
+    "bets": 207,
+    "record": "120-84-3",
+    "return": 0.1221,
+    "return_se": 0.0651,
+    "move_toward": 1.51
+   }
+  },
+  "blend_half": {
+   "tune": {
+    "bets": 172,
+    "record": "101-68-3",
+    "return": 0.1404,
+    "return_se": 0.0711,
+    "move_toward": 0.907
+   },
+   "hold": {
+    "bets": 309,
+    "record": "174-129-6",
+    "return": 0.0954,
+    "return_se": 0.0533,
+    "move_toward": 0.911
+   }
+  }
+ },
+ "blend_minus_ours_hold": {
+  "change": -0.1914,
+  "se": 0.0534
+ },
+ "by_qb_change": {
+  "qb_change": {
+   "games": 596,
+   "hold_miss": {
+    "ours": 10.747,
+    "nfelo": 10.271,
+    "blend": 10.264,
+    "open_spread": 10.423
+   },
+   "bets_2plus": {
+    "ours": {
+     "tune": {
+      "bets": 101,
+      "record": "49-51-1",
+      "return": -0.0635,
+      "return_se": 0.095,
+      "move_toward": 0.257
+     },
+     "hold": {
+      "bets": 215,
+      "record": "119-91-5",
+      "return": 0.0795,
+      "return_se": 0.0639,
+      "move_toward": 0.36
+     }
+    },
+    "nfelo": {
+     "tune": {
+      "bets": 32,
+      "record": "19-12-1",
+      "return": 0.1711,
+      "return_se": 0.1655,
+      "move_toward": 1.781
+     },
+     "hold": {
+      "bets": 77,
+      "record": "45-31-1",
+      "return": 0.1308,
+      "return_se": 0.1072,
+      "move_toward": 2.201
+     }
+    }
+   }
+  },
+  "no_qb_change": {
+   "games": 2085,
+   "hold_miss": {
+    "ours": 9.929,
+    "nfelo": 9.829,
+    "blend": 9.829,
+    "open_spread": 9.817
+   },
+   "bets_2plus": {
+    "ours": {
+     "tune": {
+      "bets": 265,
+      "record": "146-112-7",
+      "return": 0.0791,
+      "return_se": 0.0575,
+      "move_toward": 0.894
+     },
+     "hold": {
+      "bets": 400,
+      "record": "208-181-11",
+      "return": 0.021,
+      "return_se": 0.0471,
+      "move_toward": 0.655
+     }
+    },
+    "nfelo": {
+     "tune": {
+      "bets": 72,
+      "record": "42-29-1",
+      "return": 0.1287,
+      "return_se": 0.1107,
+      "move_toward": 0.993
+     },
+     "hold": {
+      "bets": 114,
+      "record": "65-47-2",
+      "return": 0.1058,
+      "return_se": 0.0879,
+      "move_toward": 1.079
+     }
+    }
+   }
+  }
+ },
+ "lead": true
+}
