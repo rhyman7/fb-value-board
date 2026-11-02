@@ -107,7 +107,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
         <label class="chk"><input id="m-ml" type="checkbox" checked> Moneylines</label>
         <label class="chk"><input id="m-prop" type="checkbox" checked> Player props</label>
         <label class="chk"><input id="f-fair" type="checkbox"> Include legs with no book price</label>
-        <label class="chk"><input id="f-untested" type="checkbox" checked> Include college props (not market-tested)</label>
+        <label class="chk"><input id="f-untested" type="checkbox" checked> Include college props the books don't post (model only, not market-tested)</label>
 
         <div><button class="btn" id="go">Find parlays</button></div>
       </div>
@@ -161,7 +161,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
       <ul>
         <li><b>Spreads, totals, moneylines and moved lines:</b> the board's market-adjusted projection, read off the key-number curve, so moving a spread through 3 or 7 costs what those numbers are worth.</li>
         <li><b>NFL props:</b> DraftKings and FanDuel have been the better forecasters (PROPS.md), so the chance shown is the books' no-vig number nudged toward the model (at most 3 points). <b>Value is scored on the books' number alone</b>: in 2025, props the nudge made look +EV lost about 4% to the closing line, so a prop only shows value when its price earns it (one book better than the other, a rung priced better than its neighbours, or a boost). A prop line the books do not post carries the correction from the nearest line they do price, and has no price.</li>
-        <li><b>College props:</b> the model's own distribution only. They have never been compared with sportsbook prices, so they are tagged <span class="tag warn">not market-tested</span> and priced at fair odds.</li>
+        <li><b>College props:</b> where DraftKings or FanDuel post a player's prop, the leg is the books' own chance at their real prices: the no-vig chance on two-sided lines, alternate yardage lines read through how 2025's college rungs at each price cleared, and anytime TD at a 17.5% margin. Tested on 2025's lines, the model alone was less accurate than the books and nudging toward it didn't help, so it has no say. Players and lines the books don't post keep the model's own chance, tagged <span class="tag warn">not market-tested</span>, at fair odds.</li>
       </ul>
       <h2>Why "chance of cashing" is not the goal</h2>
       <p>Heavy favourites parlayed together lose more than they win. In 2025, DraftKings and FanDuel alternate rungs priced −400 to −1000 cleared 79.5% of the time against the 85.3% their prices implied: about −7% a leg, −13% for two and −19% for three. Ranking by chance shows those parlays honestly, with their value next to them; ranking by value finds the legs closest to a fair price, which is what makes a boost pay.</p>

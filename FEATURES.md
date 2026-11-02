@@ -1070,3 +1070,16 @@ college legs. Rules were written into the script before it ran.
 So the "not market-tested" college legs on the Parlays page (the model alone) are the weakest
 number available. College props should come from live book prices: two-sided lines at the books'
 no-vig chance, ladders through a college reading, anytime TD at about a 17.5% margin.
+
+## Live college prop prices (Nov 1, 2026)
+
+`nflmodel/cfbprops.py` (workflow **College props**) pulls DraftKings and FanDuel college player props
+for games in the next 40 hours every morning (12:13 UTC) and again before each Saturday kickoff
+wave (16:13, 20:13 and 23:13 UTC, games in the next 5 hours), about three snapshots a game and
+800-1,000 credits a week. One file per game under `data/props/history_cfb_live/<season>/`, rewritten
+each snapshot, so the last one before kickoff is kept for grading 2026 (the ladder reading and the
+anytime-TD ranking lead in "College props against real lines" get rechecked on it).
+`parlays.cfb_book_legs` turns them into Parlays-page legs exactly as that test found: books' no-vig
+chance on two-sided lines, `CFB_RUNG_CAL` on alternate rungs, `CFB_TD_MARGIN` (17.5%) on anytime TD,
+no model nudge, only lines the books post. The model's own college legs remain only for players
+and stats the books don't post, still tagged "not market-tested".
