@@ -1044,3 +1044,29 @@ no receptions or attempts). `nflmodel/cfbpropbackfill.py` (workflow **College pr
 one snapshot per game ten minutes before kickoff under `data/props/history_cfb/<season>/`, newest
 weeks first; about 2,200 credits a week. Ryan approved up to 32,000 credits for 2025. The grading
 (board projections against these lines and the results) comes after.
+
+## College props against real lines (Nov 1, 2026)
+
+`python experiments/cfb_props_real_lines.py` (results in `experiments/out/cfb_props_real_lines.json`).
+450 games of 2025 college props (DraftKings and FanDuel, ten minutes before kickoff), the college
+board's walk-forward player projections, and the NFL prop distributions the Parlays page uses for
+college legs. Rules were written into the script before it ran.
+
+- **Main lines (4,328 two-sided props): the books win.** Brier: model alone 0.2551, books 0.2489
+  (model worse by 0.0062 ± 0.0017). The NFL nudge (books moved 20% toward the model, at most 3
+  points) came out 0.0004 ± 0.0003 better than the books alone: under the 2-standard-error bar.
+  Verdict: college props are priced off the books alone; the model gets no nudge.
+- **Ladders (67,061 over-only rungs, 403 games): the NFL reading of rung prices doesn't hold.**
+  College rungs cleared 1-3 points less than the NFL reading says in 4 of 10 bands (outside 2
+  standard errors), and raw implied odds overstate them by 3-8 points. A college reading fitted on
+  these rungs (`cfb_reading_2025` in the results) is the starting point; it is checked on 2026's
+  rungs before it's trusted. The model's own rung chances were worse than the NFL reading.
+- **Anytime TD (7,979 props): a tie once the books are read properly.** With the NFL's assumed 10%
+  margin the model looked 0.0058 better, but the books' college TD prices carry about 17.5%. Read
+  at their best (in-sample, generous to the books), model minus books is -0.0004 ± 0.0008.
+  Corrected the same way, the model ranks scorers slightly better (-0.0022 ± 0.0009), measured
+  in-sample: a lead to recheck on 2026's live prices, not a finding.
+
+So the "not market-tested" college legs on the Parlays page (the model alone) are the weakest
+number available. College props should come from live book prices: two-sided lines at the books'
+no-vig chance, ladders through a college reading, anytime TD at about a 17.5% margin.
