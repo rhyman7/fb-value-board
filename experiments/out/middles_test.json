@@ -1,0 +1,366 @@
+{
+ "nfl open spread": {
+  "gap 0.5+": {
+   "n": 222,
+   "games": 222,
+   "hit_rate": 0.0135,
+   "expected_per_pair": -0.0672,
+   "realized_per_pair": -0.0577,
+   "realized_se": 0.0189,
+   "avg_gap": 0.7
+  },
+  "gap 1.0+": {
+   "n": 72,
+   "games": 72,
+   "hit_rate": 0.0417,
+   "expected_per_pair": -0.0495,
+   "realized_per_pair": -0.0363,
+   "realized_se": 0.0442,
+   "avg_gap": 1.12
+  },
+  "gap 1.5+": {
+   "n": 7,
+   "games": 7,
+   "hit_rate": 0.1429,
+   "expected_per_pair": -0.0589,
+   "realized_per_pair": 0.1491,
+   "realized_se": 0.2617,
+   "avg_gap": 2.21
+  },
+  "gap 2.0+": {
+   "n": 4,
+   "games": 4,
+   "hit_rate": 0.25,
+   "expected_per_pair": -0.0662,
+   "realized_per_pair": 0.3323,
+   "realized_se": 0.4618,
+   "avg_gap": 2.75
+  },
+  "gap 3.0+": {
+   "n": 2,
+   "games": 2,
+   "hit_rate": 0.5,
+   "expected_per_pair": -0.0731,
+   "realized_per_pair": 0.7752,
+   "realized_se": 0.9418,
+   "avg_gap": 3.0
+  },
+  "across 3 or 7": {
+   "n": 0
+  }
+ },
+ "nfl open total": {
+  "gap 0.5+": {
+   "n": 239,
+   "games": 239,
+   "hit_rate": 0.0042,
+   "expected_per_pair": -0.0679,
+   "realized_per_pair": -0.0929,
+   "realized_se": 0.01,
+   "avg_gap": 0.76
+  },
+  "gap 1.0+": {
+   "n": 122,
+   "games": 122,
+   "hit_rate": 0.0082,
+   "expected_per_pair": -0.0611,
+   "realized_per_pair": -0.0885,
+   "realized_se": 0.0176,
+   "avg_gap": 1.02
+  },
+  "gap 1.5+": {
+   "n": 3,
+   "games": 3,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0301,
+   "realized_per_pair": 0.2292,
+   "realized_se": 0.3202,
+   "avg_gap": 1.67
+  },
+  "gap 2.0+": {
+   "n": 1,
+   "games": 1,
+   "hit_rate": 0.0,
+   "expected_per_pair": NaN,
+   "realized_per_pair": -0.0909,
+   "realized_se": NaN,
+   "avg_gap": 2.0
+  },
+  "gap 3.0+": {
+   "n": 0
+  }
+ },
+ "nfl close spread": {
+  "gap 0.5+": {
+   "n": 199,
+   "games": 199,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.075,
+   "realized_per_pair": -0.1093,
+   "realized_se": 0.0101,
+   "avg_gap": 0.68
+  },
+  "gap 1.0+": {
+   "n": 47,
+   "games": 47,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0668,
+   "realized_per_pair": -0.1365,
+   "realized_se": 0.0042,
+   "avg_gap": 1.24
+  },
+  "gap 1.5+": {
+   "n": 6,
+   "games": 6,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.092,
+   "realized_per_pair": -0.1697,
+   "realized_se": 0.0082,
+   "avg_gap": 2.92
+  },
+  "gap 2.0+": {
+   "n": 6,
+   "games": 6,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.092,
+   "realized_per_pair": -0.1697,
+   "realized_se": 0.0082,
+   "avg_gap": 2.92
+  },
+  "gap 3.0+": {
+   "n": 5,
+   "games": 5,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0922,
+   "realized_per_pair": -0.1776,
+   "realized_se": 0.0027,
+   "avg_gap": 3.0
+  },
+  "across 3 or 7": {
+   "n": 0
+  }
+ },
+ "nfl close total": {
+  "gap 0.5+": {
+   "n": 198,
+   "games": 198,
+   "hit_rate": 0.0051,
+   "expected_per_pair": -0.0735,
+   "realized_per_pair": -0.0779,
+   "realized_se": 0.0144,
+   "avg_gap": 0.73
+  },
+  "gap 1.0+": {
+   "n": 91,
+   "games": 91,
+   "hit_rate": 0.011,
+   "expected_per_pair": -0.0683,
+   "realized_per_pair": -0.1007,
+   "realized_se": 0.0205,
+   "avg_gap": 1.0
+  },
+  "gap 1.5+": {
+   "n": 0
+  },
+  "gap 2.0+": {
+   "n": 0
+  },
+  "gap 3.0+": {
+   "n": 0
+  }
+ },
+ "cfb open spread": {
+  "gap 0.5+": {
+   "n": 781,
+   "games": 781,
+   "hit_rate": 0.0051,
+   "expected_per_pair": -0.0698,
+   "realized_per_pair": -0.0676,
+   "realized_se": 0.0081,
+   "avg_gap": 0.66
+  },
+  "gap 1.0+": {
+   "n": 221,
+   "games": 221,
+   "hit_rate": 0.0181,
+   "expected_per_pair": -0.0586,
+   "realized_per_pair": -0.0731,
+   "realized_se": 0.0178,
+   "avg_gap": 1.08
+  },
+  "gap 1.5+": {
+   "n": 16,
+   "games": 16,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0505,
+   "realized_per_pair": -0.0621,
+   "realized_se": 0.0624,
+   "avg_gap": 2.06
+  },
+  "gap 2.0+": {
+   "n": 8,
+   "games": 8,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0531,
+   "realized_per_pair": -0.0124,
+   "realized_se": 0.1262,
+   "avg_gap": 2.62
+  },
+  "gap 3.0+": {
+   "n": 3,
+   "games": 3,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0532,
+   "realized_per_pair": -0.1421,
+   "realized_se": 0.018,
+   "avg_gap": 3.0
+  },
+  "across 3 or 7": {
+   "n": 1,
+   "games": 1,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0719,
+   "realized_per_pair": -0.1803,
+   "realized_se": NaN,
+   "avg_gap": 1.0
+  }
+ },
+ "cfb open total": {
+  "gap 0.5+": {
+   "n": 692,
+   "games": 692,
+   "hit_rate": 0.0072,
+   "expected_per_pair": -0.0666,
+   "realized_per_pair": -0.08,
+   "realized_se": 0.0072,
+   "avg_gap": 0.76
+  },
+  "gap 1.0+": {
+   "n": 341,
+   "games": 341,
+   "hit_rate": 0.0147,
+   "expected_per_pair": -0.0608,
+   "realized_per_pair": -0.0826,
+   "realized_se": 0.0124,
+   "avg_gap": 1.02
+  },
+  "gap 1.5+": {
+   "n": 10,
+   "games": 10,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0371,
+   "realized_per_pair": -0.1287,
+   "realized_se": 0.0047,
+   "avg_gap": 1.75
+  },
+  "gap 2.0+": {
+   "n": 5,
+   "games": 5,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0384,
+   "realized_per_pair": -0.1349,
+   "realized_se": 0.0044,
+   "avg_gap": 2.0
+  },
+  "gap 3.0+": {
+   "n": 0
+  }
+ },
+ "cfb close spread": {
+  "gap 0.5+": {
+   "n": 779,
+   "games": 779,
+   "hit_rate": 0.0128,
+   "expected_per_pair": -0.0762,
+   "realized_per_pair": -0.049,
+   "realized_se": 0.0105,
+   "avg_gap": 0.65
+  },
+  "gap 1.0+": {
+   "n": 176,
+   "games": 176,
+   "hit_rate": 0.0568,
+   "expected_per_pair": -0.0614,
+   "realized_per_pair": -0.0025,
+   "realized_se": 0.0337,
+   "avg_gap": 1.16
+  },
+  "gap 1.5+": {
+   "n": 21,
+   "games": 21,
+   "hit_rate": 0.0952,
+   "expected_per_pair": -0.0386,
+   "realized_per_pair": 0.141,
+   "realized_se": 0.1334,
+   "avg_gap": 2.33
+  },
+  "gap 2.0+": {
+   "n": 15,
+   "games": 15,
+   "hit_rate": 0.0667,
+   "expected_per_pair": -0.0414,
+   "realized_per_pair": 0.1142,
+   "realized_se": 0.146,
+   "avg_gap": 2.67
+  },
+  "gap 3.0+": {
+   "n": 7,
+   "games": 7,
+   "hit_rate": 0.1429,
+   "expected_per_pair": -0.0326,
+   "realized_per_pair": 0.1078,
+   "realized_se": 0.2683,
+   "avg_gap": 3.0
+  },
+  "across 3 or 7": {
+   "n": 1,
+   "games": 1,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0911,
+   "realized_per_pair": -0.2,
+   "realized_se": NaN,
+   "avg_gap": 1.0
+  }
+ },
+ "cfb close total": {
+  "gap 0.5+": {
+   "n": 660,
+   "games": 660,
+   "hit_rate": 0.0106,
+   "expected_per_pair": -0.0733,
+   "realized_per_pair": -0.0604,
+   "realized_se": 0.0099,
+   "avg_gap": 0.72
+  },
+  "gap 1.0+": {
+   "n": 282,
+   "games": 282,
+   "hit_rate": 0.0248,
+   "expected_per_pair": -0.066,
+   "realized_per_pair": -0.0694,
+   "realized_se": 0.0175,
+   "avg_gap": 1.01
+  },
+  "gap 1.5+": {
+   "n": 6,
+   "games": 6,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0468,
+   "realized_per_pair": -0.1017,
+   "realized_se": 0.0034,
+   "avg_gap": 1.67
+  },
+  "gap 2.0+": {
+   "n": 2,
+   "games": 2,
+   "hit_rate": 0.0,
+   "expected_per_pair": -0.0315,
+   "realized_per_pair": -0.1071,
+   "realized_se": 0.0,
+   "avg_gap": 2.0
+  },
+  "gap 3.0+": {
+   "n": 0
+  }
+ }
+}
