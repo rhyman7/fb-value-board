@@ -1219,3 +1219,34 @@ as profit**: 106 bets is far too few (the returns are 0.5 to 1.2 standard errors
 run uses news from later in the week that the opener did not have. Like the opening spreads, this
 belongs in the live log (the board already records each game's opening total) before anything
 changes on the board.
+
+## Blending with nfelo's model (Nov 2, 2026): passes on paper, not trusted
+
+nfelo publishes, per game since 2009, its Elo difference at the opener (team Elo plus home field,
+bye, divisional, surface, time-zone and quarterback adjustments, regressed part-way to the
+market). `python experiments/nfelo_blend_test.py` (results in `experiments/out/nfelo_blend_test.json`)
+blends it (nfelo_dif_open / 25, nfelo's points conversion) with the board's early run, weight
+chosen on 2014-2018, graded as the opening spreads are (2,681 games, Monday games left out). Rule,
+set before running: a lead if the blend lowers the holdout miss by 2+ paired standard errors and
+its 2+ opener bets return more than ours.
+
+| Holdout, 2019 on | Average miss | 2+ off the opener: record, return | Line moved toward it |
+|---|---|---|---|
+| Board's early run | 10.12 | 327-272-16, +4.1% ± 3.8% | +0.55 |
+| nfelo | 9.93 | 110-78-3, +11.6% ± 6.8% | +1.53 |
+| Blend (95% nfelo, chosen 2014-18) | 9.93 (−0.19 ± 0.05 vs ours) | 120-84-3, +12.2% ± 6.5% | +1.51 |
+| Opening spread | 9.96 | | |
+
+It passes the rule, and is **not trusted**, for three reasons found on checking:
+1. **nfelo knows the starting quarterback.** Its QB adjustment uses who actually started, which at
+   the opener is unknown when a team changes starters during the week. In those games nfelo
+   misses by 10.27 against the opener's 10.42; in the 2,085 games with no change it misses 9.83
+   against 9.82, no better than the opener. The 1.5-point line moves toward nfelo are mostly
+   that news arriving.
+2. **nfelo is regressed toward the opening line**, so beating our model's miss is largely the
+   market beating it (our early run misses 9.93 in no-change games, the opener 9.82).
+3. **In-sample:** nfelo's file is rebuilt with settings tuned on these same seasons.
+
+What is left, games with no quarterback change: nfelo 2+ off the opener 65-47-2, +10.6% ± 8.8%
+(1.2 standard errors), the line moving 1.1 points toward it. Worth a clean check, which only a
+forward record can give: save nfelo's numbers each week before the games, as published.
