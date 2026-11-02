@@ -1270,3 +1270,25 @@ standard errors at the close, or at the opener with the line moving toward it.
 the opener, and its bets are about break-even: strong in 2021-2022 (+19% and +16% at the opener),
 negative in 2024-2025. The 2019-on result from its rebuilt file (+12%) was mostly knowing the
 quarterback who started. The weekly save continues as a cheap record; the blend is not pursued.
+
+## Pass rate over expected (Nov 2, 2026): no for totals and pass attempts; tiny gain on carries
+
+PROE is how often a team passes compared with what down, distance, field position, score and
+clock say an average team would (nflfastR's xpass); nfelo shows it, the board did not use it.
+Per team-game in neutral situations (downs 1-3, win probability 0.20-0.80, more than two minutes
+left in the half), 2012 on, rated as of each game like the volume ratings (recent games weighted,
+last season at half, shrunk by 4 games): each offense's PROE and each defense's PROE allowed.
+`python experiments/proe_test.py <pbp dir>` (results in `experiments/out/proe_test.json`). Rule,
+set before running: lower miss on 2014-2018 and on 2019 on, the holdout by 2+ standard errors.
+
+| Added | Tuning (2014-18) | Holdout (2019 on) | Kept |
+|---|---|---|---|
+| Team pass attempts (volume model; miss 6.18) | −0.027 ± 0.010 | −0.006 ± 0.008 | no |
+| Team carries (miss 5.59) | −0.003 ± 0.007 | −0.015 ± 0.006 | passes |
+| Game totals (s_proe; miss 10.47) | −0.003 ± 0.016 | +0.018 ± 0.008 worse | no |
+
+**Little here.** A pass-happy offense does not score more than its efficiency ratings already say,
+and the volume model's recent pass attempts already carry the tendency. The carries gain passes
+the rule but is 0.015 carries on a 5.6-carry miss (0.3%), on the older chain projections; the
+board shows the New projections for backs' carries, so it is not applied without a recheck there,
+which at this size is not worth it.
