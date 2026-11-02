@@ -1,0 +1,68 @@
+{
+ "new_projections": {
+  "rec_yds": {
+   "b_base": 0.117,
+   "coefs": {
+    "WR1": [
+     0.172,
+     -0.1
+    ],
+    "WR2": [
+     0.59,
+     -0.29
+    ]
+   },
+   "n": 12969,
+   "base_mae": 18.665,
+   "change": 0.0686,
+   "se": 0.0089,
+   "change_WR1": 0.0677,
+   "change_WR2": 0.0688,
+   "passes": false
+  },
+  "receptions": {
+   "b_base": 0.154,
+   "coefs": {
+    "WR1": [
+     0.326,
+     -0.352
+    ],
+    "WR2": [
+     0.796,
+     -0.446
+    ]
+   },
+   "n": 12969,
+   "base_mae": 1.263,
+   "change": 0.0037,
+   "se": 0.0007,
+   "change_WR1": 0.0026,
+   "change_WR2": 0.0039,
+   "passes": false
+  }
+ },
+ "vs_books_2025": {
+  "rec_yds": {
+   "n_2025": 2022,
+   "games_2025": 257,
+   "s_base": {
+    "c": 1.693,
+    "brier_minus_book": -0.000431,
+    "se": 0.000376
+   },
+   "s_split": {
+    "c": 1.956,
+    "brier_minus_book": -0.000804,
+    "se": 0.000672
+   },
+   "split_minus_base": {
+    "brier": -0.000373,
+    "se": 0.000434
+   },
+   "no_worse_than_base": true
+  },
+  "receptions": {
+   "note": "not scored: the priced frames have no 2023-2024 receptions lines to fit c on"
+  }
+ }
+}

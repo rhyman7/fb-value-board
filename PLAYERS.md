@@ -269,3 +269,52 @@ WR versions +0.0008 to +0.0013 worse. The books already price coaching changes a
 
 Not applied: gains of a few hundredths of a yard aren't worth the extra inputs, and they don't
 move any prop against the market.
+
+### Top receiver against the rest: a shadow-corner proxy (Nov 2, 2026)
+
+No coverage charting is public, so cornerback-by-receiver matchups can't be modelled directly.
+The proxy: label each team's wide receiver with the highest projected receiving yards its WR1 and
+the rest WR2+, and build the defense-against-position rating (nflmodel/dvp.py) separately for
+each. An elite corner who follows the WR1 should make a defense's WR1 rating lower than its WR2+
+rating, consistently. `python experiments/wr1_matchup_test.py` (results in
+`experiments/out/wr1_matchup_test.json`), chain projections, tuning 2013-2018, holdout 2019 on.
+
+**Is it a stable trait?** Across 417 defense-seasons with 8+ games, odd weeks against even weeks:
+how much a defense held WR1s below projection correlates −0.02 between the halves (none), the WR2+
+version 0.20, and the WR1-minus-WR2+ gap 0.08. A defense's effect on the other team's top
+receiver is not repeatable; its effect on the secondary receivers is. Denver: WR1s at 99% of
+projection in 2023, 90% in 2024, 47% in 2025, 65% in 2026 so far (WR2+ 68%): a strong pass
+defense overall, not a steady WR1-specific effect.
+
+**Does it improve projections?** Receiving yards, average miss 19.82 on the holdout:
+
+| Change | Tuning | Holdout |
+|---|---|---|
+| The board's single WR rating, applied at its own strength for WR1 and for WR2+ (b 0.10 / 0.48 instead of 0.27) plus each role's own rating | −0.054 ± 0.006 | −0.059 ± 0.005 |
+| of which the role's own rating (over the split strength alone) | −0.015 ± 0.002 | −0.020 ± 0.002 |
+| ... for WR1s | +0.002 | +0.001 |
+
+It passes the projection rule (receptions too: −0.0013 ± 0.0003), but the gain is in the WR2+
+rows: matchups move secondary receivers about four to five times as much as WR1s, whose
+projection barely depends on the defense. The WR1 rows get slightly worse (+0.05 yards), so
+nothing here supports cutting a top receiver for a shadow corner. Size: 0.06 yards on a 19.8-yard
+miss (0.3%). Not applied: the board shows the New projections for WR receiving (players_ml.ADOPT),
+so it would need re-checking on those and against the books' 2025 lines first, where the
+position rating itself tied the books.
+
+**Recheck where it would be used (Nov 2, 2026): not applied.** `python experiments/wr1_split_recheck.py`
+(results in `experiments/out/wr1_split_recheck.json`). Rule, set before running: on the board
+only if it lowers the miss on the New projections (the ones shown for wide receivers; fitted
+2019-2021, scored 2022 on) by more than 2 standard errors, and is no worse than the current WR
+rating against the books' 2025 lines.
+
+| Check | Receiving yards | Receptions |
+|---|---|---|
+| New projections, 2022 on (miss 18.67 yards / 1.263) | **+0.069 ± 0.009 worse** (WR1 +0.068, WR2+ +0.069) | **+0.0037 ± 0.0007 worse** |
+| Against the books, 2025 Brier, split minus current WR rating | −0.0004 ± 0.0004 (no difference) | not scored (no 2023-24 lines to fit on) |
+
+The split fails the first check. On the New projections it makes both WR1s and WR2+ worse: those
+projections already carry each receiver's role and usage (target and route share, roles.features),
+so the role split repeats what they know and the extra coefficients fit noise (the role ratings
+come out negative). The gain was real only on the older chain projections, which lack those role
+inputs. The board keeps its single WR rating.
