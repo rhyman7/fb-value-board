@@ -1292,3 +1292,23 @@ and the volume model's recent pass attempts already carry the tendency. The carr
 the rule but is 0.015 carries on a 5.6-carry miss (0.3%), on the older chain projections; the
 board shows the New projections for backs' carries, so it is not applied without a recheck there,
 which at this size is not worth it.
+
+## nfelo's WEPA, weighted EPA (Nov 2, 2026): no
+
+WEPA (github.com/greerreNFL/wepa) reweights each play's EPA by its kind (turnovers in part,
+special teams at a learned weight, defensive plays boosted), refitted each season on earlier
+seasons only; its point-in-time file gives every team's WEPA in every game since 2000 with no
+look-ahead. Each team-game's offensive WEPA was added to the board's engine as one more rated
+metric (opponent-adjusted, decayed, one observation per game), ridge chosen on the tuning
+seasons. `python experiments/wepa_test.py` (results in `experiments/out/wepa_test.json`). Rule as
+usual: lower miss on tuning and holdout, the holdout by 2+ paired standard errors.
+
+| Change | Tuning (before 2019) | Holdout (2019 on) |
+|---|---|---|
+| Margin + WEPA rating | +0.002 ± 0.003 | +0.001 ± 0.004 |
+| Margin, points rating swapped for WEPA | +0.036 ± 0.015 | +0.021 ± 0.016 |
+| Total + WEPA rating | 0.000 ± 0.005 | −0.004 ± 0.006 |
+
+**Nothing here, and not a near-miss.** WEPA adds nothing to the board's pass, rush, success-rate,
+points and market ratings, and is a worse stand-in for the points rating, matching the earlier
+turnover-free and special-teams results.
