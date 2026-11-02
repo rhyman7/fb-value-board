@@ -242,3 +242,30 @@ holdout. For carries "vs usual" in place of the raw count passes the rule by a h
 under a hundredth of a carry per team-game (5.586 → 5.580), too small to change any projection.
 Defenses' tendencies to face more or fewer passes are mostly the offenses they meet and the score:
 the raw count, the team's own averages and the projected margin already carry what there is.
+
+### Coaching changes and playing surface on the player projections (Nov 2, 2026): not applied
+
+Both were rejected for the game models (FEATURES.md); this checks the props side.
+`python experiments/props_context_test.py` then `python experiments/props_context_books.py`
+(results in `experiments/out/props_context_test.json`, `props_context_books.json`). Flags per
+player-game: new head coach since last season (all season, and weeks 1-4), mid-season coaching
+change, game on turf, on turf outdoors. Each acts on a projection as a shift (x exp(b x flag)) or a
+pull toward the group average, fitted per stat and position on earlier seasons; scored on the New
+projections for the stats the board shows them for (2022 on), the chain projections otherwise
+(2019 on). Rule, set before running: 2+ standard errors better on the scored seasons, no worse on
+the fitted ones; then checked against the books' 2025 lines.
+
+**Projections:** 24 of 100 stat-by-flag versions pass, all shrinking projections a little (players
+on new-coach teams and in turf games came in slightly under their projections). All are tiny:
+the largest are backs' receiving yards −0.03 yards on an 8.6-yard miss (new coach; turf), tight
+ends' receiving yards −0.025 on 12.4 (turf outdoors), backs' rushing yards −0.012 on 16.0 (new
+coach), quarterbacks' passing yards −0.18 ± 0.08 on 68.9 (turf). With 100 versions tried, a few
+of the borderline ones are chance.
+
+**Against the books (2025 main lines):** none helps. Brier against the book, for the ones with
+lines to fit on: QB passing yards / turf −0.0001 ± 0.0014; RB receiving / new coach −0.0007 ±
+0.0009; RB rushing / new coach 0.0000 ± 0.0008; RB receiving / turf +0.0008 ± 0.0005 worse; TE and
+WR versions +0.0008 to +0.0013 worse. The books already price coaching changes and surface.
+
+Not applied: gains of a few hundredths of a yard aren't worth the extra inputs, and they don't
+move any prop against the market.
