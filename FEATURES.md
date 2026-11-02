@@ -1338,3 +1338,27 @@ pair pays two vigs. Expected value is negative at every gap, for every league an
 realized returns agree. Gaps that straddle 3 or 7 essentially never happen (none in the NFL, one in
 college). Middles need a wider book selection or a line that moves after you bet (the opener, then
 the other side later), not two books at the same moment.
+
+## Niche props: probe and the tackle stat-crew check (Nov 2, 2026)
+
+**What the books post** (probe, 320 credits: four 2025 week-1 games, the board's pricing snapshot
+and the close, via the Prop price backfill Action):
+
+| Market | DraftKings | FanDuel |
+|---|---|---|
+| Tackles + assists | ~8-9 players a game, both snapshots | none |
+| Kicking points, field goals | 2 kickers a game, close only | none |
+| Sacks | a few, close only | ~6 a game |
+| Longest reception | ~10 a game | ~8 a game |
+| Defensive interceptions | none | none |
+
+**Tackles and the home stat crew.** Tackles are recorded by each home team's stat crew.
+`python experiments/tackle_crew_test.py <stats dir> <pbp dir>` (nflverse weekly player stats and
+play-by-play, 2016-2025): tackles per opponent play credited to *visiting* defenses in each stadium
+(so the crew is what stays the same). The crew effect is real but modest: a stadium's factor in one
+season correlates 0.42 with the next, and averaged over 2023-2025 runs from 4% below the league
+rate (LAC) to 5% above it (NYG). It does **not** help project a player's tackles: scaling his
+season average by the crew (prior two seasons, shrunk) made the average miss slightly worse at every
+strength (+0.0003 ± 0.0006, +0.002 ± 0.001, +0.006 ± 0.002 on a 2.0-tackle miss, 2018-2025).
+Rule, set before running: worth pricing tackle props on only if it helped by 2+ standard errors.
+It does not, so no tackle-price backfill was bought.
