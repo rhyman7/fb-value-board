@@ -75,6 +75,15 @@ PULL_MAX = 0.03       # the model moves a prop chance at most 3 points off the b
 CONFLICT = 0.25       # model and books more than 25 points apart: different news (injury, role); left out
 MOVE_LO, MOVE_HI = 0.55, 0.95     # moved prop lines kept between these chances
 MOVE_MAX = 6          # at most this many moved lines per player, stat and side
+# College props priced off the books (experiments/out/cfb_props_real_lines.json, Nov 1, 2026: on
+# 2025's lines the model alone was worse than the books and the NFL nudge didn't clear 2 SE, so
+# there is no model nudge): two-sided lines at the books' no-vig chance; over-only rungs read
+# through how 2025's college rungs at each raw implied chance cleared (the NFL reading ran 1-3
+# points high for college; to be rechecked on 2026's rungs); anytime TD at a 17.5% margin (the
+# books' best-fitting margin on 2025's college TD prices; the NFL's 10% read them too high).
+CFB_RUNG_CAL = [(0.0, 0.0), (0.05, 0.0066), (0.1, 0.0635), (0.2, 0.1733), (0.3, 0.2513), (0.4, 0.3714), (0.5, 0.4437),
+                (0.6, 0.521), (0.7, 0.6094), (0.8, 0.7312), (0.9, 0.8407), (0.95, 0.8863), (1.0, 0.9237)]
+CFB_TD_MARGIN = 0.175
 CFB_ROLES = ("QB", "R1", "R2", "RB1")
 CFB_MOVE_MAX = 3
 CFB_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions", "anytime_td")
@@ -583,6 +592,97 @@ def cfb_prop_legs(payload: dict, model, roles: dict, now: dt.datetime) -> list[d
     return legs
 
 
+def _cfb_games(payload: dict, snaps: pd.DataFrame) -> dict:
+    """event_id -> board game id: the two teams' names (either way round), kickoff within a day."""
+    from . import market as M
+    look = {}
+    for g in payload["slate"]["games"]:
+        for nm in (g.get("home_name"), g.get("away_name")):
+            if nm:
+                look.setdefault(M._norm(nm), []).append(g)
+    alias = {M._norm(k): M._norm(v) for k, v in M.CFB_ALIASES.items()}
+    alias.update({v: k for k, v in list(alias.items())})
+    out = {}
+    for e in snaps.drop_duplicates("event_id").itertuples():
+        ko = pd.Timestamp(e.commence)
+        hn, an = M._norm(e.home_name), M._norm(e.away_name)
+        cand = [g for nm in (hn, alias.get(hn, hn)) for g in look.get(nm, [])]
+        cand = [g for g in cand if M._norm(g.get("away_name") or "") in (an, alias.get(an, an))
+                or M._norm(g.get("home_name") or "") in (an, alias.get(an, an))]
+        cand = [g for g in cand if abs(pd.Timestamp(g["kickoff"]) - ko) <= pd.Timedelta(days=1)]
+        if cand:
+            out[e.event_id] = cand[0]["id"]
+    return out
+
+
+def cfb_book_legs(payload: dict, roles: dict, now: dt.datetime, snaps: pd.DataFrame) -> list[dict]:
+    """College props at the books' own prices (CFB_RUNG_CAL, CFB_TD_MARGIN above): only the lines
+    DraftKings and FanDuel post, no model nudge, no moved lines."""
+    from . import propmarket as PM
+    if snaps is None or snaps.empty:
+        return []
+    gid = _cfb_games(payload, snaps)
+    s = snaps[snaps["event_id"].isin(gid)].copy()
+    if s.empty:
+        return []
+    s["g"] = s["event_id"].map(gid)
+    s["side"] = s["side"].str.lower().replace({"yes": "over", "no": "under"})
+    s["stat"] = s["market"].map(PM.MARKET_STAT)
+    s["alt"] = s["market"].str.endswith("_alternate")
+    s["nn"] = s["player"].map(PM.norm_name)
+    s.loc[s["market"] == "player_anytime_td", "line"] = 0.5
+    ko = {g["id"]: g["kickoff"] for g in payload["slate"]["games"]}
+    who = {}
+    for p in (payload.get("players") or {}).get("players") or []:
+        who.setdefault((p["game"], PM.norm_name(p["name"])), []).append(p)
+    legs, seen = [], set()
+
+    def leg(p, g, stat, L, side, w, prices, tags):
+        n = p["name"]
+        lab = (f"{n} anytime TD" if stat == "anytime_td" else f"{n} {int(L + 0.5)}+ {STAT_LABEL.get(stat, stat)}" if "alt rung" in tags
+               else f"{n} {side} {L:g} {STAT_LABEL.get(stat, stat)}")
+        return {"lg": "cfb", "g": g, "ko": ko[g], "m": "prop", "pl": n, "tm": p["team"], "pos": p.get("pos"), "s": stat, "lab": lab,
+                "L": float(L), "d": side, "w": _r(w), "wv": _r(w), "h": 0.0, "pk": _r(w), "bk": prices, "src": "books", "t": tags,
+                "c": {"k": "prop", "p": str(p["id"]), "tm": p["team"], "r": roles.get((g, p["id"])), "s": stat, "dir": side}}
+
+    for (g, nn, stat, L, alt), x in s.dropna(subset=["stat"]).groupby(["g", "nn", "stat", "line", "alt"]):
+        ps = who.get((g, nn))
+        if not ps or len(ps) > 1 or not _upcoming({"kickoff": ko[g]}, now):
+            continue            # a name the board doesn't know (or knows twice): left out
+        p = ps[0]
+        by = {b: x[x["book"] == b] for b in BOOKS if (x["book"] == b).any()}
+        price = lambda d, side: (float(d.loc[d["side"] == side, "price"].iloc[-1]) if (d["side"] == side).any() else None)
+        if stat == "anytime_td":
+            q = {BOOKS[b]: price(d, "over") for b, d in by.items()}
+            q = {k: v for k, v in q.items() if v is not None}
+            if q:
+                w = float(np.mean([O.one_sided_fair(v, CFB_TD_MARGIN, "power") for v in q.values()]))
+                legs.append(leg(p, g, stat, 0.5, "over", w, {k: int(v) for k, v in q.items()}, []))
+            continue
+        if alt:
+            q = {BOOKS[b]: price(d, "over") for b, d in by.items()}
+            q = {k: v for k, v in q.items() if v is not None}
+            key = (g, p["id"], stat, "over", float(L))
+            if q and key not in seen:
+                seen.add(key)
+                w = float(np.mean([np.interp(O.implied_prob(v), *zip(*CFB_RUNG_CAL)) for v in q.values()]))
+                legs.append(leg(p, g, stat, L, "over", w, {k: int(v) for k, v in q.items()}, ["alt rung"]))
+            continue
+        nv, q = [], {"over": {}, "under": {}}
+        for b, d in by.items():
+            ov, un = price(d, "over"), price(d, "under")
+            if ov is not None and un is not None:
+                nv.append(float(O.no_vig_power(ov, un)[0]))
+                q["over"][BOOKS[b]], q["under"][BOOKS[b]] = int(ov), int(un)
+        if not nv:
+            continue
+        o = float(np.mean(nv))
+        for side, w in (("over", o), ("under", 1 - o)):
+            seen.add((g, p["id"], stat, side, float(L)))
+            legs.append(leg(p, g, stat, L, side, w, q[side], []))
+    return monotone(legs)
+
+
 def _cfb_leg(row, stat, L, side, w, ko, roles):
     n = row.get("name", row["player_id"])
     if stat == "anytime_td":
@@ -668,8 +768,17 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
             tag_matchups(legs, {k: {"home": v["home"], "away": v["away"]} for k, v in gmeta.items()}, defense_table(int(payload["meta"]["season"])))
         except Exception as exc:
             print(f"  parlays: matchup tags skipped ({exc})")
-    if league == "cfb" and prop_model is not None:
-        legs += [l for l in cfb_prop_legs(payload, prop_model, roles, now) if l["g"] in gmeta]
+    if league == "cfb":
+        try:                       # the books' prices where they post a player and stat (nflmodel/cfbprops.py)
+            from . import cfbprops
+            priced = cfb_book_legs(payload, roles, now, cfbprops.load(int((payload.get("meta") or {}).get("season") or now.year), now))
+        except Exception as exc:
+            print(f"  parlays: college prop prices skipped ({exc})")
+            priced = []
+        legs += [l for l in priced if l["g"] in gmeta]
+        have = {(l["g"], l["c"]["p"], l["s"]) for l in priced}
+        if prop_model is not None:  # the model alone, tagged, only where the books post nothing
+            legs += [l for l in cfb_prop_legs(payload, prop_model, roles, now) if l["g"] in gmeta and (l["g"], l["c"]["p"], l["s"]) not in have]
     try:
         share_tags(legs, players, (payload.get("players") or {}).get("teams"))
     except Exception as exc:

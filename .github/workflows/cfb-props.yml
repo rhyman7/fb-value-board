@@ -1,0 +1,65 @@
+name: College props
+
+# Live DraftKings and FanDuel college player props for the Parlays page (nflmodel/cfbprops.py),
+# priced off the books (parlays.cfb_book_legs). Up to 8 credits a game per snapshot, nothing for a
+# game with no props; about three snapshots a game, roughly 800-1,000 credits a week. The college
+# board's update (update-cfb.yml, 30 minutes later) rebuilds the Parlays page with them.
+
+on:
+  schedule:
+    - cron: "13 12 * 8-12,1 *"        # daily 12:13 UTC: games in the next 40 hours (day)
+    - cron: "13 16,20,23 * 8-12,1 6"   # Saturdays before each kickoff wave: games in the next 5 hours (kick)
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "day (next 40 hours) or kick (next 5 hours)"
+        default: "day"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  props:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        run: |
+          mode="${{ inputs.mode }}"
+          if [ -z "$mode" ]; then
+            if [ "${{ github.event.schedule }}" = "13 12 * 8-12,1 *" ]; then mode=day; else mode=kick; fi
+          fi
+          python -m nflmodel.cfbprops "$mode"
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/props/history_cfb_live data/props/api_usage.csv
+          git diff --cached --quiet || git commit -m "College prop prices"
+          # The usage log is append-only and another Action may have added rows since this
+          # run checked out: on a conflict there, keep both sides' rows.
+          if ! git pull --rebase origin main; then
+            # during the rebase HEAD is origin/main and REBASE_HEAD is this run's commit
+            git show HEAD:data/props/api_usage.csv > /tmp/usage.csv
+            git show REBASE_HEAD:data/props/api_usage.csv | tail -n +2 >> /tmp/usage.csv
+            awk '!seen[$0]++' /tmp/usage.csv > data/props/api_usage.csv
+            git add data/props/api_usage.csv
+            git diff --name-only --diff-filter=U | grep -q . && { echo "unexpected conflict outside the usage log"; exit 1; }
+            GIT_EDITOR=true git rebase --continue
+          fi
+          git push
