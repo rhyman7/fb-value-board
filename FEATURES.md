@@ -948,25 +948,26 @@ as it is, centred on the sharp book's own no-vig price.
 ## Rain and snow (Nov 1, 2026)
 
 `data/cache/weather_history.csv` (the **Weather history** Action, Open-Meteo's free archive)
-holds the rain (mm), snow (cm) and temperature during 2,187 of the 2,397 outdoor home games
-since 2014 (the rest are still being fetched); `python experiments/precip_test.py` (results in
-`experiments/out/precip_test.json`). Like the wind test, it uses the weather that fell, not a
-forecast, so it flatters both checks.
+holds the rain (mm), snow (cm) and temperature during 2,372 of the 2,397 outdoor home games
+since 2014; `python experiments/precip_test.py` (results in `experiments/out/precip_test.json`).
+Like the wind test, it uses the weather that fell, not a forecast, so it flatters both checks.
+(First run on 2,187 games; rerun on the complete history the same day, numbers below. The
+conclusions didn't change.)
 
 | Added to the total model | Tuning (to 2018) | Holdout (2019 on) | Kept by the rule |
 |---|---|---|---|
-| Rain, mm during the game | −0.0095 | −0.0101 | passes |
-| Snow, cm | +0.324 | +0.009 | no |
-| Wet (2+ mm of rain or any snow) | +0.004 | −0.027 | no |
+| Rain, mm during the game | −0.0079 | −0.0261 | passes |
+| Snow, cm | +0.369 | +0.008 | no |
+| Wet (2+ mm of rain or any snow) | +0.008 | −0.043 | no |
 
 | Unders at the closing total | Tuning | Holdout | Points under the line |
 |---|---|---|---|
-| Wet (2+ mm or snow) | 46-29, +17.1% | 75-53, +11.9% | −2.8 / −2.4 |
-| Rain 5+ mm | 9-6 | 29-17, +20.4% | −4.2 / −5.1 |
-| Snow | 14-8 | 19-17, +0.8% | −1.3 / −1.4 |
+| Wet (2+ mm or snow) | 51-33, +15.9% | 90-59, +15.3% | −2.7 / −2.4 |
+| Rain 5+ mm | 9-6 | 33-17, +26.0% | −4.2 / −5.5 |
+| Snow | 17-10 | 23-21, −0.2% | −1.7 / −0.5 |
 
 Rain helps the total model a little on both periods, and the closing total does not fully price
-heavy rain: wet-game unders went 121-82 (59.6%, about +14% ± 7%) over both periods. Snow is
+heavy rain: wet-game unders went 141-92 (60.5%, about +15% ± 6%) over both periods. Snow is
 already priced. **Not on the board yet**: the live board would need a precipitation forecast
 (the Open-Meteo forecast it already calls for wind carries one), and as with the wind under, the
 forecast version has to be logged and graded before it is trusted. Rain and wind overlap
