@@ -236,6 +236,11 @@ def main():
             print(f"  dashboard feed: {dashfeed.write('nfl')}")
         except Exception as exc:
             print(f"  dashboard feed skipped ({exc})")
+        try:                            # the TD tracker carries the new anytime-TD prices
+            from nflmodel import tdtracker
+            print(f"  TD tracker: {tdtracker.write()}")
+        except Exception as exc:
+            print(f"  TD tracker skipped ({exc})")
     if args.cmd != "backfill" and (log_it or not args.fixture):
         try:                            # each player's whole range (docs/props/outlook.json), no API
             from nflmodel import propoutlook

@@ -257,6 +257,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         dashfeed.write("nfl", out)
     except Exception as exc:
         print(f"  dashboard feed skipped ({exc})")
+    try:                                          # the report's TD scorer tracker (docs/feed/td_tracker_nfl.json)
+        from . import tdtracker
+        tdtracker.write(season)
+    except Exception as exc:
+        print(f"  TD tracker skipped ({exc})")
     say(f"Wrote {C.DOCS / 'data.json'} and {C.DOCS / 'index.html'}")
     return out
 

@@ -93,7 +93,7 @@ def main():
     t = pd.concat(rows, ignore_index=True)
     info = pd.read_csv(C.CACHE / f"player_info_{SEASON}.csv", dtype={"player_id": str})[["player_id", "name"]]
     t = t.merge(info, on="player_id", how="left")
-    cols = ["week", "rank", "name", "position", "team", "opp", "game_id", "chance", "source", "rebuilt", "scored"]
+    cols = ["week", "rank", "player_id", "name", "position", "team", "opp", "game_id", "chance", "source", "rebuilt", "scored"]
     t = t[cols].sort_values(["week", "rank"])
     OUT.mkdir(exist_ok=True)
     t.to_csv(OUT / "td_tracker_2026.csv", index=False)
