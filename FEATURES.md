@@ -1312,3 +1312,29 @@ usual: lower miss on tuning and holdout, the holdout by 2+ paired standard error
 **Nothing here, and not a near-miss.** WEPA adds nothing to the board's pass, rush, success-rate,
 points and market ratings, and is a worse stand-in for the points rating, matching the earlier
 turnover-free and special-teams results.
+
+## Middles between DraftKings and FanDuel (Nov 2, 2026): never worth it
+
+When the two books hang different numbers, betting the better side at each wins both if the result
+lands between them and otherwise pays the vig. `python experiments/middles_test.py` (results in
+`experiments/out/middles_test.json`, every opportunity in `middles_test.csv`), the saved 2024-2025
+backfill (Monday-noon "open" and last-before-kickoff "close" snapshots), per $1 on each side.
+Expected value uses Pinnacle's no-vig line at the same snapshot as the centre and how often past
+games landed on each integer result around their line (NFL through 2023, college 2014-2023), so
+key numbers count as often as they occur. Rule, set before running: worth flagging only if both
+expected and realized are above zero, the realized by 2 standard errors.
+
+| Gap between the books | NFL spreads (open / close) | NFL totals | College spreads | College totals |
+|---|---|---|---|---|
+| 0.5+ point: how often | 222 / 199 of ~570 games | 239 / 198 | 781 / 779 of ~1,540 | 692 / 660 |
+| 0.5+: expected / realized per pair | −6.7% / −5.8% (open) | −6.8% / −9.3% | −7.0% / −6.8% | −6.7% / −8.0% |
+| 1+ point: how often | 72 / 47 | 122 / 91 | 221 / 176 | 341 / 282 |
+| 1+: expected / realized | −5.0% / −3.6% (open) | −6.1% / −8.9% | −5.9% / −7.3% | −6.1% / −8.3% |
+| 1.5+ point: how often | 7 / 6 | 3 / 0 | 16 / 21 | 10 / 6 |
+
+**No.** The two books disagree on about a third of NFL games and half of college games, but almost
+always by half a point to a point, and a half-point middle lands about 1% of the time while each
+pair pays two vigs. Expected value is negative at every gap, for every league and market, and the
+realized returns agree. Gaps that straddle 3 or 7 essentially never happen (none in the NFL, one in
+college). Middles need a wider book selection or a line that moves after you bet (the opener, then
+the other side later), not two books at the same moment.
