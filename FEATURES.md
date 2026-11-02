@@ -1107,3 +1107,14 @@ one lead: college totals did better since 2021 with this-season-only scoring rat
 though not on 2017-2019. A guess worth testing on its own: the college points rating leans on last
 season too much for totals in the transfer-portal years. That needs its own test with a fresh
 split (choose on 2021-2023, check on 2024-2025), not a decision from this one.
+
+### Follow-up: college totals and last season's weight (Nov 2, 2026): not kept
+
+`python experiments/cfb_totals_carry_test.py` (results in `experiments/out/cfb_totals_carry_test.json`).
+Only the points rating feeding the college total model was rebuilt, with last season carried at
+0.55 (current), 0.40, 0.25, 0.10 or 0 and a 9- or 15-game half-life. Rule, set first, on a fresh
+split: choose on 2021-2023, keep only if it beats the current setting on 2024-2025 by 2 standard
+errors. Chosen: carry 0 (9-game half-life), 0.044 ± 0.016 better on 2021-2023; on 2024-2025 0.028 ±
+0.018 better (1.5 SE): **not kept**. Every lower carry did a little better since 2021 and made no
+difference on 2017-2019, so the direction is consistent, but the size is small (0.03 points on a
+12.6-point average miss). Recheck after 2026 with 2024-2026 as the check.
