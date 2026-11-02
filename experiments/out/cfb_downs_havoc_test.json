@@ -1,0 +1,181 @@
+{
+ "ridge_grid_tuning_margin_miss": {
+  "sdsr": {
+   "6.0": 12.4698,
+   "18.0": 12.4697,
+   "54.0": 12.4704
+  },
+  "pdsr": {
+   "6.0": 12.4673,
+   "18.0": 12.4673,
+   "54.0": 12.4667
+  },
+  "lyd": {
+   "6.0": 12.4649,
+   "18.0": 12.4653,
+   "54.0": 12.4651
+  },
+  "hav": {
+   "6.0": 12.4653,
+   "18.0": 12.4651,
+   "54.0": 12.4649
+  }
+ },
+ "ridge_chosen": {
+  "sdsr": 18.0,
+  "pdsr": 54.0,
+  "lyd": 6.0,
+  "hav": 54.0
+ },
+ "holdout_from": 2021,
+ "margin + d_sdsr": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.0091,
+   "se": 0.0044
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": -0.0027,
+   "se": 0.0016
+  },
+  "keep": false
+ },
+ "margin + d_pdsr": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.0061,
+   "se": 0.0048
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": -0.0004,
+   "se": 0.0005
+  },
+  "keep": false
+ },
+ "margin + d_lyd": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.0043,
+   "se": 0.0143
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": -0.0181,
+   "se": 0.0115
+  },
+  "keep": false
+ },
+ "margin + d_hav": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.0043,
+   "se": 0.0047
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": 0.006,
+   "se": 0.0057
+  },
+  "keep": false
+ },
+ "margin + all four": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.0174,
+   "se": 0.0146
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": -0.0131,
+   "se": 0.0116
+  },
+  "keep": false
+ },
+ "total + s_sdsr": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": -0.0018,
+   "se": 0.0025
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": 0.002,
+   "se": 0.0019
+  },
+  "keep": false
+ },
+ "total + s_pdsr": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": -0.0003,
+   "se": 0.0018
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": 0.0015,
+   "se": 0.0012
+  },
+  "keep": false
+ },
+ "total + s_lyd": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": -0.001,
+   "se": 0.0012
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": -0.0014,
+   "se": 0.0018
+  },
+  "keep": false
+ },
+ "total + s_hav": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": -0.0026,
+   "se": 0.0063
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": 0.0028,
+   "se": 0.0048
+  },
+  "keep": false
+ },
+ "total + all four": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": -0.0062,
+   "se": 0.0073
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": 0.0019,
+   "se": 0.0054
+  },
+  "keep": false
+ }
+}

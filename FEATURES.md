@@ -1118,3 +1118,72 @@ errors. Chosen: carry 0 (9-game half-life), 0.044 ± 0.016 better on 2021-2023; 
 0.018 better (1.5 SE): **not kept**. Every lower carry did a little better since 2021 and made no
 difference on 2017-2019, so the direction is consistent, but the size is small (0.03 points on a
 12.6-point average miss). Recheck after 2026 with 2024-2026 as the check.
+
+## Head-coaching changes (Nov 2, 2026): no, with one college lead
+
+ELWAY and SP+ adjust for coaching changes; the board does not. NFL coaches from nflverse's
+home_coach / away_coach; college from Wikipedia's FBS coaching-change tables, 2014-2025
+(`experiments/data/cfb_coach_changes.csv`, every firing, interim and hire with its date).
+Flags per team-game: **new** (a different head coach from the start of last season; about 21% of
+NFL and 16% of college team-games) and **mid** (the coach changed earlier this season; about 2%).
+Features: the new-coach difference all season and weeks 1-4 only, new coach times last season's
+average margin (negated: does a new coach's team drift to the middle more than the ratings allow),
+and the mid-season difference; for totals, the sums. `python experiments/coach_change_test.py`
+(results in `experiments/out/coach_change_test.json`). Rule, set before running: kept only if the
+average miss drops in tuning and holdout, the holdout by at least 2 paired standard errors.
+
+| Added | NFL tuning | NFL holdout (2019 on) | College tuning (2017-19) | College holdout (2021-25) |
+|---|---|---|---|---|
+| Margin + new coach | +0.003 ± 0.004 | +0.002 ± 0.002 | +0.013 ± 0.010 | +0.005 ± 0.006 |
+| Margin + new coach, weeks 1-4 | +0.002 ± 0.003 | −0.002 ± 0.002 | +0.002 ± 0.006 | −0.001 ± 0.001 |
+| Margin + new coach × last season's margin | +0.011 ± 0.008 | −0.005 ± 0.003 | +0.005 ± 0.006 | **−0.026 ± 0.009** |
+| Margin + mid-season change | 0.000 ± 0.005 | +0.002 ± 0.002 | −0.001 ± 0.003 | −0.010 ± 0.009 |
+| Total + new coach | 0.000 ± 0.017 | +0.009 ± 0.012 | +0.004 ± 0.004 | −0.001 ± 0.002 |
+| Total + mid-season change | +0.003 ± 0.004 | +0.003 ± 0.002 | +0.003 ± 0.004 | +0.002 ± 0.001 |
+
+**Nothing is kept.** A new coach by itself tells the model nothing the ratings and the market
+pull do not already carry, in either sport, and mid-season firings add nothing. The one lead is
+college: a new coach's team regressing toward the middle beat the holdout by 2.7 standard errors,
+but it was slightly worse on 2017-2019, so it fails the rule. It may be real for the transfer-portal
+era (rosters now turn over with the coach), or a holdout fluke; it is on the near-miss list for the
+2026 recheck and the January bundle test, not on the board.
+
+## Playing surface, grass vs turf (Nov 2, 2026): no
+
+nfelo adds a surface adjustment to home field when the visitors play at home on the other kind of
+surface. From nflverse's per-game `surface` (gaps filled from the same stadium's other games; 4
+games left unknown), each game is grass or turf, and each team's home surface is that of most of
+its home games that season. Visitors were off their home surface in 53% of non-neutral games, and
+44% of games were on turf. `python experiments/surface_test.py` (results in
+`experiments/out/surface_test.json`). Rule, set before running: kept only if the average miss
+drops in tuning and holdout, the holdout by at least 2 paired standard errors.
+
+| Added | Tuning | Holdout (2019 on) |
+|---|---|---|
+| Margin + visitors off their home surface | +0.005 ± 0.006 | +0.008 ± 0.007 |
+| Margin + split: turf team on grass / grass team on turf | −0.009 ± 0.012 | +0.004 ± 0.012 |
+| Total + game on turf | +0.025 ± 0.009 | +0.004 ± 0.003 |
+
+**Nothing here, and not a near-miss.** Playing away from their home surface makes no difference to
+visitors beyond ordinary home field, and turf adds nothing to totals beyond the indoor flag the
+model already has.
+
+## Turnover-free pass and rush ratings (Nov 2, 2026): no
+
+ELWAY backs turnovers out of its efficiency ratings as mostly random. The board's pass and rush
+ratings were rebuilt without turnover plays (NFL: interception or fumble lost; college: cfbfastR's
+turnover_vec), same plays and ridge otherwise, then added next to the originals and swapped in for
+them. `python experiments/turnover_free_test.py` (results in `experiments/out/turnover_free_test.json`;
+the college plays come from `cfb_downs_havoc_test.py`'s cache). Rule as usual: lower average miss
+in tuning and holdout, the holdout by 2 paired standard errors. Seasons through 2025.
+
+| Change | NFL tuning | NFL holdout (2019-25) | College tuning | College holdout (2021-25) |
+|---|---|---|---|---|
+| Margin, added | −0.004 ± 0.006 | +0.001 ± 0.009 | +0.003 ± 0.006 | −0.005 ± 0.006 |
+| Margin, swapped in | −0.010 ± 0.008 | −0.003 ± 0.005 | +0.003 ± 0.006 | −0.003 ± 0.004 |
+| Total, added | +0.003 ± 0.004 | −0.003 ± 0.002 | +0.001 ± 0.006 | 0.000 ± 0.003 |
+| Total, swapped in | +0.005 ± 0.005 | −0.002 ± 0.003 | +0.001 ± 0.010 | +0.003 ± 0.007 |
+
+**Nothing here, and not a near-miss.** With turnovers in or out, the ratings predict the same, in
+both sports. This agrees with the rejected fumble-luck test: once plays are clipped and the points
+and market ratings are in the model, turnover luck is not something the board is missing.
