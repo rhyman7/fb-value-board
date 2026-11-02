@@ -255,3 +255,31 @@ open (44-38, CLV −1.8% ± 1.1%) and 62 at the close (30-32, CLV +2.5% ± 0.7%)
 
 The consensus close the backtests use sits 0.40 points from Pinnacle's close on spreads and 0.42
 on totals, and differs on 33% of games.
+
+## Drive ratings, FEI / SP+ style (tested Nov 2, 2026: not kept)
+
+FEI rates college teams per drive (points against what the starting spot was worth) and SP+ has
+a "finishing drives" factor; the board rates per play and per game. Two new rated metrics from
+the same play-by-play, rated like the others (opponent-adjusted ridge, recency decay, last season
+at 0.55), weighted by drives or trips: **dve**, points per drive minus the 2014-2016 average for
+that starting spot, and **fin**, points per trip that reached the opponent's 40. Garbage-time
+drives, drives starting with under a minute left in a half, and drives that ran out the half
+without a score are dropped. About 10 drives and 5 trips per team-game.
+`python experiments/cfb_drive_test.py` (results in `experiments/out/cfb_drive_test.json`).
+
+Rule, set before running: ridge chosen on 2017-2019 from a three-value grid; kept only if the
+average miss drops in tuning and holdout, the holdout by at least 2 paired standard errors.
+
+| Added | Tuning (2017-19) | Holdout (2021-25) |
+|---|---|---|
+| Margin + drive value | −0.005 ± 0.009 | −0.004 ± 0.007 |
+| Margin + finishing | +0.003 ± 0.005 | 0.000 ± 0.003 |
+| Margin + both | −0.005 ± 0.009 | −0.005 ± 0.007 |
+| Total + drive value | −0.006 ± 0.013 | +0.002 ± 0.010 |
+| Total + finishing | +0.015 ± 0.011 | −0.001 ± 0.004 |
+| Margin, points rating swapped for drive value | +0.075 ± 0.030 | +0.032 ± 0.024 |
+
+**Nothing here.** Drive value moves the margin model by under a hundredth of a point, well inside
+its noise (0.6 standard errors on the holdout); finishing drives does nothing. The per-play
+ratings plus the points rating already carry what drives measure, and drive value is a worse
+stand-in for the points rating, not a better one. Too small to count as a near-miss.

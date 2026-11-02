@@ -1,0 +1,126 @@
+{
+ "ridge_grid_tuning_margin_miss": {
+  "dve": {
+   "4.0": 12.4559,
+   "12.0": 12.4562,
+   "36.0": 12.4575
+  },
+  "fin": {
+   "2.0": 12.4667,
+   "6.0": 12.465,
+   "18.0": 12.464
+  }
+ },
+ "ridge_chosen": {
+  "dve": 4.0,
+  "fin": 18.0
+ },
+ "holdout_from": 2021,
+ "drives_per_team_game": 10.23,
+ "trips_per_team_game": 4.86,
+ "margin + d_dve": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": -0.0047,
+   "se": 0.009
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": -0.0042,
+   "se": 0.0073
+  },
+  "keep": false
+ },
+ "margin + d_fin": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.0034,
+   "se": 0.0047
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": 0.0,
+   "se": 0.0029
+  },
+  "keep": false
+ },
+ "margin + both": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": -0.0045,
+   "se": 0.0091
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": -0.0045,
+   "se": 0.0073
+  },
+  "keep": false
+ },
+ "total + s_dve": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": -0.006,
+   "se": 0.0129
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": 0.002,
+   "se": 0.0104
+  },
+  "keep": false
+ },
+ "total + s_fin": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": 0.0154,
+   "se": 0.011
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": -0.0013,
+   "se": 0.0035
+  },
+  "keep": false
+ },
+ "total + both": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 13.4087,
+   "change": 0.0051,
+   "se": 0.0158
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.6873,
+   "change": 0.0026,
+   "se": 0.0103
+  },
+  "keep": false
+ },
+ "margin, points rating swapped for d_dve": {
+  "tune": {
+   "n": 2322,
+   "base_miss": 12.4606,
+   "change": 0.075,
+   "se": 0.0304
+  },
+  "hold": {
+   "n": 3944,
+   "base_miss": 12.347,
+   "change": 0.0317,
+   "se": 0.0242
+  },
+  "keep": false
+ }
+}
