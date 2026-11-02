@@ -1,0 +1,51 @@
+{
+ "surface_unknown_after_fill": 4,
+ "away_off_surface_share": 0.527,
+ "turf_share": 0.435,
+ "holdout_from": 2019,
+ "margin + d_surf": {
+  "tune": {
+   "n": 2136,
+   "base_miss": 10.2482,
+   "change": 0.0046,
+   "se": 0.0064
+  },
+  "hold": {
+   "n": 2068,
+   "base_miss": 9.988,
+   "change": 0.0083,
+   "se": 0.0073
+  },
+  "keep": false
+ },
+ "margin + turf-to-grass / grass-to-turf split": {
+  "tune": {
+   "n": 2136,
+   "base_miss": 10.2482,
+   "change": -0.0094,
+   "se": 0.0123
+  },
+  "hold": {
+   "n": 2068,
+   "base_miss": 9.988,
+   "change": 0.0036,
+   "se": 0.0124
+  },
+  "keep": false
+ },
+ "total + s_turf": {
+  "tune": {
+   "n": 2136,
+   "base_miss": 10.5716,
+   "change": 0.0252,
+   "se": 0.0091
+  },
+  "hold": {
+   "n": 2068,
+   "base_miss": 10.4542,
+   "change": 0.0038,
+   "se": 0.0033
+  },
+  "keep": false
+ }
+}
