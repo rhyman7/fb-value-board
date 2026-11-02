@@ -1,0 +1,66 @@
+name: QB starter check (nfelo)
+
+# Monday to Saturday at noon Eastern: compare the board's projected starting quarterbacks with
+# nfelo's (nflmodel/qbcheck.py), and where they differ take nfelo's pick as a starter override in
+# data/overrides.csv (never over a starter row entered by hand). If anything changed, start the
+# Update board Action so the board uses it right away. Free: nfelo's public GitHub file; no Odds API.
+# GitHub schedules run in UTC, so both 16:00 (daylight time) and 17:00 (standard time) are listed
+# and the first step skips whichever one isn't noon in New York.
+
+on:
+  schedule:
+    - cron: "0 16,17 * 9-12,1-2 1-6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Noon in New York?
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(TZ=America/New_York date +%H)" != "12" ]; then
+            echo "run=no" >> "$GITHUB_OUTPUT"; echo "Not noon Eastern; skipping."
+          else
+            echo "run=yes" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v5
+        if: steps.gate.outputs.run == 'yes'
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        if: steps.gate.outputs.run == 'yes'
+        with:
+          python-version: "3.12"
+          cache: pip
+      - if: steps.gate.outputs.run == 'yes'
+        run: pip install -r requirements.txt
+      - name: Compare and apply
+        if: steps.gate.outputs.run == 'yes'
+        run: python -m nflmodel.qbcheck --apply
+      - name: Commit, then rebuild the board if a starter changed
+        if: steps.gate.outputs.run == 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          changed=no
+          git diff --quiet -- data/overrides.csv || changed=yes
+          git add data/qb_check data/overrides.csv
+          git diff --cached --quiet || git commit -m "QB starter check (nfelo)"
+          git pull --rebase origin main
+          git push
+          if [ "$changed" = "yes" ]; then
+            gh api -X POST repos/${{ github.repository }}/actions/workflows/update.yml/dispatches -f ref=main
+            echo "Starter override changed: Update board started."
+          fi
