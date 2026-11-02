@@ -1,0 +1,170 @@
+{
+ "rungs": 72034,
+ "games": 273,
+ "min_prior_games": 8,
+ "calibration": [
+  {
+   "hit_rate_band": "0.00-0.49",
+   "rungs": 53544,
+   "hit_rate_going_in": 0.1578,
+   "book_implied_raw": 0.24,
+   "book_fair": 0.2034,
+   "actual": 0.2028,
+   "actual_se": 0.0058
+  },
+  {
+   "hit_rate_band": "0.50-0.70",
+   "rungs": 10177,
+   "hit_rate_going_in": 0.5881,
+   "book_implied_raw": 0.6804,
+   "book_fair": 0.6432,
+   "actual": 0.628,
+   "actual_se": 0.0109
+  },
+  {
+   "hit_rate_band": "0.70-0.79",
+   "rungs": 3902,
+   "hit_rate_going_in": 0.7438,
+   "book_implied_raw": 0.803,
+   "book_fair": 0.7769,
+   "actual": 0.7376,
+   "actual_se": 0.0123
+  },
+  {
+   "hit_rate_band": "0.80-0.90",
+   "rungs": 3011,
+   "hit_rate_going_in": 0.8442,
+   "book_implied_raw": 0.8583,
+   "book_fair": 0.8384,
+   "actual": 0.8001,
+   "actual_se": 0.013
+  },
+  {
+   "hit_rate_band": "0.90-0.95",
+   "rungs": 877,
+   "hit_rate_going_in": 0.9192,
+   "book_implied_raw": 0.8931,
+   "book_fair": 0.8777,
+   "actual": 0.8392,
+   "actual_se": 0.0193
+  },
+  {
+   "hit_rate_band": "0.95-1.00",
+   "rungs": 523,
+   "hit_rate_going_in": 0.9781,
+   "book_implied_raw": 0.9188,
+   "book_fair": 0.9067,
+   "actual": 0.8413,
+   "actual_se": 0.0257
+  }
+ ],
+ "bets_90pct": {
+  "bets": 599,
+  "games": 230,
+  "won": 0.8381,
+  "hit_rate_going_in": 0.9296,
+  "book_implied_raw": 0.8963,
+  "book_fair": 0.8813,
+  "median_price": -1100.0,
+  "return": -0.0675,
+  "return_se": 0.0177,
+  "clv_bets": 564,
+  "clv_price": 0.0004,
+  "clv_price_se": 0.0011,
+  "passes": false
+ },
+ "bets_90pct_edge5": {
+  "bets": 191,
+  "games": 133,
+  "won": 0.7539,
+  "hit_rate_going_in": 0.9384,
+  "book_implied_raw": 0.8187,
+  "book_fair": 0.7936,
+  "median_price": -490.0,
+  "return": -0.0838,
+  "return_se": 0.039,
+  "clv_bets": 190,
+  "clv_price": 0.0004,
+  "clv_price_se": 0.0025,
+  "passes": false
+ },
+ "bets_95pct": {
+  "bets": 124,
+  "games": 101,
+  "won": 0.8468,
+  "hit_rate_going_in": 0.9714,
+  "book_implied_raw": 0.9082,
+  "book_fair": 0.8947,
+  "median_price": -1200.0,
+  "return": -0.0732,
+  "return_se": 0.0373,
+  "clv_bets": 118,
+  "clv_price": -0.0017,
+  "clv_price_se": 0.002,
+  "passes": false
+ },
+ "bets_90pct_by_stat": {
+  "pass_yds": {
+   "bets": 121,
+   "games": 107,
+   "won": 0.843,
+   "hit_rate_going_in": 0.9284,
+   "book_implied_raw": 0.9028,
+   "book_fair": 0.8886,
+   "median_price": -1160.0,
+   "return": -0.0663,
+   "return_se": 0.0369,
+   "clv_bets": 110,
+   "clv_price": 0.0028,
+   "clv_price_se": 0.0022,
+   "passes": false
+  },
+  "rec_yds": {
+   "bets": 302,
+   "games": 184,
+   "won": 0.8311,
+   "hit_rate_going_in": 0.9301,
+   "book_implied_raw": 0.8961,
+   "book_fair": 0.881,
+   "median_price": -1000.0,
+   "return": -0.0785,
+   "return_se": 0.0247,
+   "clv_bets": 291,
+   "clv_price": 0.0007,
+   "clv_price_se": 0.0015,
+   "passes": false
+  },
+  "rush_yds": {
+   "bets": 176,
+   "games": 131,
+   "won": 0.8466,
+   "hit_rate_going_in": 0.9298,
+   "book_implied_raw": 0.8921,
+   "book_fair": 0.8768,
+   "median_price": -1170.0,
+   "return": -0.0497,
+   "return_se": 0.0325,
+   "clv_bets": 163,
+   "clv_price": -0.0017,
+   "clv_price_se": 0.002,
+   "passes": false
+  }
+ },
+ "bets_90pct_by_season": {
+  "2025": {
+   "bets": 599,
+   "games": 230,
+   "won": 0.8381,
+   "hit_rate_going_in": 0.9296,
+   "book_implied_raw": 0.8963,
+   "book_fair": 0.8813,
+   "median_price": -1100.0,
+   "return": -0.0675,
+   "return_se": 0.0177,
+   "clv_bets": 564,
+   "clv_price": 0.0004,
+   "clv_price_se": 0.0011,
+   "passes": false
+  }
+ }
+}
