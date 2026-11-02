@@ -574,3 +574,36 @@ a standard error of 3 on 2025). **But the sides the capped number makes +EV stil
 close by about 4%**, at every cap. The blend is the better chance on average; picking props
 because it disagrees with the books selects the props where it is wrong more often than not.
 So the chance is right to show, and wrong to bet on: a prop's value has to come from its price.
+
+## Hit-rate method on the ladders (Nov 2, 2026): loses
+
+Ryan's question: treat a player's own hit rate on a rung (this season and last, 8+ games) as the
+true chance, and bet rungs he cleared 90%+ of the time when that beats the book's implied chance.
+No model. Ladder prices exist for 2025 only (the 2023-2024 archive has main lines, not rungs);
+pricing snapshot, DraftKings and FanDuel, Over only. `python experiments/hit_rate_rungs_test.py`
+(results in `experiments/out/hit_rate_rungs_test.json`). Rule, set before running: 30+ bets and
+both return and price CLV above zero by 2 standard errors.
+
+| Hit rate going in | Rungs | Hit rate | Book implied (raw) | Book, 10% margin out | Actually cleared |
+|---|---|---|---|---|---|
+| Under 50% | 53,544 | 16% | 24% | 20% | 20% |
+| 50-70% | 10,177 | 59% | 68% | 64% | 63% |
+| 70-80% | 3,902 | 74% | 80% | 78% | 74% |
+| 80-90% | 3,011 | 84% | 86% | 84% | 80% |
+| 90-95% | 877 | 92% | 89% | 88% | 84% |
+| 95-100% | 523 | 98% | 92% | 91% | 84% |
+
+| Bets (highest 90%+ rung per player and game, better book's price) | Bets | Won | Hit rate going in | Book implied | Return per $1 | Price CLV |
+|---|---|---|---|---|---|---|
+| Hit rate 90%+ | 599 | 83.8% | 93.0% | 89.6% | **−6.8% ± 1.8%** | +0.04% ± 0.11% |
+| ... and 5+ points above the implied chance | 191 | 75.4% | 93.8% | 81.9% | −8.4% ± 3.9% | +0.04% ± 0.25% |
+| Hit rate 95%+ | 124 | 84.7% | 97.1% | 90.8% | −7.3% ± 3.7% | −0.17% ± 0.20% |
+
+**The method loses, clearly (about 4 standard errors on 599 bets).** Hit rates going in of 90-98%
+became 84% on the day, below even the books' margin-free chance (88%), so the bets paid the vig
+and then some. The books' rung prices were close to right; the players' recent hit rates were
+not, because picking the rungs a player has cleared most often picks his luckiest stretch, and he
+falls back toward his normal level (as with kickers: past 90%+ "1+ field goal" kickers made one
+83% of the time, the league rate, 2012-2025). The "edge" subset, where the hit rate beat the
+implied chance most, lost the most. One season only; nothing here suggests more seasons would
+reverse it.
