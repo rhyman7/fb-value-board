@@ -91,10 +91,10 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
         <label>Games<select id="f-week"><option value="this">This week</option><option value="next">Next week (early lines)</option><option value="both">Both weeks</option></select></label>
         <label>League<select id="f-league"><option value="both">NFL and college</option><option value="nfl">NFL</option><option value="cfb">College</option></select></label>
         <label>Book<select id="f-book"><option value="dk">DraftKings</option><option value="fd">FanDuel</option><option value="best">Best of the two</option></select></label>
-        <label id="lab-legs">Legs<select id="f-legs"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
+        <label id="lab-legs">Legs<select id="f-legs"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
         <label class="boost-only" hidden>Profit boost %<input id="f-boost" type="number" min="0" max="500" step="5" value="30"></label>
-        <label class="boost-only" hidden>Min legs<select id="f-minlegs"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></label>
-        <label class="boost-only" hidden>Max legs<select id="f-maxlegs"><option>2</option><option>3</option><option>4</option><option selected>5</option></select></label>
+        <label class="boost-only" hidden>Min legs<select id="f-minlegs"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
+        <label class="boost-only" hidden>Max legs<select id="f-maxlegs"><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></label>
         <label>Min parlay odds<input id="f-minodds" type="text" placeholder="e.g. +200" value=""></label>
         <label>Min odds per leg<input id="f-minleg" type="text" placeholder="e.g. -300" value=""></label>
         <label class="boost-only" hidden>Max wager ($)<input id="f-maxbet" type="number" min="0" step="5" value="25"></label>
@@ -344,7 +344,7 @@ function jointGroup(legs, exact) {
   }
   let L = cholesky(R);
   if (!L) { for (let i = 0; i < R.length; i++) for (let j = 0; j < R.length; j++) if (i !== j) R[i][j] *= 0.9; L = cholesky(R); if (!L) return { ok: false }; }
-  const n = 20000, Z = normals(n, 8), th = ws.map(PhiInv); let hit = 0;
+  const n = 20000, Z = normals(n, Math.max(8, legs.length)), th = ws.map(PhiInv); let hit = 0;
   for (let s = 0; s < n; s++) {
     let ok = true;
     for (let i = 0; i < legs.length && ok; i++) { let x = 0; for (let k = 0; k <= i; k++) x += L[i][k] * Z[s][k]; if (x > th[i]) ok = false; }
