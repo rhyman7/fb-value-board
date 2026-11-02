@@ -2,7 +2,7 @@
 
 The page (site/parlays.html, served as docs/parlays.html) has three tools: a builder (pick the
 legs, see the chance they all win and what the price has to be), a boost finder (a profit
-boost and its rules in, the best legs out) and a leg finder (2-5 legs, no boost). All three
+boost and its rules in, the best legs out) and a leg finder (2-10 legs, no boost). All three
 work in the browser from the file this module writes, one per board:
 
     docs/parlays/nfl.json   docs/parlays/cfb.json
