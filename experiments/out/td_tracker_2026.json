@@ -1,0 +1,73 @@
+{
+ "weeks": {
+  "3": {
+   "players": 20,
+   "scored": 10.0,
+   "expected": 10.534569763170119,
+   "source": "rebuilt"
+  },
+  "4": {
+   "players": 20,
+   "scored": 12.0,
+   "expected": 10.848133949533967,
+   "source": "rebuilt"
+  },
+  "5": {
+   "players": 20,
+   "scored": 15.0,
+   "expected": 10.499276386164045,
+   "source": "rebuilt"
+  },
+  "6": {
+   "players": 20,
+   "scored": 9.0,
+   "expected": 10.721216658360023,
+   "source": "rebuilt,shown"
+  },
+  "7": {
+   "players": 20,
+   "scored": 9.0,
+   "expected": 10.652,
+   "source": "shown"
+  },
+  "8": {
+   "players": 20,
+   "scored": 11.0,
+   "expected": 10.108999999999998,
+   "source": "shown"
+  }
+ },
+ "total": {
+  "players": 120,
+  "scored": 66,
+  "expected": 63.4
+ },
+ "top5": {
+  "players": 30,
+  "scored": 22,
+  "expected": 19.6
+ },
+ "by_chance": {
+  "(0.3, 0.4]": {
+   "n": 2,
+   "chance": 0.3974175227250569,
+   "hit": 1.0
+  },
+  "(0.4, 0.5]": {
+   "n": 59,
+   "chance": 0.4587343179318107,
+   "hit": 0.441
+  },
+  "(0.5, 0.6]": {
+   "n": 30,
+   "chance": 0.5442256744828787,
+   "hit": 0.6
+  },
+  "(0.6, 1.0]": {
+   "n": 29,
+   "chance": 0.6612850592867189,
+   "hit": 0.69
+  }
+ },
+ "shown_vs_rebuilt_corr": 0.977
+}
