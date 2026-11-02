@@ -292,6 +292,7 @@ def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFra
             fb = pd.concat(parts, ignore_index=True)
             flagged = {**_record(fb), "holdout": _record(fb[fb.season >= C.HOLDOUT_FROM])}
     return {
+        "totals": opening_totals(f[~f["monday"]]),
         "first_season": int(clean.season.min()), "last_season": int(clean.season.max()), "games": int(len(clean)),
         "left_out_monday": int(f["monday"].sum()),
         "rows": rows, "bins": bins,
@@ -302,6 +303,54 @@ def opening_report(games: pd.DataFrame, frame: pd.DataFrame, openers: pd.DataFra
         "mean_move": round(float(np.abs(mv).mean()), 2),
         "including_monday_2plus": rec(with_monday),
     }
+
+
+def opening_totals(f: pd.DataFrame) -> dict | None:
+    """The model's total against the opening total (nfelo's file has them from 2024 on).
+
+    A lead, not a bet type (FEATURES.md, "Totals at the opening total", Nov 2, 2026): the
+    total moved toward the model's side by about two-thirds of a point at a 3+ gap, but the
+    return at the opener was not yet proven. Same early run and Monday rule as the spreads.
+    Each row: record and return at the opener's price, the same sides at the close, how
+    often and how far (points) the total moved toward the model; and the current season alone
+    (the live check)."""
+    if "open_total" not in f:
+        return None
+    cover = f.groupby("season")["open_total"].apply(lambda x: x.notna().mean())
+    full = set(cover[cover >= 0.5].index)               # seasons with opening totals for most games (2024 on)
+    t = f[f["season"].isin(full) & f["open_total"].notna() & f["total_line"].notna() & f["total"].notna()].copy()
+    if t.empty:
+        return None
+    t["d"] = t["model_total"] - t["open_total"]
+    t = t[t["d"] != 0]
+    pick = np.sign(t["d"])
+    t["res"] = np.sign(t["total"] - t["open_total"]) * pick
+    t["res_close"] = np.sign(t["total"] - t["total_line"]) * pick
+    t["clv"] = (t["total_line"] - t["open_total"]) * pick
+    price = np.where(pick > 0, t["open_over_odds"], t["open_under_odds"])
+    price = np.where(np.isnan(price.astype(float)), B.DEFAULT_PRICE, price)
+    dec = O.american_to_decimal(price.astype(float))
+    t["profit"] = np.where(t["res"] > 0, dec - 1, np.where(t["res"] < 0, -1.0, 0.0))
+
+    def rec(x: pd.DataFrame) -> dict:
+        w, l, p = int((x.res > 0).sum()), int((x.res < 0).sum()), int((x.res == 0).sum())
+        wc, lc = int((x.res_close > 0).sum()), int((x.res_close < 0).sum())
+        n = len(x)
+        return {"n": n, "w": w, "l": l, "p": p, "win_pct": round(w / (w + l), 4) if w + l else None,
+                "roi": round(float(x.profit.mean()), 4) if n else None,
+                "roi_se": round(float(x.profit.std(ddof=1) / np.sqrt(n)), 4) if n > 1 else None,
+                "close_win_pct": round(wc / (wc + lc), 4) if wc + lc else None,
+                "toward": round(float((x.clv > 0).mean()), 4) if n else None,
+                "away": round(float((x.clv < 0).mean()), 4) if n else None,
+                "clv": round(float(x.clv.mean()), 3) if n else None,
+                "clv_se": round(float(x.clv.std(ddof=1) / np.sqrt(n)), 3) if n > 1 else None}
+
+    cur = int(t.season.max())
+    rows = []
+    for th in (2, 3, 4):
+        x = t[t.d.abs() >= th]
+        rows.append({"rule": f"Total off the opener by {th}+ points", "threshold": th, **rec(x), "season": rec(x[x.season == cur])})
+    return {"first_season": int(t.season.min()), "last_season": cur, "games": int(len(t)), "rows": rows}
 
 
 # --------------------------------------------------------------------------

@@ -94,10 +94,17 @@ def load_openers(refresh: bool = False) -> pd.DataFrame:
             print(f"  could not fetch opening lines ({exc})")
             if not path.exists():
                 return pd.DataFrame(columns=cols)
-    n = pd.read_csv(path, usecols=["game_id", "home_line_open", "home_line_open_price", "away_line_open_price"])
+    have = set(pd.read_csv(path, nrows=0).columns)
+    tot = [c for c in ("total_line_open", "over_price_open", "under_price_open") if c in have]
+    n = pd.read_csv(path, usecols=["game_id", "home_line_open", "home_line_open_price", "away_line_open_price"] + tot)
     n = n[n["home_line_open"].notna()]
-    return pd.DataFrame({"game_id": n["game_id"], "open_spread": -n["home_line_open"],
-                         "open_home_odds": n["home_line_open_price"], "open_away_odds": n["away_line_open_price"]})
+    out = pd.DataFrame({"game_id": n["game_id"], "open_spread": -n["home_line_open"],
+                        "open_home_odds": n["home_line_open_price"], "open_away_odds": n["away_line_open_price"]})
+    # Opening totals (nfelo has them from 2024): graded in backtest.opening_report's totals rows.
+    out["open_total"] = n["total_line_open"] if "total_line_open" in n else np.nan
+    out["open_over_odds"] = n["over_price_open"] if "over_price_open" in n else np.nan
+    out["open_under_odds"] = n["under_price_open"] if "under_price_open" in n else np.nan
+    return out
 
 
 # --------------------------------------------------------------------------
