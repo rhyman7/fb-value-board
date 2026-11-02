@@ -281,8 +281,9 @@ def _roles(players: list[dict]) -> dict:
     return out
 
 
-def _latest_props(path: Path) -> list[dict]:
-    rows = json.loads(path.read_text()).get("props") or []
+def _latest_props(path: Path | list[Path]) -> list[dict]:
+    paths = path if isinstance(path, list) else [path]
+    rows = [r for p in paths for r in (json.loads(p.read_text()).get("props") or [])]
     best = {}
     for r in rows:
         k = (r["g"], r["id"], r["s"], r["L"], bool(r["alt"]))
@@ -318,7 +319,7 @@ def _fair_td(odds: float) -> float:
     return float(O.one_sided_fair(float(odds), RUNG_MARGIN, "power"))
 
 
-def nfl_prop_legs(props_path: Path, outlook_path: Path, roles: dict, names: dict, now: dt.datetime) -> list[dict]:
+def nfl_prop_legs(props_path: Path | list[Path], outlook_path: Path, roles: dict, names: dict, now: dt.datetime) -> list[dict]:
     rows = [r for r in _latest_props(props_path) if r.get("ko") and dt.datetime.fromisoformat(r["ko"].replace("Z", "+00:00")) > now]
     outlook = json.loads(outlook_path.read_text()) if outlook_path.exists() else {"players": {}, "stats": {}}
     legs, offset, seen, main_line = [], {}, set(), {}
@@ -763,7 +764,8 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
     if league == "nfl" and props_dir is not None:
         files = sorted(props_dir.glob(f"{payload['meta']['season']}_w*.json"))
         if files:
-            legs += nfl_prop_legs(files[-1], props_dir / "outlook.json", roles, names, now)
+            # the last two weeks: next week's file appears on Monday, before Monday night is played
+            legs += nfl_prop_legs(files[-2:], props_dir / "outlook.json", roles, names, now)
         try:
             tag_matchups(legs, {k: {"home": v["home"], "away": v["away"]} for k, v in gmeta.items()}, defense_table(int(payload["meta"]["season"])))
         except Exception as exc:
