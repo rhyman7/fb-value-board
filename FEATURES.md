@@ -1034,3 +1034,13 @@ RBs alone +0.037 ± 0.013 holdout. Not kept. The player model already shrinks ya
 position average (60 carries of prior), which takes care of a few long runs; capping on top throws away
 real information (who breaks long runs keeps doing it). The matchup sites still show capped yards on
 the team cards as context, labeled as such.
+
+## College prop history (Nov 1, 2026)
+
+Probe first (`experiments/cfb_props_probe.py`, 431 credits): on Saturday Nov 1, 2025, 27 of the 43
+college games in The Odds API's archive had DraftKings or FanDuel player props, eight markets each
+(passing yards and TDs, rushing yards, receiving yards, anytime TD, and the three yardage ladders;
+no receptions or attempts). `nflmodel/cfbpropbackfill.py` (workflow **College prop backfill**) saves
+one snapshot per game ten minutes before kickoff under `data/props/history_cfb/<season>/`, newest
+weeks first; about 2,200 credits a week. Ryan approved up to 32,000 credits for 2025. The grading
+(board projections against these lines and the results) comes after.
