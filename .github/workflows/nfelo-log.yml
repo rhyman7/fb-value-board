@@ -1,0 +1,43 @@
+name: nfelo weekly save
+
+# Saves nfelo's published NFL projections before the games (nflmodel/nfelolog.py) for a clean
+# forward test of blending them with the board (FEATURES.md, "Blending with nfelo's model").
+# Free: reads two CSVs from nfelo's public GitHub repo; no Odds API credits. Nothing on the
+# board reads data/nfelo_log/.
+
+on:
+  schedule:
+    - cron: "7 18 * 9-12,1,2 2"   # Tuesdays 18:07 UTC: early-week numbers
+    - cron: "7 15 * 9-12,1,2 4"   # Thursdays 15:07 UTC: before Thursday night
+    - cron: "7 15 * 9-12,1,2 6"   # Saturdays 15:07 UTC: late-week numbers
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  save:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m nflmodel.nfelolog
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/nfelo_log
+          git diff --cached --quiet || git commit -m "nfelo projections"
+          git pull --rebase origin main
+          git push

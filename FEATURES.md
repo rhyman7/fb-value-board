@@ -1250,3 +1250,23 @@ It passes the rule, and is **not trusted**, for three reasons found on checking:
 What is left, games with no quarterback change: nfelo 2+ off the opener 65-47-2, +10.6% ± 8.8%
 (1.2 standard errors), the line moving 1.1 points toward it. Worth a clean check, which only a
 forward record can give: save nfelo's numbers each week before the games, as published.
+
+### nfelo as published (Nov 2, 2026): no edge
+
+nfelo also archives the spreads it published before each game, 2021 on (saved weekly to
+`data/nfelo_log/` by `nflmodel/nfelolog.py`): its model line before the pull toward the market,
+with the quarterbacks it assumed at the time. These are a fair forward record.
+`python experiments/nfelo_published_test.py` (results in `experiments/out/nfelo_published_test.json`),
+1,515 games. Rule, set before running: a lead only if nfelo's 2+ bets return more than zero by two
+standard errors at the close, or at the opener with the line moving toward it.
+
+| 2021 to now | Average miss | 2+ off the opener | 2+ off the close |
+|---|---|---|---|
+| nfelo, published (before its market pull) | 9.94 | 313-271-17, +2.3% ± 3.8% | 323-296-11, +0.1% ± 3.8% |
+| Board's early run | 10.04 | 298-265-13, +1.1% ± 3.9% | 291-304-15, −5.9% ± 3.9% |
+| Opening / closing spread | 9.85 / 9.73 | | |
+
+**No lead.** As published, nfelo is a little more accurate than our model and less accurate than
+the opener, and its bets are about break-even: strong in 2021-2022 (+19% and +16% at the opener),
+negative in 2024-2025. The 2019-on result from its rebuilt file (+12%) was mostly knowing the
+quarterback who started. The weekly save continues as a cheap record; the blend is not pursued.
