@@ -1187,3 +1187,35 @@ in tuning and holdout, the holdout by 2 paired standard errors. Seasons through 
 **Nothing here, and not a near-miss.** With turnovers in or out, the ratings predict the same, in
 both sports. This agrees with the rejected fumble-luck test: once plays are clipped and the points
 and market ratings are in the model, turnover luck is not something the board is missing.
+
+## Totals at the opening total (Nov 2, 2026): a lead, not proven
+
+Until now NFL totals were graded only at the close (no historical opening totals). nfelo's games
+file, already downloaded for the opening spreads, has opening totals with prices from 2024 (513
+games through early 2026 with both a result and a close; teams off a Monday night left out, as for
+the opening spreads). `python experiments/open_totals_test.py` (results in
+`experiments/out/open_totals_test.json`). Two runs from `nfl_segments.py`: "early" (quarterbacks
+blind: what is known when the opener is posted) and the full run. "Moved" is how far the total
+went from open to close toward the model's side, in points. Rule, set before running: a lead (for
+the live log, not the board) only if, at 3+ points, the opener return is above zero and the line
+moves toward the model by more than two standard errors.
+
+| Model off the opening total by | Early run: record, return | Moved toward model | Full run: record, return | Moved |
+|---|---|---|---|---|
+| 1+ | 176-148-3, +3.5% ± 5.2% | +0.50 ± 0.07 | 188-161, +2.7% ± 5.1% | +0.47 ± 0.07 |
+| 2+ | 103-78-1, +8.4% ± 7.0% | +0.64 ± 0.10 | 109-88, +5.3% ± 6.8% | +0.69 ± 0.10 |
+| 3+ | 58-47-1, +5.0% ± 9.2% | +0.66 ± 0.13 | 62-44, +11.3% ± 9.2% | +0.82 ± 0.13 |
+| 3+, games under 10 mph wind | 41-38-1, −1.4% ± 10.6% | +0.64 ± 0.14 | 51-34, +14.3% ± 10.2% | +0.72 ± 0.15 |
+| 4+ | 32-21-1, +14.7% ± 12.7% | +0.79 ± 0.21 | 29-20, +12.6% ± 13.5% | +1.02 ± 0.22 |
+| Same 3+ sides at the close | 52-53, −5.3% | | 56-50, +1.0% | |
+
+Average miss: model 10.16 (early) / 10.12 (full), opening total 10.10, closing total 10.06.
+
+**It passes the lead rule.** The total moves toward the model's side between open and close, by
+about two-thirds of a point at a 3+ gap, five standard errors from zero, and in games without wind
+too (so it is not the recorded wind leaking in). The same bets at the close are flat, which is the
+pattern of an opener edge: the market comes to the model's number, then prices it. **Not proven
+as profit**: 106 bets is far too few (the returns are 0.5 to 1.2 standard errors), and the full
+run uses news from later in the week that the opener did not have. Like the opening spreads, this
+belongs in the live log (the board already records each game's opening total) before anything
+changes on the board.

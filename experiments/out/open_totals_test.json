@@ -1,0 +1,230 @@
+{
+ "source": "nfelo_games.csv total_line_open",
+ "games_with_open_total": 680,
+ "early": {
+  "games": 513,
+  "seasons": [
+   2023,
+   2024,
+   2025,
+   2026
+  ],
+  "model_miss": 10.164,
+  "open_miss": 10.097,
+  "close_miss": 10.058,
+  "gap_1+": {
+   "bets": 327,
+   "record": "176-148-3",
+   "return": 0.0345,
+   "return_se": 0.0523,
+   "close_record": "169-157",
+   "close_return": -0.0101,
+   "move_toward_model": 0.502,
+   "move_se": 0.071
+  },
+  "gap_1+_no_wind": {
+   "bets": 266,
+   "record": "141-124-1",
+   "return": 0.0131,
+   "return_se": 0.0583,
+   "close_record": "136-130",
+   "close_return": -0.0236,
+   "move_toward_model": 0.404,
+   "move_se": 0.069
+  },
+  "gap_2+": {
+   "bets": 182,
+   "record": "103-78-1",
+   "return": 0.0839,
+   "return_se": 0.07,
+   "close_record": "95-86",
+   "close_return": 0.0012,
+   "move_toward_model": 0.643,
+   "move_se": 0.098
+  },
+  "gap_2+_no_wind": {
+   "bets": 145,
+   "record": "80-64-1",
+   "return": 0.0581,
+   "return_se": 0.0786,
+   "close_record": "76-69",
+   "close_return": -0.0005,
+   "move_toward_model": 0.531,
+   "move_se": 0.103
+  },
+  "gap_3+": {
+   "bets": 106,
+   "record": "58-47-1",
+   "return": 0.0502,
+   "return_se": 0.0919,
+   "close_record": "52-53",
+   "close_return": -0.053,
+   "move_toward_model": 0.66,
+   "move_se": 0.126
+  },
+  "gap_3+_no_wind": {
+   "bets": 80,
+   "record": "41-38-1",
+   "return": -0.0139,
+   "return_se": 0.1061,
+   "close_record": "37-43",
+   "close_return": -0.1169,
+   "move_toward_model": 0.637,
+   "move_se": 0.144
+  },
+  "gap_4+": {
+   "bets": 54,
+   "record": "32-21-1",
+   "return": 0.147,
+   "return_se": 0.1268,
+   "close_record": "28-26",
+   "close_return": -0.0102,
+   "move_toward_model": 0.787,
+   "move_se": 0.207
+  },
+  "gap_4+_no_wind": {
+   "bets": 38,
+   "record": "19-18-1",
+   "return": -0.0236,
+   "return_se": 0.1541,
+   "close_record": "16-22",
+   "close_return": -0.1976,
+   "move_toward_model": 0.789,
+   "move_se": 0.256
+  },
+  "gap_3+_overs": {
+   "bets": 67,
+   "record": "37-30-0",
+   "return": 0.0503,
+   "return_se": 0.1164,
+   "close_record": "36-31",
+   "close_return": 0.0266,
+   "move_toward_model": 0.515,
+   "move_se": 0.143
+  },
+  "gap_3+_unders": {
+   "bets": 39,
+   "record": "21-17-1",
+   "return": 0.0499,
+   "return_se": 0.1515,
+   "close_record": "16-22",
+   "close_return": -0.1897,
+   "move_toward_model": 0.91,
+   "move_se": 0.235
+  },
+  "lead": true
+ },
+ "frame": {
+  "games": 513,
+  "seasons": [
+   2023,
+   2024,
+   2025,
+   2026
+  ],
+  "model_miss": 10.122,
+  "open_miss": 10.097,
+  "close_miss": 10.058,
+  "gap_1+": {
+   "bets": 349,
+   "record": "188-161-0",
+   "return": 0.0269,
+   "return_se": 0.051,
+   "close_record": "181-167",
+   "close_return": -0.0067,
+   "move_toward_model": 0.473,
+   "move_se": 0.07
+  },
+  "gap_1+_no_wind": {
+   "bets": 285,
+   "record": "149-136-0",
+   "return": -0.0036,
+   "return_se": 0.0565,
+   "close_record": "145-140",
+   "close_return": -0.0281,
+   "move_toward_model": 0.381,
+   "move_se": 0.067
+  },
+  "gap_2+": {
+   "bets": 197,
+   "record": "109-88-0",
+   "return": 0.0526,
+   "return_se": 0.0676,
+   "close_record": "102-95",
+   "close_return": -0.0121,
+   "move_toward_model": 0.685,
+   "move_se": 0.1
+  },
+  "gap_2+_no_wind": {
+   "bets": 159,
+   "record": "85-74-0",
+   "return": 0.0178,
+   "return_se": 0.0756,
+   "close_record": "81-78",
+   "close_return": -0.0261,
+   "move_toward_model": 0.506,
+   "move_se": 0.096
+  },
+  "gap_3+": {
+   "bets": 106,
+   "record": "62-44-0",
+   "return": 0.1129,
+   "return_se": 0.0915,
+   "close_record": "56-50",
+   "close_return": 0.0103,
+   "move_toward_model": 0.821,
+   "move_se": 0.133
+  },
+  "gap_3+_no_wind": {
+   "bets": 85,
+   "record": "51-34-0",
+   "return": 0.1428,
+   "return_se": 0.1018,
+   "close_record": "47-38",
+   "close_return": 0.0585,
+   "move_toward_model": 0.724,
+   "move_se": 0.146
+  },
+  "gap_4+": {
+   "bets": 49,
+   "record": "29-20-0",
+   "return": 0.1261,
+   "return_se": 0.135,
+   "close_record": "25-24",
+   "close_return": -0.0257,
+   "move_toward_model": 1.02,
+   "move_se": 0.22
+  },
+  "gap_4+_no_wind": {
+   "bets": 39,
+   "record": "23-16-0",
+   "return": 0.1242,
+   "return_se": 0.1521,
+   "close_record": "20-19",
+   "close_return": -0.0203,
+   "move_toward_model": 0.885,
+   "move_se": 0.245
+  },
+  "gap_3+_overs": {
+   "bets": 74,
+   "record": "46-28-0",
+   "return": 0.1831,
+   "return_se": 0.1081,
+   "close_record": "45-29",
+   "close_return": 0.1645,
+   "move_toward_model": 0.527,
+   "move_se": 0.135
+  },
+  "gap_3+_unders": {
+   "bets": 32,
+   "record": "16-16-0",
+   "return": -0.0496,
+   "return_se": 0.1707,
+   "close_record": "11-21",
+   "close_return": -0.3465,
+   "move_toward_model": 1.5,
+   "move_se": 0.281
+  },
+  "lead": true
+ }
+}
