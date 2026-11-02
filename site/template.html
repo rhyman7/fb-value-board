@@ -950,6 +950,10 @@ td .act { font-weight: 700; }
             <div class="scroll"><table id="open-table" aria-labelledby="open-t-h"></table></div>
           </figure>
         </div>
+        <figure id="open-totals">
+          <figcaption><h3 id="open-tot-h">Totals at the opener (tracking, not a bet type)</h3><p class="note" id="open-totals-note"></p></figcaption>
+          <div class="scroll"><table id="open-totals-table" aria-labelledby="open-tot-h"></table></div>
+        </figure>
       </section>
 
       <section id="keys" aria-labelledby="keys-h">
@@ -2330,6 +2334,17 @@ function diagChart(node, o) {
   table($("#open-chart-table"), [{ t: "Games" }, { t: "Model minus opener" }, { t: "Line moved" }, { t: "Standard error" }], OP.bins.map(b => [comma(b.n), snum(b.d), snum(b.move, 2), "\u00b1" + b.se.toFixed(2)]));
   table($("#open-table"), [{ t: "Bets placed", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "Since " + (BT ? BT.holdout_from : 2019) }, { t: "Toward / away" }, { t: "CLV" }],
     OP.rows.map(r => [r.rule, comma(r.n), `${r.w}-${r.l}-${r.p}`, { v: pct(r.win_pct), cls: "strong" }, spct(r.roi) + " \u00b1" + pct(r.roi_se), pct(r.holdout.win_pct) + " (" + comma(r.holdout.n) + ")", pct(r.toward, 0) + " / " + pct(r.away, 0), snum(r.clv, 2)]));
+  const OT = OP.totals;
+  if (!OT || !OT.rows.length) $("#open-totals").hidden = true;
+  else {
+    const rec = r => r.n ? `${r.w}-${r.l}-${r.p}` : "—";
+    table($("#open-totals-table"), [{ t: "Model's side", l: 1 }, { t: "Bets" }, { t: "Record at the opener" }, { t: "Return" }, { t: "Same sides at the close" }, { t: "Toward / away" }, { t: "Total moved" }, { t: OT.last_season + " (live)" }],
+      OT.rows.map(r => [r.rule, comma(r.n), rec(r), r.n ? spct(r.roi) + " \u00b1" + pct(r.roi_se) : "—", r.close_win_pct == null ? "—" : pct(r.close_win_pct),
+        r.n ? pct(r.toward, 0) + " / " + pct(r.away, 0) : "—", r.n ? snum(r.clv, 2) + " \u00b1" + (r.clv_se == null ? "—" : r.clv_se.toFixed(2)) : "—",
+        r.season.n ? `${rec(r.season)}, ${snum(r.season.clv, 2)} pts` : "—"]));
+    const t3 = OT.rows.find(r => r.threshold === 3) || OT.rows[0];
+    $("#open-totals-note").textContent = `The model's total against the opening total, ${comma(OT.games)} games from ${OT.first_season} (the first season with opening totals on file). At a ${t3.threshold}+ point gap the total moved toward the model's side ${pct(t3.toward, 0)} of the time, by ${snum(t3.clv, 2)} points on average, but the return at the opener (${spct(t3.roi)} \u00b1${pct(t3.roi_se)}) is not yet proof. These are not flagged as bets; the last column tracks this season to see whether the pattern holds.`;
+  }
   const z = r2.roi / r2.roi_se;
   const fl = OP.flagged;
   $("#open-table-note").textContent = (fl ? `The board prices early lines with a ${pct(OP.weight, 0)} weight on the model. Replayed on these seasons, that pricing flagged ${comma(fl.n)} bets as positive EV: ${fl.w}-${fl.l}-${fl.p} (${pct(fl.win_pct)}), a return of ${spct(fl.roi)} against a claimed ${spct(fl.claimed_ev)}. ` : "") + `Graded at the opening price. The 2+ point row is ${z.toFixed(1)} standard errors above zero, so it is encouraging and not yet proof. Opening numbers move quickly and take small bets, so real results would land between these and the closing-line record. The line movement is the stronger evidence: of each point the model disagrees with the opener, the market later moves about ${OP.slope.toFixed(2)}.`;
