@@ -1,0 +1,120 @@
+{
+ "stability": {
+  "defense_seasons": 417,
+  "gap_split_half_corr": 0.08,
+  "wr1_level_split_half_corr": -0.016,
+  "wr2_level_split_half_corr": 0.201
+ },
+ "denver_2023_on": {
+  "2023": {
+   "WR1": -0.015,
+   "WR2": -0.271,
+   "gap": 0.256
+  },
+  "2024": {
+   "WR1": -0.11,
+   "WR2": -0.167,
+   "gap": 0.058
+  },
+  "2025": {
+   "WR1": -0.765,
+   "WR2": -0.436,
+   "gap": -0.329
+  },
+  "2026": {
+   "WR1": -0.433,
+   "WR2": -0.384,
+   "gap": -0.049
+  }
+ },
+ "projections": {
+  "rec_yds": {
+   "coefs_wr_then_role": {
+    "WR1": [
+     0.107,
+     -0.003
+    ],
+    "WR2": [
+     0.325,
+     0.11
+    ]
+   },
+   "b_base": 0.268,
+   "split_b_wr_rating_only": {
+    "WR1": 0.103,
+    "WR2": 0.478
+   },
+   "role_rating_over_split_tune": {
+    "change": -0.0145,
+    "se": 0.0021,
+    "change_WR1": 0.0017
+   },
+   "role_rating_over_split_hold": {
+    "change": -0.0202,
+    "se": 0.0021,
+    "change_WR1": 0.0005
+   },
+   "tune": {
+    "n": 16887,
+    "base_mae": 20.563,
+    "change": -0.0536,
+    "se": 0.0059,
+    "change_WR1": 0.0564,
+    "change_WR2": -0.0793
+   },
+   "hold": {
+    "n": 21533,
+    "base_mae": 19.816,
+    "change": -0.0593,
+    "se": 0.0053,
+    "change_WR1": 0.047,
+    "change_WR2": -0.0846
+   },
+   "keep": true
+  },
+  "receptions": {
+   "coefs_wr_then_role": {
+    "WR1": [
+     0.094,
+     0.01
+    ],
+    "WR2": [
+     0.588,
+     -0.012
+    ]
+   },
+   "b_base": 0.315,
+   "split_b_wr_rating_only": {
+    "WR1": 0.103,
+    "WR2": 0.574
+   },
+   "role_rating_over_split_tune": {
+    "change": 0.0,
+    "se": 0.0,
+    "change_WR1": -0.0001
+   },
+   "role_rating_over_split_hold": {
+    "change": 0.0001,
+    "se": 0.0,
+    "change_WR1": -0.0
+   },
+   "tune": {
+    "n": 16887,
+    "base_mae": 1.361,
+    "change": -0.0018,
+    "se": 0.0004,
+    "change_WR1": 0.0008,
+    "change_WR2": -0.0024
+   },
+   "hold": {
+    "n": 21533,
+    "base_mae": 1.335,
+    "change": -0.0013,
+    "se": 0.0003,
+    "change_WR1": -0.0006,
+    "change_WR2": -0.0015
+   },
+   "keep": true
+  }
+ }
+}
