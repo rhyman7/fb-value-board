@@ -1084,3 +1084,26 @@ anytime-TD ranking lead in "College props against real lines" get rechecked on i
 chance on two-sided lines, `CFB_RUNG_CAL` on alternate rungs, `CFB_TD_MARGIN` (17.5%) on anytime TD,
 no model nudge, only lines the books post. The model's own college legs remain only for players
 and stats the books don't post, still tagged "not market-tested".
+
+## SRS (Simple Rating System) (Nov 2, 2026): no, with one college lead
+
+`python experiments/srs_test.py` (results in `experiments/out/srs_test.json`). Classic SRS (margin
+adjusted for opponents, every game this season equal, no home field, no shrinkage) and OSRS/DSRS,
+recomputed before each week from that season's earlier games, added to the walk-forward game models.
+Rule, set first: lower the average miss in both periods, the holdout by 2+ standard errors.
+
+| Change in average miss (points) | Tuning | Holdout |
+|---|---|---|
+| NFL margin, SRS added | +0.008 ± 0.013 | +0.008 ± 0.003 |
+| NFL total, OSRS/DSRS added | +0.006 ± 0.005 | +0.002 ± 0.005 |
+| NFL margin, points rating swapped for SRS | +0.035 ± 0.022 | +0.055 ± 0.020 |
+| College margin, SRS added | +0.002 ± 0.006 | +0.003 ± 0.002 |
+| College total, OSRS/DSRS added | +0.009 ± 0.014 | −0.017 ± 0.007 |
+| College total, points rating swapped for OSRS/DSRS | +0.014 ± 0.021 | −0.046 ± 0.013 |
+
+Not kept anywhere: the board's points rating (ratings.py: home field, recency, last season at lower
+weight, shrinkage) already carries what SRS does, and swapping it out makes NFL margins worse. The
+one lead: college totals did better since 2021 with this-season-only scoring ratings (OSRS/DSRS),
+though not on 2017-2019. A guess worth testing on its own: the college points rating leans on last
+season too much for totals in the transfer-portal years. That needs its own test with a fresh
+split (choose on 2021-2023, check on 2024-2025), not a decision from this one.
