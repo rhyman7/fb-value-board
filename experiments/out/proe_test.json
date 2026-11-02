@@ -1,0 +1,54 @@
+{
+ "ratings": {
+  "proe_off_sd": 0.0295,
+  "opp_proe_def_sd": 0.0208,
+  "team_games_with_proe": 7363
+ },
+ "volume": {
+  "team_att": {
+   "tune": {
+    "n": 2670,
+    "mae": 6.4448,
+    "change": -0.0272,
+    "se": 0.0102
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 6.1763,
+    "change": -0.0059,
+    "se": 0.0082
+   },
+   "keep": false
+  },
+  "team_car": {
+   "tune": {
+    "n": 2670,
+    "mae": 5.6067,
+    "change": -0.0028,
+    "se": 0.0069
+   },
+   "hold": {
+    "n": 4136,
+    "mae": 5.5862,
+    "change": -0.0148,
+    "se": 0.0061
+   },
+   "keep": true
+  }
+ },
+ "totals": {
+  "tune": {
+   "n": 2136,
+   "mae": 10.5716,
+   "change": -0.0025,
+   "se": 0.0163
+  },
+  "hold": {
+   "n": 2080,
+   "mae": 10.4688,
+   "change": 0.0179,
+   "se": 0.008
+  },
+  "keep": false
+ }
+}
