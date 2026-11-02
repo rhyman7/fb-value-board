@@ -1119,6 +1119,35 @@ errors. Chosen: carry 0 (9-game half-life), 0.044 ± 0.016 better on 2021-2023; 
 difference on 2017-2019, so the direction is consistent, but the size is small (0.03 points on a
 12.6-point average miss). Recheck after 2026 with 2024-2026 as the check.
 
+## Head-coaching changes (Nov 2, 2026): no, with one college lead
+
+ELWAY and SP+ adjust for coaching changes; the board does not. NFL coaches from nflverse's
+home_coach / away_coach; college from Wikipedia's FBS coaching-change tables, 2014-2025
+(`experiments/data/cfb_coach_changes.csv`, every firing, interim and hire with its date).
+Flags per team-game: **new** (a different head coach from the start of last season; about 21% of
+NFL and 16% of college team-games) and **mid** (the coach changed earlier this season; about 2%).
+Features: the new-coach difference all season and weeks 1-4 only, new coach times last season's
+average margin (negated: does a new coach's team drift to the middle more than the ratings allow),
+and the mid-season difference; for totals, the sums. `python experiments/coach_change_test.py`
+(results in `experiments/out/coach_change_test.json`). Rule, set before running: kept only if the
+average miss drops in tuning and holdout, the holdout by at least 2 paired standard errors.
+
+| Added | NFL tuning | NFL holdout (2019 on) | College tuning (2017-19) | College holdout (2021-25) |
+|---|---|---|---|---|
+| Margin + new coach | +0.003 ± 0.004 | +0.002 ± 0.002 | +0.013 ± 0.010 | +0.005 ± 0.006 |
+| Margin + new coach, weeks 1-4 | +0.002 ± 0.003 | −0.002 ± 0.002 | +0.002 ± 0.006 | −0.001 ± 0.001 |
+| Margin + new coach × last season's margin | +0.011 ± 0.008 | −0.005 ± 0.003 | +0.005 ± 0.006 | **−0.026 ± 0.009** |
+| Margin + mid-season change | 0.000 ± 0.005 | +0.002 ± 0.002 | −0.001 ± 0.003 | −0.010 ± 0.009 |
+| Total + new coach | 0.000 ± 0.017 | +0.009 ± 0.012 | +0.004 ± 0.004 | −0.001 ± 0.002 |
+| Total + mid-season change | +0.003 ± 0.004 | +0.003 ± 0.002 | +0.003 ± 0.004 | +0.002 ± 0.001 |
+
+**Nothing is kept.** A new coach by itself tells the model nothing the ratings and the market
+pull do not already carry, in either sport, and mid-season firings add nothing. The one lead is
+college: a new coach's team regressing toward the middle beat the holdout by 2.7 standard errors,
+but it was slightly worse on 2017-2019, so it fails the rule. It may be real for the transfer-portal
+era (rosters now turn over with the coach), or a holdout fluke; it is on the near-miss list for the
+2026 recheck and the January bundle test, not on the board.
+
 ## Playing surface, grass vs turf (Nov 2, 2026): no
 
 nfelo adds a surface adjustment to home field when the visitors play at home on the other kind of
