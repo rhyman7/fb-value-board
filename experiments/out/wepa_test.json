@@ -1,0 +1,55 @@
+{
+ "team_games_with_wepa": 0.883,
+ "ridge_grid": {
+  "0.2": 10.2499,
+  "0.6": 10.25,
+  "1.8": 10.2508
+ },
+ "ridge": 0.2,
+ "holdout_from": 2019,
+ "margin + d_wepa": {
+  "tune": {
+   "n": 2136,
+   "base_miss": 10.2482,
+   "change": 0.0017,
+   "se": 0.0029
+  },
+  "hold": {
+   "n": 2080,
+   "base_miss": 9.9908,
+   "change": 0.0005,
+   "se": 0.0037
+  },
+  "keep": false
+ },
+ "margin, points rating swapped for WEPA": {
+  "tune": {
+   "n": 2136,
+   "base_miss": 10.2482,
+   "change": 0.0362,
+   "se": 0.0145
+  },
+  "hold": {
+   "n": 2080,
+   "base_miss": 9.9908,
+   "change": 0.0211,
+   "se": 0.0164
+  },
+  "keep": false
+ },
+ "total + s_wepa": {
+  "tune": {
+   "n": 2136,
+   "base_miss": 10.5716,
+   "change": 0.0,
+   "se": 0.0047
+  },
+  "hold": {
+   "n": 2080,
+   "base_miss": 10.4688,
+   "change": -0.0037,
+   "se": 0.0063
+  },
+  "keep": false
+ }
+}
