@@ -1167,3 +1167,23 @@ drops in tuning and holdout, the holdout by at least 2 paired standard errors.
 **Nothing here, and not a near-miss.** Playing away from their home surface makes no difference to
 visitors beyond ordinary home field, and turf adds nothing to totals beyond the indoor flag the
 model already has.
+
+## Turnover-free pass and rush ratings (Nov 2, 2026): no
+
+ELWAY backs turnovers out of its efficiency ratings as mostly random. The board's pass and rush
+ratings were rebuilt without turnover plays (NFL: interception or fumble lost; college: cfbfastR's
+turnover_vec), same plays and ridge otherwise, then added next to the originals and swapped in for
+them. `python experiments/turnover_free_test.py` (results in `experiments/out/turnover_free_test.json`;
+the college plays come from `cfb_downs_havoc_test.py`'s cache). Rule as usual: lower average miss
+in tuning and holdout, the holdout by 2 paired standard errors. Seasons through 2025.
+
+| Change | NFL tuning | NFL holdout (2019-25) | College tuning | College holdout (2021-25) |
+|---|---|---|---|---|
+| Margin, added | −0.004 ± 0.006 | +0.001 ± 0.009 | +0.003 ± 0.006 | −0.005 ± 0.006 |
+| Margin, swapped in | −0.010 ± 0.008 | −0.003 ± 0.005 | +0.003 ± 0.006 | −0.003 ± 0.004 |
+| Total, added | +0.003 ± 0.004 | −0.003 ± 0.002 | +0.001 ± 0.006 | 0.000 ± 0.003 |
+| Total, swapped in | +0.005 ± 0.005 | −0.002 ± 0.003 | +0.001 ± 0.010 | +0.003 ± 0.007 |
+
+**Nothing here, and not a near-miss.** With turnovers in or out, the ratings predict the same, in
+both sports. This agrees with the rejected fumble-luck test: once plays are clipped and the points
+and market ratings are in the model, turnover luck is not something the board is missing.

@@ -283,3 +283,28 @@ average miss drops in tuning and holdout, the holdout by at least 2 paired stand
 its noise (0.6 standard errors on the holdout); finishing drives does nothing. The per-play
 ratings plus the points rating already carry what drives measure, and drive value is a worse
 stand-in for the points rating, not a better one. Too small to count as a near-miss.
+
+## Down splits, line yards and havoc (tested Nov 2, 2026: not kept)
+
+CollegeFootballData's adjusted metrics and SP+ split success rate by standard and passing downs,
+rate the line by line yards per rush, and track havoc (tackles for loss, sacks, interceptions,
+forced fumbles, pass breakups per play). From cfbfastR's own columns, over the board's
+non-garbage scrimmage plays, four new rated metrics: standard-down success, passing-down success,
+line yards per rush (each run clipped to −6..7) and havoc allowed per play, each rated like the
+others and weighted by its plays. `python experiments/cfb_downs_havoc_test.py` (results in
+`experiments/out/cfb_downs_havoc_test.json`). Rule, set before running: ridge chosen on 2017-2019
+from a three-value grid; kept only if the average miss drops in tuning and holdout, the holdout by
+at least 2 paired standard errors.
+
+| Added | Margin, tuning | Margin, holdout | Total, tuning | Total, holdout |
+|---|---|---|---|---|
+| Standard-down success | +0.009 ± 0.004 | −0.003 ± 0.002 | −0.002 ± 0.003 | +0.002 ± 0.002 |
+| Passing-down success | +0.006 ± 0.005 | 0.000 ± 0.001 | 0.000 ± 0.002 | +0.002 ± 0.001 |
+| Line yards per rush | +0.004 ± 0.014 | −0.018 ± 0.012 | −0.001 ± 0.001 | −0.001 ± 0.002 |
+| Havoc allowed | +0.004 ± 0.005 | +0.006 ± 0.006 | −0.003 ± 0.006 | +0.003 ± 0.005 |
+| All four | +0.017 ± 0.015 | −0.013 ± 0.012 | −0.006 ± 0.007 | +0.002 ± 0.005 |
+
+**Nothing here.** Every one is worse on 2017-2019 for spreads, and nothing reaches 2 standard
+errors on the holdout. Line yards was the closest (1.6 standard errors on the holdout, worse on
+tuning), too weak for the near-miss list. The overall success rate and the pass and rush ratings
+already carry what these splits measure.
