@@ -38,6 +38,9 @@ def schedule(season: int) -> pd.DataFrame:
     # kickoff: gameday + gametime are US Eastern
     t = pd.to_datetime(g["gameday"] + " " + g["gametime"].fillna("13:00"))
     g["kickoff"] = t.dt.tz_localize("America/New_York").dt.tz_convert("UTC")
+    # Only games already played: the historical endpoint has no snapshot of a future time, and a
+    # failed snapshot is never asked for again (a season in progress, e.g. TD prices for 2026).
+    g = g[g["kickoff"] + CLOSE_BEFORE < pd.Timestamp.now(tz="UTC") - pd.Timedelta(hours=1)]
     return g[["game_id", "season", "week", "home_team", "away_team", "kickoff"]].sort_values("kickoff")
 
 
