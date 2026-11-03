@@ -304,7 +304,8 @@ Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi, from The Odds API (`nflmodel/m
 `run_market.py`, the **Market lines** Action: three a day in season and hourly from Sunday
 night to Tuesday, when the week's lines open, plus hourly on game days for the league
 playing (college Saturdays, NFL Sundays and Thursday nights), each game-day snapshot followed
-by a quick rebuild of that board so its prices are never much more than an hour old). A
+by a quick rebuild of that board so its prices are never much more than an hour old; any
+snapshot that sends a line-movement alert also rebuilds that league's board, any day). A
 price bet built on prices more than 3 hours old is greyed on the sheet with "Check the price". Only rows that changed are stored, so a
 month of both leagues is a few thousand rows. Pinnacle is the sharp reference: the boards
 anchor their projections to its no-vig price where it quotes the game, and score every other
