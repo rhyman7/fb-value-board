@@ -1,0 +1,64 @@
+{
+ "rule": "keep only if QB RMSE improves on both periods, holdout by 2+ SE; RB boosted RMSE and both Briers no worse",
+ "qb_linear": {
+  "tuning 2014-18": {
+   "n": 1931,
+   "rmse_current": 16.11607636042873,
+   "rmse_new": 16.03263236069765,
+   "mse_diff": -2.6826168418800367,
+   "se": 1.0014119694192016,
+   "z": -2.6788344096145558,
+   "bias_current": -1.4032674846784656,
+   "bias_new": -1.3802776649274748
+  },
+  "holdout 2019+": {
+   "n": 3324,
+   "rmse_current": 17.828562447177593,
+   "rmse_new": 17.76672050855362,
+   "mse_diff": -2.2012813038510837,
+   "se": 1.4426316601852607,
+   "z": -1.525878964536518,
+   "bias_current": -1.0257399728526737,
+   "bias_new": -0.9214227748280558
+  }
+ },
+ "rb_boosted": {
+  "tuning 2014-18": {
+   "n": 0,
+   "rmse_current": NaN,
+   "rmse_new": NaN,
+   "mse_diff": NaN,
+   "se": NaN,
+   "z": NaN,
+   "bias_current": NaN,
+   "bias_new": NaN
+  },
+  "holdout 2019+": {
+   "n": 7309,
+   "rmse_current": 32.28954472890008,
+   "rmse_new": 32.322709081401705,
+   "mse_diff": 2.142823561289089,
+   "se": 3.566448148661482,
+   "z": 0.6008284634933803,
+   "bias_current": -0.40252454994952147,
+   "bias_new": -0.3449827705475378
+  }
+ },
+ "lines_qb": {
+  "props": 1580,
+  "brier_books": 0.2498062491985695,
+  "brier_current": 0.2562765907231919,
+  "brier_new": 0.25430823408328146,
+  "new_minus_current": -0.0019683566399104706,
+  "se": 0.0012900121484498036
+ },
+ "lines_rb": {
+  "props": 4681,
+  "brier_books": 0.24991714156142855,
+  "brier_current": 0.2605670695272793,
+  "brier_new": 0.2599008152874943,
+  "new_minus_current": -0.0006662542397849364,
+  "se": 0.0008306974301372997
+ },
+ "kept": false
+}

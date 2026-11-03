@@ -1383,7 +1383,16 @@ rushing-yards RMSE improves on tuning and holdout, the holdout by 2+ SE, and the
 2025 lines is no worse. Result: RMSE 40.154 -> 40.141 tuning (2.3 SE), 37.950 -> 37.937 holdout
 (2.9 SE); bias +0.10 -> -0.01 on the holdout; Brier 0.2612 -> 0.2604 (1.5 SE better). Passes,
 and the gain is small: about a yard on a lead back's projection. `cfbmodel.players.GROUP_STATS`,
-`CALIB_GROUPS`. The NFL calibration has the same shape and gets its own test before any change.
+`CALIB_GROUPS`.
+
+**NFL, same change, not kept** (`experiments/nfl_rush_group_calib_test.py`). On the NFL board
+the linear calibration is live for quarterbacks' rushing; for running backs it is one input to
+the boosted step. Rule: QB rushing RMSE better on tuning (2014-18) and holdout (2019+), the
+holdout by 2+ SE; RB boosted RMSE and the Briers at the 2023-2025 closing lines no worse. QB
+RMSE 16.116 -> 16.033 tuning (2.7 SE) and 17.829 -> 17.767 holdout (1.5 SE, short of 2); RB
+boosted 32.290 -> 32.323 (0.6 SE, no change); Brier QB lines 0.2563 -> 0.2543 (1.5 SE), RB lines
+0.2606 -> 0.2599 (0.8 SE). Every measure points the same way as college on a tenth of the
+starting-QB sample; filed as a near-miss to re-run after the 2026 season.
 
 ## Niche props: probe and the tackle stat-crew check (Nov 2, 2026)
 
