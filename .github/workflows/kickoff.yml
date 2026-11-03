@@ -1,0 +1,88 @@
+name: Kickoff refresh
+
+# A fresh line snapshot and a board rebuild 35 and 20 minutes before each kickoff window, both
+# leagues (nflmodel/kickoff.py has the times), so the Best bets card a bettor works from, and
+# the Best Bets record, are as close to kickoff as is still usable.
+#
+# GitHub starts scheduled runs late or skips them, so this doesn't wait for a schedule to land
+# on the minute: it starts every half hour in season, plans the refreshes in the next 5.5 hours
+# from the published boards, and sleeps until each one. Only one runs at a time (its own
+# concurrency group, not board-commits, so its waiting never holds up the board); a run that
+# starts while another waits is queued and picks up the windows after it.
+#
+# Each refresh: Market lines (workflow_dispatch, that league only: 3 credits, 6 for both),
+# then Update board and/or Update college board (no credits). Each started run is watched; if
+# GitHub cancels it in the shared board-commits queue, it is started again (until 10 minutes
+# past the refresh time). About 30-50 credits a week.
+
+on:
+  schedule:
+    - cron: "10,40 * * 8-12,1-2 *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write      # starts Market lines and the Update Actions
+
+concurrency:
+  group: kickoff-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Plan
+        run: |
+          python -c "import pandas" 2>/dev/null || pip install -q pandas numpy
+          python -m nflmodel.kickoff --horizon 330 | tee plan.txt
+          [ -s plan.txt ] || echo "nothing in the next 5.5 hours"
+      - name: Refresh before each window
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          # start a workflow and wait for that run; start it again if it was cancelled
+          run_wf() {   # $1 workflow file, $2 deadline (epoch), rest: -f inputs
+            wf=$1; deadline=$2; shift 2
+            while :; do
+              since=$(date -u -d '-5 seconds' +%Y-%m-%dT%H:%M:%SZ)
+              gh api -X POST "repos/$REPO/actions/workflows/$wf/dispatches" -f ref=main "$@" || true
+              id=""
+              for _ in $(seq 1 12); do
+                sleep 10
+                id=$(gh api "repos/$REPO/actions/workflows/$wf/runs?event=workflow_dispatch&per_page=5" \
+                       --jq "[.workflow_runs[] | select(.created_at >= \"$since\")] | last | .id // empty")
+                [ -n "$id" ] && break
+              done
+              [ -n "$id" ] || { echo "  $wf: no run found"; }
+              concl=""
+              while [ -n "$id" ]; do
+                st=$(gh api "repos/$REPO/actions/runs/$id" --jq '.status + " " + (.conclusion // "")')
+                [ "${st%% *}" = "completed" ] && { concl=${st#* }; break; }
+                sleep 20
+              done
+              echo "  $wf run $id: ${concl:-not found}"
+              [ "$concl" = "success" ] && return 0
+              [ "$(date +%s)" -lt "$deadline" ] || { echo "  $wf: giving up (past the deadline)"; return 0; }
+              echo "  $wf: starting it again"
+            done
+          }
+          while read -r at league label; do
+            [ -n "$at" ] || continue
+            wait=$(( at - $(date +%s) ))
+            if [ "$wait" -gt 0 ]; then echo "sleeping ${wait}s until $(date -u -d @$at +%H:%MZ): $label"; sleep "$wait"; fi
+            deadline=$(( at + 600 ))
+            echo "refresh: $label"
+            run_wf market.yml "$deadline" -f "inputs[league]=$league"
+            case "$league" in
+              nfl) run_wf update.yml "$deadline" ;;
+              cfb) run_wf update-cfb.yml "$deadline" ;;
+              both) run_wf update.yml "$deadline"; run_wf update-cfb.yml "$deadline" ;;
+            esac
+          done < plan.txt
