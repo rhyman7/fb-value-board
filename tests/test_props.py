@@ -652,3 +652,10 @@ def test_backfill_looks_again_for_a_game_the_weekly_list_missed(tmp_path, monkey
     assert ("e9", B._iso(kick - B.CLOSE_BEFORE)) in f.calls
     n = len(f.calls)
     assert B.run(f, 2025, B.YARDAGE, max_credits=1000, verbose=False)["spent"] == 0 and len(f.calls) == n
+
+
+def test_a_thin_opening_snapshot_is_taken_again():
+    import run_props
+    log = pd.DataFrame({"event_id": ["a", "b", "b", "b"], "snapshot": "open",
+                        "market": ["player_anytime_td", "player_reception_yds", "player_rush_yds", "player_pass_yds"]})
+    assert run_props.complete_opens(log) == {"b"}        # 'a' had only the anytime-TD market: try again
