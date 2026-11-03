@@ -13,7 +13,14 @@ name: Kickoff refresh
 # Each refresh: Market lines (workflow_dispatch, that league only: 3 credits, 6 for both),
 # then Update board and/or Update college board (no credits). Each started run is watched; if
 # GitHub cancels it in the shared board-commits queue, it is started again (until 10 minutes
-# past the refresh time). About 30-50 credits a week.
+# past the refresh time). About 150 credits in a full NFL + college week (college Saturdays
+# are most of it).
+#
+# After a window's last refresh (20 minutes before), its Best bets card, as the record will
+# grade it, goes to the phone through ntfy (secret NTFY_TOPIC, the same topic as the
+# line-movement alerts) and as a comment on the week's best-bets issue (GitHub emails it).
+# Only DraftKings and FanDuel are shown; a card bet neither qualifies is listed as not a bet
+# there. Nothing is sent when the card is empty. Reading and sending only: it changes no file.
 
 on:
   schedule:
@@ -23,6 +30,7 @@ on:
 permissions:
   contents: read
   actions: write      # starts Market lines and the Update Actions
+  issues: write       # the best-bets issue comment
 
 concurrency:
   group: kickoff-refresh
@@ -46,7 +54,32 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
         run: |
+          # the window's Best bets card to the phone and the week's best-bets issue
+          send_card() {   # $1 nfl@EPOCH[,cfb@EPOCH]
+            git pull -q --ff-only origin main || { echo "  alert: could not pull the rebuilt card"; return 0; }
+            rm -f /tmp/bestbets_push.txt /tmp/bestbets.md
+            python -m nflmodel.kickoff --alert "$1" || { echo "  alert: failed"; return 0; }
+            [ -s /tmp/bestbets_push.txt ] || return 0
+            if [ -n "$NTFY_TOPIC" ]; then
+              title=$(head -n 1 /tmp/bestbets_push.txt)
+              tail -n +2 /tmp/bestbets_push.txt | head -c 3800 > /tmp/bestbets_body.txt
+              url="https://rhyman7.github.io/fb-value-board/docs/#bestbets"
+              case "$1" in *nfl@*) ;; *) url="https://rhyman7.github.io/fb-value-board/docs/cfb/#bestbets" ;; esac
+              curl -sS --fail -H "Title: $title" -H "Tags: moneybag" -H "Click: $url" \
+                --data-binary @/tmp/bestbets_body.txt "https://ntfy.sh/$NTFY_TOPIC" > /dev/null || echo "  push failed"
+            else
+              echo "  NTFY_TOPIC not set: no push"
+            fi
+            n=$(gh issue list -R "$REPO" --label best-bets --state open --json number --jq '.[0].number')
+            if [ -z "$n" ]; then
+              gh label create best-bets -R "$REPO" --color 1D76DB --description "Best bets card at the last rebuild before each kickoff window" 2>/dev/null || true
+              gh issue create -R "$REPO" --title "Best bets, week of $(date -u +%Y-%m-%d)" --label best-bets --body-file /tmp/bestbets.md > /dev/null || echo "  issue failed"
+            else
+              gh issue comment "$n" -R "$REPO" --body-file /tmp/bestbets.md > /dev/null || echo "  comment failed"
+            fi
+          }
           # start a workflow and wait for that run; start it again if it was cancelled
           run_wf() {   # $1 workflow file, $2 deadline (epoch), rest: -f inputs
             wf=$1; deadline=$2; shift 2
@@ -73,7 +106,7 @@ jobs:
               echo "  $wf: starting it again"
             done
           }
-          while read -r at league label; do
+          while read -r at league label alert; do
             [ -n "$at" ] || continue
             wait=$(( at - $(date +%s) ))
             if [ "$wait" -gt 0 ]; then echo "sleeping ${wait}s until $(date -u -d @$at +%H:%MZ): $label"; sleep "$wait"; fi
@@ -85,4 +118,5 @@ jobs:
               cfb) run_wf update-cfb.yml "$deadline" ;;
               both) run_wf update.yml "$deadline"; run_wf update-cfb.yml "$deadline" ;;
             esac
+            if [ -n "$alert" ] && [ "$alert" != "-" ]; then send_card "$alert"; fi
           done < plan.txt
