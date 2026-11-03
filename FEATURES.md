@@ -1355,6 +1355,36 @@ realized returns agree. Gaps that straddle 3 or 7 essentially never happen (none
 college). Middles need a wider book selection or a line that moves after you bet (the opener, then
 the other side later), not two books at the same moment.
 
+## College rushing projections: three tests and one kept (Nov 3, 2026)
+
+Prompted by Messiah Burch at Miami (OH): chain 71.9, recent per-game average 103.6, projection
+95.4, season average 83.7. Scripts in `experiments/`, results in `experiments/out/`.
+
+**1. `cfb_rush_blend_test.py`: chain, recent average, their plain average or the projection,
+closest to actual RB rushing yards?** 32,000 player-games 2017-2025 (chain or projection >= 20).
+Mean absolute miss: chain 29.7 / 28.0 (tuning / holdout), recent 31.4 / 29.5, average 29.9 /
+28.1, projection 30.3 / 28.6. The chain "wins" by 8 SE on the holdout while running 8.9 yards
+low: rushing yards are right-skewed, absolute miss is minimised by the median, and a low
+center is rewarded. Not a usable result on its own.
+
+**2. `cfb_rush_center_test.py`: each number as the center of the prop distribution, Brier at the
+2025 DraftKings/FanDuel rushing-yards main lines** (1,097 props, 386 games): chain 0.2853,
+recent 0.2654, average 0.2650, projection 0.2608, the books 0.2500. The chain is the worst center
+(5.4 SE worse than the projection, calls 68% of props unders when 46% of overs hit); the
+projection is the best of the four and still 2.6 SE worse than the books, as on Nov 1. Nothing
+changed. Burch's 95 stands, and his line is priced off the books.
+
+**3. `cfb_rush_group_calib_test.py`: rushing calibration per position group. Kept.** The
+calibration fitted one rushing-yards regression on everyone who appeared (mostly receivers and
+quarterbacks with a few carries), settling on about 0.71 x chain + 0.43 x recent; running backs
+alone want about 0.76 / 0.40, prop-relevant backs 0.82 / 0.30, stable every season 2019-2025.
+Rule, written first: fit `rush_yds` and `carries` per group (RB; QB; WR+TE), keep only if RB
+rushing-yards RMSE improves on tuning and holdout, the holdout by 2+ SE, and the Brier at the
+2025 lines is no worse. Result: RMSE 40.154 -> 40.141 tuning (2.3 SE), 37.950 -> 37.937 holdout
+(2.9 SE); bias +0.10 -> -0.01 on the holdout; Brier 0.2612 -> 0.2604 (1.5 SE better). Passes,
+and the gain is small: about a yard on a lead back's projection. `cfbmodel.players.GROUP_STATS`,
+`CALIB_GROUPS`. The NFL calibration has the same shape and gets its own test before any change.
+
 ## Niche props: probe and the tackle stat-crew check (Nov 2, 2026)
 
 **What the books post** (probe, 320 credits: four 2025 week-1 games, the board's pricing snapshot

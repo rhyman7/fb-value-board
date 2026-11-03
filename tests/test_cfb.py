@@ -352,3 +352,39 @@ def test_archive_fills_the_whole_box_score(tmp_path):
     act = a["actuals"]["2026_03_X_Y"]
     assert a["full"] == ["2026_03_X_Y"] and set(act) == {"11", "22"}
     assert act["22"]["name"] == "Twenty Two" and act["22"]["pos"] == "WR" and act["22"]["team"] == "X" and "name" not in act["11"]
+
+
+def test_rushing_is_calibrated_per_position_group():
+    """Rushing yards and carries get a calibration fit per position group (RB; QB; WR+TE); a
+    group's fit is untouched by the other groups' games. Passing stays fitted on quarterbacks."""
+    import numpy as np
+    from cfbmodel import players as P
+    assert set(P.GROUP_STATS) == {"rush_yds", "carries"}
+    assert ("RB",) in P.CALIB_GROUPS and ("QB",) in P.CALIB_GROUPS and ("WR", "TE") in P.CALIB_GROUPS
+    rng = np.random.default_rng(0)
+    rows = []
+    # team carries 35; shares 0.5 and 0.1 (normalised to 0.588 / 0.118); yards per carry 5u, so the
+    # chain is about 103u for the back and 21u for the receiver; the back runs for 1x his chain,
+    # the receiver for 3x his
+    for season in (2015, 2016, 2017):
+        for g in range(80):
+            u = rng.uniform(0.6, 1.4)
+            for grp, share, mult in (("RB", 0.5, 1.0), ("WR", 0.1, 3.0)):
+                r = {s: 0.0 for s in P.STATS}
+                r.update({s + "_p": 0.0 for s in P.STATS}); r.update({s + "_sum": 0.0 for s in P.STATS}); r.update({s + "_st_sum": 0.0 for s in P.STATS})
+                chain = share / 0.85 * 35 * 5 * u
+                r.update({"season": season, "game_id": f"{season}_{g}", "team": "A", "player_id": f"{grp}{g}", "group": grp, "active": 1,
+                          "played": season < 2017, "appeared": 1, "started": 0, "att_share_raw": 0.0, "car_share_raw": share, "rec_share_raw": 0.2,
+                          "one_sum": 4.0, "start_sum": 0.0, "proj_total": 50.0, "team_att": 30.0, "team_car": 35.0, "team_car_avg": 35.0, "team_att_avg": 30.0,
+                          "opp_att_allowed": 30.0, "opp_car_allowed": 35.0, "margin": 0.0, "home": 1, "wind": 5.0,
+                          "ypc": 5 * u, "ypr": 8.0, "ypa": 7.0, "comp": 0.6, "def_ypc": 1.0, "def_ypa": 1.0, "def_comp": 1.0, "team_comp_rate": 0.6,
+                          "imp_pts": 28.0, "ptd_share": 0.5, "ctd_rate": 0.02, "rtd_rate": 0.05, "int_rate": 0.02,
+                          "rush_yds_sum": 4 * chain * mult, "carries_sum": 4 * chain / 5,
+                          "rush_yds": chain * mult + rng.normal(0, 2), "carries": chain / 5})
+                rows.append(r)
+    t = pd.DataFrame(rows)
+    out = P.walk_forward(t, first_test=2017)
+    cur = out[out.season == 2017]
+    rb, wr = cur[cur.group == "RB"], cur[cur.group == "WR"]
+    assert np.allclose(rb.rush_yds_proj / rb.rush_yds_p, 1.0, atol=0.1)       # backs calibrated on backs: about 1x the chain
+    assert np.allclose(wr.rush_yds_proj / wr.rush_yds_p, 3.0, atol=0.3)       # receivers on receivers: about 3x, not dragged toward 1x
