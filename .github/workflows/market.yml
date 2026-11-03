@@ -7,6 +7,8 @@ name: Market lines
 # snapshot, about 1,400 a month. The board builds read these files. On game days (college
 # Saturdays, NFL Sundays and Thursday nights) an hourly snapshot of the league playing (3
 # credits, about 360 a month) is followed by a quick rebuild of that board, started from here.
+# Any snapshot that sends an alert (any day) also rebuilds that league's board, so the Bet sheet
+# is never older than the alert.
 #
 # After each snapshot, `run_market.py alerts` measures every side the model is off the opener
 # at Pinnacle's newest line (nflmodel/sheet.line_moves): it writes docs/moves.json and
@@ -138,16 +140,28 @@ jobs:
           git diff --cached --quiet || git commit -m "Market lines snapshot"
           git pull --rebase origin main
           git push
-      - name: Rebuild the board on game days
-        # a quick (no-backtest) rebuild of the board whose games are on, from the snapshot just
-        # committed. The Update Actions spend no Odds API credits. Dispatching a workflow is one
-        # of the events a workflow's own token may start.
-        if: github.event.schedule == '50 13-23 * 8-12,1 6' || github.event.schedule == '50 13-20 * 9-12,1-2 0' || github.event.schedule == '50 21,22 * 9-12,1 4'
+      - name: Rebuild the boards
+        # a quick (no-backtest) rebuild, from the snapshot just committed, of the board whose
+        # games are on (game-day runs), and of any board this snapshot sent an alert for (any
+        # day), so the Bet sheet is never older than the alert. The Update Actions spend no
+        # Odds API credits. Dispatching a workflow is one of the events a workflow's own token
+        # may start.
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          wfs=""
           case "${{ github.event.schedule }}" in
-            "50 13-23 * 8-12,1 6") wf=update-cfb.yml ;;
-            *) wf=update.yml ;;
+            "50 13-23 * 8-12,1 6") wfs="update-cfb.yml" ;;
+            "50 13-20 * 9-12,1-2 0"|"50 21,22 * 9-12,1 4") wfs="update.yml" ;;
           esac
-          gh api -X POST "repos/${{ github.repository }}/actions/workflows/$wf/dispatches" -f ref=main
+          # the push file's first line names the leagues with alerts, e.g. "Line movement: NFL 2, CFB 1"
+          if [ -s /tmp/push.txt ]; then
+            first=$(head -n 1 /tmp/push.txt)
+            case "$first" in *"NFL "*) wfs="$wfs update.yml" ;; esac
+            case "$first" in *"CFB "*) wfs="$wfs update-cfb.yml" ;; esac
+          fi
+          for wf in $(printf '%s\n' $wfs | sort -u); do
+            echo "rebuilding: $wf"
+            gh api -X POST "repos/${{ github.repository }}/actions/workflows/$wf/dispatches" -f ref=main
+          done
+          [ -n "$wfs" ] || echo "no rebuild: not a game day and no alerts"

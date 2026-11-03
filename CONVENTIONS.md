@@ -111,7 +111,8 @@ boards in detail; this file is the rules.
   a day plus hourly Sunday night to Tuesday, about 1,400 credits a month; plus, from Oct 31,
   2026, hourly game-day snapshots of the league playing: college Saturdays 13-23 UTC, NFL
   Sundays 13-20 UTC and Thursday nights 21-22 UTC, about 360 credits a month, each followed
-  by a quick rebuild of that board dispatched from the Action, `actions: write`) and commits only the
+  by a quick rebuild of that board dispatched from the Action, `actions: write`; from Nov 3,
+  2026 any snapshot that sends a line-movement alert also rebuilds that league's board) and commits only the
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
