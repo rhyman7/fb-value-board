@@ -408,10 +408,11 @@ Every version passes the rule on both periods, but on the holdout the receiving 
 within about one standard error and the interceptions change about two, against average
 misses of 15 yards and 0.7 interceptions. The receiving result also swings fivefold with the
 choice of reference, which a real effect shouldn't. A board-ready version (PFR's weekly
-defensive file, the earlier-seasons reference) is on the branch
-`feature/defense-in-player-projections`, checked with
-`experiments/def_players_production.py`, and it moves this season's receiving projections
-by a median 0.6 yards (5 at most). **Not applied**; Ryan decides.
+defensive file, the earlier-seasons reference) was built on the branch
+`feature/defense-in-player-projections` (commit 901b3c7, checked with
+`experiments/def_players_production.py`); it moved this season's receiving projections by a
+median 0.6 yards (5 at most). **Not applied.** The branch was removed in the Nov 3, 2026
+branch cleanup; rebuild from this description if it's ever wanted.
 
 ### College
 
