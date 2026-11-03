@@ -31,8 +31,10 @@ jobs:
         run: pip install playwright && python -m playwright install --with-deps chromium
       - name: Build the board
         run: |
-          # Full backtest on Tuesdays (after Monday night) or when asked; otherwise the quick refresh.
-          if [ "$(date -u +%u)" = "2" ] || [ "${{ inputs.backtest }}" = "true" ]; then
+          # Full backtest on the scheduled Tuesday run (after Monday night) or when asked; otherwise
+          # the quick refresh (rebuilds started by other Actions on a Tuesday, e.g. the Kickoff
+          # refresh before Monday night, stay quick).
+          if { [ "$(date -u +%u)" = "2" ] && [ "${{ github.event_name }}" = "schedule" ]; } || [ "${{ inputs.backtest }}" = "true" ]; then
             python run.py
           else
             python run.py --no-backtest

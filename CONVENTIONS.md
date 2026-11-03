@@ -112,7 +112,11 @@ boards in detail; this file is the rules.
   2026, hourly game-day snapshots of the league playing: college Saturdays 13-23 UTC, NFL
   Sundays 13-20 UTC and Thursday nights 21-22 UTC, about 360 credits a month, each followed
   by a quick rebuild of that board dispatched from the Action, `actions: write`; from Nov 3,
-  2026 any snapshot that sends a line-movement alert also rebuilds that league's board) and commits only the
+  2026 any snapshot that sends a line-movement alert also rebuilds that league's board; from Nov 3,
+  2026 the **Kickoff refresh** Action, `kickoff.yml` + `nflmodel/kickoff.py`, dispatches a
+  `league`-scoped snapshot and that board's rebuild 35 and 20 minutes before each kickoff window,
+  about 150 credits a week in a full week, retrying a failed run until 10 minutes past its time;
+  it only dispatches existing workflows and never changes the model) and commits only the
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.

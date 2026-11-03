@@ -45,6 +45,11 @@ on:
         description: "Also fetch DraftKings' and FanDuel's alternate spreads and totals for both leagues"
         type: boolean
         default: false
+      league:
+        description: "Snapshot one league only (the Kickoff refresh Action uses this)"
+        type: choice
+        options: [both, nfl, cfb]
+        default: both
 
 permissions:
   contents: write
@@ -73,7 +78,10 @@ jobs:
           case "${{ github.event.schedule }}" in
             "50 13-23 * 8-12,1 6") python run_market.py snapshot --league cfb ;;
             "50 13-20 * 9-12,1-2 0"|"50 21,22 * 9-12,1 4") python run_market.py snapshot --league nfl ;;
-            *) python run_market.py snapshot ;;
+            *) case "${{ inputs.league }}" in
+                 nfl|cfb) python run_market.py snapshot --league "${{ inputs.league }}" ;;
+                 *) python run_market.py snapshot ;;
+               esac ;;
           esac
           # derivatives on the 14:05 UTC run: NFL Thursday, Saturday and Sunday; college Friday (or when asked)
           if [ "${{ inputs.derivatives }}" = "true" ]; then
