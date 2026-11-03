@@ -116,7 +116,9 @@ boards in detail; this file is the rules.
   2026 the **Kickoff refresh** Action, `kickoff.yml` + `nflmodel/kickoff.py`, dispatches a
   `league`-scoped snapshot and that board's rebuild 35 and 20 minutes before each kickoff window,
   about 150 credits a week in a full week, retrying a failed run until 10 minutes past its time;
-  it only dispatches existing workflows and never changes the model) and commits only the
+  after each window's 20-minute refresh it sends that window's Best bets card from
+  `bestbets.csv` to ntfy and the open `best-bets` issue, nothing when the card is empty; it only
+  dispatches existing workflows, reads and sends, and never changes the model) and commits only the
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
