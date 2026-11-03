@@ -64,7 +64,9 @@ jobs:
             if [ -n "$NTFY_TOPIC" ]; then
               title=$(head -n 1 /tmp/bestbets_push.txt)
               tail -n +2 /tmp/bestbets_push.txt | head -c 3800 > /tmp/bestbets_body.txt
-              curl -sS --fail -H "Title: $title" -H "Tags: moneybag" -H "Click: https://rhyman7.github.io/fb-value-board/docs/#bestbets" \
+              url="https://rhyman7.github.io/fb-value-board/docs/#bestbets"
+              case "$1" in *nfl@*) ;; *) url="https://rhyman7.github.io/fb-value-board/docs/cfb/#bestbets" ;; esac
+              curl -sS --fail -H "Title: $title" -H "Tags: moneybag" -H "Click: $url" \
                 --data-binary @/tmp/bestbets_body.txt "https://ntfy.sh/$NTFY_TOPIC" > /dev/null || echo "  push failed"
             else
               echo "  NTFY_TOPIC not set: no push"
