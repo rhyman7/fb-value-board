@@ -19,7 +19,8 @@ name: Kickoff refresh
 # After a window's last refresh (20 minutes before), its Best bets card, as the record will
 # grade it, goes to the phone through ntfy (secret NTFY_TOPIC, the same topic as the
 # line-movement alerts) and as a comment on the week's best-bets issue (GitHub emails it).
-# Nothing is sent when the card is empty. Reading and sending only: it changes no file.
+# Only DraftKings and FanDuel are shown; a card bet neither qualifies is listed as not a bet
+# there. Nothing is sent when the card is empty. Reading and sending only: it changes no file.
 
 on:
   schedule:

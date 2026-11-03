@@ -38,7 +38,7 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from . import bestbets as BB, config as C
+from . import bestbets as BB, config as C, sheet as SH
 
 LEADS = (35, 20)          # minutes before a window's first kickoff
 WINDOW_MIN = 30           # games kicking off within this of the first one share its refreshes
@@ -48,6 +48,7 @@ CARDS = {"nfl": C.ROOT / "data" / "bestbets.csv", "cfb": C.ROOT / "data" / "cfb"
 ALERT_LEAD = min(LEADS)   # the window's last refresh sends its card
 ET = ZoneInfo("America/New_York")
 BOOKS = {"draftkings": "DraftKings", "fanduel": "FanDuel", "betmgm": "BetMGM", "kalshi": "Kalshi", "consensus": "Consensus"}
+MY_BOOKS = ("draftkings", "fanduel")   # the only books Ryan bets: the alert shows only these
 NAMES = {"nfl": "NFL", "cfb": "College"}
 
 
@@ -105,25 +106,64 @@ def _num(x: float) -> str:
     return f"{x:g}"
 
 
-def _bet_line(r) -> str:
-    """One card entry: the pick at the book's own line and price, the stake and the EV."""
-    book = BOOKS.get(str(r["book"]), str(r["book"]).title())
-    line = r["line"]
-    if r["market"] == "Spread" and pd.notna(line):
-        pick = f"{str(r['pick']).rsplit(' ', 1)[0]} {'+' if line > 0 else ''}{_num(line)}"
-    elif r["market"] == "Total" and pd.notna(line):
-        pick = f"{str(r['pick']).split(' ', 1)[0]} {_num(line)}"
-    else:
-        pick = str(r["pick"])
-    odds = f"{int(round(r['odds'])):+d}" if pd.notna(r["odds"]) else ""
-    net = r.get("odds_net")
-    if r["book"] == "kalshi" and pd.notna(net) and pd.notna(r["odds"]) and round(net) != round(r["odds"]):
-        odds += f" ({int(round(net)):+d} after fee)"
-    stake = f"stake {r['stake'] * 100:.1f}%" if pd.notna(r["stake"]) and r["stake"] > 0 else "no stake"
-    ev = f"EV {r['ev'] * 100:+.1f}%" if pd.notna(r["ev"]) else ""
+def _pick(market: str, pick: str, line) -> str:
+    """The pick at a book's own line."""
+    if market == "Spread" and line is not None and pd.notna(line):
+        return f"{pick.rsplit(' ', 1)[0]} {'+' if line > 0 else ''}{_num(line)}"
+    if market == "Total" and line is not None and pd.notna(line):
+        return f"{pick.split(' ', 1)[0]} {_num(line)}"
+    return pick
+
+
+def qualifies(b: dict, q: dict) -> bool:
+    """Whether this book's price still makes the bet what the card calls it: a price bet needs the
+    book to beat the sharp no-vig number by sheet.PRICE_MIN (the tier's own rule); every other
+    tier needs the book's price to be +EV on the model."""
+    if b.get("tier") == "price":
+        return (q.get("ev_line") or -1.0) >= SH.PRICE_MIN
+    return (q.get("ev") or -1.0) > 0
+
+
+def _bet_line(r, b: dict | None) -> tuple[str, bool]:
+    """One card entry at DraftKings or FanDuel, and whether it qualifies there. `r` is the
+    record's row (bestbets.csv), `b` the same bet on the board (data.json) with every book's quote."""
     teams = str(r["game_id"]).split("_")[2:]
     game = f"{teams[0]}@{'_'.join(teams[1:])}: " if len(teams) >= 2 else ""
-    return " · ".join(x for x in (f"{game}{pick} {odds}".strip(), book, stake, ev) if x)
+    pick = str(r["pick"])
+    quotes = [q for q in ((b or {}).get("books") or []) if q.get("book") in MY_BOOKS and q.get("odds") is not None]
+    if not quotes and r["book"] in MY_BOOKS:       # the board entry is missing: the record's own row
+        quotes = [{"book": r["book"], "line": r["line"], "odds": r["odds"], "ev": r["ev"], "stake": r["stake"],
+                   "ev_line": SH.PRICE_MIN}]
+        b = b or {"tier": "opener"}
+    if not quotes:
+        return f"{game}{pick} · no DraftKings or FanDuel price (card: {BOOKS.get(str(r['book']), r['book'])})", False
+    good = [q for q in quotes if qualifies(b, q)]
+    if good:
+        q = max(good, key=lambda q: q.get("ev") or 0.0)
+        stake = q.get("stake") or 0.0
+        if stake <= 0 and b.get("bucket_book") == q["book"]:
+            stake = b.get("bucket_stake") or 0.0
+        if stake <= 0 and r["book"] == q["book"] and pd.notna(r["stake"]):
+            stake = float(r["stake"])
+        parts = [f"{game}{_pick(r['market'], pick, q.get('line'))} {int(round(q['odds'])):+d}", BOOKS[q["book"]],
+                 f"stake {stake * 100:.1f}%" if stake > 0 else "no stake"]
+        if q.get("ev") is not None:
+            parts.append(f"EV {q['ev'] * 100:+.1f}%")
+        return " · ".join(parts), True
+    best = max(quotes, key=lambda q: q.get("ev") if q.get("ev") is not None else -9)
+    ev = f", EV {best['ev'] * 100:+.1f}%" if best.get("ev") is not None else ""
+    why = "doesn't beat Pinnacle by enough" if b.get("tier") == "price" else "not +EV"
+    return (f"{game}{pick} · NOT A BET at DraftKings or FanDuel ({why}; best there: {BOOKS[best['book']]} "
+            f"{_pick(r['market'], pick, best.get('line'))} {int(round(best['odds'])):+d}{ev}; "
+            f"card has it at {BOOKS.get(str(r['book']), r['book'])})"), False
+
+
+def _board_bets(path: Path | None) -> dict:
+    """(game id, market, side) -> the board's bet, with every book's quote."""
+    if path is None or not Path(path).exists():
+        return {}
+    games = (json.loads(Path(path).read_text()).get("slate") or {}).get("games") or []
+    return {(str(g.get("id")), b.get("market"), b.get("side")): b for g in games for b in g.get("bets") or []}
 
 
 def card(league: str, first: dt.datetime, path: Path | None = None) -> pd.DataFrame:
@@ -141,22 +181,27 @@ def card(league: str, first: dt.datetime, path: Path | None = None) -> pd.DataFr
     return d.sort_values(["kickoff", "game_id", "market"], kind="stable")
 
 
-def message(windows_: list[tuple[str, dt.datetime]], paths: dict | None = None) -> tuple[str, str] | None:
-    """(title, body) for these windows' cards, or None when every card is empty."""
-    parts, heads = [], []
+def message(windows_: list[tuple[str, dt.datetime]], paths: dict | None = None,
+            boards: dict | None = None) -> tuple[str, str] | None:
+    """(title, body) for these windows' cards at DraftKings and FanDuel, or None when every card
+    is empty. A card bet neither book qualifies is listed as not a bet there."""
+    parts, heads, n, off = [], [], 0, 0
     for lg, first in windows_:
         d = card(lg, first, (paths or {}).get(lg))
         if d.empty:
             continue
+        bets = _board_bets((boards or PATHS).get(lg))
         when = first.astimezone(ET).strftime("%a %-I:%M %p ET")
         heads.append(f"{NAMES[lg]} {when}")
-        lines = [f"{NAMES[lg]}, kickoffs from {when}:"] + [_bet_line(r) for _, r in d.iterrows()]
-        parts.append("\n".join(lines))
+        rows = [_bet_line(r, bets.get((str(r["game_id"]), r["market"], r["side"]))) for _, r in d.iterrows()]
+        rows.sort(key=lambda x: not x[1])                 # the bets first, then the ones that aren't
+        n += sum(ok for _, ok in rows)
+        off += sum(not ok for _, ok in rows)
+        parts.append("\n".join([f"{NAMES[lg]}, kickoffs from {when}:"] + [t for t, _ in rows]))
     if not parts:
         return None
-    n = sum(len(p.splitlines()) - 1 for p in parts)
-    title = f"Best bets: {' + '.join(heads)} ({n} bet{'s' if n != 1 else ''})"
-    return title, "\n\n".join(parts)
+    count = f"{n} bet{'s' if n != 1 else ''}" + (f", {off} not at DK/FD" if off else "")
+    return f"Best bets: {' + '.join(heads)} ({count})", "\n\n".join(parts)
 
 
 def _windows_arg(s: str) -> list[tuple[str, dt.datetime]]:
@@ -182,7 +227,7 @@ def main(argv=None) -> int:
             return 0
         title, body = msg
         a.push.write_text(title + "\n" + body + "\n")
-        a.md.write_text(f"**{title}**\n\n" + body.replace("\n", "  \n") + "\n\nAs the card stood at the last rebuild before kickoff. Lines move: check the book before betting.\n")
+        a.md.write_text(f"**{title}**\n\n" + body.replace("\n", "  \n") + "\n\nThe Best bets card at the last rebuild before kickoff, at DraftKings and FanDuel only. Lines move: check the book before betting.\n")
         print(title + "\n" + body)
         return 0
     for at, lg, label, alert in plan(dt.datetime.now(dt.timezone.utc), a.horizon):

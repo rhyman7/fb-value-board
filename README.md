@@ -314,7 +314,9 @@ from the boards' kickoff times and waits in place, so GitHub's skipped schedules
 Market lines takes a `league` input (both, nfl, cfb) for these single-league snapshots. After
 a window's 20-minute refresh its Best bets card (as the record will grade it) goes to the phone
 through ntfy (`NTFY_TOPIC`) and as a comment on the open `best-bets` issue, which GitHub emails;
-an empty card sends nothing. A
+an empty card sends nothing. It shows only DraftKings and FanDuel: each bet at the better of
+the two that still qualifies (a price bet must beat Pinnacle's no-vig number by `PRICE_MIN`,
+any other tier must be +EV), or marked NOT A BET there with the best DK/FD price. A
 price bet built on prices more than 3 hours old is greyed on the sheet with "Check the price". Only rows that changed are stored, so a
 month of both leagues is a few thousand rows. Pinnacle is the sharp reference: the boards
 anchor their projections to its no-vig price where it quotes the game, and score every other

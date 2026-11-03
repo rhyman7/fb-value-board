@@ -48,13 +48,32 @@ g3|Spread|home,2026-11-08 12:00,2026,10,g3,g3,2026-11-08T21:05Z,Spread,home,LV +
 """
 
 
-def test_alert_lists_the_windows_card_as_it_stands(tmp_path):
-    p = tmp_path / "bestbets.csv"
+BOARD = {"slate": {"games": [
+    {"id": "2026_10_SEA_LV", "bets": [{"market": "Spread", "side": "away", "tier": "price", "books": [
+        {"book": "fanduel", "line": -5.5, "odds": -105, "ev": 0.0361, "ev_line": 0.0181, "stake": 0.0051},
+        {"book": "draftkings", "line": -6, "odds": -110, "ev": -0.0259, "ev_line": -0.0435, "stake": 0}]}]},
+    {"id": "g2", "bets": [{"market": "Moneyline", "side": "home", "tier": "opener", "books": [
+        {"book": "kalshi", "line": None, "odds": 108, "ev": 0.03, "stake": 0.006},
+        {"book": "draftkings", "line": None, "odds": -105, "ev": -0.01, "stake": 0}]}]},
+]}}
+
+
+def test_alert_shows_only_draftkings_and_fanduel_and_says_when_neither_qualifies(tmp_path):
+    import json
+    p, b = tmp_path / "bestbets.csv", tmp_path / "data.json"
     p.write_text(CSV)
-    title, body = K.message([("nfl", t("2026-11-08 18:00"))], {"nfl": p})
-    assert title == "Best bets: NFL Sun 1:00 PM ET (2 bets)"      # the under left the card; g3 is a later window
-    assert body.splitlines()[1:] == ["SEA@LV: SEA -5.5 -105 · FanDuel · stake 0.5% · EV +3.6%",
-                                     "DAL ML +108 (+101 after fee) · Kalshi · stake 0.6% · EV +3.0%"]
+    b.write_text(json.dumps(BOARD))
+    title, body = K.message([("nfl", t("2026-11-08 18:00"))], {"nfl": p}, {"nfl": b})
+    assert title == "Best bets: NFL Sun 1:00 PM ET (1 bet, 1 not at DK/FD)"   # the under left the card; g3 is a later window
+    assert body.splitlines()[1:] == [
+        "SEA@LV: SEA -5.5 -105 · FanDuel · stake 0.5% · EV +3.6%",
+        "DAL ML · NOT A BET at DraftKings or FanDuel (not +EV; best there: DraftKings DAL ML -105, EV -1.0%; card has it at Kalshi)"]
+
+
+def test_a_price_bet_needs_the_book_to_beat_the_sharp_number():
+    b = {"tier": "price"}
+    assert K.qualifies(b, {"ev": 0.03, "ev_line": 0.012}) and not K.qualifies(b, {"ev": 0.03, "ev_line": 0.005})
+    assert K.qualifies({"tier": "opener"}, {"ev": 0.001}) and not K.qualifies({"tier": "opener"}, {"ev": -0.001})
 
 
 def test_alert_sends_nothing_for_an_empty_card(tmp_path):
