@@ -1,0 +1,64 @@
+name: Delete merged branches
+
+# One-click branch cleanup, run by hand from the Actions tab. Deletes a branch only when it
+# holds nothing that isn't already on main:
+#   - every commit on it is already in main, or
+#   - its head is exactly the commit a merged pull request was merged from (squash merges),
+#   - or it is named in the "also_delete" input (branches checked by hand, Nov 3, 2026:
+#     their later commits reached main through other PRs, or were dropped on purpose).
+# Never touches main, gh-pages, or a branch with an open pull request.
+# "dry_run" (on by default) only lists what would be deleted; untick it to delete.
+# A deleted branch whose pull request merged can be brought back from the PR page
+# ("Restore branch").
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only list the branches; delete nothing"
+        type: boolean
+        default: true
+      also_delete:
+        description: "Extra branches to delete (space-separated), checked by hand"
+        type: string
+        default: "dashboard-feed experiments/defensive-ratings feature/defense-in-player-projections market-lines players-new-board sharp-anchor value-boards-landing"
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Find and delete
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          ALSO: ${{ inputs.also_delete }}
+        run: |
+          git fetch -q --prune origin '+refs/heads/*:refs/remotes/origin/*'
+          gh api --paginate "repos/$REPO/pulls?state=open&per_page=100" --jq '.[].head.ref' | sort -u > open.txt
+          gh api --paginate "repos/$REPO/pulls?state=closed&per_page=100" --jq '.[] | select(.merged_at != null) | .head.sha' | sort -u > merged_heads.txt
+          deleted=0; kept=0
+          for b in $(git for-each-ref --format='%(refname:lstrip=3)' refs/remotes/origin); do
+            case "$b" in main|gh-pages|HEAD) continue ;; esac
+            if grep -qxF "$b" open.txt; then echo "keep   $b (open pull request)"; kept=$((kept+1)); continue; fi
+            why=""
+            if [ "$(git rev-list --count origin/main..origin/$b)" = "0" ]; then why="all commits in main"
+            elif grep -qxF "$(git rev-parse origin/$b)" merged_heads.txt; then why="merged pull request"
+            elif printf '%s\n' $ALSO | grep -qxF "$b"; then why="listed in also_delete"
+            fi
+            if [ -z "$why" ]; then echo "keep   $b (has commits not in main)"; kept=$((kept+1)); continue; fi
+            if [ "$DRY_RUN" = "true" ]; then echo "would delete $b ($why)"
+            else gh api -X DELETE "repos/$REPO/git/refs/heads/$b" --silent && echo "deleted $b ($why)"
+            fi
+            deleted=$((deleted+1))
+          done
+          verb=$([ "$DRY_RUN" = "true" ] && echo "would delete" || echo "deleted")
+          echo "Summary: $verb $deleted, kept $kept" | tee -a "$GITHUB_STEP_SUMMARY"
