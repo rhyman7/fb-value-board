@@ -8,6 +8,10 @@ team_extra_<season>.csv, one row per team per game (offense view):
   ed_pass_epa, ed_pass   early-down (1st/2nd) pass EPA and count, non-garbage
   fumbles, fumbles_lost  all offensive fumbles and those lost (recovery luck)
   st_epa           net special-teams EPA (kicks, punts, returns) for the team
+  pnt_n, pnt_epa   non-garbage dropbacks that were not interceptions or lost fumbles, and their
+  rnt_n, rnt_epa   EPA; the same for carries. The turnover-free pass and rush ratings (Nov 2026,
+                   FEATURES.md "Turnover-free ratings"): same plays, filters and clipping as the
+                   base pass/rush ratings in data.py, turnover plays left out
 qb_extra_<season>.csv, one row per passer per game:
   att_cpoe, cpoe_sum     attempts with a CPOE value and their summed CPOE
 """
@@ -22,7 +26,7 @@ from .data import _download, current_season
 COLS = ["game_id", "season", "posteam", "defteam", "home_team", "pass", "rush", "epa", "wp", "down",
         "yards_gained", "sack", "qb_dropback", "fumble", "fumble_lost", "play_type", "two_point_attempt",
         "qb_kneel", "qb_spike", "game_seconds_remaining", "score_differential", "qtr", "fixed_drive",
-        "passer_player_id", "cpoe", "complete_pass", "incomplete_pass"]
+        "passer_player_id", "cpoe", "complete_pass", "incomplete_pass", "interception"]
 ST = {"field_goal", "extra_point", "punt", "kickoff"}
 
 
@@ -69,7 +73,9 @@ def _reduce(season: int):
         "fumbles_lost": g["fumble_lost"].sum(),
     }).reset_index().rename(columns={"posteam": "team"})
     out = out.merge(st_net.reset_index(), on=["game_id", "team"], how="left")
-    out = out.fillna({"st_epa": 0, "expl": 0, "plays_ng": 0, "ed_pass_epa": 0, "ed_pass": 0})
+    out = out.merge(turnover_free(p), on=["game_id", "team"], how="left")
+    out = out.fillna({"st_epa": 0, "expl": 0, "plays_ng": 0, "ed_pass_epa": 0, "ed_pass": 0,
+                      "pnt_n": 0, "pnt_epa": 0, "rnt_n": 0, "rnt_epa": 0})
     out.insert(0, "season", season)
 
     q = p[p["cpoe"].notna() & p["passer_player_id"].notna()]
@@ -79,12 +85,28 @@ def _reduce(season: int):
     return out, qb
 
 
+def turnover_free(p: pd.DataFrame) -> pd.DataFrame:
+    """Pass and rush EPA with turnover plays left out, per offense per game: the plays, filters and
+    clipping of the base ratings (data._reduce_season), minus interceptions and lost fumbles."""
+    q = p[((p["pass"] == 1) | (p["rush"] == 1)) & p["epa"].notna() & p["posteam"].notna()]
+    q = q[q["two_point_attempt"].fillna(0) == 0]
+    q = q[q["wp"].between(0.03, 0.97) | q["wp"].isna()].copy()
+    q["epa"] = q["epa"].clip(-4.5, 4.5)
+    is_pass = (q["pass"] == 1).astype(int)
+    to = ((q["interception"].fillna(0) == 1) | (q["fumble_lost"].fillna(0) == 1)).astype(int)
+    q = q.assign(pnt_n=is_pass * (1 - to), pnt_epa=q["epa"] * is_pass * (1 - to),
+                 rnt_n=(1 - is_pass) * (1 - to), rnt_epa=q["epa"] * (1 - is_pass) * (1 - to))
+    g = q.groupby(["game_id", "posteam"])[["pnt_n", "pnt_epa", "rnt_n", "rnt_epa"]].sum().reset_index()
+    return g.rename(columns={"posteam": "team"})
+
+
 def load_extra(refresh_current: bool = False, verbose: bool = True):
     now = current_season()
     ts, qs = [], []
     for season in range(C.FIRST_SEASON, now + 1):
         tp, qp = C.CACHE / f"team_extra_{season}.csv", C.CACHE / f"qb_extra_{season}.csv"
-        if (season == now and refresh_current) or not (tp.exists() and qp.exists()):
+        stale = tp.exists() and "pnt_n" not in pd.read_csv(tp, nrows=0).columns   # cached before the turnover-free columns
+        if (season == now and refresh_current) or not (tp.exists() and qp.exists()) or stale:
             if verbose:
                 print(f"  extra stats {season} ...", flush=True)
             t, q = _reduce(season)

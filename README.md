@@ -122,9 +122,12 @@ a lead to keep testing. The board tags games forecast in that band.
 Sack rate, explosive plays, early-down passing, special teams, fumble luck,
 quarterback CPOE, pace, travel, time zones, the West Coast early kickoff and
 divisional games were each tested as additions to the model. None improved the
-spread model. Wind and snaps per game improved the total model a little. Full
-results are in [FEATURES.md](FEATURES.md); rerun them with
-`python experiments/feature_test.py`.
+spread model under the old 2-standard-error bar; under the keep rule of Nov 4,
+2026 (CONVENTIONS.md, "Model tests") the turnover-free pass and rush ratings
+replaced the originals in the spread model, and special teams was re-checked
+and left out (FEATURES.md, "Re-judging past tests under the keep rule"). Wind
+and snaps per game improved the total model a little. Full results are in
+[FEATURES.md](FEATURES.md); rerun them with `python experiments/feature_test.py`.
 
 ## College football board
 
@@ -195,7 +198,9 @@ check its first run.
    rate and points, each solved as a ridge regression over all teams at once so
    ratings are opponent-adjusted. Recent games count more (9-week half-life),
    prior seasons count 55% as much, garbage time is dropped and single-play EPA
-   is capped.
+   is capped. The spread model uses the pass and rush ratings with turnover
+   plays (interceptions, lost fumbles) left out (`nflmodel/features_ext.py`,
+   Nov 2026); the total model uses the originals.
 2. **Quarterback adjustment.** Each quarterback has a decayed, shrunk EPA per
    dropback, judged over about 80 team-weeks so a starter's value does not
    collapse after a few bad games; an unknown backup starts at 0.13 EPA per

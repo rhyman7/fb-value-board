@@ -1204,6 +1204,11 @@ in tuning and holdout, the holdout by 2 paired standard errors. Seasons through 
 both sports. This agrees with the rejected fumble-luck test: once plays are clipped and the points
 and market ratings are in the model, turnover luck is not something the board is missing.
 
+*Nov 4, 2026: re-judged under the keep rule and applied.* The NFL margin swap is better on every
+measure, however small, so it went on the board (see "Re-judging past tests under the keep rule",
+"Applied"). The counts now live in `data/cache/team_extra_<season>.csv` (`pnt_n, pnt_epa, rnt_n,
+rnt_epa`, written by `nflmodel/extra.py`); the script reads them from there.
+
 ## Totals at the opening total (Nov 2, 2026): a lead, not proven
 
 Until now NFL totals were graded only at the close (no historical opening totals). nfelo's games
@@ -1737,3 +1742,29 @@ pre-October model, without wind or snaps.
 Trade-offs (better somewhere, worse somewhere) and incomplete results (a measure missing) are listed
 in the Project doc `claude/keep-rule-rejudge-2026-11-04.md`; trade-offs go to Ryan, incompletes need
 a re-run with the missing measure before they can be judged.
+
+### Applied (Nov 4, 2026, Ryan's go-ahead): the combined checks
+
+Changes interact, so each set was re-checked together before it went on the board, against the model
+`main` had, on the frame the Update board Action builds (injuries, wind, and the role signals of
+`game_roles.py`, which the re-judge frame did not have). A set is kept only if it is still better on
+every measure; a piece that makes the set worse is dropped and named.
+
+**NFL game model** (`experiments/apply_check_nfl_game.py`, `experiments/out/apply_check_nfl_game.json`).
+Measures: the raw model's and the blended projection's average margin miss, tuning (2014-18) and
+holdout (2019 on), paired by game; the spread record at the closing line (market-adjusted sides with
+EV above 0) alongside.
+
+| Set | Raw tuning | Raw holdout | Blend tuning | Blend holdout | Spread EV>0, holdout return |
+|---|---|---|---|---|---|
+| main | 10.248 | 10.021 | | | −1.2% (n 1028) |
+| + special teams `d_st` | +0.0002 ± 0.0043 | +0.0002 ± 0.0037 | +0.0008 ± 0.0022 | −0.0008 ± 0.0014 | −1.2% (n 1048) |
+| turnover-free swap | −0.0057 ± 0.0057 | −0.0044 ± 0.0047 | −0.0025 ± 0.0030 | −0.0006 ± 0.0019 | −1.0% (n 1077) |
+| both | −0.0021 ± 0.0065 | −0.0027 ± 0.0055 | −0.0006 ± 0.0033 | −0.0014 ± 0.0023 | −1.6% (n 1090) |
+
+- **Kept: the turnover-free swap** (`d_pnt`, `d_rnt` for `d_pass`, `d_rush` in `model.MARGIN_FEATS`;
+  `features_ext.PRODUCTION_METRICS` gained `pnt`, `rnt`; the counts are columns of
+  `team_extra_<season>.csv`). Better on all four accuracy measures and on the holdout spread record.
+- **Dropped: special teams.** On the board's frame it is a trade-off on its own (raw miss a hair worse
+  in both periods) and it makes the swap's set worse on every measure. The re-judge's −0.0005 /
+  −0.0010 came from a frame without the role signals. Not applied; it stays a trade-off for Ryan.

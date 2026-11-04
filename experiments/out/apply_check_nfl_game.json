@@ -1,0 +1,231 @@
+{
+ "main_margin": [
+  "d_pass",
+  "d_rush",
+  "d_sr",
+  "d_pts",
+  "d_mkt",
+  "d_qb",
+  "hfa",
+  "rest_diff",
+  "d_chg_ol",
+  "d_depth1_out",
+  "d_snap_drop"
+ ],
+ "spread_record_main": {
+  "all": {
+   "n": 2056,
+   "w": 1059,
+   "l": 950,
+   "p": 47,
+   "roi": 0.0259,
+   "roi_se": 0.0212,
+   "units": 53.3
+  },
+  "hold": {
+   "n": 1028,
+   "w": 513,
+   "l": 494,
+   "p": 21,
+   "roi": -0.0123,
+   "roi_se": 0.03,
+   "units": -12.6
+  }
+ },
+ "variants": {
+  "special teams (d_st)": {
+   "margin_feats": [
+    "d_pass",
+    "d_rush",
+    "d_sr",
+    "d_pts",
+    "d_mkt",
+    "d_qb",
+    "hfa",
+    "rest_diff",
+    "d_chg_ol",
+    "d_depth1_out",
+    "d_snap_drop",
+    "d_st"
+   ],
+   "model_margin": {
+    "tune": {
+     "n": 1335,
+     "base": 10.1099,
+     "change": 0.0002,
+     "se": 0.0043
+    },
+    "hold": {
+     "n": 2081,
+     "base": 9.9651,
+     "change": 0.0002,
+     "se": 0.0037
+    }
+   },
+   "proj_margin": {
+    "tune": {
+     "n": 1335,
+     "base": 10.0378,
+     "change": 0.0008,
+     "se": 0.0022
+    },
+    "hold": {
+     "n": 2081,
+     "base": 9.814,
+     "change": -0.0008,
+     "se": 0.0014
+    }
+   },
+   "spread_record": {
+    "all": {
+     "n": 2083,
+     "w": 1079,
+     "l": 958,
+     "p": 46,
+     "roi": 0.0311,
+     "roi_se": 0.0211,
+     "units": 64.8
+    },
+    "hold": {
+     "n": 1048,
+     "w": 523,
+     "l": 504,
+     "p": 21,
+     "roi": -0.0122,
+     "roi_se": 0.0297,
+     "units": -12.8
+    }
+   },
+   "verdict": "TRADE-OFF"
+  },
+  "turnover-free swap (d_pnt/d_rnt for d_pass/d_rush)": {
+   "margin_feats": [
+    "d_pnt",
+    "d_rnt",
+    "d_sr",
+    "d_pts",
+    "d_mkt",
+    "d_qb",
+    "hfa",
+    "rest_diff",
+    "d_chg_ol",
+    "d_depth1_out",
+    "d_snap_drop"
+   ],
+   "model_margin": {
+    "tune": {
+     "n": 1335,
+     "base": 10.1099,
+     "change": -0.0057,
+     "se": 0.0057
+    },
+    "hold": {
+     "n": 2081,
+     "base": 9.9651,
+     "change": -0.0044,
+     "se": 0.0047
+    }
+   },
+   "proj_margin": {
+    "tune": {
+     "n": 1335,
+     "base": 10.0378,
+     "change": -0.0025,
+     "se": 0.003
+    },
+    "hold": {
+     "n": 2081,
+     "base": 9.814,
+     "change": -0.0006,
+     "se": 0.0019
+    }
+   },
+   "spread_record": {
+    "all": {
+     "n": 2116,
+     "w": 1094,
+     "l": 973,
+     "p": 49,
+     "roi": 0.0299,
+     "roi_se": 0.0209,
+     "units": 63.2
+    },
+    "hold": {
+     "n": 1077,
+     "w": 538,
+     "l": 515,
+     "p": 24,
+     "roi": -0.0098,
+     "roi_se": 0.0292,
+     "units": -10.5
+    }
+   },
+   "verdict": "KEEP (better on every measure)"
+  },
+  "ALL together": {
+   "margin_feats": [
+    "d_pnt",
+    "d_rnt",
+    "d_sr",
+    "d_pts",
+    "d_mkt",
+    "d_qb",
+    "hfa",
+    "rest_diff",
+    "d_chg_ol",
+    "d_depth1_out",
+    "d_snap_drop",
+    "d_st"
+   ],
+   "model_margin": {
+    "tune": {
+     "n": 1335,
+     "base": 10.1099,
+     "change": -0.0021,
+     "se": 0.0065
+    },
+    "hold": {
+     "n": 2081,
+     "base": 9.9651,
+     "change": -0.0027,
+     "se": 0.0055
+    }
+   },
+   "proj_margin": {
+    "tune": {
+     "n": 1335,
+     "base": 10.0378,
+     "change": -0.0006,
+     "se": 0.0033
+    },
+    "hold": {
+     "n": 2081,
+     "base": 9.814,
+     "change": -0.0014,
+     "se": 0.0023
+    }
+   },
+   "spread_record": {
+    "all": {
+     "n": 2125,
+     "w": 1093,
+     "l": 984,
+     "p": 48,
+     "roi": 0.0244,
+     "roi_se": 0.0209,
+     "units": 51.8
+    },
+    "hold": {
+     "n": 1090,
+     "w": 542,
+     "l": 526,
+     "p": 22,
+     "roi": -0.0161,
+     "roi_se": 0.0291,
+     "units": -17.6
+    }
+   },
+   "verdict": "KEEP (better on every measure)"
+  }
+ }
+}

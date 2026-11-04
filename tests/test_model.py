@@ -557,3 +557,28 @@ def test_pass_catchers_shadow_is_logged_apart_and_off_the_board(tmp_path, monkey
     SH._merge_log(path, pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [1.0, 2.0]}), frozen=set())
     SH._merge_log(path, pd.DataFrame({"game_id": ["A", "B"], "margin_shadow": [9.0, 3.0]}), frozen={"A"})
     assert pd.read_csv(path).set_index("game_id")["margin_shadow"].to_dict() == {"A": 1.0, "B": 3.0}
+
+
+def test_turnover_free_counts_leave_out_turnover_plays():
+    """The spread model's pass and rush ratings leave out interceptions and lost fumbles (Nov 2026):
+    the per-game counts match the base ratings' filters, minus the turnover plays."""
+    from nflmodel import extra, model
+    from nflmodel.features_ext import PRODUCTION_METRICS
+    p = pd.DataFrame({
+        "game_id": ["g"] * 6, "posteam": ["A", "A", "A", "A", "B", "B"],
+        "pass": [1, 1, 0, 1, 1, 0], "rush": [0, 0, 1, 0, 0, 1],
+        "epa": [1.0, -6.0, 0.5, 9.0, 2.0, np.nan],          # -6 is an interception; 9 clips to 4.5
+        "wp": [0.5, 0.5, 0.5, 0.5, 0.99, 0.5],              # B's pass is garbage time
+        "two_point_attempt": [0, 0, 0, 0, 0, 0],
+        "interception": [0, 1, 0, 0, 0, 0], "fumble_lost": [0, 0, 1, 0, 0, 0],
+    })
+    t = extra.turnover_free(p).set_index("team")
+    assert t.loc["A", "pnt_n"] == 2 and abs(t.loc["A", "pnt_epa"] - 5.5) < 1e-9   # 1.0 + 4.5, the pick left out
+    assert t.loc["A", "rnt_n"] == 0 and t.loc["A", "rnt_epa"] == 0                # the only carry lost a fumble
+    assert "B" not in t.index                                                      # garbage time and no EPA: nothing counted
+    assert {"pnt", "rnt"} <= set(PRODUCTION_METRICS) and {"d_pnt", "d_rnt"} <= set(model.MARGIN_FEATS)
+    assert not {"d_pass", "d_rush"} & set(model.MARGIN_FEATS)
+    # every cached season carries the columns the board needs (load_extra re-reduces a season without them)
+    from nflmodel import config as C
+    for path in sorted(C.CACHE.glob("team_extra_*.csv")):
+        assert {"pnt_n", "pnt_epa", "rnt_n", "rnt_epa"} <= set(pd.read_csv(path, nrows=0).columns), path.name

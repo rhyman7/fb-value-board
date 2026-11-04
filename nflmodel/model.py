@@ -20,7 +20,8 @@ import pandas as pd
 from . import config as C
 from .ratings import RatingEngine
 
-MARGIN_FEATS = ["d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_qb", "hfa", "rest_diff",
+MARGIN_FEATS = ["d_pnt", "d_rnt",   # pass and rush ratings with turnover plays left out, in place of d_pass/d_rush (Nov 2026)
+                "d_sr", "d_pts", "d_mkt", "d_qb", "hfa", "rest_diff",
                 "d_chg_ol",   # offensive-line starters missing beyond recent games (Oct 2026, FEATURES.md)
                 "d_depth1_out", "d_snap_drop"]   # skill starters out and falling snap shares (Oct 2026, game_roles.py)
 TOTAL_FEATS = ["s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_qb", "lg_pts", "indoor",
