@@ -17,23 +17,40 @@ from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright
 
 PAGES = {
-    "sec": "https://www.secsports.com/fbreports",
-    "bigten": "https://bigten.org/FBReports",
-    "acc": "https://theacc.co/fbreporting",
-    "acc_policy": "https://theacc.com/sports/2025/8/28/availability-reporting.aspx",
-    "big12": "https://big12sports.com/sports/2025/8/21/availability-reporting.aspx",
+    # round 2 (Nov 3, 2026): the SEC and ACC pages embed app.hdintelligence.com; render it directly
+    # and log the JSON it fetches. Big 12's football page; Big Ten's football landing (its
+    # /FBReports address 404s on the new site).
+    "hdi_sec": "https://app.hdintelligence.com/?source=SEC&sport=Football&conf=SEC&type=report",
+    "hdi_sec_archive": "https://app.hdintelligence.com/?source=SEC&sport=Football&conf=SEC&type=archive",
+    "hdi_acc": "https://app.hdintelligence.com/?source=ACC&sport=Football&conf=ACC&type=report",
+    "big12_fb": "https://big12sports.com/sports/2025/8/14/FBreporting.aspx",
+    "bigten_fb": "https://bigten.org/fb/",
+    "bigten_sports": "https://bigten.org/sports/football",
 }
 LIMIT = 4
 KEY = re.compile(r"report|availab", re.I)
 
 
+NET = []
+
+
 def dump(page, url, out: Path, name: str) -> list[str]:
+    NET.clear()
     try:
         page.goto(url, wait_until="networkidle", timeout=60000)
     except Exception as exc:  # noqa: BLE001
         (out / f"{name}.error.txt").write_text(f"{url}\n{exc}")
         return []
-    page.wait_for_timeout(2500)
+    page.wait_for_timeout(4000)
+    for r in NET:
+        print(f"  ::net {r}")
+    for fr in page.frames:
+        if fr != page.main_frame and fr.url and "hdintelligence" in fr.url:
+            try:
+                ft = fr.evaluate("() => document.body ? document.body.innerText : ''")
+                print(f"  ::frame {fr.url} {len(ft)} chars: " + re.sub(r"\s+", " ", ft)[:1500])
+            except Exception as exc:  # noqa: BLE001
+                print(f"  ::frame {fr.url} unreadable ({exc})")
     info = page.evaluate("""() => ({
         url: location.href, title: document.title,
         text: document.body ? document.body.innerText : "",
@@ -74,6 +91,17 @@ def main():
     with sync_playwright() as p:
         b = p.chromium.launch()
         page = b.new_page(viewport={"width": 1400, "height": 1000}, user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36")
+
+        def on_response(resp):
+            ct = (resp.headers.get("content-type") or "").lower()
+            u = resp.url
+            if ("json" in ct or "xml" in ct or "hdintelligence" in u) and not u.endswith((".js", ".css", ".png", ".svg", ".woff2")):
+                try:
+                    body = resp.text()[:700].replace("\n", " ")
+                except Exception:  # noqa: BLE001
+                    body = "(no body)"
+                NET.append(f"{resp.status} {ct[:30]} {u} :: {body}")
+        page.on("response", on_response)
         for name, url in PAGES.items():
             for i, sub in enumerate(dump(page, url, out, name)):
                 dump(page, urljoin(url, sub), out, f"{name}_sub{i+1}")
