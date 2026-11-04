@@ -1535,3 +1535,38 @@ Not kept, not a near-miss. The books' early-season edge on roles is not recruiti
 applied this way. What the data may still be for: putting roster backs with no history into the
 team's first games (today they get no row, and no projection, until they have played), which the
 2025 lines cannot test since props start in week 3.
+
+## College defense against each position (Nov 3, 2026): passes for five pairs, not past the books
+
+Candidate 2 of the college-props memo. `python experiments/cfb_dvp_test.py` (results in
+`experiments/out/cfb_dvp_test.json`): the NFL board's defense-against-position rating
+(`nflmodel/dvp.py`: log of what a defense allowed to a position over what the projections expected,
+6-game half-life, last season at half weight, shrunk by 4 games; projection x exp(b x rating), b by
+least squares) on the college walk-forward projections, 2017 on.
+
+**Stage 1, the NFL rating as is: worse on every pair but one, on the tuning seasons it was fitted
+on too** (WR receiving yards 34.60 → 34.85 tuning, holdout 5.0 SE worse; RB carries 8.5 SE worse). The
+NFL rating counts a player who was expected but did not appear as 0 yards allowed. With no college
+injury report that is common, and the rating was measuring the opponents' absences, not the defense.
+
+**Stage 2, rule written before it ran: the same rating from players who appeared.** Decision per
+pair: RMSE better on the holdout (2021+) by 2+ SE and not worse on tuning (2017-19, where b is
+fitted); then Brier for that group at the 2025 lines (b refitted on 2017-2024) no worse.
+
+| Pair | b (2017-24) | Tuning RMSE | Holdout RMSE | Holdout z | 2025 lines, group z | Applied |
+|---|---|---|---|---|---|---|
+| WR receiving yards | 0.26 | 34.601 → 34.577 | 33.394 → 33.350 | -5.9 | -0.5 (1,442 props) | yes |
+| WR receptions | 0.34 | 2.126 → 2.124 | 2.051 → 2.048 | -5.3 | no lines | yes |
+| RB rushing yards | 0.27 | 40.192 → 40.128 | 38.022 → 37.975 | -3.0 | -0.5 (789) | yes |
+| RB carries | 0.41 | 5.555 → 5.544 | 5.277 → 5.269 | -3.2 | no lines | yes |
+| QB passing yards | 0.14 | 94.009 → 93.758 | 88.812 → 88.482 | -4.8 | -0.9 (628) | yes |
+| TE receiving yards | 0.10 | 24.953 → 24.954 (worse) | 24.378 → 24.373 | -3.8 | -0.7 | no: tuning worse |
+| RB receiving yards | 0.11 | 27.674 → 27.624 | 23.415 → 23.312 | -3.8 | **+2.0 worse** (126 props) | no: lines worse |
+| TE receptions | 0.14 | | | -0.3 | | no |
+| RB receptions | 0.37 | | | -1.5 | | no |
+
+Five pairs pass; college passing yards passes where the NFL's did not. **The gains are small** (a few
+hundredths of a yard on a 33-yard miss, as on the NFL board), and **against the books it is nothing**:
+rushing yards -0.0004 ± 0.0007, receiving -0.0001 ± 0.0004, passing -0.0012 ± 0.0014. The books price
+the matchup. It goes on the college board as a projection input and a card fact, on Ryan's go-ahead
+(it changes the live projections slightly); it does not count toward closing the gap to the books.
