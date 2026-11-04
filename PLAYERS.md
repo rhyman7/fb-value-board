@@ -11,7 +11,12 @@ Opportunity times efficiency, using only what was known before each game.
 1. **Team volume.** Pass attempts and carries per game, from the team's recent
    volume, what the opponent has allowed, the game model's projected margin and
    total (teams that trail throw more), wind and home field. A regression fitted
-   on the previous eight seasons.
+   on the previous eight seasons. Since Nov 4, 2026 (the keep rule) both regressions
+   also take the offense's pass rate over expected and the PROE its opponent has
+   allowed, and the carries regression reads the opponent's carries allowed against
+   what its opponents usually run ("vs usual") in place of the raw count
+   (`players.ATT_FEATS`, `CAR_FEATS`, `tendency`; FEATURES.md "Re-judging past tests
+   under the keep rule").
 2. **Player share.** The player's share of team targets, carries and pass
    attempts in games he was active, recent games weighted more (6-game
    half-life, last season at 60%). Active status comes from weekly rosters and
@@ -266,6 +271,9 @@ holdout. For carries "vs usual" in place of the raw count passes the rule by a h
 under a hundredth of a carry per team-game (5.586 → 5.580), too small to change any projection.
 Defenses' tendencies to face more or fewer passes are mostly the offenses they meet and the score:
 the raw count, the team's own averages and the projected margin already carry what there is.
+
+*Nov 4, 2026: applied for carries under the keep rule*, together with PROE, after the head-to-head in
+FEATURES.md "Re-judging past tests under the keep rule", "Applied".
 
 ### Coaching changes and playing surface on the player projections (Nov 2, 2026): not applied
 

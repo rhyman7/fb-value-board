@@ -1314,6 +1314,10 @@ the rule but is 0.015 carries on a 5.6-carry miss (0.3%), on the older chain pro
 board shows the New projections for backs' carries, so it is not applied without a recheck there,
 which at this size is not worth it.
 
+*Nov 4, 2026: applied under the keep rule* in both volume regressions (see "Re-judging past tests
+under the keep rule", "Applied"). PROE now lives in `data/cache/team_extra_<season>.csv` (`proe_n`,
+`proe_oe`, `nflmodel/extra.py`), rated by `players.tendency`.
+
 ## nfelo's WEPA, weighted EPA (Nov 2, 2026): no
 
 WEPA (github.com/greerreNFL/wepa) reweights each play's EPA by its kind (turnovers in part,
@@ -1768,3 +1772,39 @@ EV above 0) alongside.
 - **Dropped: special teams.** On the board's frame it is a trade-off on its own (raw miss a hair worse
   in both periods) and it makes the swap's set worse on every measure. The re-judge's −0.0005 /
   −0.0010 came from a frame without the role signals. Not applied; it stays a trade-off for Ryan.
+
+**NFL team volume** (`experiments/apply_check_nfl_volume.py`, `experiments/out/apply_check_nfl_volume.json`
+and `_pieces.json`; rule in the script's docstring), on the turnover-free spread model. The test's
+measures: the team regressions' average miss on team-games, tuning (2014-18) / holdout (2019 on).
+
+Pass attempts + PROE (offense's, and the opponent's allowed): **−0.0145 ± 0.0092 / −0.0035 ± 0.0079**, kept.
+
+Carries, head-to-head of the three re-judged versions and their combinations (miss, change vs the
+current 5.6107 / 5.5906):
+
+| Carries version | Tuning | Holdout |
+|---|---|---|
+| PROE | 5.601 (+0.0094 ± 0.0088) | 5.572 (−0.0188 ± 0.0064) |
+| play-calling (pace, neutral pass rate; team and opponent) | 5.553 (−0.0392 ± 0.0112) | 5.575 (−0.0157 ± 0.0074) |
+| vs usual, in place of the raw count | 5.571 (−0.0206 ± 0.0065) | 5.581 (−0.0095 ± 0.0045) |
+| PROE + play-calling | 5.563 (−0.0295 ± 0.0123) | 5.570 (−0.0211 ± 0.0085) |
+| **PROE + vs usual** | 5.577 (−0.0151 ± 0.0101) | **5.564 (−0.0263 ± 0.0081)** |
+| play-calling + vs usual | 5.561 (−0.0314 ± 0.0126) | 5.571 (−0.0198 ± 0.0084) |
+| all three | 5.569 (−0.0229 ± 0.0134) | 5.565 (−0.0253 ± 0.0095) |
+
+PROE alone is now a trade-off (it was better on both in the re-judge, before the spread model
+changed). Five versions are unbeaten on both periods; the pre-set tie-break (lowest holdout miss)
+picks **PROE + vs usual**, which went on the board (`players.CAR_FEATS`). Play-calling was not
+plumbed in; it stays available in `roles.py` for a later head-to-head.
+
+Through the player chain (projection RMSE, tuning / holdout; `_pieces.json` has each piece alone):
+the carries piece improves RB carries −0.0031 ± 0.0015 / −0.0034 ± 0.0014 and rushing yards −0.004 /
+−0.010 and touches nothing else; the attempts piece improves QB pass attempts −0.012 / −0.002,
+completions −0.005 / −0.003, passing yards −0.022 / −0.046 and TE receiving, and makes WR targets
++0.0002 / +0.0001 and WR receiving yards +0.010 ± 0.004 / +0.002 ± 0.004 worse. At the real 2023-25
+lines (Brier vs the books, both pieces): passing yards better in five of six snapshots (2024 close
++0.0005 worse), rushing yards better in two and worse in three by 0.0001-0.0003, carries (2025)
+better at pricing and worse at the close, receiving yards flat; "all" −0.0002 to 0.0000. **Ryan's
+call (Nov 4): apply both**; the team-level measures the test reports pass and the downstream
+differences are noise-sized. The WR receiving-yards and rushing-yards line numbers are recorded here
+as the mixed part of the result.

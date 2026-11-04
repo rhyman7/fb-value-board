@@ -140,9 +140,37 @@ def asof(df: pd.DataFrame, entity: str, num: list[str], den: list[str] | None, h
 # Building the projection table
 # --------------------------------------------------------------------------
 
-def team_games(frame: pd.DataFrame, pg: pd.DataFrame) -> pd.DataFrame:
+TEND_SHRINK, TEND_LAST = 4.0, 0.5    # tendency ratings: shrink toward 0 by 4 games; last season at half weight
+
+
+def tendency(t: pd.DataFrame, key: str, val: str, out: str, hl: float = TEAM_HL) -> pd.DataFrame:
+    """For each row, the weighted average of `val` over the `key` team's earlier games (TEAM_HL-game
+    half-life in games with a value, last season at TEND_LAST, older seasons dropped), shrunk toward
+    0 by TEND_SHRINK games: experiments/volume_allowed_test.py's `defense_rating`. Rows must carry
+    `season` and `t` (the game order); `val` is NaN where unknown (an upcoming game)."""
+    t = t.sort_values([key, "t"])
+    r = np.zeros(len(t))
+    pos = 0
+    for _, h in t.groupby(key, sort=False):
+        v = h[val].to_numpy(float)
+        season = h["season"].to_numpy(int)
+        have = ~np.isnan(v)
+        n = len(h)
+        if have.any() and n > 1:
+            cum = np.cumsum(have) - have                       # valued games before each row
+            i, j = np.arange(n)[:, None], np.arange(n)[None, :]
+            k = cum[:, None] - 1 - cum[None, :]                # valued games between j and i
+            sd = season[:, None] - season[None, :]
+            W = np.where((j < i) & have[None, :] & (sd <= 1) & (sd >= 0), 0.5 ** (k / hl) * TEND_LAST ** sd, 0.0)
+            r[pos:pos + n] = (W @ np.nan_to_num(v)) / (W.sum(1) + TEND_SHRINK)
+        pos += n
+    return t.assign(**{out: r}).sort_index()
+
+
+def team_games(frame: pd.DataFrame, pg: pd.DataFrame, team_extra: pd.DataFrame | None = None) -> pd.DataFrame:
     """One row per team per game (played and upcoming) with game-model context and,
-    for played games, team volume."""
+    for played games, team volume. team_extra (nflmodel/extra.py; loaded from the cache when
+    not given) supplies pass rate over expected for the tendency features."""
     f = frame
     cols = ["game_id", "season", "week", "home_team", "away_team", "proj_margin", "proj_total", "wind", "indoor", "played", "neutral"]
     h = f[cols].rename(columns={"home_team": "team", "away_team": "opp"}).assign(sign=1.0, home=1 - f["neutral"])
@@ -171,7 +199,21 @@ def team_games(frame: pd.DataFrame, pg: pd.DataFrame) -> pd.DataFrame:
     for c, lg in (("team_att_avg", lg_att), ("opp_att_allowed", lg_att), ("team_car_avg", lg_car), ("opp_car_allowed", lg_car)):
         tg[c] = tg[c].fillna(lg)
     tg["ptd_share"] = tg["ptd_share"].fillna(0.6)
-    return tg
+    # Tendencies (Nov 2026, FEATURES.md "Re-judging past tests under the keep rule"): the offense's pass
+    # rate over expected and the PROE its opponent has allowed, in the team pass-attempt regression;
+    # the defense's carries allowed against what its opponents usually run ("vs usual"), in the carries
+    # regression in place of the raw count. All from earlier games only; 0 = no information.
+    if team_extra is None:
+        from .extra import load_extra
+        team_extra, _ = load_extra(verbose=False)
+    pr = team_extra[["game_id", "team", "proe_n", "proe_oe"]]
+    tg = tg.merge(pr, on=["game_id", "team"], how="left")
+    tg["proe_v"] = np.where(tg["played"].astype(bool) & (tg["proe_n"] > 0), tg["proe_oe"] / tg["proe_n"].replace(0, np.nan), np.nan)
+    tg = tendency(tg, "team", "proe_v", "proe_off")
+    tg = tendency(tg, "opp", "proe_v", "opp_proe_def")
+    tg["car_vs_usual"] = np.where(tg["played"].astype(bool), tg["team_car"] - tg["team_car_avg"], np.nan)
+    tg = tendency(tg, "opp", "car_vs_usual", "opp_car_usual")
+    return tg.drop(columns=["proe_n", "proe_oe", "proe_v", "car_vs_usual"])
 
 
 def player_rows(tg: pd.DataFrame, pg: pd.DataFrame, avail: pd.DataFrame, info: pd.DataFrame) -> pd.DataFrame:
@@ -396,6 +438,12 @@ class Lin:
 
 
 VOL_FEATS = ["team_att_avg", "opp_att_allowed", "team_car_avg", "opp_car_allowed", "margin", "proj_total", "wind", "home"]
+# The two team-volume regressions (Nov 2026, FEATURES.md "Re-judging past tests under the keep rule"):
+# pass attempts also take the offense's pass rate over expected and the PROE its opponent allows;
+# carries take the same two and, in place of the opponent's raw carries allowed, what it allows
+# against what its opponents usually run (the head-to-head in experiments/apply_check_nfl_volume.py).
+ATT_FEATS = VOL_FEATS + ["proe_off", "opp_proe_def"]
+CAR_FEATS = [f for f in VOL_FEATS if f != "opp_car_allowed"] + ["opp_car_usual", "proe_off", "opp_proe_def"]
 
 
 def _pick_starter(d: pd.DataFrame):
@@ -410,9 +458,9 @@ def _pick_starter(d: pd.DataFrame):
 def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFrame:
     """Volume x share x efficiency, before calibration."""
     p = p.copy()
-    X = p[VOL_FEATS].fillna(0).to_numpy()
-    p["proj_team_att"] = att_model.predict(X).clip(15, 60)
-    p["proj_team_car"] = car_model.predict(X).clip(10, 45)
+    vol = lambda feats: p.reindex(columns=feats).fillna(0).to_numpy(float)   # a missing column = no information
+    p["proj_team_att"] = att_model.predict(vol(ATT_FEATS)).clip(15, 60)
+    p["proj_team_car"] = car_model.predict(vol(CAR_FEATS)).clip(10, 45)
     # shares among the players expected to play in this game
     act = (p["active_pre"] if "active_pre" in p else p["active"]) == 1
     for c in ("tgt_share", "car_share", "att_share"):
@@ -497,8 +545,8 @@ def walk_forward(table: pd.DataFrame, first_test: int = 2013) -> pd.DataFrame:
             continue
         tr_t = tg[(tg["season"] < s) & tg["played"].astype(bool) & tg["team_att"].notna()]
         tr_t = tr_t[tr_t["season"] >= s - 8]
-        att = Lin(5.0).fit(tr_t[VOL_FEATS].fillna(0), tr_t["team_att"].to_numpy(float))
-        car = Lin(5.0).fit(tr_t[VOL_FEATS].fillna(0), tr_t["team_car"].to_numpy(float))
+        att = Lin(5.0).fit(tr_t.reindex(columns=ATT_FEATS).fillna(0), tr_t["team_att"].to_numpy(float))
+        car = Lin(5.0).fit(tr_t.reindex(columns=CAR_FEATS).fillna(0), tr_t["team_car"].to_numpy(float))
         hist = raw_projection(table[(table["season"] < s) & (table["season"] >= max(first_test - 1, s - 6))], att, car)
         hist = hist[hist["played"].astype(bool) & (hist["active"] == 1)]
         cur = raw_projection(table[table["season"] == s], att, car)

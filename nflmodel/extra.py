@@ -9,7 +9,11 @@ team_extra_<season>.csv, one row per team per game (offense view):
   fumbles, fumbles_lost  all offensive fumbles and those lost (recovery luck)
   st_epa           net special-teams EPA (kicks, punts, returns) for the team
   pnt_n, pnt_epa   non-garbage dropbacks that were not interceptions or lost fumbles, and their
-  rnt_n, rnt_epa   EPA; the same for carries. The turnover-free pass and rush ratings (Nov 2026,
+  rnt_n, rnt_epa   EPA; the same for carries.
+  proe_n, proe_oe  neutral plays (downs 1-3, win probability 0.20-0.80, more than two minutes left in
+                   the half) and the sum of pass minus nflfastR's xpass over them: pass rate over
+                   expected, PROE (Nov 2026, FEATURES.md "Pass rate over expected"); the defense's
+                   "PROE allowed" is the same number read from its opponents' rows The turnover-free pass and rush ratings (Nov 2026,
                    FEATURES.md "Turnover-free ratings"): same plays, filters and clipping as the
                    base pass/rush ratings in data.py, turnover plays left out
 qb_extra_<season>.csv, one row per passer per game:
@@ -26,7 +30,7 @@ from .data import _download, current_season
 COLS = ["game_id", "season", "posteam", "defteam", "home_team", "pass", "rush", "epa", "wp", "down",
         "yards_gained", "sack", "qb_dropback", "fumble", "fumble_lost", "play_type", "two_point_attempt",
         "qb_kneel", "qb_spike", "game_seconds_remaining", "score_differential", "qtr", "fixed_drive",
-        "passer_player_id", "cpoe", "complete_pass", "incomplete_pass", "interception"]
+        "passer_player_id", "cpoe", "complete_pass", "incomplete_pass", "interception", "xpass", "half_seconds_remaining"]
 ST = {"field_goal", "extra_point", "punt", "kickoff"}
 
 
@@ -74,8 +78,9 @@ def _reduce(season: int):
     }).reset_index().rename(columns={"posteam": "team"})
     out = out.merge(st_net.reset_index(), on=["game_id", "team"], how="left")
     out = out.merge(turnover_free(p), on=["game_id", "team"], how="left")
+    out = out.merge(proe(p), on=["game_id", "team"], how="left")
     out = out.fillna({"st_epa": 0, "expl": 0, "plays_ng": 0, "ed_pass_epa": 0, "ed_pass": 0,
-                      "pnt_n": 0, "pnt_epa": 0, "rnt_n": 0, "rnt_epa": 0})
+                      "pnt_n": 0, "pnt_epa": 0, "rnt_n": 0, "rnt_epa": 0, "proe_n": 0, "proe_oe": 0})
     out.insert(0, "season", season)
 
     q = p[p["cpoe"].notna() & p["passer_player_id"].notna()]
@@ -100,12 +105,22 @@ def turnover_free(p: pd.DataFrame) -> pd.DataFrame:
     return g.rename(columns={"posteam": "team"})
 
 
+def proe(p: pd.DataFrame) -> pd.DataFrame:
+    """Pass rate over expected per offense per game: neutral plays (downs 1-3, win probability
+    0.20-0.80, over two minutes left in the half) and the sum of pass minus xpass over them
+    (experiments/proe_test.py's definition)."""
+    q = p[((p["pass"] == 1) | (p["rush"] == 1)) & p["posteam"].notna() & p["xpass"].notna()
+          & p["down"].isin([1, 2, 3]) & p["wp"].between(0.2, 0.8) & (p["half_seconds_remaining"] > 120)]
+    g = q.assign(oe=q["pass"] - q["xpass"]).groupby(["game_id", "posteam"]).agg(proe_n=("oe", "size"), proe_oe=("oe", "sum"))
+    return g.reset_index().rename(columns={"posteam": "team"})
+
+
 def load_extra(refresh_current: bool = False, verbose: bool = True):
     now = current_season()
     ts, qs = [], []
     for season in range(C.FIRST_SEASON, now + 1):
         tp, qp = C.CACHE / f"team_extra_{season}.csv", C.CACHE / f"qb_extra_{season}.csv"
-        stale = tp.exists() and "pnt_n" not in pd.read_csv(tp, nrows=0).columns   # cached before the turnover-free columns
+        stale = tp.exists() and not {"pnt_n", "proe_n"} <= set(pd.read_csv(tp, nrows=0).columns)   # cached before the newer columns
         if (season == now and refresh_current) or not (tp.exists() and qp.exists()) or stale:
             if verbose:
                 print(f"  extra stats {season} ...", flush=True)

@@ -1,0 +1,602 @@
+{
+ "head_to_head": {
+  "attempts": {
+   "+ PROE": {
+    "tune": {
+     "n": 2670,
+     "mae": 6.4109,
+     "change": -0.0145,
+     "se": 0.0092
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 6.1817,
+     "change": -0.0035,
+     "se": 0.0079
+    },
+    "keep": true
+   }
+  },
+  "carries": {
+   "PROE": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.6013,
+     "change": 0.0094,
+     "se": 0.0088
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5718,
+     "change": -0.0188,
+     "se": 0.0064
+    },
+    "beats_current": false
+   },
+   "play-calling": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5528,
+     "change": -0.0392,
+     "se": 0.0112
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.575,
+     "change": -0.0157,
+     "se": 0.0074
+    },
+    "beats_current": true
+   },
+   "vs usual (swap)": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5714,
+     "change": -0.0206,
+     "se": 0.0065
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5811,
+     "change": -0.0095,
+     "se": 0.0045
+    },
+    "beats_current": true
+   },
+   "PROE + play-calling": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5625,
+     "change": -0.0295,
+     "se": 0.0123
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5695,
+     "change": -0.0211,
+     "se": 0.0085
+    },
+    "beats_current": true
+   },
+   "PROE + vs usual": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5769,
+     "change": -0.0151,
+     "se": 0.0101
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5643,
+     "change": -0.0263,
+     "se": 0.0081
+    },
+    "beats_current": true
+   },
+   "play-calling + vs usual": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5606,
+     "change": -0.0314,
+     "se": 0.0126
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5709,
+     "change": -0.0198,
+     "se": 0.0084
+    },
+    "beats_current": true
+   },
+   "all three": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5691,
+     "change": -0.0229,
+     "se": 0.0134
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5653,
+     "change": -0.0253,
+     "se": 0.0095
+    },
+    "beats_current": true
+   }
+  },
+  "carries_pick": "PROE + vs usual",
+  "carries_unbeaten": [
+   "play-calling",
+   "PROE + play-calling",
+   "PROE + vs usual",
+   "play-calling + vs usual",
+   "all three"
+  ]
+ },
+ "chosen": {
+  "ATT_FEATS": [
+   "team_att_avg",
+   "opp_att_allowed",
+   "team_car_avg",
+   "opp_car_allowed",
+   "margin",
+   "proj_total",
+   "wind",
+   "home",
+   "proe_off",
+   "opp_proe_def"
+  ],
+  "CAR_FEATS": [
+   "team_att_avg",
+   "opp_att_allowed",
+   "team_car_avg",
+   "margin",
+   "proj_total",
+   "wind",
+   "home",
+   "opp_car_usual",
+   "proe_off",
+   "opp_proe_def"
+  ]
+ },
+ "projection_rmse": {
+  "QB pass_att": {
+   "tune": {
+    "n": 2521,
+    "rmse_current": 8.7565,
+    "rmse_new": 8.7445,
+    "change": -0.012,
+    "se": 0.0067
+   },
+   "hold": {
+    "n": 3849,
+    "rmse_current": 8.7259,
+    "rmse_new": 8.7235,
+    "change": -0.0023,
+    "se": 0.0065
+   }
+  },
+  "QB completions": {
+   "tune": {
+    "n": 2521,
+    "rmse_current": 5.9947,
+    "rmse_new": 5.9895,
+    "change": -0.0052,
+    "se": 0.0041
+   },
+   "hold": {
+    "n": 3849,
+    "rmse_current": 6.1532,
+    "rmse_new": 6.1505,
+    "change": -0.0027,
+    "se": 0.0039
+   }
+  },
+  "QB pass_yds": {
+   "tune": {
+    "n": 2521,
+    "rmse_current": 74.5235,
+    "rmse_new": 74.5013,
+    "change": -0.0222,
+    "se": 0.0378
+   },
+   "hold": {
+    "n": 3849,
+    "rmse_current": 75.5054,
+    "rmse_new": 75.4599,
+    "change": -0.0455,
+    "se": 0.0375
+   }
+  },
+  "RB carries": {
+   "tune": {
+    "n": 10721,
+    "rmse_current": 4.5979,
+    "rmse_new": 4.5948,
+    "change": -0.0031,
+    "se": 0.0015
+   },
+   "hold": {
+    "n": 14834,
+    "rmse_current": 4.2529,
+    "rmse_new": 4.2494,
+    "change": -0.0034,
+    "se": 0.0014
+   }
+  },
+  "RB rush_yds": {
+   "tune": {
+    "n": 10721,
+    "rmse_current": 25.193,
+    "rmse_new": 25.1887,
+    "change": -0.0042,
+    "se": 0.0076
+   },
+   "hold": {
+    "n": 14834,
+    "rmse_current": 24.6741,
+    "rmse_new": 24.6644,
+    "change": -0.0098,
+    "se": 0.0065
+   }
+  },
+  "WR targets": {
+   "tune": {
+    "n": 14303,
+    "rmse_current": 2.6468,
+    "rmse_new": 2.647,
+    "change": 0.0002,
+    "se": 0.0005
+   },
+   "hold": {
+    "n": 21664,
+    "rmse_current": 2.4856,
+    "rmse_new": 2.4857,
+    "change": 0.0001,
+    "se": 0.0004
+   }
+  },
+  "WR rec_yds": {
+   "tune": {
+    "n": 14303,
+    "rmse_current": 28.6417,
+    "rmse_new": 28.6521,
+    "change": 0.0104,
+    "se": 0.0042
+   },
+   "hold": {
+    "n": 21664,
+    "rmse_current": 27.8422,
+    "rmse_new": 27.8446,
+    "change": 0.0023,
+    "se": 0.0036
+   }
+  },
+  "TE targets": {
+   "tune": {
+    "n": 8041,
+    "rmse_current": 2.0274,
+    "rmse_new": 2.0267,
+    "change": -0.0007,
+    "se": 0.0005
+   },
+   "hold": {
+    "n": 12899,
+    "rmse_current": 1.8632,
+    "rmse_new": 1.863,
+    "change": -0.0002,
+    "se": 0.0004
+   }
+  },
+  "TE rec_yds": {
+   "tune": {
+    "n": 8041,
+    "rmse_current": 20.0872,
+    "rmse_new": 20.0847,
+    "change": -0.0025,
+    "se": 0.0038
+   },
+   "hold": {
+    "n": 12899,
+    "rmse_current": 18.4947,
+    "rmse_new": 18.4941,
+    "change": -0.0006,
+    "se": 0.0037
+   }
+  }
+ },
+ "projection_rmse_by_piece": {
+  "attempts only": {
+   "QB pass_att": {
+    "tune": {
+     "n": 2521,
+     "rmse_current": 8.7565,
+     "rmse_new": 8.7445,
+     "change": -0.012,
+     "se": 0.0067
+    },
+    "hold": {
+     "n": 3849,
+     "rmse_current": 8.7259,
+     "rmse_new": 8.7235,
+     "change": -0.0023,
+     "se": 0.0065
+    }
+   },
+   "QB completions": {
+    "tune": {
+     "n": 2521,
+     "rmse_current": 5.9947,
+     "rmse_new": 5.9895,
+     "change": -0.0052,
+     "se": 0.0041
+    },
+    "hold": {
+     "n": 3849,
+     "rmse_current": 6.1532,
+     "rmse_new": 6.1505,
+     "change": -0.0027,
+     "se": 0.0039
+    }
+   },
+   "QB pass_yds": {
+    "tune": {
+     "n": 2521,
+     "rmse_current": 74.5235,
+     "rmse_new": 74.5013,
+     "change": -0.0222,
+     "se": 0.0378
+    },
+    "hold": {
+     "n": 3849,
+     "rmse_current": 75.5054,
+     "rmse_new": 75.4599,
+     "change": -0.0455,
+     "se": 0.0375
+    }
+   },
+   "RB carries": {
+    "tune": {
+     "n": 10721,
+     "rmse_current": 4.5979,
+     "rmse_new": 4.5979,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 14834,
+     "rmse_current": 4.2529,
+     "rmse_new": 4.2529,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "RB rush_yds": {
+    "tune": {
+     "n": 10721,
+     "rmse_current": 25.193,
+     "rmse_new": 25.193,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 14834,
+     "rmse_current": 24.6741,
+     "rmse_new": 24.6741,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "WR targets": {
+    "tune": {
+     "n": 14303,
+     "rmse_current": 2.6468,
+     "rmse_new": 2.647,
+     "change": 0.0002,
+     "se": 0.0005
+    },
+    "hold": {
+     "n": 21664,
+     "rmse_current": 2.4856,
+     "rmse_new": 2.4857,
+     "change": 0.0001,
+     "se": 0.0004
+    }
+   },
+   "WR rec_yds": {
+    "tune": {
+     "n": 14303,
+     "rmse_current": 28.6417,
+     "rmse_new": 28.6521,
+     "change": 0.0104,
+     "se": 0.0042
+    },
+    "hold": {
+     "n": 21664,
+     "rmse_current": 27.8422,
+     "rmse_new": 27.8446,
+     "change": 0.0023,
+     "se": 0.0036
+    }
+   },
+   "TE targets": {
+    "tune": {
+     "n": 8041,
+     "rmse_current": 2.0274,
+     "rmse_new": 2.0267,
+     "change": -0.0007,
+     "se": 0.0005
+    },
+    "hold": {
+     "n": 12899,
+     "rmse_current": 1.8632,
+     "rmse_new": 1.863,
+     "change": -0.0002,
+     "se": 0.0004
+    }
+   },
+   "TE rec_yds": {
+    "tune": {
+     "n": 8041,
+     "rmse_current": 20.0872,
+     "rmse_new": 20.0847,
+     "change": -0.0025,
+     "se": 0.0038
+    },
+    "hold": {
+     "n": 12899,
+     "rmse_current": 18.4947,
+     "rmse_new": 18.4941,
+     "change": -0.0006,
+     "se": 0.0037
+    }
+   }
+  },
+  "carries only": {
+   "QB pass_att": {
+    "tune": {
+     "n": 2521,
+     "rmse_current": 8.7565,
+     "rmse_new": 8.7565,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 3849,
+     "rmse_current": 8.7259,
+     "rmse_new": 8.7259,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "QB completions": {
+    "tune": {
+     "n": 2521,
+     "rmse_current": 5.9947,
+     "rmse_new": 5.9947,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 3849,
+     "rmse_current": 6.1532,
+     "rmse_new": 6.1532,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "QB pass_yds": {
+    "tune": {
+     "n": 2521,
+     "rmse_current": 74.5235,
+     "rmse_new": 74.5235,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 3849,
+     "rmse_current": 75.5054,
+     "rmse_new": 75.5054,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "RB carries": {
+    "tune": {
+     "n": 10721,
+     "rmse_current": 4.5979,
+     "rmse_new": 4.5948,
+     "change": -0.0031,
+     "se": 0.0015
+    },
+    "hold": {
+     "n": 14834,
+     "rmse_current": 4.2529,
+     "rmse_new": 4.2494,
+     "change": -0.0034,
+     "se": 0.0014
+    }
+   },
+   "RB rush_yds": {
+    "tune": {
+     "n": 10721,
+     "rmse_current": 25.193,
+     "rmse_new": 25.1887,
+     "change": -0.0042,
+     "se": 0.0076
+    },
+    "hold": {
+     "n": 14834,
+     "rmse_current": 24.6741,
+     "rmse_new": 24.6644,
+     "change": -0.0098,
+     "se": 0.0065
+    }
+   },
+   "WR targets": {
+    "tune": {
+     "n": 14303,
+     "rmse_current": 2.6468,
+     "rmse_new": 2.6468,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 21664,
+     "rmse_current": 2.4856,
+     "rmse_new": 2.4856,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "WR rec_yds": {
+    "tune": {
+     "n": 14303,
+     "rmse_current": 28.6417,
+     "rmse_new": 28.6417,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 21664,
+     "rmse_current": 27.8422,
+     "rmse_new": 27.8422,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "TE targets": {
+    "tune": {
+     "n": 8041,
+     "rmse_current": 2.0274,
+     "rmse_new": 2.0274,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 12899,
+     "rmse_current": 1.8632,
+     "rmse_new": 1.8632,
+     "change": 0.0,
+     "se": 0.0
+    }
+   },
+   "TE rec_yds": {
+    "tune": {
+     "n": 8041,
+     "rmse_current": 20.0872,
+     "rmse_new": 20.0872,
+     "change": 0.0,
+     "se": 0.0
+    },
+    "hold": {
+     "n": 12899,
+     "rmse_current": 18.4947,
+     "rmse_new": 18.4947,
+     "change": 0.0,
+     "se": 0.0
+    }
+   }
+  }
+ }
+}
