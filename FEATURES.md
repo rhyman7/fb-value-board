@@ -1773,6 +1773,12 @@ EV above 0) alongside.
   in both periods) and it makes the swap's set worse on every measure. The re-judge's −0.0005 /
   −0.0010 came from a frame without the role signals. Not applied; it stays a trade-off for Ryan.
 
+**NFL prop nudge cap** (`experiments/props_cap.py` re-run on the chain above, `experiments/out/props_cap.json`):
+`parlays.PULL_MAX` 3 → 7.5 points. Against 3 points: Brier −0.00014 ± 0.00013 (2024) / −0.00008 ± 0.00010
+(2025), CLV better in both folds, return better on 2025 and worse on 2024 (18 bets at 3 points; the
+test reports bets, it does not choose on them). Details in PROPS.md "How far the model may move a prop".
+On this week's Parlays page, legs priced at the same book number moved a median 0 and at most 7 points.
+
 **NFL team volume** (`experiments/apply_check_nfl_volume.py`, `experiments/out/apply_check_nfl_volume.json`
 and `_pieces.json`; rule in the script's docstring), on the turnover-free spread model. The test's
 measures: the team regressions' average miss on team-games, tuning (2014-18) / holdout (2019 on).

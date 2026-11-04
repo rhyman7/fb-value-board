@@ -7,11 +7,11 @@
    ],
    "test": 2024,
    "weights": {
-    "pass_yds": 0.444,
-    "rec_yds": 0.107,
-    "rush_yds": 0.148
+    "pass_yds": 0.512,
+    "rec_yds": 0.111,
+    "rush_yds": 0.146
    },
-   "pooled_w": 0.162,
+   "pooled_w": 0.17,
    "rows": [
     {
      "cap": 0.0,
@@ -22,76 +22,76 @@
       "se": 0.0
      },
      "test": {
-      "n": 5779,
-      "brier": 0.249908,
+      "n": 5780,
+      "brier": 0.249904,
       "minus_book": 0.0,
       "se": 0.0
      },
-     "test_minus_current": 0.000398,
-     "test_minus_current_se": 0.000255
+     "test_minus_current": 0.000367,
+     "test_minus_current_se": 0.00026
     },
     {
      "cap": 0.01,
      "train": {
       "n": 5055,
-      "brier": 0.24984,
-      "minus_book": -0.000293,
-      "se": 0.000133
+      "brier": 0.249845,
+      "minus_book": -0.000287,
+      "se": 0.000135
      },
      "test": {
-      "n": 5779,
-      "brier": 0.249757,
-      "minus_book": -0.000151,
-      "se": 0.000136
+      "n": 5780,
+      "brier": 0.249773,
+      "minus_book": -0.000131,
+      "se": 0.000138
      },
      "bets": {
       "bets": 0
      },
-     "test_minus_current": 0.000247,
-     "test_minus_current_se": 0.000137
+     "test_minus_current": 0.000236,
+     "test_minus_current_se": 0.000139
     },
     {
      "cap": 0.02,
      "train": {
       "n": 5055,
-      "brier": 0.249781,
-      "minus_book": -0.000351,
-      "se": 0.000202
+      "brier": 0.249788,
+      "minus_book": -0.000345,
+      "se": 0.000204
      },
      "test": {
-      "n": 5779,
-      "brier": 0.2496,
-      "minus_book": -0.000308,
-      "se": 0.000209
+      "n": 5780,
+      "brier": 0.24962,
+      "minus_book": -0.000284,
+      "se": 0.000212
      },
      "bets": {
       "bets": 0
      },
-     "test_minus_current": 9e-05,
-     "test_minus_current_se": 5.9e-05
+     "test_minus_current": 8.3e-05,
+     "test_minus_current_se": 6.1e-05
     },
     {
      "cap": 0.03,
      "train": {
       "n": 5055,
-      "brier": 0.249784,
-      "minus_book": -0.000349,
-      "se": 0.000249
+      "brier": 0.249777,
+      "minus_book": -0.000356,
+      "se": 0.000251
      },
      "test": {
-      "n": 5779,
-      "brier": 0.24951,
-      "minus_book": -0.000398,
-      "se": 0.000255
+      "n": 5780,
+      "brier": 0.249537,
+      "minus_book": -0.000367,
+      "se": 0.00026
      },
      "bets": {
-      "bets": 19,
-      "record": "11-8-0",
-      "return_flat": 0.1011,
-      "return_se": 0.1471,
-      "clv_carried": -0.0441,
-      "clv_carried_se": 0.0173,
-      "beat_close_carried": 0.211
+      "bets": 18,
+      "record": "11-7-0",
+      "return_flat": 0.1601,
+      "return_se": 0.1749,
+      "clv_carried": -0.0482,
+      "clv_carried_se": 0.0144,
+      "beat_close_carried": 0.167
      },
      "test_minus_current": 0.0,
      "test_minus_current_se": 0.0
@@ -100,134 +100,134 @@
      "cap": 0.04,
      "train": {
       "n": 5055,
-      "brier": 0.249778,
-      "minus_book": -0.000354,
-      "se": 0.000278
+      "brier": 0.249748,
+      "minus_book": -0.000385,
+      "se": 0.000287
      },
      "test": {
-      "n": 5779,
-      "brier": 0.24947,
-      "minus_book": -0.000438,
-      "se": 0.000286
+      "n": 5780,
+      "brier": 0.249477,
+      "minus_book": -0.000427,
+      "se": 0.000297
      },
      "bets": {
-      "bets": 141,
-      "record": "80-61-0",
-      "return_flat": 0.0664,
-      "return_se": 0.0752,
-      "clv_carried": -0.0304,
-      "clv_carried_se": 0.0058,
-      "beat_close_carried": 0.277
+      "bets": 173,
+      "record": "100-73-0",
+      "return_flat": 0.0858,
+      "return_se": 0.071,
+      "clv_carried": -0.0312,
+      "clv_carried_se": 0.0052,
+      "beat_close_carried": 0.266
      },
-     "test_minus_current": -4e-05,
-     "test_minus_current_se": 4.2e-05
+     "test_minus_current": -6e-05,
+     "test_minus_current_se": 4.9e-05
     },
     {
      "cap": 0.05,
      "train": {
       "n": 5055,
-      "brier": 0.249768,
-      "minus_book": -0.000365,
-      "se": 0.000296
+      "brier": 0.249723,
+      "minus_book": -0.00041,
+      "se": 0.000306
      },
      "test": {
-      "n": 5779,
-      "brier": 0.249445,
-      "minus_book": -0.000463,
-      "se": 0.000304
+      "n": 5780,
+      "brier": 0.249447,
+      "minus_book": -0.000457,
+      "se": 0.000319
      },
      "bets": {
-      "bets": 141,
-      "record": "80-61-0",
-      "return_flat": 0.0659,
-      "return_se": 0.0752,
+      "bets": 173,
+      "record": "100-73-0",
+      "return_flat": 0.0855,
+      "return_se": 0.0709,
       "clv_carried": -0.028,
-      "clv_carried_se": 0.0057,
-      "beat_close_carried": 0.284
+      "clv_carried_se": 0.0051,
+      "beat_close_carried": 0.277
      },
-     "test_minus_current": -6.6e-05,
-     "test_minus_current_se": 6.9e-05
+     "test_minus_current": -9.1e-05,
+     "test_minus_current_se": 7.9e-05
     },
     {
      "cap": 0.075,
      "train": {
       "n": 5055,
-      "brier": 0.249753,
-      "minus_book": -0.00038,
-      "se": 0.000326
+      "brier": 0.249717,
+      "minus_book": -0.000416,
+      "se": 0.000341
      },
      "test": {
-      "n": 5779,
-      "brier": 0.249405,
-      "minus_book": -0.000503,
-      "se": 0.00033
+      "n": 5780,
+      "brier": 0.2494,
+      "minus_book": -0.000504,
+      "se": 0.000357
      },
      "bets": {
-      "bets": 141,
-      "record": "82-59-0",
-      "return_flat": 0.0921,
-      "return_se": 0.0748,
-      "clv_carried": -0.0257,
-      "clv_carried_se": 0.0061,
-      "beat_close_carried": 0.298
+      "bets": 173,
+      "record": "101-72-0",
+      "return_flat": 0.096,
+      "return_se": 0.0708,
+      "clv_carried": -0.0267,
+      "clv_carried_se": 0.0051,
+      "beat_close_carried": 0.283
      },
-     "test_minus_current": -0.000105,
-     "test_minus_current_se": 0.000109
+     "test_minus_current": -0.000137,
+     "test_minus_current_se": 0.000132
     },
     {
      "cap": 0.1,
      "train": {
       "n": 5055,
-      "brier": 0.249766,
-      "minus_book": -0.000366,
-      "se": 0.000337
+      "brier": 0.249693,
+      "minus_book": -0.00044,
+      "se": 0.000358
      },
      "test": {
-      "n": 5779,
-      "brier": 0.249395,
-      "minus_book": -0.000513,
-      "se": 0.000336
+      "n": 5780,
+      "brier": 0.249371,
+      "minus_book": -0.000533,
+      "se": 0.00037
      },
      "bets": {
-      "bets": 141,
-      "record": "82-59-0",
-      "return_flat": 0.0921,
-      "return_se": 0.0748,
-      "clv_carried": -0.0257,
-      "clv_carried_se": 0.0061,
-      "beat_close_carried": 0.298
+      "bets": 173,
+      "record": "102-71-0",
+      "return_flat": 0.1065,
+      "return_se": 0.0706,
+      "clv_carried": -0.0255,
+      "clv_carried_se": 0.0053,
+      "beat_close_carried": 0.289
      },
-     "test_minus_current": -0.000115,
-     "test_minus_current_se": 0.000118
+     "test_minus_current": -0.000166,
+     "test_minus_current_se": 0.000151
     },
     {
      "cap": 1.0,
      "train": {
       "n": 5055,
-      "brier": 0.249793,
-      "minus_book": -0.00034,
-      "se": 0.000356
+      "brier": 0.249733,
+      "minus_book": -0.0004,
+      "se": 0.000387
      },
      "test": {
-      "n": 5779,
-      "brier": 0.249395,
-      "minus_book": -0.000513,
-      "se": 0.000337
+      "n": 5780,
+      "brier": 0.24937,
+      "minus_book": -0.000534,
+      "se": 0.000373
      },
      "bets": {
-      "bets": 141,
-      "record": "82-59-0",
-      "return_flat": 0.0921,
-      "return_se": 0.0748,
-      "clv_carried": -0.0257,
-      "clv_carried_se": 0.0061,
-      "beat_close_carried": 0.298
+      "bets": 173,
+      "record": "102-71-0",
+      "return_flat": 0.1064,
+      "return_se": 0.0706,
+      "clv_carried": -0.0254,
+      "clv_carried_se": 0.0053,
+      "beat_close_carried": 0.289
      },
-     "test_minus_current": -0.000115,
-     "test_minus_current_se": 0.000121
+     "test_minus_current": -0.000167,
+     "test_minus_current_se": 0.000156
     }
    ],
-   "train_best_cap": 0.075
+   "train_best_cap": 0.1
   },
   "fold2": {
    "train": [
@@ -236,91 +236,91 @@
    ],
    "test": 2025,
    "weights": {
-    "pass_yds": 0.529,
-    "rec_yds": 0.082,
-    "rush_yds": 0.223
+    "pass_yds": 0.573,
+    "rec_yds": 0.081,
+    "rush_yds": 0.218
    },
-   "pooled_w": 0.176,
+   "pooled_w": 0.179,
    "rows": [
     {
      "cap": 0.0,
      "train": {
-      "n": 10834,
-      "brier": 0.250013,
+      "n": 10835,
+      "brier": 0.250011,
       "minus_book": 0.0,
       "se": 0.0
      },
      "test": {
       "n": 10971,
-      "brier": 0.248572,
+      "brier": 0.248578,
       "minus_book": 0.0,
       "se": 0.0
      },
-     "test_minus_current": 0.000597,
-     "test_minus_current_se": 0.000242
+     "test_minus_current": 0.000624,
+     "test_minus_current_se": 0.000247
     },
     {
      "cap": 0.01,
      "train": {
-      "n": 10834,
-      "brier": 0.249784,
-      "minus_book": -0.000229,
+      "n": 10835,
+      "brier": 0.249789,
+      "minus_book": -0.000222,
       "se": 9.4e-05
      },
      "test": {
       "n": 10971,
-      "brier": 0.248212,
-      "minus_book": -0.00036,
-      "se": 0.000122
+      "brier": 0.248209,
+      "minus_book": -0.000368,
+      "se": 0.000124
      },
      "bets": {
       "bets": 0
      },
-     "test_minus_current": 0.000237,
-     "test_minus_current_se": 0.000134
+     "test_minus_current": 0.000256,
+     "test_minus_current_se": 0.000138
     },
     {
      "cap": 0.02,
      "train": {
-      "n": 10834,
-      "brier": 0.249692,
-      "minus_book": -0.000321,
-      "se": 0.000144
+      "n": 10835,
+      "brier": 0.249712,
+      "minus_book": -0.000298,
+      "se": 0.000143
      },
      "test": {
       "n": 10971,
-      "brier": 0.248048,
-      "minus_book": -0.000524,
-      "se": 0.000194
+      "brier": 0.248035,
+      "minus_book": -0.000543,
+      "se": 0.000198
      },
      "bets": {
       "bets": 0
      },
-     "test_minus_current": 7.2e-05,
-     "test_minus_current_se": 5.7e-05
+     "test_minus_current": 8.2e-05,
+     "test_minus_current_se": 5.8e-05
     },
     {
      "cap": 0.03,
      "train": {
-      "n": 10834,
-      "brier": 0.249639,
-      "minus_book": -0.000374,
-      "se": 0.000182
+      "n": 10835,
+      "brier": 0.249653,
+      "minus_book": -0.000358,
+      "se": 0.000181
      },
      "test": {
       "n": 10971,
-      "brier": 0.247975,
-      "minus_book": -0.000597,
-      "se": 0.000242
+      "brier": 0.247953,
+      "minus_book": -0.000624,
+      "se": 0.000247
      },
      "bets": {
-      "bets": 436,
-      "record": "225-211-0",
-      "return_flat": -0.0399,
-      "return_se": 0.0466,
-      "clv_carried": -0.0411,
-      "clv_carried_se": 0.0043,
-      "beat_close_carried": 0.211
+      "bets": 449,
+      "record": "235-214-0",
+      "return_flat": -0.0263,
+      "return_se": 0.0461,
+      "clv_carried": -0.0398,
+      "clv_carried_se": 0.0042,
+      "beat_close_carried": 0.214
      },
      "test_minus_current": 0.0,
      "test_minus_current_se": 0.0
@@ -328,132 +328,132 @@
     {
      "cap": 0.04,
      "train": {
-      "n": 10834,
-      "brier": 0.249609,
-      "minus_book": -0.000404,
-      "se": 0.000213
+      "n": 10835,
+      "brier": 0.249614,
+      "minus_book": -0.000397,
+      "se": 0.000212
      },
      "test": {
       "n": 10971,
-      "brier": 0.247956,
-      "minus_book": -0.000616,
-      "se": 0.000271
+      "brier": 0.247936,
+      "minus_book": -0.000641,
+      "se": 0.000279
      },
      "bets": {
-      "bets": 585,
-      "record": "300-285-0",
-      "return_flat": -0.0281,
-      "return_se": 0.0432,
-      "clv_carried": -0.0372,
-      "clv_carried_se": 0.0039,
-      "beat_close_carried": 0.241
+      "bets": 607,
+      "record": "316-291-0",
+      "return_flat": -0.0119,
+      "return_se": 0.0435,
+      "clv_carried": -0.0364,
+      "clv_carried_se": 0.0038,
+      "beat_close_carried": 0.244
      },
-     "test_minus_current": -1.9e-05,
-     "test_minus_current_se": 4e-05
+     "test_minus_current": -1.7e-05,
+     "test_minus_current_se": 4.3e-05
     },
     {
      "cap": 0.05,
      "train": {
-      "n": 10834,
-      "brier": 0.249588,
-      "minus_book": -0.000425,
-      "se": 0.000231
+      "n": 10835,
+      "brier": 0.249577,
+      "minus_book": -0.000434,
+      "se": 0.000234
      },
      "test": {
       "n": 10971,
-      "brier": 0.247922,
-      "minus_book": -0.00065,
-      "se": 0.000288
+      "brier": 0.247911,
+      "minus_book": -0.000666,
+      "se": 0.000298
      },
      "bets": {
-      "bets": 585,
-      "record": "300-285-0",
-      "return_flat": -0.0275,
-      "return_se": 0.0434,
-      "clv_carried": -0.0367,
-      "clv_carried_se": 0.0039,
-      "beat_close_carried": 0.246
+      "bets": 607,
+      "record": "316-291-0",
+      "return_flat": -0.0117,
+      "return_se": 0.0435,
+      "clv_carried": -0.0362,
+      "clv_carried_se": 0.0038,
+      "beat_close_carried": 0.245
      },
-     "test_minus_current": -5.3e-05,
-     "test_minus_current_se": 6.5e-05
+     "test_minus_current": -4.2e-05,
+     "test_minus_current_se": 7e-05
     },
     {
      "cap": 0.075,
      "train": {
-      "n": 10834,
-      "brier": 0.249551,
-      "minus_book": -0.000462,
-      "se": 0.00026
+      "n": 10835,
+      "brier": 0.249532,
+      "minus_book": -0.000479,
+      "se": 0.000265
      },
      "test": {
       "n": 10971,
-      "brier": 0.247896,
-      "minus_book": -0.000677,
-      "se": 0.00031
+      "brier": 0.247871,
+      "minus_book": -0.000707,
+      "se": 0.000321
      },
      "bets": {
-      "bets": 585,
-      "record": "300-285-0",
-      "return_flat": -0.0264,
-      "return_se": 0.0433,
-      "clv_carried": -0.0347,
-      "clv_carried_se": 0.0039,
-      "beat_close_carried": 0.248
+      "bets": 607,
+      "record": "316-291-0",
+      "return_flat": -0.0096,
+      "return_se": 0.0435,
+      "clv_carried": -0.0338,
+      "clv_carried_se": 0.0038,
+      "beat_close_carried": 0.254
      },
-     "test_minus_current": -8e-05,
-     "test_minus_current_se": 9.8e-05
+     "test_minus_current": -8.2e-05,
+     "test_minus_current_se": 0.000104
     },
     {
      "cap": 0.1,
      "train": {
-      "n": 10834,
-      "brier": 0.249533,
-      "minus_book": -0.000479,
-      "se": 0.000272
+      "n": 10835,
+      "brier": 0.249498,
+      "minus_book": -0.000513,
+      "se": 0.000281
      },
      "test": {
       "n": 10971,
-      "brier": 0.247912,
-      "minus_book": -0.000661,
-      "se": 0.000315
+      "brier": 0.247888,
+      "minus_book": -0.00069,
+      "se": 0.000327
      },
      "bets": {
-      "bets": 585,
-      "record": "300-285-0",
-      "return_flat": -0.0262,
-      "return_se": 0.0433,
-      "clv_carried": -0.0344,
-      "clv_carried_se": 0.0039,
-      "beat_close_carried": 0.251
+      "bets": 607,
+      "record": "316-291-0",
+      "return_flat": -0.0094,
+      "return_se": 0.0436,
+      "clv_carried": -0.0336,
+      "clv_carried_se": 0.0038,
+      "beat_close_carried": 0.255
      },
-     "test_minus_current": -6.4e-05,
-     "test_minus_current_se": 0.000106
+     "test_minus_current": -6.5e-05,
+     "test_minus_current_se": 0.000115
     },
     {
      "cap": 1.0,
      "train": {
-      "n": 10834,
-      "brier": 0.249554,
-      "minus_book": -0.000458,
-      "se": 0.000283
+      "n": 10835,
+      "brier": 0.249516,
+      "minus_book": -0.000494,
+      "se": 0.000295
      },
      "test": {
       "n": 10971,
-      "brier": 0.247914,
-      "minus_book": -0.000659,
-      "se": 0.000317
+      "brier": 0.247894,
+      "minus_book": -0.000684,
+      "se": 0.000331
      },
      "bets": {
-      "bets": 585,
-      "record": "300-285-0",
-      "return_flat": -0.0262,
-      "return_se": 0.0433,
-      "clv_carried": -0.0344,
-      "clv_carried_se": 0.0039,
-      "beat_close_carried": 0.251
+      "bets": 607,
+      "record": "316-291-0",
+      "return_flat": -0.0094,
+      "return_se": 0.0436,
+      "clv_carried": -0.0336,
+      "clv_carried_se": 0.0038,
+      "beat_close_carried": 0.255
      },
-     "test_minus_current": -6.2e-05,
-     "test_minus_current_se": 0.000111
+     "test_minus_current": -5.9e-05,
+     "test_minus_current_se": 0.000123
     }
    ],
    "train_best_cap": 0.1
@@ -461,8 +461,8 @@
  },
  "verdict": {
   "train_best_cap": 0.1,
-  "test_minus_current": -6.4e-05,
-  "se": 0.000106,
+  "test_minus_current": -6.5e-05,
+  "se": 0.000115,
   "cap_to_use": 0.03
  }
 }
