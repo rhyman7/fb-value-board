@@ -1,0 +1,63 @@
+name: CFBD player data
+
+# Player-background data from CollegeFootballData.com (cfbmodel/cfbd_pull.py): recruiting
+# ratings, transfer-portal entries, team returning production and rosters, one CSV each per
+# season under data/cfb/cfbd/. Inputs to the early-season role prior for the college player
+# projections (experiments/cfb_role_prior_test.py, Nov 2026). Run by hand; about five CFBD calls
+# a season, so a full 2014-2026 pull is about 70 calls. Existing seasons are kept unless
+# "refresh" is ticked; the current season is always rewritten.
+
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: "First season"
+        default: "2014"
+      to:
+        description: "Last season (blank: current)"
+        default: ""
+      refresh:
+        description: "Rewrite seasons already on disk"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Main only
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "Run this workflow from main: from ${{ github.ref }} its files could not be committed."
+          exit 1
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Pull
+        env:
+          CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+        run: |
+          args="--from ${{ inputs.from }}"
+          [ -n "${{ inputs.to }}" ] && args="$args --to ${{ inputs.to }}"
+          [ "${{ inputs.refresh }}" = "true" ] && args="$args --refresh"
+          python -m cfbmodel.cfbd_pull $args
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cfb/cfbd
+          git diff --cached --quiet || git commit -m "CFBD player data ${{ inputs.from }}-${{ inputs.to }}"
+          git pull --rebase origin main
+          git push
