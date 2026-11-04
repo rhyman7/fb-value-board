@@ -1,0 +1,478 @@
+{
+ "props": 3066,
+ "games": 395,
+ "rec_yds": {
+  "props": 1960,
+  "gap_per_prop": 0.00584,
+  "se": 0.00226,
+  "brier_model": 0.25579,
+  "brier_books": 0.24995,
+  "spread_model": 0.0764,
+  "spread_books": 0.0001,
+  "model_mean_minus_line_pct": 16.2,
+  "model_median_minus_line_pct": 12.0,
+  "corr_model_books": 0.003,
+  "distance": [
+   {
+    "distance": "<10%",
+    "props": 704,
+    "share_of_props": 0.359,
+    "gap_per_prop": 0.00328,
+    "se": 0.00278,
+    "share_of_gap": 0.202,
+    "brier_model": 0.25321,
+    "brier_books": 0.24993,
+    "model_mean_minus_line_pct": 1.6,
+    "over_rate": 0.476
+   },
+   {
+    "distance": "10-30%",
+    "props": 859,
+    "share_of_props": 0.438,
+    "gap_per_prop": 0.00193,
+    "se": 0.00295,
+    "share_of_gap": 0.145,
+    "brier_model": 0.25187,
+    "brier_books": 0.24994,
+    "model_mean_minus_line_pct": 12.6,
+    "over_rate": 0.451
+   },
+   {
+    "distance": ">30%",
+    "props": 397,
+    "share_of_props": 0.203,
+    "gap_per_prop": 0.01884,
+    "se": 0.00693,
+    "share_of_gap": 0.654,
+    "brier_model": 0.26884,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 50.1,
+    "over_rate": 0.494
+   }
+  ],
+  "expected_by_model": [
+   {
+    "expected_by_model": "expected",
+    "props": 1884,
+    "share_of_props": 0.961,
+    "gap_per_prop": 0.0059,
+    "se": 0.00227,
+    "share_of_gap": 0.971,
+    "brier_model": 0.25584,
+    "brier_books": 0.24995,
+    "model_mean_minus_line_pct": 15.6,
+    "over_rate": 0.468
+   },
+   {
+    "expected_by_model": "not expected (post hoc)",
+    "props": 76,
+    "share_of_props": 0.039,
+    "gap_per_prop": 0.00439,
+    "se": 0.01237,
+    "share_of_gap": 0.029,
+    "brier_model": 0.25439,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 32.4,
+    "over_rate": 0.487
+   }
+  ],
+  "teammate_out": [
+   {
+    "teammate_out": "no",
+    "props": 1535,
+    "share_of_props": 0.783,
+    "gap_per_prop": 0.00567,
+    "se": 0.00252,
+    "share_of_gap": 0.761,
+    "brier_model": 0.25561,
+    "brier_books": 0.24994,
+    "model_mean_minus_line_pct": 15.7,
+    "over_rate": 0.499
+   },
+   {
+    "teammate_out": "regular teammate out (post hoc)",
+    "props": 425,
+    "share_of_props": 0.217,
+    "gap_per_prop": 0.00644,
+    "se": 0.00503,
+    "share_of_gap": 0.239,
+    "brier_model": 0.25644,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 18.0,
+    "over_rate": 0.358
+   }
+  ],
+  "group": [
+   {
+    "group": "RB",
+    "props": 129,
+    "share_of_props": 0.066,
+    "gap_per_prop": 0.01342,
+    "se": 0.01133,
+    "share_of_gap": 0.151,
+    "brier_model": 0.26318,
+    "brier_books": 0.24976,
+    "model_mean_minus_line_pct": 5.4,
+    "over_rate": 0.465
+   },
+   {
+    "group": "TE",
+    "props": 312,
+    "share_of_props": 0.159,
+    "gap_per_prop": 0.00316,
+    "se": 0.00525,
+    "share_of_gap": 0.086,
+    "brier_model": 0.25316,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 20.8,
+    "over_rate": 0.429
+   },
+   {
+    "group": "WR",
+    "props": 1519,
+    "share_of_props": 0.775,
+    "gap_per_prop": 0.00575,
+    "se": 0.00253,
+    "share_of_gap": 0.763,
+    "brier_model": 0.2557,
+    "brier_books": 0.24995,
+    "model_mean_minus_line_pct": 16.2,
+    "over_rate": 0.477
+   }
+  ],
+  "margin_band": [
+   {
+    "margin_band": "n/a",
+    "props": 1960,
+    "share_of_props": 1.0,
+    "gap_per_prop": 0.00584,
+    "se": 0.00226,
+    "share_of_gap": 1.0,
+    "brier_model": 0.25579,
+    "brier_books": 0.24995,
+    "model_mean_minus_line_pct": 16.2,
+    "over_rate": 0.468
+   }
+  ],
+  "week_band": [
+   {
+    "week_band": "weeks 3-8",
+    "props": 913,
+    "share_of_props": 0.466,
+    "gap_per_prop": 0.00301,
+    "se": 0.0034,
+    "share_of_gap": 0.24,
+    "brier_model": 0.25293,
+    "brier_books": 0.24993,
+    "model_mean_minus_line_pct": 14.0,
+    "over_rate": 0.457
+   },
+   {
+    "week_band": "weeks 9-16",
+    "props": 1047,
+    "share_of_props": 0.534,
+    "gap_per_prop": 0.0083,
+    "se": 0.00303,
+    "share_of_gap": 0.76,
+    "brier_model": 0.25828,
+    "brier_books": 0.24997,
+    "model_mean_minus_line_pct": 18.2,
+    "over_rate": 0.479
+   }
+  ],
+  "reliability": [
+   {
+    "model_band": "(-0.001, 0.3]",
+    "props": 45,
+    "model_mean": 0.263,
+    "books_mean": 0.5,
+    "cleared": 0.533
+   },
+   {
+    "model_band": "(0.3, 0.4]",
+    "props": 397,
+    "model_mean": 0.366,
+    "books_mean": 0.5,
+    "cleared": 0.426
+   },
+   {
+    "model_band": "(0.4, 0.45]",
+    "props": 156,
+    "model_mean": 0.424,
+    "books_mean": 0.5,
+    "cleared": 0.538
+   },
+   {
+    "model_band": "(0.45, 0.5]",
+    "props": 592,
+    "model_mean": 0.467,
+    "books_mean": 0.5,
+    "cleared": 0.465
+   },
+   {
+    "model_band": "(0.5, 0.55]",
+    "props": 327,
+    "model_mean": 0.524,
+    "books_mean": 0.5,
+    "cleared": 0.465
+   },
+   {
+    "model_band": "(0.55, 0.6]",
+    "props": 231,
+    "model_mean": 0.569,
+    "books_mean": 0.5,
+    "cleared": 0.494
+   },
+   {
+    "model_band": "(0.6, 0.7]",
+    "props": 198,
+    "model_mean": 0.638,
+    "books_mean": 0.5,
+    "cleared": 0.46
+   },
+   {
+    "model_band": "(0.7, 1.0]",
+    "props": 14,
+    "model_mean": 0.744,
+    "books_mean": 0.5,
+    "cleared": 0.643
+   }
+  ],
+  "disagree_5pt": {
+   "props": 1042,
+   "model_side_won": 0.513,
+   "needed_to_tie_books": 0.5
+  }
+ },
+ "rush_yds": {
+  "props": 1106,
+  "gap_per_prop": 0.00998,
+  "se": 0.00407,
+  "brier_model": 0.25999,
+  "brier_books": 0.25,
+  "spread_model": 0.1029,
+  "spread_books": 0.0,
+  "model_mean_minus_line_pct": 6.0,
+  "model_median_minus_line_pct": 3.7,
+  "corr_model_books": -0.044,
+  "distance": [
+   {
+    "distance": "<10%",
+    "props": 421,
+    "share_of_props": 0.381,
+    "gap_per_prop": -0.00312,
+    "se": 0.00383,
+    "share_of_gap": -0.119,
+    "brier_model": 0.24688,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 0.6,
+    "over_rate": 0.461
+   },
+   {
+    "distance": "10-30%",
+    "props": 507,
+    "share_of_props": 0.458,
+    "gap_per_prop": 0.00847,
+    "se": 0.00555,
+    "share_of_gap": 0.389,
+    "brier_model": 0.25852,
+    "brier_books": 0.25005,
+    "model_mean_minus_line_pct": 4.8,
+    "over_rate": 0.483
+   },
+   {
+    "distance": ">30%",
+    "props": 178,
+    "share_of_props": 0.161,
+    "gap_per_prop": 0.04529,
+    "se": 0.01615,
+    "share_of_gap": 0.73,
+    "brier_model": 0.29515,
+    "brier_books": 0.24986,
+    "model_mean_minus_line_pct": 21.9,
+    "over_rate": 0.404
+   }
+  ],
+  "expected_by_model": [
+   {
+    "expected_by_model": "expected",
+    "props": 1087,
+    "share_of_props": 0.983,
+    "gap_per_prop": 0.0109,
+    "se": 0.00411,
+    "share_of_gap": 1.073,
+    "brier_model": 0.2609,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 5.9,
+    "over_rate": 0.466
+   },
+   {
+    "expected_by_model": "not expected (post hoc)",
+    "props": 19,
+    "share_of_props": 0.017,
+    "gap_per_prop": -0.04253,
+    "se": 0.02769,
+    "share_of_gap": -0.073,
+    "brier_model": 0.20747,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 9.1,
+    "over_rate": 0.263
+   }
+  ],
+  "teammate_out": [
+   {
+    "teammate_out": "no",
+    "props": 893,
+    "share_of_props": 0.807,
+    "gap_per_prop": 0.00816,
+    "se": 0.00448,
+    "share_of_gap": 0.66,
+    "brier_model": 0.25816,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 7.1,
+    "over_rate": 0.45
+   },
+   {
+    "teammate_out": "regular teammate out (post hoc)",
+    "props": 213,
+    "share_of_props": 0.193,
+    "gap_per_prop": 0.01764,
+    "se": 0.00942,
+    "share_of_gap": 0.34,
+    "brier_model": 0.26764,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 1.3,
+    "over_rate": 0.512
+   }
+  ],
+  "group": [
+   {
+    "group": "QB",
+    "props": 309,
+    "share_of_props": 0.279,
+    "gap_per_prop": 0.01083,
+    "se": 0.00787,
+    "share_of_gap": 0.303,
+    "brier_model": 0.26092,
+    "brier_books": 0.25009,
+    "model_mean_minus_line_pct": 7.3,
+    "over_rate": 0.479
+   },
+   {
+    "group": "RB",
+    "props": 797,
+    "share_of_props": 0.721,
+    "gap_per_prop": 0.00966,
+    "se": 0.00467,
+    "share_of_gap": 0.697,
+    "brier_model": 0.25962,
+    "brier_books": 0.24997,
+    "model_mean_minus_line_pct": 5.5,
+    "over_rate": 0.455
+   }
+  ],
+  "margin_band": [
+   {
+    "margin_band": "n/a",
+    "props": 1106,
+    "share_of_props": 1.0,
+    "gap_per_prop": 0.00998,
+    "se": 0.00407,
+    "share_of_gap": 1.0,
+    "brier_model": 0.25999,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 6.0,
+    "over_rate": 0.462
+   }
+  ],
+  "week_band": [
+   {
+    "week_band": "weeks 3-8",
+    "props": 490,
+    "share_of_props": 0.443,
+    "gap_per_prop": 0.01746,
+    "se": 0.00677,
+    "share_of_gap": 0.775,
+    "brier_model": 0.26747,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 4.7,
+    "over_rate": 0.455
+   },
+   {
+    "week_band": "weeks 9-16",
+    "props": 616,
+    "share_of_props": 0.557,
+    "gap_per_prop": 0.00404,
+    "se": 0.00492,
+    "share_of_gap": 0.225,
+    "brier_model": 0.25404,
+    "brier_books": 0.25,
+    "model_mean_minus_line_pct": 7.0,
+    "over_rate": 0.468
+   }
+  ],
+  "reliability": [
+   {
+    "model_band": "(-0.001, 0.3]",
+    "props": 105,
+    "model_mean": 0.234,
+    "books_mean": 0.5,
+    "cleared": 0.448
+   },
+   {
+    "model_band": "(0.3, 0.4]",
+    "props": 265,
+    "model_mean": 0.344,
+    "books_mean": 0.5,
+    "cleared": 0.453
+   },
+   {
+    "model_band": "(0.4, 0.45]",
+    "props": 157,
+    "model_mean": 0.438,
+    "books_mean": 0.5,
+    "cleared": 0.408
+   },
+   {
+    "model_band": "(0.45, 0.5]",
+    "props": 114,
+    "model_mean": 0.479,
+    "books_mean": 0.5,
+    "cleared": 0.474
+   },
+   {
+    "model_band": "(0.5, 0.55]",
+    "props": 234,
+    "model_mean": 0.529,
+    "books_mean": 0.5,
+    "cleared": 0.479
+   },
+   {
+    "model_band": "(0.55, 0.6]",
+    "props": 135,
+    "model_mean": 0.57,
+    "books_mean": 0.5,
+    "cleared": 0.504
+   },
+   {
+    "model_band": "(0.6, 0.7]",
+    "props": 62,
+    "model_mean": 0.631,
+    "books_mean": 0.5,
+    "cleared": 0.5
+   },
+   {
+    "model_band": "(0.7, 1.0]",
+    "props": 34,
+    "model_mean": 0.739,
+    "books_mean": 0.5,
+    "cleared": 0.441
+   }
+  ],
+  "disagree_5pt": {
+   "props": 759,
+   "model_side_won": 0.542,
+   "needed_to_tie_books": 0.5
+  }
+ }
+}

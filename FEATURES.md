@@ -1440,3 +1440,60 @@ season average by the crew (prior two seasons, shrunk) made the average miss sli
 strength (+0.0003 ± 0.0006, +0.002 ± 0.001, +0.006 ± 0.002 on a 2.0-tackle miss, 2018-2025).
 Rule, set before running: worth pricing tackle props on only if it helped by 2+ standard errors.
 It does not, so no tackle-price backfill was bought.
+
+## College props: where the gap lives, and college-fitted distributions (Nov 3, 2026): nothing kept
+
+Two read-only steps from the research memo on getting the college player model past the books
+(`claude/college-props-inputs-2026-11-03.md` in the Project). Same props, projections and chances
+as "College props against real lines" above: the 2025 DraftKings/FanDuel main lines, the board's
+walk-forward 2025 player table, the NFL prop distributions. Rushing yards 1,106 props, receiving
+yards 1,960.
+
+**1. `cfb_props_gap_diag.py`: which props carry the gap** (results in `experiments/out/cfb_props_gap_diag.json`).
+Each prop's contribution is (model - hit)^2 - (books - hit)^2. At a main line the books' no-vig
+chance is 50.0% on every prop, so "beating the books" here means only one thing: the model's lean
+off the line has to be right more often than its size claims.
+
+- **Over-confidence is the whole gap.** Reliability by band of the model's chance: rushing props the
+  model put at 23% cleared 45%; at 74%, 44%. Receiving: 37% cleared 43%; 64% cleared 46%. The best
+  single shrink of the model's chance toward 50% is 0.2 for both stats (in-sample), and even shrunk
+  the model only ties the books (rushing -0.0008 ± 0.0008, receiving -0.0003 ± 0.0005). Where the
+  model and books disagree by 5+ points, the model's side won 54.2% of 759 rushing props (2.3 SE
+  above a coin) and 51.3% of 1,042 receiving props (nothing). The model's lean carries about a
+  fifth of the information it claims.
+- **Role disagreements carry most of it.** Props where the projection sits 30%+ from the line are
+  16% of rushing props and 73% of the rushing gap (model 22% above the line on average; 40% of them
+  cleared); 20% of receiving props and 65% of that gap (model 50% above the line; 49% cleared).
+  Within 10% of the line the model is even with the books on rushing (-0.0031 ± 0.0038). When the
+  model has a player for far more than the books do, the books are right.
+- **Not the availability rule as such.** Props on players the model did not expect (post hoc: he
+  appeared without playing the previous game) are 2-4% of props and carry none of the gap. Props
+  where an expected regular teammate at the position sat out (post hoc) are about 20% of props and
+  carry 34% of the rushing gap, 24% of receiving: more than their share, not most of it.
+- **Rushing is an early-season problem** (weeks 3-8: 44% of props, 78% of the gap; weeks 9-16:
+  +0.0040 ± 0.0049, even with the books). **Receiving is the reverse** (weeks 9-16: 76% of the gap).
+  Quarterback and running-back rushing props carry the gap in proportion to their numbers.
+
+**2. `cfb_propdist_test.py`: college-fitted prop distributions.** Rule, written first: refit the
+PropModel widths per stat and position on the 2017-2024 college walk-forward table (mean held equal
+to the projection) with the isotonic correction fitted on synthetic lines on the same seasons; keep
+only if rushing and receiving yards each improve at the 2025 lines by 2+ SE over the NFL-fitted
+chances and no stat is worse by 2 SE. Decision version: widths + correction.
+
+| Stat | Books | Current (NFL-fitted) | College widths + correction (vs current) | College widths only (vs current, information) |
+|---|---|---|---|---|
+| Rushing yards | 0.2500 | 0.2604 | 0.2604 (0.0000 ± 0.0025) | 0.2582 (-0.0022 ± 0.0020, 1.1 SE) |
+| Receiving yards | 0.2500 | 0.2561 | 0.2600 (+0.0038 ± 0.0022, worse) | 0.2545 (-0.0017 ± 0.0006, 3.0 SE) |
+| Passing yards | 0.2500 | 0.2526 | 0.2512 (-0.0015 ± 0.0007, 2.3 SE) | 0.2506 (-0.0020 ± 0.0008, 2.5 SE) |
+| Passing TDs | 0.2422 | 0.2439 | 0.2419 (-0.0019 ± 0.0012, 1.7 SE) | 0.2415 (-0.0024 ± 0.0014, 1.7 SE) |
+
+**Fails the rule; nothing changes.** The isotonic correction, fitted on lines around the model's own
+projection, makes the chances *more* extreme at the books' lines (receiving spread from 50%: 0.074
+→ 0.112) and undoes the widths' gain. The widths alone point the right way on all four stats and
+clear 2 SE on receiving and passing yards, not rushing (1.1 SE): a near-miss (#6 in the Project's
+near-miss list), with a 2021-2024 fit giving the same picture. Even the best version is still
++0.0045 (receiving) and +0.0082 (rushing) behind the books: the distribution is not the main story.
+The main story is the diagnostic's: the centre of the model's number is what has to improve, on
+the props where it disagrees with the books by 30%+, which is a role and volume question
+(candidates 1-5 in the memo), with early-season rushing roles (portal and recruiting priors,
+candidate 6) moved up the list.
