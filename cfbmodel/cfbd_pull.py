@@ -15,7 +15,10 @@ calls a season. Four files a season, each a plain CSV of the endpoint's rows:
                         position, year (class), jersey, height, weight, recruitIds
 
 These are inputs to the early-season role prior tested in experiments/cfb_role_prior_test.py
-(Nov 2026). A failed call prints one line and the season's other files are still written; an
+(Nov 2026). With --targets it pulls GET /plays/stats by season and week instead, and keeps per
+(game, athlete) counts of targets, receptions, incompletions, completions, pass attempts and
+interceptions (targets_{year}.csv) with a count of every statType name seen (types_{year}.csv):
+the coverage check for candidate 3 of the college-props memo (target share for receivers). A failed call prints one line and the season's other files are still written; an
 existing file is rewritten only when `--refresh` is given or the season is the current one.
 """
 from __future__ import annotations
@@ -86,18 +89,72 @@ def pull_season(year: int, refresh: bool, current: int) -> None:
         print(f"  {name} {year}: {len(df)} rows")
 
 
+TARGET_TYPES = {"target": "targets", "reception": "receptions", "incompletion": "incompletions", "completion": "completions",
+                "pass attempt": "pass_att", "interception": "ints"}
+CONFERENCES = ("SEC", "B1G", "ACC", "B12", "AAC", "MWC", "SBC", "MAC", "CUSA", "PAC", "Ind")
+
+
+def pull_targets(year: int, budget: list, weeks=range(1, 17)) -> None:
+    """targets_{year}.csv: per (game, athlete) counts of the play-stat types that make up a target
+    share (GET /plays/stats by year and week; by conference where a whole week is refused),
+    plus types_{year}.csv, how many rows each statType name had, so the coverage can be read."""
+    path = DIR / f"targets_{year}.csv"
+    rows, types = {}, {}
+    def take(items):
+        for it in items:
+            st = str(it.get("statType") or "").strip()
+            types[st] = types.get(st, 0) + 1
+            col = next((c for k, c in TARGET_TYPES.items() if k in st.lower()), None)
+            if col is None:
+                continue
+            key = (it.get("gameId"), it.get("athleteId"))
+            r = rows.setdefault(key, {"gameId": it.get("gameId"), "week": it.get("week"), "team": it.get("team"), "opponent": it.get("opponent"),
+                                      "athleteId": it.get("athleteId"), "athleteName": it.get("athleteName"),
+                                      **{c: 0 for c in TARGET_TYPES.values()}})
+            r[col] += 1
+    for wk in weeks:
+        if budget[0] <= 0:
+            print(f"  targets {year}: call budget spent at week {wk}")
+            break
+        try:
+            budget[0] -= 1
+            take(get("/plays/stats", year=year, week=wk, seasonType="regular"))
+        except Exception as exc:
+            print(f"  targets {year} week {wk}: whole week failed ({type(exc).__name__}: {str(exc)[:60]}); by conference")
+            for conf in CONFERENCES:
+                if budget[0] <= 0:
+                    break
+                try:
+                    budget[0] -= 1
+                    take(get("/plays/stats", year=year, week=wk, seasonType="regular", conference=conf))
+                except Exception as exc2:
+                    print(f"    {conf}: {type(exc2).__name__}")
+    pd.DataFrame(list(rows.values())).to_csv(path, index=False)
+    pd.DataFrame([{"statType": k, "rows": v} for k, v in sorted(types.items())]).to_csv(DIR / f"types_{year}.csv", index=False)
+    print(f"  targets {year}: {len(rows)} player-games; types: {dict(sorted(types.items()))}")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--from", dest="start", type=int, default=C.FIRST_SEASON)
     ap.add_argument("--to", dest="end", type=int, default=None)
     ap.add_argument("--refresh", action="store_true", help="rewrite files that already exist")
+    ap.add_argument("--targets", action="store_true", help="pull per-play player stats (targets etc.) instead of the background files")
+    ap.add_argument("--max-calls", type=int, default=120, help="most CFBD calls a --targets run may make")
     a = ap.parse_args()
     from .data import current_season
     cur = current_season()
     end = a.end or cur
+    budget = [a.max_calls]
     for year in range(a.start, end + 1):
         print(f"{year}:")
-        pull_season(year, a.refresh, cur)
+        if a.targets:
+            DIR.mkdir(parents=True, exist_ok=True)
+            if (DIR / f"targets_{year}.csv").exists() and not (a.refresh or year == cur):
+                continue
+            pull_targets(year, budget)
+        else:
+            pull_season(year, a.refresh, cur)
 
 
 if __name__ == "__main__":
