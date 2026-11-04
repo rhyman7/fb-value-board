@@ -46,6 +46,19 @@ def dump(page, url, out: Path, name: str) -> list[str]:
     (out / f"{name}.txt").write_text(info["text"])
     page.screenshot(path=str(out / f"{name}.png"), full_page=True)
     print(f"{name}: {len(info['text'])} chars, {len(info['links'])} links, {len(info['images'])} images, {len(info['iframes'])} iframes, {info['tables']} tables")
+    # the artifact may be unreachable from the workspace: say what matters in the log too
+    print(f"  ::url {info['url']} | {info['title']}")
+    for f in info["iframes"][:8]:
+        print(f"  ::iframe {f}")
+    for ln in info["links"]:
+        if KEY.search(ln["text"]) or KEY.search(ln["href"]) or ln["href"].lower().endswith((".pdf", ".jpg", ".png")):
+            print(f"  ::link {ln['text'][:60]!r} {ln['href']}")
+    for im in info["images"]:
+        if (im.get("w") or 0) >= 400:
+            print(f"  ::image {im['alt'][:60]!r} {im['src'][:160]} {im['w']}x{im['h']}")
+    t = re.sub(r"\s+", " ", info["text"])
+    i = t.lower().find("availab")
+    print("  ::text " + (t[max(0, i - 300): i + 1500] if i >= 0 else t[:1200]))
     picks = []
     for ln in info["links"]:
         href = ln["href"]
