@@ -1408,6 +1408,15 @@ boosted 32.290 -> 32.323 (0.6 SE, no change); Brier QB lines 0.2563 -> 0.2543 (1
 0.2606 -> 0.2599 (0.8 SE). Every measure points the same way as college on a tenth of the
 starting-QB sample; filed as a near-miss to re-run after the 2026 season.
 
+**NFL receiving, same change, not kept: it is a small loss** (`experiments/nfl_rec_group_calib_test.py`).
+Live for tight ends' receiving on the NFL board (WR and RB receiving come from the boosted step).
+Rule: TE receiving-yards Brier at the 2023-2025 closing lines better by 2+ SE, or TE RMSE better
+on both periods (holdout 2+ SE); nothing worse by 2 SE. TE receptions RMSE 2.215 -> 2.220 on
+tuning (3.4 SE worse), receiving yards 28.82 -> 28.89 (2.2 SE worse); both flat on the holdout
+(0.7 SE); Brier at the lines 0.2583 -> 0.2581 (0.7 SE); boosted WR and RB within 1.6 SE. The NFL
+tight-end pool (about 2,500 tuning games against 14,000 college WR games) is too small to stand
+alone and does better borrowing from receivers. Not a near-miss; the pooled fit stays.
+
 ## Niche props: probe and the tackle stat-crew check (Nov 2, 2026)
 
 **What the books post** (probe, 320 credits: four 2025 week-1 games, the board's pricing snapshot
