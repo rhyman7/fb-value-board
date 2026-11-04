@@ -1,0 +1,431 @@
+{
+ "volume": {
+  "ATT_FEATS": [
+   "team_att_avg",
+   "opp_att_allowed",
+   "team_car_avg",
+   "opp_car_allowed",
+   "margin",
+   "proj_total",
+   "wind",
+   "home",
+   "proe_off",
+   "opp_proe_def"
+  ],
+  "CAR_FEATS": [
+   "team_att_avg",
+   "opp_att_allowed",
+   "team_car_avg",
+   "margin",
+   "proj_total",
+   "wind",
+   "home",
+   "opp_car_usual",
+   "proe_off",
+   "opp_proe_def"
+  ]
+ },
+ "cal_extra_added": {
+  "rec_yds": [
+   "opp_def_mt",
+   "opp_def_ypt"
+  ],
+  "ints": [
+   "opp_def_press"
+  ]
+ },
+ "rmse": {
+  "WR rec_yds": {
+   "tune": {
+    "n": 8729,
+    "rmse_current": 28.1661,
+    "rmse_new": 28.1524,
+    "change": -0.0138,
+    "se": 0.0182
+   },
+   "hold": {
+    "n": 10197,
+    "rmse_current": 27.0284,
+    "rmse_new": 27.0315,
+    "change": 0.0031,
+    "se": 0.0138
+   }
+  },
+  "TE rec_yds": {
+   "tune": {
+    "n": 5164,
+    "rmse_current": 18.5092,
+    "rmse_new": 18.499,
+    "change": -0.0102,
+    "se": 0.0172
+   },
+   "hold": {
+    "n": 6183,
+    "rmse_current": 18.1671,
+    "rmse_new": 18.1488,
+    "change": -0.0183,
+    "se": 0.0128
+   }
+  },
+  "RB rec_yds": {
+   "tune": {
+    "n": 6145,
+    "rmse_current": 14.0828,
+    "rmse_new": 14.0797,
+    "change": -0.0031,
+    "se": 0.0088
+   },
+   "hold": {
+    "n": 6672,
+    "rmse_current": 13.2909,
+    "rmse_new": 13.2919,
+    "change": 0.0011,
+    "se": 0.0067
+   }
+  },
+  "QB ints": {
+   "tune": {
+    "n": 1558,
+    "rmse_current": 0.8724,
+    "rmse_new": 0.8717,
+    "change": -0.0007,
+    "se": 0.0017
+   },
+   "hold": {
+    "n": 1789,
+    "rmse_current": 0.8448,
+    "rmse_new": 0.844,
+    "change": -0.0008,
+    "se": 0.0012
+   }
+  }
+ },
+ "upcoming_move": {
+  "rec_yds median": 0.349,
+  "95th": 1.412,
+  "max": 3.922,
+  "n": 1983
+ },
+ "props": {
+  "current": {
+   "2023": {
+    "pricing": {
+     "all": {
+      "n": 5055,
+      "brier_ours": 0.25598,
+      "brier_market": 0.25013
+     },
+     "pass_yds": {
+      "n": 785,
+      "brier_ours": 0.25026,
+      "brier_market": 0.25042
+     },
+     "rec_yds": {
+      "n": 3012,
+      "brier_ours": 0.25626,
+      "brier_market": 0.25
+     },
+     "rush_yds": {
+      "n": 1258,
+      "brier_ours": 0.25889,
+      "brier_market": 0.25027
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9080,
+      "brier_ours": 0.25842,
+      "brier_market": 0.24987
+     },
+     "pass_yds": {
+      "n": 1004,
+      "brier_ours": 0.25244,
+      "brier_market": 0.25074
+     },
+     "rec_yds": {
+      "n": 5709,
+      "brier_ours": 0.25873,
+      "brier_market": 0.24979
+     },
+     "rush_yds": {
+      "n": 2367,
+      "brier_ours": 0.26021,
+      "brier_market": 0.2497
+     }
+    }
+   },
+   "2024": {
+    "pricing": {
+     "all": {
+      "n": 5780,
+      "brier_ours": 0.25563,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 873,
+      "brier_ours": 0.24848,
+      "brier_market": 0.25011
+     },
+     "rec_yds": {
+      "n": 3401,
+      "brier_ours": 0.25801,
+      "brier_market": 0.24993
+     },
+     "rush_yds": {
+      "n": 1506,
+      "brier_ours": 0.25441,
+      "brier_market": 0.24973
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9575,
+      "brier_ours": 0.26036,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 992,
+      "brier_ours": 0.25405,
+      "brier_market": 0.24998
+     },
+     "rec_yds": {
+      "n": 6056,
+      "brier_ours": 0.26197,
+      "brier_market": 0.24989
+     },
+     "rush_yds": {
+      "n": 2527,
+      "brier_ours": 0.25896,
+      "brier_market": 0.24989
+     }
+    }
+   },
+   "2025": {
+    "pricing": {
+     "all": {
+      "n": 10971,
+      "brier_ours": 0.2539,
+      "brier_market": 0.24858
+     },
+     "carries": {
+      "n": 1205,
+      "brier_ours": 0.24729,
+      "brier_market": 0.24901
+     },
+     "pass_yds": {
+      "n": 938,
+      "brier_ours": 0.25387,
+      "brier_market": 0.25
+     },
+     "rec_yds": {
+      "n": 3556,
+      "brier_ours": 0.25692,
+      "brier_market": 0.2502
+     },
+     "receptions": {
+      "n": 3435,
+      "brier_ours": 0.25483,
+      "brier_market": 0.24571
+     },
+     "rush_yds": {
+      "n": 1837,
+      "brier_ours": 0.25067,
+      "brier_market": 0.24978
+     }
+    },
+    "close": {
+     "all": {
+      "n": 16652,
+      "brier_ours": 0.25625,
+      "brier_market": 0.24765
+     },
+     "carries": {
+      "n": 1564,
+      "brier_ours": 0.26015,
+      "brier_market": 0.24829
+     },
+     "pass_yds": {
+      "n": 1035,
+      "brier_ours": 0.25335,
+      "brier_market": 0.24995
+     },
+     "rec_yds": {
+      "n": 5798,
+      "brier_ours": 0.25758,
+      "brier_market": 0.25009
+     },
+     "receptions": {
+      "n": 5707,
+      "brier_ours": 0.25314,
+      "brier_market": 0.24354
+     },
+     "rush_yds": {
+      "n": 2548,
+      "brier_ours": 0.25897,
+      "brier_market": 0.24997
+     }
+    }
+   }
+  },
+  "new": {
+   "2023": {
+    "pricing": {
+     "all": {
+      "n": 5054,
+      "brier_ours": 0.25603,
+      "brier_market": 0.25014
+     },
+     "pass_yds": {
+      "n": 785,
+      "brier_ours": 0.25026,
+      "brier_market": 0.25042
+     },
+     "rec_yds": {
+      "n": 3011,
+      "brier_ours": 0.25634,
+      "brier_market": 0.25001
+     },
+     "rush_yds": {
+      "n": 1258,
+      "brier_ours": 0.25889,
+      "brier_market": 0.25027
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9073,
+      "brier_ours": 0.2587,
+      "brier_market": 0.24988
+     },
+     "pass_yds": {
+      "n": 1004,
+      "brier_ours": 0.25244,
+      "brier_market": 0.25074
+     },
+     "rec_yds": {
+      "n": 5702,
+      "brier_ours": 0.25918,
+      "brier_market": 0.2498
+     },
+     "rush_yds": {
+      "n": 2367,
+      "brier_ours": 0.26021,
+      "brier_market": 0.2497
+     }
+    }
+   },
+   "2024": {
+    "pricing": {
+     "all": {
+      "n": 5780,
+      "brier_ours": 0.25593,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 873,
+      "brier_ours": 0.24848,
+      "brier_market": 0.25011
+     },
+     "rec_yds": {
+      "n": 3401,
+      "brier_ours": 0.25851,
+      "brier_market": 0.24993
+     },
+     "rush_yds": {
+      "n": 1506,
+      "brier_ours": 0.25441,
+      "brier_market": 0.24973
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9578,
+      "brier_ours": 0.2605,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 992,
+      "brier_ours": 0.25405,
+      "brier_market": 0.24998
+     },
+     "rec_yds": {
+      "n": 6059,
+      "brier_ours": 0.26219,
+      "brier_market": 0.24989
+     },
+     "rush_yds": {
+      "n": 2527,
+      "brier_ours": 0.25896,
+      "brier_market": 0.24989
+     }
+    }
+   },
+   "2025": {
+    "pricing": {
+     "all": {
+      "n": 10973,
+      "brier_ours": 0.25372,
+      "brier_market": 0.24858
+     },
+     "carries": {
+      "n": 1205,
+      "brier_ours": 0.24729,
+      "brier_market": 0.24901
+     },
+     "pass_yds": {
+      "n": 938,
+      "brier_ours": 0.25387,
+      "brier_market": 0.25
+     },
+     "rec_yds": {
+      "n": 3558,
+      "brier_ours": 0.25637,
+      "brier_market": 0.2502
+     },
+     "receptions": {
+      "n": 3435,
+      "brier_ours": 0.25483,
+      "brier_market": 0.24571
+     },
+     "rush_yds": {
+      "n": 1837,
+      "brier_ours": 0.25067,
+      "brier_market": 0.24978
+     }
+    },
+    "close": {
+     "all": {
+      "n": 16656,
+      "brier_ours": 0.25609,
+      "brier_market": 0.24765
+     },
+     "carries": {
+      "n": 1564,
+      "brier_ours": 0.26015,
+      "brier_market": 0.24829
+     },
+     "pass_yds": {
+      "n": 1035,
+      "brier_ours": 0.25335,
+      "brier_market": 0.24995
+     },
+     "rec_yds": {
+      "n": 5802,
+      "brier_ours": 0.25712,
+      "brier_market": 0.25009
+     },
+     "receptions": {
+      "n": 5707,
+      "brier_ours": 0.25314,
+      "brier_market": 0.24354
+     },
+     "rush_yds": {
+      "n": 2548,
+      "brier_ours": 0.25897,
+      "brier_market": 0.24997
+     }
+    }
+   }
+  }
+ }
+}

@@ -1798,6 +1798,21 @@ out" and "Mid-season coaching change"; "Returning defensive production" became "
 Week 10 board: raw spreads move 0.41 on average, max 2.9 (the coaching-change teams); projected lines at
 most 0.84; totals at most 0.06; no bet added or removed.
 
+**NFL defense in the player projections: checked, not applied** (`experiments/apply_check_nfl_defense_players.py`,
+`experiments/out/apply_check_nfl_defense_players.json`; rule in the docstring). Ryan had said to apply the shadow
+test's player version now, but on today's chain (after the volume changes) it is mixed, so it stays in the shadow
+test under its pre-registered rule (Ryan, Nov 4: "just move on"). RMSE change, tuning 2020-22 / holdout 2023 on:
+
+| | Tuning | Holdout |
+|---|---|---|
+| WR rec_yds | -0.0138 ± 0.0182 | +0.0031 ± 0.0138 |
+| TE rec_yds | -0.0102 ± 0.0172 | -0.0183 ± 0.0128 |
+| RB rec_yds | -0.0031 ± 0.0088 | +0.0011 ± 0.0067 |
+| QB ints | -0.0007 ± 0.0017 | -0.0008 ± 0.0012 |
+
+Receiving-yards Brier at the real lines: 2023 pricing 0.2563 → 0.2563; 2023 close 0.2587 → 0.2592; 2024 pricing 0.2580 → 0.2585; 2024 close 0.2620 → 0.2622; 2025 pricing 0.2569 → 0.2564; 2025 close 0.2576 → 0.2571. The re-judge's −0.054 / −0.005 was measured on the
+October chain. It would have moved this week's receiving projections by a median 0.35 yards (max 3.9).
+
 **College prop widths** (near-miss #6; `experiments/cfb_propdist_test.py --save`, `experiments/out/cfb_propdist_test.json`):
 the widths-only version, refitted on the chain above, is better than the NFL-fitted chances on every stat at the
 2025 lines (passing TDs −0.0025, passing yards −0.0019, receiving yards −0.0010, rushing yards −0.0013) and
