@@ -41,7 +41,10 @@ Opportunity times efficiency, using only what was known before each game.
 7. **Calibration.** A last regression per stat on earlier seasons that blends the chain
    with the player's recent per-game average (per start, for quarterbacks). Passing is
    fitted on projected starters who started, so a quarterback's line is what he throws
-   if he starts.
+   if he starts. Receptions and receiving yards also get the player's PFF route share
+   (routes per team pass play) and snap share, as of the game, from earlier games
+   (`cfbmodel/pff_roles.py`, Nov 4, 2026; PFF data is private and never shown on the page).
+   Without current PFF data (no token, or PFF more than a week behind) they are left out.
 
 8. **Matchup.** Defense against each position (`nflmodel/dvp.py`, the NFL board's rating):
    the log of what this defense has allowed to the position over what the projections
@@ -88,6 +91,9 @@ Each piece removed in turn, on 2017-2019:
   (25.3 against 25.6).
 - **Defense against each position** (Nov 3, 2026): holdout RMSE WR receiving yards 33.394 →
   33.350, RB rushing yards 38.022 → 37.975, QB passing yards 88.81 → 88.48, each 3+ SE.
+- **PFF route and snap share** (Nov 4, 2026): walk-forward receiving-yards RMSE 31.435 →
+  31.418 on 2017-19 (3.7 SE) and 30.179 → 30.057 on 2021+ (10.1 SE); better at the 2025
+  lines and on the floor rungs too.
 - **Who plays**: built into which players are projected, so it cannot be removed on its
   own; as a game-model feature the same box-score signal added nothing (CFB_FEATURES.md).
 

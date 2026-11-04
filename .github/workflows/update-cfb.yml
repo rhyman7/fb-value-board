@@ -29,6 +29,20 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
+      # PFF route/snap share for the receiving projections (cfbmodel/pff_roles.py). Private data:
+      # checked out into .pff-data/ (git-ignored, never added below). Without the PFF_DATA_TOKEN
+      # secret, or if the checkout fails, the board builds without it, as before Nov 4, 2026.
+      - name: PFF data (private)
+        uses: actions/checkout@v5
+        continue-on-error: true
+        with:
+          repository: rhyman7/pff-data
+          token: ${{ secrets.PFF_DATA_TOKEN }}
+          path: .pff-data
+          sparse-checkout: |
+            ncaa/**/*_receiving_summary.csv.gz
+            ncaa/**/*_offense_summary.csv.gz
+          sparse-checkout-cone-mode: false
       - name: Browser for the best-bets PDF
         run: pip install playwright && python -m playwright install --with-deps chromium
       - name: Build the college board
