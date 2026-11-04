@@ -177,13 +177,22 @@ boards in detail; this file is the rules.
   projection rows and `why.dvp[<stat>]` in the board JSON; the matchup tooltip row that shows
   it lives in `site/template.html` (shared with the NFL page, which has no `why.dvp` yet, so the
   row only renders on the college board).
-- **PFF college data: `data/cfb/pff/<season>/w<week>_<table>.csv`** (receiving, rushing), written by
-  the **PFF pull** Action (`cfbmodel/pff_pull.py`, `PFF_API_KEY` repository secret, a PFF Pro key;
-  100 reads a minute, the script paces itself on the x-ratelimit headers). Manual for backfills,
-  scheduled Sunday and Monday in season for the current season. The operation paths are looked up
-  in PFF's public OpenAPI file at run time. Hand exports from the website (Nov 2026) are filed to
-  the same place by `scripts/pff_identify.py`, which stamps season and week by matching box scores.
-  Never print the key.
+- **PFF college data lives in the private repo rhyman7/pff-data, never here.** This repo is public
+  and its root is the live site; PFF's data is licensed to Ryan's PFF Pro account. Don't commit PFF
+  rows (or a file that reproduces them row by row) anywhere in this repo, and don't put them in
+  `docs/`, an issue, a PDF or an alert. Test scores, fitted weights and projections computed from
+  them are fine. `tests/test_pff_private.py` fails if PFF files are committed. Moved out on Nov 4,
+  2026; the files remain in this repo's history from #190 (left as is).
+  - Reading it: `cfbmodel/pff_data.py` (`pff_data.load(table, seasons)`) looks in `$PFF_DATA_DIR`,
+    then `.pff-data/` (git-ignored), then `../pff-data`. An Action that needs it checks it out with
+    the **PFF_DATA_TOKEN** secret (a fine-grained token: read-only Contents on rhyman7/pff-data
+    only): `actions/checkout@v5` with `repository: rhyman7/pff-data`, `token:
+    ${{ secrets.PFF_DATA_TOKEN }}`, `path: .pff-data`. Never `git add` that folder; the Update
+    Actions add only named paths, keep it that way.
+  - The pull (`pff_pull.py`, the **PFF pull** Action, the `PFF_API_KEY` secret) and its rules are
+    in pff-data's CONVENTIONS.md. No PFF key is stored in this repo.
+  - `scripts/pff_identify.py` (stamps season and week on hand exports from the website by matching
+    box scores) writes into the pff-data checkout (`hand/`), never here.
 - **College availability log: `data/cfb/availability/<season>/`** (`latest.json`, `log.csv`), written
   only by the **College availability** Action (`cfbmodel/availability_log.py`, standard library
   only, no pip step): ESPN's per-team college injury designations, which carry the power
