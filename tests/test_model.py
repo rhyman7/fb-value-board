@@ -582,3 +582,22 @@ def test_turnover_free_counts_leave_out_turnover_plays():
     from nflmodel import config as C
     for path in sorted(C.CACHE.glob("team_extra_*.csv")):
         assert {"pnt_n", "pnt_epa", "rnt_n", "rnt_epa"} <= set(pd.read_csv(path, nrows=0).columns), path.name
+
+
+def test_tendency_uses_only_earlier_games_and_shrinks():
+    """players.tendency (Nov 2026): a weighted average of the key team's earlier games, last season
+    at half weight, older seasons dropped, shrunk toward 0 by TEND_SHRINK games; an upcoming game
+    (NaN value) adds nothing and gets the rating as of then."""
+    from nflmodel import players as PL
+    t = pd.DataFrame({
+        "game_id": ["a", "b", "c", "d", "e"], "season": [2024, 2024, 2025, 2025, 2025], "t": [1, 2, 30, 31, 32],
+        "team": ["X", "X", "X", "X", "X"], "opp": ["Y"] * 5, "x": [1.0, 1.0, 1.0, np.nan, 1.0],
+    })
+    r = PL.tendency(t, "team", "x", "r")["r"].to_numpy()
+    assert r[0] == 0.0                                          # nothing earlier
+    w = 1.0
+    assert abs(r[1] - w / (w + PL.TEND_SHRINK)) < 1e-12         # one earlier game, shrunk
+    w2 = PL.TEND_LAST * (1 + 0.5 ** (1 / PL.TEAM_HL))           # last season's two games, half weight, decayed by valued games
+    assert abs(r[2] - w2 / (w2 + PL.TEND_SHRINK)) < 1e-12
+    assert r[3] == r[4]                                         # the game with no value changes nothing for the next one
+    assert 0 < r[3] < 1

@@ -1,0 +1,46 @@
+attempts + PROE   tune -0.0145 ± 0.0092   hold -0.0035 ± 0.0079   keep
+carries PROE                       tune 5.6013 (+0.0094 ± 0.0088)   hold 5.5718 (-0.0188 ± 0.0064)
+carries play-calling               tune 5.5528 (-0.0392 ± 0.0112)   hold 5.5750 (-0.0157 ± 0.0074)
+carries vs usual (swap)            tune 5.5714 (-0.0206 ± 0.0065)   hold 5.5811 (-0.0095 ± 0.0045)
+carries PROE + play-calling        tune 5.5625 (-0.0295 ± 0.0123)   hold 5.5695 (-0.0211 ± 0.0085)
+carries PROE + vs usual            tune 5.5769 (-0.0151 ± 0.0101)   hold 5.5643 (-0.0263 ± 0.0081)
+carries play-calling + vs usual    tune 5.5606 (-0.0314 ± 0.0126)   hold 5.5709 (-0.0198 ± 0.0084)
+carries all three                  tune 5.5691 (-0.0229 ± 0.0134)   hold 5.5653 (-0.0253 ± 0.0095)
+carries: beat current ['play-calling', 'vs usual (swap)', 'PROE + play-calling', 'PROE + vs usual', 'play-calling + vs usual', 'all three']; unbeaten ['play-calling', 'PROE + play-calling', 'PROE + vs usual', 'play-calling + vs usual', 'all three']; pick: PROE + vs usual
+
+chosen: attempts ['team_att_avg', 'opp_att_allowed', 'team_car_avg', 'opp_car_allowed', 'margin', 'proj_total', 'wind', 'home', 'proe_off', 'opp_proe_def']
+        carries  ['team_att_avg', 'opp_att_allowed', 'team_car_avg', 'margin', 'proj_total', 'wind', 'home', 'opp_car_usual', 'proe_off', 'opp_proe_def']
+
+projection RMSE, current chain -> chosen chain:
+  QB pass_att     tune 8.757 -> 8.745 (-0.0120 ± 0.0067)   hold 8.726 -> 8.723 (-0.0023 ± 0.0065)
+  QB completions  tune 5.995 -> 5.989 (-0.0052 ± 0.0041)   hold 6.153 -> 6.151 (-0.0027 ± 0.0039)
+  QB pass_yds     tune 74.523 -> 74.501 (-0.0222 ± 0.0378)   hold 75.505 -> 75.460 (-0.0455 ± 0.0375)
+  RB carries      tune 4.598 -> 4.595 (-0.0031 ± 0.0015)   hold 4.253 -> 4.249 (-0.0034 ± 0.0014)
+  RB rush_yds     tune 25.193 -> 25.189 (-0.0042 ± 0.0076)   hold 24.674 -> 24.664 (-0.0098 ± 0.0065)
+  WR targets      tune 2.647 -> 2.647 (+0.0002 ± 0.0005)   hold 2.486 -> 2.486 (+0.0001 ± 0.0004)
+  WR rec_yds      tune 28.642 -> 28.652 (+0.0104 ± 0.0042)   hold 27.842 -> 27.845 (+0.0023 ± 0.0036)
+  TE targets      tune 2.027 -> 2.027 (-0.0007 ± 0.0005)   hold 1.863 -> 1.863 (-0.0002 ± 0.0004)
+  TE rec_yds      tune 20.087 -> 20.085 (-0.0025 ± 0.0038)   hold 18.495 -> 18.494 (-0.0006 ± 0.0037)
+
+projection RMSE, attempts only:
+  QB pass_att     tune 8.757 -> 8.745 (-0.0120 ± 0.0067)   hold 8.726 -> 8.723 (-0.0023 ± 0.0065)
+  QB completions  tune 5.995 -> 5.989 (-0.0052 ± 0.0041)   hold 6.153 -> 6.151 (-0.0027 ± 0.0039)
+  QB pass_yds     tune 74.523 -> 74.501 (-0.0222 ± 0.0378)   hold 75.505 -> 75.460 (-0.0455 ± 0.0375)
+  RB carries      tune 4.598 -> 4.598 (+0.0000 ± 0.0000)   hold 4.253 -> 4.253 (+0.0000 ± 0.0000)
+  RB rush_yds     tune 25.193 -> 25.193 (+0.0000 ± 0.0000)   hold 24.674 -> 24.674 (+0.0000 ± 0.0000)
+  WR targets      tune 2.647 -> 2.647 (+0.0002 ± 0.0005)   hold 2.486 -> 2.486 (+0.0001 ± 0.0004)
+  WR rec_yds      tune 28.642 -> 28.652 (+0.0104 ± 0.0042)   hold 27.842 -> 27.845 (+0.0023 ± 0.0036)
+  TE targets      tune 2.027 -> 2.027 (-0.0007 ± 0.0005)   hold 1.863 -> 1.863 (-0.0002 ± 0.0004)
+  TE rec_yds      tune 20.087 -> 20.085 (-0.0025 ± 0.0038)   hold 18.495 -> 18.494 (-0.0006 ± 0.0037)
+
+projection RMSE, carries only:
+  QB pass_att     tune 8.757 -> 8.757 (+0.0000 ± 0.0000)   hold 8.726 -> 8.726 (+0.0000 ± 0.0000)
+  QB completions  tune 5.995 -> 5.995 (+0.0000 ± 0.0000)   hold 6.153 -> 6.153 (+0.0000 ± 0.0000)
+  QB pass_yds     tune 74.523 -> 74.523 (+0.0000 ± 0.0000)   hold 75.505 -> 75.505 (+0.0000 ± 0.0000)
+  RB carries      tune 4.598 -> 4.595 (-0.0031 ± 0.0015)   hold 4.253 -> 4.249 (-0.0034 ± 0.0014)
+  RB rush_yds     tune 25.193 -> 25.189 (-0.0042 ± 0.0076)   hold 24.674 -> 24.664 (-0.0098 ± 0.0065)
+  WR targets      tune 2.647 -> 2.647 (+0.0000 ± 0.0000)   hold 2.486 -> 2.486 (+0.0000 ± 0.0000)
+  WR rec_yds      tune 28.642 -> 28.642 (+0.0000 ± 0.0000)   hold 27.842 -> 27.842 (+0.0000 ± 0.0000)
+  TE targets      tune 2.027 -> 2.027 (+0.0000 ± 0.0000)   hold 1.863 -> 1.863 (+0.0000 ± 0.0000)
+  TE rec_yds      tune 20.087 -> 20.087 (+0.0000 ± 0.0000)   hold 18.495 -> 18.495 (+0.0000 ± 0.0000)
+wrote /home/claude/fb-value-board/experiments/out/apply_check_nfl_volume_pieces.json

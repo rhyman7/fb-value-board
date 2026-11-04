@@ -1,0 +1,630 @@
+{
+ "head_to_head": {
+  "attempts": {
+   "+ PROE": {
+    "tune": {
+     "n": 2670,
+     "mae": 6.4109,
+     "change": -0.0145,
+     "se": 0.0092
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 6.1817,
+     "change": -0.0035,
+     "se": 0.0079
+    },
+    "keep": true
+   }
+  },
+  "carries": {
+   "PROE": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.6013,
+     "change": 0.0094,
+     "se": 0.0088
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5718,
+     "change": -0.0188,
+     "se": 0.0064
+    },
+    "beats_current": false
+   },
+   "play-calling": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5528,
+     "change": -0.0392,
+     "se": 0.0112
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.575,
+     "change": -0.0157,
+     "se": 0.0074
+    },
+    "beats_current": true
+   },
+   "vs usual (swap)": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5714,
+     "change": -0.0206,
+     "se": 0.0065
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5811,
+     "change": -0.0095,
+     "se": 0.0045
+    },
+    "beats_current": true
+   },
+   "PROE + play-calling": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5625,
+     "change": -0.0295,
+     "se": 0.0123
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5695,
+     "change": -0.0211,
+     "se": 0.0085
+    },
+    "beats_current": true
+   },
+   "PROE + vs usual": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5769,
+     "change": -0.0151,
+     "se": 0.0101
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5643,
+     "change": -0.0263,
+     "se": 0.0081
+    },
+    "beats_current": true
+   },
+   "play-calling + vs usual": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5606,
+     "change": -0.0314,
+     "se": 0.0126
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5709,
+     "change": -0.0198,
+     "se": 0.0084
+    },
+    "beats_current": true
+   },
+   "all three": {
+    "tune": {
+     "n": 2670,
+     "mae": 5.5691,
+     "change": -0.0229,
+     "se": 0.0134
+    },
+    "hold": {
+     "n": 4162,
+     "mae": 5.5653,
+     "change": -0.0253,
+     "se": 0.0095
+    },
+    "beats_current": true
+   }
+  },
+  "carries_pick": "PROE + vs usual",
+  "carries_unbeaten": [
+   "play-calling",
+   "PROE + play-calling",
+   "PROE + vs usual",
+   "play-calling + vs usual",
+   "all three"
+  ]
+ },
+ "chosen": {
+  "ATT_FEATS": [
+   "team_att_avg",
+   "opp_att_allowed",
+   "team_car_avg",
+   "opp_car_allowed",
+   "margin",
+   "proj_total",
+   "wind",
+   "home",
+   "proe_off",
+   "opp_proe_def"
+  ],
+  "CAR_FEATS": [
+   "team_att_avg",
+   "opp_att_allowed",
+   "team_car_avg",
+   "margin",
+   "proj_total",
+   "wind",
+   "home",
+   "opp_car_usual",
+   "proe_off",
+   "opp_proe_def"
+  ]
+ },
+ "projection_rmse": {
+  "QB pass_att": {
+   "tune": {
+    "n": 2521,
+    "rmse_current": 8.7565,
+    "rmse_new": 8.7445,
+    "change": -0.012,
+    "se": 0.0067
+   },
+   "hold": {
+    "n": 3849,
+    "rmse_current": 8.7259,
+    "rmse_new": 8.7235,
+    "change": -0.0023,
+    "se": 0.0065
+   }
+  },
+  "QB completions": {
+   "tune": {
+    "n": 2521,
+    "rmse_current": 5.9947,
+    "rmse_new": 5.9895,
+    "change": -0.0052,
+    "se": 0.0041
+   },
+   "hold": {
+    "n": 3849,
+    "rmse_current": 6.1532,
+    "rmse_new": 6.1505,
+    "change": -0.0027,
+    "se": 0.0039
+   }
+  },
+  "QB pass_yds": {
+   "tune": {
+    "n": 2521,
+    "rmse_current": 74.5235,
+    "rmse_new": 74.5013,
+    "change": -0.0222,
+    "se": 0.0378
+   },
+   "hold": {
+    "n": 3849,
+    "rmse_current": 75.5054,
+    "rmse_new": 75.4599,
+    "change": -0.0455,
+    "se": 0.0375
+   }
+  },
+  "RB carries": {
+   "tune": {
+    "n": 10721,
+    "rmse_current": 4.5979,
+    "rmse_new": 4.5948,
+    "change": -0.0031,
+    "se": 0.0015
+   },
+   "hold": {
+    "n": 14834,
+    "rmse_current": 4.2529,
+    "rmse_new": 4.2494,
+    "change": -0.0034,
+    "se": 0.0014
+   }
+  },
+  "RB rush_yds": {
+   "tune": {
+    "n": 10721,
+    "rmse_current": 25.193,
+    "rmse_new": 25.1887,
+    "change": -0.0042,
+    "se": 0.0076
+   },
+   "hold": {
+    "n": 14834,
+    "rmse_current": 24.6741,
+    "rmse_new": 24.6644,
+    "change": -0.0098,
+    "se": 0.0065
+   }
+  },
+  "WR targets": {
+   "tune": {
+    "n": 14303,
+    "rmse_current": 2.6468,
+    "rmse_new": 2.647,
+    "change": 0.0002,
+    "se": 0.0005
+   },
+   "hold": {
+    "n": 21664,
+    "rmse_current": 2.4856,
+    "rmse_new": 2.4857,
+    "change": 0.0001,
+    "se": 0.0004
+   }
+  },
+  "WR rec_yds": {
+   "tune": {
+    "n": 14303,
+    "rmse_current": 28.6417,
+    "rmse_new": 28.6521,
+    "change": 0.0104,
+    "se": 0.0042
+   },
+   "hold": {
+    "n": 21664,
+    "rmse_current": 27.8422,
+    "rmse_new": 27.8446,
+    "change": 0.0023,
+    "se": 0.0036
+   }
+  },
+  "TE targets": {
+   "tune": {
+    "n": 8041,
+    "rmse_current": 2.0274,
+    "rmse_new": 2.0267,
+    "change": -0.0007,
+    "se": 0.0005
+   },
+   "hold": {
+    "n": 12899,
+    "rmse_current": 1.8632,
+    "rmse_new": 1.863,
+    "change": -0.0002,
+    "se": 0.0004
+   }
+  },
+  "TE rec_yds": {
+   "tune": {
+    "n": 8041,
+    "rmse_current": 20.0872,
+    "rmse_new": 20.0847,
+    "change": -0.0025,
+    "se": 0.0038
+   },
+   "hold": {
+    "n": 12899,
+    "rmse_current": 18.4947,
+    "rmse_new": 18.4941,
+    "change": -0.0006,
+    "se": 0.0037
+   }
+  }
+ },
+ "props": {
+  "current": {
+   "2023": {
+    "pricing": {
+     "all": {
+      "n": 5055,
+      "brier_ours": 0.25619,
+      "brier_market": 0.25013
+     },
+     "pass_yds": {
+      "n": 785,
+      "brier_ours": 0.25117,
+      "brier_market": 0.25042
+     },
+     "rec_yds": {
+      "n": 3012,
+      "brier_ours": 0.25634,
+      "brier_market": 0.25
+     },
+     "rush_yds": {
+      "n": 1258,
+      "brier_ours": 0.25897,
+      "brier_market": 0.25027
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9085,
+      "brier_ours": 0.25873,
+      "brier_market": 0.24988
+     },
+     "pass_yds": {
+      "n": 1004,
+      "brier_ours": 0.25317,
+      "brier_market": 0.25074
+     },
+     "rec_yds": {
+      "n": 5712,
+      "brier_ours": 0.25911,
+      "brier_market": 0.2498
+     },
+     "rush_yds": {
+      "n": 2369,
+      "brier_ours": 0.26019,
+      "brier_market": 0.24971
+     }
+    }
+   },
+   "2024": {
+    "pricing": {
+     "all": {
+      "n": 5779,
+      "brier_ours": 0.25558,
+      "brier_market": 0.24991
+     },
+     "pass_yds": {
+      "n": 873,
+      "brier_ours": 0.2486,
+      "brier_market": 0.25011
+     },
+     "rec_yds": {
+      "n": 3399,
+      "brier_ours": 0.25799,
+      "brier_market": 0.24993
+     },
+     "rush_yds": {
+      "n": 1507,
+      "brier_ours": 0.25419,
+      "brier_market": 0.24973
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9574,
+      "brier_ours": 0.26039,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 992,
+      "brier_ours": 0.25351,
+      "brier_market": 0.24998
+     },
+     "rec_yds": {
+      "n": 6057,
+      "brier_ours": 0.26197,
+      "brier_market": 0.24989
+     },
+     "rush_yds": {
+      "n": 2525,
+      "brier_ours": 0.25928,
+      "brier_market": 0.24989
+     }
+    }
+   },
+   "2025": {
+    "pricing": {
+     "all": {
+      "n": 10973,
+      "brier_ours": 0.25403,
+      "brier_market": 0.24857
+     },
+     "carries": {
+      "n": 1207,
+      "brier_ours": 0.24816,
+      "brier_market": 0.24897
+     },
+     "pass_yds": {
+      "n": 938,
+      "brier_ours": 0.2547,
+      "brier_market": 0.25
+     },
+     "rec_yds": {
+      "n": 3556,
+      "brier_ours": 0.2569,
+      "brier_market": 0.2502
+     },
+     "receptions": {
+      "n": 3435,
+      "brier_ours": 0.25489,
+      "brier_market": 0.24571
+     },
+     "rush_yds": {
+      "n": 1837,
+      "brier_ours": 0.2504,
+      "brier_market": 0.24978
+     }
+    },
+    "close": {
+     "all": {
+      "n": 16644,
+      "brier_ours": 0.2562,
+      "brier_market": 0.24765
+     },
+     "carries": {
+      "n": 1562,
+      "brier_ours": 0.25899,
+      "brier_market": 0.2483
+     },
+     "pass_yds": {
+      "n": 1035,
+      "brier_ours": 0.25458,
+      "brier_market": 0.24995
+     },
+     "rec_yds": {
+      "n": 5794,
+      "brier_ours": 0.25754,
+      "brier_market": 0.25009
+     },
+     "receptions": {
+      "n": 5707,
+      "brier_ours": 0.25319,
+      "brier_market": 0.24354
+     },
+     "rush_yds": {
+      "n": 2546,
+      "brier_ours": 0.25883,
+      "brier_market": 0.24998
+     }
+    }
+   }
+  },
+  "new": {
+   "2023": {
+    "pricing": {
+     "all": {
+      "n": 5055,
+      "brier_ours": 0.25598,
+      "brier_market": 0.25013
+     },
+     "pass_yds": {
+      "n": 785,
+      "brier_ours": 0.25026,
+      "brier_market": 0.25042
+     },
+     "rec_yds": {
+      "n": 3012,
+      "brier_ours": 0.25626,
+      "brier_market": 0.25
+     },
+     "rush_yds": {
+      "n": 1258,
+      "brier_ours": 0.25889,
+      "brier_market": 0.25027
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9080,
+      "brier_ours": 0.25842,
+      "brier_market": 0.24987
+     },
+     "pass_yds": {
+      "n": 1004,
+      "brier_ours": 0.25244,
+      "brier_market": 0.25074
+     },
+     "rec_yds": {
+      "n": 5709,
+      "brier_ours": 0.25873,
+      "brier_market": 0.24979
+     },
+     "rush_yds": {
+      "n": 2367,
+      "brier_ours": 0.26021,
+      "brier_market": 0.2497
+     }
+    }
+   },
+   "2024": {
+    "pricing": {
+     "all": {
+      "n": 5780,
+      "brier_ours": 0.25563,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 873,
+      "brier_ours": 0.24848,
+      "brier_market": 0.25011
+     },
+     "rec_yds": {
+      "n": 3401,
+      "brier_ours": 0.25801,
+      "brier_market": 0.24993
+     },
+     "rush_yds": {
+      "n": 1506,
+      "brier_ours": 0.25441,
+      "brier_market": 0.24973
+     }
+    },
+    "close": {
+     "all": {
+      "n": 9575,
+      "brier_ours": 0.26036,
+      "brier_market": 0.2499
+     },
+     "pass_yds": {
+      "n": 992,
+      "brier_ours": 0.25405,
+      "brier_market": 0.24998
+     },
+     "rec_yds": {
+      "n": 6056,
+      "brier_ours": 0.26197,
+      "brier_market": 0.24989
+     },
+     "rush_yds": {
+      "n": 2527,
+      "brier_ours": 0.25896,
+      "brier_market": 0.24989
+     }
+    }
+   },
+   "2025": {
+    "pricing": {
+     "all": {
+      "n": 10971,
+      "brier_ours": 0.2539,
+      "brier_market": 0.24858
+     },
+     "carries": {
+      "n": 1205,
+      "brier_ours": 0.24729,
+      "brier_market": 0.24901
+     },
+     "pass_yds": {
+      "n": 938,
+      "brier_ours": 0.25387,
+      "brier_market": 0.25
+     },
+     "rec_yds": {
+      "n": 3556,
+      "brier_ours": 0.25692,
+      "brier_market": 0.2502
+     },
+     "receptions": {
+      "n": 3435,
+      "brier_ours": 0.25483,
+      "brier_market": 0.24571
+     },
+     "rush_yds": {
+      "n": 1837,
+      "brier_ours": 0.25067,
+      "brier_market": 0.24978
+     }
+    },
+    "close": {
+     "all": {
+      "n": 16652,
+      "brier_ours": 0.25625,
+      "brier_market": 0.24765
+     },
+     "carries": {
+      "n": 1564,
+      "brier_ours": 0.26015,
+      "brier_market": 0.24829
+     },
+     "pass_yds": {
+      "n": 1035,
+      "brier_ours": 0.25335,
+      "brier_market": 0.24995
+     },
+     "rec_yds": {
+      "n": 5798,
+      "brier_ours": 0.25758,
+      "brier_market": 0.25009
+     },
+     "receptions": {
+      "n": 5707,
+      "brier_ours": 0.25314,
+      "brier_market": 0.24354
+     },
+     "rush_yds": {
+      "n": 2548,
+      "brier_ours": 0.25897,
+      "brier_market": 0.24997
+     }
+    }
+   }
+  }
+ }
+}
