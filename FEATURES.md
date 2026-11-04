@@ -1598,3 +1598,41 @@ so this waits: after the 2026 season there will be two seasons of real targets (
 enough to test "target share where the season's coverage is 85%+, catch share otherwise" on the
 2025 + 2026 lines. Filed on the near-miss list's rechecks, not as a near-miss. Pulling full seasons
 (by game, about 800 calls a season) is not worth CFBD calls until then.
+
+## College backs: usage by down type and player PPA from CFBD (Nov 3, 2026): one kept, one near-miss
+
+Candidate 4 of the college-props memo. `python experiments/cfb_usage_ppa_test.py` (results in
+`experiments/out/cfb_usage_ppa_test.json`); data from the **CFBD player data** Action's `usage` mode
+(`data/cfb/cfbd/usage_<year>.csv`: a player's share of his team's plays on standard vs passing downs,
+per season; `ppa_<year>.csv`: per player per game average PPA). Each candidate is one column multiplied
+into the last calibration step (`players.CAL_EXTRA`: raw x column next to the chain and the recent
+average, fitted walk-forward), rules written first.
+
+**(a) Game script by role.** `usage_script` = (passing-downs usage - standard-downs usage, from the
+back's previous season; 57% of RB rows have one) x the projected margin / 10, on carries and rushing
+yards. Rule: RB carries RMSE better on tuning and holdout (2+ SE), rushing-yards Brier at the 2025
+lines better by 2+ SE.
+
+| | Tuning 2017-19 | Holdout 2021+ |
+|---|---|---|
+| RB carries RMSE | 5.555 → 5.546 (3.7 SE) | 5.277 → 5.271 (3.2 SE) |
+| RB rushing yards RMSE | 40.192 → 40.101 (3.6 SE) | 38.021 → 37.958 (4.0 SE) |
+| 2025 rushing lines, Brier (1,106 props) | | 0.2604 → 0.2592, -0.0012 ± 0.0007 (**1.9 SE**) |
+
+Passes the projection bar on every count; the lines bar by a hair short (1.87 SE against the 2
+required). **Not kept by the rule; near-miss #7.** It is the largest move toward the books of any
+college candidate so far (a tenth of the rushing gap). Re-run on 2025 + 2026 lines (+ 2024 once bought).
+
+**(b) PPA as the efficiency prior.** `ppa_rush` = the back's decayed average rushing PPA per play over
+his earlier games (8-game half-life, last season at 60%, centred on the season's RB mean, shrunk by
+two games; 77% of appearing RB rows have history), on rushing yards. Rule: RB rushing-yards RMSE
+better on both periods, holdout 2+ SE; Brier at the 2025 lines no worse.
+
+| | Tuning 2017-19 | Holdout 2021+ |
+|---|---|---|
+| RB rushing yards RMSE | 40.192 → 40.151 (2.4 SE) | 38.021 → 37.992 (3.2 SE) |
+| 2025 rushing lines, Brier | | -0.0001 ± 0.0004 (no worse) |
+
+**Passes; kept, pending the board change** (it needs the PPA file refreshed in season: the CFBD pull
+gains a weekly step, and the column enters `players.build`). Size: 0.03 yards on a 38-yard miss,
+nothing against the books: an accuracy input, like defense vs position.
