@@ -177,6 +177,13 @@ boards in detail; this file is the rules.
   projection rows and `why.dvp[<stat>]` in the board JSON; the matchup tooltip row that shows
   it lives in `site/template.html` (shared with the NFL page, which has no `why.dvp` yet, so the
   row only renders on the college board).
+- **PFF college data: `data/cfb/pff/<season>/w<week>_<table>.csv`** (receiving, rushing), written by
+  the **PFF pull** Action (`cfbmodel/pff_pull.py`, `PFF_API_KEY` repository secret, a PFF Pro key;
+  100 reads a minute, the script paces itself on the x-ratelimit headers). Manual for backfills,
+  scheduled Sunday and Monday in season for the current season. The operation paths are looked up
+  in PFF's public OpenAPI file at run time. Hand exports from the website (Nov 2026) are filed to
+  the same place by `scripts/pff_identify.py`, which stamps season and week by matching box scores.
+  Never print the key.
 - **College availability log: `data/cfb/availability/<season>/`** (`latest.json`, `log.csv`), written
   only by the **College availability** Action (`cfbmodel/availability_log.py`, standard library
   only, no pip step): ESPN's per-team college injury designations, which carry the power
