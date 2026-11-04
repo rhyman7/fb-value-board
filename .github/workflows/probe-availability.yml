@@ -1,0 +1,28 @@
+name: Probe availability pages
+
+# One-off: renders the SEC, Big Ten, ACC and Big 12 football availability-report pages headlessly
+# (scripts/probe_availability_pages.py) and uploads text, links, images and screenshots as a run
+# artifact, so the College availability Action's parsers can be written against the real pages.
+# Writes nothing to the repo.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - run: python scripts/probe_availability_pages.py probe_out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: availability-pages
+          path: probe_out
