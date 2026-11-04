@@ -1,8 +1,10 @@
 name: College availability
 
-# ESPN's college injury designations for every FBS team (which since 2025 carry the four power
-# conferences' availability reports), logged with the time each change was first seen
-# (cfbmodel/availability_log.py): data/cfb/availability/<season>/latest.json and log.csv.
+# College availability history (cfbmodel/availability_log.py), data/cfb/availability/<season>/:
+# covers_log.csv, every change in the Covers.com designations the board uses (docs/cfb/designations.json,
+# written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on the
+# Nov 3, 2026 dry runs and is kept in case it fills. Reading the conference report pages directly
+# (SEC, Big Ten, ACC, Big 12) is the next step.
 # History only: the board's Covers.com designations are untouched until the kickoff-time
 # availability has been tested against the 2026 live prop log. About 2,000-4,000 ESPN calls a run,
 # two to three minutes. In season: every two hours Wednesday to Friday, hourly on Saturday
@@ -38,7 +40,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Fetch
+      - name: Log the Covers designations the board used
+        run: |
+          args="--covers"
+          [ "${{ inputs.dry_run }}" = "true" ] && args="$args --dry-run"
+          python -m cfbmodel.availability_log $args
+      - name: ESPN (empty for college as of Nov 2026; kept for when it fills, never fails the run)
+        continue-on-error: true
         run: |
           args=""
           [ "${{ inputs.dry_run }}" = "true" ] && args="--dry-run"
