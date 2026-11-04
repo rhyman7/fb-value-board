@@ -2972,6 +2972,7 @@ const matchups = (() => {
         { k: p.pos === "QB" && kind === "pass" ? "Recent per start" : "Recent per game", v: n1(w.recent[stat]) },
         { k: "Calibration", v: sgnf((proj || 0) - w.chain[stat]) });
     }
+    if (w.dvp && w.dvp[stat] != null) rows.push({ k: `${p.opp} vs ${p.pos}s`, v: factor(w.dvp[stat]) + " than expected" });
     rows.push({ k: label + ", projected", v: n1(proj) });
     const a = actOf(p);
     if (a && a[stat] != null) rows.push({ k: label + ", actual", v: n1(a[stat]) });

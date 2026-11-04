@@ -169,6 +169,14 @@ boards in detail; this file is the rules.
   `line_source` says so ("CFBD DraftKings"). ESPN's price always comes first, the cfbfastR
   consensus stays the fallback, and without the key or on any failure nothing changes. Never
   print the key or write it to a file.
+- **College player projections, defense against each position.** `cfbmodel.players.walk_forward`
+  ends with `nflmodel.dvp` applied to `players.DVP_PAIRS`, fitted on the seasons it projected
+  before each one (it projects `DVP_FIT_SEASONS` seasons before `first_test` for that and drops
+  them). The rating uses players who appeared (`active := appeared`), not the NFL's expected-and-
+  active rule; keep that if the two modules are ever merged. The factor is `dvpf_<stat>` on the
+  projection rows and `why.dvp[<stat>]` in the board JSON; the matchup tooltip row that shows
+  it lives in `site/template.html` (shared with the NFL page, which has no `why.dvp` yet, so the
+  row only renders on the college board).
 - **College availability log: `data/cfb/availability/<season>/`** (`latest.json`, `log.csv`), written
   only by the **College availability** Action (`cfbmodel/availability_log.py`, standard library
   only, no pip step): ESPN's per-team college injury designations, which carry the power
