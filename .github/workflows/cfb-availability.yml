@@ -1,7 +1,8 @@
 name: College availability
 
 # College availability history (cfbmodel/availability_log.py), data/cfb/availability/<season>/:
-# covers_log.csv, every change in the Covers.com designations the board uses (docs/cfb/designations.json,
+# conf_log.csv and conf_archive.json, the four power conferences' own availability reports (one
+# vendor app serves all four: app.hdintelligence.com, public JSON); covers_log.csv, every change in the Covers.com designations the board uses (docs/cfb/designations.json,
 # written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on the
 # Nov 3, 2026 dry runs and is kept in case it fills. Reading the conference report pages directly
 # (SEC, Big Ten, ACC, Big 12) is the next step.
@@ -40,6 +41,12 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+      - name: Conference reports (SEC, ACC, Big 12, Big Ten via the vendor app)
+        continue-on-error: true
+        run: |
+          args="--conferences"
+          [ "${{ inputs.dry_run }}" = "true" ] && args="$args --dry-run"
+          python -m cfbmodel.availability_log $args
       - name: Log the Covers designations the board used
         run: |
           args="--covers"

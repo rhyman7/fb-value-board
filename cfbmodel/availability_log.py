@@ -18,7 +18,8 @@ The per-team core API (.../teams/{id}/injuries) is the fallback; for college it 
 entries from 2020-2022 on the Nov 3, 2026 dry run. Team ids are the board's
 (data/cfb/cache/teams_{season}.csv).
 
-ESPN's college feeds turned out empty on the Nov 3, 2026 dry runs (per-team: five 2020-2022
+The conferences' own reports (`--conferences`, conf_log.csv and conf_archive.json; see CONFERENCES
+below) are the primary source from Nov 3, 2026. ESPN's college feeds turned out empty on the Nov 3, 2026 dry runs (per-team: five 2020-2022
 entries; league-wide: three teams, no entries), so until the conference pages themselves are read,
 the one source with history is the Covers.com designations file the daily task writes
 (`--covers`: covers_log.csv, one row per change in docs/cfb/designations.json, with the file's
@@ -39,6 +40,7 @@ import argparse
 import csv
 import datetime as dt
 import json
+import re
 import sys
 import time
 import urllib.request
@@ -181,6 +183,110 @@ def diff(old: list[dict], new: list[dict], seen: str) -> list[dict]:
     return [{f: r.get(f, "") for f in FIELDS} for r in rows]
 
 
+# ---- the conferences' own reports -------------------------------------------------------------------
+# All four power conferences publish their football availability reports through one vendor app
+# (app.hdintelligence.com, embedded on secsports.com/fbreports, theacc.com, big12sports.com and
+# bigten.org; found by the Probe availability pages Action, Nov 3, 2026). Two public JSON calls:
+#   POST /api/get-publish-public  {"sport":"Football","organization":X,"conference":X}
+#        -> {report_id: {ReportType (Initial | Update | Game Day | Report Pending), publishDate,
+#            postedTime, footer{date, time, location}, games: [{teamName, teamDisplayName,
+#            rows: [{name "POS #N Player", status, exemptStatus}]}], statusReportOrder}}
+#   POST /api/get-archive-public  same body -> {data: [{Team, Player, Number, Opponent, Week,
+#            WeekNum, Initial, Update 1, Update 2, Game Day}]}  (the season to date)
+HDI = "https://app.hdintelligence.com/api/"
+CONFERENCES = {"SEC": "SEC", "ACC": "ACC", "B12": "Big 12", "B10": "Big Ten"}
+CONF_FIELDS = ["seen", "conf", "report_id", "report_type", "publish_date", "posted_time", "game_date", "game_time", "location",
+               "team", "pos", "number", "player", "status", "exempt"]
+NAME_RE = re.compile(r"^\s*([A-Z/]{1,4})\s*#(\d+)\s+(.*?)\s*$")
+
+
+def hdi(path: str, org: str):
+    body = json.dumps({"sport": "Football", "organization": org, "conference": org}).encode()
+    req = urllib.request.Request(HDI + path, data=body, method="POST",
+                                 headers={"Content-Type": "application/json", "Accept": "application/json",
+                                          "Referer": f"https://app.hdintelligence.com/?source={org}&sport=Football&conf={org}&type=report",
+                                          "User-Agent": "Mozilla/5.0 (cfb-model availability)"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return json.load(r)
+
+
+def conference_rows(org: str, payload: dict, seen: str) -> list[dict]:
+    rows = []
+    for rid, rep in (payload or {}).items():
+        if not isinstance(rep, dict):
+            continue
+        foot = rep.get("footer") or {}
+        for g in rep.get("games") or []:
+            team = g.get("teamDisplayName") or g.get("teamName") or ""
+            for r in g.get("rows") or []:
+                m = NAME_RE.match(str(r.get("name") or ""))
+                pos, num, player = (m.group(1), m.group(2), m.group(3)) if m else ("", "", str(r.get("name") or ""))
+                rows.append({"seen": seen, "conf": CONFERENCES[org], "report_id": str(rid), "report_type": rep.get("ReportType", ""),
+                             "publish_date": rep.get("publishDate", ""), "posted_time": rep.get("postedTime", ""),
+                             "game_date": foot.get("date", ""), "game_time": foot.get("time", ""), "location": foot.get("location", ""),
+                             "team": team, "pos": pos, "number": num, "player": player, "status": r.get("status", ""),
+                             "exempt": r.get("exemptStatus", "")})
+    return rows
+
+
+def conference_log(d: Path, seen: str, dry_run: bool) -> None:
+    """conf_log.csv: every (report version, team, player, status) the first time it is seen, Available
+    rows only for players who carried another status in an earlier version of the same report;
+    conf_archive.json: the vendor's season-to-date archive per conference, rewritten when it grows."""
+    state_path, log_path, arch_path = d / "conf_seen.json", d / "conf_log.csv", d / "conf_archive.json"
+    state = json.loads(state_path.read_text()) if state_path.exists() else {"keys": [], "listed": []}
+    keys, listed = set(state["keys"]), set(state["listed"])
+    new_rows = []
+    archive = json.loads(arch_path.read_text()) if arch_path.exists() else {}
+    for org in CONFERENCES:
+        try:
+            pub = hdi("get-publish-public", org)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {org}: reports failed ({type(exc).__name__}: {str(exc)[:80]})", file=sys.stderr)
+            continue
+        rows = conference_rows(org, pub, seen)
+        n_rep = len(pub) if isinstance(pub, dict) else 0
+        kept = 0
+        for r in rows:
+            pk = f"{r['report_id']}|{r['team']}|{r['player']}"
+            k = f"{pk}|{r['report_type']}|{r['publish_date']}|{r['posted_time']}|{r['status']}"
+            if k in keys:
+                continue
+            if r["status"] == "Available" and pk not in listed:
+                continue
+            if r["status"] not in ("Available", "Exempt"):
+                listed.add(pk)
+            keys.add(k)
+            new_rows.append(r)
+            kept += 1
+        try:
+            arc = hdi("get-archive-public", org)
+            data = arc.get("data") if isinstance(arc, dict) else None
+            if isinstance(data, list) and len(data) >= len(archive.get(org, [])):
+                archive[org] = data
+                weeks = sorted({str(x.get("Week", ""))[:16] for x in data})
+                print(f"  {org}: {n_rep} reports, {len(rows)} rows, {kept} new; archive {len(data)} rows, weeks {weeks[0] if weeks else '-'} .. {weeks[-1] if weeks else '-'}")
+            else:
+                print(f"  {org}: {n_rep} reports, {len(rows)} rows, {kept} new; archive unchanged")
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {org}: {n_rep} reports, {len(rows)} rows, {kept} new; archive failed ({type(exc).__name__})", file=sys.stderr)
+    if dry_run:
+        for r in new_rows[:15]:
+            print("  ", {k: r[k] for k in ("conf", "report_type", "publish_date", "team", "pos", "player", "status")})
+        return
+    d.mkdir(parents=True, exist_ok=True)
+    if new_rows:
+        write_header = not log_path.exists()
+        with log_path.open("a", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=CONF_FIELDS)
+            if write_header:
+                w.writeheader()
+            w.writerows(new_rows)
+    state_path.write_text(json.dumps({"keys": sorted(keys), "listed": sorted(listed)}))
+    if archive:
+        arch_path.write_text(json.dumps(archive, separators=(",", ":")))
+
+
 COVERS_FIELDS = ["seen", "checked", "team", "name", "pos", "d", "injury", "updated", "season_out", "change"]
 
 
@@ -232,6 +338,7 @@ def main():
     ap.add_argument("--season", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--covers", action="store_true", help="log the Covers.com designations file instead of ESPN")
+    ap.add_argument("--conferences", action="store_true", help="log the SEC/ACC/Big 12/Big Ten reports from the vendor app instead of ESPN")
     a = ap.parse_args()
     today = dt.date.today()        # data.current_season, without importing pandas (standard library only here)
     season = a.season or (today.year if today.month >= 8 else today.year - 1)
@@ -239,6 +346,9 @@ def main():
     seen = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
     if a.covers:
         covers_log(d, seen, a.dry_run)
+        return
+    if a.conferences:
+        conference_log(d, seen, a.dry_run)
         return
     new, answered = fetch(season)
     if answered < MIN_TEAMS:
