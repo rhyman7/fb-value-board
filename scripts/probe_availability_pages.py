@@ -17,6 +17,13 @@ from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright
 
 PAGES = {
+    # round 3: request shapes of the vendor API, one full report JSON (images stripped), Big Ten codes
+    "hdi_b12": "https://app.hdintelligence.com/?source=B12&sport=Football&conf=B12&type=report",
+    "hdi_b1g": "https://app.hdintelligence.com/?source=B1G&sport=Football&conf=B1G&type=report",
+    "hdi_bigten": "https://app.hdintelligence.com/?source=BIGTEN&sport=Football&conf=BIGTEN&type=report",
+    "hdi_b10": "https://app.hdintelligence.com/?source=B10&sport=Football&conf=B10&type=report",
+    "hdi_big10": "https://app.hdintelligence.com/?source=BIG10&sport=Football&conf=BIG10&type=report",
+    "bigten_news": "https://bigten.org/fb/",
     # round 2 (Nov 3, 2026): the SEC and ACC pages embed app.hdintelligence.com; render it directly
     # and log the JSON it fetches. Big 12's football page; Big Ten's football landing (its
     # /FBReports address 404s on the new site).
@@ -95,6 +102,17 @@ def main():
         def on_response(resp):
             ct = (resp.headers.get("content-type") or "").lower()
             u = resp.url
+            if "hdintelligence.com/api/" in u:
+                req = resp.request
+                try:
+                    body = resp.text()
+                except Exception:  # noqa: BLE001
+                    body = ""
+                # strip base64 images, print the whole structure once
+                slim = re.sub(r'"data:image[^"]*"', '"<img>"', body)
+                slim = re.sub(r'"https://[^"]*\.(png|jpg|svg)[^"]*"', '"<url>"', slim)
+                NET.append(f"API {req.method} {u} headers={ {k: v for k, v in req.headers.items() if k.lower() in ('content-type', 'authorization', 'origin', 'referer')} } post={req.post_data!r} -> {resp.status} :: {slim[:6000]}")
+                return
             if ("json" in ct or "xml" in ct or "hdintelligence" in u) and not u.endswith((".js", ".css", ".png", ".svg", ".woff2")):
                 try:
                     body = resp.text()[:700].replace("\n", " ")
