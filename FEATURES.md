@@ -1636,3 +1636,51 @@ better on both periods, holdout 2+ SE; Brier at the 2025 lines no worse.
 **Passes; kept, pending the board change** (it needs the PPA file refreshed in season: the CFBD pull
 gains a weekly step, and the column enters `players.build`). Size: 0.03 yards on a 38-yard miss,
 nothing against the books: an accuracy input, like defense vs position.
+
+## College PFF role inputs: routes per pass play and snap share (Nov 4, 2026): nothing kept
+
+Item 2 of the Nov 3 handoff. `PFF_DATA_DIR=../pff-data python experiments/cfb_pff_role_test.py`
+(scores in `experiments/out/cfb_pff_role_test.json`). Data: PFF Premium Stats from the private repo
+rhyman7/pff-data (`receiving_summary` for routes, `offense_summary` for snap counts), read through
+`cfbmodel/pff_data.py`; no PFF rows are committed here. PFF covers every division; rows are kept only
+for the board's FBS teams (the game-model frame, 136 teams in 2025). Franchises are matched to board
+teams by shared players (all 1,181 FBS team-seasons 2017-2025 matched), players by name within a
+team-season, weeks by team and week. Receiving yards agree exactly on 86% of matched rows (the rest are
+small stat-crew corrections).
+
+**Inputs**, as of each game from earlier games only (8-game half-life, last season at 60%):
+`route_share` = routes / team pass plays; `snap_share` = offensive snaps / team snaps (team = the most
+any player of the team logged that week). 84% of 2025 WR/TE/RB rows have a route share, 90% a snap
+share. Each enters the last calibration step as a `CAL_EXTRA` column: receiving chain (receptions,
+receiving yards) both; rushing chain (carries, rushing yards) snap share.
+
+**Rule, written before running** (handoff memo; script docstring): fit on 2024 (one-season calibration
+window, the same for the current chain), score on 2025. Each chain is kept only if all three improve by
+2+ SE: (1) 2025 RMSE (receiving yards WR/TE/RB, rushing yards RB); (2) Brier at the 2025 DK/FD main
+lines (receiving yards / rushing yards); (3) floor rungs: 2025 over-only alternates whose books'
+reading (`CFB_RUNG_CAL`) is 65-95%, model Brier vs the current chain (betting strategy #1). Walk-forward
+2017-2025 only after a pass.
+
+| Receiving chain | Current | With PFF | Change |
+|---|---|---|---|
+| Receiving yards RMSE, 2025 (9,213 player-games) | 29.449 | 29.309 | **3.7 SE better** |
+| Receptions RMSE (9,168) | 1.815 | 1.807 | 3.4 SE better |
+| Receiving-yards lines, Brier (1,958 props; books 0.2499) | 0.2557 | 0.2552 | -0.0005 ± 0.0009 (0.6 SE) |
+| Floor rungs 65-95%, Brier (6,717 rungs, 397 games; books 0.1668) | 0.1697 | 0.1690 | -0.0008 ± 0.0005 (1.6 SE) |
+
+| Rushing chain | Current | With PFF | Change |
+|---|---|---|---|
+| RB rushing yards RMSE (3,647) | 37.658 | 37.653 | 1.2 SE better |
+| RB carries RMSE (3,862) | 5.160 | 5.154 | 2.2 SE better |
+| Rushing-yards lines, Brier (1,104 props; books 0.2500) | 0.2597 | 0.2592 | -0.0005 ± 0.0008 (0.7 SE) |
+| Floor rungs 65-95%, Brier (4,118 rungs; books 0.1580) | 0.1662 | 0.1659 | -0.0003 ± 0.0002 (1.2 SE) |
+
+**Verdict: not kept, either chain.** Route share makes the receiving projections clearly more accurate
+(3.7 SE on yards, 3.4 on receptions), but that does not reach the prices: at the main lines the Brier
+gain is 0.0005 (0.6 SE) and the model stays 0.0052 behind the books (2.1 SE); on the floor rungs it
+moves 1.6 SE, short of 2. Snap share adds nothing to the rushing chain at the lines
+or the rungs. No walk-forward (the rule runs it only after a pass). Nothing touches the board.
+
+Worth a recheck rather than a near-miss slot: the receiving floor-rung score (1.6 SE) on 2025 + 2026
+lines, and with the 2024 college prop backfill when Ryan buys it in December. The other 50 PFF tables
+(depth, concept, scheme, blocking, pass rush, coverage; pulled Nov 4) are untested.
