@@ -11,10 +11,12 @@ designations (designations.py) are untouched by this module (and availability.py
 so that the kickoff-time availability can be tested against the 2026 live prop log before it is
 allowed to change a projection.
 
-Source: ESPN's core API, per team, the same feed rhyman7/nfl's Fetch injuries Action reads:
-    sports.core.api.espn.com/v2/sports/football/leagues/college-football/teams/{id}/injuries
-each item a $ref to an injury record (status, date, athlete $ref, details.type/detail/side/
-returnDate, shortComment/longComment). Team ids are the board's (data/cfb/cache/teams_{season}.csv).
+Source: ESPN's league-wide injuries feed (site.api.espn.com/.../college-football/injuries, the data
+behind espn.com/college-football/injuries): one group per team, each entry with status, date,
+athlete (id, displayName, position), details (type, detail, side, returnDate) and shortComment.
+The per-team core API (.../teams/{id}/injuries) is the fallback; for college it held five stale
+entries from 2020-2022 on the Nov 3, 2026 dry run. Team ids are the board's
+(data/cfb/cache/teams_{season}.csv).
 
 Files, under data/cfb/availability/{season}/:
     latest.json     every current entry: {"seen": ..., "entries": [{team_id, team, player_id, name,
@@ -40,9 +42,10 @@ from pathlib import Path
 from . import config as C
 
 CORE = "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football"
+LEAGUE = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/injuries"   # the feed behind espn.com/college-football/injuries
 DIR = C.DATA / "availability"
 FIELDS = ["seen", "team_id", "team", "player_id", "name", "pos", "status", "date", "type", "detail", "comment", "change"]
-MIN_TEAMS = 100          # fewer teams answering than this: ESPN is having a bad day; write nothing
+MIN_TEAMS = 20           # the league feed lists only teams with an entry; fewer than this and ESPN is having a bad day: write nothing
 
 
 def get(url: str, tries: int = 4):
@@ -85,8 +88,46 @@ def athlete_id(ref: str) -> int | None:
         return None
 
 
+def fetch_league(season: int) -> tuple[list[dict], int]:
+    """ESPN's league-wide feed: one group per team with that team's current entries. Team ids are
+    ESPN's (the board's); groups for teams outside the board's FBS list are dropped."""
+    tm = teams(season)
+    d = get(LEAGUE)
+    out, answered = [], 0
+    for grp in d.get("injuries") or []:
+        try:
+            tid = int(grp.get("id") or (grp.get("team") or {}).get("id"))
+        except (TypeError, ValueError):
+            continue
+        if tid not in tm:
+            continue
+        answered += 1
+        for it in grp.get("injuries") or []:
+            a = it.get("athlete") or {}
+            try:
+                pid = int(a.get("id"))
+            except (TypeError, ValueError):
+                continue
+            det = it.get("details") or {}
+            status = str(it.get("status") or (it.get("type") or {}).get("description") or "").strip()
+            out.append({"team_id": tid, "team": tm[tid], "player_id": pid, "name": a.get("displayName", ""),
+                        "pos": ((a.get("position") or {}).get("abbreviation") or ""), "status": status,
+                        "date": str(it.get("date") or "")[:10], "type": str(det.get("type") or ""),
+                        "detail": str(det.get("detail") or ""), "comment": str(it.get("shortComment") or "")[:200]})
+    out.sort(key=lambda e: (e["team"], e["name"]))
+    return out, answered
+
+
 def fetch(season: int) -> tuple[list[dict], int]:
-    """Current entries for every team; (entries, teams that answered)."""
+    """Current entries for every team; (entries, teams that answered). The league feed first; the
+    per-team core API (which for college carries only a few stale entries, Nov 2026 dry run) only
+    if the league feed fails outright."""
+    try:
+        out, answered = fetch_league(season)
+        print(f"  league feed: {answered} teams listed, {len(out)} entries")
+        return out, answered
+    except Exception as exc:  # noqa: BLE001
+        print(f"  league feed failed ({exc}); falling back to the per-team feed", file=sys.stderr)
     tm = teams(season)
     pool = ThreadPoolExecutor(max_workers=16)
     refs = dict(zip(tm, pool.map(team_refs, tm)))
