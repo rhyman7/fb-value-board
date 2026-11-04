@@ -1,0 +1,71 @@
+name: PFF pull
+
+# Per-week college receiving and rushing leaderboards from the PFF Developer API
+# (cfbmodel/pff_pull.py, PFF_API_KEY secret, PFF Pro): data/cfb/pff/<season>/w<week>_<table>.csv.
+# Manual for the backfill (about 300 reads for 2017-2025, four minutes at 100 reads a minute);
+# in season, Sundays and Mondays at 11:40 UTC it refreshes the current season (weeks already on
+# disk are rewritten for the current season only). Inputs to the PFF role test and, if that
+# passes, to the college player projections.
+
+on:
+  schedule:
+    - cron: "40 11 * 9-12,1 0,1"
+  workflow_dispatch:
+    inputs:
+      from:
+        description: "First season"
+        default: "2017"
+      to:
+        description: "Last season (blank: current)"
+        default: ""
+      weeks:
+        description: "Weeks, e.g. 0-16 or 0,1,2"
+        default: "0-16"
+      refresh:
+        description: "Rewrite seasons already on disk"
+        type: boolean
+        default: false
+      dry_run:
+        description: "Pull one week, print it, write nothing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Pull
+        env:
+          PFF_API_KEY: ${{ secrets.PFF_API_KEY }}
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            python -m cfbmodel.pff_pull --from $(date +%Y) --weeks 0-18
+          else
+            args="--from ${{ inputs.from }} --weeks ${{ inputs.weeks }}"
+            [ -n "${{ inputs.to }}" ] && args="$args --to ${{ inputs.to }}"
+            [ "${{ inputs.refresh }}" = "true" ] && args="$args --refresh"
+            [ "${{ inputs.dry_run }}" = "true" ] && args="$args --dry-run"
+            python -m cfbmodel.pff_pull $args
+          fi
+      - name: Commit
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cfb/pff
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -m "PFF pull $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin main
+          git push
