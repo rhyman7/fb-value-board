@@ -23,6 +23,12 @@ This test refits the same family on college data. Rule, written before the run (
   report   the widths-only version and a 2021-2024 fit as information, not for the decision.
 
 Writes experiments/out/cfb_propdist_test.json.
+
+Nov 4, 2026, the keep rule (FEATURES.md "Re-judging past tests under the keep rule"): the widths-only
+version (near-miss #6) is applied when it is better than the current NFL-fitted chances on every stat
+with 2025 lines (Brier, however small) and worse on none. `--save` writes it to data/cfb/prop_params.json
+(the NFL parameters with the college widths swapped in; the NFL correction and correlations kept),
+which nflmodel/parlays.py reads for the college legs; it refuses to write when any stat is worse.
 """
 from __future__ import annotations
 
@@ -41,7 +47,7 @@ from nflmodel import propmarket as PM, props as P  # noqa: E402
 
 warnings.filterwarnings("ignore")
 OUT = Path(__file__).resolve().parent / "out" / "cfb_propdist_test.json"
-CACHE = Path("/tmp/cfb_pproj_2017.pkl")
+CACHE = Path("/tmp/cfb_pproj_2017.pkl")   # delete it after a model change; the table is rebuilt from the current code
 FIT_FROM, FIT_TO = 2017, 2024
 STATS = ["receptions", "rec_yds", "carries", "rush_yds", "pass_att", "completions", "pass_yds", "pass_td", "ints", "anytime_td"]
 
@@ -110,7 +116,11 @@ def clustered(d, game):
     return float(np.mean(d)), float(cl.std(ddof=1) * np.sqrt(len(cl)) / len(d))
 
 
+CFB_PARAMS = Path(__file__).resolve().parent.parent / "data" / "cfb" / "prop_params.json"
+
+
 def main():
+    save = "--save" in sys.argv
     pproj, pinfo, games = projections_2017()
     df = prep(pproj)
     fits = {}
@@ -154,6 +164,20 @@ def main():
     better = all(decision[s]["minus_current"] <= -2 * decision[s]["se"] for s in ("rush_yds", "rec_yds") if s in decision)
     worse = any(decision[s]["minus_current"] >= 2 * decision[s]["se"] for s in decision)
     res["rule"] = {"rush_and_rec_2se_better": bool(better), "any_stat_2se_worse": bool(worse), "keep": bool(better and not worse)}
+    # the keep rule (Nov 4, 2026): widths only, better on every stat with lines
+    w = {s: res["by_stat"][s]["widths_2017"]["minus_current"] for s in res["by_stat"]}
+    res["keep_rule_widths_only"] = {"minus_current": w, "better_on_all": bool(all(v < 0 for v in w.values()))}
+    if save:
+        if not res["keep_rule_widths_only"]["better_on_all"]:
+            print("widths-only is worse on a stat; not saved:", w)
+        else:
+            saved = P.PropModel.load()
+            out = P.PropModel(saved.family)
+            out.counts, out.yards, out.iso = dict(fits["widths_2017"].counts), dict(fits["widths_2017"].yards), dict(saved.iso)
+            out.meta = dict(saved.meta) | {"college_widths": {"fit_seasons": [FIT_FROM, FIT_TO], "written": "2026-11-04",
+                                                              "note": "widths fitted on the college walk-forward; correction and the rest from data/prop_params.json"}}
+            out.save(CFB_PARAMS)
+            print(f"wrote {CFB_PARAMS}")
     OUT.write_text(json.dumps(res, indent=1, default=float))
     for stat, r in res["by_stat"].items():
         f = r["full_2017"]

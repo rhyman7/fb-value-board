@@ -1,0 +1,7 @@
+  PFF roles: 204,185 player-weeks matched; 74% of this season's rows have a route share
+wrote /home/claude/fb-value-board/data/cfb/prop_params.json
+pass_td   n= 628 books 0.24222 current 0.24397 (vs books +0.00175) college 0.24207 (vs current -0.00190 ± 0.00113, z -1.68; vs books -0.00015 ± 0.00241) spread 0.112 -> 0.096
+pass_yds  n= 628 books 0.24996 current 0.25188 (vs books +0.00192) college 0.25082 (vs current -0.00105 ± 0.00074, z -1.43; vs books +0.00086 ± 0.00339) spread 0.069 -> 0.063
+rec_yds   n=1960 books 0.24995 current 0.25594 (vs books +0.00599) college 0.25930 (vs current +0.00336 ± 0.00205, z 1.64; vs books +0.00935 ± 0.00320) spread 0.077 -> 0.110
+rush_yds  n=1106 books 0.25000 current 0.26019 (vs books +0.01018) college 0.26061 (vs current +0.00043 ± 0.00247, z 0.17; vs books +0.01061 ± 0.00432) spread 0.104 -> 0.116
+rule: {'rush_and_rec_2se_better': False, 'any_stat_2se_worse': False, 'keep': False}

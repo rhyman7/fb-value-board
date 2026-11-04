@@ -640,3 +640,29 @@ falls back toward his normal level (as with kickers: past 90%+ "1+ field goal" k
 83% of the time, the league rate, 2012-2025). The "edge" subset, where the hit rate beat the
 implied chance most, lost the most. One season only; nothing here suggests more seasons would
 reverse it.
+
+## College prop widths (Nov 4, 2026): college-fitted, widths only
+
+The college legs the Parlays page prices itself (lines the books do not post, `parlays.cfb_prop_legs`)
+used the NFL prop distributions, which made the college chances too confident (near-miss #6,
+FEATURES.md "College props: where the gap lives"). Under the keep rule the widths-only version is
+applied: `data/cfb/prop_params.json` is the NFL parameter file with the count and yardage widths
+refitted on the college walk-forward player table, seasons 2017-2024 (`experiments/cfb_propdist_test.py
+--save`; the NFL isotonic correction and correlations kept). `parlays.prop_params_path("cfb")` reads it;
+the NFL legs are untouched, and the book-priced college legs never used the model.
+
+Re-fitted on the chain of PRs #198-#201 (PFF route share in), scored at the 2025 DraftKings/FanDuel
+main lines, Brier vs the NFL-fitted chances (clustered by game):
+
+| Stat | Props | Books | NFL widths | College widths | Change |
+|---|---|---|---|---|---|
+| Passing TDs | 628 | 0.24222 | 0.24397 | 0.24150 | −0.00247 ± 0.00141 |
+| Passing yards | 628 | 0.24996 | 0.25188 | 0.25001 | −0.00187 ± 0.00077 |
+| Receiving yards | 1,960 | 0.24995 | 0.25594 | 0.25492 | −0.00102 ± 0.00045 |
+| Rushing yards | 1,106 | 0.25000 | 0.26019 | 0.25885 | −0.00133 ± 0.00220 |
+
+Better on every stat, worse on none; still behind the books on both yardage stats, so value on
+college props keeps coming from the price, never the model's chance. On the week 10 Parlays page the
+model-priced college legs move a median 1.7 points (95th percentile 25), 61% of them toward 50%, and
+fewer rungs fall in the 55-95% window (5,465 legs from 8,321). Refit when the college player model
+changes (delete the test's `/tmp` cache first); the recheck on the 2026 live log stands.
