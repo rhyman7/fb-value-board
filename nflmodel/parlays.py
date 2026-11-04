@@ -71,7 +71,8 @@ RUNG_CAL = [(0.0, 0.0), (0.0561, 0.0361), (0.1651, 0.1326), (0.3225, 0.2868), (0
             (0.8007, 0.7314), (0.885, 0.832), (0.9396, 0.8928), (0.9812, 0.9367), (1.0, 0.955)]
 W_TD = 0.2            # anytime touchdown (Yes only)
 RUNG_MARGIN = 0.10    # assumed book margin on over-only rungs, as propmarket assumes
-PULL_MAX = 0.03       # the model moves a prop chance at most 3 points off the books'
+PULL_MAX = 0.075      # the model moves a prop chance at most 7.5 points off the books' (3 until Nov 4, 2026;
+                      # experiments/props_cap.py under the keep rule, PROPS.md "How far the model may move a prop")
 CONFLICT = 0.25       # model and books more than 25 points apart: different news (injury, role); left out
 MOVE_LO, MOVE_HI = 0.55, 0.95     # moved prop lines kept between these chances
 MOVE_MAX = 6          # at most this many moved lines per player, stat and side

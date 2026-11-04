@@ -595,9 +595,15 @@ within one standard error counting as a tie that keeps the smaller cap.
 | 5 points | −0.00065 ± 0.00029 | −0.00005 ± 0.00006 | 585 | −2.8% ± 4.3% | −3.7% ± 0.4% |
 | no cap | −0.00066 ± 0.00032 | −0.00006 ± 0.00011 | 585 | −2.6% ± 4.3% | −3.4% ± 0.4% |
 
-Fold 1 (2023 → 2024) reads the same. **Three points stays**: caps of 1-2 points give up
+Fold 1 (2023 → 2024) reads the same. **Three points stayed** under that rule: caps of 1-2 points give up
 accuracy, and anything above 3 is a tie with it (the training seasons picked 10 points, within
-a standard error of 3 on 2025). **But the sides the capped number makes +EV still lose to the
+a standard error of 3 on 2025). *Nov 4, 2026: 7.5 points under the keep rule* (CONVENTIONS.md "Model
+tests": better however small). Re-run on the chain of PRs #198-#199 (`experiments/out/props_cap.json`):
+against the 3-point cap, 7.5 points is better on Brier in both folds (2024 −0.00014 ± 0.00013, 2025
+−0.00008 ± 0.00010) and on closing line value (−2.7% vs −4.8%; −3.4% vs −4.0%); flat return is better on
+2025 (−1.0% vs −2.6%, 607 vs 449 sides) and worse on 2024 (+9.6% on 173 sides vs +16.0% on 18), which
+the test treats as reported, not decisive. 10 points scores about the same (better on 2024, a hair
+worse on 2025); 7.5 is the smaller cap that beats 3 on both. `parlays.PULL_MAX = 0.075`. **But the sides the capped number makes +EV still lose to the
 close by about 4%**, at every cap. The blend is the better chance on average; picking props
 because it disagrees with the books selects the props where it is wrong more often than not.
 So the chance is right to show, and wrong to bet on: a prop's value has to come from its price.
