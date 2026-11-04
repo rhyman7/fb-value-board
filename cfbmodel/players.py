@@ -25,6 +25,10 @@ public college data allows:
                  touchdown rate
   calibration    a last regression per stat on earlier seasons that blends the chain with the
                  player's recent per-game average
+  matchup        defense against each position (nflmodel.dvp): what this defense has allowed to
+                 the position relative to what the projections expected, from players who
+                 appeared, as a last multiplier exp(b x rating) on the pairs in DVP_PAIRS, b fitted
+                 on the earlier projected seasons (tested Nov 3, 2026: cfb_dvp_test.py)
 
 Stats are official box scores, which in college count sacks as quarterback runs.
 """
@@ -331,6 +335,13 @@ CAL_EXTRA = {s: [] for s in STATS}
 CALIB_GROUPS = {"rush_yds": (("RB",), ("QB",), ("WR", "TE")), "carries": (("RB",), ("QB",), ("WR", "TE")),
                 "receptions": (("WR",), ("TE",), ("RB",)), "rec_yds": (("WR",), ("TE",), ("RB",))}
 GROUP_STATS = tuple(CALIB_GROUPS)
+# Defense against each position, applied after the calibration (experiments/cfb_dvp_test.py, Nov 3,
+# 2026): the pairs that improved the holdout by 2+ SE, were not worse on the tuning seasons, and were
+# no worse at the 2025 lines. TE receiving (worse on tuning), RB receiving yards (worse at the lines)
+# and TE/RB receptions (short) are not applied. The rating uses players who appeared: the NFL
+# version's "expected but absent counts as 0 allowed" measured the opponents' absences in college.
+DVP_PAIRS = [("WR", "rec_yds"), ("WR", "receptions"), ("RB", "rush_yds"), ("RB", "carries"), ("QB", "pass_yds")]
+DVP_FIT_SEASONS = 4     # seasons before first_test also projected (not returned) so the matchup fit has history
 
 
 def calib_X(p: pd.DataFrame, stat: str) -> np.ndarray:
@@ -346,12 +357,15 @@ def calib_X(p: pd.DataFrame, stat: str) -> np.ndarray:
 
 def walk_forward(table: pd.DataFrame, first_test: int = C.FIRST_TEST_SEASON, lookback: int = 6) -> pd.DataFrame:
     """Fit team volume and calibration on earlier seasons and project each season in turn.
-    Only games in the game-model frame (FBS against FBS) have projections."""
+    Only games in the game-model frame (FBS against FBS) have projections. The last step is the
+    defense-against-position multiplier (DVP_PAIRS), fitted on the seasons projected before each
+    one; so the DVP_FIT_SEASONS seasons before first_test are projected too and dropped."""
+    from nflmodel import dvp
     out = []
     tg = table.drop_duplicates(["game_id", "team"])
     tg = tg[tg["proj_total"].notna()]
     for s in sorted(table["season"].unique()):
-        if s < first_test:
+        if s < max(first_test - DVP_FIT_SEASONS, C.FIRST_TEST_SEASON):
             continue
         tr = tg[(tg["season"] < s) & (tg["season"] >= s - 8) & tg["played"].astype(bool) & tg["team_att"].notna()]
         att = Lin(5.0).fit(tr[VOL_FEATS].fillna(0), tr["team_att"].to_numpy(float))
@@ -373,8 +387,35 @@ def walk_forward(table: pd.DataFrame, first_test: int = C.FIRST_TEST_SEASON, loo
                 continue
             h = qb_fit if stat in PASS_STATS else hist
             cur[stat + "_proj"] = _calibrate(h, cur, stat)
+        cur = _matchup(cur, out, dvp)
         out.append(cur)
-    return pd.concat(out, ignore_index=True)
+    res = pd.concat(out, ignore_index=True)
+    return res[res["season"] >= first_test].reset_index(drop=True)
+
+
+def _matchup(cur: pd.DataFrame, earlier: list, dvp) -> pd.DataFrame:
+    """Defense against each position on this season's projections: ratings from this and the
+    previous projected season (players who appeared), b fitted on all earlier projected seasons."""
+    for g, st in DVP_PAIRS:
+        cur[f"dvpf_{st}"] = np.nan
+    if not earlier:
+        return cur
+    prev = earlier[-1]
+    both = pd.concat([prev, cur], ignore_index=True)
+    both["active"] = both["appeared"].fillna(0).astype(int)
+    rt = dvp.ratings(both)
+    fit_on = pd.concat(earlier, ignore_index=True)
+    fit_on["active"] = fit_on["appeared"].fillna(0).astype(int)
+    b = dvp.fit(fit_on, dvp.ratings(fit_on), sorted(fit_on["season"].unique()))
+    b = {k: v for k, v in b.items() if k in DVP_PAIRS}
+    if not b:
+        return cur
+    before = {st: cur[st + "_proj"].copy() for _, st in b}
+    cur = dvp.apply(cur, rt, b, pairs=list(b))
+    for (g, st), bb in b.items():
+        m = cur["group"] == g
+        cur.loc[m, f"dvpf_{st}"] = np.exp(bb * cur.loc[m, f"dvp_{st}"].fillna(0.0))
+    return cur
 
 
 def _calibrate(h: pd.DataFrame, cur: pd.DataFrame, stat: str) -> np.ndarray:
@@ -525,7 +566,8 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
                     "ypr": r2(r.ypr), "ypc": r2(r.ypc), "ypa": r2(r.ypa), "comp": r3(r.comp),
                     "def_ypc": r3(r.def_ypc), "def_ypa": r3(r.def_ypa), "games": r1(r.one_sum),
                     "chain": {k: r1(cal_in[k][i, 0]) for k in SHOWN},
-                    "recent": {k: r1(cal_in[k][i, 1]) for k in SHOWN}},
+                    "recent": {k: r1(cal_in[k][i, 1]) for k in SHOWN},
+                    "dvp": {st: r3(getattr(r, f"dvpf_{st}")) for _, st in DVP_PAIRS if f"dvpf_{st}" in a and pd.notna(getattr(r, f"dvpf_{st}"))}},
         })
     players.sort(key=lambda x: -(x["proj"]["rec_yds"] or 0) - (x["proj"]["rush_yds"] or 0) - (x["proj"]["pass_yds"] or 0) / 2.5)
     return {"players": players, "teams": teams}

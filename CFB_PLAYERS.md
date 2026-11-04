@@ -43,6 +43,16 @@ Opportunity times efficiency, using only what was known before each game.
    fitted on projected starters who started, so a quarterback's line is what he throws
    if he starts.
 
+8. **Matchup.** Defense against each position (`nflmodel/dvp.py`, the NFL board's rating):
+   the log of what this defense has allowed to the position over what the projections
+   expected those players to get, from players who appeared, 6-game half-life, last season
+   at half weight, shrunk by 4 games; applied as projection x exp(b x rating), b fitted on
+   the earlier projected seasons each run. Applied to WR receiving yards and receptions, RB
+   rushing yards and carries, and QB passing yards (`players.DVP_PAIRS`); the other pairs
+   failed the test (FEATURES.md, "College defense against each position", Nov 3, 2026). The
+   card shows it as "KSU vs RBs: 6% fewer than expected". Gains are small, as on the NFL
+   board, and it does not move the chances against the books.
+
 Stats are official college box scores, which count sacks as quarterback runs (that is
 how college rushing props settle).
 
@@ -76,6 +86,8 @@ Each piece removed in turn, on 2017-2019:
   0.241 against 0.257 without it) and passing touchdowns (0.98 against 1.05).
 - **What the defense allows**: helps passing yards (68.5 against 68.9) and rushing yards
   (25.3 against 25.6).
+- **Defense against each position** (Nov 3, 2026): holdout RMSE WR receiving yards 33.394 →
+  33.350, RB rushing yards 38.022 → 37.975, QB passing yards 88.81 → 88.48, each 3+ SE.
 - **Who plays**: built into which players are projected, so it cannot be removed on its
   own; as a game-model feature the same box-score signal added nothing (CFB_FEATURES.md).
 
