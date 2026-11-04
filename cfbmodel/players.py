@@ -323,8 +323,14 @@ CAL_EXTRA = {s: [] for s in STATS}
 # settles on about 0.71 x chain + 0.43 x recent, where running backs alone want about 0.76 /
 # 0.40. Per group: RB rushing-yards RMSE better on tuning (2.3 SE) and holdout (2.9 SE), Brier
 # at 2025 lines no worse. Passing is already fitted on starting quarterbacks only.
-GROUP_STATS = ("rush_yds", "carries")
-CALIB_GROUPS = (("RB",), ("QB",), ("WR", "TE"))
+# Receiving the same way (experiments/cfb_rec_group_calib_test.py, Nov 3, 2026): one fit on everyone
+# overprojected backs' receiving yards by 5 a game and dragged receivers' weights; per group, the
+# receiving-yards Brier at the 2025 lines is 3.0 SE better (WR 2.6, TE 3.5). Receptions have no
+# college lines and are judged through the yards they feed. A group not listed for a stat gets
+# the pooled fit.
+CALIB_GROUPS = {"rush_yds": (("RB",), ("QB",), ("WR", "TE")), "carries": (("RB",), ("QB",), ("WR", "TE")),
+                "receptions": (("WR",), ("TE",), ("RB",)), "rec_yds": (("WR",), ("TE",), ("RB",))}
+GROUP_STATS = tuple(CALIB_GROUPS)
 
 
 def calib_X(p: pd.DataFrame, stat: str) -> np.ndarray:
@@ -357,8 +363,8 @@ def walk_forward(table: pd.DataFrame, first_test: int = C.FIRST_TEST_SEASON, loo
         qb_fit = hist[(hist["att_share"] > 0.5) & (hist["started"] == 1)]
         for stat in STATS:
             if stat in GROUP_STATS:
-                cur[stat + "_proj"] = 0.0
-                for grps in CALIB_GROUPS:
+                cur[stat + "_proj"] = _calibrate(hist, cur, stat)          # the pooled fit, for groups not listed
+                for grps in CALIB_GROUPS[stat]:
                     h = hist[hist["group"].isin(grps)]
                     sel = cur["group"].isin(grps).to_numpy()
                     if h.empty or not sel.any():
