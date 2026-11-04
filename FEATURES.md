@@ -1695,5 +1695,45 @@ The walk-forward (`--walk-forward`, default seasons and calibration window) deci
 | RB rushing yards RMSE (snap share) | 40.187 → 40.191 (1.8 SE worse) | 38.195 → 38.198 (1.2 SE worse) |
 
 - **Receiving chain: kept.** Better on every measure: 2025 RMSE, the 2025 main lines, the floor rungs and
-  both walk-forward periods. Goes on the college board after Ryan sees the plan.
+  both walk-forward periods. Applied: `cfbmodel/pff_roles.py`, `players.CAL_EXTRA` (receptions,
+  receiving yards); the Update college board Action reads the private PFF data.
 - **Rushing chain: not kept.** Slightly better on 2025 alone but worse on both walk-forward periods.
+## Re-judging past tests under the keep rule (Nov 4, 2026)
+
+Ryan's keep rule (CONVENTIONS.md, "Model tests", #193): anything that makes the model more accurate is
+kept, however small: better on every measure, worse on none. Every past "not kept" result in FEATURES.md,
+CFB_FEATURES.md, PLAYERS.md, CFB_PLAYERS.md and PROPS.md was inventoried (about 300 candidates). The
+ones that would flip on their original numbers were **re-run on today's model**, because most were
+measured before later changes were kept. Outputs and logs: `experiments/out/rejudge_2026-11-04/`.
+NFL game-model candidates were re-run on the board's frame with today's features by
+`experiments/rejudge_nfl_game.py`. The original feature test added total-model candidates to the
+pre-October model, without wind or snaps.
+
+**Better on every measure on today's model (kept under the rule; each needs a plan before the board):**
+
+| Change | Measures (tuning / holdout, change in average miss; or as stated) |
+|---|---|
+| NFL margin + special-teams EPA (`d_st`) | -0.0005 / -0.0010 |
+| NFL margin, turnover-free ratings swapped in | -0.0097 / -0.0031 |
+| NFL team pass attempts + PROE | -0.0272 / -0.0045 |
+| NFL team carries: three overlapping versions all better (PROE -0.0028 / -0.0151; play-calling pace + neutral pass rate 5.607→5.599 / 5.590→5.578; defense volume "vs usual" swapped in -0.0095 / -0.0068) | head-to-head needed to pick or combine |
+| NFL prop nudge cap `PULL_MAX` 3 → 7.5 points | Brier vs the 3-point cap -0.00011 (2024) / -0.00008 (2025); return +8.4% vs +5.6%, -2.3% vs -4.2%; CLV better both |
+| College margin + coverage defenders missed last game (or the change version, -0.0020 / -0.0013) | -0.0111 / -0.0005 |
+| College unknown-QB value -0.30 → -0.35 | better on QB-change and all games, both periods |
+| College margin + drive value (`d_dve`; with finishing -0.0041 / -0.0045) | -0.0043 / -0.0042 |
+| College margin + mid-season coaching change | -0.0013 / -0.0095 |
+| College total + returning offensive production (overall version -0.001 / -0.002) | -0.002 / -0.004 |
+| College total + line yards per rush | -0.0010 / -0.0015 |
+| College prop widths fitted on college misses, widths only (near-miss #6) | 2025 lines vs current: pass TD -0.0024, pass yards -0.0019, rec yards -0.0010, rush yards -0.0021 |
+| NFL total + rain; wet-game unders (2+ mm or snow) | rain -0.0079 / -0.0259; unders +15.9% / +15.3%. On recorded weather; live needs forecasts (forecast log recheck) |
+| NFL defense in player projections (shadow version) | flips on its Nov 2 numbers; in the shadow test (fixed until judged after 2027) |
+
+**No longer better on today's model:**
+- **College rushing PPA prior ("apply b"):** worse. RB rushing RMSE is 0.8 SE worse on 2017-19 and 2.6 SE worse on 2021+; it was kept on Nov 3 before defense vs position went on the board. Not to be applied.
+- **College usage by downs (near-miss #7):** a trade-off. Rushing yards are better (2.3 / 2.0 SE) and better at the lines (1.8 SE), but carries are 0.6 SE worse on 2021+.
+- **NFL total + wind above 10 mph:** worse now that wind is in the model.
+- NFL linebacker injuries: the Oct re-test supersedes the first test (trade-off / zero).
+
+Trade-offs (better somewhere, worse somewhere) and incomplete results (a measure missing) are listed
+in the Project doc `claude/keep-rule-rejudge-2026-11-04.md`; trade-offs go to Ryan, incompletes need
+a re-run with the missing measure before they can be judged.

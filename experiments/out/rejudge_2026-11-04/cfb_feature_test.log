@@ -1,0 +1,32 @@
+Current model, margin: tuning 12.375, holdout 12.353 (closing line 12.221 / 12.046)
+Current model, total:  tuning 13.454, holdout 12.625 (closing line 13.174 / 12.446)
+NFL feature set only:  margin 12.759 / 12.528, total 13.508 / 12.674
+
+Margin                tuning  holdout  kept
+d_talent             -0.021  +0.015   yes
+d_talent_early       -0.073  -0.096   yes
+d_rtprod             -0.149  -0.023   yes
+d_rtprod_early       +0.008  +0.002   no
+d_off_rtprod         +0.019  -0.001   no
+d_def_rtprod         +0.032  +0.000   no
+d_ret_qb             -0.000  +0.000   no
+d_qb_early           -0.037  -0.011   yes
+d_mkt_early          +0.002  -0.003   no
+d_pts_early          +0.002  -0.002   no
+d_sr_early           +0.000  -0.000   no
+d_snaps              +0.003  -0.001   no
+travel               +0.011  -0.012   no
+elev                 +0.011  -0.003   no
+hfa_conf             -0.000  -0.001   no
+
+Total                 tuning  holdout  kept
+s_snaps              -0.013  -0.032   yes
+s_def_rtprod         -0.045  +0.005   yes
+s_off_rtprod         -0.002  -0.004   no
+s_rtprod             -0.001  -0.002   no
+s_talent             +0.003  +0.001   no
+s_ret_qb             +0.002  +0.001   no
+wind                 +0.008  +0.000   no
+wind_hi              -0.010  -0.020   yes
+cold                 +0.003  -0.002   no
+elev                 +0.010  +0.001   no

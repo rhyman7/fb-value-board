@@ -1,0 +1,10 @@
+drives per team-game: 10.2, trips: 4.9
+dve: tuning miss by ridge {'4.0': 12.4507, '12.0': 12.4511, '36.0': 12.4524} -> 4.0
+fin: tuning miss by ridge {'2.0': 12.4608, '6.0': 12.4592, '18.0': 12.4583} -> 18.0
+margin + d_dve {'tune': {'n': 2322, 'base_miss': 12.4549, 'change': -0.0043, 'se': 0.009}, 'hold': {'n': 3944, 'base_miss': 12.346, 'change': -0.0042, 'se': 0.0073}, 'keep': False}
+margin + d_fin {'tune': {'n': 2322, 'base_miss': 12.4549, 'change': 0.0033, 'se': 0.0047}, 'hold': {'n': 3944, 'base_miss': 12.346, 'change': 0.0002, 'se': 0.0028}, 'keep': False}
+margin + both {'tune': {'n': 2322, 'base_miss': 12.4549, 'change': -0.0041, 'se': 0.0091}, 'hold': {'n': 3944, 'base_miss': 12.346, 'change': -0.0045, 'se': 0.0072}, 'keep': False}
+total + s_dve {'tune': {'n': 2322, 'base_miss': 13.4128, 'change': -0.0058, 'se': 0.0129}, 'hold': {'n': 3944, 'base_miss': 12.6859, 'change': 0.002, 'se': 0.0104}, 'keep': False}
+total + s_fin {'tune': {'n': 2322, 'base_miss': 13.4128, 'change': 0.0155, 'se': 0.011}, 'hold': {'n': 3944, 'base_miss': 12.6859, 'change': -0.0013, 'se': 0.0035}, 'keep': False}
+total + both {'tune': {'n': 2322, 'base_miss': 13.4128, 'change': 0.0053, 'se': 0.0157}, 'hold': {'n': 3944, 'base_miss': 12.6859, 'change': 0.0027, 'se': 0.0103}, 'keep': False}
+margin, points rating swapped for d_dve {'tune': {'n': 2322, 'base_miss': 12.4549, 'change': 0.076, 'se': 0.0305}, 'hold': {'n': 3944, 'base_miss': 12.346, 'change': 0.0318, 'se': 0.0242}, 'keep': False}

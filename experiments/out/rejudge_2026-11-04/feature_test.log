@@ -1,0 +1,23 @@
+base  margin tune 10.248 hold 9.997 | total tune 10.606 hold 10.515
+change in average miss when added (negative = better)
+  margin d_sack      tune +0.0048  hold +0.0009
+  margin d_expl      tune +0.0028  hold -0.0013
+  margin d_ed        tune +0.0000  hold -0.0034
+  margin d_st        tune -0.0005  hold -0.0009
+  margin d_fum       tune +0.0038  hold +0.0017
+  margin d_cpoe      tune +0.0034  hold -0.0006
+  margin d_pace      tune +0.0004  hold +0.0001
+  margin d_snaps     tune +0.0018  hold +0.0025
+  margin travel      tune +0.0049  hold +0.0060
+  margin tz_east     tune +0.0094  hold -0.0006
+  margin west_early  tune +0.0297  hold +0.0076
+  margin hfa_div     tune -0.0002  hold +0.0073
+  total  s_pace      tune +0.0053  hold -0.0100
+  total  s_snaps     tune -0.0106  hold -0.0088
+  total  s_expl      tune +0.0144  hold -0.0067
+  total  s_sack      tune +0.0010  hold +0.0019
+  total  s_ed        tune +0.0004  hold -0.0024
+  total  s_fum       tune +0.0017  hold +0.0005
+  total  wind_hi     tune -0.0034  hold -0.0224
+  total  cold        tune +0.0035  hold -0.0009
+  total  wind        tune -0.0255  hold -0.0413

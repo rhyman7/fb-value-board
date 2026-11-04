@@ -1,0 +1,12 @@
+setting                 tune chg  hold chg  tune all  hold all
+NFL-style (-0.10, 200)    12.356    12.708    12.421    12.397
+unknown QB at -0.20       12.269    12.576    12.382    12.367
+current (-0.30, 800)      12.262    12.529    12.375    12.353
+unknown QB at -0.35       12.261    12.516    12.373    12.349
+QB half-life 700          12.262    12.469    12.384    12.330
+QB half-life 2800         12.264    12.568    12.373    12.368
+QB prior 400              12.283    12.521    12.386    12.348
+QB prior 1600             12.247    12.540    12.369    12.359
+no QB features            12.488    12.960    12.429    12.450
+closing line              12.168    12.499    12.221    12.046
+QB-change games: 579 tuning, 1022 holdout
