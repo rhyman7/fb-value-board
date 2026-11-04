@@ -1,11 +1,12 @@
 """Identify PFF Premium Stats per-week college exports (receiving / rushing tables, no season or
 week columns) by matching their stat lines to the board's box scores, and file them as
-data/cfb/pff/<season>/w<week>_<table>.csv.
+hand/<season>/w<week>_<table>.csv in the private PFF data checkout (cfbmodel.pff_data.root(): the
+rhyman7/pff-data clone). Never into this repo: it is public (CONVENTIONS.md).
 
     python scripts/pff_identify.py <dir with csvs> [--copy]
 
 Prints one line per file: table, season, week, how many of the top lines matched; then the
-season-weeks covered and missing. With --copy, writes the identified files into data/cfb/pff/.
+season-weeks covered and missing. With --copy, writes the identified files there.
 """
 import re
 import sys
@@ -15,9 +16,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
-from cfbmodel import config as C  # noqa: E402
+from cfbmodel import config as C, pff_data  # noqa: E402
 
-OUT = C.DATA / "pff"
+OUT = pff_data.root() / "hand" if pff_data.available() else None    # needed only for --copy
 
 
 def norm(s):
