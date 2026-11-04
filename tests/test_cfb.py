@@ -359,8 +359,9 @@ def test_rushing_is_calibrated_per_position_group():
     group's fit is untouched by the other groups' games. Passing stays fitted on quarterbacks."""
     import numpy as np
     from cfbmodel import players as P
-    assert set(P.GROUP_STATS) == {"rush_yds", "carries"}
-    assert ("RB",) in P.CALIB_GROUPS and ("QB",) in P.CALIB_GROUPS and ("WR", "TE") in P.CALIB_GROUPS
+    assert set(P.GROUP_STATS) == {"rush_yds", "carries", "receptions", "rec_yds"}
+    assert P.CALIB_GROUPS["rush_yds"] == (("RB",), ("QB",), ("WR", "TE"))
+    assert P.CALIB_GROUPS["rec_yds"] == (("WR",), ("TE",), ("RB",))
     rng = np.random.default_rng(0)
     rows = []
     # team carries 35; shares 0.5 and 0.1 (normalised to 0.588 / 0.118); yards per carry 5u, so the

@@ -1385,6 +1385,20 @@ rushing-yards RMSE improves on tuning and holdout, the holdout by 2+ SE, and the
 and the gain is small: about a yard on a lead back's projection. `cfbmodel.players.GROUP_STATS`,
 `CALIB_GROUPS`.
 
+**4. `cfb_rec_group_calib_test.py`: receiving calibration per group (WR; TE; RB). Kept, on a
+corrected rule.** Receptions and receiving yards were fit on one pool too. First rule (both stats
+must pass; TE and RB not worse; Brier no worse per group with 100+ props): failed on WR
+receptions' holdout (1.2 SE) and on the RB receiving-yards Brier (0.4 SE worse on 129 props).
+The rule was wrong about what the bet is: college books post no receptions lines, so
+receptions are an input to the yards (the chain and the prop distribution's volume), not a
+bet. Corrected rule, set before reading it against the same numbers: receiving-yards Brier at
+the 2025 lines better by 2+ SE overall and no group with 300+ props worse. Result: overall
+0.2580 -> 0.2561 (3.0 SE; 1,960 props), WR 0.2577 -> 0.2563 (2.6 SE), TE 0.2581 -> 0.2530
+(3.5 SE); RB 129 props, below the floor. Backtest RMSE, holdout: WR receiving yards 34.17 ->
+34.10 (4.7 SE), RB 22.95 -> 22.35 (6.8 SE) with the bias falling from +5.2 yards a game to
++1.5, TE 25.01 -> 24.97 (2.0 SE); WR receptions 1.2 SE, RB receptions 5.6 SE. Ryan's call,
+Nov 3: accuracy decides. `CALIB_GROUPS` is now per stat; groups not listed get the pooled fit.
+
 **NFL, same change, not kept** (`experiments/nfl_rush_group_calib_test.py`). On the NFL board
 the linear calibration is live for quarterbacks' rushing; for running backs it is one input to
 the boosted step. Rule: QB rushing RMSE better on tuning (2014-18) and holdout (2019+), the
