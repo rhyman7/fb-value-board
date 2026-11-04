@@ -1,0 +1,55 @@
+name: College availability
+
+# ESPN's college injury designations for every FBS team (which since 2025 carry the four power
+# conferences' availability reports), logged with the time each change was first seen
+# (cfbmodel/availability_log.py): data/cfb/availability/<season>/latest.json and log.csv.
+# History only: the board's Covers.com designations are untouched until the kickoff-time
+# availability has been tested against the 2026 live prop log. About 2,000-4,000 ESPN calls a run,
+# two to three minutes. In season: every two hours Wednesday to Friday, hourly on Saturday
+# (reports land from three days out, the final one 90 minutes to two hours before kickoff), once
+# on the other days.
+
+on:
+  schedule:
+    - cron: "7 0,2,4,12,14,16,18,20,22 * 8-12,1 3-5"   # Wed-Fri (UTC), every two hours
+    - cron: "7 * * 8-12,1 6"                             # Saturday (UTC), hourly
+    - cron: "7 0-6 * 8-12,1 0"                           # Saturday night ET, hourly, into Sunday UTC
+    - cron: "7 16 * 8-12,1 0-2"                          # Sun-Tue, once
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Print the changes, write nothing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Fetch
+        run: |
+          args=""
+          [ "${{ inputs.dry_run }}" = "true" ] && args="--dry-run"
+          python -m cfbmodel.availability_log $args
+      - name: Commit
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cfb/availability
+          git diff --cached --quiet && { echo "no change"; exit 0; }
+          git commit -m "College availability $(date -u +%Y-%m-%dT%H:%MZ)"
+          git pull --rebase origin main
+          git push

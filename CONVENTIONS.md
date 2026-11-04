@@ -169,6 +169,17 @@ boards in detail; this file is the rules.
   `line_source` says so ("CFBD DraftKings"). ESPN's price always comes first, the cfbfastR
   consensus stays the fallback, and without the key or on any failure nothing changes. Never
   print the key or write it to a file.
+- **College availability log: `data/cfb/availability/<season>/`** (`latest.json`, `log.csv`), written
+  only by the **College availability** Action (`cfbmodel/availability_log.py`, standard library
+  only, no pip step): ESPN's per-team college injury designations, which carry the power
+  conferences' availability reports, with one `log.csv` row per change (new, status, details,
+  cleared) and the time it was first seen. History for the 2026 recheck of kickoff-time
+  availability; the board's Covers.com designations (`docs/cfb/designations.json`) are not
+  read from it. Don't edit these files by hand. The box-score absence features stay in
+  `cfbmodel/availability.py`; the two modules are unrelated.
+- **CFBD player data: `data/cfb/cfbd/`** (`recruits_`, `portal_`, `returning_`, `roster_<season>.csv`),
+  written by the manual **CFBD player data** Action (`cfbmodel/cfbd_pull.py`, `CFBD_API_KEY`).
+  Inputs to experiments only (role prior, Nov 3, 2026: not kept); the board does not read them.
 - **Hand overrides (NFL board): `data/overrides.csv`.** One row per player per game:
   `starter` sets that game's starting quarterback for the game model and makes him the
   quarterback who takes the team's passes in the player projections (whoever started the
