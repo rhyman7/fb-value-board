@@ -1570,3 +1570,31 @@ hundredths of a yard on a 33-yard miss, as on the NFL board), and **against the 
 rushing yards -0.0004 ± 0.0007, receiving -0.0001 ± 0.0004, passing -0.0012 ± 0.0014. The books price
 the matchup. It goes on the college board as a projection input and a card fact, on Ryan's go-ahead
 (it changes the live projections slightly); it does not count toward closing the gap to the books.
+
+## College targets from CFBD play stats (Nov 3, 2026): coverage check fails for 2021-2024; stop
+
+Candidate 3 of the college-props memo. The college receiving chain runs on catch share because
+cfbfastR's play-by-play names the receiver on too few incompletions from 2021 on. CFBD's own
+per-play player stats (`/plays/stats`, pulled by the **CFBD player data** Action's `targets` mode
+into `data/cfb/cfbd/targets_<year>.csv` and `types_<year>.csv`) record a "Target" row for the
+intended receiver of an incompletion, separately from "Reception". Rule, written first: targets
+over receptions must sit near the NFL's 1.5 in 2021-2025, or the test stops.
+
+The endpoint returns about 2,000 rows a call, so a year-and-week call is a sample of 5-11 games a
+week (about 135 games a season); the ratios are what matter:
+
+| Season | Games sampled | Targets / receptions | Incompletions with a named receiver |
+|---|---|---|---|
+| 2021 | 129 | 1.32 | 56% |
+| 2022 | 130 | 1.25 | 43% |
+| 2023 | 134 | 1.21 | 36% |
+| 2024 | 142 | 1.20 | 34% |
+| 2025 | 138 | **1.50** | **88%** |
+
+**Stopped.** 2021-2024 have the same hole as cfbfastR (both parse ESPN's play text): a third to a
+half of incompletions carry a receiver, so a target share built on them would be a catch share
+with noise. 2025 is the first season with real coverage. A walk-forward model needs fitting seasons,
+so this waits: after the 2026 season there will be two seasons of real targets (2025 and 2026 live),
+enough to test "target share where the season's coverage is 85%+, catch share otherwise" on the
+2025 + 2026 lines. Filed on the near-miss list's rechecks, not as a near-miss. Pulling full seasons
+(by game, about 800 calls a season) is not worth CFBD calls until then.
