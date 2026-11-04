@@ -1497,3 +1497,41 @@ The main story is the diagnostic's: the centre of the model's number is what has
 the props where it disagrees with the books by 30%+, which is a role and volume question
 (candidates 1-5 in the memo), with early-season rushing roles (portal and recruiting priors,
 candidate 6) moved up the list.
+
+## College early-season role prior from CFBD background data (Nov 3, 2026): no
+
+Candidate 1 of the college-props memo, aimed at the 78% of the rushing-yards prop gap that sits in
+weeks 3-8. `python experiments/cfb_role_prior_test.py` (results in `experiments/out/cfb_role_prior_test.json`);
+data from the new **CFBD player data** Action (`cfbmodel/cfbd_pull.py`, `data/cfb/cfbd/`: recruiting
+ratings, transfer portal, team returning production, rosters, 2014-2026; CFBD roster ids are the
+board's ESPN player ids, 98% matched).
+
+A back's carry share starts each season from a flat prior (half the position average, worth one
+game). The candidate replaced it with a ridge-fitted prior share for running backs: decayed history
+entering the season and how much of it there is, 247 composite rating and stars, class year, portal
+transfer, the team's returning rushing usage, rank among the team's backs; fitted walk-forward on
+2015 to the season before. Weight w pseudo-games from {1, 2, 4, 8, 16}, chosen on tuning.
+
+Rule, written first: RB rushing-yards and carries RMSE in weeks 1-8 better on the holdout (2021+)
+by 2+ SE and not worse on tuning (2017-19); Brier at the 2025 rushing lines in weeks 3-8 better by
+2+ SE.
+
+- **The prior predicts the early-season share well on its own**: RMSE of a back's first-eight-weeks
+  carry share 0.114 against 0.142 from his history alone and 0.140 from the flat prior (holdout).
+  Rating carries most of the weight; stars are missing for 54% of back-seasons (walk-ons, older
+  classes, JUCO), class year for 27%.
+- **In the chain it does not help, at any weight.** w = 1 (the tuning pick): rushing RMSE 37.681 →
+  37.670 (0.5 SE), carries 5.259 → 5.263 (worse, 1.3 SE). Every heavier weight is worse on both
+  periods, by 2.4 SE (w = 2) to 9.6 SE (w = 16) on holdout rushing yards. Why: the shares are
+  renormalised within the team, so a prior that lifts one back's share lowers his teammates', and
+  the backs who already have history (most of the props) lose accuracy to those who don't; the
+  calibration's recent-average term already does the early-season catching-up the prior was meant
+  to do, and the chain's decayed history (last season at 60%) is a better prior than the fitted
+  one for anyone who played last year.
+- **Lines**: weeks 3-8 Brier 0.2677 → 0.2671 (-0.0006 ± 0.0009, 0.7 SE); all weeks 0.8 SE.
+  Receiving, same features, as information: RMSE flat (1.2 SE worse on holdout), lines 0.7 SE worse.
+
+Not kept, not a near-miss. The books' early-season edge on roles is not recruiting and portal data
+applied this way. What the data may still be for: putting roster backs with no history into the
+team's first games (today they get no row, and no projection, until they have played), which the
+2025 lines cannot test since props start in week 3.
