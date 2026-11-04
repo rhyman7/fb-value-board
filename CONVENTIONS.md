@@ -10,6 +10,14 @@ boards in detail; this file is the rules.
   - College board: https://rhyman7.github.io/fb-value-board/docs/cfb/ (`docs/cfb/index.html`)
 - The matchup dashboards (rhyman7/nfl, rhyman7/cfb) and the Weekly Gridiron Board
   (rhyman7.github.io) are separate sites with their own CONVENTIONS.md.
+- **What the dashboards read from here** (`docs/feed/`, written by every board build): the
+  matchup feed `<league>.json` (`nflmodel/dashfeed.py`) and the Likeliest TD Scorers tracker
+  `td_tracker_<league>.json` (`nflmodel/tdtracker.py` for the NFL, also run by the props run;
+  `cfbmodel/tdtracker.py` for college, from Nov 4, 2026). The two trackers write the same shape,
+  which each report's `build_report.py` turns into its Touchdown tracker page: keep them in step,
+  and keep each one's eligibility rules the same as its report's `td_rows`. The college tracker
+  reads the board's archived weeks (chances frozen at kickoff, box scores in `actuals`; weeks the
+  walk-forward backfill wrote are marked "rebuilt") and the live college props for prices.
 
 ## How changes get made
 
