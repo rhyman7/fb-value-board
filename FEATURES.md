@@ -1695,5 +1695,6 @@ The walk-forward (`--walk-forward`, default seasons and calibration window) deci
 | RB rushing yards RMSE (snap share) | 40.187 → 40.191 (1.8 SE worse) | 38.195 → 38.198 (1.2 SE worse) |
 
 - **Receiving chain: kept.** Better on every measure: 2025 RMSE, the 2025 main lines, the floor rungs and
-  both walk-forward periods. Goes on the college board after Ryan sees the plan.
+  both walk-forward periods. Applied: `cfbmodel/pff_roles.py`, `players.CAL_EXTRA` (receptions,
+  receiving yards); the Update college board Action reads the private PFF data.
 - **Rushing chain: not kept.** Slightly better on 2025 alone but worse on both walk-forward periods.

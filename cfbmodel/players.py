@@ -41,6 +41,7 @@ from nflmodel.players import Lin, _shrink, asof
 
 from . import config as C
 from . import designations as DES
+from . import pff_roles
 from .players_data import GROUP
 
 SEASON_LEN = 22
@@ -265,7 +266,7 @@ def build(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame, info: pd.D
         f = starters[starters["qb_id"] != "replacement"].set_index(["game_id", "team"])["qb_id"].astype(np.int64)
         out["forced_qb"] = [f.get((g, t)) for g, t in zip(out["game_id"], out["team"])]
     out["started"] = out["start"]      # did he start (half the team's passes)? an outcome, used to fit and score passing
-    return out
+    return pff_roles.add(out, info)    # PFF route and snap share (0 without the private data)
 
 
 def _pick_starter(d: pd.DataFrame):
@@ -322,6 +323,11 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
 
 
 CAL_EXTRA = {s: [] for s in STATS}
+# PFF route share and snap share in the receiving chain (Nov 4, 2026; cfbmodel/pff_roles.py,
+# experiments/cfb_pff_role_test.py): better on every measure (walk-forward receiving-yards RMSE
+# 3.7 SE tuning, 10.1 SE holdout; 2025 lines and floor rungs). Not in rushing (worse walk-forward).
+CAL_EXTRA["receptions"] = ["route_share", "snap_share"]
+CAL_EXTRA["rec_yds"] = ["route_share", "snap_share"]
 # Rushing is calibrated per position group (Nov 3, 2026, experiments/cfb_rush_group_calib_test.py):
 # one fit on everyone who appeared is mostly receivers and quarterbacks with a few carries and
 # settles on about 0.71 x chain + 0.43 x recent, where running backs alone want about 0.76 /
@@ -351,7 +357,8 @@ def calib_X(p: pd.DataFrame, stat: str) -> np.ndarray:
         recent = np.where(p["att_share"] > 0.5, per_start.fillna(p[stat + "_p"]), p[stat + "_p"])
     else:
         recent = (p[stat + "_sum"] / p["one_sum"].replace(0, np.nan)).fillna(0.0).to_numpy(float)
-    cols = [raw, recent] + [raw * p[c].to_numpy(float) for c in CAL_EXTRA[stat]]
+    zero = np.zeros(len(p))       # a table built without a column (e.g. no PFF data): no weight
+    cols = [raw, recent] + [raw * (p[c].to_numpy(float) if c in p else zero) for c in CAL_EXTRA[stat]]
     return np.column_stack(cols)
 
 
