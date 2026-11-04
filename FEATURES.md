@@ -1637,7 +1637,7 @@ better on both periods, holdout 2+ SE; Brier at the 2025 lines no worse.
 gains a weekly step, and the column enters `players.build`). Size: 0.03 yards on a 38-yard miss,
 nothing against the books: an accuracy input, like defense vs position.
 
-## College PFF role inputs: routes per pass play and snap share (Nov 4, 2026): nothing kept
+## College PFF role inputs: routes per pass play and snap share (Nov 4, 2026): receiving kept, rushing not
 
 Item 2 of the Nov 3 handoff. `PFF_DATA_DIR=../pff-data python experiments/cfb_pff_role_test.py`
 (scores in `experiments/out/cfb_pff_role_test.json`). Data: PFF Premium Stats from the private repo
@@ -1684,3 +1684,16 @@ or the rungs. No walk-forward (the rule runs it only after a pass). Nothing touc
 Worth a recheck rather than a near-miss slot: the receiving floor-rung score (1.6 SE) on 2025 + 2026
 lines, and with the 2024 college prop backfill when Ryan buys it in December. The other 50 PFF tables
 (depth, concept, scheme, blocking, pass rush, coverage; pulled Nov 4) are untested.
+
+**Re-judged the same day under the new keep rule (CONVENTIONS.md, "Model tests"): anything that makes
+the model more accurate is kept, however small.** The receiving chain was better on every 2025 measure.
+The walk-forward (`--walk-forward`, default seasons and calibration window) decides:
+
+| Walk-forward 2017-2025 | Tuning 2017-19 | Holdout 2021+ |
+|---|---|---|
+| Receiving yards RMSE, WR/TE/RB (route + snap share) | 31.435 → 31.418 (3.7 SE better) | 30.179 → 30.057 (**10.1 SE better**) |
+| RB rushing yards RMSE (snap share) | 40.187 → 40.191 (1.8 SE worse) | 38.195 → 38.198 (1.2 SE worse) |
+
+- **Receiving chain: kept.** Better on every measure: 2025 RMSE, the 2025 main lines, the floor rungs and
+  both walk-forward periods. Goes on the college board after Ryan sees the plan.
+- **Rushing chain: not kept.** Slightly better on 2025 alone but worse on both walk-forward periods.
