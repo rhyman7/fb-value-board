@@ -339,6 +339,20 @@ boards in detail; this file is the rules.
   superscript comes from the board data, not from fetching `designations.json` (that file
   only adds the injury and date to the tooltip), so it always matches the projections.
 
+## Model tests: the keep rule
+
+- **Kept if it makes the model more accurate, however small (Ryan, Nov 4, 2026; replaces the
+  old "holdout better by 2+ standard errors" bar).** Small gains add up.
+- "More accurate" means the change's number is better on **every** accuracy measure the test
+  reports, and worse on none: projection RMSE (or the game model's average miss) on the tuning
+  seasons and on the holdout, and Brier at the real DraftKings/FanDuel lines where lines exist,
+  props included. No standard-error threshold; standard errors are still reported.
+- A mixed result (better on one measure, worse on another) is not kept. It goes to Ryan as a
+  trade-off for him to decide.
+- Still write the measures into the test script before running, still run the 2017-2025
+  walk-forward (or the NFL equivalent) before anything is kept, and still give Ryan a short plan
+  and wait for his go-ahead before a kept change goes on the live boards.
+
 ## Site structure
 
 - `docs/index.html` and `docs/cfb/index.html` are **generated**. Don't edit them by hand;
