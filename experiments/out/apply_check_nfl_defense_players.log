@@ -1,0 +1,17 @@
+volume features: attempts ['team_att_avg', 'opp_att_allowed', 'team_car_avg', 'opp_car_allowed', 'margin', 'proj_total', 'wind', 'home', 'proe_off', 'opp_proe_def']
+                 carries  ['team_att_avg', 'opp_att_allowed', 'team_car_avg', 'margin', 'proj_total', 'wind', 'home', 'opp_car_usual', 'proe_off', 'opp_proe_def']
+projection RMSE, current chain -> with the defensive rates:
+  WR rec_yds  tune 28.1661 -> 28.1524 (-0.0138 ± 0.0182)   hold 27.0284 -> 27.0315 (+0.0031 ± 0.0138)
+  TE rec_yds  tune 18.5092 -> 18.4990 (-0.0102 ± 0.0172)   hold 18.1671 -> 18.1488 (-0.0183 ± 0.0128)
+  RB rec_yds  tune 14.0828 -> 14.0797 (-0.0031 ± 0.0088)   hold 13.2909 -> 13.2919 (+0.0011 ± 0.0067)
+  QB ints     tune 0.8724 -> 0.8717 (-0.0007 ± 0.0017)   hold 0.8448 -> 0.8440 (-0.0008 ± 0.0012)
+  upcoming receiving projections move: median 0.35, 95th 1.41, max 3.92 yards (1983 players)
+
+props check (Brier vs the books at the 2023-2025 lines) ...
+  2023 pricing  all 0.2560 -> 0.2560 (books 0.2501)   rec_yds 0.2563->0.2563
+  2023 close    all 0.2584 -> 0.2587 (books 0.2499)   rec_yds 0.2587->0.2592
+  2024 pricing  all 0.2556 -> 0.2559 (books 0.2499)   rec_yds 0.2580->0.2585
+  2024 close    all 0.2604 -> 0.2605 (books 0.2499)   rec_yds 0.2620->0.2622
+  2025 pricing  all 0.2539 -> 0.2537 (books 0.2486)   rec_yds 0.2569->0.2564  receptions 0.2548->0.2548
+  2025 close    all 0.2562 -> 0.2561 (books 0.2477)   rec_yds 0.2576->0.2571  receptions 0.2531->0.2531
+wrote /home/claude/fb-value-board/experiments/out/apply_check_nfl_defense_players.json
