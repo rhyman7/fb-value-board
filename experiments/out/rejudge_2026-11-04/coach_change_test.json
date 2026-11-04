@@ -1,0 +1,232 @@
+{
+ "nfl": {
+  "holdout_from": 2019,
+  "tuning_seasons": [
+   2008,
+   2018
+  ],
+  "team_games_new_coach_share": 0.208,
+  "team_games_after_midseason_change_share": 0.019,
+  "games": 4897,
+  "margin + d_new": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": 0.0025,
+    "se": 0.0037
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 9.9968,
+    "change": 0.0019,
+    "se": 0.0022
+   },
+   "keep": false
+  },
+  "margin + d_new_early": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": 0.0019,
+    "se": 0.0029
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 9.9968,
+    "change": -0.0021,
+    "se": 0.0023
+   },
+   "keep": false
+  },
+  "margin + d_new_reg": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": 0.0106,
+    "se": 0.0083
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 9.9968,
+    "change": -0.0055,
+    "se": 0.0034
+   },
+   "keep": false
+  },
+  "margin + d_mid": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": -0.0003,
+    "se": 0.0046
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 9.9968,
+    "change": 0.0024,
+    "se": 0.0024
+   },
+   "keep": false
+  },
+  "margin + all": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": 0.0141,
+    "se": 0.0117
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 9.9968,
+    "change": -0.0081,
+    "se": 0.0057
+   },
+   "keep": false
+  },
+  "total + s_new": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.5716,
+    "change": 0.0001,
+    "se": 0.0171
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 10.4668,
+    "change": 0.0086,
+    "se": 0.0114
+   },
+   "keep": false
+  },
+  "total + s_mid": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.5716,
+    "change": 0.0032,
+    "se": 0.0043
+   },
+   "hold": {
+    "n": 2081,
+    "base_miss": 10.4668,
+    "change": 0.0027,
+    "se": 0.0018
+   },
+   "keep": false
+  }
+ },
+ "cfb": {
+  "holdout_from": 2021,
+  "tuning_seasons": [
+   2017,
+   2019
+  ],
+  "team_games_new_coach_share": 0.163,
+  "team_games_after_midseason_change_share": 0.025,
+  "games": 8474,
+  "margin + d_new": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": 0.0123,
+    "se": 0.0096
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": 0.0046,
+    "se": 0.0062
+   },
+   "keep": false
+  },
+  "margin + d_new_early": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": 0.0018,
+    "se": 0.0058
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": -0.0007,
+    "se": 0.0013
+   },
+   "keep": false
+  },
+  "margin + d_new_reg": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": 0.0046,
+    "se": 0.0055
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": -0.0253,
+    "se": 0.0093
+   },
+   "keep": false
+  },
+  "margin + d_mid": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": -0.0013,
+    "se": 0.0034
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": -0.0095,
+    "se": 0.0085
+   },
+   "keep": false
+  },
+  "margin + all": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": 0.0257,
+    "se": 0.0163
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": -0.0247,
+    "se": 0.0144
+   },
+   "keep": false
+  },
+  "total + s_new": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 13.4128,
+    "change": 0.0041,
+    "se": 0.0042
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.6859,
+    "change": -0.001,
+    "se": 0.002
+   },
+   "keep": false
+  },
+  "total + s_mid": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 13.4128,
+    "change": 0.0025,
+    "se": 0.0037
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.6859,
+    "change": 0.0022,
+    "se": 0.0013
+   },
+   "keep": false
+  }
+ }
+}

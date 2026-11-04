@@ -1,0 +1,21 @@
+base margin feats ['d_pass', 'd_rush', 'd_sr', 'd_pts', 'd_mkt', 'd_qb', 'hfa', 'rest_diff', 'd_chg_ol', 'd_depth1_out', 'd_snap_drop']
+base total feats ['s_pass', 's_rush', 's_sr', 's_pts', 's_mkt', 's_qb', 'lg_pts', 'indoor', 'wind', 's_snaps']
+  margin d_sack: missing
+  margin d_expl: missing
+  margin d_ed: missing
+  margin d_st: missing
+  margin d_fum: missing
+  margin d_cpoe      tune +0.0036 ± 0.0043  hold -0.0000 ± 0.0014  TRADE-OFF
+  margin d_pace: missing
+  margin d_snaps     tune +0.0005 ± 0.0031  hold +0.0021 ± 0.0019  STAYS NO
+  margin travel      tune +0.0045 ± 0.0077  hold +0.0056 ± 0.0029  STAYS NO
+  margin tz_east     tune +0.0095 ± 0.0086  hold -0.0004 ± 0.0021  TRADE-OFF
+  margin west_early  tune +0.0287 ± 0.0110  hold +0.0075 ± 0.0026  STAYS NO
+  margin hfa_div     tune -0.0033 ± 0.0099  hold +0.0051 ± 0.0071  TRADE-OFF
+  total s_pace: missing
+  total s_expl: missing
+  total s_sack: missing
+  total s_ed: missing
+  total s_fum: missing
+  total  wind_hi     tune +0.0091 ± 0.0071  hold +0.0029 ± 0.0009  STAYS NO
+  total  cold        tune +0.0044 ± 0.0048  hold +0.0004 ± 0.0008  STAYS NO

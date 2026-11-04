@@ -1,0 +1,128 @@
+{
+ "nfl": {
+  "holdout_from": 2019,
+  "margin + turnover-free added": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": -0.0035,
+    "se": 0.0063
+   },
+   "hold": {
+    "n": 1960,
+    "base_miss": 10.0208,
+    "change": 0.0014,
+    "se": 0.0093
+   },
+   "keep": false
+  },
+  "margin, swapped in": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.2482,
+    "change": -0.0097,
+    "se": 0.0075
+   },
+   "hold": {
+    "n": 1960,
+    "base_miss": 10.0208,
+    "change": -0.0031,
+    "se": 0.0051
+   },
+   "keep": false
+  },
+  "total + turnover-free added": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.5716,
+    "change": 0.0031,
+    "se": 0.0035
+   },
+   "hold": {
+    "n": 1960,
+    "base_miss": 10.4265,
+    "change": -0.0031,
+    "se": 0.0021
+   },
+   "keep": false
+  },
+  "total, swapped in": {
+   "tune": {
+    "n": 2136,
+    "base_miss": 10.5716,
+    "change": 0.0049,
+    "se": 0.0049
+   },
+   "hold": {
+    "n": 1960,
+    "base_miss": 10.4265,
+    "change": -0.0019,
+    "se": 0.0032
+   },
+   "keep": false
+  }
+ },
+ "cfb": {
+  "holdout_from": 2021,
+  "margin + turnover-free added": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": 0.0025,
+    "se": 0.0064
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": -0.0047,
+    "se": 0.0056
+   },
+   "keep": false
+  },
+  "margin, swapped in": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 12.4549,
+    "change": 0.0025,
+    "se": 0.0064
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.346,
+    "change": -0.0033,
+    "se": 0.0042
+   },
+   "keep": false
+  },
+  "total + turnover-free added": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 13.4128,
+    "change": 0.0008,
+    "se": 0.0062
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.6859,
+    "change": -0.0001,
+    "se": 0.0031
+   },
+   "keep": false
+  },
+  "total, swapped in": {
+   "tune": {
+    "n": 2322,
+    "base_miss": 13.4128,
+    "change": 0.001,
+    "se": 0.0103
+   },
+   "hold": {
+    "n": 3944,
+    "base_miss": 12.6859,
+    "change": 0.0032,
+    "se": 0.0074
+   },
+   "keep": false
+  }
+ }
+}

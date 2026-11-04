@@ -1,0 +1,4 @@
+{'proe_off_sd': 0.0293, 'opp_proe_def_sd': 0.0208, 'team_games_with_proe': 7123}
+team_att {'tune': {'n': 2670, 'mae': 6.4448, 'change': -0.0272, 'se': 0.0102}, 'hold': {'n': 4162, 'mae': 6.1809, 'change': -0.0045, 'se': 0.0083}, 'keep': False}
+team_car {'tune': {'n': 2670, 'mae': 5.6067, 'change': -0.0028, 'se': 0.0069}, 'hold': {'n': 4162, 'mae': 5.5902, 'change': -0.0151, 'se': 0.0061}, 'keep': True}
+total {'tune': {'n': 2136, 'mae': 10.5716, 'change': -0.0025, 'se': 0.0163}, 'hold': {'n': 2081, 'mae': 10.4668, 'change': 0.0182, 'se': 0.008}, 'keep': False}
