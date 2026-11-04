@@ -134,12 +134,41 @@ def pull_targets(year: int, budget: list, weeks=range(1, 17)) -> None:
     print(f"  targets {year}: {len(rows)} player-games; types: {dict(sorted(types.items()))}")
 
 
+def pull_usage(year: int, budget: list, weeks=range(1, 17)) -> None:
+    """usage_{year}.csv: GET /player/usage (season totals per player: overall/pass/rush usage and the
+    split by down type), one call; ppa_{year}.csv: GET /ppa/players/games by week (per player per
+    game average and total PPA, rushing and passing). Candidate 4 of the college-props memo."""
+    DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        budget[0] -= 1
+        flat(get("/player/usage", year=year, excludeGarbageTime="false")).to_csv(DIR / f"usage_{year}.csv", index=False)
+        print(f"  usage {year}: written")
+    except Exception as exc:
+        print(f"  usage {year}: failed ({type(exc).__name__}: {str(exc)[:80]})")
+    rows = []
+    for wk in weeks:
+        if budget[0] <= 0:
+            print(f"  ppa {year}: call budget spent at week {wk}")
+            break
+        try:
+            budget[0] -= 1
+            d = flat(get("/ppa/players/games", year=year, week=wk, seasonType="regular", excludeGarbageTime="false"))
+            if len(d):
+                rows.append(d)
+        except Exception as exc:
+            print(f"  ppa {year} week {wk}: failed ({type(exc).__name__}: {str(exc)[:60]})")
+    if rows:
+        pd.concat(rows, ignore_index=True).to_csv(DIR / f"ppa_{year}.csv", index=False)
+    print(f"  ppa {year}: {sum(len(r) for r in rows)} player-games")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--from", dest="start", type=int, default=C.FIRST_SEASON)
     ap.add_argument("--to", dest="end", type=int, default=None)
     ap.add_argument("--refresh", action="store_true", help="rewrite files that already exist")
     ap.add_argument("--targets", action="store_true", help="pull per-play player stats (targets etc.) instead of the background files")
+    ap.add_argument("--usage", action="store_true", help="pull season usage (/player/usage) and per-game PPA (/ppa/players/games) instead")
     ap.add_argument("--max-calls", type=int, default=120, help="most CFBD calls a --targets run may make")
     a = ap.parse_args()
     from .data import current_season
@@ -153,6 +182,10 @@ def main():
             if (DIR / f"targets_{year}.csv").exists() and not (a.refresh or year == cur):
                 continue
             pull_targets(year, budget)
+        elif a.usage:
+            if (DIR / f"ppa_{year}.csv").exists() and not (a.refresh or year == cur):
+                continue
+            pull_usage(year, budget)
         else:
             pull_season(year, a.refresh, cur)
 
