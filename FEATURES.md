@@ -1500,7 +1500,9 @@ chances and no stat is worse by 2 SE. Decision version: widths + correction.
 projection, makes the chances *more* extreme at the books' lines (receiving spread from 50%: 0.074
 → 0.112) and undoes the widths' gain. The widths alone point the right way on all four stats and
 clear 2 SE on receiving and passing yards, not rushing (1.1 SE): a near-miss (#6 in the Project's
-near-miss list), with a 2021-2024 fit giving the same picture. Even the best version is still
+near-miss list), with a 2021-2024 fit giving the same picture. *Nov 4, 2026: the widths-only version
+was applied under the keep rule (see "Re-judging past tests under the keep rule", "Applied", and PROPS.md
+"College prop widths").* Even the best version is still
 +0.0045 (receiving) and +0.0082 (rushing) behind the books: the distribution is not the main story.
 The main story is the diagnostic's: the centre of the model's number is what has to improve, on
 the props where it disagrees with the books by 30%+, which is a role and volume question
@@ -1795,6 +1797,11 @@ solves `lyd` and `dve` like the base metrics. The college spread card gained row
 out" and "Mid-season coaching change"; "Returning defensive production" became "Returning production".
 Week 10 board: raw spreads move 0.41 on average, max 2.9 (the coaching-change teams); projected lines at
 most 0.84; totals at most 0.06; no bet added or removed.
+
+**College prop widths** (near-miss #6; `experiments/cfb_propdist_test.py --save`, `experiments/out/cfb_propdist_test.json`):
+the widths-only version, refitted on the chain above, is better than the NFL-fitted chances on every stat at the
+2025 lines (passing TDs −0.0025, passing yards −0.0019, receiving yards −0.0010, rushing yards −0.0013) and
+is applied through `data/cfb/prop_params.json` (PROPS.md "College prop widths").
 
 **NFL team volume** (`experiments/apply_check_nfl_volume.py`, `experiments/out/apply_check_nfl_volume.json`
 and `_pieces.json`; rule in the script's docstring), on the turnover-free spread model. The test's

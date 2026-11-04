@@ -804,12 +804,21 @@ def _nfl_alt(payload: dict) -> dict:
     return M.alt_quotes(gs, "nfl") if len(gs) else {}
 
 
+def prop_params_path(league: str) -> Path:
+    """The prop distribution parameters for a league's legs: the NFL file, or for college
+    data/cfb/prop_params.json when it exists (college-fitted widths, Nov 4, 2026, PROPS.md
+    "College prop widths"; written by experiments/cfb_propdist_test.py --save)."""
+    from . import props as P
+    cfb = C.DATA / "cfb" / "prop_params.json"
+    return cfb if league == "cfb" and cfb.exists() else P.PARAMS_PATH
+
+
 def write(league: str, payload_path: Path | None = None, alt: dict | None = None) -> Path:
     from . import props as P
     payload_path = payload_path or (C.DOCS / ("data.json" if league == "nfl" else "cfb/data.json"))
     payload = json.loads(Path(payload_path).read_text())
     try:
-        model = P.PropModel.load()
+        model = P.PropModel.load(prop_params_path(league))
     except Exception:
         model = None
     if alt is None and league == "nfl":

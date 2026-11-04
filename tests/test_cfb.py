@@ -405,3 +405,16 @@ def test_coach_change_flag_is_mid_season_only(tmp_path):
     frame = extra.attach_game_features(games.copy(), games, None, c.reset_index())
     assert list(frame["d_mid"]) == [0.0, 1.0, -1.0]
     assert {"d_miss_defcov", "d_dve", "d_mid"} <= set(__import__("cfbmodel.model", fromlist=["model"]).MARGIN_FEATS)
+
+
+def test_college_legs_read_the_college_prop_widths():
+    """parlays.prop_params_path: the college legs read data/cfb/prop_params.json (college-fitted
+    widths, Nov 2026) when it exists; the NFL legs always read the NFL file."""
+    import json
+    from nflmodel import config as C, parlays, props as P
+    assert parlays.prop_params_path("nfl") == P.PARAMS_PATH
+    cfb = C.DATA / "cfb" / "prop_params.json"
+    assert parlays.prop_params_path("cfb") == cfb and cfb.exists()
+    a, b = json.loads(P.PARAMS_PATH.read_text()), json.loads(cfb.read_text())
+    assert b["isotonic"] == a["isotonic"] and b["family"] == a["family"]      # widths only: the correction is the NFL's
+    assert b["yards"] != a["yards"] and set(b["yards"]) == set(a["yards"])
