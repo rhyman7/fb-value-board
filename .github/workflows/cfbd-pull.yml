@@ -20,6 +20,13 @@ on:
         description: "Rewrite seasons already on disk"
         type: boolean
         default: false
+      targets:
+        description: "Pull per-play player stats (targets) instead of the background files; ~16 calls a season"
+        type: boolean
+        default: false
+      max_calls:
+        description: "Most CFBD calls a targets run may make"
+        default: "120"
 
 permissions:
   contents: write
@@ -51,6 +58,7 @@ jobs:
           args="--from ${{ inputs.from }}"
           [ -n "${{ inputs.to }}" ] && args="$args --to ${{ inputs.to }}"
           [ "${{ inputs.refresh }}" = "true" ] && args="$args --refresh"
+          [ "${{ inputs.targets }}" = "true" ] && args="$args --targets --max-calls ${{ inputs.max_calls }}"
           python -m cfbmodel.cfbd_pull $args
       - name: Commit
         if: always()
