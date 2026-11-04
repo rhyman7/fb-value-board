@@ -309,6 +309,15 @@ boards in detail; this file is the rules.
   the data loaders write and the Actions commit with the rest of the cache).
   The page's timing verdicts (bet now / can wait / wait or size down) are in `timing()` in
   `site/template.html`; keep them consistent with the sheet's wording if either changes.
+- **College game-model inputs (`cfbmodel/extra.py`, from Nov 4, 2026).** `data/cfb/cache/`
+  holds, per season, `play_extra_<s>.csv` and `drive_raw_<s>.csv` (written by `data.load_season`
+  from the same play-by-play download as `team_games`) and `def_missing_<s>.csv` (from the
+  cfbfastR box scores); the Update college board Action refreshes the current season's with the
+  rest of the cache. `data/cfb/coach_changes.csv` is **hand-kept**: every FBS head-coaching
+  change with its date (team as the games file names it, `COACH_ALIAS` in `extra.py` for the
+  few that differ). When a head coach is fired, resigns or an interim is named during the
+  season, add the row in a PR the same week; the mid-season-change feature reads it, and no
+  scheduled task writes it. Offseason hires can wait for the season's first rows.
 - **The ledger (both boards): `data/ledger.csv`, `data/ledger_results.csv`, and the same
   under `data/cfb/`** (`nflmodel/ledger.py`). Every bet the sheet flags (a stake on the shown
   basis, or a price, opener or wind tier) is written down the first time it is flagged, at

@@ -22,8 +22,13 @@ BASE_TOTAL = ["s_pass", "s_rush", "s_sr", "s_pts", "s_mkt", "s_qb", "lg_pts", "i
 # Added after testing on 2017-2019 (CFB_FEATURES.md): talent early in the season, returning
 # production, talent, and the quarterback gap early in the season; for totals, returning
 # defensive production, tempo (snaps per game) and wind above 10 mph.
-MARGIN_FEATS = BASE_MARGIN + ["d_talent_early", "d_rtprod", "d_qb_early", "d_talent"]
-TOTAL_FEATS = BASE_TOTAL + ["s_def_rtprod", "s_snaps", "wind_hi"]
+MARGIN_FEATS = BASE_MARGIN + ["d_talent_early", "d_rtprod", "d_qb_early", "d_talent",
+                              # Nov 4, 2026, the keep rule (FEATURES.md "Re-judging past tests under the keep rule";
+                              # experiments/apply_check_cfb_game.py): core coverage defenders who missed the last
+                              # game, drive value over expected, a mid-season head-coaching change (cfbmodel/extra.py)
+                              "d_miss_defcov", "d_dve", "d_mid"]
+TOTAL_FEATS = BASE_TOTAL + ["s_def_rtprod", "s_snaps", "wind_hi",
+                            "s_off_rtprod", "s_lyd"]   # Nov 4, 2026: returning offensive production, line yards per rush
 ALPHA_MARGIN, ALPHA_TOTAL = 150.0, 600.0   # game-model ridge, chosen on 2017-2019 (NFL uses 20)
 FIRST_OOS = C.FIRST_TEST_SEASON
 
@@ -74,8 +79,10 @@ def add_context(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def build_frame(games: pd.DataFrame, engine: CFBRatingEngine, verbose: bool = False) -> pd.DataFrame:
-    """Every FBS-vs-FBS game from FIRST_MODEL_SEASON on, with pre-game features attached."""
+def build_frame(games: pd.DataFrame, engine: CFBRatingEngine, verbose: bool = False, inputs: dict | None = None) -> pd.DataFrame:
+    """Every FBS-vs-FBS game from FIRST_MODEL_SEASON on, with pre-game features attached.
+    inputs: extra.load_inputs(...) for the defenders-missing and coaching-change features; loaded from
+    the caches when not given (the rated extras come through the engine)."""
     g = games[(games.season >= C.FIRST_MODEL_SEASON) & (games.fbs_game == 1)].copy()
     feats = engine.features(g, verbose=verbose)
     df = g.drop(columns=["home_qb_id", "away_qb_id"]).merge(feats, on="game_id", how="inner")
@@ -83,7 +90,11 @@ def build_frame(games: pd.DataFrame, engine: CFBRatingEngine, verbose: bool = Fa
     home_margin = fbs.groupby("season")["result"].mean()
     trail = {s: home_margin[(home_margin.index < s) & (home_margin.index >= s - 5)].mean() for s in df.season.unique()}
     df["hfa"] = df["season"].map(trail).fillna(home_margin.mean()) * (1 - df["neutral"])
-    return add_context(df)
+    df = add_context(df)
+    from .extra import attach_game_features, load_inputs
+    if inputs is None:
+        inputs = load_inputs(games, verbose=verbose, rated=False)
+    return attach_game_features(df, games, inputs.get("defenders"), inputs.get("coach"))
 
 
 def walk_forward(df: pd.DataFrame, alpha: float = ALPHA_MARGIN, alpha_total: float = ALPHA_TOTAL, margin_feats: list[str] | None = None,
@@ -91,6 +102,9 @@ def walk_forward(df: pd.DataFrame, alpha: float = ALPHA_MARGIN, alpha_total: flo
     MF = MARGIN_FEATS if margin_feats is None else margin_feats
     TF = TOTAL_FEATS if total_feats is None else total_feats
     df = df.copy()
+    for col in MF + TF:              # a feature the frame lacks (an extra input not loaded) = no information
+        if col not in df:
+            df[col] = 0.0
     for col in ("model_margin", "model_total", "proj_margin", "proj_total", "w_margin", "w_total"):
         df[col] = np.nan
     info = {}

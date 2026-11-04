@@ -1139,7 +1139,7 @@ difference on 2017-2019, so the direction is consistent, but the size is small (
 
 ELWAY and SP+ adjust for coaching changes; the board does not. NFL coaches from nflverse's
 home_coach / away_coach; college from Wikipedia's FBS coaching-change tables, 2014-2025
-(`experiments/data/cfb_coach_changes.csv`, every firing, interim and hire with its date).
+(`data/cfb/coach_changes.csv`, every firing, interim and hire with its date; in `experiments/data/` until Nov 4, 2026).
 Flags per team-game: **new** (a different head coach from the start of last season; about 21% of
 NFL and 16% of college team-games) and **mid** (the coach changed earlier this season; about 2%).
 Features: the new-coach difference all season and weeks 1-4 only, new coach times last season's
@@ -1778,6 +1778,23 @@ EV above 0) alongside.
 (2025), CLV better in both folds, return better on 2025 and worse on 2024 (18 bets at 3 points; the
 test reports bets, it does not choose on them). Details in PROPS.md "How far the model may move a prop".
 On this week's Parlays page, legs priced at the same book number moved a median 0 and at most 7 points.
+
+**College game model** (`experiments/apply_check_cfb_game.py`, `experiments/out/apply_check_cfb_game.json`; rule in
+the docstring). Head-to-heads, each piece added alone (raw / blend, tuning / holdout): coverage defenders
+*missed last game* −0.016 / −0.002, −0.009 / −0.002 beats the change version (−0.004 / −0.001, −0.003 /
+−0.000); drive value with finishing added nothing to dve alone; returning *offensive* production (raw
+−0.002 / −0.003) over overall (−0.001 / −0.002). The margin set (coverage missed + drive value + mid-season
+coaching change + unknown QB −0.35) together: raw −0.022 ± 0.012 / −0.017 ± 0.011, blend −0.009 ± 0.005 /
+−0.007 ± 0.005, better on all; nothing dropped (drive and the coaching change were each mixed on the blend
+alone). Holdout spread record at the close, EV>0 sides: −0.6% (n 1792) → +0.1% (n 1874). The total set
+(returning offensive production + line yards): raw −0.003 ± 0.010 / −0.005 ± 0.004, blend +0.0001 ± 0.0007
+/ +0.0000 ± 0.0004: mixed by a ten-thousandth on a projection that is 95% market; **Ryan's call: applied.**
+Plumbing: `cfbmodel/extra.py` (play splits and drives from the same play-by-play download as
+`team_games`, defenders missing from the box scores, `data/cfb/coach_changes.csv`); the rating engine
+solves `lyd` and `dve` like the base metrics. The college spread card gained rows "Coverage defenders
+out" and "Mid-season coaching change"; "Returning defensive production" became "Returning production".
+Week 10 board: raw spreads move 0.41 on average, max 2.9 (the coaching-change teams); projected lines at
+most 0.84; totals at most 0.06; no bet added or removed.
 
 **NFL team volume** (`experiments/apply_check_nfl_volume.py`, `experiments/out/apply_check_nfl_volume.json`
 and `_pieces.json`; rule in the script's docstring), on the turnover-free spread model. The test's

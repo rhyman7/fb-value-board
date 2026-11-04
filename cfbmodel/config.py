@@ -44,7 +44,8 @@ OFFSEASON_CARRY = 0.55
 RIDGE = {"pass": 12.0, "rush": 16.0, "sr": 18.0, "pts": 0.4, "snaps": 0.4}
 MARKET_HALF_LIFE = 8.0     # weeks (NFL 4); 8 beat 2, 4 and 12 on 2017-2019
 QB_PRIOR_DROPBACKS = 800.0  # college starters are judged on more dropbacks (NFL 200); QB-change games, 2017-2019
-QB_REPLACEMENT = -0.30      # an unknown quarterback, EPA/dropback vs average (NFL -0.13): college backups are much worse
+QB_REPLACEMENT = -0.35      # an unknown quarterback, EPA/dropback vs average (NFL -0.13): college backups are much worse
+                            # (-0.30 until Nov 4, 2026; -0.35 under the keep rule, experiments/cfb_qb_test.py)
 QB_HALF_LIFE_DROPBACKS = 1400.0
 
 TOTAL_WEIGHT_CAP = 0.05

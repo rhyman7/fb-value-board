@@ -22,7 +22,11 @@ class CFBRatingEngine(RatingEngine):
     QB_REPLACEMENT = C.QB_REPLACEMENT
     MARKET_DEFAULT = {"hfa": 2.5, "avg_total": 55.0}
 
-    def __init__(self, team_games: pd.DataFrame, qb_games: pd.DataFrame, *, ridge: dict | None = None, **kw):
+    def __init__(self, team_games: pd.DataFrame, qb_games: pd.DataFrame, *, ridge: dict | None = None,
+                 extra: dict | None = None, **kw):
+        # extra: {metric: (per team-game frame keyed by game_id and side, value column, weight column)}:
+        # more rated metrics (extra.py), solved like the base ones with extra.EXTRA_RIDGE penalties.
+        # None loads the live model's set (extra.RATED) from the caches; {} means none.
         kw.setdefault("half_life", C.HALF_LIFE_GAMES)
         kw.setdefault("carry", C.OFFSEASON_CARRY)
         kw.setdefault("market_half_life", C.MARKET_HALF_LIFE)
@@ -34,6 +38,18 @@ class CFBRatingEngine(RatingEngine):
         self.y["snaps"] = np.nan_to_num(snaps, nan=np.nanmean(snaps))
         self.n_obs["snaps"] = np.ones(len(t))
         self.metrics = METRICS + ("snaps",)
+        from .extra import EXTRA_RIDGE, load_drives, load_plays, rated_inputs
+        if extra is None:
+            seasons = sorted(team_games.season.unique())
+            extra = rated_inputs(load_plays(seasons), load_drives(seasons))
+        for m, (df, v, w) in extra.items():
+            j = t[["game_id", "side"]].merge(df[["game_id", "side", v, w]], on=["game_id", "side"], how="left")
+            val, wt = j[v].to_numpy(float), j[w].fillna(0).to_numpy(float)
+            fill = float(np.nanmean(val)) if np.isfinite(val).any() else 0.0   # no values at all (a toy table): 0
+            self.y[m] = np.nan_to_num(val, nan=fill)
+            self.n_obs[m] = np.where(np.isnan(val), 0.0, wt)
+            self.ridge[m] = EXTRA_RIDGE[m]
+            self.metrics = self.metrics + (m,)
 
     def _solve(self, metric: str, idx: np.ndarray, decay: np.ndarray):
         """Same weighted ridge as the NFL engine, built from sparse sums (every row has only

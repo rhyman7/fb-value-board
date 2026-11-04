@@ -4,7 +4,7 @@
 
 ELWAY (Silver Bulletin) adjusts for coaching changes and SP+ adjusts its preseason numbers for
 them; the board does not. Coaches: NFL from nflverse's home_coach / away_coach; college from
-Wikipedia's FBS coaching-change tables, 2014-2025 seasons (experiments/data/cfb_coach_changes.csv:
+Wikipedia's FBS coaching-change tables, 2014-2025 seasons (data/cfb/coach_changes.csv, hand-kept, 2026 mid-season rows added:
 every firing, interim and hire with its date).
 
 Per team and game:
@@ -38,7 +38,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 warnings.filterwarnings("ignore")
 OUT = HERE / "out" / "coach_change_test.json"
-CFB_CHANGES = HERE / "data" / "cfb_coach_changes.csv"
+CFB_CHANGES = HERE.parent / "data" / "cfb" / "coach_changes.csv"   # moved from experiments/data on Nov 4, 2026 (the board reads it)
 ALIAS = {"FIU": "Florida International", "Hawaii": "Hawai'i", "Massachusetts": "Massachusetts",
          "Louisiana Monroe": "UL Monroe", "San Jose State": "San José State",
          "Appalachian State": "App State"}

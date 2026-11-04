@@ -52,6 +52,14 @@ the season the play-by-play has seen two or three games and last season's rating
 stale. Talent all season helps on the tuning seasons and hurts slightly since, but is
 kept by the rule.
 
+*Nov 4, 2026, under the keep rule (CONVENTIONS.md "Model tests"; FEATURES.md "Re-judging past
+tests under the keep rule", "Applied"):* three more margin features and the unknown-quarterback
+value −0.35 (below). `d_miss_defcov`, the share of the team's core coverage defenders (by box-score
+production) who recorded no stat in the previous game; `d_dve`, drive value over expected, rated
+like the other metrics; `d_mid`, a mid-season head-coaching change (`cfbmodel/extra.py`). Together,
+on today's model: raw miss −0.022 ± 0.012 tuning / −0.017 ± 0.011 holdout, blended −0.009 ± 0.005 /
+−0.007 ± 0.005; the holdout spread record (EV>0 sides, closing line) −0.6% → +0.1%.
+
 ## Totals
 
 Raw model with the NFL's feature set: 13.508 (tuning), 12.648 (holdout). Current model:
@@ -70,6 +78,11 @@ Raw model with the NFL's feature set: 13.508 (tuning), 12.648 (holdout). Current
 | Elevation | +0.009 | +0.001 | no |
 
 As with the NFL board, the totals weight in the market blend is capped at 5%.
+
+*Nov 4, 2026, under the keep rule:* returning offensive production (`s_off_rtprod`; the offense-only
+version beat overall head-to-head) and line yards per rush (`s_lyd`, rated) joined the total. Raw
+total miss −0.003 ± 0.010 tuning / −0.005 ± 0.004 holdout; the blended total, 95% market, moved
++0.0001 ± 0.0007 / +0.0000 ± 0.0004 (noise). Ryan's call: applied on the raw measure.
 
 ## Quarterback changes
 
@@ -90,7 +103,9 @@ NFL setting undervalued a switch.
 | Closing line | 12.140 | 12.608 | 12.221 | 12.056 |
 
 −0.35 and the 700 half-life were barely better or worse on tuning and were not taken
-(differences under 0.005 are noise). On QB-change games the model is now within 0.03
+(differences under 0.005 are noise). *Nov 4, 2026: −0.35 taken under the keep rule* (better on
+QB-change and all games in both periods; on today's model raw −0.0017 / −0.0045, blended −0.0004 /
+−0.0013). On QB-change games the model is now within 0.03
 points of the closing line since 2021.
 
 ## Data fix found during testing
@@ -256,7 +271,7 @@ open (44-38, CLV −1.8% ± 1.1%) and 62 at the close (30-32, CLV +2.5% ± 0.7%)
 The consensus close the backtests use sits 0.40 points from Pinnacle's close on spreads and 0.42
 on totals, and differs on 33% of games.
 
-## Drive ratings, FEI / SP+ style (tested Nov 2, 2026: not kept)
+## Drive ratings, FEI / SP+ style (tested Nov 2, 2026: not kept; dve applied Nov 4 under the keep rule)
 
 FEI rates college teams per drive (points against what the starting spot was worth) and SP+ has
 a "finishing drives" factor; the board rates per play and per game. Two new rated metrics from
@@ -284,7 +299,7 @@ its noise (0.6 standard errors on the holdout); finishing drives does nothing. T
 ratings plus the points rating already carry what drives measure, and drive value is a worse
 stand-in for the points rating, not a better one. Too small to count as a near-miss.
 
-## Down splits, line yards and havoc (tested Nov 2, 2026: not kept)
+## Down splits, line yards and havoc (tested Nov 2, 2026: not kept; line yards in the total from Nov 4 under the keep rule)
 
 CollegeFootballData's adjusted metrics and SP+ split success rate by standard and passing downs,
 rate the line by line yards per rush, and track havoc (tackles for loss, sacks, interceptions,

@@ -163,8 +163,9 @@ class MatchupBuilder:
         """Model features the spread and totals card has no row for (should be empty;
         tests/test_cfb.py checks). The totals baseline is what is left over, so a total
         feature missing here would be hidden inside it."""
-        m_ok = {f"d_{m}" for m in metrics} | {"d_mkt", "d_talent", "d_talent_early", "d_rtprod", "hfa", "rest_diff", "d_qb", "d_qb_early"}
-        t_ok = {f"s_{m}" for m in metrics} | {"s_mkt", "lg_pts", "s_qb", "s_def_rtprod", "indoor", "wind_hi"}
+        m_ok = {f"d_{m}" for m in metrics} | {"d_mkt", "d_talent", "d_talent_early", "d_rtprod", "hfa", "rest_diff", "d_qb", "d_qb_early",
+                                              "d_miss_defcov", "d_mid"}
+        t_ok = {f"s_{m}" for m in metrics} | {"s_mkt", "lg_pts", "s_qb", "s_def_rtprod", "s_off_rtprod", "indoor", "wind_hi"}
         return [k for k in margin_feats if k not in m_ok] + [k for k in total_feats if k not in t_ok]
 
     def breakdown(self, g) -> dict:
@@ -185,13 +186,18 @@ class MatchupBuilder:
             {"key": "home_qb", "label": f"{ha} quarterback", "value": _f(qcoef * val("home_qb_delta"))},
             {"key": "away_qb", "label": f"{aa} quarterback", "value": _f(-qcoef * val("away_qb_delta"))},
         ]
+        # Nov 2026 (the keep rule): coverage defenders who missed the last game, a mid-season coaching change
+        if "d_miss_defcov" in mc:
+            margin.append({"key": "defcov", "label": "Coverage defenders out", "value": _f(mc["d_miss_defcov"] * val("d_miss_defcov"))})
+        if "d_mid" in mc:
+            margin.append({"key": "coach", "label": "Mid-season coaching change", "value": _f(mc["d_mid"] * val("d_mid"))})
         th, ta = self.total_rating(r, h), self.total_rating(r, a)
         total = [
             {"key": "base", "label": "League baseline", "value": None},
             {"key": "home", "label": f"{ha} offense and defense", "value": _f(th)},
             {"key": "away", "label": f"{aa} offense and defense", "value": _f(ta)},
             {"key": "qb", "label": "Quarterbacks", "value": _f(tc["s_qb"] * val("s_qb"))},
-            {"key": "ret", "label": "Returning defensive production", "value": _f(tc.get("s_def_rtprod", 0.0) * val("s_def_rtprod"))},
+            {"key": "ret", "label": "Returning production", "value": _f(tc.get("s_def_rtprod", 0.0) * val("s_def_rtprod") + tc.get("s_off_rtprod", 0.0) * val("s_off_rtprod"))},
             {"key": "roof", "label": "Indoors" if g.indoor else "Outdoors", "value": _f(tc["indoor"] * val("indoor"))},
         ]
         if "wind_hi" in tc:

@@ -328,7 +328,8 @@ def test_designations_played_through():
 def test_spread_card_covers_every_model_feature():
     from cfbmodel import board, model
     from nflmodel.ratings import METRICS
-    assert board.MatchupBuilder.uncovered(model.MARGIN_FEATS, model.TOTAL_FEATS, METRICS + ("snaps",)) == []
+    from cfbmodel.extra import RATED
+    assert board.MatchupBuilder.uncovered(model.MARGIN_FEATS, model.TOTAL_FEATS, METRICS + ("snaps",) + RATED) == []
 
 
 def test_archive_fills_the_whole_box_score(tmp_path):
@@ -389,3 +390,18 @@ def test_rushing_is_calibrated_per_position_group():
     rb, wr = cur[cur.group == "RB"], cur[cur.group == "WR"]
     assert np.allclose(rb.rush_yds_proj / rb.rush_yds_p, 1.0, atol=0.1)       # backs calibrated on backs: about 1x the chain
     assert np.allclose(wr.rush_yds_proj / wr.rush_yds_p, 3.0, atol=0.3)       # receivers on receivers: about 3x, not dragged toward 1x
+
+
+def test_coach_change_flag_is_mid_season_only(tmp_path):
+    """extra.coach_flags: 1 for a team whose head coach changed after Aug 31 of the season and before
+    the game; an offseason change is not a mid-season one; home minus away for the margin."""
+    from cfbmodel import extra
+    f = tmp_path / "coach.csv"
+    f.write_text("team,date,incoming,interim\nA,2026-10-21,X,yes\nB,2026-02-18,Y,yes\n")
+    games = pd.DataFrame({"game_id": [1, 2, 3], "season": [2026] * 3, "gameday": pd.to_datetime(["2026-10-17", "2026-10-31", "2026-11-07"]),
+                          "home_team": ["A", "A", "C"], "away_team": ["B", "C", "A"]})
+    c = extra.coach_flags(games, path=f).set_index("game_id")
+    assert list(c["d_mid"]) == [0.0, 1.0, -1.0] and list(c["s_mid"]) == [0.0, 1.0, 1.0]
+    frame = extra.attach_game_features(games.copy(), games, None, c.reset_index())
+    assert list(frame["d_mid"]) == [0.0, 1.0, -1.0]
+    assert {"d_miss_defcov", "d_dve", "d_mid"} <= set(__import__("cfbmodel.model", fromlist=["model"]).MARGIN_FEATS)
