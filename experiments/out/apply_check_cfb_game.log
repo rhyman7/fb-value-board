@@ -1,0 +1,26 @@
+  frame built (qb_main: unknown QB -0.3)
+  frame built (qb_new: unknown QB -0.35)
+coverage: d_miss_defcov                    raw -0.0159 ± 0.0068 / -0.0015 ± 0.0035   blend -0.0085 ± 0.0028 / -0.0016 ± 0.0015   BETTER ON ALL
+coverage: d_chg_defcov                     raw -0.0038 ± 0.0042 / -0.0010 ± 0.0025   blend -0.0027 ± 0.0018 / -0.0004 ± 0.0011   BETTER ON ALL
+   -> coverage: d_miss_defcov
+drive: d_dve                               raw -0.0034 ± 0.0090 / -0.0033 ± 0.0068   blend -0.0006 ± 0.0029 / +0.0012 ± 0.0024   mixed
+drive: d_dve+d_fin                         raw -0.0032 ± 0.0091 / -0.0034 ± 0.0068   blend -0.0011 ± 0.0029 / +0.0012 ± 0.0023   mixed
+   -> drive: d_dve
+returning offense: s_off_rtprod            raw -0.0020 ± 0.0101 / -0.0031 ± 0.0035   blend +0.0000 ± 0.0006 / +0.0004 ± 0.0003   mixed
+returning offense: s_rtprod                raw -0.0012 ± 0.0051 / -0.0021 ± 0.0023   blend -0.0001 ± 0.0003 / +0.0002 ± 0.0002   mixed
+   -> returning offense: s_off_rtprod
+coaching change: d_mid                     raw -0.0010 ± 0.0033 / -0.0089 ± 0.0075   blend +0.0003 ± 0.0019 / -0.0056 ± 0.0037   mixed
+unknown QB -0.35                           raw -0.0017 ± 0.0025 / -0.0045 ± 0.0015   blend -0.0004 ± 0.0009 / -0.0013 ± 0.0006   BETTER ON ALL
+line yards: s_lyd                          raw -0.0010 ± 0.0013 / -0.0023 ± 0.0017   blend +0.0001 ± 0.0003 / -0.0004 ± 0.0003   mixed
+
+MARGIN SET ['coverage', 'drive', 'coaching change', 'unknown QB -0.35']
+   raw -0.0219 ± 0.0120 / -0.0171 ± 0.0111   blend -0.0090 ± 0.0046 / -0.0071 ± 0.0049   BETTER ON ALL
+
+TOTAL SET ['returning offense', 'line yards']
+   raw -0.0028 ± 0.0101 / -0.0054 ± 0.0039   blend +0.0001 ± 0.0007 / +0.0000 ± 0.0004   mixed
+   without returning offense              raw -0.0010 ± 0.0013 / -0.0023 ± 0.0017   blend +0.0001 ± 0.0003 / -0.0004 ± 0.0003   mixed
+   without line yards                     raw -0.0020 ± 0.0101 / -0.0031 ± 0.0035   blend +0.0000 ± 0.0006 / +0.0004 ± 0.0003   mixed
+
+kept margin pieces: ['coverage', 'drive', 'coaching change', 'unknown QB -0.35']  total pieces: []
+holdout records (EV>0):  {'main': {'Spread': {'n': 1792, 'roi': -0.0056}, 'Total': {'n': 0, 'roi': None}}, 'margin_set': {'Spread': {'n': 1874, 'roi': 0.0008}, 'Total': {'n': 0, 'roi': None}}, 'total_set': {'Spread': {'n': 1792, 'roi': -0.0056}, 'Total': {'n': 0, 'roi': None}}}
+wrote /home/claude/fb-value-board/experiments/out/apply_check_cfb_game.json

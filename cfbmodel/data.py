@@ -5,6 +5,7 @@ Per season, cached in data/cfb/cache/:
                       from 2021, opening), recorded wind, dome, talent, returning production
   team_games_<s>.csv  one row per offense per game: EPA, success, pass/rush splits, snaps
   qb_games_<s>.csv    one row per passer per game: dropbacks and EPA
+  play_extra_<s>.csv, drive_raw_<s>.csv   the extra game-model inputs (extra.py), from the same download
 
 Team keys are school names (e.g. "Ohio State"). Opponents outside FBS that season are
 pooled into one key, C.POOL, so FBS teams' games against them still count for ratings.
@@ -24,7 +25,10 @@ from . import config as C
 
 PBP_COLS = ["game_id", "season", "week", "pos_team_id", "def_pos_team_id", "homeTeamId", "awayTeamId",
             "period", "pos_score_diff_start", "rush", "pass", "kneel_down", "penalty_no_play",
-            "EPA", "EPA_success", "passer_player_id", "passer_player_name", "seasonType"]
+            "EPA", "EPA_success", "passer_player_id", "passer_player_name", "seasonType",
+            # for the extra inputs (extra.py: line yards and the other play splits; drives)
+            "standard_down", "passing_down", "line_yards", "havoc", "turnover_vec",
+            "drive.id", "drive.result", "start.yardsToEndzone", "start.TimeSecsRem", "drive_play_index"]
 
 
 def current_season(today: dt.date | None = None) -> int:
@@ -187,8 +191,8 @@ def reduce_games(season: int) -> pd.DataFrame:
 # Play-by-play
 # --------------------------------------------------------------------------
 
-def reduce_pbp(season: int, games: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    p = _get_pbp(season)
+def reduce_pbp(season: int, games: pd.DataFrame, raw: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
+    p = _get_pbp(season) if raw is None else raw
     p = p[p["game_id"].astype(int).isin(set(games["game_id"]))].copy()
     p["game_id"] = p["game_id"].astype(int)
     ids = games.set_index("game_id")
@@ -238,15 +242,19 @@ def reduce_pbp(season: int, games: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataF
 
 def load_season(season: int, refresh: bool = False, verbose: bool = True):
     C.CACHE.mkdir(parents=True, exist_ok=True)
-    paths = [C.CACHE / f"{k}_{season}.csv" for k in ("games", "team_games", "qb_games")]
+    paths = [C.CACHE / f"{k}_{season}.csv" for k in ("games", "team_games", "qb_games", "play_extra", "drive_raw")]
     if refresh or not all(p.exists() for p in paths):
+        from . import extra
         if verbose:
             print(f"  downloading {season} ...", flush=True)
         g = reduce_games(season)
-        tg, qb = reduce_pbp(season, g)
+        raw = _get_pbp(season)
+        tg, qb = reduce_pbp(season, g, raw)
         g.to_csv(paths[0], index=False)
         tg.round(4).to_csv(paths[1], index=False)
         qb.round(4).to_csv(paths[2], index=False)
+        extra.reduce_plays(raw, season, g).to_csv(paths[3], index=False)
+        extra.reduce_drives(raw, season, g).to_csv(paths[4], index=False)
     g = pd.read_csv(paths[0])
     tg = pd.read_csv(paths[1])
     qb = pd.read_csv(paths[2])

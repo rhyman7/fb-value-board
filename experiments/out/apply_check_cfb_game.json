@@ -1,0 +1,630 @@
+{
+ "main_margin": [
+  "d_pass",
+  "d_rush",
+  "d_sr",
+  "d_pts",
+  "d_mkt",
+  "d_qb",
+  "hfa",
+  "rest_diff",
+  "d_talent_early",
+  "d_rtprod",
+  "d_qb_early",
+  "d_talent"
+ ],
+ "main_total": [
+  "s_pass",
+  "s_rush",
+  "s_sr",
+  "s_pts",
+  "s_mkt",
+  "s_qb",
+  "lg_pts",
+  "indoor",
+  "s_def_rtprod",
+  "s_snaps",
+  "wind_hi"
+ ],
+ "h2h": {
+  "coverage": {
+   "d_miss_defcov": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 12.456,
+      "change": -0.0159,
+      "se": 0.0068
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.3427,
+      "change": -0.0015,
+      "se": 0.0035
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 12.2925,
+      "change": -0.0085,
+      "se": 0.0028
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.0608,
+      "change": -0.0016,
+      "se": 0.0015
+     }
+    },
+    "better_all": true
+   },
+   "d_chg_defcov": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 12.456,
+      "change": -0.0038,
+      "se": 0.0042
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.3427,
+      "change": -0.001,
+      "se": 0.0025
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 12.2925,
+      "change": -0.0027,
+      "se": 0.0018
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.0608,
+      "change": -0.0004,
+      "se": 0.0011
+     }
+    },
+    "better_all": true
+   },
+   "pick": [
+    "d_miss_defcov"
+   ]
+  },
+  "drive": {
+   "d_dve": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 12.456,
+      "change": -0.0034,
+      "se": 0.009
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.3427,
+      "change": -0.0033,
+      "se": 0.0068
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 12.2925,
+      "change": -0.0006,
+      "se": 0.0029
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.0608,
+      "change": 0.0012,
+      "se": 0.0024
+     }
+    },
+    "better_all": false
+   },
+   "d_dve+d_fin": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 12.456,
+      "change": -0.0032,
+      "se": 0.0091
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.3427,
+      "change": -0.0034,
+      "se": 0.0068
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 12.2925,
+      "change": -0.0011,
+      "se": 0.0029
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.0608,
+      "change": 0.0012,
+      "se": 0.0023
+     }
+    },
+    "better_all": false
+   },
+   "pick": [
+    "d_dve"
+   ]
+  },
+  "returning offense": {
+   "s_off_rtprod": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 13.4126,
+      "change": -0.002,
+      "se": 0.0101
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.6894,
+      "change": -0.0031,
+      "se": 0.0035
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 13.1472,
+      "change": 0.0,
+      "se": 0.0006
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.5151,
+      "change": 0.0004,
+      "se": 0.0003
+     }
+    },
+    "better_all": false
+   },
+   "s_rtprod": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 13.4126,
+      "change": -0.0012,
+      "se": 0.0051
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.6894,
+      "change": -0.0021,
+      "se": 0.0023
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 13.1472,
+      "change": -0.0001,
+      "se": 0.0003
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.5151,
+      "change": 0.0002,
+      "se": 0.0002
+     }
+    },
+    "better_all": false
+   },
+   "pick": [
+    "s_off_rtprod"
+   ]
+  }
+ },
+ "pieces": {
+  "coaching change d_mid": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 12.456,
+     "change": -0.001,
+     "se": 0.0033
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.3427,
+     "change": -0.0089,
+     "se": 0.0075
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 12.2925,
+     "change": 0.0003,
+     "se": 0.0019
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.0608,
+     "change": -0.0056,
+     "se": 0.0037
+    }
+   },
+   "better_all": false
+  },
+  "unknown QB -0.35": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 12.456,
+     "change": -0.0017,
+     "se": 0.0025
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.3427,
+     "change": -0.0045,
+     "se": 0.0015
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 12.2925,
+     "change": -0.0004,
+     "se": 0.0009
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.0608,
+     "change": -0.0013,
+     "se": 0.0006
+    }
+   },
+   "better_all": true
+  },
+  "line yards s_lyd": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 13.4126,
+     "change": -0.001,
+     "se": 0.0013
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.6894,
+     "change": -0.0023,
+     "se": 0.0017
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 13.1472,
+     "change": 0.0001,
+     "se": 0.0003
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.5151,
+     "change": -0.0004,
+     "se": 0.0003
+    }
+   },
+   "better_all": false
+  }
+ },
+ "margin_set": {
+  "pieces": [
+   "coverage",
+   "drive",
+   "coaching change",
+   "unknown QB -0.35"
+  ],
+  "full": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 12.456,
+     "change": -0.0219,
+     "se": 0.012
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.3427,
+     "change": -0.0171,
+     "se": 0.0111
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 12.2925,
+     "change": -0.009,
+     "se": 0.0046
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.0608,
+     "change": -0.0071,
+     "se": 0.0049
+    }
+   },
+   "better_all": true
+  },
+  "leave_one_out": {},
+  "dropped": [],
+  "kept": [
+   "coverage",
+   "drive",
+   "coaching change",
+   "unknown QB -0.35"
+  ],
+  "final": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 12.456,
+     "change": -0.0219,
+     "se": 0.012
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.3427,
+     "change": -0.0171,
+     "se": 0.0111
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 12.2925,
+     "change": -0.009,
+     "se": 0.0046
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.0608,
+     "change": -0.0071,
+     "se": 0.0049
+    }
+   },
+   "better_all": true
+  },
+  "margin_feats": [
+   "d_pass",
+   "d_rush",
+   "d_sr",
+   "d_pts",
+   "d_mkt",
+   "d_qb",
+   "hfa",
+   "rest_diff",
+   "d_talent_early",
+   "d_rtprod",
+   "d_qb_early",
+   "d_talent",
+   "d_miss_defcov",
+   "d_dve",
+   "d_mid"
+  ],
+  "total_feats": [
+   "s_pass",
+   "s_rush",
+   "s_sr",
+   "s_pts",
+   "s_mkt",
+   "s_qb",
+   "lg_pts",
+   "indoor",
+   "s_def_rtprod",
+   "s_snaps",
+   "wind_hi"
+  ],
+  "qb_new": true
+ },
+ "total_set": {
+  "pieces": [
+   "returning offense",
+   "line yards"
+  ],
+  "full": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 13.4126,
+     "change": -0.0028,
+     "se": 0.0101
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.6894,
+     "change": -0.0054,
+     "se": 0.0039
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 13.1472,
+     "change": 0.0001,
+     "se": 0.0007
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.5151,
+     "change": 0.0,
+     "se": 0.0004
+    }
+   },
+   "better_all": false
+  },
+  "leave_one_out": {
+   "without returning offense": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 13.4126,
+      "change": -0.001,
+      "se": 0.0013
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.6894,
+      "change": -0.0023,
+      "se": 0.0017
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 13.1472,
+      "change": 0.0001,
+      "se": 0.0003
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.5151,
+      "change": -0.0004,
+      "se": 0.0003
+     }
+    },
+    "better_all": false
+   },
+   "without line yards": {
+    "raw": {
+     "tune": {
+      "n": 2322,
+      "base": 13.4126,
+      "change": -0.002,
+      "se": 0.0101
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.6894,
+      "change": -0.0031,
+      "se": 0.0035
+     }
+    },
+    "blend": {
+     "tune": {
+      "n": 2322,
+      "base": 13.1472,
+      "change": 0.0,
+      "se": 0.0006
+     },
+     "hold": {
+      "n": 4446,
+      "base": 12.5151,
+      "change": 0.0004,
+      "se": 0.0003
+     }
+    },
+    "better_all": false
+   }
+  },
+  "dropped": [],
+  "kept": [],
+  "final": {
+   "raw": {
+    "tune": {
+     "n": 2322,
+     "base": 13.4126,
+     "change": -0.0028,
+     "se": 0.0101
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.6894,
+     "change": -0.0054,
+     "se": 0.0039
+    }
+   },
+   "blend": {
+    "tune": {
+     "n": 2322,
+     "base": 13.1472,
+     "change": 0.0001,
+     "se": 0.0007
+    },
+    "hold": {
+     "n": 4446,
+     "base": 12.5151,
+     "change": 0.0,
+     "se": 0.0004
+    }
+   },
+   "better_all": false
+  },
+  "margin_feats": [
+   "d_pass",
+   "d_rush",
+   "d_sr",
+   "d_pts",
+   "d_mkt",
+   "d_qb",
+   "hfa",
+   "rest_diff",
+   "d_talent_early",
+   "d_rtprod",
+   "d_qb_early",
+   "d_talent"
+  ],
+  "total_feats": [
+   "s_pass",
+   "s_rush",
+   "s_sr",
+   "s_pts",
+   "s_mkt",
+   "s_qb",
+   "lg_pts",
+   "indoor",
+   "s_def_rtprod",
+   "s_snaps",
+   "wind_hi"
+  ],
+  "qb_new": false
+ },
+ "records": {
+  "main": {
+   "Spread": {
+    "n": 1792,
+    "roi": -0.0056
+   },
+   "Total": {
+    "n": 0,
+    "roi": null
+   }
+  },
+  "margin_set": {
+   "Spread": {
+    "n": 1874,
+    "roi": 0.0008
+   },
+   "Total": {
+    "n": 0,
+    "roi": null
+   }
+  },
+  "total_set": {
+   "Spread": {
+    "n": 1792,
+    "roi": -0.0056
+   },
+   "Total": {
+    "n": 0,
+    "roi": null
+   }
+  }
+ }
+}

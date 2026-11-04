@@ -10,7 +10,7 @@ import pandas as pd
 from nflmodel import backtest as NBT, bestbets, derivs, ledger, market, sheet
 from nflmodel.pipeline import _clean, haircut_factor
 
-from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, model, players, players_data, starters as QBS, teams as T, weather
+from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, extra, model, players, players_data, starters as QBS, teams as T, weather
 from .ratings import CFBRatingEngine
 
 PLAYER_PERIODS = {"tuning": (2017, 2019), "holdout": (C.HOLDOUT_FROM, 2100)}
@@ -40,7 +40,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     games.loc[~games.played & (games.wind_source != "forecast"), "wind"] = np.nan   # a typical day unless forecast
 
     say("Rating teams week by week ...")
-    engine = CFBRatingEngine(tg, qb, games=games)
+    inputs = extra.load_inputs(games, refresh_current=refresh, verbose=verbose)   # defenders missing, coaching changes, rated extras
+    engine = CFBRatingEngine(tg, qb, games=games, extra=inputs["rated"])
     teams = T.load_teams(season, refresh=refresh)
     abbr = teams["abbr"].to_dict()
     # injury designations (Covers.com, docs/cfb/designations.json): upcoming games only
@@ -55,7 +56,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     qb_picks = QBS.resolve(QBS.load(), games, qb, verbose=verbose)
     games = QBS.apply(games, qb_picks, engine, verbose=verbose)
     games = DES.apply_qbs(games, qb, des_out, engine, verbose=verbose)
-    frame, info = model.walk_forward(model.build_frame(games, engine))
+    frame, info = model.walk_forward(model.build_frame(games, engine, inputs=inputs))
 
     prev_path = C.DOCS / "data.json"
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
