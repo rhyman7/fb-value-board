@@ -15,6 +15,9 @@ from . import config as C
 
 EXTRA_TOTAL_METRICS = ("snaps",)   # extra rated metrics in the total model
 RATING_METRICS = ("pass", "rush", "sr", "pts")
+# Rated metrics in the margin model: the turnover-free pass and rush ratings replaced pass/rush
+# (Nov 2026, FEATURES.md "Re-judging past tests under the keep rule").
+MARGIN_METRICS = ("pnt", "rnt", "sr", "pts")
 
 # key, label, how to compute from season sums, format, is a bigger number better for the offense?
 STAT_ROWS = [
@@ -44,7 +47,7 @@ def _f(x, nd=2):
 # Rating features are summed into "Team ratings" (margin) or the two teams' "offense and
 # defense" rows (total); d_qb is split into the two quarterback rows. Every other feature
 # needs an entry here, or breakdown() refuses to build the card (tests check this).
-MARGIN_RATING = {"d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_snaps"}
+MARGIN_RATING = {"d_pass", "d_rush", "d_sr", "d_pts", "d_mkt", "d_snaps", "d_pnt", "d_rnt"}
 MARGIN_ROWS = {
     "hfa": ("hfa", "Home field"), "rest_diff": ("rest", "Rest"),
     "d_chg_ol": ("ol", "Offensive line injuries"),
@@ -98,7 +101,7 @@ class MatchupBuilder:
 
     def team_rating(self, r: dict, i: int) -> float:
         """Points versus an average team, before any quarterback adjustment."""
-        v = sum(self.mc[f"d_{m}"] * (r[m]["off"] - r[m]["def"]) for m in RATING_METRICS) + self.mc["d_mkt"] * r["mkt"]["R"]
+        v = sum(self.mc[f"d_{m}"] * (r[m]["off"] - r[m]["def"]) for m in MARGIN_METRICS if f"d_{m}" in self.mc) + self.mc["d_mkt"] * r["mkt"]["R"]
         return float(v[i] - v.mean())
 
     def total_rating(self, r: dict, i: int) -> float:

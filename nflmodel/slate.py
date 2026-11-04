@@ -253,7 +253,8 @@ def ratings_table(engine, r: dict, coefs: dict, games: pd.DataFrame, frame: pd.D
     pass_share = 0.58   # share of plays that are dropbacks, for a blended per-play number
     t["off_epa"] = pass_share * t.pass_off + (1 - pass_share) * t.rush_off
     t["def_epa"] = pass_share * t.pass_def + (1 - pass_share) * t.rush_def
-    stats = sum(coefs[f"d_{m}"] * (t[f"{m}_off"] - t[f"{m}_def"]) for m in ("pass", "rush", "sr", "pts"))
+    # the rated metrics the margin model uses (turnover-free pass and rush, success rate, points; Nov 2026)
+    stats = sum(coefs[f"d_{m}"] * (t[f"{m}_off"] - t[f"{m}_def"]) for m in engine.metrics if f"d_{m}" in coefs)
 
     # Each team's quarterback for its next game (falls back to last week's starter).
     up = frame[~frame.played].sort_values("order")

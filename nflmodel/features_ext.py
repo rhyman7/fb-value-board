@@ -8,6 +8,8 @@ Rated the same way as the base metrics (opponent-adjusted ridge, decayed):
   pace   seconds per snap, neutral situations
   snaps  offensive snaps per game
   fum    fumble-recovery luck per game (fumbles lost minus half of all fumbles)
+  pnt    pass EPA per dropback, interceptions and lost fumbles left out  (turnover-free, Nov 2026)
+  rnt    rush EPA per carry, lost fumbles left out
 Quarterback:
   cpoe   completion % over expected, decayed and shrunk, as a starter-vs-usual gap
 Game context (no ratings needed):
@@ -22,8 +24,9 @@ import pandas as pd
 from . import config as C
 from .ratings import METRICS, RatingEngine, _time
 
-EXTRA_METRICS = ("sack", "expl", "ed", "st", "pace", "snaps", "fum")
-EXTRA_RIDGE = {"sack": 300.0, "expl": 320.0, "ed": 240.0, "st": 8.0, "pace": 8.0, "snaps": 8.0, "fum": 8.0}
+EXTRA_METRICS = ("sack", "expl", "ed", "st", "pace", "snaps", "fum", "pnt", "rnt")
+EXTRA_RIDGE = {"sack": 300.0, "expl": 320.0, "ed": 240.0, "st": 8.0, "pace": 8.0, "snaps": 8.0, "fum": 8.0,
+               "pnt": C.RIDGE["pass"], "rnt": C.RIDGE["rush"]}   # turnover-free: the base pass/rush penalties
 CPOE_PRIOR_ATT = 150.0
 
 # Home stadium location and standard-time UTC offset, by current franchise code.
@@ -45,7 +48,9 @@ def _km(a, b):
     return 6371 * 2 * np.arcsin(np.sqrt(h))
 
 
-PRODUCTION_METRICS = ("snaps",)   # the extras that earned a place in the live model
+# The extras that earned a place in the live model: snaps (pace, Oct 2026) and the turnover-free
+# pass/rush ratings in the margin (Nov 2026, FEATURES.md "Re-judging past tests under the keep rule").
+PRODUCTION_METRICS = ("snaps", "pnt", "rnt")
 
 
 class ExtRatingEngine(RatingEngine):
@@ -69,9 +74,14 @@ class ExtRatingEngine(RatingEngine):
         self.y["pace"] = np.where(np.isnan(f("sec_per_play")), lg_pace, f("sec_per_play"))
         self.y["snaps"] = np.nan_to_num(f("snaps"), nan=np.nanmean(f("snaps")))
         self.y["fum"] = np.nan_to_num(f("fumbles_lost") - 0.5 * f("fumbles"))
+        with np.errstate(divide="ignore", invalid="ignore"):
+            pnt_n, rnt_n = f("pnt_n"), f("rnt_n")
+            self.y["pnt"] = np.nan_to_num(f("pnt_epa") / pnt_n)
+            self.y["rnt"] = np.nan_to_num(f("rnt_epa") / rnt_n)
         ones = np.ones(len(t))
         self.n_obs.update({"sack": np.nan_to_num(db), "expl": np.nan_to_num(png), "ed": np.nan_to_num(edp),
-                           "st": ones, "pace": ones, "snaps": ones, "fum": ones})
+                           "st": ones, "pace": ones, "snaps": ones, "fum": ones,
+                           "pnt": np.nan_to_num(pnt_n), "rnt": np.nan_to_num(rnt_n)})
         # quarterback CPOE per game, aligned with the qb_games ordering
         q = qb_games.merge(qb_extra.drop(columns=["season"]), on=["game_id", "qb_id"], how="left").sort_values("order")
         self.c_order = q["order"].to_numpy()
