@@ -163,7 +163,7 @@ def for_board(players: list[dict], log: pd.DataFrame, groups: dict, ctx: dict, n
     """Add "floor" to each board player (in place). players: the board's player dicts; log: this
     season's played games (LOG_COLS); groups: player_id -> position group; ctx: (game_id, team)
     -> context for played games; now: board player index -> this game's context (team, opp,
-    spread, wind, qb); outs: (team) -> set of teammate ids out. Returns players given a floor."""
+    spread, wind, qb, game_id); outs: (game_id, team) -> set of teammate ids out. Returns players given a floor."""
     if log is None or log.empty:
         return 0
     log = log.sort_values("t")
@@ -184,7 +184,7 @@ def for_board(players: list[dict], log: pd.DataFrame, groups: dict, ctx: dict, n
         for st, d in fl.items():
             g = d["rows"]
             mate = top_mate(by_team.get(c["team"], log.iloc[:0]), set(g["game_id"]), str(p.get("id")), st, groups)
-            fg = [x for x in flags(st, grp, g, ctx, c, allow, mate, outs.get(c["team"], set())) if x in SHOW_FLAGS]
+            fg = [x for x in flags(st, grp, g, ctx, c, allow, mate, outs.get((c["game_id"], c["team"]), set())) if x in SHOW_FLAGS]
             vals = g["v"].to_numpy()
             lo = int(np.argmin(vals))
             srt = sorted(vals)
@@ -260,8 +260,9 @@ def cfb_log(season: int, pg: pd.DataFrame, games: pd.DataFrame, groups: dict) ->
     carries + targets). A QB start is the team's pass-attempt leader that game. Teams are ESPN
     team ids. games: the board's college schedule frame (home_id/away_id, spread_line from the
     home side, wind, dome, week)."""
-    g = games[(games["season"] == season) & games["played"].astype(bool)].copy()
-    g["t"] = pd.to_datetime(g["kickoff"], utc=True).rank(method="dense").astype(int)
+    allg = games[games["season"] == season].copy()
+    allg["t"] = pd.to_datetime(allg["kickoff"], utc=True).rank(method="dense").astype(int)
+    g = allg[allg["played"].astype(bool)]
     gi = g.set_index("game_id")
     p = pg[(pg["season"] == season) & pg["game_id"].isin(set(g["game_id"]))].copy()
     p = p.rename(columns={"team_id": "team"})
@@ -279,9 +280,76 @@ def cfb_log(season: int, pg: pd.DataFrame, games: pd.DataFrame, groups: dict) ->
     qb = {(a, b): c for a, b, c in zip(lead["game_id"], lead["team"], lead["player_id"])}
     p["qb_start"] = [qb.get((a, b)) == c for a, b, c in zip(p["game_id"], p["team"], p["player_id"])]
     ctx = {}
-    for r in g.itertuples():
+    for r in allg.itertuples():
         wind = np.nan if int(getattr(r, "dome", 0) or 0) else getattr(r, "wind", np.nan)
-        for team, sign in ((r.home_id, 1), (r.away_id, -1)):
+        for team, sign, side in ((r.home_id, 1, "home"), (r.away_id, -1, "away")):
             sp = getattr(r, "spread_line", np.nan)
-            ctx[(r.game_id, team)] = {"spread": None if _nan(sp) else sign * float(sp), "wind": wind, "qb": qb.get((r.game_id, team))}
+            q = qb.get((r.game_id, team))
+            if q is None and not bool(r.played):            # upcoming: the board's starting QB
+                q0 = getattr(r, f"{side}_qb_id", None)
+                q = None if _nan(q0) else str(int(float(q0)))
+            ctx[(r.game_id, team)] = {"spread": None if _nan(sp) else sign * float(sp), "wind": wind, "qb": q}
     return p[LOG_COLS].reset_index(drop=True), ctx
+
+
+# ------------------------------------------------------------------------------------------
+# Board hooks (called from each pipeline; a failure there never stops the board build)
+# ------------------------------------------------------------------------------------------
+def _norm(n) -> str:
+    return "".join(ch for ch in str(n or "").lower() if ch.isalnum())
+
+
+def attach_nfl(board: dict, season: int, pg: pd.DataFrame, pinfo: pd.DataFrame, games: pd.DataFrame,
+               pproj: pd.DataFrame | None, cache) -> int:
+    snaps = cache / f"snaps_{season}.csv"
+    depth = cache / f"depth_{season}.csv"
+    log, ctx = nfl_log(season, pg, games,
+                       pd.read_csv(snaps, dtype={"player_id": str}) if snaps.exists() else None,
+                       pd.read_csv(depth, dtype={"player_id": str}) if depth.exists() else None)
+    groups = {str(a): group(p) for a, p in pinfo["position"].items()}
+    gi = games.set_index("game_id")
+    now = {}
+    for i, p in enumerate(board.get("players") or []):
+        gid, team = p.get("game"), p.get("team")
+        if gid in gi.index and (gid, team) in ctx:
+            now[i] = {**ctx[(gid, team)], "team": team, "opp": p.get("opp"), "game_id": gid}
+    outs = {}
+    if pproj is not None and "active" in pproj:
+        o = pproj[pproj["game_id"].isin({p.get("game") for p in board.get("players") or []}) & (pproj["active"] == 0)]
+        for gid, team, pid in zip(o["game_id"], o["team"], o["player_id"]):
+            outs.setdefault((gid, team), set()).add(str(pid))
+    return for_board(board.get("players") or [], log, groups, ctx, now, outs, "nfl")
+
+
+def attach_cfb(board: dict, season: int, pg: pd.DataFrame, pinfo: pd.DataFrame, games: pd.DataFrame,
+               game_keys: dict, abbr: dict) -> int:
+    """game_keys: game_id -> board game id; abbr: team name -> abbreviation (the board's labels)."""
+    groups = {str(a): group(p) for a, p in pinfo["position"].items()}
+    log, ctx = cfb_log(season, pg, games, groups)
+    sg = games[games["season"] == season]
+    id_abbr = {}
+    for h, hn, a, an in zip(sg["home_id"], sg["home_team"], sg["away_id"], sg["away_team"]):
+        id_abbr[h], id_abbr[a] = abbr.get(hn, hn), abbr.get(an, an)
+    back = {v: k for k, v in game_keys.items()}
+    gi = sg.set_index("game_id")
+    names = pinfo["name"].to_dict()
+    out_names = {}
+    for t in board.get("teams") or []:
+        out_names[(back.get(t.get("game")), t.get("team"))] = {_norm(o.get("name")) for o in t.get("out") or []}
+    outs = {}
+    now = {}
+    for i, p in enumerate(board.get("players") or []):
+        gid = back.get(p.get("game"))
+        if gid not in gi.index:
+            continue
+        r = gi.loc[gid]
+        team = r["home_id"] if id_abbr.get(r["home_id"]) == p.get("team") else r["away_id"] if id_abbr.get(r["away_id"]) == p.get("team") else None
+        if team is None or (gid, team) not in ctx:
+            continue
+        opp = r["away_id"] if team == r["home_id"] else r["home_id"]
+        now[i] = {**ctx[(gid, team)], "team": team, "opp": opp, "game_id": gid}
+        on = out_names.get((gid, p.get("team")), set())
+        if on and (gid, team) not in outs:
+            mates = log.loc[log["team"] == team, "player_id"].unique()
+            outs[(gid, team)] = {m for m in mates if _norm(names.get(int(m)) if str(m).lstrip("-").isdigit() else None) in on}
+    return for_board(board.get("players") or [], log, groups, ctx, now, outs, "cfb", opp_label=lambda o: id_abbr.get(o, o))

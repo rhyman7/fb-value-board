@@ -449,6 +449,20 @@ boards in detail; this file is the rules.
   The page's Range column and the outlook panel at the top of an open row read it; the panel
   says these are the model's chances, not bets, and gives the fair price. Keep that wording if
   the panel changes: the books have been the better forecast on props (PROPS.md).
+- **Every-game floors (both boards): `players[].floor`** (`nflmodel/floors.py`, Nov 5, 2026),
+  written by **Update board** and **Update college board** after the player projections, never by
+  hand, for players already on the board only (no player is added for it). The most yards he
+  reached in every game he played this season: current team only, a QB's starts only, early exits
+  left out (NFL: snap share under half his median; college: touches under 40% of his median).
+  Stats by position: QB passing and rushing; RB rushing, receiving and rush + receiving; WR and TE
+  receiving; 3+ games. Flags (`floors.SHOW_FLAGS`, set by `experiments/floor_tag_test.py`): ⚠ tough
+  defense, bigger underdog, new QB, wind; ▲ teammate out; blowout risk is off. Shown under the
+  projections on Players, the Matchups team cards (this week only), the player card's "Every-game
+  floor" box and the Props table's Floor column and ladder panel. **Display only**: it never feeds
+  the model, the bets, the Bet sheet or the Parlays page, and the Props section never marks rungs
+  under it (graded on 2025 rungs they lost about 9% per bet, PROPS.md "Every-game floors"). Keep the
+  "information, not a bet" wording (`FL_NOTE` in the template) if the display changes. A floors
+  failure never stops a board build.
 - **Props `#props` is NFL only** (Ryan's call, Oct 2026), between Players and Past weeks. Its
   markup, styles and script in `site/template.html` sit between `<!--NFL-ONLY-->` and
   `<!--/NFL-ONLY-->` (HTML) or `/*NFL-ONLY*/` and `/*/NFL-ONLY*/` (CSS and script), which
