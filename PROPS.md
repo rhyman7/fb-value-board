@@ -710,3 +710,41 @@ most targets in his floor games is out; rushing: the teammate with the most carr
 - *Context, not a rule:* the hit-rate test above already found rungs a player cleared 95%+ of the
   time went on to clear 84% (books' margin-free chance 91%). The floor tag is the same idea at 100%,
   so the report states the tagged rungs' clear rate against the books' chance as well.
+
+### Result (Nov 5, 2026)
+
+2025 rungs where the player had a floor (3+ earlier games): 8,045 rungs under the raw floor, 9,178
+under the adjusted. Highest tagged rung per player, game and stat, better book's price:
+
+| | Bets | Won | Books' margin-free chance | Return per $1 |
+|---|---|---|---|---|
+| NFL, raw floor | 1,076 | 75.8% | 81.8% | −9.6% ± 1.9% |
+| NFL, adjusted floor | 1,065 | 76.7% | 81.7% | **−8.2% ± 1.9%** |
+| College, raw floor | 1,832 | 75.2% | 79.7% | −9.2% ± 1.4% |
+| College, adjusted floor | 2,071 | 74.0% | 78.8% | −9.7% ± 1.3% |
+| Pooled, raw | 2,908 | 75.4% | 80.5% | −9.35% ± 1.1% |
+| Pooled, adjusted | 3,136 | 74.9% | 79.8% | **−9.2% ± 1.1%** |
+
+- **Adjusted vs raw:** pooled return −9.2% vs −9.35%, so under the rule the adjusted floor stays (as
+  Ryan chose). The difference is tiny: better in the NFL (snap counts find the real early exits),
+  slightly worse in college (the touches stand-in also drops quiet games that were real).
+- **The floor is not a betting edge.** Every tagged rung (all, not just the highest) cleared 78%
+  against the books' 83% margin-free chance; by stat the adjusted best rungs lost 8.7% (receiving),
+  9.4% (rushing) and 10.5% (passing). This repeats the hit-rate test above: a player's lowest
+  game so far overstates how safe the next one is, and the books price the rungs better. The boards
+  show the floor as information only, and the Props section does not mark rungs under it.
+- **Flags** (adjusted-tagged rungs, cleared with the flag minus without, pooled):
+
+| Flag | Flagged rungs | Difference | Verdict |
+|---|---|---|---|
+| ⚠ Tough defense | 2,581 | −3.8 ± 2.2 pts | show |
+| ⚠ Bigger underdog | 385 | −4.5 ± 4.1 pts | show |
+| ⚠ Blowout risk | 239 | +1.5 ± 5.5 pts (NFL +17.8, college −4.3) | **off** |
+| ⚠ New QB | 227 | −14.5 ± 5.4 pts | show |
+| ⚠ Wind | 249 | −7.6 ± 6.0 pts | show |
+| ▲ Teammate out | 501 | +3.8 ± 3.0 pts | show |
+
+  The new-QB size is overstated: the test takes the starter from who threw most, so a game where
+  the starter left hurt counts as a "new QB" game, which the board cannot know in advance. The
+  books' prices already move with every flag (margin-free chance lower on flagged rungs), so a flag
+  says the floor is less safe, not that the rung is mispriced.

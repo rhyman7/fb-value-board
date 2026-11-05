@@ -1,0 +1,412 @@
+{
+ "season": 2025,
+ "rungs": 105737,
+ "nfl": {
+  "best_rung_raw": {
+   "bets": 1076,
+   "games": 219,
+   "won": 0.7584,
+   "implied": 0.8391,
+   "fair": 0.8176,
+   "median_price": -670.0,
+   "avg_line_minus_floor": -3.5,
+   "return": -0.0964,
+   "return_se": 0.0187
+  },
+  "best_rung_adjusted": {
+   "bets": 1065,
+   "games": 215,
+   "won": 0.7671,
+   "implied": 0.8386,
+   "fair": 0.817,
+   "median_price": -670.0,
+   "avg_line_minus_floor": -3.7,
+   "return": -0.0823,
+   "return_se": 0.0194
+  },
+  "tagged_raw": {
+   "rungs": 2501,
+   "cleared": 0.8025,
+   "cleared_se": 0.0148,
+   "implied": 0.8657,
+   "fair": 0.8473
+  },
+  "tagged_adjusted": {
+   "rungs": 2683,
+   "cleared": 0.811,
+   "cleared_se": 0.0145,
+   "implied": 0.8626,
+   "fair": 0.8438
+  },
+  "by_stat_adjusted": {
+   "pass": {
+    "bets": 210,
+    "games": 160,
+    "won": 0.7762,
+    "implied": 0.8458,
+    "fair": 0.8251,
+    "median_price": -750.0,
+    "avg_line_minus_floor": -6.6,
+    "return": -0.0831,
+    "return_se": 0.0361
+   },
+   "rec": {
+    "bets": 560,
+    "games": 191,
+    "won": 0.7571,
+    "implied": 0.833,
+    "fair": 0.8107,
+    "median_price": -605.0,
+    "avg_line_minus_floor": -3.0,
+    "return": -0.0857,
+    "return_se": 0.0256
+   },
+   "rush": {
+    "bets": 295,
+    "games": 157,
+    "won": 0.7797,
+    "implied": 0.8439,
+    "fair": 0.8231,
+    "median_price": -700.0,
+    "avg_line_minus_floor": -3.1,
+    "return": -0.0753,
+    "return_se": 0.0271
+   }
+  }
+ },
+ "cfb": {
+  "best_rung_raw": {
+   "bets": 1832,
+   "games": 366,
+   "won": 0.7516,
+   "implied": 0.8211,
+   "fair": 0.7973,
+   "median_price": -580.0,
+   "avg_line_minus_floor": -3.4,
+   "return": -0.0918,
+   "return_se": 0.0135
+  },
+  "best_rung_adjusted": {
+   "bets": 2071,
+   "games": 378,
+   "won": 0.7397,
+   "implied": 0.8125,
+   "fair": 0.7878,
+   "median_price": -542.0,
+   "avg_line_minus_floor": -3.6,
+   "return": -0.097,
+   "return_se": 0.0133
+  },
+  "tagged_raw": {
+   "rungs": 5544,
+   "cleared": 0.7756,
+   "cleared_se": 0.0117,
+   "implied": 0.8465,
+   "fair": 0.8258
+  },
+  "tagged_adjusted": {
+   "rungs": 6495,
+   "cleared": 0.768,
+   "cleared_se": 0.0112,
+   "implied": 0.8417,
+   "fair": 0.8204
+  },
+  "by_stat_adjusted": {
+   "pass": {
+    "bets": 340,
+    "games": 260,
+    "won": 0.7118,
+    "implied": 0.8032,
+    "fair": 0.7778,
+    "median_price": -488.5,
+    "avg_line_minus_floor": -6.3,
+    "return": -0.1182,
+    "return_se": 0.0336
+   },
+   "rec": {
+    "bets": 1084,
+    "games": 352,
+    "won": 0.7509,
+    "implied": 0.8146,
+    "fair": 0.7901,
+    "median_price": -550.0,
+    "avg_line_minus_floor": -2.9,
+    "return": -0.0873,
+    "return_se": 0.0166
+   },
+   "rush": {
+    "bets": 647,
+    "games": 321,
+    "won": 0.7357,
+    "implied": 0.8137,
+    "fair": 0.7892,
+    "median_price": -500.0,
+    "avg_line_minus_floor": -3.3,
+    "return": -0.1019,
+    "return_se": 0.0231
+   }
+  }
+ },
+ "pooled": {
+  "best_rung_raw": {
+   "bets": 2908,
+   "games": 585,
+   "won": 0.7541,
+   "implied": 0.8277,
+   "fair": 0.8048,
+   "median_price": -600.0,
+   "avg_line_minus_floor": -3.5,
+   "return": -0.0935,
+   "return_se": 0.011
+  },
+  "best_rung_adjusted": {
+   "bets": 3136,
+   "games": 593,
+   "won": 0.749,
+   "implied": 0.8213,
+   "fair": 0.7977,
+   "median_price": -582.5,
+   "avg_line_minus_floor": -3.6,
+   "return": -0.092,
+   "return_se": 0.011
+  },
+  "tagged_raw": {
+   "rungs": 8045,
+   "cleared": 0.784,
+   "cleared_se": 0.0093,
+   "implied": 0.8525,
+   "fair": 0.8324
+  },
+  "tagged_adjusted": {
+   "rungs": 9178,
+   "cleared": 0.7806,
+   "cleared_se": 0.0091,
+   "implied": 0.8478,
+   "fair": 0.8272
+  },
+  "by_stat_adjusted": {
+   "pass": {
+    "bets": 550,
+    "games": 420,
+    "won": 0.7364,
+    "implied": 0.8195,
+    "fair": 0.7959,
+    "median_price": -600.0,
+    "avg_line_minus_floor": -6.4,
+    "return": -0.1048,
+    "return_se": 0.025
+   },
+   "rec": {
+    "bets": 1644,
+    "games": 543,
+    "won": 0.753,
+    "implied": 0.8209,
+    "fair": 0.7971,
+    "median_price": -580.0,
+    "avg_line_minus_floor": -3.0,
+    "return": -0.0868,
+    "return_se": 0.014
+   },
+   "rush": {
+    "bets": 942,
+    "games": 478,
+    "won": 0.7495,
+    "implied": 0.8231,
+    "fair": 0.7998,
+    "median_price": -587.0,
+    "avg_line_minus_floor": -3.2,
+    "return": -0.0936,
+    "return_se": 0.018
+   }
+  }
+ },
+ "flags": {
+  "tough_d": {
+   "flagged": 2581,
+   "cleared_flagged": 0.7532,
+   "cleared_unflagged": 0.7913,
+   "fair_flagged": 0.7966,
+   "fair_unflagged": 0.8392,
+   "diff": -0.0381,
+   "diff_se": 0.0222,
+   "verdict": "show"
+  },
+  "dog": {
+   "flagged": 385,
+   "cleared_flagged": 0.7377,
+   "cleared_unflagged": 0.7824,
+   "fair_flagged": 0.7909,
+   "fair_unflagged": 0.8288,
+   "diff": -0.0448,
+   "diff_se": 0.0411,
+   "verdict": "show"
+  },
+  "blowout": {
+   "flagged": 239,
+   "cleared_flagged": 0.795,
+   "cleared_unflagged": 0.7802,
+   "fair_flagged": 0.831,
+   "fair_unflagged": 0.8271,
+   "diff": 0.0148,
+   "diff_se": 0.0549,
+   "verdict": "off"
+  },
+  "new_qb": {
+   "flagged": 227,
+   "cleared_flagged": 0.6388,
+   "cleared_unflagged": 0.7842,
+   "fair_flagged": 0.8137,
+   "fair_unflagged": 0.8276,
+   "diff": -0.1454,
+   "diff_se": 0.0542,
+   "verdict": "show"
+  },
+  "wind": {
+   "flagged": 249,
+   "cleared_flagged": 0.7068,
+   "cleared_unflagged": 0.7826,
+   "fair_flagged": 0.8144,
+   "fair_unflagged": 0.8276,
+   "diff": -0.0758,
+   "diff_se": 0.0604,
+   "verdict": "show"
+  },
+  "mate_out": {
+   "flagged": 501,
+   "cleared_flagged": 0.8164,
+   "cleared_unflagged": 0.7785,
+   "fair_flagged": 0.8561,
+   "fair_unflagged": 0.8256,
+   "diff": 0.0379,
+   "diff_se": 0.0295,
+   "verdict": "show"
+  }
+ },
+ "flags_by_league": {
+  "cfb": {
+   "tough_d": {
+    "flagged": 2050,
+    "cleared_flagged": 0.7424,
+    "cleared_unflagged": 0.7798,
+    "fair_flagged": 0.793,
+    "fair_unflagged": 0.833,
+    "diff": -0.0373,
+    "diff_se": 0.0261,
+    "verdict": "show"
+   },
+   "dog": {
+    "flagged": 352,
+    "cleared_flagged": 0.733,
+    "cleared_unflagged": 0.77,
+    "fair_flagged": 0.7865,
+    "fair_unflagged": 0.8224,
+    "diff": -0.037,
+    "diff_se": 0.0445,
+    "verdict": "show"
+   },
+   "blowout": {
+    "flagged": 175,
+    "cleared_flagged": 0.7257,
+    "cleared_unflagged": 0.7691,
+    "fair_flagged": 0.8226,
+    "fair_unflagged": 0.8203,
+    "diff": -0.0434,
+    "diff_se": 0.0701,
+    "verdict": "show"
+   },
+   "new_qb": {
+    "flagged": 157,
+    "cleared_flagged": 0.6051,
+    "cleared_unflagged": 0.772,
+    "fair_flagged": 0.8019,
+    "fair_unflagged": 0.8209,
+    "diff": -0.1669,
+    "diff_se": 0.0705,
+    "verdict": "show"
+   },
+   "wind": {
+    "flagged": 175,
+    "cleared_flagged": 0.72,
+    "cleared_unflagged": 0.7693,
+    "fair_flagged": 0.8044,
+    "fair_unflagged": 0.8209,
+    "diff": -0.0493,
+    "diff_se": 0.0775,
+    "verdict": "show"
+   },
+   "mate_out": {
+    "flagged": 365,
+    "cleared_flagged": 0.8027,
+    "cleared_unflagged": 0.7659,
+    "fair_flagged": 0.8429,
+    "fair_unflagged": 0.8191,
+    "diff": 0.0368,
+    "diff_se": 0.0375,
+    "verdict": "show"
+   }
+  },
+  "nfl": {
+   "tough_d": {
+    "flagged": 531,
+    "cleared_flagged": 0.7947,
+    "cleared_unflagged": 0.8151,
+    "fair_flagged": 0.8102,
+    "fair_unflagged": 0.852,
+    "diff": -0.0203,
+    "diff_se": 0.0394,
+    "verdict": "show"
+   },
+   "dog": {
+    "flagged": 33,
+    "cleared_flagged": 0.7879,
+    "cleared_unflagged": 0.8113,
+    "fair_flagged": 0.8376,
+    "fair_unflagged": 0.8438,
+    "diff": -0.0234,
+    "diff_se": 0.0921,
+    "verdict": "show"
+   },
+   "blowout": {
+    "flagged": 64,
+    "cleared_flagged": 0.9844,
+    "cleared_unflagged": 0.8068,
+    "fair_flagged": 0.8539,
+    "fair_unflagged": 0.8435,
+    "diff": 0.1776,
+    "diff_se": 0.02,
+    "verdict": "off"
+   },
+   "new_qb": {
+    "flagged": 70,
+    "cleared_flagged": 0.7143,
+    "cleared_unflagged": 0.8136,
+    "fair_flagged": 0.8401,
+    "fair_unflagged": 0.8439,
+    "diff": -0.0993,
+    "diff_se": 0.0574,
+    "verdict": "show"
+   },
+   "wind": {
+    "flagged": 74,
+    "cleared_flagged": 0.6757,
+    "cleared_unflagged": 0.8149,
+    "fair_flagged": 0.8381,
+    "fair_unflagged": 0.8439,
+    "diff": -0.1392,
+    "diff_se": 0.0897,
+    "verdict": "show"
+   },
+   "mate_out": {
+    "flagged": 136,
+    "cleared_flagged": 0.8529,
+    "cleared_unflagged": 0.8088,
+    "fair_flagged": 0.8914,
+    "fair_unflagged": 0.8412,
+    "diff": 0.0441,
+    "diff_se": 0.0409,
+    "verdict": "show"
+   }
+  }
+ },
+ "verdict_adjusted": "adjusted stays"
+}
