@@ -41,3 +41,18 @@ def test_apply_writes_override_but_keeps_hand_rows(tmp_path, monkeypatch):
     qbcheck.apply(res2, 2026, path)
     o = pd.read_csv(path, dtype=str)
     assert (o.team == "DEN").sum() == 1 and o[o.team == "DEN"].player_id.item() == "00-3"
+
+
+def test_apply_never_starts_a_quarterback_with_an_out_row(tmp_path, monkeypatch):
+    path = tmp_path / "overrides.csv"
+    pd.DataFrame([{"game_id": "g1", "team": "ARI", "kind": "out", "player_id": "00-9", "name": "Jacoby Brissett",
+                   "status": "Out", "source": "traded Nov 4"}]).to_csv(path, index=False)
+    qbs = pd.DataFrame({"player_id": ["00-9"], "name": ["Jacoby Brissett"], "teams": [{"ARI"}]})
+    qbs["key"] = qbs["name"].map(qbcheck.norm)
+    monkeypatch.setattr(qbcheck, "qb_ids", lambda season: qbs)
+    monkeypatch.setattr(qbcheck, "OUT", tmp_path)
+    res = {"checked_utc": "2026-11-05T17:00:00Z", "disagree": [
+        {"game_id": "g1", "team": "ARI", "board": "Gardner Minshew", "nfelo": "Jacoby Brissett", "kickoff": "x"}]}
+    out = qbcheck.apply(res, 2026, path)
+    assert out["applied"] == [] and out["skipped"][0]["why"].startswith("nfelo's quarterback has an out row")
+    assert (pd.read_csv(path, dtype=str).kind == "starter").sum() == 0

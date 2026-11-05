@@ -1,11 +1,11 @@
 name: QB starter check (nfelo)
 
-# Monday to Saturday at noon Eastern: compare the board's projected starting quarterbacks with
+# Monday to Saturday from noon Eastern (once a day): compare the board's projected starting quarterbacks with
 # nfelo's (nflmodel/qbcheck.py), and where they differ take nfelo's pick as a starter override in
-# data/overrides.csv (never over a starter row entered by hand). If anything changed, start the
+# data/overrides.csv (never over a starter row entered by hand, and never for a QB with an out row). If anything changed, start the
 # Update board Action so the board uses it right away. Free: nfelo's public GitHub file; no Odds API.
-# GitHub schedules run in UTC, so both 16:00 (daylight time) and 17:00 (standard time) are listed
-# and the first step skips whichever one isn't noon in New York.
+# GitHub schedules run in UTC (16:00 and 17:00 cover daylight and standard time) and often start
+# late; the gate step runs the check on the first scheduled run at or after noon ET each day.
 
 on:
   schedule:
@@ -25,18 +25,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Noon in New York?
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+      - name: Noon or later in New York, and not checked yet today?
         id: gate
+        # GitHub often starts scheduled runs hours late (Nov 3 and 4, 2026: about 4:40 PM ET), so
+        # an exact-noon gate skipped every run. Any scheduled run from noon ET on goes ahead once a
+        # day: data/qb_check/latest.json records the last check.
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ] && [ "$(TZ=America/New_York date +%H)" != "12" ]; then
-            echo "run=no" >> "$GITHUB_OUTPUT"; echo "Not noon Eastern; skipping."
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          hour=$(TZ=America/New_York date +%H); today=$(TZ=America/New_York date +%F)
+          last=""
+          if [ -f data/qb_check/latest.json ]; then
+            last=$(python3 -c "import json,datetime as d,zoneinfo as z; t=json.load(open('data/qb_check/latest.json'))['checked_utc']; print(d.datetime.strptime(t,'%Y-%m-%dT%H:%M:%SZ').replace(tzinfo=d.timezone.utc).astimezone(z.ZoneInfo('America/New_York')).date())")
+          fi
+          if [ "$hour" -lt 12 ]; then
+            echo "run=no" >> "$GITHUB_OUTPUT"; echo "Before noon Eastern; skipping."
+          elif [ "$last" = "$today" ]; then
+            echo "run=no" >> "$GITHUB_OUTPUT"; echo "Already checked today ($today); skipping."
           else
             echo "run=yes" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/checkout@v5
-        if: steps.gate.outputs.run == 'yes'
-        with:
-          ref: main
       - uses: actions/setup-python@v6
         if: steps.gate.outputs.run == 'yes'
         with:

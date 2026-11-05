@@ -17,8 +17,9 @@ to data/qb_check/log.csv. No Odds API credits.
 also takes nfelo's pick where the two disagree (Ryan, Nov 2, 2026): a `starter` row in
 data/overrides.csv for that game, which the next board update uses. Two safeguards: a starter row
 entered by hand for that game is never replaced (hand-entered news is newer than nfelo's
-Tuesday/Thursday list), and a pick whose quarterback can't be matched to a player id is only
-reported. Rows this check wrote earlier are replaced when nfelo changes its pick again. What was
+Tuesday/Thursday list), a quarterback with an `out` row for that game (benched, traded or
+injured since nfelo's list) is never started, and a pick whose quarterback can't be matched to a
+player id is only reported. Rows this check wrote earlier are replaced when nfelo changes its pick again. What was
 applied or skipped is written to data/qb_check/applied.json.
 """
 from __future__ import annotations
@@ -146,6 +147,11 @@ def apply(res: dict, season: int, path=None) -> dict:
         hit = pick_id(qbs, x["nfelo"], x["team"])
         if hit is None:
             skipped.append({**x, "why": "nfelo's quarterback could not be matched to a player id"})
+            continue
+        # nfelo's list lags hand-entered news (benchings, trades, injuries): never start a
+        # quarterback an `out` row takes out of this game
+        if len(ov[(ov["game_id"] == x["game_id"]) & (ov["kind"] == "out") & (ov["player_id"] == hit[0])]):
+            skipped.append({**x, "why": "nfelo's quarterback has an out row for this game; kept"})
             continue
         ov = ov.drop(mine.index)
         row = {"game_id": x["game_id"], "team": x["team"], "kind": "starter", "player_id": hit[0], "name": hit[1], "status": "",
