@@ -15,7 +15,7 @@ PFF posts a week's games a few days late):
      K_DEF snaps of last season's rate (league average when there is none), minus the average D
      of all defenses that week.
   G  the receiver's man-vs-zone edge: log(man rate per route / zone rate per route), each shrunk
-     toward his overall rate by K_REC routes. Rate = yards per route for receiving yards,
+     toward his overall rate by K_REC routes, capped at +/- G_CAP (0 with no PFF history). Rate = yards per route for receiving yards,
      receptions per route for receptions. Routes from earlier seasons weigh PRIOR_W per season back.
 Candidates, each a log adjustment on top of the board's defense-vs-position rating r (dvp.py):
   base  projection x exp(b r)                      (the board)
@@ -62,6 +62,7 @@ OUT = HERE / "out" / "coverage_scheme_test.json"
 K_DEF = 750.0          # about three games of a defense's coverage snaps
 K_REC = 150.0          # routes of shrinkage toward the receiver's overall rate, each side
 PRIOR_W = 0.6          # weight of each earlier season's routes
+G_CAP = 0.5            # |G| capped: a receiver with near-zero or negative yards per route gave |G| > 10
 GROUPS = ("WR", "TE", "RB")
 STATS = ("rec_yds", "receptions")
 TUNE = list(range(2014, C.HOLDOUT_FROM))
@@ -143,7 +144,8 @@ def receiver_edge(lag: int) -> pd.DataFrame:
                 ov = ((tot[a] + tot[b]).to_numpy() + 1e-9) / (routes + 1e-9)
                 m = (tot[a].to_numpy() + K_REC * ov) / (tot.man_routes.to_numpy() + K_REC)
                 z = (tot[b].to_numpy() + K_REC * ov) / (tot.zone_routes.to_numpy() + K_REC)
-                g["G_" + stat] = np.where((ov > 0) & (routes > 0), np.log(np.maximum(m, 1e-6) / np.maximum(z, 1e-6)), 0.0)
+                ok = (ov > 0) & (routes > 0) & (m > 0) & (z > 0)
+                g["G_" + stat] = np.clip(np.where(ok, np.log(np.where(ok, m / np.where(z > 0, z, 1), 1)), 0.0), -G_CAP, G_CAP)
             out.append(g)
     return pd.concat(out, ignore_index=True)
 
