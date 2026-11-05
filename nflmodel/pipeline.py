@@ -236,6 +236,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     except Exception as exc:
         print(f"  best bets record skipped ({exc})")
         out["best_record"] = prev.get("best_record")
+    try:                                          # the Wong underdog teaser's live record (nflmodel/teaserlog.py); data/ only, not shown
+        from . import teaserlog
+        teaserlog.update(out["slate"]["games"], season, kick, scores)
+    except Exception as exc:
+        print(f"  teaser log skipped ({exc})")
 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)
