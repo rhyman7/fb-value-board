@@ -14,6 +14,9 @@ to docs/. Where the data is found, in order:
 Tables are the files' names in pff-data (see its spec/operations.md): receiving_summary,
 rushing_summary, offense_summary, report_receiving, ... One row per player per week, with
 `season` and `week` (0-16 regular season, 17 conference championships, 18 bowls).
+
+NFL tables (pff-data's nfl/ folder) load with league="nfl":
+    pff_data.load("receiving_summary", [2025], league="nfl")
 """
 from __future__ import annotations
 
@@ -41,8 +44,9 @@ def available() -> bool:
         return False
 
 
-def load(table: str, seasons, weeks=None) -> pd.DataFrame:
-    base = root() / "ncaa"
+def load(table: str, seasons, weeks=None, league: str = "ncaa") -> pd.DataFrame:
+    """league "nfl" reads pff-data's nfl/ folder (NFL weeks 1-18, playoffs 28-32)."""
+    base = root() / league
     parts = []
     for s in seasons:
         for f in sorted((base / str(s)).glob(f"w*_{table}.csv.gz")):
