@@ -238,8 +238,14 @@ boards in detail; this file is the rules.
   player projections. Use it only for confirmed news the nflverse schedule or the
   official injury report hasn't picked up yet, and put the source and date in `source`. Rows
   only touch games not yet played, so they lapse by themselves; delete stale rows when you
-  see them. Edits go through a PR like any other change (the Actions never write this
-  file); after merging, run **Update board** so the board picks them up.
+  see them. Hand edits go through a PR like any other change; after merging, run **Update
+  board** so the board picks them up. One Action writes this file: the **QB starter check**
+  (`qb-check.yml`, `nflmodel/qbcheck.py`; Mon-Sat, once a day from noon ET, since GitHub often
+  starts scheduled runs hours late) commits nfelo's pick as a `starter` row marked
+  "(auto, qbcheck)" where nfelo and the board disagree, then starts Update board. It never
+  replaces a hand-entered starter row and never starts a quarterback with an `out` row for
+  that game, so when nfelo's list is behind the news, a hand `starter` row (or `out` row) wins.
+  It commits `data/qb_check/` and `data/overrides.csv` straight to `main`.
 - **Injury designations (college board): `docs/cfb/designations.json`.** The daily college
   check task writes it from Covers.com's NCAAF injury page
   (https://www.covers.com/sport/football/ncaaf/injuries) and merges it through a PR like any
