@@ -59,6 +59,14 @@ boards in detail; this file is the rules.
   with `experiments/shadow_score.py`. A shadow failure never stops the board build. A second
   spread version, pass catchers out (`shadow.MARGIN_PC`, from Oct 29, 2026), is logged the same
   way to `passcatchers_games.csv` under the same rule: don't change `MARGIN_PC` either.
+- **Wong teaser record (NFL): `data/teasers/`** (`nflmodel/teaserlog.py`, from Nov 6, 2026; the
+  Project doc `claude/betting-strategies.md`, strategy 2). Every **Update board** run logs each side
+  whose DraftKings, FanDuel or anchor line is in a Wong range (underdog +1.5 to +2.5, favourite -7.5 to
+  -8.5) to `nfl_log.csv` (a row whenever its lines or total change, until kickoff; append-only),
+  grades it after the game into `nfl_results.csv` (append-only) and writes the summary
+  `nfl_record.json`. It reads the slate and writes only `data/teasers/`; the board shows none of it,
+  and a failure never stops the build. The strategy's rule (underdog legs, total 49.5 or less, two-team
+  teasers at -120 or better) is fixed in the module's constants; change it only with Ryan.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
