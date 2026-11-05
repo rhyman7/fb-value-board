@@ -191,6 +191,9 @@ boards in detail; this file is the rules.
   `docs/`, an issue, a PDF or an alert. Test scores, fitted weights and projections computed from
   them are fine. `tests/test_pff_private.py` fails if PFF files are committed. Moved out on Nov 4,
   2026; the files remain in this repo's history from #190 (left as is).
+  - NFL tables (Nov 5, 2026): pff-data's `nfl/` (man/zone tables, 2014 on). Read only by
+    `experiments/coverage_scheme_test.py` (looks in `$PFF_DATA_DIR`, `.pff-data/`, `../pff-data`);
+    the board does not use them (tested, not kept: PLAYERS.md "Man and zone coverage").
   - Reading it: `cfbmodel/pff_data.py` (`pff_data.load(table, seasons)`) looks in `$PFF_DATA_DIR`,
     then `.pff-data/` (git-ignored), then `../pff-data`. An Action that needs it checks it out with
     the **PFF_DATA_TOKEN** secret (a fine-grained token: read-only Contents on rhyman7/pff-data

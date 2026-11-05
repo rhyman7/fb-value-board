@@ -32,7 +32,8 @@ Measures, every one of them, set before running (Nov 5, 2026), for receiving yar
      WR / TE / RB. logit(chance) = logit(book's vig-free chance) + k x signal, k fitted on
      2023-2024, Brier on 2025; signal = the candidate's log adjustment (chain fit) vs the base's.
 Keep rule (CONVENTIONS.md, Nov 4): a candidate is kept if it is better than the base on all
-eight numbers (4 measures x 2 stats) and worse on none. B is kept over A only if it is also better
+eight numbers (seven: the books have receptions lines for 2025 only, so measure 4 can't be fitted for
+receptions; found on the first run, Nov 5, and marked not scored; it decided nothing) (4 measures x 2 stats) and worse on none. B is kept over A only if it is also better
 than A on all eight. Anything mixed goes to Ryan as a trade-off. Standard errors (clustered by
 game) are reported but don't decide. Kept means it goes to Ryan with a plan before the board.
 
@@ -284,6 +285,10 @@ def books(pall, rt, fits):
             return x
 
         tr, te = frame((2023, 2024)), frame((2025,))
+        if not len(tr):
+            out[stat] = {"not_scored": "no 2023-2024 lines to fit k on (the priced frames have receptions for 2025 only)"}
+            print("books", stat, out[stat], flush=True)
+            continue
         y = te.hit.to_numpy()
         res = {"n_2025": int(len(te)), "games_2025": int(te.game_id.nunique())}
         br = {}
@@ -315,7 +320,8 @@ def verdict(res):
             else:
                 signs += [c["tuning"]["B_minus_A_mse"], c["holdout"]["B_minus_A_mse"],
                           res["shown"][stat]["2022_on"]["B_minus_A_mse"]]
-            signs.append(res["books"][stat][f"{cand}_minus_{ref}"]["brier"])
+            if "not_scored" not in res["books"][stat]:
+                signs.append(res["books"][stat][f"{cand}_minus_{ref}"]["brier"])
         v[f"{cand}_vs_{ref}"] = {"better": sum(s < 0 for s in signs), "worse": sum(s > 0 for s in signs),
                                  "of": len(signs), "kept": all(s < 0 for s in signs)}
     return v
