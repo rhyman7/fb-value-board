@@ -116,12 +116,7 @@ def route_features(table: pd.DataFrame, rec: pd.DataFrame) -> tuple[pd.DataFrame
 # ------------------------------------------------------------------------------- the two variants
 
 def run_variant(table: pd.DataFrame, feats: list[str], first: int) -> pd.DataFrame:
-    saved = list(ML.FEATS)
-    try:
-        ML.FEATS[:] = feats
-        return ML.questionable(ML.walk_forward(table, first=first), first=C.FIRST_TEST_SEASON)
-    finally:
-        ML.FEATS[:] = saved
+    return ML.questionable(ML.walk_forward(table, first=first, feats=feats), first=C.FIRST_TEST_SEASON)
 
 
 def rmse(cur: pd.DataFrame, new: pd.DataFrame) -> dict:
@@ -152,7 +147,7 @@ def props_check(R: dict, rec: pd.DataFrame) -> dict:
     saved = P.PropModel.load()
     rows = {}
     for snap, base, kind in (("pricing", RL.load_pregame(), "flag"), ("close", load_proj(None), "close")):
-        tab = ML.add_features(base, R)
+        tab = ML.add_features(base, R, routes=False)
         rf, _ = route_features(tab, rec)
         tab = tab.merge(rf, on=["game_id", "player_id"], how="left")
         for season in PROP_SEASONS:
@@ -207,7 +202,7 @@ def main():
     games = data.load_games()
     R = roles.load_all(games, verbose=False)
     rec = pff_routes()
-    proj = ML.add_features(load_proj(None), R)
+    proj = ML.add_features(load_proj(None), R, routes=False)
     rf, cov = route_features(proj, rec)
     print("coverage", cov, flush=True)
     proj = proj.merge(rf, on=["game_id", "player_id"], how="left")

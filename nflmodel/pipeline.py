@@ -81,6 +81,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=C.HOLDOUT_FROM if with_backtest else season),
                                          first=C.FIRST_TEST_SEASON)
             new = ml[ml["season"] == season]
+            print("  PFF route inputs:", "on" if players_ml.feats_for(ml) != players_ml.FEATS else "off (no private PFF data; as before Nov 5, 2026)")
         except Exception as exc:
             print(f"  new projections skipped ({exc})")
         try:                                      # defense against each position (dvp.py), the last multiplier

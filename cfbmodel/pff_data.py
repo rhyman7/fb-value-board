@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 
 def root() -> Path:
     for cand in (os.environ.get("PFF_DATA_DIR"), ROOT / ".pff-data", ROOT.parent / "pff-data"):
-        if cand and (Path(cand) / "ncaa").is_dir():
+        if cand and ((Path(cand) / "ncaa").is_dir() or (Path(cand) / "nfl").is_dir()):   # each board checks out its own league
             return Path(cand)
     raise FileNotFoundError("PFF data not found: set PFF_DATA_DIR, or check out rhyman7/pff-data into .pff-data/ "
                             "(Actions: the PFF_DATA_TOKEN secret) or ../pff-data")

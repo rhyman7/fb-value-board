@@ -14,20 +14,28 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import HistGradientBoostingRegressor
 
-from . import roles
+from . import pff_routes, roles
 
 BASE_F = ["{s}_p", "{s}_proj", "{s}_recent", "tgt_share", "car_share", "tgt_share_raw", "car_share_raw", "proj_team_att", "proj_team_car",
           "imp_pts", "margin", "proj_total", "wind", "home", "def_ypc", "def_ypa", "def_ypt", "one_sum", "ypc", "ypt", "catch", "gl_car_rate", "rz_tgt_rate"]
 ROLE_F = ["snap_avg", "snap_last", "snap_last2", "snap_trend", "car_close_avg", "tgt_close_avg", "new_team", "depth", "age", "draft_pick", "exp",
           "pace", "neutral_pass"]
 FEATS = BASE_F + ROLE_F
+# PFF route share and targets per route (nflmodel/pff_routes.py), applied Nov 5, 2026 (Ryan's call;
+# PLAYERS.md "PFF route share in the New projections"). Used when the private PFF data is there
+# (the columns exist and are filled); without it the model runs on FEATS, as before.
+ROUTE_F = list(pff_routes.COLS)
 # where it beat the current model on both the tuning seasons and since 2019 (Oct 2026)
 ADOPT = {"carries": ("RB",), "rush_yds": ("RB",), "receptions": ("WR", "RB"), "rec_yds": ("WR", "RB")}
 TRAIN_GROUPS = {"carries": ("RB", "QB"), "rush_yds": ("RB", "QB"), "receptions": ("WR", "TE", "RB"), "rec_yds": ("WR", "TE", "RB")}
 
 
-def add_features(proj: pd.DataFrame, R: dict) -> pd.DataFrame:
+def add_features(proj: pd.DataFrame, R: dict, routes: bool = True) -> pd.DataFrame:
     out = proj.merge(roles.features(proj, R), on=["game_id", "player_id"], how="left")
+    if routes:
+        rf = pff_routes.features(proj)
+        if len(rf):
+            out = out.merge(rf, on=["game_id", "player_id"], how="left")
     for st in ADOPT:
         out[st + "_recent"] = out[st + "_sum"] / out["one_sum"].replace(0, np.nan)
     return out
@@ -79,16 +87,23 @@ def _model():
                                          min_samples_leaf=200, l2_regularization=1.0, early_stopping=False, random_state=0)
 
 
-def walk_forward(proj: pd.DataFrame, first: int = 2014, adopt: dict | None = None) -> pd.DataFrame:
+def feats_for(p: pd.DataFrame) -> list[str]:
+    """FEATS, plus ROUTE_F when the PFF route columns are there and filled."""
+    has = all(c in p.columns for c in ROUTE_F) and bool(p["route_avg"].notna().any())
+    return FEATS + ROUTE_F if has else list(FEATS)
+
+
+def walk_forward(proj: pd.DataFrame, first: int = 2014, adopt: dict | None = None, feats: list[str] | None = None) -> pd.DataFrame:
     """proj with <stat>_proj replaced, for the adopted stats and positions, by the boosted
     prediction from a model trained on earlier seasons. The current projection is kept as
     <stat>_proj_lin."""
     adopt = adopt or ADOPT
+    feats = feats if feats is not None else feats_for(proj)
     p = proj.copy()
     played = p["played"].astype(bool) & (p["active"] == 1)
     for stat, groups in adopt.items():
         p[stat + "_proj_lin"] = p[stat + "_proj"]
-        cols = [f.format(s=stat) for f in FEATS]
+        cols = [f.format(s=stat) for f in feats]
         new = p[stat + "_proj"].copy()
         for s in sorted(p["season"].unique()):
             if s < first:
