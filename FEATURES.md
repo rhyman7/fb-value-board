@@ -1853,3 +1853,31 @@ better at pricing and worse at the close, receiving yards flat; "all" −0.0002 
 call (Nov 4): apply both**; the team-level measures the test reports pass and the downstream
 differences are noise-sized. The WR receiving-yards and rushing-yards line numbers are recorded here
 as the mixed part of the result.
+
+## Margin curve by total and spread size (Nov 5, 2026): no, both boards
+
+Both boards price every spread side, alternate spread, teaser leg and derivative off one margin curve
+per season (one width and one set of key-number multipliers for every game). Teaser and alternate-line
+bettors usually condition on the total, so `python experiments/total_curve_test.py` (and `--cfb`) refits
+the curve walk-forward exactly as production does and tries: **A** width scaling with the closing total,
+**B** A plus key-number multipliers by total band, **C** A plus width growing with the spread's size.
+Measures (log loss, paired by game): results against the closing spread moved ±0.5 to ±6.5 points, both
+6-point teaser legs, and Wong legs only. Rule, set before running: kept only if better on all three in
+both the tuning and holdout seasons (NFL 2014-18 / 2019-25; college 2017-19 / 2020-25).
+
+| Candidate | NFL tuning (alts / teaser / Wong) | NFL holdout | College tuning | College holdout |
+|---|---|---|---|---|
+| A | -0.00001 / -0.00001 / +0.00015 | -0.00005 / +0.00012 / -0.00001 | +0.00001 / +0.00021 / +0.00056 | +0.00003 / +0.00029 / +0.00039 |
+| B | -0.00003 / -0.00004 / -0.00085 | -0.00011 / +0.00010 / +0.00004 | +0.00005 / +0.00032 / +0.00007 | +0.00004 / +0.00033 / +0.00052 |
+| C | -0.00001 / -0.00001 / +0.00015 | +0.00008 / +0.00048 / +0.00055 | +0.00001 / +0.00021 / +0.00056 | +0.00003 / +0.00029 / +0.00039 |
+
+**None passes; nothing changes.** The fitted total exponent was 0 in most NFL seasons and 0.2-0.6 in
+college, the spread-size term 0 in both, and every difference is a fraction of a standard error
+(`experiments/out/total_curve_test_<league>.json`). The single curve, anchored to the market's line and
+price, is already as well calibrated on alternate lines and teaser legs as these refinements.
+
+Side finding, not a rule (Nov 5, 2026 consultant review): the curve puts both kinds of Wong leg at about
+75%. Since 2019, closing lines, pushes set aside, underdog legs (+1.5 to +2.5 teased to +7.5/+8.5) cleared
+77.6% (330) and favourite legs (-7.5 to -8.5 teased to -1.5/-2.5) 71.1% (159), below the 73.9% a two-team
+teaser at -120 needs; on 2014-18 both cleared about 76%. The gap is 1.5 standard errors, so the board's
+pricing is unchanged; it is a candidate for the live teaser record (`claude/betting-strategies.md`).
