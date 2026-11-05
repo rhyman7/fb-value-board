@@ -230,6 +230,15 @@ table.players td.why { white-space: normal; text-align: left; padding: 10px 0 16
 .why-grid p { margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); }
 .why-grid strong { color: var(--ink); }
 .status { font-size: 12px; font-weight: 600; color: var(--ink-2); border: 1px solid var(--axis); border-radius: 4px; padding: 1px 5px; margin-left: 6px; }
+/* every-game floor (nflmodel/floors.py): the most yards he reached in every game he played; information, not a bet */
+.fl { display: block; font-size: 11.5px; font-weight: 500; color: var(--ink-3); line-height: 1.25; white-space: nowrap; cursor: help; }
+.fl .fw { color: var(--s2); font-weight: 800; margin-left: 3px; }
+.fl .fu { color: var(--s3); font-weight: 800; margin-left: 3px; }
+.flog { display: flex; flex-wrap: wrap; gap: 3px; margin: 3px 0 8px; }
+.flog span { border: 1px solid var(--grid); border-radius: 4px; padding: 0 4px; font-size: 12px; color: var(--ink-2); }
+.flog span.lo { border-color: var(--ink-2); color: var(--ink); font-weight: 700; }
+.fl-dn { color: var(--s2); font-weight: 600; } .fl-up { color: var(--s3); font-weight: 600; }
+.flnote { display: block; margin-top: 4px; font-size: 12px; color: var(--ink-3); }
 /* injury designation after a player's name (O, D, Q, P, IR): display only */
 sup.dz { font-size: 0.78em; font-weight: 800; line-height: 0; margin-left: 2px; letter-spacing: 0.02em; color: var(--ink); cursor: help; }
 sup.dz-O, sup.dz-D, sup.dz-IR { color: var(--s2); }
@@ -465,6 +474,7 @@ td .act { font-weight: 700; }
 .mx td.pname:focus-visible { outline: 2px solid var(--text); outline-offset: -2px; }
 .mx .ptag { margin-left: 6px; padding: 0 5px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.72rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; }
 .mx .ppos { margin-left: 6px; font-size: 0.75rem; color: var(--text-dim); }
+.mx .fl { color: var(--text-dim); font-size: 0.68rem; }
 .mx sup.dz { color: var(--text); } .mx sup.dz-O, .mx sup.dz-D, .mx sup.dz-IR { color: var(--neg); }
 .mx .out-line { margin: 16px 0 0; font-size: 0.8125rem; color: var(--text-dim); }
 .mx .out-line b { color: var(--text); font-weight: 600; }
@@ -1000,6 +1010,39 @@ const dzEl = p => { const z = dzOf(p); return z ? H("sup", { class: "dz dz-" + z
 const dzHtml = p => { const e = dzEl(p); return e ? e.outerHTML : ""; };
 // a status chip is still shown when the superscript doesn't already say it
 const chipText = p => p.status && !dzFromStatus(p.status) ? p.status : null;
+/* Every-game floor (nflmodel/floors.py, Nov 5, 2026): the most yards a player reached in every
+   game he played this season, current team only, QB starts only, early exits left out. Flags say
+   this week's setup is tougher (⚠) or a teammate's usage is freed up (▲). Display only. Tested on
+   2025 lines (PROPS.md): rungs under the floor cleared 78% against the books' 83%, so it is never
+   marked as a bet. QB: passing and rushing; RB: rushing, receiving, rush + rec; WR/TE: receiving. */
+const FL_KEY = { pass_yds: "pass", rush_yds: "rush", rec_yds: "rec" };
+const FL_LBL = { pass: "Passing", rush: "Rushing", rec: "Receiving", rr: "Rush + receiving" };
+const FL_NOTE = "Information, not a bet: on 2025 lines, rungs under a player's floor cleared 78% of the time against the books' 83%.";
+const flOf = (p, k) => (p && p.floor && p.floor[FL_KEY[k] || k]) || null;
+const flIcons = f => { const fl = f.flags || []; return (fl.some(x => !x.up) ? "⚠" : "") + (fl.some(x => x.up) ? "▲" : ""); };
+const flTitle = (f, k) => `${FL_LBL[k] || ""} floor: ${f.floor}+ in all ${f.g} games (low ${f.low}${f.next != null ? ", next lowest " + f.next : ""}, average ${f.avg}).` +
+  (f.flags || []).map(x => " " + (x.up ? "▲ " : "⚠ ") + x.text + ".").join("") + " " + FL_NOTE;
+function flEl(p, k) {
+  const f = flOf(p, k); if (!f) return null;
+  const fl = f.flags || [], dn = fl.some(x => !x.up), up = fl.some(x => x.up);
+  return H("span", { class: "fl", title: flTitle(f, FL_KEY[k] || k) }, document.createTextNode("floor " + f.floor),
+    dn ? H("span", { class: "fw", text: "⚠" }) : null, up ? H("span", { class: "fu", text: "▲" }) : null);
+}
+const flHtml = (p, k) => { const e = flEl(p, k); return e ? e.outerHTML : ""; };
+function floorBox(p) {
+  const F = p.floor; if (!F) return null;
+  const kids = [];
+  ["pass", "rush", "rec", "rr"].filter(k => F[k]).forEach((k, i) => {
+    const f = F[k];
+    if (i) kids.push(H("br"));
+    kids.push(H("strong", { text: `${FL_LBL[k]}: ${f.floor}+ in all ${f.g} games` }),
+      document.createTextNode(` (low ${f.low}${f.next != null ? "; next lowest " + f.next : ""}; average ${f.avg}).`));
+    (f.flags || []).forEach(x => kids.push(H("br"), H("span", { class: x.up ? "fl-up" : "fl-dn", text: (x.up ? "▲ " : "⚠ ") + x.text + "." })));
+    kids.push(H("span", { class: "flog", "aria-label": FL_LBL[k] + " game log" }, ...(f.log || []).map(([w, o, v]) => H("span", { class: v === f.floor ? "lo" : "", text: `W${w} ${o} ${v}` }))));
+  });
+  kids.push(H("span", { class: "flnote", text: "Games for his current team; a quarterback's starts only; games he left early are left out. " + FL_NOTE }));
+  return H("div", {}, H("h4", { text: "Every-game floor" }), H("p", {}, ...kids));
+}
 /* The New projections (nflmodel/players_ml.py: playing time, depth charts, background and team
    pace through a machine-learning last step) replaced the old ones on Oct 31, 2026 wherever they
    exist: a player's projection is the New number. Week files saved before then carry both
@@ -2362,6 +2405,7 @@ function diagChart(node, o) {
   seg($("#seg-pweek"), weeks.map(w => ({ v: w, t: "Week " + w })), () => ps.week, v => { ps.week = +v; draw(); });
   seg($("#seg-pos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => ps.pos, v => { ps.pos = v; ps.key = "score"; ps.dir = -1; draw(); });
   $("#players-note").textContent = "Projected box scores for every quarterback, running back, receiver and tight end with a role this week, in official college stats (sacks count as quarterback runs). Each projection is volume times efficiency: the team's expected passes and runs (from its pace, the opponent, the projected score and wind), the player's share of them (recent games weighted more; players listed Out or Doubtful on Covers.com get no projection and their usage is passed on), and his own efficiency, adjusted for what this defense allows. Select a player to see how his numbers are built.";
+  $("#players-note").append(' Under a projection, "floor" is the most yards he has reached in every game he played this season (⚠: this week looks tougher than any of those games; ▲: a teammate\'s usage is freed up). It is information, not a bet.');
 
   const pctx = x => x == null ? "–" : (x * 100).toFixed(x < 0.1 ? 1 : 0) + "%";
   const factor = x => x == null ? "" : (x >= 1 ? (x - 1) * 100 : (1 - x) * 100).toFixed(0) + "% " + (x >= 1 ? "more" : "fewer");
@@ -2395,6 +2439,7 @@ function diagChart(node, o) {
         grid.append(box("From chain to projection", ...kids));
       }
     }
+    const fb = floorBox(p); if (fb) grid.append(fb);
     if (t.out && t.out.length) grid.append(box("Teammates out", tx(t.out.map(o => `${o.name} (${[o.pos, o.status, o.att_share >= 0.5 ? pctx(o.att_share) + " of passes" : "", o.rec_share >= 0.05 ? pctx(o.rec_share) + " of catches" : "", o.car_share >= 0.1 ? pctx(o.car_share) + " of carries" : ""].filter(Boolean).join(", ")})`).join("; ") + ". From Covers.com.")));
     return grid;
   }
@@ -2415,7 +2460,8 @@ function diagChart(node, o) {
       const chip = chipText(p);
       const name = H("span", {}, document.createTextNode(p.name), dzEl(p), H("span", { class: "rec", text: p.pos + " · " + p.team }), chip ? H("span", { class: "status", text: chip }) : null);
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp })];
-      cols.forEach(c => cells.push(H("td", { text: c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]) })));
+      cols.forEach(c => cells.push(c[0] === "td" ? H("td", { text: pct(val(p, "td"), 0) })
+        : H("td", {}, document.createTextNode(c[2](p.proj[c[0]])), flEl(p, c[0]))));
       const open = ps.open === p.id + p.game;
       const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(open) }, ...cells);
       const toggle = () => { ps.open = open ? null : p.id + p.game; draw(); };
@@ -2936,7 +2982,7 @@ const matchups = (() => {
   // In a played game each number cell (c.a: the actual) shows the projection over what happened.
   function table(title, rows, cols, kind, played) {
     if (!rows.length) return `<div class="table-block"><h4>${title}</h4><div class="empty-note">No projection</div></div>`;
-    const num = (c, p) => { const a = played && c.a ? c.a(actOf(p) || {}) : null; return a == null ? `<td class="num">${c.f(p)}</td>` : `<td class="num pa"><span class="pv">${c.f(p)}</span><span class="av">${a}</span></td>`; };
+    const num = (c, p) => { const a = played && c.a ? c.a(actOf(p) || {}) : null; return a == null ? `<td class="num">${c.f(p)}${!played && c.fl ? flHtml(p, c.fl) : ""}</td>` : `<td class="num pa"><span class="pv">${c.f(p)}</span><span class="av">${a}</span></td>`; };
     return `<div class="table-block"><h4>${title}</h4><table><thead><tr>${cols.map(c => `<th class="${c.n ? "num" : ""}" scope="col">${c.t}</th>`).join("")}</tr></thead><tbody>${
       rows.map(p => `<tr>${cols.map(c => c.n ? num(c, p)
         : p.extra ? `<td>${esc(p.name)}<span class="ppos">${esc(p.pos)}</span><span class="ptag" title="Not projected before the game">Not projected</span></td>`
@@ -3014,11 +3060,11 @@ const matchups = (() => {
     const recv = ps.filter(p => tg(p.proj) >= 0.5 || (played && tg(A(p)) >= 1)).sort(by("rec_yds")).slice(0, 7);
     const name = { t: "Player" };
     const tables = [
-      table("Passing", passing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.pass_yds), a: a => n0(a.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td), a: a => n0(a.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints), a: a => n0(a.ints) },
+      table("Passing", passing, [name, { t: "Yds", n: 1, fl: "pass_yds", f: p => n0(p.proj.pass_yds), a: a => n0(a.pass_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.pass_td), a: a => n0(a.pass_td) }, { t: "Int", n: 1, f: p => n1(p.proj.ints), a: a => n0(a.ints) },
         { t: "Cmp", n: 1, f: p => n1(p.proj.completions), a: a => n0(a.completions) }, { t: "Att", n: 1, f: p => n1(p.proj.pass_att), a: a => n0(a.pass_att) }], "pass", played),
-      table("Rushing", rushing, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rush_yds), a: a => n0(a.rush_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rush_td), a: a => n0(a.rush_td) },
+      table("Rushing", rushing, [name, { t: "Yds", n: 1, fl: "rush_yds", f: p => n0(p.proj.rush_yds), a: a => n0(a.rush_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rush_td), a: a => n0(a.rush_td) },
         { t: "Y/A", n: 1, f: p => p.proj.carries ? n1(p.proj.rush_yds / p.proj.carries) : "–", a: a => a.carries ? n1(a.rush_yds / a.carries) : "–" }, { t: "Car", n: 1, f: p => n1(p.proj.carries), a: a => n0(a.carries) }], "rush", played),
-      table("Receiving", recv, [name, { t: "Yds", n: 1, f: p => n0(p.proj.rec_yds), a: a => n0(a.rec_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rec_td), a: a => n0(a.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions), a: a => n0(a.receptions) },
+      table("Receiving", recv, [name, { t: "Yds", n: 1, fl: "rec_yds", f: p => n0(p.proj.rec_yds), a: a => n0(a.rec_yds) }, { t: "TD", n: 1, f: p => n1(p.proj.rec_td), a: a => n0(a.rec_td) }, { t: "Rec", n: 1, f: p => n1(p.proj.receptions), a: a => n0(a.receptions) },
         LEAGUE === "nfl" ? { t: "Tgt", n: 1, f: p => n1(p.proj.targets), a: a => n0(a.targets) } : { t: "Y/R", n: 1, f: p => p.proj.receptions ? n1(p.proj.rec_yds / p.proj.receptions) : "–", a: a => a.receptions ? n1(a.rec_yds / a.receptions) : "–" }], "rec", played),
     ].join("");
     const d = [];

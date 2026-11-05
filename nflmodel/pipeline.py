@@ -97,6 +97,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         except Exception as exc:
             print(f"  defense vs position skipped ({exc})")
         player_board = players.board(pproj, pinfo, upcoming_ids, new=new)
+        try:                                      # every-game floors (floors.py): display only
+            from . import floors
+            say(f"  every-game floors for {floors.attach_nfl(player_board, season, pg, pinfo, games, pproj, C.CACHE)} players")
+        except Exception as exc:
+            print(f"  every-game floors skipped ({exc})")
         if with_backtest:
             say("Backtesting player projections ...")
             pall = pall if pall is not None else players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)

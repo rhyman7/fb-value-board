@@ -666,3 +666,85 @@ college props keeps coming from the price, never the model's chance. On the week
 model-priced college legs move a median 1.7 points (95th percentile 25), 61% of them toward 50%, and
 fewer rungs fall in the 55-95% window (5,465 legs from 8,321). Refit when the college player model
 changes (delete the test's `/tmp` cache first); the recheck on the 2026 live log stands.
+
+## Every-game floors on the boards (Nov 5, 2026): test rule, set before running
+
+Ryan's request: show each board player's every-game floor (the most yards he has reached in every
+game he played this season, i.e. his lowest qualifying game) next to his projections on both
+boards, for players already on the board only. QB: passing and rushing; RB: rushing, receiving and
+rush + receiving; WR and TE: receiving. Minimum 3 games. He chose the **adjusted** floor (replacing
+the raw one) and **flags only** for this week's setup. Test: `python experiments/floor_tag_test.py`
+(results in `experiments/out/floor_tag_test.json`), 2025 NFL and college ladder rungs (pricing
+snapshot, DraftKings and FanDuel, Over only), each rung's floor built from the player's earlier 2025
+games only.
+
+**Raw floor:** lowest yards over every game this season in which he had a chance at the stat (a
+pass attempt; a carry; a target or catch; for rush + receiving either), any team.
+
+**Adjusted floor** (Ryan's 1 and 2):
+1. Early exits dropped. NFL: games with an offensive snap share under half his season median (from
+   nflverse snap counts; a game he took snaps in with no stat counts as 0 yards). College (no
+   public snap counts): games with touches (QB: pass attempts + carries; others: carries + targets)
+   under 40% of his season median.
+2. Current role only. Games for his current team only; for QBs, only games he started (NFL: the
+   team's primary passer in `qb_games`; college: the team's pass-attempt leader that game).
+
+**Flags** (this week's setup tougher than any game behind the floor; display only, never moves the
+number): ⚠ tough defense (the opponent allows fewer yards per game to his position at that stat,
+season to date, than every opponent in his floor games did); ⚠ bigger underdog (rushing and rush +
+receiving: his team is a bigger underdog than in any floor game, by 3+ points); ⚠ blowout risk
+(any stat: his team is favoured by 14+ and by 3+ more than in any floor game); ⚠ new QB (receiving
+and rush + receiving: a different starting QB from every floor game); ⚠ wind (passing and receiving,
+outdoor: 15+ mph and 5+ mph above any floor game); ▲ teammate out (receiving: the teammate with the
+most targets in his floor games is out; rushing: the teammate with the most carries).
+
+**Rule, written before running:**
+- *Adjusted vs raw.* Each version tags the rungs below its floor. Graded on the highest tagged rung
+  per player, game and stat, at the better of the two books' prices: return per $1, standard error
+  clustered by game, NFL and college separately and pooled. Under the keep rule (more accurate is
+  kept), the adjusted floor stays as Ryan chose if its pooled return is at least the raw floor's;
+  if it is worse, report it and ask Ryan before building it into the boards.
+- *Flags.* For each flag, among adjusted-tagged rungs, the share cleared with the flag vs without.
+  A ⚠ flag is shown if flagged rungs cleared less often than unflagged ones (▲: more often) with 30+
+  flagged rungs; fewer than 30 is not enough to judge, and the flag stays off until it is.
+- *Context, not a rule:* the hit-rate test above already found rungs a player cleared 95%+ of the
+  time went on to clear 84% (books' margin-free chance 91%). The floor tag is the same idea at 100%,
+  so the report states the tagged rungs' clear rate against the books' chance as well.
+
+### Result (Nov 5, 2026)
+
+2025 rungs where the player had a floor (3+ earlier games): 8,045 rungs under the raw floor, 9,178
+under the adjusted. Highest tagged rung per player, game and stat, better book's price:
+
+| | Bets | Won | Books' margin-free chance | Return per $1 |
+|---|---|---|---|---|
+| NFL, raw floor | 1,076 | 75.8% | 81.8% | −9.6% ± 1.9% |
+| NFL, adjusted floor | 1,065 | 76.7% | 81.7% | **−8.2% ± 1.9%** |
+| College, raw floor | 1,832 | 75.2% | 79.7% | −9.2% ± 1.4% |
+| College, adjusted floor | 2,071 | 74.0% | 78.8% | −9.7% ± 1.3% |
+| Pooled, raw | 2,908 | 75.4% | 80.5% | −9.35% ± 1.1% |
+| Pooled, adjusted | 3,136 | 74.9% | 79.8% | **−9.2% ± 1.1%** |
+
+- **Adjusted vs raw:** pooled return −9.2% vs −9.35%, so under the rule the adjusted floor stays (as
+  Ryan chose). The difference is tiny: better in the NFL (snap counts find the real early exits),
+  slightly worse in college (the touches stand-in also drops quiet games that were real).
+- **The floor is not a betting edge.** Every tagged rung (all, not just the highest) cleared 78%
+  against the books' 83% margin-free chance; by stat the adjusted best rungs lost 8.7% (receiving),
+  9.4% (rushing) and 10.5% (passing). This repeats the hit-rate test above: a player's lowest
+  game so far overstates how safe the next one is, and the books price the rungs better. The boards
+  show the floor as information only, and the Props section does not mark rungs under it.
+- **Flags** (adjusted-tagged rungs, cleared with the flag minus without, pooled):
+
+| Flag | Flagged rungs | Difference | Verdict |
+|---|---|---|---|
+| ⚠ Tough defense | 2,581 | −3.8 ± 2.2 pts | show |
+| ⚠ Bigger underdog | 385 | −4.5 ± 4.1 pts | show |
+| ⚠ Blowout risk | 239 | +1.5 ± 5.5 pts (NFL +17.8, college −4.3) | **off** |
+| ⚠ New QB | 227 | −14.5 ± 5.4 pts | show |
+| ⚠ Wind | 249 | −7.6 ± 6.0 pts | show |
+| ▲ Teammate out | 501 | +3.8 ± 3.0 pts | show |
+
+  The new-QB size is overstated: the test takes the starter from who threw most, so a game where
+  the starter left hurt counts as a "new QB" game, which the board cannot know in advance. The
+  books' prices already move with every flag (margin-free chance lower on flagged rungs), so a flag
+  says the floor is less safe, not that the rung is mispriced.
