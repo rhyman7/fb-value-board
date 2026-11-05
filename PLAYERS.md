@@ -210,7 +210,8 @@ target by 40 targets, so a single 70-yard run moves a back's rate little. The sw
 
 - No cornerback-by-receiver matchups: that needs coverage charting (PFF or Next
   Gen Stats), which is not public. The defense enters by position group and
-  through its injured backs.
+  through its injured backs. PFF's man/zone split (by defense and by receiver) was
+  tested on Nov 5, 2026 and not kept (below, "Man and zone coverage").
 - Game-day inactives are named about 90 minutes before kickoff. Earlier in the
   week only injured reserve and Out or Doubtful count.
 - A quarterback's line assumes he starts. The starter pick is wrong about one
@@ -350,3 +351,45 @@ projections already carry each receiver's role and usage (target and route share
 so the role split repeats what they know and the extra coefficients fit noise (the role ratings
 come out negative). The gain was real only on the older chain projections, which lack those role
 inputs. The board keeps its single WR rating.
+
+### Man and zone coverage (PFF), Nov 5, 2026: not kept
+
+Ryan asked whether the model can tell which cornerback a receiver will face. PFF doesn't sell
+receiver-by-corner charting, but its Receiving vs Scheme and Defense Coverage Scheme tables split
+every receiver's routes and every defender's coverage snaps into man and zone, by game week, 2014 on
+(rhyman7/pff-data, `nfl/`, private). `python experiments/coverage_scheme_test.py` (results in
+`experiments/out/coverage_scheme_test.json`; rule in its docstring, committed before the run).
+
+**Which half is a trait?** A defense's man rate is steady: odd weeks against even weeks 0.82 (416
+team-seasons), one season to the next 0.56. A receiver's man-minus-zone yards per route is not:
+odd against even weeks 0.03-0.05, one season to the next 0.19 for wide receivers (691) and 0.11 for
+tight ends, against about 0.5 for his overall yards per route. College is the same or weaker
+(defense 0.80; receivers 0.04 and 0.07).
+
+**Inputs, known before the game** (PFF weeks through the week before): D, the defense's man rate this
+season plus 750 snaps of last season's, centred on the week's average; G, the receiver's log ratio of
+man to zone rate per route (yards or receptions), each shrunk 150 routes toward his overall rate,
+earlier seasons at 0.6 a season, capped at ±0.5. Candidates on top of the board's defense-vs-position
+rating: **A** adds a × D, **B** adds a × D + c × D × G, coefficients by position group (WR, TE, RB).
+
+| Measure | Receiving yards: base → A / B | Receptions: base → A / B |
+|---|---|---|
+| Chain RMSE, 2014-2018 (fitted here) | 23.020 → 23.018 / 23.014 better | 1.6674 → 1.6670 / 1.6669 better |
+| Chain RMSE, 2019 on | 22.050 → 22.052 / 22.051 **worse** | 1.6225 → 1.6223 / 1.6223 better |
+| Board's projections (New for WR/RB, chain TE), fit 2019-21, RMSE 2022 on | 21.407 → 21.408 / 21.408 **worse** | 1.5755 → 1.5756 / 1.5758 **worse** |
+| 2025 DK/FD main lines, Brier (book 0.25020) | 0.24945 → 0.24962 / 0.24964 **worse** | not scored (lines for 2025 only, nothing to fit on) |
+
+**Verdict: not kept, neither candidate.** Each is better on 3 of the 7 numbers and worse on 4, and the
+four are the ones that matter: the holdout for yards, the projections the board actually shows, and the
+books. No difference reaches 1.5 standard errors (the largest are the fitted seasons: A on 2014-2018
+receptions −0.0012 ± 0.0008, B on 2014-2018 yards −0.28 ± 0.20, in squared error). It's the in-sample fit that looks good; out of sample it adds noise. Waiting two weeks for
+PFF's data (lag 2) gives the same picture. One thing to watch, not a result: on the board's projections
+the receiver edge (B) helps wide receivers alone (26.918 → 26.916) and hurts tight ends and backs, the
+same direction as its season-to-season 0.19; one subgroup of three, chosen after the fact.
+
+Why it adds nothing: the New projections already carry each receiver's role and his
+defense-vs-position matchup, and a defense's coverage mix is part of what its WR/TE/RB rating already
+measures. The receiver's own man/zone split needs a season or more of routes before it means anything.
+Recheck only if PFF's receiver splits ever get a two-season sample in the board's own projections; the
+pull is kept current by hand (pff-data, `--league nfl`).
+
