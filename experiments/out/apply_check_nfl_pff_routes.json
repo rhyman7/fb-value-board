@@ -1,0 +1,123 @@
+{
+ "season": 2026,
+ "upcoming_rows": 7495,
+ "weeks": [
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18
+ ],
+ "first_upcoming_week": 9,
+ "first_upcoming_week_route_avg_filled": 0.989,
+ "WR receptions": {
+  "n": 130,
+  "median_abs": 0.088,
+  "p95_abs": 0.33,
+  "max_abs": 0.561,
+  "mean": 0.021
+ },
+ "RB receptions": {
+  "n": 68,
+  "median_abs": 0.109,
+  "p95_abs": 0.3,
+  "max_abs": 0.728,
+  "mean": -0.018
+ },
+ "WR rec_yds": {
+  "n": 138,
+  "median_abs": 1.467,
+  "p95_abs": 4.552,
+  "max_abs": 7.56,
+  "mean": 0.361
+ },
+ "RB rec_yds": {
+  "n": 63,
+  "median_abs": 0.928,
+  "p95_abs": 2.896,
+  "max_abs": 5.126,
+  "mean": -0.296
+ },
+ "RB carries also moves": true,
+ "RB rush_yds also moves": true,
+ "rmse": {
+  "WR receptions": {
+   "tune": {
+    "n": 11641,
+    "rmse_current": 1.8322,
+    "rmse_routes": 1.8257,
+    "change": -0.0065,
+    "se": 0.0027,
+    "better": true
+   },
+   "hold": {
+    "n": 20412,
+    "rmse_current": 1.8074,
+    "rmse_routes": 1.8054,
+    "change": -0.002,
+    "se": 0.0016,
+    "better": true
+   }
+  },
+  "RB receptions": {
+   "tune": {
+    "n": 8695,
+    "rmse_current": 1.49,
+    "rmse_routes": 1.488,
+    "change": -0.002,
+    "se": 0.003,
+    "better": true
+   },
+   "hold": {
+    "n": 14011,
+    "rmse_current": 1.3955,
+    "rmse_routes": 1.3954,
+    "change": -0.0001,
+    "se": 0.0019,
+    "better": true
+   }
+  },
+  "WR rec_yds": {
+   "tune": {
+    "n": 11641,
+    "rmse_current": 28.3138,
+    "rmse_routes": 28.2611,
+    "change": -0.0527,
+    "se": 0.0487,
+    "better": true
+   },
+   "hold": {
+    "n": 20412,
+    "rmse_current": 27.6115,
+    "rmse_routes": 27.5546,
+    "change": -0.0569,
+    "se": 0.0272,
+    "better": true
+   }
+  },
+  "RB rec_yds": {
+   "tune": {
+    "n": 8695,
+    "rmse_current": 15.2518,
+    "rmse_routes": 15.1796,
+    "change": -0.0722,
+    "se": 0.0338,
+    "better": true
+   },
+   "hold": {
+    "n": 14011,
+    "rmse_current": 13.7948,
+    "rmse_routes": 13.7956,
+    "change": 0.0007,
+    "se": 0.0191,
+    "better": false
+   }
+  }
+ },
+ "rmse_better_on": "7 of 8"
+}

@@ -421,4 +421,14 @@ applied; Ryan decides. If applied, the NFL `receiving_summary` needs adding to t
 schedule, and PFF posts NFL weeks a few days late (week 9 was still empty on Thursday, Nov 5), so
 the latest game's routes may be missing at Thursday-night and early pricing.
 
-**Ryan (Nov 5, 3:43 PM): apply as-is.** Applying it is a separate change with its own plan.
+**Ryan (Nov 5, 3:43 PM): apply as-is. Applied Nov 5, 2026** (`nflmodel/pff_routes.py`, added to
+`players_ml.add_features`; `players_ml.ROUTE_F`). The board's code reproduces the test's walk-forward
+numbers exactly (`experiments/apply_check_nfl_pff_routes.py --rmse`, results in
+`experiments/out/apply_check_nfl_pff_routes.json`). One addition: rookies whose nflverse record has
+no PFF id yet are matched by name (four 2026 rookies were otherwise counted at 0 routes every game,
+up to 17 yards low). Two guards for games PFF hasn't charted yet were tried and dropped, each
+making the backs' holdout worse (the board keeps the test's rule: a player who played with no
+PFF row that week ran 0 routes). On the first upcoming week the change moves WR receiving yards by
+a median 1.5 yards (95th percentile 4.6, largest 7.6), RB receiving yards 0.9 (largest 5.1),
+receptions about 0.1. The data comes from pff-data's daily NFL pull (10:35 UTC, before Update
+board); without it the board falls back to the projections from before.

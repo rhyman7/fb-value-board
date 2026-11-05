@@ -185,15 +185,23 @@ boards in detail; this file is the rules.
   projection rows and `why.dvp[<stat>]` in the board JSON; the matchup tooltip row that shows
   it lives in `site/template.html` (shared with the NFL page, which has no `why.dvp` yet, so the
   row only renders on the college board).
-- **PFF college data lives in the private repo rhyman7/pff-data, never here.** This repo is public
+- **PFF data (college and NFL) lives in the private repo rhyman7/pff-data, never here.** This repo is public
   and its root is the live site; PFF's data is licensed to Ryan's PFF Pro account. Don't commit PFF
   rows (or a file that reproduces them row by row) anywhere in this repo, and don't put them in
   `docs/`, an issue, a PDF or an alert. Test scores, fitted weights and projections computed from
   them are fine. `tests/test_pff_private.py` fails if PFF files are committed. Moved out on Nov 4,
   2026; the files remain in this repo's history from #190 (left as is).
-  - NFL tables (Nov 5, 2026): pff-data's `nfl/` (man/zone tables, 2014 on). Read only by
-    `experiments/coverage_scheme_test.py` (looks in `$PFF_DATA_DIR`, `.pff-data/`, `../pff-data`);
-    the board does not use them (tested, not kept: PLAYERS.md "Man and zone coverage").
+  - NFL tables (Nov 5, 2026): pff-data's `nfl/` (`pff_data.load(table, seasons, league="nfl")`).
+    The man/zone tables are read only by `experiments/coverage_scheme_test.py`; the board does not
+    use them (tested, not kept: PLAYERS.md "Man and zone coverage").
+  - **Used on the NFL board** (Nov 5, 2026): `nflmodel/pff_routes.py` adds route share (decayed,
+    last game, trend) and targets per route to the New projections (`players_ml.ROUTE_F`, through
+    `players_ml.add_features`; PLAYERS.md "PFF route share in the New projections"). The **Update
+    board** Action checks out only `nfl/**/*_receiving_summary.csv.gz` into `.pff-data/`; a new
+    workflow that builds the NFL board must add the same step. pff-data pulls that table daily at
+    10:35 UTC, before Update board. Without the data `players_ml.feats_for` drops the route
+    columns and the board is what it was before; the build log says "PFF route inputs: on/off".
+    The route columns never go into the board JSON or any file under `docs/` or `data/`.
   - Reading it: `cfbmodel/pff_data.py` (`pff_data.load(table, seasons)`) looks in `$PFF_DATA_DIR`,
     then `.pff-data/` (git-ignored), then `../pff-data`. An Action that needs it checks it out with
     the **PFF_DATA_TOKEN** secret (a fine-grained token: read-only Contents on rhyman7/pff-data

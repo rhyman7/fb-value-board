@@ -404,6 +404,7 @@ nflmodel/
   shadow.py               the shadow test of the defensive inputs, logged to data/shadow/
   players_data.py         player box scores from play-by-play
   players.py              player projections, backtest summary and board output
+  pff_routes.py           PFF route share for the New projections (private data, read at build time only)
   ratings.py              team, quarterback and market-implied ratings
   model.py                margin and total models, market blend
   distributions.py        key-number curve, anchoring, width fit
@@ -452,7 +453,9 @@ tests/test_model.py
 Play-by-play, schedules, results and closing lines come from the
 [nflverse](https://github.com/nflverse) project. Opening lines come from the
 [nfelo](https://github.com/greerreNFL/nfelo) project's public game file. Player-prop
-prices come from [The Odds API](https://the-odds-api.com) (DraftKings and FanDuel). Wind
+prices come from [The Odds API](https://the-odds-api.com) (DraftKings and FanDuel). Route
+participation for the player projections comes from PFF (licensed; read at build time from a
+private repo, never published here). Wind
 forecasts come from [Open-Meteo](https://open-meteo.com). Check their terms
 before redistributing the data.
 
