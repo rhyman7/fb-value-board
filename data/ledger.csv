@@ -70,3 +70,6 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_10_HOU_CLE|Moneyline|away,2026-11-05 15:23,2026,10,2026_10_HOU_CLE,2026_10_HOU_CLE,2026-11-15T18:00Z,Moneyline,away,HOU ML,price,fanduel,,-176.0,-176.0,0.0214,0.0111,consensus,-4.5,39.5,-4.06,40.18
 2026_10_MIN_GB|Spread|away,2026-11-05 15:23,2026,10,2026_10_MIN_GB,2026_10_MIN_GB,2026-11-15T18:00Z,Spread,away,MIN +2.5,model,fanduel,3.0,-110.0,-110.0,0.0194,0.0002,consensus,2.5,41.5,0.84,39.69
 2026_10_NE_DET|Moneyline|home,2026-11-05 16:52,2026,10,2026_10_NE_DET,2026_10_NE_DET,2026-11-15T14:30Z,Moneyline,home,DET ML,price,draftkings,,110.0,110.0,0.0604,0.0034,consensus,-1.5,49.5,2.15,51.96
+2026_10_NE_DET|Total|under,2026-11-05 21:03,2026,10,2026_10_NE_DET,2026_10_NE_DET,2026-11-15T14:30Z,Total,under,Under 49.5,price,fanduel,50.5,-104.0,-104.0,0.0303,0.0097,consensus,-1.5,49.5,2.22,51.99
+2026_10_MIN_GB|Total|under,2026-11-05 21:03,2026,10,2026_10_MIN_GB,2026_10_MIN_GB,2026-11-15T18:00Z,Total,under,Under 40.5,price,fanduel,41.5,-108.0,-108.0,0.0133,0.003,consensus,3.0,40.5,0.83,39.61
+2026_10_PIT_CIN|Moneyline|home,2026-11-05 21:03,2026,10,2026_10_PIT_CIN,2026_10_PIT_CIN,2026-11-16T01:20Z,Moneyline,home,CIN ML,price,kalshi,,-150.0,-161.0,-0.0022,0.0042,consensus,3.5,47.5,2.12,47.92
