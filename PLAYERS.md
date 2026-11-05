@@ -393,3 +393,32 @@ measures. The receiver's own man/zone split needs a season or more of routes bef
 Recheck only if PFF's receiver splits ever get a two-season sample in the board's own projections; the
 pull is kept current by hand (pff-data, `--league nfl`).
 
+### PFF route share in the New projections (Nov 5, 2026): one measure flat, a trade-off for Ryan
+
+`PFF_DATA_DIR=../pff-data python experiments/nfl_pff_routes_test.py` (results in
+`experiments/out/nfl_pff_routes_test.json`; PFF rows stay in the private rhyman7/pff-data). The real
+weekly PFF numbers (NFL `receiving_summary`, 2014-2026, pulled Nov 5) in the boosted New projections
+for WR and RB receptions and receiving yards: route share (decayed and last game), its trend, and
+targets per route run, from earlier games only. 99.9% of PFF rows match the board's players by
+nflverse's `pff_id`. Rule, set before running: kept only if better on all 12 measures below.
+
+| Projection RMSE (walk-forward) | Tuning 2015-2018 | Holdout 2019-2025 |
+|---|---|---|
+| WR receptions | −0.0065 ± 0.0027 | −0.0020 ± 0.0016 |
+| WR receiving yards | −0.053 ± 0.049 | −0.057 ± 0.027 |
+| RB receptions | −0.0020 ± 0.0030 | −0.0001 ± 0.0019 |
+| RB receiving yards | −0.072 ± 0.034 | **+0.0007 ± 0.019** |
+
+| Brier at the real DK/FD lines (WR + RB), pooled | Pricing (pregame) | Close |
+|---|---|---|
+| Receiving yards, 2023-2025 | −0.00052 ± 0.00058 | −0.00064 ± 0.00046 |
+| Receptions, 2025 | −0.00160 ± 0.00092 | −0.00143 ± 0.00090 |
+
+Better on 11 of 12, and in every season at both snapshots against the books (the gap to the books
+narrows by about a tenth). The one miss is RB receiving yards on the holdout, worse by 0.0007 yards
+(0.04 standard errors, effectively flat). Under the keep rule that is a trade-off, so it is not
+applied; Ryan decides. If applied, the NFL `receiving_summary` needs adding to the PFF pull's
+schedule, and PFF posts NFL weeks a few days late (week 9 was still empty on Thursday, Nov 5), so
+the latest game's routes may be missing at Thursday-night and early pricing.
+
+**Ryan (Nov 5, 3:43 PM): apply as-is.** Applying it is a separate change with its own plan.

@@ -1,0 +1,277 @@
+{
+ "coverage": {
+  "pff_rows": 51966,
+  "pff_matched_share": 0.999,
+  "board_receiver_games_2014on": 79664,
+  "with_routes": 78925
+ },
+ "rule": "routes kept only if better on all 8 RMSE and 4 pooled Brier measures",
+ "feature_present_share": {
+  "route_avg": 0.837,
+  "route_last": 0.8433,
+  "route_trend": 0.837,
+  "tprr_avg": 0.457
+ },
+ "rmse": {
+  "WR receptions": {
+   "tune": {
+    "n": 11641,
+    "rmse_current": 1.8322,
+    "rmse_routes": 1.8257,
+    "change": -0.0065,
+    "se": 0.0027,
+    "better": true
+   },
+   "hold": {
+    "n": 20412,
+    "rmse_current": 1.8074,
+    "rmse_routes": 1.8054,
+    "change": -0.002,
+    "se": 0.0016,
+    "better": true
+   }
+  },
+  "RB receptions": {
+   "tune": {
+    "n": 8695,
+    "rmse_current": 1.49,
+    "rmse_routes": 1.488,
+    "change": -0.002,
+    "se": 0.003,
+    "better": true
+   },
+   "hold": {
+    "n": 14011,
+    "rmse_current": 1.3955,
+    "rmse_routes": 1.3954,
+    "change": -0.0001,
+    "se": 0.0019,
+    "better": true
+   }
+  },
+  "WR rec_yds": {
+   "tune": {
+    "n": 11641,
+    "rmse_current": 28.3138,
+    "rmse_routes": 28.2611,
+    "change": -0.0527,
+    "se": 0.0487,
+    "better": true
+   },
+   "hold": {
+    "n": 20412,
+    "rmse_current": 27.6115,
+    "rmse_routes": 27.5546,
+    "change": -0.0569,
+    "se": 0.0272,
+    "better": true
+   }
+  },
+  "RB rec_yds": {
+   "tune": {
+    "n": 8695,
+    "rmse_current": 15.2518,
+    "rmse_routes": 15.1796,
+    "change": -0.0722,
+    "se": 0.0338,
+    "better": true
+   },
+   "hold": {
+    "n": 14011,
+    "rmse_current": 13.7948,
+    "rmse_routes": 13.7956,
+    "change": 0.0007,
+    "se": 0.0191,
+    "better": false
+   }
+  }
+ },
+ "props": {
+  "pricing": {
+   "receptions 2025": {
+    "n": 2602,
+    "brier_current": 0.25265,
+    "brier_routes": 0.25105,
+    "brier_books": 0.24612,
+    "change": -0.0016,
+    "se": 0.000921,
+    "better": true
+   },
+   "receptions pooled": {
+    "n": 2602,
+    "brier_current": 0.25265,
+    "brier_routes": 0.25105,
+    "brier_books": 0.24612,
+    "change": -0.0016,
+    "se": 0.000921,
+    "better": true
+   },
+   "rec_yds 2023": {
+    "n": 2323,
+    "brier_current": 0.25645,
+    "brier_routes": 0.2558,
+    "brier_books": 0.24993,
+    "change": -0.000644,
+    "se": 0.001139,
+    "better": true
+   },
+   "rec_yds 2024": {
+    "n": 2669,
+    "brier_current": 0.25855,
+    "brier_routes": 0.25821,
+    "brier_books": 0.24997,
+    "change": -0.000342,
+    "se": 0.000867,
+    "better": true
+   },
+   "rec_yds 2025": {
+    "n": 2731,
+    "brier_current": 0.25496,
+    "brier_routes": 0.25436,
+    "brier_books": 0.25011,
+    "change": -0.0006,
+    "se": 0.001,
+    "better": true
+   },
+   "rec_yds pooled": {
+    "n": 7723,
+    "brier_current": 0.25665,
+    "brier_routes": 0.25613,
+    "brier_books": 0.25001,
+    "change": -0.000524,
+    "se": 0.000576,
+    "better": true
+   },
+   "both 2023": {
+    "n": 2323,
+    "brier_current": 0.25645,
+    "brier_routes": 0.2558,
+    "brier_books": 0.24993,
+    "change": -0.000644,
+    "se": 0.001139,
+    "better": true
+   },
+   "both 2024": {
+    "n": 2669,
+    "brier_current": 0.25855,
+    "brier_routes": 0.25821,
+    "brier_books": 0.24997,
+    "change": -0.000342,
+    "se": 0.000867,
+    "better": true
+   },
+   "both 2025": {
+    "n": 5333,
+    "brier_current": 0.25383,
+    "brier_routes": 0.25275,
+    "brier_books": 0.24816,
+    "change": -0.001088,
+    "se": 0.00076,
+    "better": true
+   },
+   "both pooled": {
+    "n": 10325,
+    "brier_current": 0.25564,
+    "brier_routes": 0.25485,
+    "brier_books": 0.24903,
+    "change": -0.000795,
+    "se": 0.000519,
+    "better": true
+   }
+  },
+  "close": {
+   "receptions 2025": {
+    "n": 4336,
+    "brier_current": 0.2513,
+    "brier_routes": 0.24987,
+    "brier_books": 0.24278,
+    "change": -0.001434,
+    "se": 0.000897,
+    "better": true
+   },
+   "receptions pooled": {
+    "n": 4336,
+    "brier_current": 0.2513,
+    "brier_routes": 0.24987,
+    "brier_books": 0.24278,
+    "change": -0.001434,
+    "se": 0.000897,
+    "better": true
+   },
+   "rec_yds 2023": {
+    "n": 4416,
+    "brier_current": 0.25698,
+    "brier_routes": 0.25653,
+    "brier_books": 0.24986,
+    "change": -0.000448,
+    "se": 0.000865,
+    "better": true
+   },
+   "rec_yds 2024": {
+    "n": 4683,
+    "brier_current": 0.26014,
+    "brier_routes": 0.25973,
+    "brier_books": 0.25005,
+    "change": -0.000412,
+    "se": 0.000729,
+    "better": true
+   },
+   "rec_yds 2025": {
+    "n": 4426,
+    "brier_current": 0.25737,
+    "brier_routes": 0.2563,
+    "brier_books": 0.24996,
+    "change": -0.001062,
+    "se": 0.000798,
+    "better": true
+   },
+   "rec_yds pooled": {
+    "n": 13525,
+    "brier_current": 0.2582,
+    "brier_routes": 0.25756,
+    "brier_books": 0.24996,
+    "change": -0.000636,
+    "se": 0.00046,
+    "better": true
+   },
+   "both 2023": {
+    "n": 4416,
+    "brier_current": 0.25698,
+    "brier_routes": 0.25653,
+    "brier_books": 0.24986,
+    "change": -0.000448,
+    "se": 0.000865,
+    "better": true
+   },
+   "both 2024": {
+    "n": 4683,
+    "brier_current": 0.26014,
+    "brier_routes": 0.25973,
+    "brier_books": 0.25005,
+    "change": -0.000412,
+    "se": 0.000729,
+    "better": true
+   },
+   "both 2025": {
+    "n": 8762,
+    "brier_current": 0.25436,
+    "brier_routes": 0.25312,
+    "brier_books": 0.2464,
+    "change": -0.001246,
+    "se": 0.000648,
+    "better": true
+   },
+   "both pooled": {
+    "n": 17861,
+    "brier_current": 0.25653,
+    "brier_routes": 0.2557,
+    "brier_books": 0.24822,
+    "change": -0.00083,
+    "se": 0.000428,
+    "better": true
+   }
+  }
+ },
+ "better_on": "11 of 12",
+ "kept": false
+}
