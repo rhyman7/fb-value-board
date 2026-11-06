@@ -164,7 +164,7 @@ class MatchupBuilder:
         tests/test_cfb.py checks). The totals baseline is what is left over, so a total
         feature missing here would be hidden inside it."""
         m_ok = {f"d_{m}" for m in metrics} | {"d_mkt", "d_talent", "d_talent_early", "d_rtprod", "hfa", "rest_diff", "d_qb", "d_qb_early",
-                                              "d_miss_defcov", "d_mid"}
+                                              "d_miss_defcov", "d_mid", "d_pffret"}
         t_ok = {f"s_{m}" for m in metrics} | {"s_mkt", "lg_pts", "s_qb", "s_def_rtprod", "s_off_rtprod", "indoor", "wind_hi"}
         return [k for k in margin_feats if k not in m_ok] + [k for k in total_feats if k not in t_ok]
 
@@ -174,7 +174,7 @@ class MatchupBuilder:
         h, a = self.engine.tix[g.home_team], self.engine.tix[g.away_team]
         val = lambda k: float(getattr(g, k, 0.0) or 0.0)
         rat = sum(mc.get(f"d_{m}", 0.0) * val(f"d_{m}") for m in self.engine.metrics) + mc["d_mkt"] * val("d_mkt")
-        pre = sum(mc.get(k, 0.0) * val(k) for k in ("d_talent", "d_talent_early", "d_rtprod"))
+        pre = sum(mc.get(k, 0.0) * val(k) for k in ("d_talent", "d_talent_early", "d_rtprod", "d_pffret"))
         early = val("early")
         qcoef = mc.get("d_qb", 0.0) + mc.get("d_qb_early", 0.0) * early
         ha, aa = self.abbr.get(g.home_team, g.home_team), self.abbr.get(g.away_team, g.away_team)

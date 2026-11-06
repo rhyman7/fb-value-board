@@ -349,3 +349,9 @@ of the five holdout seasons through 2025 (2026 to date −0.067); weeks 0-5 on t
 feature only exists from 2018, so on the tuning seasons only 2019 could move. Mixed (holdout total
 worse), so not kept by the rule: it goes to Ryan. The margin and total models are fitted separately,
 so A's margin half on its own is exactly A's margin numbers with the totals unchanged.
+
+*Applied Nov 6, 2026 (Ryan's choice: the margin half only):* `cfbmodel/pff_returning.py` adds
+`d_pffret` to the margin model; the totals are unchanged. The production code reproduces the test
+(margin 12.354 / 12.313, totals 13.452 / 12.619). Update college board checks out PFF
+`ncaa/**/*_defense_summary.csv.gz` too; without the PFF data `d_pffret` is 0 and the board runs as
+before. Shown in the spread card under "Talent and returning production".

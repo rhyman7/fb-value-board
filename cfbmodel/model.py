@@ -26,7 +26,10 @@ MARGIN_FEATS = BASE_MARGIN + ["d_talent_early", "d_rtprod", "d_qb_early", "d_tal
                               # Nov 4, 2026, the keep rule (FEATURES.md "Re-judging past tests under the keep rule";
                               # experiments/apply_check_cfb_game.py): core coverage defenders who missed the last
                               # game, drive value over expected, a mid-season head-coaching change (cfbmodel/extra.py)
-                              "d_miss_defcov", "d_dve", "d_mid"]
+                              "d_miss_defcov", "d_dve", "d_mid",
+                              # Nov 6, 2026 (Ryan's choice, CFB_FEATURES.md): transfer-aware returning production
+                              # from PFF (cfbmodel/pff_returning.py), margin only
+                              "d_pffret"]
 TOTAL_FEATS = BASE_TOTAL + ["s_def_rtprod", "s_snaps", "wind_hi",
                             "s_off_rtprod", "s_lyd"]   # Nov 4, 2026: returning offensive production, line yards per rush
 ALPHA_MARGIN, ALPHA_TOTAL = 150.0, 600.0   # game-model ridge, chosen on 2017-2019 (NFL uses 20)
