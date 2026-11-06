@@ -2029,3 +2029,25 @@ props check (run only for a chosen version) did not run. Version A against the c
 tuning margin −0.021 (SE 0.018), total +0.009 (SE 0.015); holdout margin −0.004 (SE 0.013), total
 −0.005 (SE 0.007): all within noise, and the totals, where the trenches should matter most, go the
 wrong way on the tuning seasons.
+
+## Backup-QB starter pick in the player projections (Nov 6, 2026): kept, on the board
+
+`experiments/backup_qb_pick_test.py` (rule committed before the first run; an earlier draft of the
+rule, with different candidates, was replaced before anything ran). When last game's starter is not
+among a team's pregame-active QBs (468 team-games since 2013), `players._pick_starter` gave the passes
+to the active QB with the largest share, where a QB with no games starts at half the position
+average and a season-long backup with a few passes sits near 0 (Week 9, 2026: Carson Beck over
+Gardner Minshew). Candidates for that fallback only: most decayed pass attempts (volume), most
+decayed starts (starts), unknown QBs ranked last (known).
+
+| Fallback games | Tuning 2013-18 (139) pick right / starter pass-yds RMSE | Holdout 2019+ (286) |
+|---|---|---|
+| Current (largest share) | 74.1% / 124.5 | 55.9% / 147.8 |
+| **Volume (chosen)** | **79.9% / 115.5** | **73.4% / 123.3** |
+| Starts | 77.7% / 119.0 | 72.4% / 125.8 |
+| Known | 78.4% / 120.4 | 61.9% / 140.3 |
+
+Volume is better on all four measures, so it passes the keep rule. 116 picks change: 29 were right
+before, 85 after. Over all team-games the pick is right 94.9% / 93.6% (tuning / holdout) against
+94.6% / 92.4%. Props: fallback-game QB passing-yards main lines 2023-25 (74 lines, 35 games), Brier
+0.2450 against 0.2453 (books 0.2497). Applied Nov 6, 2026 (Ryan's go-ahead): `players._pick_starter`.
