@@ -26,6 +26,9 @@ kept only if better on all four and worse on none; a mixed result goes to Ryan.
 Props check: QB passing-yards main lines at 2023-2025 DK/FD in fallback games are reported (the
 books post them for the starter they expect, so the sample is small); judged only with 30+ lines.
 Also reported: pick accuracy over all team-games (it can only change in fallback games).
+
+Applied Nov 6, 2026: players._pick_starter now uses "volume", so on a rerun "current" and "volume"
+are the same (fallback right 79.9% / 73.4%).
 """
 from __future__ import annotations
 

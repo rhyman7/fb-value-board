@@ -452,6 +452,13 @@ def _pick_starter(d: pd.DataFrame):
     prev = d[d["player_id"] == top["prev_qb"]]
     if len(prev) and not (top["att_share_raw"] >= 0.8 and top["player_id"] != top["prev_qb"]):
         return prev.index[0]
+    # Last game's starter is out: the active quarterback with the most recent pass attempts
+    # (decayed pass_att_sum), then the largest share. The largest share alone let a quarterback
+    # with no games (half the position average) outrank a season-long backup with a few passes
+    # (Nov 2026: Carson Beck over Gardner Minshew). FEATURES.md "Backup-QB starter pick":
+    # right on 73.4% of these games since 2019 (55.9% before); applied Nov 6, 2026.
+    if "pass_att_sum" in d:
+        return d.sort_values(["pass_att_sum", "att_share_raw"], ascending=False, na_position="last").index[0]
     return d.index[0]
 
 
@@ -470,8 +477,9 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
         p[c] = np.where(tot > 0, raw / tot.clip(lower=0.85), 0.0)
     # One starting quarterback takes the passes: last game's starter if he is active, unless
     # another active quarterback is clearly the regular (80%+ of the team's recent passes), as when
-    # a starter returns from injury; with neither, the active quarterback with the largest share.
-    # Right on 92.7% of team-games since 2019 (91.1% for largest share alone). A hand
+    # a starter returns from injury; with neither, the active quarterback with the most recent pass
+    # attempts (_pick_starter). Right on 93.6% of team-games since 2019 (Nov 6, 2026; 92.4% when
+    # the fallback was the largest share, 91.1% for largest share alone). A hand
     # override (data/overrides.csv, kind=starter; qb_force) names the starter outright.
     qb = p[(p["group"] == "QB") & act].copy()
     if len(qb):

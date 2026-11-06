@@ -2030,7 +2030,7 @@ tuning margin −0.021 (SE 0.018), total +0.009 (SE 0.015); holdout margin −0.
 −0.005 (SE 0.007): all within noise, and the totals, where the trenches should matter most, go the
 wrong way on the tuning seasons.
 
-## Backup-QB starter pick in the player projections (Nov 6, 2026): passes the keep rule, not yet on the board
+## Backup-QB starter pick in the player projections (Nov 6, 2026): kept, on the board
 
 `experiments/backup_qb_pick_test.py` (rule committed before the first run; an earlier draft of the
 rule, with different candidates, was replaced before anything ran). When last game's starter is not
@@ -2050,4 +2050,4 @@ decayed starts (starts), unknown QBs ranked last (known).
 Volume is better on all four measures, so it passes the keep rule. 116 picks change: 29 were right
 before, 85 after. Over all team-games the pick is right 94.9% / 93.6% (tuning / holdout) against
 94.6% / 92.4%. Props: fallback-game QB passing-yards main lines 2023-25 (74 lines, 35 games), Brier
-0.2450 against 0.2453 (books 0.2497). Putting it on the board needs Ryan's go-ahead.
+0.2450 against 0.2453 (books 0.2497). Applied Nov 6, 2026 (Ryan's go-ahead): `players._pick_starter`.
