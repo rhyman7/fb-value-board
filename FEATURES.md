@@ -1918,3 +1918,34 @@ affected (the player projections don't read the game model's quarterback rating)
 Applied Nov 5, 2026 (Ryan's go-ahead): `nflmodel/pff_qb.py`, passed to the engine as
 `qb_prior_model` by the pipeline. The production code reproduces the test's six numbers exactly.
 Without the PFF data (no `.pff-data` checkout) the prior is −0.13, the old model.
+
+## Whole-roster availability weighted by PFF grades (Nov 5, 2026): no
+
+`experiments/pff_availability_test.py` (rule committed before the first run). Every non-quarterback
+player who is known to be out before kickoff (Out or Doubtful on the injury report, or on a reserve
+list: RES, PUP, NWT, SUS, RSN, RSR, EXE; game-day inactives not counted) is weighted by his usual
+snap share (team's last 8 PFF games, decayed) times his PFF overall grade above a replacement level
+(decayed over his earlier games, shrunk with 300 snaps). Summed by unit (OL, skill, front,
+secondary) into home-minus-away margin features and both-teams total features, on top of the
+production model (the QB prior, d_chg_ol, d_depth1_out and d_snap_drop included). Data: PFF
+offense_summary and defense_summary 2014 on (247,514 player-games, linked by nflverse's players file;
+the weekly rosters carry no pff_id for offensive linemen), nflverse injury reports and rosters.
+Raw model, average miss:
+
+| Version | Tuning 2015-18 margin / total | Holdout 2019+ margin / total |
+|---|---|---|
+| Current model | 9.843 / 10.693 | 9.958 / 10.466 |
+| A offense/defense, replacement 60 | 9.920 / 10.701 | 9.956 / 10.475 |
+| B four units, 60 | 10.044 / 10.701 | 9.957 / 10.475 |
+| C offense/defense, 50 | 9.927 / 10.695 | 9.953 / 10.457 |
+| D offense/defense, 70 | 9.864 / 10.702 | 9.966 / 10.472 |
+| E as A, replacing d_chg_ol and d_depth1_out | 9.923 / 10.701 | 9.955 / 10.475 |
+
+No version beats the current model on the tuning seasons, so nothing is carried to the holdout and
+nothing is kept. Margin better in 6 of 12 PFF-era seasons, total in 7 (version D against the current
+model). The closest to a trade-off is C (better on both holdout measures by 0.005 and 0.009, worse on
+the tuning margin by 0.084): not close enough to argue for. Week 18 rest games carry the largest
+values and swing the fits. The opener record at 2+ points of disagreement looks better with D
+(holdout 393-287, +10.1%, against 382-289, +8.6%), but availability here is Friday's knowledge, which
+the opener doesn't have, so that record is flattered by construction and isn't evidence.
+Props: not applicable (the player projections don't read the game model's features).
