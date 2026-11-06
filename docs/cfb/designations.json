@@ -1,20 +1,83 @@
 {
  "source": "Covers.com",
  "url": "https://www.covers.com/sport/football/ncaaf/injuries",
- "checked": "2026-11-05",
+ "checked": "2026-11-06",
  "players": [
   {
-   "team": "UTSA",
-   "name": "B. Donnell",
-   "pos": "RB",
+   "team": "ALA",
+   "name": "Ryan Coleman-Williams",
+   "pos": "WR",
    "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
+   "injury": "Knee",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "ALA",
+   "name": "E. Crowell",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Leg",
+   "updated": "2026-10-19",
+   "season": false
+  },
+  {
+   "team": "ARIZ",
+   "name": "Tre Spivey",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Ankle",
+   "updated": "2026-10-04",
    "season": true
   },
   {
-   "team": "FAU",
-   "name": "P. Cannon",
+   "team": "ARIZ",
+   "name": "Giovanni Richardson",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Hamstring",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "FLA",
+   "name": "V. Brown III",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Knee",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "D. Overby",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Knee",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "KU",
+   "name": "Keaton Kubecka",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "KU",
+   "name": "Y. Willis",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Foot",
+   "updated": "2026-09-28",
+   "season": true
+  },
+  {
+   "team": "LSU",
+   "name": "Trey'Dez Green",
    "pos": "TE",
    "d": "Q",
    "injury": "Undisclosed",
@@ -22,17 +85,548 @@
    "season": false
   },
   {
-   "team": "JMU",
-   "name": "Z. Collins",
-   "pos": "WR",
+   "team": "MIZ",
+   "name": "Brett Norfleet",
+   "pos": "TE",
    "d": "Q",
-   "injury": "Shoulder",
+   "injury": "Undisclosed",
    "updated": "2026-10-17",
    "season": false
   },
   {
-   "team": "USM",
-   "name": "A. Sledge",
+   "team": "MIZ",
+   "name": "Ahmad Hardy",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Leg",
+   "updated": "2026-09-11",
+   "season": false
+  },
+  {
+   "team": "NEB",
+   "name": "Isaiah Mozee",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-19",
+   "season": false
+  },
+  {
+   "team": "NEB",
+   "name": "Jamal Rule",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-20",
+   "season": false
+  },
+  {
+   "team": "ORE",
+   "name": "Evan Stewart",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-19",
+   "season": false
+  },
+  {
+   "team": "ORE",
+   "name": "Jeremiah McClellan",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Foot",
+   "updated": "2026-09-21",
+   "season": false
+  },
+  {
+   "team": "OU",
+   "name": "E. Thomas",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Lower Body",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "PSU",
+   "name": "K. Howard",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-23",
+   "season": false
+  },
+  {
+   "team": "SC",
+   "name": "Mazeo Bennett Jr.",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-09",
+   "season": false
+  },
+  {
+   "team": "SC",
+   "name": "L. Anderson III",
+   "pos": "QB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-08",
+   "season": false
+  },
+  {
+   "team": "SYR",
+   "name": "Steve Angeli",
+   "pos": "QB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "UCF",
+   "name": "Dylan Wade",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Shoulder",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "UK",
+   "name": "CJ Baxter",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "WASH",
+   "name": "Trey Cooley",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-19",
+   "season": false
+  },
+  {
+   "team": "WASH",
+   "name": "Jayden Limar",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Upper Body",
+   "updated": "2026-09-07",
+   "season": false
+  },
+  {
+   "team": "WASH",
+   "name": "Q. Carr",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-07",
+   "season": false
+  },
+  {
+   "team": "ORE",
+   "name": "I. Hooks",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "ORE",
+   "name": "D. Gresham",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Neck",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "ORE",
+   "name": "S. Price",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "ORE",
+   "name": "A. Flowers",
+   "pos": "CB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-14",
+   "season": true
+  },
+  {
+   "team": "ND",
+   "name": "B. Hebert",
+   "pos": "QB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "ND",
+   "name": "Q. Porter",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Knee",
+   "updated": "2026-09-28",
+   "season": true
+  },
+  {
+   "team": "PSU",
+   "name": "B. Kortovich",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "PSU",
+   "name": "D. Sheffey",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "PSU",
+   "name": "M. Granville",
+   "pos": "DL",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-12",
+   "season": true
+  },
+  {
+   "team": "WASH",
+   "name": "C. Moss",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "WASH",
+   "name": "C. Christian",
+   "pos": "S",
+   "d": "O",
+   "injury": "Achilles",
+   "updated": "2026-10-03",
+   "season": true
+  },
+  {
+   "team": "OU",
+   "name": "T. Harris",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Back",
+   "updated": "2026-09-15",
+   "season": false
+  },
+  {
+   "team": "LSU",
+   "name": "R. Guillory Jr.",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "LSU",
+   "name": "T. Brown",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "LSU",
+   "name": "T. Singleton",
+   "pos": "LB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "LSU",
+   "name": "P. Wright III",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-21",
+   "season": true
+  },
+  {
+   "team": "LSU",
+   "name": "D. Spears",
+   "pos": "S",
+   "d": "O",
+   "injury": "Knee",
+   "updated": "2026-09-21",
+   "season": true
+  },
+  {
+   "team": "ALA",
+   "name": "C. Morgan",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Hamstring",
+   "updated": "2026-10-19",
+   "season": false
+  },
+  {
+   "team": "ALA",
+   "name": "A. Walker",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "ALA",
+   "name": "Josh Ford",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Arm",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "MIZ",
+   "name": "D. Smith",
+   "pos": "DL",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "MIZ",
+   "name": "G. Hoffman",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-20",
+   "season": false
+  },
+  {
+   "team": "MIZ",
+   "name": "J. Brady",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-20",
+   "season": false
+  },
+  {
+   "team": "MIZ",
+   "name": "C. Green",
+   "pos": "OG",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-20",
+   "season": false
+  },
+  {
+   "team": "FLA",
+   "name": "D. Groce",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-07",
+   "season": false
+  },
+  {
+   "team": "FLA",
+   "name": "K. Jimenez",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-05",
+   "season": true
+  },
+  {
+   "team": "SC",
+   "name": "J. Peak",
+   "pos": "OG",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-08",
+   "season": false
+  },
+  {
+   "team": "SC",
+   "name": "G. Brownlow-Dindy",
+   "pos": "DL",
+   "d": "Q",
+   "injury": "Upper Body",
+   "updated": "2026-10-08",
+   "season": false
+  },
+  {
+   "team": "SC",
+   "name": "D. Stewart",
+   "pos": "DL",
+   "d": "O",
+   "injury": "Back",
+   "updated": "2026-09-20",
+   "season": false
+  },
+  {
+   "team": "SC",
+   "name": "J. Sellers",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Lower Body",
+   "updated": "2026-08-17",
+   "season": true
+  },
+  {
+   "team": "SC",
+   "name": "J. Gibson",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Lower Body",
+   "updated": "2026-08-17",
+   "season": false
+  },
+  {
+   "team": "UGA",
+   "name": "I. Canion",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Leg",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "UGA",
+   "name": "T. Blackshear",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Upper Body",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "UGA",
+   "name": "D. Dowdell",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-05",
+   "season": false
+  },
+  {
+   "team": "TENN",
+   "name": "B. Brady",
+   "pos": "LS",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "TENN",
+   "name": "W. Moe Jr.",
+   "pos": "OG",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-30",
+   "season": true
+  },
+  {
+   "team": "TENN",
+   "name": "J. Harmon",
+   "pos": "LB",
+   "d": "O",
+   "injury": "Knee (ACL tear)",
+   "updated": "2026-09-07",
+   "season": true
+  },
+  {
+   "team": "TA&M",
+   "name": "A. Bethel-Roman",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Personal",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "TA&M",
+   "name": "Mario Craver",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "TA&M",
+   "name": "B. Ivy",
+   "pos": "OG",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-11",
+   "season": true
+  },
+  {
+   "team": "TA&M",
+   "name": "T. Bussey",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-21",
+   "season": true
+  },
+  {
+   "team": "TA&M",
+   "name": "M. Williams",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-06",
+   "season": true
+  },
+  {
+   "team": "TA&M",
+   "name": "T. Riden Jr.",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-08-27",
+   "season": true
+  },
+  {
+   "team": "UK",
+   "name": "L. Watkins",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "UK",
+   "name": "A. Afari Jr.",
    "pos": "LB",
    "d": "Q",
    "injury": "Undisclosed",
@@ -40,30 +634,147 @@
    "season": false
   },
   {
-   "team": "USM",
-   "name": "Ethan Hampton",
-   "pos": "QB",
+   "team": "UK",
+   "name": "T. Mizell",
+   "pos": "RB",
    "d": "O",
-   "injury": "Hand",
-   "updated": "2026-09-25",
+   "injury": "Undisclosed",
+   "updated": "2026-08-22",
+   "season": true
+  },
+  {
+   "team": "ARIZ",
+   "name": "S. Brennan",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
    "season": false
   },
   {
-   "team": "USM",
-   "name": "J. Himes",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Foot",
-   "updated": "2026-09-25",
+   "team": "ARIZ",
+   "name": "C. Warren III",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
    "season": false
   },
   {
-   "team": "USM",
-   "name": "Grant Page",
+   "team": "ARIZ",
+   "name": "C. Rusk",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Leg",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ARIZ",
+   "name": "M. Harris",
+   "pos": "LB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ARIZ",
+   "name": "D. Austin",
+   "pos": "S",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-25",
+   "season": true
+  },
+  {
+   "team": "UTAH",
+   "name": "J. Hart",
+   "pos": "CB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "BAY",
+   "name": "C. Redding",
+   "pos": "S",
+   "d": "O",
+   "injury": "Knee",
+   "updated": "2026-09-05",
+   "season": true
+  },
+  {
+   "team": "BAY",
+   "name": "Taz Williams Jr.",
    "pos": "WR",
    "d": "O",
-   "injury": "Elbow",
-   "updated": "2026-09-22",
+   "injury": "Collarbone",
+   "updated": "2026-08-21",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "Easton Miller",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "L. Galer",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "J. Singletary",
+   "pos": "CB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "C. Crawford",
+   "pos": "DL",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "R. Barnes",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "ISU",
+   "name": "C. Pabst",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Knee",
+   "updated": "2026-10-03",
+   "season": true
+  },
+  {
+   "team": "ISU",
+   "name": "J. Bailey",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-09-01",
    "season": false
   },
   {
@@ -127,6 +838,267 @@
    "d": "O",
    "injury": "Undisclosed",
    "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "J. Platt",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-14",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "J. Eberhart",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "J. Forster",
+   "pos": "RB",
+   "d": "Q",
+   "injury": "Knee",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "J. Harvey",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "W. Vala III",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "N. Rankin",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Leg",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "K. Alston",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-11",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "G. Smith",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-08-23",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "B. Thurman",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Foot",
+   "updated": "2026-08-13",
+   "season": true
+  },
+  {
+   "team": "ILL",
+   "name": "A. Perry",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Shoulder",
+   "updated": "2026-08-13",
+   "season": false
+  },
+  {
+   "team": "ILL",
+   "name": "T. Hollinger",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-08-11",
+   "season": false
+  },
+  {
+   "team": "SYR",
+   "name": "N. Edwards",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "SYR",
+   "name": "T. Woody",
+   "pos": "K",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "NEB",
+   "name": "A. Jones Jr.",
+   "pos": "DL",
+   "d": "O",
+   "injury": "Foot",
+   "updated": "2026-10-19",
+   "season": false
+  },
+  {
+   "team": "NEB",
+   "name": "V. Genatone",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-19",
+   "season": true
+  },
+  {
+   "team": "NEB",
+   "name": "L. Miles",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "NEB",
+   "name": "R. Van Poppel",
+   "pos": "DL",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "KU",
+   "name": "J. Mason",
+   "pos": "QB",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "KU",
+   "name": "J. Butler",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "KU",
+   "name": "C. Moses",
+   "pos": "TE",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-17",
+   "season": false
+  },
+  {
+   "team": "KU",
+   "name": "K. Amachree",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-02",
+   "season": true
+  },
+  {
+   "team": "KU",
+   "name": "J. Thurman",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-08-11",
+   "season": true
+  },
+  {
+   "team": "HOU",
+   "name": "J. Strozier Jr.",
+   "pos": "WR",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "HOU",
+   "name": "E. Noel",
+   "pos": "K",
+   "d": "Q",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "HOU",
+   "name": "J. Thurman",
+   "pos": "TE",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-18",
+   "season": false
+  },
+  {
+   "team": "HOU",
+   "name": "J. Hebert",
+   "pos": "RB",
+   "d": "O",
+   "injury": "Leg",
+   "updated": "2026-10-05",
+   "season": true
+  },
+  {
+   "team": "HOU",
+   "name": "M. Tounkara",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Foot",
+   "updated": "2026-08-11",
+   "season": false
+  },
+  {
+   "team": "UCF",
+   "name": "Duane Thomas Jr.",
+   "pos": "WR",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
+   "season": false
+  },
+  {
+   "team": "UCF",
+   "name": "L. Carter",
+   "pos": "LB",
+   "d": "O",
+   "injury": "Undisclosed",
+   "updated": "2026-10-10",
    "season": false
   },
   {
@@ -209,159 +1181,6 @@
    "injury": "Undisclosed",
    "updated": "2026-10-18",
    "season": false
-  },
-  {
-   "team": "NEB",
-   "name": "Jamal Rule",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-20",
-   "season": false
-  },
-  {
-   "team": "NEB",
-   "name": "A. Jones Jr.",
-   "pos": "DL",
-   "d": "O",
-   "injury": "Foot",
-   "updated": "2026-10-19",
-   "season": false
-  },
-  {
-   "team": "NEB",
-   "name": "Isaiah Mozee",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-19",
-   "season": false
-  },
-  {
-   "team": "NEB",
-   "name": "V. Genatone",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-19",
-   "season": true
-  },
-  {
-   "team": "NEB",
-   "name": "L. Miles",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "NEB",
-   "name": "R. Van Poppel",
-   "pos": "DL",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "J. Platt",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-14",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "J. Eberhart",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "J. Forster",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Knee",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "J. Harvey",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "W. Vala III",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "N. Rankin",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Leg",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "K. Alston",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "G. Smith",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-08-23",
-   "season": true
-  },
-  {
-   "team": "ILL",
-   "name": "B. Thurman",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Foot (surgery)",
-   "updated": "2026-08-13",
-   "season": true
-  },
-  {
-   "team": "ILL",
-   "name": "A. Perry",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Shoulder (surgery)",
-   "updated": "2026-08-13",
-   "season": false
-  },
-  {
-   "team": "ILL",
-   "name": "T. Hollinger",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-08-11",
-   "season": true
   },
   {
    "team": "UNM",
@@ -463,69 +1282,6 @@
    "season": false
   },
   {
-   "team": "ARIZ",
-   "name": "S. Brennan",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ARIZ",
-   "name": "C. Warren III",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ARIZ",
-   "name": "Giovanni Richardson",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Hamstring",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ARIZ",
-   "name": "C. Rusk",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Leg",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ARIZ",
-   "name": "M. Harris",
-   "pos": "LB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ARIZ",
-   "name": "Tre Spivey",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Ankle",
-   "updated": "2026-10-04",
-   "season": true
-  },
-  {
-   "team": "ARIZ",
-   "name": "D. Austin",
-   "pos": "S",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-25",
-   "season": true
-  },
-  {
    "team": "TEX",
    "name": "C. Simmons",
    "pos": "DL",
@@ -580,60 +1336,6 @@
    "season": false
   },
   {
-   "team": "MIZ",
-   "name": "D. Smith",
-   "pos": "DL",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "MIZ",
-   "name": "Brett Norfleet",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "MIZ",
-   "name": "G. Hoffman",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-20",
-   "season": false
-  },
-  {
-   "team": "MIZ",
-   "name": "J. Brady",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-20",
-   "season": false
-  },
-  {
-   "team": "MIZ",
-   "name": "C. Green",
-   "pos": "OG",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-20",
-   "season": false
-  },
-  {
-   "team": "MIZ",
-   "name": "Ahmad Hardy",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Leg",
-   "updated": "2026-09-11",
-   "season": false
-  },
-  {
    "team": "BYU",
    "name": "J. Nye",
    "pos": "TE",
@@ -676,105 +1378,6 @@
    "d": "O",
    "injury": "Undisclosed",
    "updated": "2026-09-20",
-   "season": false
-  },
-  {
-   "team": "UTAH",
-   "name": "J. Hart",
-   "pos": "CB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "D. Overby",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Knee",
-   "updated": "2026-10-11",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "Easton Miller",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "L. Galer",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "J. Singletary",
-   "pos": "CB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "C. Crawford",
-   "pos": "DL",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "R. Barnes",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "ISU",
-   "name": "C. Pabst",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Knee",
-   "updated": "2026-10-03",
-   "season": true
-  },
-  {
-   "team": "ISU",
-   "name": "J. Bailey",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-01",
-   "season": false
-  },
-  {
-   "team": "BAY",
-   "name": "C. Redding",
-   "pos": "S",
-   "d": "O",
-   "injury": "Knee",
-   "updated": "2026-09-05",
-   "season": true
-  },
-  {
-   "team": "BAY",
-   "name": "Taz Williams Jr.",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Collarbone",
-   "updated": "2026-08-21",
    "season": false
   },
   {
@@ -839,42 +1442,6 @@
    "injury": "Undisclosed",
    "updated": "2026-08-11",
    "season": true
-  },
-  {
-   "team": "SYR",
-   "name": "N. Edwards",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "SYR",
-   "name": "A. Odom",
-   "pos": "QB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "SYR",
-   "name": "T. Woody",
-   "pos": "K",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "SYR",
-   "name": "Steve Angeli",
-   "pos": "QB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
   },
   {
    "team": "FSU",
@@ -1052,7 +1619,7 @@
    "name": "M. Matthews",
    "pos": "WR",
    "d": "O",
-   "injury": "Lower-leg",
+   "injury": "Undisclosed",
    "updated": "2026-09-21",
    "season": true
   },
@@ -1516,123 +2083,6 @@
    "season": false
   },
   {
-   "team": "TA&M",
-   "name": "A. Bethel-Roman",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Personal",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "TA&M",
-   "name": "Mario Craver",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "TA&M",
-   "name": "B. Ivy",
-   "pos": "OG",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-11",
-   "season": true
-  },
-  {
-   "team": "TA&M",
-   "name": "T. Bussey",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-21",
-   "season": true
-  },
-  {
-   "team": "TA&M",
-   "name": "M. Williams",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-06",
-   "season": true
-  },
-  {
-   "team": "TA&M",
-   "name": "T. Riden Jr.",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-08-27",
-   "season": true
-  },
-  {
-   "team": "SC",
-   "name": "Mazeo Bennett Jr.",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-09",
-   "season": false
-  },
-  {
-   "team": "SC",
-   "name": "J. Peak",
-   "pos": "OG",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-08",
-   "season": false
-  },
-  {
-   "team": "SC",
-   "name": "L. Anderson III",
-   "pos": "QB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-08",
-   "season": false
-  },
-  {
-   "team": "SC",
-   "name": "G. Brownlow-Dindy",
-   "pos": "DL",
-   "d": "Q",
-   "injury": "Upper Body",
-   "updated": "2026-10-08",
-   "season": false
-  },
-  {
-   "team": "SC",
-   "name": "D. Stewart",
-   "pos": "DL",
-   "d": "O",
-   "injury": "Back",
-   "updated": "2026-09-20",
-   "season": false
-  },
-  {
-   "team": "SC",
-   "name": "J. Sellers",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Lower Body",
-   "updated": "2026-08-17",
-   "season": true
-  },
-  {
-   "team": "SC",
-   "name": "J. Gibson",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Lower Body",
-   "updated": "2026-08-17",
-   "season": true
-  },
-  {
    "team": "ULM",
    "name": "J. Wright",
    "pos": "RB",
@@ -1705,105 +2155,6 @@
    "season": false
   },
   {
-   "team": "ALA",
-   "name": "E. Crowell",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Leg",
-   "updated": "2026-10-19",
-   "season": false
-  },
-  {
-   "team": "ALA",
-   "name": "C. Morgan",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Hamstring",
-   "updated": "2026-10-19",
-   "season": false
-  },
-  {
-   "team": "ALA",
-   "name": "A. Walker",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "ALA",
-   "name": "Josh Ford",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Arm",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "ALA",
-   "name": "Ryan Coleman-Williams",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Knee",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "LSU",
-   "name": "R. Guillory Jr.",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "LSU",
-   "name": "Trey'Dez Green",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "LSU",
-   "name": "T. Brown",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "LSU",
-   "name": "T. Singleton",
-   "pos": "LB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "LSU",
-   "name": "P. Wright III",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-21",
-   "season": true
-  },
-  {
-   "team": "LSU",
-   "name": "D. Spears",
-   "pos": "S",
-   "d": "O",
-   "injury": "Knee",
-   "updated": "2026-09-21",
-   "season": true
-  },
-  {
    "team": "CIN",
    "name": "D. Witherspoon",
    "pos": "TE",
@@ -1822,110 +2173,11 @@
    "season": false
   },
   {
-   "team": "HOU",
-   "name": "J. Strozier Jr.",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "HOU",
-   "name": "E. Noel",
-   "pos": "K",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "HOU",
-   "name": "J. Thurman",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "HOU",
-   "name": "J. Hebert",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Leg",
-   "updated": "2026-10-05",
-   "season": true
-  },
-  {
-   "team": "HOU",
-   "name": "M. Tounkara",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Foot",
-   "updated": "2026-08-11",
-   "season": false
-  },
-  {
-   "team": "ORE",
-   "name": "Evan Stewart",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-19",
-   "season": false
-  },
-  {
-   "team": "ORE",
-   "name": "I. Hooks",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "ORE",
-   "name": "D. Gresham",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Neck",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "ORE",
-   "name": "S. Price",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "ORE",
-   "name": "A. Flowers",
-   "pos": "CB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-14",
-   "season": true
-  },
-  {
-   "team": "ORE",
-   "name": "Jeremiah McClellan",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Foot",
-   "updated": "2026-09-21",
-   "season": false
-  },
-  {
    "team": "OSU",
    "name": "Ja'Kobi Jackson",
    "pos": "RB",
    "d": "O",
-   "injury": "Foot (Lisfranc)",
+   "injury": "Foot",
    "updated": "2026-10-21",
    "season": false
   },
@@ -1972,96 +2224,6 @@
    "d": "Q",
    "injury": "Undisclosed",
    "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "PSU",
-   "name": "B. Kortovich",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "PSU",
-   "name": "D. Sheffey",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "PSU",
-   "name": "K. Howard",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-23",
-   "season": false
-  },
-  {
-   "team": "PSU",
-   "name": "M. Granville",
-   "pos": "DL",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-12",
-   "season": true
-  },
-  {
-   "team": "WASH",
-   "name": "Trey Cooley",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-19",
-   "season": false
-  },
-  {
-   "team": "WASH",
-   "name": "C. Moss",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "WASH",
-   "name": "Demond Williams Jr.",
-   "pos": "QB",
-   "d": "Q",
-   "injury": "Ribs",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "WASH",
-   "name": "C. Christian",
-   "pos": "S",
-   "d": "O",
-   "injury": "Achilles",
-   "updated": "2026-10-03",
-   "season": true
-  },
-  {
-   "team": "WASH",
-   "name": "Jayden Limar",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Upper Body",
-   "updated": "2026-09-07",
-   "season": false
-  },
-  {
-   "team": "WASH",
-   "name": "Q. Carr",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-07",
    "season": false
   },
   {
@@ -2279,114 +2441,6 @@
    "injury": "Undisclosed",
    "updated": "2026-10-21",
    "season": false
-  },
-  {
-   "team": "UCF",
-   "name": "Alonza Barnett III",
-   "pos": "QB",
-   "d": "O",
-   "injury": "Hamstring",
-   "updated": "2026-10-20",
-   "season": false
-  },
-  {
-   "team": "UCF",
-   "name": "Duane Thomas Jr.",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "UCF",
-   "name": "L. Carter",
-   "pos": "LB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "UCF",
-   "name": "Dylan Wade",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Shoulder",
-   "updated": "2026-10-10",
-   "season": false
-  },
-  {
-   "team": "KU",
-   "name": "J. Mason",
-   "pos": "QB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "KU",
-   "name": "J. Butler",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "KU",
-   "name": "C. Moses",
-   "pos": "TE",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "KU",
-   "name": "Keaton Kubecka",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "KU",
-   "name": "Cole Ballard",
-   "pos": "QB",
-   "d": "O",
-   "injury": "Shoulder",
-   "updated": "2026-10-02",
-   "season": false
-  },
-  {
-   "team": "KU",
-   "name": "K. Amachree",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-02",
-   "season": true
-  },
-  {
-   "team": "KU",
-   "name": "Y. Willis",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Foot",
-   "updated": "2026-09-28",
-   "season": true
-  },
-  {
-   "team": "KU",
-   "name": "J. Thurman",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-08-11",
-   "season": true
   },
   {
    "team": "RICE",
@@ -2884,69 +2938,6 @@
    "season": false
   },
   {
-   "team": "UK",
-   "name": "L. Watkins",
-   "pos": "TE",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "UK",
-   "name": "A. Afari Jr.",
-   "pos": "LB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "UK",
-   "name": "CJ Baxter",
-   "pos": "RB",
-   "d": "Q",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "UK",
-   "name": "T. Mizell",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-08-22",
-   "season": true
-  },
-  {
-   "team": "TENN",
-   "name": "B. Brady",
-   "pos": "LS",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "TENN",
-   "name": "W. Moe Jr.",
-   "pos": "OG",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-30",
-   "season": true
-  },
-  {
-   "team": "TENN",
-   "name": "J. Harmon",
-   "pos": "LB",
-   "d": "O",
-   "injury": "Knee",
-   "updated": "2026-09-07",
-   "season": true
-  },
-  {
    "team": "SHSU",
    "name": "M. Whisner",
    "pos": "TE",
@@ -3016,33 +3007,6 @@
    "d": "O",
    "injury": "Undisclosed",
    "updated": "2026-10-07",
-   "season": true
-  },
-  {
-   "team": "UGA",
-   "name": "I. Canion",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Leg",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "UGA",
-   "name": "T. Blackshear",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Upper Body",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "UGA",
-   "name": "D. Dowdell",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-05",
    "season": false
   },
   {
@@ -3334,24 +3298,6 @@
    "season": true
   },
   {
-   "team": "ND",
-   "name": "B. Hebert",
-   "pos": "QB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "ND",
-   "name": "Q. Porter",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Knee",
-   "updated": "2026-09-28",
-   "season": true
-  },
-  {
    "team": "MSU",
    "name": "C. Edwards",
    "pos": "RB",
@@ -3443,7 +3389,7 @@
   },
   {
    "team": "IOWA",
-   "name": "L. Phillips Jr.",
+   "name": "L.J. Phillips Jr.",
    "pos": "RB",
    "d": "Q",
    "injury": "Ankle",
@@ -3536,7 +3482,7 @@
    "name": "Liam Szarka",
    "pos": "QB",
    "d": "O",
-   "injury": "Lower leg",
+   "injury": "Leg",
    "updated": "2026-10-05",
    "season": true
   },
@@ -3583,60 +3529,6 @@
    "d": "O",
    "injury": "Undisclosed",
    "updated": "2026-10-17",
-   "season": true
-  },
-  {
-   "team": "OU",
-   "name": "E. Thomas",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Lower Body",
-   "updated": "2026-10-18",
-   "season": false
-  },
-  {
-   "team": "OU",
-   "name": "T. Harris",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Back",
-   "updated": "2026-09-15",
-   "season": false
-  },
-  {
-   "team": "FLA",
-   "name": "V. Brown III",
-   "pos": "WR",
-   "d": "Q",
-   "injury": "Knee",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "FLA",
-   "name": "Aaron Philo",
-   "pos": "QB",
-   "d": "Q",
-   "injury": "Shoulder",
-   "updated": "2026-10-17",
-   "season": false
-  },
-  {
-   "team": "FLA",
-   "name": "D. Groce",
-   "pos": "WR",
-   "d": "O",
-   "injury": "Back",
-   "updated": "2026-09-07",
-   "season": false
-  },
-  {
-   "team": "FLA",
-   "name": "K. Jimenez",
-   "pos": "RB",
-   "d": "O",
-   "injury": "Undisclosed",
-   "updated": "2026-09-05",
    "season": true
   },
   {
