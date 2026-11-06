@@ -1949,3 +1949,37 @@ values and swing the fits. The opener record at 2+ points of disagreement looks 
 (holdout 393-287, +10.1%, against 382-289, +8.6%), but availability here is Friday's knowledge, which
 the opener doesn't have, so that record is flattered by construction and isn't evidence.
 Props: not applicable (the player projections don't read the game model's features).
+
+## PFF prop inputs for the floors strategy, NFL (Nov 6, 2026): both chains mixed, Ryan's call
+
+`experiments/nfl_pff_prop_inputs_test.py` (rule committed before the first run; two plumbing fixes in
+the sanity check before any measure ran: PFF's own `team` field, and linking PFF team names to board
+teams through offensive players). Added to the New projections (route share already in), as of each
+game from earlier games: receiving — aDOT, slot share, contested-target rate, YAC per reception, the
+opponent's coverage grade; rushing — yards before contact per carry, breakaway rate, zone share, the
+opponent's run-defense grade. Same walk-forward as the board; scored on RMSE (tuning 2015-18,
+holdout 2019-25), Brier at the 2023-25 DK/FD main lines and Brier on the floor rungs (alternate
+rungs whose books' reading is 65-95%), pricing snapshot.
+
+| Receiving chain | Current | With PFF inputs | Change |
+|---|---|---|---|
+| WR receptions RMSE, tuning / holdout | 1.8257 / 1.8054 | 1.8317 / 1.8054 | +0.0060 ± 0.0030 / +0.0000 ± 0.0015 |
+| RB receptions RMSE | 1.4880 / 1.3954 | 1.4856 / 1.3963 | −0.0024 ± 0.0031 / +0.0010 ± 0.0017 |
+| WR receiving yards RMSE | 28.261 / 27.555 | 28.311 / 27.566 | +0.050 ± 0.049 / +0.011 ± 0.026 |
+| RB receiving yards RMSE | 15.180 / 13.796 | 15.192 / 13.804 | +0.012 ± 0.031 / +0.009 ± 0.017 |
+| Main lines, Brier (10,356; books 0.24898) | 0.25388 | 0.25354 | −0.00034 ± 0.00047 |
+| Floor rungs 65-95%, Brier (5,492; books 0.15952; 78.8% cleared) | 0.16610 | 0.16549 | −0.00061 ± 0.00048 |
+
+| Rushing chain | Current | With PFF inputs | Change |
+|---|---|---|---|
+| RB carries RMSE, tuning / holdout | 4.4527 / 4.1566 | 4.4800 / 4.1482 | +0.0273 ± 0.0119 / −0.0084 ± 0.0059 |
+| RB rushing yards RMSE | 24.976 / 24.716 | 25.017 / 24.702 | +0.041 ± 0.070 / −0.013 ± 0.039 |
+| Main lines, Brier (4,311; books 0.24979) | 0.25360 | 0.25345 | −0.00016 ± 0.00095 |
+| Floor rungs 65-95%, Brier (3,312; books 0.16294; 78.2% cleared) | 0.17266 | 0.17191 | −0.00075 ± 0.00084 |
+
+Receiving: better on 3 of 10 (the projections get slightly worse; the small Brier gains are within
+noise). Rushing: better on 4 of 6 (worse on the tuning seasons, carries by 2.3 SE; better on the
+holdout and both Brier measures, all within noise). Neither is kept by the rule; both are Ryan's call.
+The larger finding: on the floor rungs the books read the outcome far better than the model, with or
+without these inputs (receiving 0.1595 vs 0.1661, rushing 0.1629 vs 0.1727, gaps of 4-6 SE). The
+rungs that clear 78% of the time are already priced well by the books.
