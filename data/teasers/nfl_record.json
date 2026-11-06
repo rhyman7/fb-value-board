@@ -1,4 +1,41 @@
 {
- "legs": {},
- "pairs": {}
+ "legs": {
+  "dog, total 49.5 or less (the strategy)": {
+   "w": 0,
+   "l": 0,
+   "p": 0,
+   "hit": null
+  },
+  "dog, total 50+": {
+   "w": 0,
+   "l": 0,
+   "p": 0,
+   "hit": null
+  },
+  "fav (watch only)": {
+   "w": 1,
+   "l": 0,
+   "p": 0,
+   "hit": 1.0
+  }
+ },
+ "pairs": {
+  "-120": {
+   "n": 0,
+   "w": 0,
+   "l": 0,
+   "p": 0,
+   "units": 0.0,
+   "roi": null
+  },
+  "-130": {
+   "n": 0,
+   "w": 0,
+   "l": 0,
+   "p": 0,
+   "units": 0.0,
+   "roi": null
+  }
+ },
+ "built": "2026-11-06 15:41 UTC"
 }
