@@ -88,7 +88,8 @@ def build(games, tg, qb) -> pd.DataFrame:
     # previous game of each team: its order, then that game's starter share
     r = qb_risk(games, qb)
     order_of = games[["game_id", "season", "week"]].assign(order=lambda x: x.season * 100 + x.week)
-    f = f.merge(order_of[["game_id", "order"]], on="game_id", how="left")
+    if "order" not in f:
+        f = f.merge(order_of[["game_id", "order"]], on="game_id", how="left")
     for side, col in (("home_team", "qb_risk_h"), ("away_team", "qb_risk_a")):
         rr = r.rename(columns={"team": side}).sort_values("order")
         x = f[["game_id", side, "order"]].sort_values("order")
