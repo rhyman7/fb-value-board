@@ -203,7 +203,9 @@ check its first run.
    Nov 2026); the total model uses the originals.
 2. **Quarterback adjustment.** Each quarterback has a decayed, shrunk EPA per
    dropback, judged over about 80 team-weeks so a starter's value does not
-   collapse after a few bad games; an unknown backup starts at 0.13 EPA per
+   collapse after a few bad games. The rating is shrunk toward the quarterback's own
+   PFF pass grades turned into EPA (`nflmodel/pff_qb.py`, Nov 2026), so a backup with
+   snaps anywhere starts from his grades; one with no PFF games starts at 0.13 EPA per
    dropback below average. The feature is the gap between this week's starter and the
    quarterbacks who produced the team's pass rating.
 3. **Market-implied ratings.** Earlier weeks' closing spreads and totals are

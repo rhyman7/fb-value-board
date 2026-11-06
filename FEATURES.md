@@ -1882,7 +1882,7 @@ Side finding, not a rule (Nov 5, 2026 consultant review): the curve puts both ki
 teaser at -120 needs; on 2014-18 both cleared about 76%. The gap is 1.5 standard errors, so the board's
 pricing is unchanged; it is a candidate for the live teaser record (`claude/betting-strategies.md`).
 
-## Quarterback value from PFF grades (Nov 5, 2026): passes the keep rule, not yet on the board
+## Quarterback value from PFF grades (Nov 5, 2026): kept, on the board
 
 `experiments/qb_pff_grade_test.py` (rule written and committed before the first run). A
 quarterback's value is his decayed EPA per dropback shrunk toward a prior; today every prior is
@@ -1915,5 +1915,6 @@ place as the starting point for a quarterback with few dropbacks, not as a secon
 established starter. Big-time and turnover-worthy rates add nothing over the grade. Props: not
 affected (the player projections don't read the game model's quarterback rating).
 
-Not yet on the board: applying it needs Ryan's go-ahead (production engine reads the PFF
-quarterback table through `PFF_DATA_TOKEN`, falling back to −0.13 when PFF data is missing).
+Applied Nov 5, 2026 (Ryan's go-ahead): `nflmodel/pff_qb.py`, passed to the engine as
+`qb_prior_model` by the pipeline. The production code reproduces the test's six numbers exactly.
+Without the PFF data (no `.pff-data` checkout) the prior is −0.13, the old model.

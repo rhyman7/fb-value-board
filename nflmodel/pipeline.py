@@ -39,7 +39,15 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     season = int(games[games.played].season.max())
 
     say("Rating teams week by week ...")
-    engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games)
+    qb_prior = None
+    try:                                          # PFF-grade quarterback prior (pff_qb.py); -0.13 without PFF data
+        from . import pff_qb
+        qb_prior = pff_qb.load(qb, sorted(games.season.unique()))
+    except Exception as exc:  # noqa: BLE001
+        say(f"  PFF quarterback prior skipped ({exc})")
+    say(f"  quarterback prior: {'PFF grades' if qb_prior is not None else 'flat ' + str(C.QB_REPLACEMENT)}")
+    engine = ExtRatingEngine(tg, qb, team_extra, qb_extra, extra_metrics=PRODUCTION_METRICS, games=games,
+                             qb_prior_model=qb_prior)
     base = model.build_frame(games, engine, injuries=inj)
     frame, info = model.walk_forward(base)
     wf_input = base                               # the frame the game model is fitted on (shadow.py refits it)
