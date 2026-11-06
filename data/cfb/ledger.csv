@@ -155,3 +155,6 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_11_TEX_LSU|Spread|away,2026-11-05 23:59,2026,11,2026_11_TEX_LSU,401856885,2026-11-14T05:00Z,Spread,away,TEX +5.5,model,fanduel,5.5,-104.0,-104.0,0.0077,0.0005,consensus,5.5,46.5,4.84,49.71
 2026_11_TEX_LSU|Moneyline|away,2026-11-05 23:59,2026,11,2026_11_TEX_LSU,401856885,2026-11-14T05:00Z,Moneyline,away,TEX ML,price,fanduel,,184.0,184.0,0.0324,0.0033,consensus,5.5,46.5,4.84,49.71
 2026_11_NU_OSU|Total|over,2026-11-05 23:59,2026,11,2026_11_NU_OSU,401858522,2026-11-14T17:00Z,Total,over,Over 48.5,price,fanduel,47.5,-110.0,-110.0,0.02,0.0041,consensus,9.5,48.5,11.88,50.54
+2026_11_NU_OSU|Spread|away,2026-11-06 09:14,2026,11,2026_11_NU_OSU,401858522,2026-11-14T17:00Z,Spread,away,NU +9.5,price,fanduel,10.5,-108.0,-108.0,0.0096,0.0086,consensus,9.5,48.5,12.04,50.44
+2026_11_ORST_BOIS|Moneyline|away,2026-11-06 09:14,2026,11,2026_11_ORST_BOIS,401860914,2026-11-14T23:00Z,Moneyline,away,ORST ML,price,fanduel,,180.0,180.0,-0.0079,0.0073,consensus,4.5,62.5,9.61,64.08
+2026_11_ORST_BOIS|Total|under,2026-11-06 09:14,2026,11,2026_11_ORST_BOIS,401860914,2026-11-14T23:00Z,Total,under,Under 62.5,price,fanduel,63.5,-106.0,-106.0,0.0199,0.0063,consensus,4.5,62.5,9.61,64.08
