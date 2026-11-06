@@ -1983,3 +1983,27 @@ holdout and both Brier measures, all within noise). Neither is kept by the rule;
 The larger finding: on the floor rungs the books read the outcome far better than the model, with or
 without these inputs (receiving 0.1595 vs 0.1661, rushing 0.1629 vs 0.1727, gaps of 4-6 SE). The
 rungs that clear 78% of the time are already priced well by the books.
+
+## Predicting the spread's move from the opener (Nov 6, 2026): mixed, leave as is
+
+`experiments/line_move_predict_test.py` (rule committed before the first run; one crash fixed
+before any measure). Target: closing minus opening spread. Opener-time model (last week's
+starters, no late news, post-Monday games out), nfelo's openers, 3,316 games 2009 on, refitted
+each season on earlier seasons. Gap-only (move ~ model minus opener, what the board implies) against
+the full model (+ nfelo's rating gap without its QB adjustment, last game's starter under 75% of
+dropbacks for each team, the opening spread).
+
+| | Tuning 2014-18 | Holdout 2019+ |
+|---|---|---|
+| Average miss of the predicted move, gap-only | 1.2340 | 1.1743 |
+| Full model | 1.2399 (+0.006 ± 0.005) | 1.1760 (+0.002 ± 0.003) |
+| Bets at the opener, today's rule (model off the opener by 2+) | 203-157, +7.6% ± 4.9%, CLV +0.65 | 345-282, +4.9% ± 3.7%, CLV +0.54 |
+| Full rule (predicted move 0.5+ points; threshold set on tuning) | 146-104, +11.4% ± 5.9%, CLV +0.85 | 264-216, +5.0% ± 4.3%, CLV +0.64 |
+
+Better on 2 of 4 (both returns), worse on both move measures: mixed. The extra inputs don't predict
+the move better than the gap alone; the full rule's better tuning return comes from betting fewer,
+bigger disagreements (about 0.14 points of move per point of gap, so 0.5 points of predicted move
+is a gap of about 3.5), and on the holdout it matches today's rule (+5.0% vs +4.9%). The one input
+with a sizeable fitted effect: when the home team's starter threw under 75% of its dropbacks last
+game, the line moves about 0.6 points toward the away team (2.7% of games): QB news the market
+prices during the week. A lead for the backup-QB work, not a rule.
