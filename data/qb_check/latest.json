@@ -1,0 +1,43 @@
+{
+ "checked_utc": "2026-11-06T21:24:29Z",
+ "games": 17,
+ "compared": 28,
+ "not_in_nfelo": 4,
+ "disagree": [
+  {
+   "game_id": "2026_09_CLE_NO",
+   "team": "CLE",
+   "board": "Shedeur Sanders",
+   "nfelo": "Deshaun Watson",
+   "kickoff": "2026-11-08T18:00Z"
+  },
+  {
+   "game_id": "2026_09_NYG_PHI",
+   "team": "PHI",
+   "board": "Joe Milton III",
+   "nfelo": "Tanner McKee",
+   "kickoff": "2026-11-08T18:00Z"
+  },
+  {
+   "game_id": "2026_09_ARI_SEA",
+   "team": "SEA",
+   "board": "Drew Lock",
+   "nfelo": "Sam Darnold",
+   "kickoff": "2026-11-08T21:25Z"
+  },
+  {
+   "game_id": "2026_09_ARI_SEA",
+   "team": "ARI",
+   "board": "Gardner Minshew",
+   "nfelo": "Jacoby Brissett",
+   "kickoff": "2026-11-08T21:25Z"
+  }
+ ],
+ "changed": true,
+ "key": [
+  "2026_09_ARI_SEA|ARI|Gardner Minshew|Jacoby Brissett",
+  "2026_09_ARI_SEA|SEA|Drew Lock|Sam Darnold",
+  "2026_09_CLE_NO|CLE|Shedeur Sanders|Deshaun Watson",
+  "2026_09_NYG_PHI|PHI|Joe Milton III|Tanner McKee"
+ ]
+}
