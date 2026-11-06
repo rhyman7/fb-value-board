@@ -2007,3 +2007,25 @@ is a gap of about 3.5), and on the holdout it matches today's rule (+5.0% vs +4.
 with a sizeable fitted effect: when the home team's starter threw under 75% of its dropbacks last
 game, the line moves about 0.6 points toward the away team (2.7% of games): QB news the market
 prices during the week. A lead for the backup-QB work, not a rule.
+
+## Trenches matchup from PFF: pressure allowed against pass-rush win rate (Nov 6, 2026): no
+
+`experiments/trenches_test.py` (rule committed before the first run). Per team, decayed over earlier
+games: offense pressure allowed (pressured dropbacks / dropbacks), defense pass-rush win rate, and
+the offense's pressure-to-sack rate (PFF passing_pressure and defense_pass_rush, 2014 on). Expected
+pressure on each offense = its pressure allowed + the opposing pass-rush win rate (centred);
+expected sacks = that × its pressure-to-sack rate relative to the league. Margin: away minus home;
+total: the sum. Added to the production model. Raw model, average miss:
+
+| Version | Tuning 2015-18 margin / total | Holdout 2019+ margin / total |
+|---|---|---|
+| Current model | 9.843 / 10.693 | 9.958 / 10.466 |
+| A pressure | 9.822 / 10.702 | 9.955 / 10.461 |
+| B sacks | 9.826 / 10.706 | 9.950 / 10.461 |
+| C both | 9.820 / 10.709 | 9.954 / 10.463 |
+
+Every version is worse on the tuning total, so none is chosen and none is kept; the QB passing-yards
+props check (run only for a chosen version) did not run. Version A against the current model:
+tuning margin −0.021 (SE 0.018), total +0.009 (SE 0.015); holdout margin −0.004 (SE 0.013), total
+−0.005 (SE 0.007): all within noise, and the totals, where the trenches should matter most, go the
+wrong way on the tuning seasons.
