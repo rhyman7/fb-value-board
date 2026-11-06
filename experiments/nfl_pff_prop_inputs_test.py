@@ -137,11 +137,14 @@ def player_inputs(table: pd.DataFrame) -> pd.DataFrame:
 
 def team_defense(table: pd.DataFrame) -> pd.DataFrame:
     """opp_cov and opp_rdef per (game_id, team): the opponent's decayed unit grades before the game."""
-    d = _load("defense_summary")
+    d = _load("defense_summary").drop(columns=["team"], errors="ignore")      # PFF's own team field
     for c in ("grades_coverage_defense", "grades_run_defense", "snap_counts_coverage", "snap_counts_run_defense"):
         d[c] = pd.to_numeric(d[c], errors="coerce")
-    # PFF team_name -> board team, by the majority of linked players' board team that week
-    link = d.dropna(subset=["nfl_id"])[["season", "week", "team_name", "nfl_id"]].merge(
+    # PFF team_name -> board team, by the majority of linked offensive players' board team that week
+    # (the player table holds offensive players only; first run's sanity check had whole teams
+    # missing when linked through defenders)
+    r = _load("receiving_summary")
+    link = r.dropna(subset=["nfl_id"])[["season", "week", "team_name", "nfl_id"]].merge(
         table[["player_id", "season", "week", "team"]].rename(columns={"player_id": "nfl_id"}), on=["nfl_id", "season", "week"])
     tm = link.groupby(["season", "team_name", "team"]).size().rename("n").reset_index().sort_values("n").drop_duplicates(["season", "team_name"], keep="last")
     d = d.merge(tm[["season", "team_name", "team"]], on=["season", "team_name"], how="inner")
