@@ -35,7 +35,9 @@ Versions (all added to the production margin and total features):
   E  as A, replacing d_chg_ol and d_depth1_out in the margin model
 
 Data: PFF NFL offense_summary and defense_summary (rhyman7/pff-data, 2014 on; players linked to
-rosters by nflverse's weekly-roster pff_id), nflverse injury reports and weekly rosters 2014 on.
+nflverse ids by nflverse's players file pff_id: 100% of linemen, about 99.9% of the rest. The weekly
+rosters' own pff_id is blank for offensive linemen, found in the sanity check before any measure
+was run), nflverse injury reports and weekly rosters 2014 on, matched by gsis id.
 Games before a team has PFF history (2014 week 1) get 0.
 
 Scored on the raw model's average miss (walk-forward refits, as experiments/qb_test.py): margin
@@ -113,13 +115,16 @@ def pff_player_games(last: int) -> pd.DataFrame:
     p["season"] = p["season"].astype(int)
     p["order"] = p["season"] * 100 + p["week"]
     p["side"] = p["unit"].map(SIDE)
+    from nflmodel.pff_routes import pff_ids
+    p = p.merge(pff_ids(), left_on="player_id", right_on="pff_id", how="inner").drop(columns=["pff_id"])
+    p["pid"] = p["nfl_id"]
     return p.reset_index(drop=True)
 
 
 def rosters_and_injuries(last: int):
     ros, inj = [], []
     for s in range(FIRST, last + 1):
-        r = _nv("weekly_rosters", f"roster_weekly_{s}.parquet")[["season", "week", "team", "status", "gsis_id", "pff_id"]]
+        r = _nv("weekly_rosters", f"roster_weekly_{s}.parquet")[["season", "week", "team", "status", "gsis_id"]]
         ros.append(r)
         i = _nv("injuries", f"injuries_{s}.parquet")[["season", "week", "team", "gsis_id", "report_status"]]
         inj.append(i)
@@ -129,15 +134,14 @@ def rosters_and_injuries(last: int):
         d["team"] = d["team"].replace(C.TEAM_ALIASES)
         d["season"] = d["season"].astype(int)
         d["week"] = d["week"].astype(int)
-    ros["pff_id"] = pd.to_numeric(ros["pff_id"], errors="coerce")
     return ros, inj
 
 
 def team_map(p: pd.DataFrame, ros: pd.DataFrame) -> dict:
     """(season, PFF team_name) -> nflverse team, by majority of linked roster rows."""
-    r = ros.dropna(subset=["pff_id"])[["season", "week", "team", "pff_id"]].drop_duplicates()
-    m = p[["season", "week", "team_name", "player_id"]].merge(r, left_on=["season", "week", "player_id"],
-                                                             right_on=["season", "week", "pff_id"], how="inner")
+    r = ros.dropna(subset=["gsis_id"])[["season", "week", "team", "gsis_id"]].drop_duplicates()
+    m = p[["season", "week", "team_name", "pid"]].merge(r, left_on=["season", "week", "pid"],
+                                                       right_on=["season", "week", "gsis_id"], how="inner")
     v = m.groupby(["season", "team_name", "team"]).size().reset_index(name="n").sort_values("n")
     return {(s, t): nv for s, t, nv in v.drop_duplicates(["season", "team_name"], keep="last")[["season", "team_name", "team"]].itertuples(index=False)}
 
@@ -151,13 +155,13 @@ def availability(games: pd.DataFrame, p: pd.DataFrame, ros: pd.DataFrame, inj: p
     side_snaps = p.groupby(["team", "order", "side"])["snaps"].transform("max")
     p["share"] = p["snaps"] / side_snaps
     # player grade as of any order: the latest state before it
-    pv = p.dropna(subset=["grade"]).sort_values(["player_id", "order"])
+    pv = p.dropna(subset=["grade"]).sort_values(["pid", "order"])
     pv["t"] = _time(pv["order"].to_numpy()).astype(float)
     # running decayed sums per player (inclusive), to look up "before order X"
     pv["ws"] = 0.0
     pv["wg"] = 0.0
     out_ws, out_wg = np.empty(len(pv)), np.empty(len(pv))
-    pid, t, sn, gr = pv["player_id"].to_numpy(), pv["t"].to_numpy(), pv["snaps"].to_numpy(float), pv["grade"].to_numpy(float)
+    pid, t, sn, gr = pv["pid"].to_numpy(), pv["t"].to_numpy(), pv["snaps"].to_numpy(float), pv["grade"].to_numpy(float)
     ws = wg = 0.0
     for k in range(len(pv)):
         if k == 0 or pid[k] != pid[k - 1]:
@@ -168,30 +172,28 @@ def availability(games: pd.DataFrame, p: pd.DataFrame, ros: pd.DataFrame, inj: p
         ws, wg = ws + sn[k], wg + sn[k] * gr[k]
         out_ws[k], out_wg[k] = ws, wg
     pv["ws"], pv["wg"] = out_ws, out_wg
-    state = pv[["player_id", "order", "t", "ws", "wg", "unit"]]
+    state = pv[["pid", "order", "t", "ws", "wg", "unit"]]
 
     # team game sequences (PFF games), per side
     tg = p.groupby(["team", "order"]).size().reset_index()[["team", "order"]].sort_values(["team", "order"])
     seq = {tm_: g["order"].to_numpy() for tm_, g in tg.groupby("team")}
-    share = p.set_index(["team", "order", "player_id"])["share"]
-    unit_of = p.drop_duplicates(["team", "player_id"], keep="last").set_index(["team", "player_id"])["unit"]
+    share = p.groupby(["team", "order", "pid"])["share"].max()
+    unit_of = p.drop_duplicates(["team", "pid"], keep="last").set_index(["team", "pid"])["unit"]
 
-    # out sets: (team, season, week) -> set of pff ids
-    gs2pff = ros.dropna(subset=["pff_id"]).drop_duplicates(["season", "gsis_id"]).set_index(["season", "gsis_id"])["pff_id"]
-    rs = ros[ros["status"].isin(OUT_STATUS)].dropna(subset=["pff_id"])
+    # out sets: (team, season, week) -> set of nflverse (gsis) ids
+    rs = ros[ros["status"].isin(OUT_STATUS)].dropna(subset=["gsis_id"])
     out = {}
     for (tm_, s, w), g in rs.groupby(["team", "season", "week"]):
-        out.setdefault((tm_, s, w), set()).update(g["pff_id"].astype(int))
-    ij = inj[inj["report_status"].isin(["Out", "Doubtful"])]
+        out.setdefault((tm_, s, w), set()).update(g["gsis_id"])
+    ij = inj[inj["report_status"].isin(["Out", "Doubtful"])].dropna(subset=["gsis_id"])
     for (tm_, s, w), g in ij.groupby(["team", "season", "week"]):
-        ids = [gs2pff.get((s, x)) for x in g["gsis_id"]]
-        out.setdefault((tm_, s, w), set()).update(int(x) for x in ids if x is not None and not pd.isna(x))
+        out.setdefault((tm_, s, w), set()).update(g["gsis_id"])
 
     sched = games[games["season"] >= FIRST][["game_id", "season", "week", "home_team", "away_team"]]
     long = pd.concat([sched.rename(columns={"home_team": "team"})[["game_id", "season", "week", "team"]],
                       sched.rename(columns={"away_team": "team"})[["game_id", "season", "week", "team"]]])
     long["order"] = long["season"] * 100 + long["week"]
-    st_by_pid = {k: g for k, g in state.groupby("player_id")}
+    st_by_pid = {k: g for k, g in state.groupby("pid")}
     rows = []
     for r in long.itertuples(index=False):
         row = {"game_id": r.game_id, "team": r.team, **{f"av_{u}": 0.0 for u in UNITS}}
