@@ -210,6 +210,11 @@ boards in detail; this file is the rules.
     10:35 UTC, before Update board. Without the data `players_ml.feats_for` drops the route
     columns and the board is what it was before; the build log says "PFF route inputs: on/off".
     The route columns never go into the board JSON or any file under `docs/` or `data/`.
+  - **Used in the college margin model** (Nov 6, 2026): `cfbmodel/pff_returning.py` matches this
+    season's CFBD roster to last season's PFF college players (offense and defense summaries) and
+    adds `d_pffret`, transfer-aware returning production (CFB_FEATURES.md). Update college board
+    checks out `ncaa/**/*_defense_summary.csv.gz` for it; without the data `d_pffret` is 0. Only
+    the team-level difference reaches the board, never a PFF grade.
   - **Used in the NFL game model** (Nov 5, 2026): `nflmodel/pff_qb.py` gives each quarterback a
     prior from his PFF pass grades (`passing_summary`, 2014 on), which the rating engine's
     EPA-per-dropback rating shrinks toward in place of the flat `QB_REPLACEMENT` (engine argument

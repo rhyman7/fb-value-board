@@ -11,6 +11,7 @@ from nflmodel import backtest as NBT, bestbets, derivs, ledger, market, sheet
 from nflmodel.pipeline import _clean, haircut_factor
 
 from . import archive, backtest, bets, board, config as C, cfbd, data, designations as DES, espn, extra, model, players, players_data, starters as QBS, teams as T, weather
+from . import pff_returning as PFFRET
 from .ratings import CFBRatingEngine
 
 PLAYER_PERIODS = {"tuning": (2017, 2019), "holdout": (C.HOLDOUT_FROM, 2100)}
@@ -56,7 +57,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     qb_picks = QBS.resolve(QBS.load(), games, qb, verbose=verbose)
     games = QBS.apply(games, qb_picks, engine, verbose=verbose)
     games = DES.apply_qbs(games, qb, des_out, engine, verbose=verbose)
-    frame, info = model.walk_forward(model.build_frame(games, engine, inputs=inputs))
+    frame, info = model.walk_forward(PFFRET.add(model.build_frame(games, engine, inputs=inputs), verbose=verbose))
 
     prev_path = C.DOCS / "data.json"
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
@@ -78,7 +79,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         bt = backtest.summarize(frame, graded, dists)
         bt["wind_unders"] = backtest.wind_report(frame)
         blind = games.assign(home_qb_id=np.nan, away_qb_id=np.nan, wind=np.nan)
-        early_frame, _ = model.walk_forward(model.build_frame(blind, engine))
+        early_frame, _ = model.walk_forward(PFFRET.add(model.build_frame(blind, engine)))
         opening = backtest.opening_report(games, early_frame, dists)
         graded.round(4).to_csv(C.DATA / "backtest_bets.csv", index=False)
 
