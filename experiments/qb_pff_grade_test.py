@@ -11,8 +11,8 @@ quarterback per game) in two ways:
 
   PFF score   each PFF game is turned into an EPA-scale score with a linear map fitted
               walk-forward: for season S, PFF games of seasons before S (2014 on, 10+ dropbacks,
-              weighted by dropbacks) regress the game's EPA per dropback (against that season's
-              PFF average) on the PFF inputs. Two maps:
+              weighted by dropbacks) regress the game's nflverse EPA per dropback (against that
+              season's average, the scale the engine uses) on the PFF inputs. Two maps:
                 grade      grades_pass
                 grade+bt   grades_pass, btt_rate, twp_rate
               A quarterback's PFF value g as of a game is his decayed (the engine's quarterback
@@ -88,16 +88,21 @@ def pff_qb_games(qb: pd.DataFrame) -> pd.DataFrame:
     rate = p.loc[p.nfl_id.notna(), "dropbacks"].sum() / p["dropbacks"].sum()
     print(f"PFF QB games {len(p)}, dropbacks matched to nflverse ids: {rate:.1%}")
     p = p[p.nfl_id.notna()].copy()
-    for c in ("grades_pass", "btt_rate", "twp_rate", "epa"):
+    for c in ("grades_pass", "btt_rate", "twp_rate"):
         p[c] = pd.to_numeric(p[c], errors="coerce")
-    p["epa_db"] = p["epa"] / p["dropbacks"]
+    # the fitting target: nflverse EPA per dropback in that game (the engine's own scale;
+    # PFF's `epa` column is per play and on its own scale, Nov 5 first run)
+    nv = qb.groupby(["qb_id", "order"])[["epa", "dropbacks"]].sum()
+    nv = (nv["epa"] / nv["dropbacks"]).rename("epa_db").reset_index().rename(columns={"qb_id": "nfl_id"})
+    p = p.merge(nv, on=["nfl_id", "order"], how="left")
     return p[["nfl_id", "season", "order", "dropbacks", "epa_db", "grades_pass", "btt_rate", "twp_rate"]].dropna(subset=["grades_pass"])
 
 
 def fit_maps(p: pd.DataFrame, seasons) -> dict:
     """{map: {season: (cols, coef)}} fitted on PFF games of earlier seasons (walk-forward)."""
     p = p.copy()
-    lg = p.groupby("season").apply(lambda x: np.average(x.epa_db.fillna(0), weights=x.dropbacks))
+    p = p.dropna(subset=["epa_db"])
+    lg = p.groupby("season").apply(lambda x: np.average(x.epa_db, weights=x.dropbacks))
     p["rel"] = p["epa_db"] - p["season"].map(lg)
     out = {}
     for name, cols in MAPS.items():
