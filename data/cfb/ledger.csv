@@ -159,3 +159,6 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_11_ORST_BOIS|Moneyline|away,2026-11-06 09:14,2026,11,2026_11_ORST_BOIS,401860914,2026-11-14T23:00Z,Moneyline,away,ORST ML,price,fanduel,,180.0,180.0,-0.0079,0.0073,consensus,4.5,62.5,9.61,64.08
 2026_11_ORST_BOIS|Total|under,2026-11-06 09:14,2026,11,2026_11_ORST_BOIS,401860914,2026-11-14T23:00Z,Total,under,Under 62.5,price,fanduel,63.5,-106.0,-106.0,0.0199,0.0063,consensus,4.5,62.5,9.61,64.08
 2026_10_FSU_BC|Moneyline|away,2026-11-06 23:30,2026,10,2026_10_FSU_BC,401858289,2026-11-07T17:00Z,Moneyline,away,FSU ML,price,fanduel,,-220.0,-220.0,0.0305,0.006,pinnacle,-6.5,52.5,-8.41,54.11
+2026_10_CLEM_SYR|Spread|home,2026-11-06 23:45,2026,10,2026_10_CLEM_SYR,401858285,2026-11-07T17:00Z,Spread,home,SYR +2.5,price,kalshi,2.5,104.0,-103.1,0.0557,0.003,pinnacle,-2.5,50.0,0.4,51.99
+2026_10_CLEM_SYR|Moneyline|home,2026-11-06 23:45,2026,10,2026_10_CLEM_SYR,401858285,2026-11-07T17:00Z,Moneyline,home,SYR ML,price,kalshi,,127.0,118.4,0.0675,0.0034,pinnacle,-2.5,50.0,0.4,51.99
+2026_10_MOST_FIU|Moneyline|home,2026-11-06 23:45,2026,10,2026_10_MOST_FIU,401871074,2026-11-07T21:00Z,Moneyline,home,FIU ML,price,fanduel,,-188.0,-188.0,-0.0169,0.0093,pinnacle,5.0,50.0,1.83,50.17
