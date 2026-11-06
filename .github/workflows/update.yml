@@ -27,9 +27,10 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      # PFF route share for the New projections (nflmodel/pff_routes.py). Private data: checked out
-      # into .pff-data/ (git-ignored, never added below). Without the PFF_DATA_TOKEN secret, or if
-      # the checkout fails, the board builds without it, as before Nov 5, 2026.
+      # PFF route share for the New projections (nflmodel/pff_routes.py) and the PFF-grade
+      # quarterback prior for the game model (nflmodel/pff_qb.py). Private data: checked out into
+      # .pff-data/ (git-ignored, never added below). Without the PFF_DATA_TOKEN secret, or if the
+      # checkout fails, the board builds without them, as before Nov 5, 2026 (QB prior -0.13).
       - name: PFF data (private)
         uses: actions/checkout@v5
         continue-on-error: true
@@ -39,6 +40,7 @@ jobs:
           path: .pff-data
           sparse-checkout: |
             nfl/**/*_receiving_summary.csv.gz
+            nfl/**/*_passing_summary.csv.gz
           sparse-checkout-cone-mode: false
       - name: Browser for the best-bets PDF
         run: pip install playwright && python -m playwright install --with-deps chromium

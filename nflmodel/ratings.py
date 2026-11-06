@@ -44,10 +44,13 @@ class RatingEngine:
                  ridge: dict | None = None, window_seasons: int = 3,
                  games: pd.DataFrame | None = None, market_half_life: float = C.MARKET_HALF_LIFE,
                  qb_half_life: float = C.QB_HALF_LIFE_DROPBACKS, qb_prior: float = C.QB_PRIOR_DROPBACKS,
-                 qb_priors: dict | None = None):
+                 qb_priors: dict | None = None, qb_prior_model=None):
         # qb_priors: {season: {qb_id: prior EPA/dropback}}: a quarterback's prior for games of that
         # season when he is listed, else QB_REPLACEMENT (experiments/qb_test.py, the draft prior)
+        # qb_prior_model: an object with values(order_now, ids, half_life), each quarterback's
+        # prior as of the game: the board's PFF-grade prior (nflmodel/pff_qb.py, Nov 5, 2026)
         self.qb_priors = qb_priors
+        self.qb_prior_model = qb_prior_model
         tg = team_games.sort_values("order").reset_index(drop=True)
         self.teams = sorted(set(tg["team"]) | set(tg["opp"]))
         self.tix = {t: i for i, t in enumerate(self.teams)}
@@ -203,7 +206,10 @@ class RatingEngine:
         return {"R": b[:n], "T": b2[:n], "hfa": b[n], "avg_total": b2[n]}
 
     def _qb_replacement(self, order_now: int, ids) -> np.ndarray:
-        """The prior for each quarterback id: QB_REPLACEMENT unless qb_priors lists him."""
+        """The prior for each quarterback id: the PFF prior model if there is one, else
+        QB_REPLACEMENT unless qb_priors lists him."""
+        if self.qb_prior_model is not None:
+            return self.qb_prior_model.values(order_now, ids, self.qb_half_life)
         if not self.qb_priors:
             return np.full(len(ids), self.QB_REPLACEMENT)
         table = self.qb_priors.get(int(order_now) // 100, {})

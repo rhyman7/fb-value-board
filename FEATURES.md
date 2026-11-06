@@ -1881,3 +1881,40 @@ Side finding, not a rule (Nov 5, 2026 consultant review): the curve puts both ki
 77.6% (330) and favourite legs (-7.5 to -8.5 teased to -1.5/-2.5) 71.1% (159), below the 73.9% a two-team
 teaser at -120 needs; on 2014-18 both cleared about 76%. The gap is 1.5 standard errors, so the board's
 pricing is unchanged; it is a candidate for the live teaser record (`claude/betting-strategies.md`).
+
+## Quarterback value from PFF grades (Nov 5, 2026): kept, on the board
+
+`experiments/qb_pff_grade_test.py` (rule written and committed before the first run). A
+quarterback's value is his decayed EPA per dropback shrunk toward a prior; today every prior is
+−0.13. Here each PFF NFL game (passing_summary, 2014 on; 8,212 quarterback games, 100% of
+dropbacks matched to nflverse ids) is turned into an EPA-scale score by a walk-forward linear
+map fitted on earlier seasons' games (game EPA per dropback on PFF's pass grade, alone or with
+big-time and turnover-worthy throw rates; about +0.014 EPA per dropback per grade point), and a
+quarterback's PFF value is his decayed, dropback-weighted score shrunk toward −0.13 with Pg
+dropbacks. Versions: the EPA rating shrinks toward the PFF value instead of −0.13 ("prior"),
+or the PFF value is blended into the rating ("blend"). Chosen on the tuning seasons 2015-2018
+(2014 is PFF's burn-in), judged on the holdout 2019 on. Raw model, average miss:
+
+| Version | Tuning margin, all / QB-change | Tuning total | Holdout margin, all / QB-change | Holdout total |
+|---|---|---|---|---|
+| Current model | 9.887 / 10.278 | 10.695 | 9.994 / 10.367 | 10.467 |
+| Prior, grade, Pg 100 | 9.882 / 10.282 | 10.692 | 9.992 / 10.368 | 10.465 |
+| Prior, grade, Pg 200 | 9.882 / 10.271 | 10.692 | 9.991 / 10.365 | 10.465 |
+| **Prior, grade, Pg 400 (chosen)** | **9.884 / 10.265** | **10.693** | **9.991 / 10.363** | **10.466** |
+| Prior, grade+BTT/TWP, Pg 100 / 200 / 400 | 9.885-9.886 / 10.270-10.293 | 10.688-10.691 | 9.992-9.993 / 10.364-10.368 | 10.465-10.466 |
+| Blend, a 0.25 / 0.5 | 9.896 / 9.933, 10.231 / 10.244 | 10.688 / 10.697 | 9.998 / 10.009, 10.378 / 10.413 | 10.465 / 10.467 |
+| Prior + blend 0.25 | 9.898 / 10.246 | 10.686 | 9.997 / 10.381 | 10.464 |
+
+Chosen version against the current model (paired): tuning margin −0.003 (SE 0.007), QB-change
+games −0.013 (SE 0.023), total −0.003 (SE 0.004); holdout margin −0.003 (SE 0.004), QB-change
+games −0.004 (SE 0.012), total −0.001 (SE 0.003). Better on all six measures, so it passes the
+keep rule; margin better in 9 of 12 seasons, total in 8 of 12. Small: the model margin moves
+0.11 points on average (at most 1.35). Blending the grade into a starter's rating helps
+QB-change games on the tuning seasons but hurts everything on the holdout: the grade earns its
+place as the starting point for a quarterback with few dropbacks, not as a second opinion on an
+established starter. Big-time and turnover-worthy rates add nothing over the grade. Props: not
+affected (the player projections don't read the game model's quarterback rating).
+
+Applied Nov 5, 2026 (Ryan's go-ahead): `nflmodel/pff_qb.py`, passed to the engine as
+`qb_prior_model` by the pipeline. The production code reproduces the test's six numbers exactly.
+Without the PFF data (no `.pff-data` checkout) the prior is −0.13, the old model.

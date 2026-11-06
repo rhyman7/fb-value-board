@@ -210,6 +210,14 @@ boards in detail; this file is the rules.
     10:35 UTC, before Update board. Without the data `players_ml.feats_for` drops the route
     columns and the board is what it was before; the build log says "PFF route inputs: on/off".
     The route columns never go into the board JSON or any file under `docs/` or `data/`.
+  - **Used in the NFL game model** (Nov 5, 2026): `nflmodel/pff_qb.py` gives each quarterback a
+    prior from his PFF pass grades (`passing_summary`, 2014 on), which the rating engine's
+    EPA-per-dropback rating shrinks toward in place of the flat `QB_REPLACEMENT` (engine argument
+    `qb_prior_model`; FEATURES.md "Quarterback value from PFF grades"). Update board checks out
+    `nfl/**/*_passing_summary.csv.gz` too, and pff-data's daily NFL pull includes that table.
+    Without the data the prior is −0.13 for everyone, exactly the old model; the build log says
+    "quarterback prior: PFF grades" or "flat -0.13". Only the derived quarterback values (EPA
+    scale) reach the board, never a PFF grade.
   - Reading it: `cfbmodel/pff_data.py` (`pff_data.load(table, seasons)`) looks in `$PFF_DATA_DIR`,
     then `.pff-data/` (git-ignored), then `../pff-data`. An Action that needs it checks it out with
     the **PFF_DATA_TOKEN** secret (a fine-grained token: read-only Contents on rhyman7/pff-data
