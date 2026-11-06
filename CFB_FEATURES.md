@@ -323,3 +323,29 @@ at least 2 paired standard errors.
 errors on the holdout. Line yards was the closest (1.6 standard errors on the holdout, worse on
 tuning), too weak for the near-miss list. The overall success rate and the pass and rush ratings
 already carry what these splits measure.
+
+## Returning production from PFF that counts incoming transfers (Nov 5, 2026): mixed, Ryan's call
+
+`experiments/cfb_pff_returning_test.py` (rule committed before the first run). For each team-season,
+the players on this season's CFBD roster are matched by name to last season's PFF college players on
+any team (98,348 matches since 2018, 15,077 of them transfers in), and valued at last season's PFF
+snaps × (snap-weighted grade − 60), clipped at 0. Offense and defense summed separately. Margin:
+home minus away (`d_pffret`); total: both teams' sums, centred (`s_pffret_off`, `s_pffret_def`).
+The first run had a numerical bug in the total features (a filled constant kept a rounding-size
+spread that the ridge's standardisation blew up in 2018, +1.11 points); fixed and every version
+re-run, disclosed in the script. Raw model, average miss (weeks 0-5 in brackets, reported only):
+
+| Version | Tuning 2017-19 margin / total | Holdout 2021+ margin / total |
+|---|---|---|
+| Current model | 12.359 / 13.452 (12.420 / 13.169) | 12.334 / 12.619 (12.572 / 12.575) |
+| **A: margin + d_pffret, total + s_pffret_off/def (chosen)** | **12.354 / 13.447** (12.394 / 13.168) | **12.313** / 12.630 (12.522 / 12.587) |
+| B: margin + d_pffret × early only | 12.366 / 13.452 | 12.309 / 12.619 |
+| C: A + d_pffret × early | 12.375 / 13.447 | 12.305 / 12.630 |
+| D: A replacing CFBD returning production | 12.492 / 13.488 | 12.323 / 12.631 |
+
+A against the current model (paired): tuning margin −0.005 (SE 0.010), total −0.005 (SE 0.012);
+holdout margin **−0.022 (SE 0.009)**, total **+0.011 (SE 0.008)**. Margin better in 2019 and in four
+of the five holdout seasons through 2025 (2026 to date −0.067); weeks 0-5 on the holdout −0.050. The
+feature only exists from 2018, so on the tuning seasons only 2019 could move. Mixed (holdout total
+worse), so not kept by the rule: it goes to Ryan. The margin and total models are fitted separately,
+so A's margin half on its own is exactly A's margin numbers with the totals unchanged.
