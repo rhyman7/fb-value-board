@@ -40,6 +40,9 @@ total, tuning and holdout) and worse on none. The version is chosen on the tunin
 (among those better than the current model on both tuning measures, the lowest tuning margin
 miss); its holdout decides. A mixed result goes to Ryan as a trade-off. Paired standard errors
 reported, not used. Props: not applicable (the player projections don't read these features).
+Correction after the first run (Nov 5, 2026): the total features were 2 x median in seasons
+without data, which kept a rounding-size spread that blew up the 2018 totals fit (+1.11 points);
+they are now centred so those rows are exactly 0. Nothing else changed; every version re-run.
 Caveat: CFBD rosters are the season's roster as posted, which can include players added after
 week 0; that is a small look-ahead, noted, not corrected.
 """
@@ -185,8 +188,13 @@ def add_features(frame: pd.DataFrame, tv: pd.DataFrame) -> pd.DataFrame:
         f[f"away_{c}"] = f[f"away_{c}"].fillna(fill)
     f["d_pffret"] = f["home_ret"] - f["away_ret"]
     f["d_pffret_early"] = f["d_pffret"] * f["early"]
-    f["s_pffret_off"] = f["home_ret_off"] + f["away_ret_off"]
-    f["s_pffret_def"] = f["home_ret_def"] + f["away_ret_def"]
+    # centred on the fill, so rows without data are exactly 0: a filled constant like 2 x median
+    # kept a rounding-size spread that the ridge's standardisation blew up (first run, 2018 totals
+    # +1.11; fixed and every version re-run, Nov 5, 2026)
+    for c, k in (("s_pffret_off", "ret_off"), ("s_pffret_def", "ret_def")):
+        fill = pd.concat([f[f"home_{k}"], f[f"away_{k}"]]).median()
+        f[c] = (f[f"home_{k}"] - fill) + (f[f"away_{k}"] - fill)
+        f.loc[f[c].abs() < 1e-9, c] = 0.0
     return f
 
 
