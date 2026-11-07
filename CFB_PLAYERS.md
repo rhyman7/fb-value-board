@@ -97,6 +97,16 @@ Each piece removed in turn, on 2017-2019:
 - **Who plays**: built into which players are projected, so it cannot be removed on its
   own; as a game-model feature the same box-score signal added nothing (CFB_FEATURES.md).
 
+- **Backup-QB starter pick** (tested Nov 6, 2026, `experiments/cfb_backup_qb_pick_test.py`: not
+  kept). The NFL board's fix (when last game's starter is out, start the backup with the most
+  recent passes) and two other versions, on games where last game's starter had no stat:
+  none beat the current "largest share" pick (best tuning version, recent passes: right 50.1% →
+  50.1% on 2017-19, 45.7% → 45.1% on 2021+, starter passing-yards RMSE slightly worse). In college
+  the pool before kickoff holds only quarterbacks with a stat in the previous game, so the
+  unknown-rookie problem the NFL fix solved hardly comes up; the actual starter is in that pool
+  only about half the time, and the current pick already finds him almost every time he is.
+  Live, the daily starting-QB list covers most of these games.
+
 ## Limits
 
 - No injury report: a player who misses a game without missing the one before is
