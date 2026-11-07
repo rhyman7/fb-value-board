@@ -2860,7 +2860,8 @@ const propsView = (function () {
       // market-only tags (propmarket.market_tags): a book gap on the main line, ladder rungs off their book's main line
       // (the ladder-gap tag is no longer shown: graded on real 2025 rungs it lost 21.7% ± 5.2%, PROPS.md)
       const bgap = gs.find(x => !x.alt && x.bg) || null;
-      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), ladder: gs.some(p => p.alt), bgap };
+      const over = book => { const r = pool.find(x => (x.bk || {})[book]); const o = r && r.bk[book][0]; return o == null ? null : o > 0 ? 1 + o / 100 : 1 + 100 / -o; };   // decimal over price, for sorting
+      return { ...pick, dk: cell("draftkings"), fd: cell("fanduel"), dkO: over("draftkings"), fdO: over("fanduel"), ladder: gs.some(p => p.alt), bgap };
     });
   }
   const resBadge = p => {
@@ -2949,13 +2950,18 @@ const propsView = (function () {
     const dead = p => { const z = dzFromStatus(dzStatus(p.g, p.t, p.n)); return z === "O" || z === "D" || z === "IR" || outs.has(dzKey(p.t, p.n)) || (p.mu === 0 && /^pass_|^completions$|^ints$/.test(p.s)); };
     const deadN = rows.filter(dead).length;
     rows = rows.filter(p => !dead(p));
-    const val = (p, k) => k === "gap" ? Math.abs(gap(p) || 0) : k === "name" ? p.n : k === "ours" ? dec(p) || 0 : k === "books" ? p.fo || 0 : k === "proj" ? p.mu || 0 : k === "line" ? p.L : 0;
-    rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); return (typeof A === "string" ? A.localeCompare(B) : A - B) * ps.dir; });
-    const head = [{ k: "name", t: "Player", l: 1 }, { t: "Game", l: 1 }, { t: "Stat", l: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" }, { t: "Range" }, { t: "Floor" },
-      { k: "ours", t: "Ours, over" }, { k: "books", t: "Books'" }, { k: "gap", t: "Lean" }, { t: "DK O / U" }, { t: "FD O / U" }, { t: "Close" }, { t: "Result", l: 1 }];
+    // every column sorts on what it shows; a blank ("–") always sorts last, whichever way
+    const rng = p => { const o = p.s === "anytime_td" ? null : look(p); return o ? [o.lo, o.hi] : null; };
+    const val = (p, k) => k === "gap" ? (gap(p) == null ? null : Math.abs(gap(p))) : k === "name" ? p.n : k === "ours" ? dec(p) : k === "books" ? p.fo : k === "proj" ? p.mu : k === "line" ? p.L
+      : k === "game" ? (p.ko || "") + "|" + p.g : k === "stat" ? ORDER.indexOf(p.s) : k === "range" ? rng(p) : k === "floor" ? (flOf(bpOf(p), p.s) || {}).floor
+      : k === "dk" ? p.dkO : k === "fd" ? p.fdO : k === "close" ? (p.cL == null || p.alt ? null : p.cL - p.L) : k === "result" ? p.y : null;
+    const cmp = (A, B) => typeof A === "string" ? A.localeCompare(B) : Array.isArray(A) ? (A[0] - B[0]) || (A[1] - B[1]) : A - B;
+    rows.sort((a, b) => { const A = val(a, ps.key), B = val(b, ps.key); if (A == null || B == null) return (A == null) - (B == null); return cmp(A, B) * ps.dir; });
+    const head = [{ k: "name", t: "Player", l: 1, a: 1 }, { k: "game", t: "Game", l: 1, a: 1 }, { k: "stat", t: "Stat", l: 1, a: 1 }, { k: "line", t: "Line" }, { k: "proj", t: "Proj" }, { k: "range", t: "Range" }, { k: "floor", t: "Floor" },
+      { k: "ours", t: "Ours, over" }, { k: "books", t: "Books'" }, { k: "gap", t: "Lean" }, { k: "dk", t: "DK O / U" }, { k: "fd", t: "FD O / U" }, { k: "close", t: "Close" }, { k: "result", t: "Result", l: 1 }];
     const thead = H("thead", {}, H("tr", {}, head.map(c => {
       if (!c.k) return H("th", { class: c.l ? "l" : "", scope: "col", text: c.t });
-      const btn = H("button", { type: "button", text: c.t, onclick: () => { ps.dir = ps.key === c.k ? -ps.dir : (c.l ? 1 : -1); ps.key = c.k; draw(); } });
+      const btn = H("button", { type: "button", text: c.t, onclick: () => { ps.dir = ps.key === c.k ? -ps.dir : (c.a ? 1 : -1); ps.key = c.k; draw(); } });
       if (ps.key === c.k) btn.setAttribute("aria-sort", ps.dir > 0 ? "ascending" : "descending");
       return H("th", { class: c.l ? "l" : "", scope: "col" }, btn);
     })));

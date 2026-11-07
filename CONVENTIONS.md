@@ -480,7 +480,9 @@ boards in detail; this file is the rules.
   then Model against the market, the game cards and Every price. The Model record view leads
   with **Live record** (the ledger), then the backtest with the holdout columns first. The
   Props view hides lines on players the board has ruled out and passing lines with no
-  projection, and says how many.
+  projection, and says how many. Every Props table column sorts (Nov 7, 2026), on what it shows: Game by
+  kickoff, Stat in the dropdown's order, Range by its low end, DK/FD by the over price, Close by
+  the move; a blank always sorts last.
 - **Player outlook (Props section): `docs/props/outlook.json`** (`nflmodel/propoutlook.py`),
   written by **Update board** (from the data.json it just wrote) and by every props run, never
   by hand: each board player's median, 80% range and chance of reaching at least every number.
