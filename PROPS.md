@@ -3,7 +3,8 @@
 The player projections ([PLAYERS.md](PLAYERS.md)) give each player's expected line. This
 work turns those means into calibrated chances for prop bets, over/under and anytime
 touchdown, compares them with the books' prices, and flags a bet only when the edge is
-real. NFL only for now; college is not done (Ryan's call, Oct 2026).
+real. Flags are NFL only. College lines are shown on the college board's Props section from Nov 7, 2026
+(not market-tested, nothing flagged; see "The college Props section" at the end).
 
 Code: `nflmodel/propdist.py` (distributions), `nflmodel/props.py` (the prop model),
 `nflmodel/propsim.py` (same-game combinations), `nflmodel/oddsapi.py` (prices),
@@ -575,7 +576,7 @@ refreshes daily.
   in our chance is a large error in EV. On the holdout the model was well calibrated up to
   80-90% (receiving yards: 83.5% predicted, 84.6% happened) but slightly overconfident at
   90-95% (90.8% against 87.8%, 123 lines). Rungs far below the projection were not tested.
-- College: not started.
+- College: shown, not market-tested ("The college Props section" below).
 
 ## How far the model may move a prop (Nov 1, 2026)
 
@@ -748,3 +749,29 @@ under the adjusted. Highest tagged rung per player, game and stat, better book's
   the starter left hurt counts as a "new QB" game, which the board cannot know in advance. The
   books' prices already move with every flag (margin-free chance lower on flagged rungs), so a flag
   says the floor is less safe, not that the rung is mispriced.
+
+## The college Props section (Nov 7, 2026)
+
+The college board shows the same Props section as the NFL board (CONVENTIONS.md "Props"),
+built by `nflmodel/cfbpropboard.py` from the DraftKings and FanDuel lines the College props
+Action already pulls: no extra credits. Each line is priced once, the first time it appears,
+with the college projections on the college-fitted widths (`data/cfb/prop_params.json`), and
+kept in `data/props/cfb_prop_log.csv`. The books' vig-free chance is worked out as the Parlays
+page does for college legs (two-sided lines no-vig; over-only rungs through `CFB_RUNG_CAL`;
+anytime TD at a 17.5% margin). Markets: passing yards and TDs, rushing yards, receiving yards,
+anytime TD (the books post no college receptions).
+
+Not market-tested: the model's college chances have not been graded against real college
+lines at these prices, so nothing is flagged. The section's record (Brier, ours against the
+books', and the calibration table) builds up from week 10 of 2026 and is the test.
+
+Reception share stands in for target share (`cfbpropboard.with_target_share`): the college board
+has no targets, and `propmarket.board_players` fills a missing `tgt_share` with 0, which squeezed
+receivers' ranges to almost nothing (a receiver projected at 55 yards had 3% over 48.5). The
+college widths were fitted with rec_share in that place (`experiments/cfb_propdist_test.py`).
+On week 10's lines (main lines, as first priced): receiving yards ours 47.5% over on average
+against the books' 50.0%, mean gap 6.4 points; rushing 44.3% against 50.1%, gap 10.0; passing
+yards 46.3% against 50.0%, gap 6.4; anytime TD 27.2% against 23.7%, gap 6.9. Running
+quarterbacks' rushing ranges are very wide (an option QB projected at 114 yards: 0 to 305),
+the same model the Parlays page and the outlook use; not changed here.
+

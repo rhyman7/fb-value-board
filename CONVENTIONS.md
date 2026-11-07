@@ -437,7 +437,7 @@ boards in detail; this file is the rules.
   read, so the page never has to load every week's file for the season view.
 - Both boards share the same sections and anchors, in this order:
   Manual `#manual` | This Week's Matchups `#matchups` | Games `#games` | Players `#players` |
-  (Props `#props`, NFL) | Past weeks `#history` | Team ratings `#ratings` | Model record `#model`.
+  Props `#props` | Past weeks `#history` | Team ratings `#ratings` | Model record `#model`.
   Each board's nav links to the other board.
 - **The manual (both boards): `#manual` and `docs/manual/`** (Oct 31, 2026). The Value Boards
   manual lives once, in `docs/manual/` (`index.html`, its screenshots in `img/`, and
@@ -507,13 +507,26 @@ boards in detail; this file is the rules.
   (`scripts/build_report.py`) reads the floors from `docs/data.json` / `docs/cfb/data.json`: `players[]`
   `name`, `pos`, `team`, `game`, `status`, `proj.pass_att` and `floor.{pass,rush,rec,rr}` (`floor`, `g`,
   `avg`), plus the teams' `out` lists. Keep those fields or update the report in both dashboards.
-- **Props `#props` is NFL only** (Ryan's call, Oct 2026), between Players and Past weeks. Its
-  markup, styles and script in `site/template.html` sit between `<!--NFL-ONLY-->` and
-  `<!--/NFL-ONLY-->` (HTML) or `/*NFL-ONLY*/` and `/*/NFL-ONLY*/` (CSS and script), which
-  `site/make_cfb_template.py` cuts from the college page; it checks the number of blocks, so
-  update its count when adding one. The section reads `docs/props/` (one file per week,
-  `index.json` for the list), written by `nflmodel/propboard.py` on every props run; it never
-  edits past weeks by hand, since the files are rebuilt from the append-only log.
+- **Props `#props` is on both boards** (NFL from Oct 2026; college from Nov 7, 2026, Ryan's call),
+  between Players and Past weeks. One section in `site/template.html`; `site/make_cfb_template.py`
+  swaps in the college wording (not market-tested banner, the college pull times, the over-only
+  rung note, "Off" for flagged bets). Only the Best bets card's props summary is still marked
+  `/*NFL-ONLY*/` and cut from the college page (the script checks the number of blocks: update
+  its count when adding one). Each page reads `props/` next to it, one file per week plus
+  `index.json` and `outlook.json`:
+  - NFL: `docs/props/`, written by `nflmodel/propboard.py` on every props run from the
+    append-only prop log.
+  - College: `docs/cfb/props/`, written by `nflmodel/cfbpropboard.py` in **Update college board**
+    (after the build; a failure never stops it). It spends no Odds API credits: it reads the
+    files the **College props** Action pulls (`data/props/history_cfb_live/`). The first time a
+    line appears it appends one row to `data/props/cfb_prop_log.csv` with the books' prices, the
+    vig-free chance (priced as the Parlays page prices college legs) and the model's chance then
+    (college projections on `data/cfb/prop_params.json`, reception share standing in for target
+    share, `cfbpropboard.with_target_share`). The row is never rewritten. Close comes from the
+    game's file after kickoff; results from the archive's `actuals`. Not market-tested, so
+    `flags_on` is false and nothing is flagged. Display only: it never feeds the model, the bets,
+    the Bet sheet or the Parlays page.
+  Never edit past weeks by hand; the files are rebuilt from the logs.
 - **One set of player projections** (Ryan's call, Oct 31, 2026). The New projections
   (`nflmodel/players_ml.py`) replace the current ones wherever `players_ml.ADOPT` covers the stat
   and position (RB carries and rushing yards; WR and RB receptions and receiving yards); every
@@ -572,8 +585,8 @@ boards in detail; this file is the rules.
 
 - Titled **Weekly Value Boards**. Same layout, tokens, Archivo type and NCAA/NFL logos as
   the Weekly Gridiron Board (rhyman7.github.io); keep it styled consistently with it.
-- College card on the left, NFL on the right. Each card links to its board and to the six
-  sections above (the NFL card also to Props); if a section is added, renamed or reordered,
+- College card on the left, NFL on the right. Each card links to its board and to the seven
+  sections above (Props included on both cards since Nov 7, 2026); if a section is added, renamed or reordered,
   update both cards. Each card's first link is its board's **Best Bets (PDF)**
   (`docs/best-bets.pdf`, `docs/cfb/best-bets.pdf`), which the Update Actions write.
 - Logos live in `img/` (copies of rhyman7.github.io's `img/ncaa.png` and `img/nfl.png`).
