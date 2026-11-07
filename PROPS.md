@@ -769,6 +769,9 @@ Reception share stands in for target share (`cfbpropboard.with_target_share`): t
 has no targets, and `propmarket.board_players` fills a missing `tgt_share` with 0, which squeezed
 receivers' ranges to almost nothing (a receiver projected at 55 yards had 3% over 48.5). The
 college widths were fitted with rec_share in that place (`experiments/cfb_propdist_test.py`).
+The Parlays page's model-only college legs (`parlays.cfb_prop_legs`) had the same fault: on week 10
+all 939 of its receiving-yard legs were unders. From Nov 7, 2026 they read players through the same
+fix (1,953 receiving legs, 1,160 unders, on the same slate); the book-priced college legs are unchanged.
 On week 10's lines (main lines, as first priced): receiving yards ours 47.5% over on average
 against the books' 50.0%, mean gap 6.4 points; rushing 44.3% against 50.1%, gap 10.0; passing
 yards 46.3% against 50.0%, gap 6.4; anytime TD 27.2% against 23.7%, gap 6.9. Running
