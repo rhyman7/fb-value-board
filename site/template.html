@@ -348,7 +348,6 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 .res { display: inline-block; min-width: 1.6em; text-align: center; font-size: 11.5px; font-weight: 700; border-radius: 3px; padding: 1px 4px; margin-left: 6px; border: 1px solid var(--axis); color: var(--ink-2); }
 .res.w { background: var(--s3); border-color: var(--s3); color: #fff; } .res.l { background: transparent; border-color: var(--s2); color: var(--s2); }
 .hist-rec { display: flex; flex-wrap: wrap; gap: 12px 36px; margin: 6px 0 4px; }
-/*NFL-ONLY*/
 .props-banner { border-left: 4px solid var(--flag); background: var(--raised); padding: 10px 14px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); max-width: 82ch; margin: 4px 0 14px; }
 .props-banner strong { color: var(--ink); }
 #props-table .lean { font-weight: 700; } #props-table .lean.o, #props-table .lean.u { white-space: nowrap; }
@@ -381,7 +380,6 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--rule);
 #props-table td.ladder td:first-child { white-space: normal; min-width: 9em; }
 #props-table td.ladder td:first-child .tag { margin: 2px 0 0; }
 @media (min-width: 1000px) { #view-props .scroll.props-wide { width: min(1440px, calc(100vw - 64px)); margin-left: calc(50% - min(720px, 50vw - 32px)); } }
-/*/NFL-ONLY*/
 .hist-rec div { display: grid; gap: 0; } .hist-rec b { font: 700 26px/1.1 var(--display); font-variant-numeric: tabular-nums; } .hist-rec span { font-size: 12.5px; color: var(--ink-3); }
 td .act { font-weight: 700; }
 #hist-players th.grp { text-align: center; border-bottom: 1px solid var(--axis); padding-bottom: 2px; }
@@ -605,8 +603,8 @@ td .act { font-weight: 700; }
         <li><a href="#matchups" data-view="matchups">This Week's Matchups</a></li>
         <li><a href="#games" data-view="games">Games</a></li>
         <li><a href="#players" data-view="players">Players</a></li>
-<!--NFL-ONLY-->        <li><a href="#props" data-view="props">Props</a></li>
-<!--/NFL-ONLY-->        <li><a href="#history" data-view="history">Past weeks</a></li>
+        <li><a href="#props" data-view="props">Props</a></li>
+        <li><a href="#history" data-view="history">Past weeks</a></li>
         <li><a href="#ratings" data-view="ratings">Team ratings</a></li>
         <li><a href="#model" data-view="model">Model record</a></li>
         <li><a href="cfb/" data-view="cfb">College board</a></li>
@@ -767,8 +765,7 @@ td .act { font-weight: 700; }
       </section>
     </div>
 
-<!--NFL-ONLY-->
-    <!-- ============ player props (NFL only) ============ -->
+    <!-- ============ player props (both boards; college from Nov 7, 2026) ============ -->
     <div class="view" id="view-props" hidden>
       <section aria-labelledby="props-h">
         <div class="section-head">
@@ -808,7 +805,6 @@ td .act { font-weight: 700; }
         <div class="scroll"><table id="props-weeks" class="compact" aria-labelledby="prweeks-h"></table></div>
       </section>
     </div>
-<!--/NFL-ONLY-->
     <!-- ============ past weeks ============ -->
     <div class="view" id="view-history" hidden>
       <section aria-labelledby="hist-h">
@@ -2767,8 +2763,7 @@ const historyView = (function () {
 })();
 
 
-/*NFL-ONLY*/
-/* ---------------- player props (NFL only) ----------------
+/* ---------------- player props (both boards; college from Nov 7, 2026) ----------------
    Every prop the books posted (main lines and ladder rungs), as priced at the pricing
    snapshot, with the closing line and the result. One file per week in props/, built
    from the prop log by run_props.py; fetched when the section opens. */
@@ -3035,7 +3030,6 @@ const propsView = (function () {
   }
   return { open, load, current };
 })();
-/*/NFL-ONLY*/
 
 /* ---------------- this week's matchups (in the matchup dashboards' look) ----------------
    A board of this week's games, one row per game, and for each game the two team cards
@@ -3522,7 +3516,7 @@ function openManual() {
 
 /* ---------------- routing ---------------- */
 const views = { games: $("#view-games"), manual: $("#view-manual"), bestbets: $("#view-bestbets"), leans: $("#view-leans"), game: $("#view-game"), matchups: $("#view-matchups"), matchup: $("#view-matchup"), players: $("#view-players"), history: $("#view-history"), ratings: $("#view-ratings"), model: $("#view-model") };
-/*NFL-ONLY*/views.props = $("#view-props");/*/NFL-ONLY*/
+views.props = $("#view-props");
 let shownGame = null;
 function route() {
   const h = location.hash.slice(1), g = ALL.find(x => x.id === h);
@@ -3542,7 +3536,7 @@ function route() {
   if (name === "matchups") matchups.board(tok);
   if (name === "matchup") matchups.game(tok, mg || pid);
   if (name === "history") historyView.open();
-/*NFL-ONLY*/  if (name === "props") propsView.open();/*/NFL-ONLY*/
+  if (name === "props") propsView.open();
   hideTip();
   Object.keys(views).forEach(k => { views[k].hidden = k !== name; });
   document.querySelectorAll("nav.sections a").forEach(a => {

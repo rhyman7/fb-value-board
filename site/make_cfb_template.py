@@ -190,9 +190,24 @@ sub('"No player projections were archived for this week (they start with week 7)
 
 
 
-# NFL-only parts of the page (the Props section, Oct 2026: props are NFL only, Ryan's call),
-# marked in template.html and cut from the college page: (pattern, expected count).
-NFL_ONLY = [(r"<!--NFL-ONLY-->.*?<!--/NFL-ONLY-->\n?", 2), (r"/\*NFL-ONLY\*/.*?/\*/NFL-ONLY\*/\n?", 5)]
+# ---- the Props section (college from Nov 7, 2026, Ryan's call): college wording -----------
+# The college page reads docs/cfb/props/ (nflmodel/cfbpropboard.py). Its chances are not
+# market-tested, so nothing is flagged and the banner says so.
+sub("Against real 2025 DraftKings and FanDuel lines the books' prices were the better forecast, and the props the model would have picked broke even. Every prop is still priced and tracked here, so the record below shows whether that changes. Nothing here is a recommendation.",
+    "Not market-tested: the model's college chances have not yet been graded against real college lines, so nothing is flagged and the Lean column is information only. Every prop is priced and tracked here, so the record below will show how they hold up. Nothing here is a recommendation.")
+sub("Every passing, rushing and receiving prop DraftKings and FanDuel post, main lines and alternate ladders, priced by the model about three days before kickoff.",
+    "Every college passing, rushing, receiving and touchdown prop DraftKings and FanDuel post, main lines and alternate ladders, priced by the model the first time the books post each line (the college prop pulls run every morning and before each Saturday kickoff wave).")
+sub("The first ones arrive with the next daily props run (8:47 am Eastern)", "The first ones arrive with the next college props pull (7:13 am Eastern, and before each Saturday kickoff wave)")
+sub("Against DraftKings and FanDuel the books have been the better forecast so far, so treat these as a guide, not picks.",
+    "These college chances have not been tested against the books' lines yet, so treat them as a guide, not picks.")
+sub("Rungs posted over-only have no under to take the vig out; their no-vig chance assumes a 10% margin. ",
+    "Rungs posted over-only have no under to take the vig out; their no-vig chance reads the price through how 2025's college rungs cleared. ")
+sub(': "Paused"', ': "Off"', 2)
+
+
+# NFL-only parts of the page (the Best bets card's props, NFL only), marked in template.html
+# and cut from the college page: (pattern, expected count).
+NFL_ONLY = [(r"<!--NFL-ONLY-->.*?<!--/NFL-ONLY-->\n?", 0), (r"/\*NFL-ONLY\*/.*?/\*/NFL-ONLY\*/\n?", 1)]
 
 
 def main():
