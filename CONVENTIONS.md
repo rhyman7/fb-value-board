@@ -503,6 +503,10 @@ boards in detail; this file is the rules.
   under it (graded on 2025 rungs they lost about 9% per bet, PROPS.md "Every-game floors"). Keep the
   "information, not a bet" wording (`FL_NOTE` in the template) if the display changes. A floors
   failure never stops a board build.
+- **The dashboards' Highest Floors pages** (Nov 7, 2026): rhyman7/nfl and rhyman7/cfb's Matchup Report
+  (`scripts/build_report.py`) reads the floors from `docs/data.json` / `docs/cfb/data.json`: `players[]`
+  `name`, `pos`, `team`, `game`, `status`, `proj.pass_att` and `floor.{pass,rush,rec,rr}` (`floor`, `g`,
+  `avg`), plus the teams' `out` lists. Keep those fields or update the report in both dashboards.
 - **Props `#props` is NFL only** (Ryan's call, Oct 2026), between Players and Past weeks. Its
   markup, styles and script in `site/template.html` sit between `<!--NFL-ONLY-->` and
   `<!--/NFL-ONLY-->` (HTML) or `/*NFL-ONLY*/` and `/*/NFL-ONLY*/` (CSS and script), which
