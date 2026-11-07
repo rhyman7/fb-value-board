@@ -542,18 +542,20 @@ def tag_matchups(legs: list[dict], games: dict, table: dict) -> None:
 # --------------------------------------------------------------------------
 
 def cfb_prop_legs(payload: dict, model, roles: dict, now: dt.datetime) -> list[dict]:
-    """The NFL prop distributions on the college projections; no prices, tagged."""
+    """The college prop distributions on the college projections; no prices, tagged.
+    Reception share stands in for target share (cfbpropboard.with_target_share, Nov 7, 2026):
+    without it board_players gave every college receiver a target share of 0 and a range
+    squeezed to almost nothing, so these legs leaned hard to the under."""
     from . import propmarket as PM, props as P
+    from .cfbpropboard import with_target_share
     from .propoutlook import _survival, STEP
     try:
-        players = PM.board_players(payload)
+        players = PM.board_players(with_target_share(payload))
     except Exception as e:                       # the college payload may lack a field the NFL one has
         print(f"  college props skipped: {e}")
         return []
     if players.empty:
         return []
-    if "tgt_share" not in players or players["tgt_share"].isna().all():
-        players["tgt_share"] = players.get("rec_share", 0.0)
     ko = {g["id"]: g["kickoff"] for g in payload["slate"]["games"]}
     players = players[players["game_id"].map(lambda g: g in ko and _upcoming({"kickoff": ko[g]}, now))]
     players = players[~players["status"].fillna("").str.lower().str.match(r"^(out|doubtful|injured reserve)")]

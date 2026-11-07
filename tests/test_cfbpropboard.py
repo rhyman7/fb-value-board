@@ -40,3 +40,17 @@ def test_lines_fair_chances():
     assert 0.5 < x.loc[50.5, "fair_over"] < 0.53
     assert x.loc[50.5, "game_id"] == "2026_10_A_B"
     assert 0.5 < x.loc[29.5, "fair_over"] < 0.8 and '"fanduel":[-400,null]' in x.loc[29.5, "books"]
+
+
+def test_parlays_college_legs_use_reception_share(monkeypatch):
+    """parlays.cfb_prop_legs reads players through with_target_share."""
+    from nflmodel import parlays as PL, propmarket as PM
+    seen = {}
+
+    def fake(payload):
+        seen["why"] = payload["players"]["players"][0]["why"]
+        return pd.DataFrame()
+    monkeypatch.setattr(PM, "board_players", fake)
+    pay = {"players": {"players": [{"id": "1", "why": {"rec_share": 0.3}}]}, "slate": {"games": []}}
+    assert PL.cfb_prop_legs(pay, None, {}, None) == []
+    assert seen["why"]["tgt_share"] == 0.3
