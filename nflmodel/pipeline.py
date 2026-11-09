@@ -105,6 +105,13 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             say(f"  defense vs position applied ({len(dvp.APPLY)} position-stats)")
         except Exception as exc:
             print(f"  defense vs position skipped ({exc})")
+        try:                                      # expected kneel-downs for the starters (kneels.py): the rush-attempts prop only
+            from . import kneels
+            kp = kneels.project(kneels.attach(ptable, pg))
+            pproj = pproj.merge(kp.loc[kp["season"] == season, ["game_id", "player_id", "kneels_proj"]].drop_duplicates(["game_id", "player_id"]),
+                                on=["game_id", "player_id"], how="left")
+        except Exception as exc:
+            print(f"  expected kneel-downs skipped ({exc})")
         player_board = players.board(pproj, pinfo, upcoming_ids, new=new)
         try:                                      # every-game floors (floors.py): display only
             from . import floors

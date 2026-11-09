@@ -37,7 +37,7 @@ import pandas as pd
 
 from . import config as C, odds as O
 from .oddsapi import BOOK_WEIGHT
-from .props import SPECS, PropModel
+from .props import SPECS, PropModel, line_mean
 
 MARKET_STAT = {s.odds_key: k for k, s in SPECS.items() if s.odds_key}
 # Alternate yardage ladders (200+, 225+, 250+ ...): priced off the same distribution as the
@@ -238,9 +238,10 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
                 continue
             gg, dd = g[m], d[m].reset_index(drop=True)
             over, push, under = model.probs(dd, stat, grp, gg["line"].to_numpy(float))
+            lm = line_mean(dd, stat, grp, model)      # a quarterback's rush attempts: kneel-downs included
             for i, r in enumerate(gg.to_dict("records")):
                 base = dict(r, team=dd.loc[i, "team"], pos=dd.loc[i, "pos"], status=dd.loc[i, "status"],
-                            proj=float(sum(dd.loc[i, c] for c in SPECS[stat].proj)), role_clear=bool(role_clear(dd.iloc[[i]]).iloc[0]))
+                            proj=float(lm[i]), role_clear=bool(role_clear(dd.iloc[[i]]).iloc[0]))
                 for side, p_win, p_lose, fair in (("over", over[i], under[i], r["fair_power"]),
                                                   ("under", under[i], over[i], 1 - r["fair_power"])):
                     best = r.get(f"best_{side}")

@@ -2773,6 +2773,8 @@ const propsView = (function () {
   const STAT = { pass_yds: "Passing yards", rush_yds: "Rushing yards", rec_yds: "Receiving yards", receptions: "Receptions",
     carries: "Carries", pass_att: "Pass attempts", completions: "Completions", pass_td: "Passing TDs", ints: "Interceptions", anytime_td: "Anytime TD" };
   const ORDER = Object.keys(STAT);
+  // a row can carry its own stat label (sl): a quarterback's rush attempts priced with kneel-downs (nflmodel/propboard.py)
+  const statOf = p => p.sl || STAT[p.s] || p.s;
   // Weeks priced before Oct 31, 2026 carry the old and the New projections' chances (po/pno):
   // only the New one is shown, with the edge and EV worked out again from it at the books' prices.
   const evAt = (p, q, side) => { const xs = Object.values(p.bk || {}).map(x => x[side === "o" ? 0 : 1]).filter(x => x != null);
@@ -2813,7 +2815,7 @@ const propsView = (function () {
   function outlook(p) {
     const o = look(p);
     if (!o) return null;
-    const unit = (STAT[p.s] || p.s).toLowerCase();
+    const unit = statOf(p).toLowerCase();
     if (p.s === "anytime_td") {
       const q = o.s[0] ?? 0;
       return H("div", { class: "outlook" }, H("h4", { text: "Outlook" }),
@@ -2831,7 +2833,7 @@ const propsView = (function () {
       const q = atLeast(o, p.s, Math.ceil(n)); out.textContent = pct(q, 0) + (fair(q) != null ? " · fair price " + odds(fair(q)) : ""); };
     inp.addEventListener("input", say);
     inp.value = String(Math.ceil(p.L || o.mid)); say();
-    return H("div", { class: "outlook" }, H("h4", { text: "Outlook: " + (STAT[p.s] || p.s) }),
+    return H("div", { class: "outlook" }, H("h4", { text: "Outlook: " + statOf(p) }),
       H("p", {}, document.createTextNode("Current projection "), H("b", { text: String(o.mu) }), document.createTextNode(" (from the latest board update). "),
         ...(o.mid > 0 ? [document.createTextNode("Half the time he gets "), H("b", { text: o.mid + " or more" })]
           : [document.createTextNode("More often than not he gets "), H("b", { text: "fewer than " + step })]),
@@ -2968,7 +2970,7 @@ const propsView = (function () {
         p.ladder ? H("span", { class: "early", text: "ladder" }) : null,
         p.bgap ? H("span", { class: "tag", text: p.bgap.mid ? "middle" : "book gap", title: "DraftKings and FanDuel post this line a full step apart (" + p.bgap.bg + "): the over at the lower line and the under at the higher are the better numbers" + (p.bgap.mid ? ", and both are -110 or better, so both can win (a middle)." : ".") }) : null,);
       const close = p.cL == null || p.alt ? "–" : (p.cL === p.L ? "No move" : String(p.cL) + " (" + (p.cL > p.L ? "+" : "−") + Math.abs(p.cL - p.L).toFixed(1).replace(/\.0$/, "") + ")");
-      const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: STAT[p.s] || p.s }),
+      const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: opp(p) }), H("td", { class: "l", text: statOf(p) }),
         H("td", { text: lineTxt(p) }), H("td", { text: p.mu == null ? "–" : String(p.mu) }),
         H("td", { class: "rng", text: rangeTxt(p), title: "About 80% of his outcomes land in this range (the model's); open the row for the whole outlook" }),
         H("td", {}, flEl(bpOf(p), p.s) || document.createTextNode("–")),
@@ -3001,7 +3003,7 @@ const propsView = (function () {
     const list = (title, xs) => {
       const t = H("table", { class: "compact" });
       table(t, [{ t: "Player", l: 1 }, { t: "Prop", l: 1 }, { t: "Lean", l: 1 }, { t: "Ours, over" }, { t: "Books'" }, { t: "Result" }],
-        xs.slice(0, 8).map(p => [H("span", {}, document.createTextNode(p.n), H("span", { class: "rec", text: p.t })), (STAT[p.s] || p.s) + " " + lineTxt(p),
+        xs.slice(0, 8).map(p => [H("span", {}, document.createTextNode(p.n), H("span", { class: "rec", text: p.t })), statOf(p) + " " + lineTxt(p),
           (gap(p) >= 0 ? "Over" : "Under") + " " + pts(gap(p)), pct(dec(p), 0), pct(p.fo, 0), String(p.y)]));
       return H("div", { style: "min-width: 0" }, H("h3", { text: `${title} (${xs.length})` }), H("div", { class: "scroll" }, t));
     };

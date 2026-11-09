@@ -63,6 +63,13 @@ SPECS: dict[str, Spec] = {
 }
 QB_STATS = {"pass_att", "completions", "pass_yds", "pass_td", "ints"}
 
+# A quarterback's rush-attempts prop is priced on the official line, kneel-downs included
+# (kneels.py; Nov 9, 2026). When the rows carry `kneels_proj` and the model has the count fit
+# stored under OFFICIAL_KEY, the prop's mean is carries_proj + kneels_proj and that fit is used.
+# Nothing else reads either: `mean`, the `carries` fit and the rushing-yards volume are as before.
+OFFICIAL = ("carries", "QB")
+OFFICIAL_KEY = ("carries_off", "QB")
+
 
 # --------------------------------------------------------------------------
 # Rows, outcomes and means
@@ -89,6 +96,23 @@ def actual(df: pd.DataFrame, stat: str) -> np.ndarray:
 
 def mean(df: pd.DataFrame, stat: str) -> np.ndarray:
     return df[list(SPECS[stat].proj)].fillna(0).sum(axis=1).to_numpy(float)
+
+
+def kneel_add(df: pd.DataFrame, stat: str, group: str) -> np.ndarray | None:
+    """The expected kneel-downs to add to a quarterback's rush attempts, or None when the rows
+    carry none (or for any other stat or position)."""
+    if (stat, group) != OFFICIAL or "kneels_proj" not in df:
+        return None
+    return pd.to_numeric(df["kneels_proj"], errors="coerce").fillna(0).to_numpy(float)
+
+
+def line_mean(df: pd.DataFrame, stat: str, group: str, model: "PropModel | None" = None) -> np.ndarray:
+    """The mean the prop is priced on: `mean`, plus the kneel-downs for a quarterback's rush
+    attempts when the model prices them (model given) or the rows carry them (no model)."""
+    k = kneel_add(df, stat, group)
+    if k is None or (model is not None and OFFICIAL_KEY not in model.counts):
+        return mean(df, stat)
+    return mean(df, stat) + k
 
 
 def role(df: pd.DataFrame, stat: str, group: str) -> np.ndarray:
@@ -161,6 +185,11 @@ class PropModel:
                 if s.kind == "count":
                     self.counts[(stat, g)] = fit_count(actual(d, stat), mean(d, stat), role(d, stat, g),
                                                        family=self.family.get(stat, "nb"))
+                    if (stat, g) == OFFICIAL and "kneels" in d and kneel_add(d, stat, g) is not None:
+                        # the same rows against the official count, with the kneel-downs in the mean
+                        self.counts[OFFICIAL_KEY] = fit_count(actual(d, stat) + d["kneels"].fillna(0).to_numpy(float),
+                                                              mean(d, stat) + kneel_add(d, stat, g), role(d, stat, g),
+                                                              family=self.family.get(stat, "nb"))
                 else:
                     vol = self._vol_pmf(d, stat, g)
                     if vol is None:
@@ -193,6 +222,8 @@ class PropModel:
         mu = np.maximum(mean(d, stat), 0.01)
         if s.kind == "count":
             fit = self.counts[(stat, g)]
+            if OFFICIAL_KEY in self.counts and kneel_add(d, stat, g) is not None:
+                fit, mu = self.counts[OFFICIAL_KEY], np.maximum(line_mean(d, stat, g, self), 0.01)
             cum = np.cumsum(fit.pmf(mu, role(d, stat, g), s.kmax), 1)
 
             def f(k):

@@ -919,3 +919,23 @@ error.
 
 **Nothing changes on the board.** A trade-off for Ryan: the rush-attempts half on its own is better
 on every one of its measures; the rushing-yards half should stay as it is.
+
+**Applied, the rush-attempts half only (Nov 9, 2026, Ryan's go-ahead).** A quarterback's
+rush-attempts prop is priced on the official line: his `carries` projection plus his expected
+kneel-downs (`nflmodel/kneels.py`: a + b × his team's chance of winning, refitted each season on
+earlier starts), with the count's width fitted against the official line (`carries_off|QB` in
+`data/prop_params.json`, added on its own; every other saved parameter is as it was, and
+`props_calibration.py` now writes it on any refit).
+
+- **Where it shows:** the Props section's projection, chance, range and outlook for a quarterback's
+  rush-attempts line, labelled "Rush attempts (with kneels)" on rows priced from Nov 10, 2026 UTC
+  (`propboard.KNEELS_FROM`; earlier rows keep "Carries", as they were priced), and the same
+  chance wherever the Parlays page uses that prop.
+- **Where it does not:** `carries_proj` and everything built on it (the Players tab, matchup pages,
+  reports, floors, the projection record, the rushing-yards prop, whose volume is still the plain
+  carries count), running backs, college. The board's payload carries the number as
+  `proj.kneels` on starting quarterbacks only; nothing but the prop model reads it.
+- **Checked before merging:** with and without the kneel column, the chances for every other prop
+  on the current board are identical (1,017 player-stats). On the two quarterback rush-attempt
+  lines logged for week 10 the model's over chance moves from 3.8% to 12.8% (Wentz 2.5; the books'
+  fair 59%) and 34.0% to 41.7% (Allen 7.5; 45.9%).
