@@ -52,6 +52,12 @@ def dump(page, url, out: Path, name: str) -> list[str]:
     (out / f"{name}.txt").write_text(info["text"])
     page.screenshot(path=str(out / f"{name}.png"), full_page=True)
     print(f"{name}: {len(info['text'])} chars, {len(info['links'])} links, {len(info['images'])} images, {len(info['iframes'])} iframes, {info['tables']} tables")
+    for f in info["iframes"]:
+        if "hdintel" in f or KEY.search(f):
+            print(f"  iframe: {f}")
+    for ln in info["links"]:
+        if KEY.search(ln["href"]) or ln["href"].lower().endswith(".pdf"):
+            print(f"  link: {ln['text'][:50]!r} {ln['href']}")
     picks = []
     for ln in info["links"]:
         href = ln["href"]
@@ -65,7 +71,7 @@ def probe_vendor(out: Path):
     """Ask the vendor app that serves the power four for likely Group of Five codes."""
     import urllib.request
     res = {}
-    for org in ("MAC", "Mid-American", "MW", "MWC", "Mountain West", "AAC", "American", "SBC", "Sun Belt", "CUSA", "Pac-12", "PAC12"):
+    for org in ("MAC", "American", "MW", "MWC", "Mountain West", "Mountain West Conference", "MountainWest", "TheMW", "Mountain-West", "Sun Belt", "SunBelt", "CUSA", "Conference USA", "Pac-12", "Pac12"):
         body = json.dumps({"sport": "Football", "organization": org, "conference": org}).encode()
         req = urllib.request.Request("https://app.hdintelligence.com/api/get-publish-public", data=body, method="POST",
                                      headers={"Content-Type": "application/json", "Accept": "application/json",
