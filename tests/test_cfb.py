@@ -491,3 +491,39 @@ def test_current_reports_from_vendor_payload():
     assert a["players"] == [{"name": "Hurt Guy", "pos": "WR", "number": "1", "status": "Out", "season_out": True}]
     assert cur["teams"]["Team B"]["players"] == []          # a live report with nobody listed: everyone available
     assert A.current_reports({"SEC": sec}, "x", today=dt.date(2026, 11, 8), abbr={})["teams"] == {}   # played
+
+
+def test_availability_shade_and_props_use_played():
+    """An official Questionable / GTD player keeps PLAY_CHANCE of his receptions, receiving yards,
+    carries and rushing yards; undesignated teammates pick up the rest in proportion; passing is left
+    alone; Covers' Questionable is untouched; the college props read his full projection."""
+    from cfbmodel import designations as D, players as P
+    from nflmodel.cfbpropboard import with_target_share
+    rows = [  # game g1, Team A: Q WR (official), free WR, free RB; Team B: Covers-Q WR
+        {"game_id": "g1", "team": "Team A", "name": "Q Guy", "receptions_proj": 6.0, "rec_yds_proj": 80.0, "carries_proj": 0.0, "rush_yds_proj": 0.0, "pass_yds_proj": 0.0},
+        {"game_id": "g1", "team": "Team A", "name": "Free Wr", "receptions_proj": 4.0, "rec_yds_proj": 40.0, "carries_proj": 0.0, "rush_yds_proj": 0.0, "pass_yds_proj": 0.0},
+        {"game_id": "g1", "team": "Team A", "name": "Free Rb", "receptions_proj": 2.0, "rec_yds_proj": 10.0, "carries_proj": 15.0, "rush_yds_proj": 70.0, "pass_yds_proj": 0.0},
+        {"game_id": "g1", "team": "Team B", "name": "Covers Q", "receptions_proj": 5.0, "rec_yds_proj": 60.0, "carries_proj": 0.0, "rush_yds_proj": 0.0, "pass_yds_proj": 0.0},
+    ]
+    p = pd.DataFrame(rows)
+    p["play_chance"] = [D.PLAY_CHANCE["Questionable"], None, None, None]
+    tag = {("g1", "Team A", D.norm("Q Guy")): "Q", ("g1", "Team B", D.norm("Covers Q")): "Q"}
+    out, played, gained = P.shade_for_availability(p, tag)
+    c = D.PLAY_CHANCE["Questionable"]
+    assert abs(out.at[0, "receptions_proj"] - 6.0 * c) < 1e-9
+    lost = 6.0 * (1 - c)
+    assert abs(out.at[1, "receptions_proj"] - (4.0 + lost * 4 / 6)) < 1e-9      # in proportion to 4 : 2
+    assert abs(out.at[2, "receptions_proj"] - (2.0 + lost * 2 / 6)) < 1e-9
+    assert abs(out["receptions_proj"][:3].sum() - 12.0) < 1e-9                    # team total unchanged
+    assert out.at[2, "carries_proj"] == 15.0                                       # nothing lost on the ground
+    assert out.at[3, "receptions_proj"] == 5.0                                     # Covers' Q untouched
+    assert played[0]["receptions"] == 6.0 and set(played) == {0}
+    assert set(gained) == {1, 2} and abs(gained[1]["receptions"] - lost * 4 / 6) < 1e-9
+    payload = {"players": {"players": [{"id": "1", "proj": {"receptions": 4.0}, "proj_played": {"receptions": 6.0},
+                                        "play_chance": c, "why": {"rec_share": 0.3}},
+                                       {"id": "2", "proj": {"receptions": 3.0}, "why": {}}]}}
+    w = with_target_share(payload)
+    assert w["players"]["players"][0]["proj"]["receptions"] == 6.0                 # props price given he plays
+    assert w["players"]["players"][1]["proj"]["receptions"] == 3.0
+    assert payload["players"]["players"][0]["proj"]["receptions"] == 4.0           # the board's copy unchanged
+    assert D.PLAY_CHANCE == {"Questionable": 0.66, "Game Time Decision": 0.64}

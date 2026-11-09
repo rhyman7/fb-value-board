@@ -2477,7 +2477,7 @@ function diagChart(node, o) {
   $("#p-search").addEventListener("input", e => { ps.q = e.target.value.trim().toLowerCase(); draw(); });
   seg($("#seg-pweek"), weeks.map(w => ({ v: w, t: "Week " + w })), () => ps.week, v => { ps.week = +v; draw(); });
   seg($("#seg-pos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => ps.pos, v => { ps.pos = v; ps.key = "score"; ps.dir = -1; draw(); });
-  $("#players-note").textContent = "Projected box scores for every quarterback, running back, receiver and tight end with a role this week, in official college stats (sacks count as quarterback runs). Each projection is volume times efficiency: the team's expected passes and runs (from its pace, the opponent, the projected score and wind), the player's share of them (recent games weighted more; players listed Out or Doubtful on Covers.com get no projection and their usage is passed on), and his own efficiency, adjusted for what this defense allows. Select a player to see how his numbers are built.";
+  $("#players-note").textContent = "Projected box scores for every quarterback, running back, receiver and tight end with a role this week, in official college stats (sacks count as quarterback runs). Each projection is volume times efficiency: the team's expected passes and runs (from its pace, the opponent, the projected score and wind), the player's share of them (recent games weighted more; players listed Out or Doubtful on the official availability report or Covers.com get no projection and their usage is passed on; players the official report lists Questionable or Game Time Decision keep about two-thirds of theirs, the chance they play), and his own efficiency, adjusted for what this defense allows. Select a player to see how his numbers are built.";
   $("#players-note").append(' Under a projection, "floor" is the most yards he has reached in every game he played this season (⚠: this week looks tougher than any of those games; ▲: a teammate\'s usage is freed up). It is information, not a bet.');
 
   const pctx = x => x == null ? "–" : (x * 100).toFixed(x < 0.1 ? 1 : 0) + "%";
@@ -2488,6 +2488,13 @@ function diagChart(node, o) {
     const tx = s => document.createTextNode(s), b = s => H("strong", { text: s });
     grid.append(box("Team volume", tx(p.team + " is projected for "), b(f1(t.pass_att) + " pass attempts"), tx(" and "), b(f1(t.carries) + " carries"),
       tx(`, with ${f1(t.imp_pts)} points implied by the game model (${t.margin >= 0 ? "favoured by " + f1(t.margin) : "underdog by " + f1(-t.margin)})` + (t.wind != null ? `, ${f0(t.wind)} mph wind.` : "."))));
+    // official Questionable / GTD: the projection includes his chance to sit (college, Nov 9, 2026)
+    if (p.play_chance != null) {
+      const pp = p.proj_played || {}, sits = Math.round((1 - p.play_chance) * 100);
+      const ifp = [pp.receptions >= 0.5 ? f1(pp.receptions) + " catches for " + f0(pp.rec_yds) + " yards" : "", pp.carries >= 1 ? f1(pp.carries) + " carries for " + f0(pp.rush_yds) + " yards" : ""].filter(Boolean).join(", ");
+      grid.append(box("Availability", tx((p.status || "Listed") + " on the official availability report: this projection includes a "), b(sits + "% chance he sits"),
+        tx(` (players listed like this played about ${100 - sits}% of the time this season); his share goes to his teammates.` + (ifp ? " If he plays: " + ifp + "." : "") + " His props are priced as if he plays (a prop is void if he sits).")));
+    }
     if (p.pos === "QB") grid.append(box("Share and efficiency", tx("Projected starter: "), b("all of the passes if he starts"), tx(` (the numbers assume he does). Completes ${pctx(w.comp)} for ${f1(w.ypa)} yards per attempt over his recent games (shrunk toward a typical starter).`)));
     else grid.append(box("Share", tx("Projected "), b(pctx(w.rec_share) + " of catches"), tx(" and "), b(pctx(w.car_share) + " of carries"),
       tx(`; ${pctx(w.rec_share_hist)} and ${pctx(w.car_share_hist)} in his recent games` + (Math.abs((w.rec_share || 0) - (w.rec_share_hist || 0)) > 0.01 || Math.abs((w.car_share || 0) - (w.car_share_hist || 0)) > 0.02 ? ", adjusted for who is out." : "."))));
@@ -2505,9 +2512,14 @@ function diagChart(node, o) {
         const ml = w.ml || [];
         const kids = [tx("The chain is team volume × share × efficiency × defense. The projection comes from a regression on earlier seasons that blends the chain with his recent average" + (keys.some(([k]) => ml.includes(k)) ? "; stats marked New come from the machine-learning step, which also sees snap shares, depth chart and team pace." : "."))];
         keys.forEach(([k, label]) => {
-          const lift = (p.proj[k] || 0) - (w.chain[k] || 0);
+          // the availability shading (college) comes after the last step: show it separately
+          const played = p.proj_played && p.proj_played[k] != null ? p.proj_played[k] : null;
+          const plus = p.avail_plus && p.avail_plus[k] ? p.avail_plus[k] : 0;
+          const step = played != null ? played : (p.proj[k] || 0) - plus;
+          const lift = step - (w.chain[k] || 0);
           const rec = p.pos === "QB" && k === "pass_yds" ? "per start" : "per game";
-          kids.push(H("br"), b(label + (ml.includes(k) ? " (New)" : "") + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(p.proj[k])} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from the last step).`));
+          const after = played != null ? `; ${f1(p.proj[k])} after his chance to sit` : plus ? `; ${f1(p.proj[k])} with ${f1(plus)} from a teammate's chance to sit` : "";
+          kids.push(H("br"), b(label + (ml.includes(k) ? " (New)" : "") + ": "), tx(`chain ${f1(w.chain[k])}, recent ${rec} ${f1(w.recent[k])}, projection ${f1(step)} (${lift >= 0 ? "+" : "−"}${f1(Math.abs(lift))} from the last step)${after}.`));
         });
         grid.append(box("From chain to projection", ...kids));
       }

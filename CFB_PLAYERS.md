@@ -24,7 +24,10 @@ Opportunity times efficiency, using only what was known before each game.
    games, the injury designations decide instead (`cfbmodel/designations.py`: the conference's
    official availability report, `docs/cfb/availability.json`, for a power-conference team in a
    conference-game week, from Nov 9, 2026; the daily Covers.com designations,
-   `docs/cfb/designations.json`, for everyone else): Out or Doubtful means out of the team's
+   `docs/cfb/designations.json`, for everyone else; a player the official report lists Questionable
+   or Game Time Decision keeps 66% / 64% of his projected catches, receiving yards, carries and
+   rushing yards, the rest going to his teammates, since Nov 9, 2026, while his props still price
+   him as if he plays): Out or Doubtful means out of the team's
    next game (every game, if out for the season) and his share goes to teammates; a
    regular who sat out but played in one of the team's last three games, and isn't listed
    out, is expected back. A starting quarterback listed out is replaced in the game model
