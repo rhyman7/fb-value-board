@@ -13,8 +13,10 @@ Players with neither source for the week (linemen and defenders without PFF, wal
 and left out of the rates. A "Game Day: Out" player who played is the interesting kind of miss; a
 "Probable" who sat is the other.
 
-Writes grade.csv (one row per archived designation with the outcome) and prints the table. Reads
-the archive, the box-score cache and PFF; writes only the grade file. Not part of any build.
+Prints the tables. With --out, also writes one row per archived designation with the outcome (never
+commit that file when PFF was used: its played flags are PFF data, which stays private). Run with PFF
+by the manual **Availability grade** Action (availability-grade.yml), which prints aggregates only.
+Not part of any build.
 """
 from __future__ import annotations
 
@@ -41,7 +43,9 @@ def archive(season: int) -> pd.DataFrame:
                 wk = dt.datetime.strptime(x.get("Week", ""), "%a, %d %b %Y %H:%M:%S %Z").date()
             except ValueError:
                 wk = None
-            rows.append({"conf": org, "team": x.get("TeamDisplay") or x.get("Team"), "player": x.get("Player"),
+            team = x.get("TeamDisplay") or x.get("Team")
+            team = {("MAC", "Miami"): "Miami (OH)"}.get((org, team), team)
+            rows.append({"conf": org, "team": team, "player": x.get("Player"),
                          "number": x.get("Number"), "opponent": x.get("OpponentDisplay") or x.get("Opponent"),
                          "week_sat": wk, "week_num": x.get("WeekNum"),
                          **{s: x.get(s) or "" for s in STAGES}})
@@ -59,17 +63,18 @@ def played_box(season: int, games: pd.DataFrame) -> pd.DataFrame:
                       games[["game_id", "away_id", "away_team", "gameday"]].set_axis(["game_id", "team_id", "team", "gameday"], axis=1)])
     o = pg.merge(team, on=["game_id", "team_id"])
     o["key"] = o["player_id"].map(info["name"]).map(DES.norm)
+    o["pos"] = o["player_id"].map(info["position"]) if "position" in info.columns else ""
     o = o[o[["pass_att", "carries", "receptions"]].fillna(0).sum(axis=1) > 0]
     o["gameday"] = pd.to_datetime(o["gameday"]).dt.date
     stat = o.groupby(["team", "key", "gameday"]).size().reset_index()[["team", "key", "gameday"]].assign(box=1)
     # the universe: every (team, player) with a stat this season, for every game the team played
     # after that player's first stat (so a missing stat line means he did not play, not that he is
     # a lineman the box score never lists)
-    first = o.groupby(["team", "key"])["gameday"].min().reset_index().rename(columns={"gameday": "first"})
+    first = o.groupby(["team", "key"]).agg(first=("gameday", "min"), pos=("pos", "last")).reset_index()
     tgames = team[["team", "gameday"]].drop_duplicates()
     tgames["gameday"] = pd.to_datetime(tgames["gameday"]).dt.date
     uni = first.merge(tgames, on="team")
-    uni = uni[uni["gameday"] >= uni["first"]][["team", "key", "gameday"]]
+    uni = uni[uni["gameday"] >= uni["first"]][["team", "key", "gameday", "pos"]]
     out = uni.merge(stat, on=["team", "key", "gameday"], how="left")
     out["box"] = out["box"].fillna(0).astype(int)
     return out
@@ -83,9 +88,16 @@ def played_pff(season: int) -> pd.DataFrame | None:
     if off.empty:
         return None
     off["key"] = off["player"].map(DES.norm)
-    g = off.groupby(["key", "week"])["snap_counts_total"].max().reset_index()
-    g["pff"] = (g["snap_counts_total"] > 0).astype(int)
-    return g[["key", "week", "pff"]]
+    off["snaps"] = pd.to_numeric(off["snap_counts_total"], errors="coerce").fillna(0)
+    g = off.groupby(["key", "week"]).agg(snaps=("snaps", "max"), ids=("player_id", "nunique")).reset_index()
+    g = g[g["ids"] == 1]                         # a name two PFF players share that week: no outcome
+    g["pff"] = (g["snaps"] > 0).astype(int)
+    # his usual snaps: the mean over his earlier weeks with snaps this season
+    g = g.sort_values(["key", "week"])
+    played = g["snaps"].where(g["snaps"] > 0)
+    g["usual"] = played.groupby(g["key"]).transform(lambda x: x.shift().expanding().mean())
+    g["snap_ratio"] = (g["snaps"] / g["usual"]).where(g["usual"] > 0)
+    return g[["key", "week", "pff", "snaps", "usual", "snap_ratio"]]
 
 
 def main():
@@ -95,7 +107,7 @@ def main():
     a = ap.parse_args()
     today = dt.date.today()
     season = a.season or (today.year if today.month >= 8 else today.year - 1)
-    out = Path(a.out) if a.out else C.DATA / "availability" / str(season) / "grade.csv"
+    out = Path(a.out) if a.out else None
 
     games = pd.read_csv(C.CACHE / f"games_{season}.csv")
     games["gameday"] = pd.to_datetime(games["kickoff"], utc=True).dt.tz_convert("America/New_York").dt.date
@@ -125,13 +137,17 @@ def main():
         print("  PFF snap counts used where available")
     else:
         d["pff"] = pd.NA
+        d["snap_ratio"] = pd.NA
         print("  no PFF data here: box-score stats only (a player with no pass, carry or catch counts as not played; "
               "linemen and defenders are unknown)")
     d["played"] = d["pff"].where(d["pff"].notna(), d["box"])
     d["source"] = pd.Series(["pff"] * len(d)).where(d["pff"].notna(), pd.Series(["box"] * len(d)).where(d["box"].notna(), "unknown"))
-    out.parent.mkdir(parents=True, exist_ok=True)
-    d.to_csv(out, index=False)
-    print(f"wrote {out}: {len(d)} rows, {(d['source'] != 'unknown').sum()} with an outcome\n")
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        d.to_csv(out, index=False)
+        print(f"wrote {out}")
+    print(f"{len(d)} rows, {(d['source'] != 'unknown').sum()} with an outcome "
+          f"({(d['source'] == 'pff').sum()} from PFF snaps, {(d['source'] == 'box').sum()} from box scores)\n")
 
     known = d[d["source"] != "unknown"].copy()
     known["played"] = known["played"].astype(int)
@@ -145,6 +161,24 @@ def main():
     print("Game Day report by conference:")
     for conf, g in t.groupby("conf"):
         print(f"  {conf}: " + "; ".join(f"{r['Game Day']} {int(r.n)}, {r.played:.0%} played" for _, r in g.iterrows()))
+    pos_group = lambda p: {"QB": "QB", "RB": "RB", "FB": "RB", "WR": "WR", "TE": "TE"}.get(str(p or "").upper(), "other")
+    if "pos" in known.columns:
+        known["grp"] = known["pos"].map(pos_group)
+        print("\nGame Day by position group (QB/RB/WR/TE):")
+        for grp, g in known[known["Game Day"] != ""].groupby("grp"):
+            t = g.groupby("Game Day")["played"].agg(n="size", played="mean")
+            print(f"  {grp}: " + "; ".join(f"{s} {int(v.n)}, {v.played:.0%}" for s, v in t.iterrows()))
+    # the last status before kickoff: Game Day where the league files one, else the last update
+    known["last"] = known["Game Day"].where(known["Game Day"] != "", known["Update 2"].where(known["Update 2"] != "", known["Update 1"].where(known["Update 1"] != "", known["Initial"])))
+    print("\nLast status before kickoff (all leagues):")
+    t = known.groupby("last")["played"].agg(n="size", played="mean")
+    print("  " + "; ".join(f"{s} {int(v.n)}, {v.played:.0%} played" for s, v in t.iterrows()))
+    if known["snap_ratio"].notna().any():
+        print("\nWhen they played, snaps as a share of their usual (PFF; median, mean, n):")
+        for col in ("last", "Initial", "Update 1", "Update 2"):
+            g = known[(known["played"] == 1) & known["snap_ratio"].notna() & (known[col] != "")]
+            t = g.groupby(col)["snap_ratio"].agg(["median", "mean", "size"])
+            print(f"  by {col}: " + "; ".join(f"{s} {v['median']:.2f}/{v['mean']:.2f}/{int(v['size'])}" for s, v in t.iterrows()))
     miss = gd[(gd["Game Day"] == "Out") & (gd["played"] == 1)]
     if len(miss):
         print(f"\n{len(miss)} listed Out on the Game Day report but recorded a stat (name matches worth checking):")
