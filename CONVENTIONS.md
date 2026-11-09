@@ -246,8 +246,11 @@ boards in detail; this file is the rules.
   --conferences`, standard library only, no pip step; every two hours Wednesday to Friday,
   hourly on Saturdays). The four power conferences publish NFL-style availability reports for
   conference games (SEC, ACC, Big 12, Big Ten: Wednesday to Friday evenings and a Game Day report
-  90 minutes to two hours before kickoff; players not listed are available), all through one
-  vendor app (app.hdintelligence.com, public JSON). The file holds each team's newest report
+  90 minutes to two hours before kickoff), the MAC for every game and the American for conference
+  games (a Game Day report three hours out); players not listed are available. All six come
+  through one vendor app (app.hdintelligence.com, public JSON; the MAC's "Miami" is renamed to the
+  board's "Miami (OH)"). The Mountain West publishes its own on themw.com and isn't read; the
+  Pac-12, Sun Belt and CUSA publish none (Nov 2026). The file holds each team's newest report
   while its game is still ahead: `{source, fetched, today, teams: {school: {conf, abbr, report
   (Initial | Update | Game Day), published, posted, game_date, game_time, opponent, players:
   [{name, pos, number, status, season_out}]}}}`, statuses in the conferences' own words,
