@@ -939,3 +939,37 @@ earlier starts), with the count's width fitted against the official line (`carri
   on the current board are identical (1,017 player-stats). On the two quarterback rush-attempt
   lines logged for week 10 the model's over chance moves from 3.8% to 12.8% (Wentz 2.5; the books'
   fair 59%) and 34.0% to 41.7% (Allen 7.5; 45.9%).
+
+## The over-lean shade and the model-agreed-unders record (Nov 9, 2026, applied)
+
+Ryan's call on the three-of-four trade-off above (Project doc `claude/plan-over-lean-shade-2026-11-09.md`).
+
+**The shade** (`nflmodel/propshade.py`; `data/prop_params.json` key `shade`, written by
+`experiments/props_shade_fit.py` from the over-lean test's committed output): the books' vig-free
+over chance moves **−2.66 points** on receptions, receiving yards and running-back rushing yards and
+attempts (30,220 lines, 2023-2025 at the close) and **+1.23 points** on quarterback passing yards
+(3,055). Nothing else is shaded: passing TDs, completions, attempts, interceptions, anytime TD,
+quarterback rushing (its grading was wrong until Nov 9), alternate rungs (RUNG_CAL already fitted on
+how rungs settled), college. Refit at the January recheck, never by a task.
+
+- **Where:** the live prop pricing (`propmarket.price`: `fair`, edge and EV on two-sided rows), so the
+  log's `fair` column is the shaded number from the first run after this merge; the Parlays page
+  (`parlays._nv_main`: value `wv`, blended chance `w`, Needs, on two-sided main-line prop legs, and
+  the moved lines that carry the main line's correction); the Props section ("Books'" with a
+  "shaded" tag, the plain number on hover, footnote). `propboard.SHADE_FROM`: rows priced before
+  Nov 10, 2026 UTC show no tag and no hover number; their logged `fair` is the plain one.
+- **Not:** the model's chance, projections, the Players tab, game lines, college, the live record's
+  results. Flags stay off. The summaries' "Brier, books'" is the shaded number from here on.
+- **Checked:** this week's 811 NFL prop legs rebuilt with and without the shade: every two-sided
+  main-line leg on a shaded market moves by exactly the shade (±0.027 / ±0.012), moved lines
+  inherit it, rungs and TDs do not move. Two main lines newly clear the 25-point model-vs-books
+  conflict check and about 30 moved lines enter or leave the page's range because `wv` shifted;
+  expected. Positive-value legs this week: 0 → 7, all unders, none above +3%. The Props week
+  files rebuild unchanged (no row is yet past the cutover).
+
+**Model-agreed unders, a record only** (strategy 4 in `claude/betting-strategies.md`;
+`propboard.summary` → `agreed_unders`, shown as a tile in the Props record marked "not bets"):
+main-line unders where the board's over chance is below 35%, passing yards and quarterback rushing
+left out, at the first pricing, graded on results at the under's best posted price. Nothing is
+flagged or staked. Weeks 8-9 so far: 51-72 (−25%) and 5-2 (+22%); judged after the 2026 season
+by return and closing line value above zero.
