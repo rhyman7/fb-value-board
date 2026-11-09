@@ -284,7 +284,9 @@ def current_reports(payloads: dict, seen: str, today: dt.date | None = None, abb
                     players.append({"name": player, "pos": pos, "number": num, "status": status,
                                     "season_out": str(r.get("exemptStatus") or "") == "Out"})
                 others = [n for n in names if n != team]
-                key = (str(rep.get("publishDate") or ""), str(rep.get("postedTime") or ""), REPORT_ORDER[rep["ReportType"]])
+                posted = str(rep.get("postedTime") or "")[:8]
+                posted = ("0" + posted) if len(posted) == 7 and posted[1] == ":" else posted     # '9:30:00' sorts after '13:15:00' otherwise
+                key = (str(rep.get("publishDate") or ""), posted, REPORT_ORDER[rep["ReportType"]])
                 if team not in best or key > best[team][0]:
                     best[team] = (key, {"conf": CONFERENCES[org], "abbr": abbr.get(team, ""), "report": rep["ReportType"],
                                         "published": key[0][:10], "posted": key[1][:8], "game_date": gd.isoformat(),
