@@ -496,3 +496,31 @@ and rushing yards 14.218 / 16.700 (tuning / holdout) against the test's 1.784 / 
 earlier seasons only. The production prop widths were refitted (`props_calibration.py
 --production`); the quarterback rushing fits are the change there, the rest moved only because
 2026 has more games than at the last refit.
+
+### Passing yards for new starters (Nov 9, 2026): two of four, not kept
+
+`python experiments/qb_new_starter_passing_test.py` (results in `experiments/out/qb_new_starter_passing_test.json`;
+rule committed before the run). The change: one more column in the passing calibration, the raw
+projection × how new the starter is (1 − the share of his recent active games that were starts).
+Kept only if passing-yards RMSE (tuning, holdout) and Brier at the 2023-2025 passing-yards lines
+(pricing, close) are all better.
+
+| Measure (new term against current) | Passing yards |
+|---|---|
+| RMSE, tuning 2014-2018 (2,530 starts) | 74.54 → 74.50 (MSE −6.2 ± 17.2) |
+| RMSE, holdout 2019 on (3,920) | 75.65 → 75.38 (MSE −41.0 ± 18.2) |
+| Brier at the lines, pricing snapshot (2,597) | +0.00061 ± 0.00082 |
+| Brier at the lines, close (3,055) | +0.00089 ± 0.00099 |
+
+**Two of four: not kept.** The term does what it was meant to: new starters (under 30% starts) go
+from 221.0 projected to 203.0 against 204.3 actual, the 30-60% group from 226.0 to 216.2 against
+208.4, and established starters are untouched (243.4 → 245.9 against 245.3). Both RMSE measures
+improve, the holdout by 2.3 standard errors. But at the books' lines it is slightly worse at both
+snapshots (within one standard error). The books already price a new starter low; the
+correction overshoots their number on the props they post, and the lines are mostly on
+established starters, where the term adds a little noise. Pass attempts and completions
+(reported only): mixed, within noise.
+
+**Nothing changes on the board.** A trade-off for Ryan: the projections shown on the Players tab
+and reports would be more accurate for new starters, and the passing-yards prop pricing would
+be a hair worse.
