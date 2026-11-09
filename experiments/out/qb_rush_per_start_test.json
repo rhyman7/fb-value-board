@@ -1,0 +1,234 @@
+{
+ "rmse": {
+  "rush_yds": {
+   "tuning": {
+    "n": 2530,
+    "current_rmse": 14.638,
+    "per_start_rmse": 14.4498,
+    "rmse_change": -0.1882,
+    "mse_change": -5.4738,
+    "mse_se": 3.9631,
+    "current_bias": 1.262,
+    "per_start_bias": -2.068
+   },
+   "holdout": {
+    "n": 3920,
+    "current_rmse": 17.2195,
+    "per_start_rmse": 16.7078,
+    "rmse_change": -0.5117,
+    "mse_change": -17.3601,
+    "mse_se": 3.2507,
+    "current_bias": 1.577,
+    "per_start_bias": -0.328
+   },
+   "2026": {
+    "n": 255,
+    "current_rmse": 15.9406,
+    "per_start_rmse": 15.5923,
+    "rmse_change": -0.3483,
+    "mse_change": -10.9823,
+    "mse_se": 10.1633,
+    "current_bias": -0.33,
+    "per_start_bias": -2.119
+   },
+   "by_start_history": {
+    "30-60%": {
+     "n": 459,
+     "actual": 13.2,
+     "current": 7.6,
+     "per_start": 14.95,
+     "current_rmse": 15.576,
+     "per_start_rmse": 14.393
+    },
+    "60-85%": {
+     "n": 625,
+     "actual": 16.5,
+     "current": 13.14,
+     "per_start": 17.45,
+     "current_rmse": 16.198,
+     "per_start_rmse": 15.908
+    },
+    "85%+ (established)": {
+     "n": 5046,
+     "actual": 16.46,
+     "current": 16.28,
+     "per_start": 17.49,
+     "current_rmse": 16.014,
+     "per_start_rmse": 15.967
+    },
+    "under 30% starts": {
+     "n": 320,
+     "actual": 15.83,
+     "current": 3.91,
+     "per_start": 15.61,
+     "current_rmse": 20.547,
+     "per_start_rmse": 16.085
+    }
+   }
+  },
+  "carries": {
+   "tuning": {
+    "n": 2530,
+    "current_rmse": 1.8484,
+    "per_start_rmse": 1.7844,
+    "rmse_change": -0.0641,
+    "mse_change": -0.2328,
+    "mse_se": 0.0768,
+    "current_bias": 0.187,
+    "per_start_bias": -0.312
+   },
+   "holdout": {
+    "n": 3920,
+    "current_rmse": 2.2644,
+    "per_start_rmse": 2.1163,
+    "rmse_change": -0.1481,
+    "mse_change": -0.6488,
+    "mse_se": 0.0806,
+    "current_bias": 0.337,
+    "per_start_bias": 0.004
+   },
+   "2026": {
+    "n": 255,
+    "current_rmse": 2.0481,
+    "per_start_rmse": 1.9451,
+    "rmse_change": -0.103,
+    "mse_change": -0.4114,
+    "mse_se": 0.2534,
+    "current_bias": 0.041,
+    "per_start_bias": -0.27
+   },
+   "by_start_history": {
+    "30-60%": {
+     "n": 459,
+     "actual": 2.45,
+     "current": 1.36,
+     "per_start": 2.71,
+     "current_rmse": 2.2,
+     "per_start_rmse": 1.876
+    },
+    "60-85%": {
+     "n": 625,
+     "actual": 2.95,
+     "current": 2.28,
+     "per_start": 3.01,
+     "current_rmse": 2.099,
+     "per_start_rmse": 1.981
+    },
+    "85%+ (established)": {
+     "n": 5046,
+     "actual": 2.81,
+     "current": 2.79,
+     "per_start": 2.95,
+     "current_rmse": 1.982,
+     "per_start_rmse": 1.967
+    },
+    "under 30% starts": {
+     "n": 320,
+     "actual": 3.04,
+     "current": 0.69,
+     "per_start": 2.83,
+     "current_rmse": 3.514,
+     "per_start_rmse": 2.519
+    }
+   }
+  },
+  "pass_yds_by_start_history": {
+   "30-60%": {
+    "n": 459,
+    "actual": 208.4,
+    "current": 226.0
+   },
+   "60-85%": {
+    "n": 625,
+    "actual": 223.3,
+    "current": 226.6
+   },
+   "85%+ (established)": {
+    "n": 5046,
+    "actual": 245.3,
+    "current": 243.4
+   },
+   "under 30% starts": {
+    "n": 320,
+    "actual": 204.3,
+    "current": 221.0
+   }
+  }
+ },
+ "lines": {
+  "close": {
+   "rush_yds": {
+    "n": 1907,
+    "games": 695,
+    "over_rate": 0.4803,
+    "books_fair_over": 0.5001,
+    "brier_books": 0.24968,
+    "current": {
+     "brier": 0.25648,
+     "our_over": 0.4686
+    },
+    "per_start": {
+     "brier": 0.25167,
+     "our_over": 0.496
+    },
+    "brier_change": -0.00482,
+    "se": 0.00261
+   },
+   "carries": {
+    "n": 273,
+    "games": 123,
+    "over_rate": 0.4469,
+    "books_fair_over": 0.4979,
+    "brier_books": 0.2509,
+    "current": {
+     "brier": 0.22953,
+     "our_over": 0.4413
+    },
+    "per_start": {
+     "brier": 0.23625,
+     "our_over": 0.467
+    },
+    "brier_change": 0.00672,
+    "se": 0.00665
+   }
+  },
+  "pricing": {
+   "rush_yds": {
+    "n": 1276,
+    "games": 579,
+    "over_rate": 0.4922,
+    "books_fair_over": 0.5004,
+    "brier_books": 0.24963,
+    "current": {
+     "brier": 0.25043,
+     "our_over": 0.4735
+    },
+    "per_start": {
+     "brier": 0.24981,
+     "our_over": 0.4951
+    },
+    "brier_change": -0.00061,
+    "se": 0.00244
+   },
+   "carries": {
+    "n": 223,
+    "games": 100,
+    "over_rate": 0.4395,
+    "books_fair_over": 0.4942,
+    "brier_books": 0.25139,
+    "current": {
+     "brier": 0.22917,
+     "our_over": 0.4577
+    },
+    "per_start": {
+     "brier": 0.23615,
+     "our_over": 0.4692
+    },
+    "brier_change": 0.00698,
+    "se": 0.00505
+   }
+  }
+ },
+ "measures_better": 6,
+ "kept_by_rule": false
+}
