@@ -129,6 +129,11 @@ def with_target_share(payload: dict) -> dict:
             why["tgt_share"] = why["rec_share"]
         if why.get("tgt_share_hist") is None and why.get("rec_share_hist") is not None:
             why["tgt_share_hist"] = why["rec_share_hist"]
+    for p in (out.get("players") or {}).get("players") or []:
+        # a player the official report lists Questionable / GTD shows a projection shaded by his
+        # chance to play; a prop is void if he sits, so props price his projection given he plays
+        if isinstance(p.get("proj_played"), dict):
+            p["proj"] = dict(p["proj_played"])
     return out
 
 

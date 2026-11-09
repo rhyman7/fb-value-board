@@ -52,7 +52,12 @@ OUT_CODES = {"O": "Out", "D": "Doubtful"}
 WORDS = {**OUT_CODES, "Q": "Questionable", "P": "Probable"}
 # the conferences' own statuses -> the board's code
 REPORT_CODES = {"out": "O", "doubtful": "D", "questionable": "Q", "probable": "P", "game time decision": "Q", "out (1st half)": "P"}
-COLS = ["team", "name", "pos", "d", "injury", "updated", "season", "key", "src"]
+COLS = ["team", "name", "pos", "d", "injury", "updated", "season", "key", "src", "raw"]
+# Chance to play for the official reports' Questionable and Game Time Decision (Nov 9, 2026 test,
+# Project doc claude/questionable-gtd-test-results-2026-11-09.md: fitted on 2026 weeks 0-6 from PFF
+# snaps, kept on weeks 7+). Only official-report designations; Covers' Questionable is untested and
+# stays a label. Refit at the January recheck, not mid-season.
+PLAY_CHANCE = {"Questionable": 0.66, "Game Time Decision": 0.64}
 
 
 def norm(name) -> str:
@@ -104,6 +109,7 @@ def load_covers(path, today: dt.date) -> pd.DataFrame:
     o["season"] = o["season"].fillna(False).astype(bool)
     o["key"] = o["name"].map(norm)
     o["src"] = "Covers"
+    o["raw"] = o["d"].map(WORDS)
     return o[COLS]
 
 
@@ -144,7 +150,7 @@ def _reports(path, today: dt.date) -> tuple[pd.DataFrame, set]:
                 continue
             rows.append({"team": rep["abbr"], "name": p["name"], "pos": p.get("pos") or "", "d": d, "injury": "",
                          "updated": rep.get("published"), "season": bool(p.get("season_out")), "key": norm(p["name"]),
-                         "src": rep.get("conf", "report")})
+                         "src": rep.get("conf", "report"), "raw": str(p.get("status") or "")})
     return (pd.DataFrame(rows)[COLS] if rows else empty), covered
 
 

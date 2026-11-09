@@ -496,6 +496,39 @@ def backtest_summary(proj: pd.DataFrame, table: pd.DataFrame, periods: dict) -> 
 # Board output
 # --------------------------------------------------------------------------
 
+SHADE_STATS = ("receptions", "rec_yds", "carries", "rush_yds")
+
+
+def shade_for_availability(p: pd.DataFrame, tag: dict) -> tuple[pd.DataFrame, dict, dict]:
+    """A player the official report lists Questionable or Game Time Decision (p.play_chance) keeps
+    play_chance of his projected receptions, receiving yards, carries and rushing yards; the rest goes
+    to his teammates in the game with no designation, in proportion to their own projection (Nov 9,
+    2026 test, kept: experiments/cfb_availability_test.py, variant V2). Passing and touchdowns are
+    left as projected given he plays. Returns the frame, {row index: full projection given he plays}
+    (the college props price from it: a prop is void if he sits) and {row index: {stat: amount a
+    teammate gained}} (the card says where the extra came from)."""
+    p = p.copy()
+    keys = [DES.norm(n) for n in p["name"]]
+    free = pd.Series([tag.get((g, t, k)) is None for g, t, k in zip(p["game_id"], p["team"], keys)], index=p.index)
+    c = p["play_chance"].astype(float)
+    listed = c.notna()
+    played = {i: {k: float(p.at[i, k + "_proj"]) for k in STATS if k + "_proj" in p} for i in p.index[listed]}   # stat -> value
+    grp = [p["game_id"], p["team"]]
+    gained: dict = {}
+    for s in SHADE_STATS:
+        col = s + "_proj"
+        src = p[col].astype(float)
+        new = src * c.fillna(1.0)
+        lost = (src - new).groupby(grp).transform("sum")
+        base = src.where(free, 0.0)
+        tot = base.groupby(grp).transform("sum")
+        add = (lost * base / tot.replace(0, np.nan)).fillna(0.0)
+        p[col] = new + add
+        for i in add.index[add > 0.05]:
+            gained.setdefault(i, {})[s] = float(add[i])
+    return p, played, gained
+
+
 def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys: dict, abbr: dict,
           des: pd.DataFrame | None = None) -> dict:
     """Projections for the board's upcoming games (game_keys: game_id -> board id), with the inputs
@@ -517,10 +550,17 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
     up = table[~table["played"].astype(bool) & table["game_id"].isin(game_keys)][["game_id", "team", "t"]].drop_duplicates()
     cov = DES.applies(des_out, up) if des_out is not None and len(des_out) else None
     # the designation each player carries in each board game: {(game_id, team, name key): code}
-    tag = {}
+    tag, chance = {}, {}
     if des is not None:
         for x in DES.applies(des, up).itertuples():
             tag[(x.game_id, x.team_name, x.key)] = x.d
+            c = DES.PLAY_CHANCE.get(getattr(x, "raw", None)) if getattr(x, "src", "Covers") != "Covers" else None
+            if c is not None:
+                chance[(x.game_id, x.team_name, x.key)] = c
+    p["play_chance"] = [chance.get((g, t, DES.norm(n))) for g, t, n in zip(p["game_id"], p["team"], p["name"])]
+    played_proj, gained = {}, {}
+    if p["play_chance"].notna().any():
+        p, played_proj, gained = shade_for_availability(p, tag)
     teams = []
     for (gid, team), t in p.groupby(["game_id", "team"]):
         first = t.iloc[0]
@@ -568,6 +608,9 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
             "team": abbr.get(r.team, r.team), "opp": abbr.get(r.opp, r.opp), "game": game_keys[r.game_id], "week": int(r.week),
             "status": DES.WORDS.get(d),
             "proj": {k: r1(getattr(r, k + "_proj")) for k in STATS},
+            **({"play_chance": r2(r.play_chance), "proj_played": {k: r1(v) for k, v in played_proj[r.Index].items()}}
+               if r.Index in played_proj else {}),
+            **({"avail_plus": {k: r1(v) for k, v in gained[r.Index].items()}} if r.Index in gained else {}),
             "td_any": r3(1 - np.exp(-max(td, 0))),
             "why": {"rec_share": r3(r.rec_share), "car_share": r3(r.car_share), "att_share": r3(r.att_share),
                     "rec_share_hist": r3(r.rec_share_raw), "car_share_hist": r3(r.car_share_raw),

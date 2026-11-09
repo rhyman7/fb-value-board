@@ -259,7 +259,16 @@ boards in detail; this file is the rules.
   report's designations replace the team's Covers rows (a Covers row that says out for the season
   stays unless the report lists him; a live report listing nobody means everyone is available),
   mapped Out O, Doubtful D, Questionable Q, Probable P, Game Time Decision Q, Out (1st Half) P,
-  with `src` the conference; the Teammates-out box names the source. The file is ignored once
+  with `src` the conference; the Teammates-out box names the source. **Questionable and Game Time
+  Decision on an official report** (not Covers') are shaded by the chance to play
+  (`designations.PLAY_CHANCE`: Questionable 0.66, Game Time Decision 0.64; Nov 9, 2026 test, kept,
+  Project doc `claude/questionable-gtd-test-results-2026-11-09.md`): `players.shade_for_availability`
+  keeps that share of his receptions, receiving yards, carries and rushing yards and gives the rest
+  to undesignated teammates in proportion; passing and touchdowns stay as projected given he plays.
+  His board entry carries `play_chance` and `proj_played` (full projection given he plays), a
+  teammate's `avail_plus` (what he gained). **College props price from `proj_played`**
+  (`cfbpropboard.with_target_share`; a prop is void if he sits). Refit the chances at the January
+  recheck, not mid-season. The file is ignored once
   `fetched` is more than 5 days old. When the reports in it change (not just its stamps), the
   Action starts a quick **Update college board** run so Game Day reports reach the projections
   before kickoff (Ryan's call, Nov 9, 2026); it skips that on Saturdays 13:00-23:59 UTC, when the
