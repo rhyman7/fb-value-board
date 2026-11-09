@@ -5,6 +5,9 @@ name: College availability
 #    team's newest official availability report while its game is still ahead (SEC, ACC, Big 12,
 #    Big Ten; one vendor app serves all four: app.hdintelligence.com, public JSON). The board build
 #    (cfbmodel/designations.py) uses these over the Covers.com designations for every team that has one.
+#    When the reports change, this Action starts a quick Update college board run (except Saturday
+#    afternoons, when the Market lines Action already rebuilds hourly), so Game Day reports reach the
+#    projections before kickoff.
 # 2. History, data/cfb/availability/<season>/: conf_log.csv and conf_archive.json (every report
 #    version); covers_log.csv, every change in the Covers.com designations (docs/cfb/designations.json,
 #    written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on
@@ -31,6 +34,7 @@ on:
 
 permissions:
   contents: write
+  actions: write      # starts Update college board when the official reports change (workflow_dispatch)
 
 concurrency:
   group: board-commits
@@ -62,7 +66,27 @@ jobs:
           args=""
           [ "${{ inputs.dry_run }}" = "true" ] && args="--dry-run"
           python -m cfbmodel.availability_log $args
+      - name: Did the official reports change?
+        # compares docs/cfb/availability.json's teams (reports and designations) with the committed
+        # file, ignoring its fetched and today stamps
+        id: reports
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, subprocess
+          f = "docs/cfb/availability.json"
+          try:
+              new = json.load(open(f)).get("teams")
+          except (OSError, ValueError):
+              new = None
+          try:
+              old = json.loads(subprocess.check_output(["git", "show", f"HEAD:{f}"], text=True)).get("teams")
+          except (subprocess.CalledProcessError, ValueError):
+              old = None
+          print(f"changed={'true' if new is not None and new != old else 'false'}")
+          PY
       - name: Commit
+        id: commit
         if: ${{ inputs.dry_run != true }}
         run: |
           git config user.name "github-actions[bot]"
@@ -78,3 +102,21 @@ jobs:
           git commit -m "College availability $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase origin main
           git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      - name: Rebuild the college board
+        # A quick (no-backtest) rebuild whenever the official reports changed, so a Game Day report
+        # reaches the board's projections before kickoff (Nov 9, 2026, Ryan's call). Skipped on
+        # Saturdays 13:00-23:59 UTC, when the Market lines Action already rebuilds the college board
+        # at :50 every hour, and when an Update college board run is already queued or running.
+        if: ${{ steps.commit.outputs.pushed == 'true' && steps.reports.outputs.changed == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$(date -u +%u)" = "6" ] && [ "$(date -u +%H)" -ge 13 ] && [ "$(date -u +%H)" -le 23 ]; then
+            echo "no rebuild: Saturday, the Market lines Action rebuilds at :50"; exit 0
+          fi
+          busy=$(gh api "repos/${{ github.repository }}/actions/workflows/update-cfb.yml/runs?per_page=5" \
+                 --jq '[.workflow_runs[] | select(.status=="queued" or .status=="in_progress" or .status=="pending" or .status=="waiting")] | length')
+          if [ "${busy:-0}" != "0" ]; then echo "no rebuild: Update college board already queued or running"; exit 0; fi
+          echo "official reports changed: starting Update college board"
+          gh api -X POST "repos/${{ github.repository }}/actions/workflows/update-cfb.yml/dispatches" -f ref=main -f 'inputs[backtest]=false'

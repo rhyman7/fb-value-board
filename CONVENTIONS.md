@@ -260,7 +260,11 @@ boards in detail; this file is the rules.
   stays unless the report lists him; a live report listing nobody means everyone is available),
   mapped Out O, Doubtful D, Questionable Q, Probable P, Game Time Decision Q, Out (1st Half) P,
   with `src` the conference; the Teammates-out box names the source. The file is ignored once
-  `fetched` is more than 5 days old. Don't edit it by hand. The CFB dashboard (rhyman7/cfb) reads
+  `fetched` is more than 5 days old. When the reports in it change (not just its stamps), the
+  Action starts a quick **Update college board** run so Game Day reports reach the projections
+  before kickoff (Ryan's call, Nov 9, 2026); it skips that on Saturdays 13:00-23:59 UTC, when the
+  Market lines Action already rebuilds the college board hourly, and when an Update college board
+  run is already queued or running. Don't edit it by hand. The CFB dashboard (rhyman7/cfb) reads
   the same vendor app into its own `data/availability.json` with the same rules.
 - **College availability history: `data/cfb/availability/<season>/`**, written by the same
   Action: `conf_log.csv` and `conf_archive.json` (every version of every conference report,
