@@ -245,3 +245,8 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_11_MINN_PSU|Moneyline|home,2026-11-09 00:50,2026,11,2026_11_MINN_PSU,401858524,2026-11-15T00:00Z,Moneyline,home,PSU ML,price,kalshi,,-270.0,-289.9,0.0251,0.0088,consensus,9.5,43.5,11.03,44.4
 2026_11_CSU_WSU|Moneyline|home,2026-11-09 00:50,2026,11,2026_11_CSU_WSU,401860917,2026-11-15T03:30Z,Moneyline,home,WSU ML,price,draftkings,,-278.0,-278.0,0.0563,0.0138,consensus,8.5,66.5,14.3,62.41
 2026_11_NDSU_HAW|Moneyline|home,2026-11-09 00:50,2026,11,2026_11_NDSU_HAW,401864537,2026-11-15T04:00Z,Moneyline,home,HAW ML,price,draftkings,,260.0,260.0,0.0219,0.0009,consensus,-7.0,39.5,-6.37,44.59
+2026_11_CIN_ISU|Spread|home,2026-11-09 01:17,2026,11,2026_11_CIN_ISU,401856859,2026-11-14T05:00Z,Spread,home,ISU -3,model,draftkings,-2.5,-108.0,-108.0,0.0222,0.0016,pinnacle,3.0,60.5,4.71,61.24
+2026_11_WIS_MD|Moneyline|away,2026-11-09 01:17,2026,11,2026_11_WIS_MD,401858520,2026-11-14T17:00Z,Moneyline,away,WIS ML,price,fanduel,,-295.0,-295.0,-0.0074,0.0058,pinnacle,-8.0,43.0,-4.25,45.8
+2026_11_USC_IU|Spread|home,2026-11-09 01:17,2026,11,2026_11_USC_IU,401858518,2026-11-14T20:30Z,Spread,home,IU -7.5,model,kalshi,-7.5,113.0,105.4,0.0299,0.0011,pinnacle,7.5,49.5,10.08,55.56
+2026_11_USU_SDSU|Spread|home,2026-11-09 01:17,2026,11,2026_11_USU_SDSU,401860915,2026-11-15T02:30Z,Spread,home,SDSU -1,price,draftkings,1.5,-112.0,-112.0,0.0134,0.0021,pinnacle,1.0,41.0,1.4,48.26
+2026_11_USU_SDSU|Total|under,2026-11-09 01:17,2026,11,2026_11_USU_SDSU,401860915,2026-11-15T02:30Z,Total,under,Under 41,price,fanduel,41.5,-105.0,-105.0,0.0007,0.0035,pinnacle,1.0,41.0,1.4,48.26
