@@ -1,0 +1,219 @@
+{
+ "rmse": {
+  "pass_yds": {
+   "tuning": {
+    "n": 2530,
+    "current_rmse": 74.542,
+    "new_rmse": 74.5,
+    "mse_change": -6.184,
+    "mse_se": 17.225,
+    "current_bias": 0.41,
+    "new_bias": -0.75
+   },
+   "holdout": {
+    "n": 3920,
+    "current_rmse": 75.651,
+    "new_rmse": 75.379,
+    "mse_change": -41.04,
+    "mse_se": 18.168,
+    "current_bias": -1.73,
+    "new_bias": -1.27
+   },
+   "2026": {
+    "n": 255,
+    "current_rmse": 76.299,
+    "new_rmse": 75.716,
+    "mse_change": -88.652,
+    "mse_se": 46.481,
+    "current_bias": 2.75,
+    "new_bias": 3.39
+   },
+   "by_start_history": {
+    "30-60%": {
+     "n": 459,
+     "actual": 208.4,
+     "current": 226.0,
+     "new": 216.2,
+     "current_rmse": 85.37,
+     "new_rmse": 84.19
+    },
+    "60-85%": {
+     "n": 625,
+     "actual": 223.3,
+     "current": 226.6,
+     "new": 224.4,
+     "current_rmse": 76.7,
+     "new_rmse": 76.75
+    },
+    "85%+ (established)": {
+     "n": 5046,
+     "actual": 245.3,
+     "current": 243.4,
+     "new": 245.9,
+     "current_rmse": 73.68,
+     "new_rmse": 73.67
+    },
+    "under 30% starts": {
+     "n": 320,
+     "actual": 204.3,
+     "current": 221.0,
+     "new": 203.0,
+     "current_rmse": 80.6,
+     "new_rmse": 78.89
+    }
+   }
+  },
+  "pass_att": {
+   "tuning": {
+    "n": 2530,
+    "current_rmse": 8.754,
+    "new_rmse": 8.758,
+    "mse_change": 0.082,
+    "mse_se": 0.246,
+    "current_bias": -0.02,
+    "new_bias": -0.11
+   },
+   "holdout": {
+    "n": 3920,
+    "current_rmse": 8.71,
+    "new_rmse": 8.704,
+    "mse_change": -0.115,
+    "mse_se": 0.199,
+    "current_bias": -0.28,
+    "new_bias": -0.15
+   },
+   "2026": {
+    "n": 255,
+    "current_rmse": 8.883,
+    "new_rmse": 8.891,
+    "mse_change": 0.151,
+    "mse_se": 0.471,
+    "current_bias": 0.39,
+    "new_bias": 0.57
+   },
+   "by_start_history": {
+    "30-60%": {
+     "n": 459,
+     "actual": 30.6,
+     "current": 32.3,
+     "new": 31.3,
+     "current_rmse": 10.5,
+     "new_rmse": 10.43
+    },
+    "60-85%": {
+     "n": 625,
+     "actual": 31.9,
+     "current": 32.3,
+     "new": 32.1,
+     "current_rmse": 9.03,
+     "new_rmse": 9.03
+    },
+    "85%+ (established)": {
+     "n": 5046,
+     "actual": 33.5,
+     "current": 33.5,
+     "new": 33.6,
+     "current_rmse": 8.43,
+     "new_rmse": 8.44
+    },
+    "under 30% starts": {
+     "n": 320,
+     "actual": 30.8,
+     "current": 31.8,
+     "new": 30.2,
+     "current_rmse": 9.86,
+     "new_rmse": 9.81
+    }
+   }
+  },
+  "completions": {
+   "tuning": {
+    "n": 2530,
+    "current_rmse": 5.997,
+    "new_rmse": 5.996,
+    "mse_change": -0.004,
+    "mse_se": 0.135,
+    "current_bias": 0.0,
+    "new_bias": -0.1
+   },
+   "holdout": {
+    "n": 3920,
+    "current_rmse": 6.137,
+    "new_rmse": 6.127,
+    "mse_change": -0.132,
+    "mse_se": 0.119,
+    "current_bias": -0.2,
+    "new_bias": -0.1
+   },
+   "2026": {
+    "n": 255,
+    "current_rmse": 6.193,
+    "new_rmse": 6.19,
+    "mse_change": -0.033,
+    "mse_se": 0.239,
+    "current_bias": 0.38,
+    "new_bias": 0.49
+   },
+   "by_start_history": {
+    "30-60%": {
+     "n": 459,
+     "actual": 19.0,
+     "current": 20.3,
+     "new": 19.5,
+     "current_rmse": 7.27,
+     "new_rmse": 7.2
+    },
+    "60-85%": {
+     "n": 625,
+     "actual": 20.1,
+     "current": 20.4,
+     "new": 20.2,
+     "current_rmse": 6.3,
+     "new_rmse": 6.3
+    },
+    "85%+ (established)": {
+     "n": 5046,
+     "actual": 21.8,
+     "current": 21.7,
+     "new": 21.9,
+     "current_rmse": 5.9,
+     "new_rmse": 5.9
+    },
+    "under 30% starts": {
+     "n": 320,
+     "actual": 19.0,
+     "current": 20.1,
+     "new": 18.6,
+     "current_rmse": 6.64,
+     "new_rmse": 6.58
+    }
+   }
+  }
+ },
+ "lines": {
+  "close": {
+   "pass_yds": {
+    "n": 3055,
+    "over_rate": 0.5119,
+    "brier_books": 0.2502,
+    "current": 0.25357,
+    "new": 0.25447,
+    "brier_change": 0.00089,
+    "se": 0.00099
+   }
+  },
+  "pricing": {
+   "pass_yds": {
+    "n": 2597,
+    "over_rate": 0.5133,
+    "brier_books": 0.25016,
+    "current": 0.25124,
+    "new": 0.25184,
+    "brier_change": 0.00061,
+    "se": 0.00082
+   }
+  }
+ },
+ "measures_better": 2,
+ "kept_by_rule": false
+}
