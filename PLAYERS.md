@@ -481,3 +481,18 @@ actual 204.3; 30-60%: 226.0 against 208.4; established 243.4 against 245.3).
 
 **Nothing changes on the board.** For Ryan: apply as tested, or test a narrower version first (the
 per-start numbers only for quarterbacks without an established run of starts).
+
+**Applied (Nov 9, 2026, Ryan's choice: option 1, as tested).** `players.py`: `build` keeps a
+quarterback's carries, rushing yards and share of the team's carries over his starts
+(`carries_st`, `rush_yds_st`, `car_share_st`, decayed like everything else) and his per-start
+share `car_share_qbst` (prior: the average starter's share); `raw_projection` puts the projected
+starter's per-start chain in `carries_qp` / `rush_yds_qp`, leaving `carries_p` and his teammates'
+touchdown shares as they were; `calib_X(..., per_start=True)` reads the per-start chain and form,
+and `walk_forward` fits the starters' own last step for the two stats on projected starters who
+started (`QB_RUSH`). Nothing else is refitted: rebuilt and compared, every other projection on every
+row is identical; 7,668 starter rows moved. The production code gives carries RMSE 1.741 / 2.115
+and rushing yards 14.218 / 16.700 (tuning / holdout) against the test's 1.784 / 2.116 and 14.450 /
+16.708: a shade better, because the production prior is the one share average rather than
+earlier seasons only. The production prop widths were refitted (`props_calibration.py
+--production`); the quarterback rushing fits are the change there, the rest moved only because
+2026 has more games than at the last refit.
