@@ -311,16 +311,26 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
     act["start"] = np.where(use, (act["pass_att"] >= 0.5 * act["team_att"].clip(lower=1)).astype(float), np.nan)
     for c in ("pass_att", "completions", "pass_yds", "pass_td", "ints"):
         act[c + "_st"] = np.where(use, act[c] * act["start"], np.nan)
+    # a starter's rushing, judged on his starts (Nov 9, 2026, PLAYERS.md "Quarterback rushing per start"):
+    # a backup is active every week without playing, so his per-active-game share runs near zero
+    for c in ("carries", "rush_yds"):
+        act[c + "_st"] = np.where(use, act[c] * act["start"], np.nan)
+    act["car_share_st"] = np.where(use, act["car_share"] * act["start"], np.nan)
     capc = [f"rush_yds_c{EFF_CAP}", f"rec_yds_c{EFF_CAP}"] if EFF_CAP else []
     for c in ("tgt_share", "car_share", "att_share", "targets", "receptions", "rec_yds", "rec_td", "rz_targets",
               "carries", "rush_yds", "rush_td", "rz_carries", "gl_carries", "pass_att", "completions", "pass_yds", "pass_td", "ints", *capc):
         act[c] = act[c].where(use)
     pl = asof(act, "player_id", ["tgt_share", "car_share", "att_share", "targets", "receptions", "rec_yds", "rec_td", "rz_targets",
                                  "carries", "rush_yds", "rush_td", "rz_carries", "gl_carries", "pass_att", "completions",
-                                 "pass_yds", "pass_td", "ints", "pass_att_st", "completions_st", "pass_yds_st", "pass_td_st", "ints_st", *capc],
+                                 "pass_yds", "pass_td", "ints", "pass_att_st", "completions_st", "pass_yds_st", "pass_td_st", "ints_st",
+                                 "carries_st", "rush_yds_st", "car_share_st", *capc],
               ["one", "start"], PLAYER_HL)
     n = pl["one_sum"]
     pos_share = act[use].groupby("group")[["tgt_share", "car_share", "att_share"]].mean()
+    # the average starting quarterback's share of his team's carries: the prior for a starter's per-start share
+    qb_st = act[use & (act["group"] == "QB") & (act["start"] == 1)]
+    pl["qb_car_share_prior"] = float(qb_st["car_share"].mean()) if len(qb_st) else 0.1
+    pl["car_share_qbst"] = (pl["car_share_st_sum"].fillna(0) + pl["qb_car_share_prior"]) / (pl["start_sum"].fillna(0) + 1.0)
     for c in ("tgt_share", "car_share", "att_share"):
         prior = pl["group"].map(pos_share[c]).fillna(0.0) * 0.5     # an unknown player starts at half his position's average
         pl[f"{c}_raw"] = (pl[f"{c}_sum"] + prior * 1.0) / (n + 1.0)
@@ -497,6 +507,13 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
     p["pass_att_p"] = p["att_share"] * p["proj_team_att"]
     p["targets_p"] = p["tgt_share"] * p["proj_team_att"]
     p["carries_p"] = p["car_share"] * p["proj_team_car"]
+    # the projected starter's rushing at his per-start share, in its own columns so the shared
+    # chain, the regression fitted on it and his teammates' touchdown shares are untouched
+    # (PLAYERS.md "Quarterback rushing per start"); calib_X reads them for him
+    if "car_share_qbst" in p:
+        qb1 = (p["group"] == "QB") & (p["att_share"] > 0.5)
+        p["carries_qp"] = np.where(qb1, p["car_share_qbst"] * p["proj_team_car"], np.nan)
+        p["rush_yds_qp"] = p["carries_qp"] * p["ypc"] * p["def_ypc"]
     # Defense-vs-position did not help receiving on the tuning seasons (players_ablation.py),
     # so receivers use their own catch rate and yards per target; QBs and runners keep it.
     p["receptions_p"] = p["targets_p"] * p["catch"].clip(0.2, 0.95)
@@ -520,6 +537,7 @@ def raw_projection(p: pd.DataFrame, att_model: Lin, car_model: Lin) -> pd.DataFr
 
 
 PASS_STATS = ("pass_att", "completions", "pass_yds", "pass_td", "ints")
+QB_RUSH = ("carries", "rush_yds")     # a starting quarterback's rushing: per-start inputs and its own last step (Nov 9, 2026)
 
 CAL_EXTRA = {   # extra terms in the calibration of each stat (multiplied by the raw projection).
     # Defensive injuries are kept only where they helped on 2013-2018 (receiving); see FEATURES.md.
@@ -529,16 +547,23 @@ CAL_EXTRA = {   # extra terms in the calibration of each stat (multiplied by the
 }
 
 
-def calib_X(p: pd.DataFrame, stat: str) -> np.ndarray:
+def calib_X(p: pd.DataFrame, stat: str, per_start: bool = False) -> np.ndarray:
     """The raw projection, its interactions with defensive injuries and wind, and the
-    player's recent per-game average (form the volume x efficiency chain can miss)."""
+    player's recent per-game average (form the volume x efficiency chain can miss).
+    per_start: a starting quarterback's rushing from his starts (chain and form); only the
+    starters' own last step uses it, so every other fit is as before."""
     raw = p[stat + "_p"].to_numpy(float)
+    if per_start and stat in QB_RUSH and stat + "_qp" in p:   # the projected starter: his per-start chain
+        raw = p[stat + "_qp"].fillna(p[stat + "_p"]).to_numpy(float)
     if stat in ("pass_att", "completions", "pass_yds", "pass_td", "ints"):
         # a quarterback's form is his per-start average; with no starts, his raw projection
         per_start = p[stat + "_st_sum"] / p["start_sum"].where(p["start_sum"] > 0.3)
         recent = np.where(p["att_share"] > 0.5, per_start.fillna(p[stat + "_p"]), p[stat + "_p"])
     else:
         recent = (p[stat + "_sum"] / p["one_sum"].replace(0, np.nan)).fillna(0.0).to_numpy(float)
+        if per_start and stat in QB_RUSH and stat + "_st_sum" in p:   # his per-start average, else the chain
+            per_start = p[stat + "_st_sum"] / p["start_sum"].where(p["start_sum"] > 0.3)
+            recent = np.where(p["att_share"] > 0.5, per_start.fillna(pd.Series(raw, index=p.index)), recent)
     cols = [raw, recent] + [raw * p[c].to_numpy(float) for c in CAL_EXTRA[stat]]
     return np.column_stack(cols)
 
@@ -564,6 +589,7 @@ def walk_forward(table: pd.DataFrame, first_test: int = 2013) -> pd.DataFrame:
         # low. A passing prop is void if the quarterback does not play, so the projection is what he
         # throws if he starts.
         qb_fit = hist[(hist["att_share"] > 0.5) & (hist["started"] == 1)]
+        qb_cur = ((cur["group"] == "QB") & (cur["att_share"] > 0.5)).to_numpy()
         for stat in STATS:
             h = qb_fit if stat in PASS_STATS else hist
             m = Lin(1.0).fit(calib_X(h, stat), h[stat].to_numpy(float))
@@ -571,6 +597,11 @@ def walk_forward(table: pd.DataFrame, first_test: int = 2013) -> pd.DataFrame:
             # no projected volume and no history for this stat: zero, not the regression's intercept
             none = (X[:, 0] == 0) & (X[:, 1] == 0)
             cur[stat + "_proj"] = np.where(none, 0.0, np.clip(m.predict(X), 0, None))
+            if stat in QB_RUSH and "car_share_qbst" in cur and qb_cur.any() and len(qb_fit) >= 200:
+                # the projected starter's rushing: its own last step, fitted on starters who started
+                mq = Lin(1.0).fit(calib_X(qb_fit, stat, per_start=True), qb_fit[stat].to_numpy(float))
+                Xq = calib_X(cur, stat, per_start=True)
+                cur.loc[cur.index[qb_cur], stat + "_proj"] = np.clip(mq.predict(Xq[qb_cur]), 0, None)
         out.append(cur)
     return pd.concat(out, ignore_index=True)
 

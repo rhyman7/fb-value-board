@@ -87,3 +87,20 @@ def test_props_rows_are_labelled_from_the_cutover_only():
     assert PB._rec({**base, "time": "2026-11-12 02:00:00"})["sl"] == PB.KNEELS_LABEL
     assert "sl" not in PB._rec({**base, "time": "2026-10-28 02:00:00"})
     assert "sl" not in PB._rec({**base, "time": "2026-11-12 02:00:00", "pos": "RB"})
+
+
+# ---- a starting quarterback's rushing from his starts (players.QB_RUSH) ----------------------
+
+from nflmodel import players as PLY  # noqa: E402
+
+
+def test_calib_X_per_start_only_changes_the_starter_and_only_when_asked():
+    p = pd.DataFrame({"carries_p": [1.0, 10.0], "carries_qp": [3.0, np.nan], "carries_sum": [2.0, 40.0], "one_sum": [8.0, 8.0],
+                      "carries_st_sum": [6.0, np.nan], "start_sum": [2.0, 0.0], "att_share": [1.0, 0.0]})
+    plain = PLY.calib_X(p, "carries")
+    assert np.allclose(plain[:, 0], [1.0, 10.0]) and np.allclose(plain[:, 1], [0.25, 5.0])
+    ps = PLY.calib_X(p, "carries", per_start=True)
+    assert np.allclose(ps[0], [3.0, 3.0])                 # the starter: per-start chain and per-start form
+    assert np.allclose(ps[1], plain[1])                   # the back: unchanged
+    few = p.assign(start_sum=[0.2, 0.0])
+    assert np.allclose(PLY.calib_X(few, "carries", per_start=True)[0], [3.0, 3.0])   # under 0.3 starts: the chain as form
