@@ -778,3 +778,79 @@ yards 46.3% against 50.0%, gap 6.4; anytime TD 27.2% against 23.7%, gap 6.9. Run
 quarterbacks' rushing ranges are very wide (an option QB projected at 114 yards: 0 to 305),
 the same model the Parlays page and the outlook use; not changed here.
 
+
+## The over lean and model-agreed unders (Nov 9, 2026): both rules miss by one measure
+
+`python experiments/props_over_lean_test.py` (results in `experiments/out/props_over_lean_test.json`).
+Two-sided DraftKings and FanDuel main lines, 2023-2025 (receptions and carries: 2025 only), each
+book's line counted separately, pushes left out; the board's projections (the New projections with
+PFF route share where the board uses them, the current ones elsewhere), pregame at the pricing
+snapshot and game-day at the close. Rules were written into the script before the run. An
+exploratory pass the same day chose the cuts (35%, quarterback markets apart, passing yards out),
+so this is not an out-of-sample test of them; the live log from here on is.
+
+**Grading fault found on the way.** The board's box scores leave kneel-downs out
+(`players_data.py`); the books count a kneel as a rushing attempt for about −1 yard (2025: 0.79
+kneels per team-game). A quarterback's carries are therefore graded about 0.8 low and his rushing
+yards about 0.9 high, here and in the live prop record. Quarterback rush-attempt overs "cleared"
+32% for that reason. The numbers below leave quarterback carries and quarterback rushing yards
+out (33,275 props at the close, 20,401 at pricing); the json has both versions. The verdicts are
+the same either way. Not fixed here: it changes the graded live record, so it waits for Ryan.
+
+**The lean.** With the vig taken out the books say 49.8% over on everything but passing yards;
+47.2% went over (30,220 props at the close). At the posted prices:
+
+| Close | Props | Over rate | Under return | Over return |
+|---|---|---|---|---|
+| 2023 | 8,481 | 49.1% | −3.8% ± 1.6% | −7.3% ± 1.6% |
+| 2024 | 8,980 | 48.2% | −1.8% ± 1.5% | −9.1% ± 1.5% |
+| 2025 | 15,814 | 46.4% | +0.5% ± 1.4% | −11.9% ± 1.4% |
+| All but passing yards | 30,220 | 47.2% | −0.6% ± 0.8% | −10.7% ± 0.8% |
+| Passing yards | 3,055 | 51.2% | −7.8% ± 2.5% | −3.1% ± 2.5% |
+
+By stat (close, under / over return): RB rushing yards +0.5% / −11.4%; receiving yards WR −0.8% /
+−10.1%, TE −2.9% / −8.0%, RB −1.5% / −9.5%; receptions WR +2.3% / −14.9%, TE +2.0% / −13.5%, RB
+−1.1% / −10.6%; RB carries −1.6% / −11.1%. At the pricing snapshot the same pattern, a little
+weaker: unders −1.6% ± 1.0%, overs −10.6% (17,804 props). The 2026 live log so far (weeks 8-9, 693
+props at pricing): overs 47.0%, −10.7% ± 8.8%; unders −0.7% ± 8.7%.
+
+**Rule A, shading the fair number** (fair + the average of went-over minus fair on earlier
+seasons, one shift for passing yards and one for the rest; kept only if better on all four):
+
+| Brier, shade minus fair | 2024 (shift from 2023) | 2025 (shift from 2023-24) |
+|---|---|---|
+| Pricing snapshot | +0.00001 ± 0.00027 | −0.00063 ± 0.00018 |
+| Close | −0.00032 ± 0.00017 | −0.00090 ± 0.00021 |
+
+Better on three, flat on one (pricing, 2024, when the 2023 pricing-snapshot lean of 1.7 points
+was followed by a 2024 lean of 0.5). **Not kept by the rule: a trade-off for Ryan.** The shifts
+fitted: −1.2 to −1.8 points for the rest, +1.3 to +2.4 for passing yards. For comparison the nudge
+toward the model on the same props: +0.00015 and −0.00131 at pricing, +0.00004 and −0.00081 at the
+close, so in 2024 the nudge did nothing and in 2025 about what the shade did; shade then nudge
+−0.00159 (pricing) and −0.00129 (close) on 2025.
+
+**Rule B, unders the model agrees with** (board's over chance below 35%, passing yards out; the
+under at the posted price; return above zero in every season at both snapshots):
+
+| Under return | 2023 | 2024 | 2025 | All |
+|---|---|---|---|---|
+| Pricing snapshot | +10.9% ± 5.2% (531) | **−2.4% ± 5.2% (588)** | +7.9% ± 3.7% (1,353) | +6.1% ± 2.6% (2,472) |
+| Close | +3.8% ± 3.5% (1,197) | +0.8% ± 3.6% (1,205) | +8.3% ± 2.9% (2,518) | +5.4% ± 1.9% (4,920) |
+
+Five of six. **Rule B is not met.** The return falls in step with the model's over chance (close:
++5.4% under 35%, +1.1% at 35-42%, −2.4%, −1.7%, −4.3% at 54% and up), and overs lose in every
+band (−7% to −17%), so the model's opinion is worth something on the under side only. Among the
+agreed unders: RB rushing yards +6.4% ± 3.9% (1,090), RB carries +16.4% ± 7.1% (266, 2025 only),
+WR receptions +8.7% ± 4.9% (592, 2025 only), WR receiving yards +4.0% ± 3.5% (1,457).
+
+**No closing line value on the price.** For the agreed unders at pricing (2,422 still posted at
+the close) the line fell on 34% and rose on 26% (−0.15 on average), which is the bettor's way; on
+the 970 whose line did not move, the under's vig-free chance went from 52.42% to 52.50% (+0.09 ±
+0.12 points), and at the closing fair chance the bet is −5.5% ± 0.3%, the vig. By the playbook's
+standard that is unproven. The 2026 live log so far: 110 agreed unders, 48.2%, −12.9% ± 10.7%.
+
+**What follows.** Nothing changes on the board. The fair number is still the power-method one,
+flags stay off, and no under is staked. Open for Ryan: whether to shade the fair number anyway
+(three of four measures), and whether to keep a live record of the agreed unders. One look-ahead
+remains at the pricing snapshot, as above: the game model behind the projections is anchored to
+the closing spread and total.

@@ -1,0 +1,1770 @@
+{
+ "agree_below": 0.35,
+ "seasons": [
+  2023,
+  2024,
+  2025
+ ],
+ "pff_route_inputs": {
+  "pricing": true,
+  "close": true
+ },
+ "as_written": {
+  "pricing": {
+   "n": 21913,
+   "games": 833,
+   "ours_minus_books_brier": 0.00391,
+   "lean_by_season": [
+    {
+     "key": [
+      "2023"
+     ],
+     "n": 5067,
+     "over_rate": 0.4892,
+     "fair_over": 0.5005,
+     "under_return": -0.0418,
+     "under_se": 0.0188,
+     "over_return": -0.0839,
+     "over_se": 0.019
+    },
+    {
+     "key": [
+      "2024"
+     ],
+     "n": 5808,
+     "over_rate": 0.4955,
+     "fair_over": 0.5004,
+     "under_return": -0.054,
+     "under_se": 0.017,
+     "over_return": -0.0722,
+     "over_se": 0.0174
+    },
+    {
+     "key": [
+      "2025"
+     ],
+     "n": 11038,
+     "over_rate": 0.4675,
+     "fair_over": 0.4973,
+     "under_return": -0.0023,
+     "under_se": 0.0156,
+     "over_return": -0.1159,
+     "over_se": 0.0161
+    }
+   ],
+   "lean_by_stat": [
+    {
+     "key": [
+      "carries",
+      "QB"
+     ],
+     "n": 224,
+     "over_rate": 0.3125,
+     "fair_over": 0.4943,
+     "under_return": 0.2862,
+     "under_se": 0.0812,
+     "over_return": -0.402,
+     "over_se": 0.0848
+    },
+    {
+     "key": [
+      "carries",
+      "RB"
+     ],
+     "n": 989,
+     "over_rate": 0.455,
+     "fair_over": 0.4975,
+     "under_return": 0.0195,
+     "under_se": 0.0378,
+     "over_return": -0.142,
+     "over_se": 0.038
+    },
+    {
+     "key": [
+      "pass_yds",
+      "QB"
+     ],
+     "n": 2597,
+     "over_rate": 0.5133,
+     "fair_over": 0.4997,
+     "under_return": -0.0862,
+     "under_se": 0.0263,
+     "over_return": -0.0353,
+     "over_se": 0.0263
+    },
+    {
+     "key": [
+      "rec_yds",
+      "RB"
+     ],
+     "n": 2030,
+     "over_rate": 0.4783,
+     "fair_over": 0.5002,
+     "under_return": -0.0194,
+     "under_se": 0.0275,
+     "over_return": -0.1017,
+     "over_se": 0.0274
+    },
+    {
+     "key": [
+      "rec_yds",
+      "TE"
+     ],
+     "n": 2265,
+     "over_rate": 0.4949,
+     "fair_over": 0.5001,
+     "under_return": -0.051,
+     "under_se": 0.0263,
+     "over_return": -0.0708,
+     "over_se": 0.0263
+    },
+    {
+     "key": [
+      "rec_yds",
+      "WR"
+     ],
+     "n": 5748,
+     "over_rate": 0.4796,
+     "fair_over": 0.5006,
+     "under_return": -0.0219,
+     "under_se": 0.0162,
+     "over_return": -0.1004,
+     "over_se": 0.0164
+    },
+    {
+     "key": [
+      "receptions",
+      "RB"
+     ],
+     "n": 689,
+     "over_rate": 0.4659,
+     "fair_over": 0.4955,
+     "under_return": 0.0002,
+     "under_se": 0.0536,
+     "over_return": -0.114,
+     "over_se": 0.0535
+    },
+    {
+     "key": [
+      "receptions",
+      "TE"
+     ],
+     "n": 827,
+     "over_rate": 0.4534,
+     "fair_over": 0.4907,
+     "under_return": 0.0066,
+     "under_se": 0.0423,
+     "over_return": -0.1362,
+     "over_se": 0.0452
+    },
+    {
+     "key": [
+      "receptions",
+      "WR"
+     ],
+     "n": 1928,
+     "over_rate": 0.4533,
+     "fair_over": 0.4918,
+     "under_return": 0.0128,
+     "under_se": 0.0297,
+     "over_return": -0.137,
+     "over_se": 0.0317
+    },
+    {
+     "key": [
+      "rush_yds",
+      "QB"
+     ],
+     "n": 1288,
+     "over_rate": 0.5132,
+     "fair_over": 0.5004,
+     "under_return": -0.086,
+     "under_se": 0.0339,
+     "over_return": -0.0373,
+     "over_se": 0.0339
+    },
+    {
+     "key": [
+      "rush_yds",
+      "RB"
+     ],
+     "n": 3328,
+     "over_rate": 0.476,
+     "fair_over": 0.5004,
+     "under_return": -0.0146,
+     "under_se": 0.0204,
+     "over_return": -0.1065,
+     "over_se": 0.0206
+    }
+   ],
+   "lean_by_book": [
+    {
+     "key": [
+      "draftkings"
+     ],
+     "n": 11857,
+     "over_rate": 0.4819,
+     "fair_over": 0.4997,
+     "under_return": -0.0261,
+     "under_se": 0.01,
+     "over_return": -0.0934,
+     "over_se": 0.0103
+    },
+    {
+     "key": [
+      "fanduel"
+     ],
+     "n": 10056,
+     "over_rate": 0.4776,
+     "fair_over": 0.4979,
+     "under_return": -0.0239,
+     "under_se": 0.011,
+     "over_return": -0.1011,
+     "over_se": 0.0114
+    }
+   ],
+   "lean_by_group": [
+    {
+     "key": [
+      "False"
+     ],
+     "n": 18028,
+     "over_rate": 0.4728,
+     "fair_over": 0.4986,
+     "under_return": -0.012,
+     "under_se": 0.0102,
+     "over_return": -0.1101,
+     "over_se": 0.0108
+    },
+    {
+     "key": [
+      "True"
+     ],
+     "n": 3885,
+     "over_rate": 0.5133,
+     "fair_over": 0.4999,
+     "under_return": -0.0862,
+     "under_se": 0.0208,
+     "over_return": -0.0359,
+     "over_se": 0.0209
+    }
+   ],
+   "rule_a": {
+    "2024": {
+     "n": 5808,
+     "shift_qb_markets": 0.0092,
+     "shift_other": -0.0171,
+     "brier_fair": 0.2499,
+     "shade_minus_fair": 1e-05,
+     "se": 0.00024,
+     "nudge_weight": 0.332,
+     "nudge_minus_fair": 9e-05,
+     "nudge_se": 0.0006,
+     "shade_plus_nudge_weight": 0.303,
+     "shade_plus_nudge_minus_fair": 0.00019,
+     "shade_plus_nudge_se": 0.00063,
+     "better": false
+    },
+    "2025": {
+     "n": 11038,
+     "shift_qb_markets": 0.0073,
+     "shift_other": -0.0123,
+     "brier_fair": 0.24851,
+     "shade_minus_fair": -0.00071,
+     "se": 0.00017,
+     "nudge_weight": 0.238,
+     "nudge_minus_fair": -0.00157,
+     "nudge_se": 0.0004,
+     "shade_plus_nudge_weight": 0.212,
+     "shade_plus_nudge_minus_fair": -0.00189,
+     "shade_plus_nudge_se": 0.0004,
+     "better": true
+    }
+   },
+   "rule_b": {
+    "by_season": {
+     "2023": {
+      "n": 565,
+      "under_wins": 0.5894,
+      "under_return": 0.105,
+      "se": 0.0517,
+      "above_zero": true
+     },
+     "2024": {
+      "n": 621,
+      "under_wins": 0.5266,
+      "under_return": -0.0124,
+      "se": 0.0496,
+      "above_zero": false
+     },
+     "2025": {
+      "n": 1487,
+      "under_wins": 0.6046,
+      "under_return": 0.0985,
+      "se": 0.0357,
+      "above_zero": true
+     }
+    },
+    "bands": [
+     {
+      "band": "(0.0, 0.35]",
+      "n": 2673,
+      "under_return": 0.0741,
+      "under_se": 0.0255,
+      "over_return": -0.1981,
+      "over_se": 0.0275,
+      "under_return_by_season": {
+       "2023": 0.105,
+       "2024": -0.0124,
+       "2025": 0.0985
+      }
+     },
+     {
+      "band": "(0.35, 0.42]",
+      "n": 4131,
+      "under_return": 0.0192,
+      "under_se": 0.0194,
+      "over_return": -0.1411,
+      "over_se": 0.0208,
+      "under_return_by_season": {
+       "2023": -0.0129,
+       "2024": -0.0184,
+       "2025": 0.0504
+      }
+     },
+     {
+      "band": "(0.42, 0.48]",
+      "n": 4508,
+      "under_return": -0.0094,
+      "under_se": 0.0184,
+      "over_return": -0.112,
+      "over_se": 0.0188,
+      "under_return_by_season": {
+       "2023": -0.0303,
+       "2024": -0.0538,
+       "2025": 0.0276
+      }
+     },
+     {
+      "band": "(0.48, 0.54]",
+      "n": 4198,
+      "under_return": -0.061,
+      "under_se": 0.0191,
+      "over_return": -0.0597,
+      "over_se": 0.0191,
+      "under_return_by_season": {
+       "2023": -0.0781,
+       "2024": -0.0819,
+       "2025": -0.0447
+      }
+     },
+     {
+      "band": "(0.54, 1.0]",
+      "n": 3806,
+      "under_return": -0.0803,
+      "under_se": 0.0222,
+      "over_return": -0.0432,
+      "over_se": 0.0217,
+      "under_return_by_season": {
+       "2023": -0.1014,
+       "2024": -0.0572,
+       "2025": -0.0833
+      }
+     }
+    ],
+    "by_stat": [
+     {
+      "stat": "carries",
+      "group": "QB",
+      "n": 99,
+      "under_return": 0.3567,
+      "se": 0.1169
+     },
+     {
+      "stat": "carries",
+      "group": "RB",
+      "n": 202,
+      "under_return": 0.1948,
+      "se": 0.0812
+     },
+     {
+      "stat": "rec_yds",
+      "group": "RB",
+      "n": 252,
+      "under_return": 0.0424,
+      "se": 0.075
+     },
+     {
+      "stat": "rec_yds",
+      "group": "TE",
+      "n": 211,
+      "under_return": 0.0683,
+      "se": 0.0823
+     },
+     {
+      "stat": "rec_yds",
+      "group": "WR",
+      "n": 658,
+      "under_return": -0.0062,
+      "se": 0.0513
+     },
+     {
+      "stat": "receptions",
+      "group": "RB",
+      "n": 131,
+      "under_return": 0.0074,
+      "se": 0.1088
+     },
+     {
+      "stat": "receptions",
+      "group": "TE",
+      "n": 128,
+      "under_return": 0.0096,
+      "se": 0.0989
+     },
+     {
+      "stat": "receptions",
+      "group": "WR",
+      "n": 306,
+      "under_return": 0.1071,
+      "se": 0.0638
+     },
+     {
+      "stat": "rush_yds",
+      "group": "QB",
+      "n": 102,
+      "under_return": 0.1245,
+      "se": 0.119
+     },
+     {
+      "stat": "rush_yds",
+      "group": "RB",
+      "n": 584,
+      "under_return": 0.0939,
+      "se": 0.0507
+     }
+    ],
+    "all": {
+     "n": 2673,
+     "under_wins": 0.5832,
+     "under_return": 0.0741,
+     "se": 0.0255,
+     "avg_price_decimal": 1.845
+    }
+   }
+  },
+  "close": {
+   "n": 35507,
+   "games": 851,
+   "ours_minus_books_brier": 0.00696,
+   "lean_by_season": [
+    {
+     "key": [
+      "2023"
+     ],
+     "n": 9107,
+     "over_rate": 0.4894,
+     "fair_over": 0.4999,
+     "under_return": -0.0356,
+     "under_se": 0.0149,
+     "over_return": -0.0754,
+     "over_se": 0.015
+    },
+    {
+     "key": [
+      "2024"
+     ],
+     "n": 9638,
+     "over_rate": 0.4817,
+     "fair_over": 0.5009,
+     "under_return": -0.0188,
+     "under_se": 0.014,
+     "over_return": -0.0908,
+     "over_se": 0.014
+    },
+    {
+     "key": [
+      "2025"
+     ],
+     "n": 16762,
+     "over_rate": 0.4639,
+     "fair_over": 0.4961,
+     "under_return": 0.0049,
+     "under_se": 0.013,
+     "over_return": -0.1186,
+     "over_se": 0.0132
+    }
+   ],
+   "lean_by_stat": [
+    {
+     "key": [
+      "carries",
+      "QB"
+     ],
+     "n": 279,
+     "over_rate": 0.3226,
+     "fair_over": 0.4991,
+     "under_return": 0.2796,
+     "under_se": 0.0744,
+     "over_return": -0.3869,
+     "over_se": 0.0758
+    },
+    {
+     "key": [
+      "carries",
+      "RB"
+     ],
+     "n": 1287,
+     "over_rate": 0.4716,
+     "fair_over": 0.4965,
+     "under_return": -0.0161,
+     "under_se": 0.0321,
+     "over_return": -0.1114,
+     "over_se": 0.0324
+    },
+    {
+     "key": [
+      "pass_yds",
+      "QB"
+     ],
+     "n": 3055,
+     "over_rate": 0.5119,
+     "fair_over": 0.4996,
+     "under_return": -0.0775,
+     "under_se": 0.025,
+     "over_return": -0.0308,
+     "over_se": 0.025
+    },
+    {
+     "key": [
+      "rec_yds",
+      "RB"
+     ],
+     "n": 3887,
+     "over_rate": 0.479,
+     "fair_over": 0.5001,
+     "under_return": -0.015,
+     "under_se": 0.0213,
+     "over_return": -0.0946,
+     "over_se": 0.0213
+    },
+    {
+     "key": [
+      "rec_yds",
+      "TE"
+     ],
+     "n": 4007,
+     "over_rate": 0.4866,
+     "fair_over": 0.5001,
+     "under_return": -0.0294,
+     "under_se": 0.0207,
+     "over_return": -0.0804,
+     "over_se": 0.0207
+    },
+    {
+     "key": [
+      "rec_yds",
+      "WR"
+     ],
+     "n": 9848,
+     "over_rate": 0.4759,
+     "fair_over": 0.5006,
+     "under_return": -0.0081,
+     "under_se": 0.0131,
+     "over_return": -0.1011,
+     "over_se": 0.0131
+    },
+    {
+     "key": [
+      "receptions",
+      "RB"
+     ],
+     "n": 1307,
+     "over_rate": 0.4675,
+     "fair_over": 0.492,
+     "under_return": -0.011,
+     "under_se": 0.0364,
+     "over_return": -0.1064,
+     "over_se": 0.0371
+    },
+    {
+     "key": [
+      "receptions",
+      "TE"
+     ],
+     "n": 1357,
+     "over_rate": 0.4488,
+     "fair_over": 0.4882,
+     "under_return": 0.0198,
+     "under_se": 0.0343,
+     "over_return": -0.1345,
+     "over_se": 0.0363
+    },
+    {
+     "key": [
+      "receptions",
+      "WR"
+     ],
+     "n": 3072,
+     "over_rate": 0.445,
+     "fair_over": 0.4889,
+     "under_return": 0.0225,
+     "under_se": 0.0239,
+     "over_return": -0.1488,
+     "over_se": 0.0252
+    },
+    {
+     "key": [
+      "rush_yds",
+      "QB"
+     ],
+     "n": 1953,
+     "over_rate": 0.4977,
+     "fair_over": 0.5002,
+     "under_return": -0.0503,
+     "under_se": 0.0296,
+     "over_return": -0.0595,
+     "over_se": 0.0296
+    },
+    {
+     "key": [
+      "rush_yds",
+      "RB"
+     ],
+     "n": 5455,
+     "over_rate": 0.4687,
+     "fair_over": 0.5003,
+     "under_return": 0.0051,
+     "under_se": 0.0164,
+     "over_return": -0.1144,
+     "over_se": 0.0164
+    }
+   ],
+   "lean_by_book": [
+    {
+     "key": [
+      "draftkings"
+     ],
+     "n": 18055,
+     "over_rate": 0.4739,
+     "fair_over": 0.4989,
+     "under_return": -0.0129,
+     "under_se": 0.0081,
+     "over_return": -0.1076,
+     "over_se": 0.0083
+    },
+    {
+     "key": [
+      "fanduel"
+     ],
+     "n": 17452,
+     "over_rate": 0.4767,
+     "fair_over": 0.4978,
+     "under_return": -0.0109,
+     "under_se": 0.0084,
+     "over_return": -0.092,
+     "over_se": 0.0087
+    }
+   ],
+   "lean_by_group": [
+    {
+     "key": [
+      "False"
+     ],
+     "n": 30499,
+     "over_rate": 0.4702,
+     "fair_over": 0.4981,
+     "under_return": -0.0029,
+     "under_se": 0.0079,
+     "over_return": -0.1095,
+     "over_se": 0.0083
+    },
+    {
+     "key": [
+      "True"
+     ],
+     "n": 5008,
+     "over_rate": 0.5064,
+     "fair_over": 0.4998,
+     "under_return": -0.0669,
+     "under_se": 0.019,
+     "over_return": -0.042,
+     "over_se": 0.0191
+    }
+   ],
+   "rule_a": {
+    "2024": {
+     "n": 9638,
+     "shift_qb_markets": 0.0044,
+     "shift_other": -0.0138,
+     "brier_fair": 0.24993,
+     "shade_minus_fair": -0.00034,
+     "se": 0.00015,
+     "nudge_weight": 0.229,
+     "nudge_minus_fair": 2e-05,
+     "nudge_se": 0.00034,
+     "shade_plus_nudge_weight": 0.197,
+     "shade_plus_nudge_minus_fair": -0.00019,
+     "shade_plus_nudge_se": 0.00036,
+     "better": true
+    },
+    "2025": {
+     "n": 16762,
+     "shift_qb_markets": -0.0002,
+     "shift_other": -0.0181,
+     "brier_fair": 0.2476,
+     "shade_minus_fair": -0.00094,
+     "se": 0.00022,
+     "nudge_weight": 0.168,
+     "nudge_minus_fair": -0.00095,
+     "nudge_se": 0.00027,
+     "shade_plus_nudge_weight": 0.118,
+     "shade_plus_nudge_minus_fair": -0.00143,
+     "shade_plus_nudge_se": 0.00031,
+     "better": true
+    }
+   },
+   "rule_b": {
+    "by_season": {
+     "2023": {
+      "n": 1259,
+      "under_wins": 0.5488,
+      "under_return": 0.0352,
+      "se": 0.0353,
+      "above_zero": true
+     },
+     "2024": {
+      "n": 1288,
+      "under_wins": 0.5373,
+      "under_return": 0.018,
+      "se": 0.0345,
+      "above_zero": true
+     },
+     "2025": {
+      "n": 2706,
+      "under_wins": 0.5987,
+      "under_return": 0.0883,
+      "se": 0.0282,
+      "above_zero": true
+     }
+    },
+    "bands": [
+     {
+      "band": "(0.0, 0.35]",
+      "n": 5253,
+      "under_return": 0.0583,
+      "under_se": 0.0189,
+      "over_return": -0.175,
+      "over_se": 0.0203,
+      "under_return_by_season": {
+       "2023": 0.0352,
+       "2024": 0.018,
+       "2025": 0.0883
+      }
+     },
+     {
+      "band": "(0.35, 0.42]",
+      "n": 7115,
+      "under_return": 0.0096,
+      "under_se": 0.0154,
+      "over_return": -0.1229,
+      "over_se": 0.016,
+      "under_return_by_season": {
+       "2023": 0.007,
+       "2024": -0.0179,
+       "2025": 0.0243
+      }
+     },
+     {
+      "band": "(0.42, 0.48]",
+      "n": 7234,
+      "under_return": -0.0193,
+      "under_se": 0.0145,
+      "over_return": -0.0904,
+      "over_se": 0.0146,
+      "under_return_by_season": {
+       "2023": -0.0509,
+       "2024": -0.0473,
+       "2025": 0.0194
+      }
+     },
+     {
+      "band": "(0.48, 0.54]",
+      "n": 6727,
+      "under_return": -0.0185,
+      "under_se": 0.0162,
+      "over_return": -0.0905,
+      "over_se": 0.0163,
+      "under_return_by_season": {
+       "2023": -0.0476,
+       "2024": 0.0267,
+       "2025": -0.0279
+      }
+     },
+     {
+      "band": "(0.54, 1.0]",
+      "n": 6123,
+      "under_return": -0.0486,
+      "under_se": 0.0181,
+      "over_return": -0.0653,
+      "over_se": 0.0179,
+      "under_return_by_season": {
+       "2023": -0.0708,
+       "2024": -0.0338,
+       "2025": -0.0463
+      }
+     }
+    ],
+    "by_stat": [
+     {
+      "stat": "carries",
+      "group": "QB",
+      "n": 112,
+      "under_return": 0.3016,
+      "se": 0.1116
+     },
+     {
+      "stat": "carries",
+      "group": "RB",
+      "n": 266,
+      "under_return": 0.1636,
+      "se": 0.0705
+     },
+     {
+      "stat": "rec_yds",
+      "group": "RB",
+      "n": 484,
+      "under_return": 0.0358,
+      "se": 0.0576
+     },
+     {
+      "stat": "rec_yds",
+      "group": "TE",
+      "n": 535,
+      "under_return": 0.0036,
+      "se": 0.0565
+     },
+     {
+      "stat": "rec_yds",
+      "group": "WR",
+      "n": 1457,
+      "under_return": 0.0403,
+      "se": 0.0347
+     },
+     {
+      "stat": "receptions",
+      "group": "RB",
+      "n": 239,
+      "under_return": -0.0285,
+      "se": 0.0802
+     },
+     {
+      "stat": "receptions",
+      "group": "TE",
+      "n": 257,
+      "under_return": 0.1115,
+      "se": 0.0736
+     },
+     {
+      "stat": "receptions",
+      "group": "WR",
+      "n": 592,
+      "under_return": 0.0865,
+      "se": 0.0493
+     },
+     {
+      "stat": "rush_yds",
+      "group": "QB",
+      "n": 221,
+      "under_return": 0.0378,
+      "se": 0.0858
+     },
+     {
+      "stat": "rush_yds",
+      "group": "RB",
+      "n": 1090,
+      "under_return": 0.0639,
+      "se": 0.0387
+     }
+    ],
+    "all": {
+     "n": 5253,
+     "under_wins": 0.5717,
+     "under_return": 0.0583,
+     "se": 0.0189,
+     "avg_price_decimal": 1.858
+    }
+   }
+  },
+  "clv_pricing_to_close": {
+   "bets": 2673,
+   "still_posted_at_close": 2617,
+   "line_fell": 0.333,
+   "line_rose": 0.26,
+   "line_same": 0.407,
+   "avg_line_move": -0.137,
+   "same_line_n": 1065,
+   "same_line_fair_under_pricing": 0.5236,
+   "same_line_fair_under_close": 0.524,
+   "same_line_fair_gain": 0.0004,
+   "same_line_fair_gain_se": 0.0012,
+   "same_line_ev_at_closing_fair": -0.0554,
+   "same_line_ev_se": 0.0031
+  },
+  "rule_a_passes": false,
+  "rule_b_passes": false
+ },
+ "qb_rushing_out": {
+  "pricing": {
+   "n": 20401,
+   "games": 833,
+   "ours_minus_books_brier": 0.0044,
+   "lean_by_season": [
+    {
+     "key": [
+      "2023"
+     ],
+     "n": 4728,
+     "over_rate": 0.4896,
+     "fair_over": 0.5005,
+     "under_return": -0.0425,
+     "under_se": 0.0196,
+     "over_return": -0.0831,
+     "over_se": 0.0197
+    },
+    {
+     "key": [
+      "2024"
+     ],
+     "n": 5364,
+     "over_rate": 0.4957,
+     "fair_over": 0.5004,
+     "under_return": -0.0542,
+     "under_se": 0.0181,
+     "over_return": -0.0718,
+     "over_se": 0.0183
+    },
+    {
+     "key": [
+      "2025"
+     ],
+     "n": 10309,
+     "over_rate": 0.4668,
+     "fair_over": 0.4972,
+     "under_return": -0.0012,
+     "under_se": 0.0163,
+     "over_return": -0.1172,
+     "over_se": 0.0169
+    }
+   ],
+   "lean_by_stat": [
+    {
+     "key": [
+      "carries",
+      "RB"
+     ],
+     "n": 989,
+     "over_rate": 0.455,
+     "fair_over": 0.4975,
+     "under_return": 0.0195,
+     "under_se": 0.0378,
+     "over_return": -0.142,
+     "over_se": 0.038
+    },
+    {
+     "key": [
+      "pass_yds",
+      "QB"
+     ],
+     "n": 2597,
+     "over_rate": 0.5133,
+     "fair_over": 0.4997,
+     "under_return": -0.0862,
+     "under_se": 0.0263,
+     "over_return": -0.0353,
+     "over_se": 0.0263
+    },
+    {
+     "key": [
+      "rec_yds",
+      "RB"
+     ],
+     "n": 2030,
+     "over_rate": 0.4783,
+     "fair_over": 0.5002,
+     "under_return": -0.0194,
+     "under_se": 0.0275,
+     "over_return": -0.1017,
+     "over_se": 0.0274
+    },
+    {
+     "key": [
+      "rec_yds",
+      "TE"
+     ],
+     "n": 2265,
+     "over_rate": 0.4949,
+     "fair_over": 0.5001,
+     "under_return": -0.051,
+     "under_se": 0.0263,
+     "over_return": -0.0708,
+     "over_se": 0.0263
+    },
+    {
+     "key": [
+      "rec_yds",
+      "WR"
+     ],
+     "n": 5748,
+     "over_rate": 0.4796,
+     "fair_over": 0.5006,
+     "under_return": -0.0219,
+     "under_se": 0.0162,
+     "over_return": -0.1004,
+     "over_se": 0.0164
+    },
+    {
+     "key": [
+      "receptions",
+      "RB"
+     ],
+     "n": 689,
+     "over_rate": 0.4659,
+     "fair_over": 0.4955,
+     "under_return": 0.0002,
+     "under_se": 0.0536,
+     "over_return": -0.114,
+     "over_se": 0.0535
+    },
+    {
+     "key": [
+      "receptions",
+      "TE"
+     ],
+     "n": 827,
+     "over_rate": 0.4534,
+     "fair_over": 0.4907,
+     "under_return": 0.0066,
+     "under_se": 0.0423,
+     "over_return": -0.1362,
+     "over_se": 0.0452
+    },
+    {
+     "key": [
+      "receptions",
+      "WR"
+     ],
+     "n": 1928,
+     "over_rate": 0.4533,
+     "fair_over": 0.4918,
+     "under_return": 0.0128,
+     "under_se": 0.0297,
+     "over_return": -0.137,
+     "over_se": 0.0317
+    },
+    {
+     "key": [
+      "rush_yds",
+      "RB"
+     ],
+     "n": 3328,
+     "over_rate": 0.476,
+     "fair_over": 0.5004,
+     "under_return": -0.0146,
+     "under_se": 0.0204,
+     "over_return": -0.1065,
+     "over_se": 0.0206
+    }
+   ],
+   "lean_by_book": [
+    {
+     "key": [
+      "draftkings"
+     ],
+     "n": 10996,
+     "over_rate": 0.4816,
+     "fair_over": 0.4997,
+     "under_return": -0.0256,
+     "under_se": 0.0104,
+     "over_return": -0.0939,
+     "over_se": 0.0108
+    },
+    {
+     "key": [
+      "fanduel"
+     ],
+     "n": 9405,
+     "over_rate": 0.4774,
+     "fair_over": 0.4978,
+     "under_return": -0.0237,
+     "under_se": 0.0114,
+     "over_return": -0.1013,
+     "over_se": 0.0119
+    }
+   ],
+   "lean_by_group": [
+    {
+     "key": [
+      "False"
+     ],
+     "n": 17804,
+     "over_rate": 0.4748,
+     "fair_over": 0.4987,
+     "under_return": -0.0157,
+     "under_se": 0.0103,
+     "over_return": -0.1064,
+     "over_se": 0.0108
+    },
+    {
+     "key": [
+      "True"
+     ],
+     "n": 2597,
+     "over_rate": 0.5133,
+     "fair_over": 0.4997,
+     "under_return": -0.0862,
+     "under_se": 0.0263,
+     "over_return": -0.0353,
+     "over_se": 0.0263
+    }
+   ],
+   "rule_a": {
+    "2024": {
+     "n": 5364,
+     "shift_qb_markets": 0.0206,
+     "shift_other": -0.0171,
+     "brier_fair": 0.24995,
+     "shade_minus_fair": 1e-05,
+     "se": 0.00027,
+     "nudge_weight": 0.336,
+     "nudge_minus_fair": 0.00015,
+     "nudge_se": 0.00065,
+     "shade_plus_nudge_weight": 0.305,
+     "shade_plus_nudge_minus_fair": 0.00024,
+     "shade_plus_nudge_se": 0.00068,
+     "better": false
+    },
+    "2025": {
+     "n": 10309,
+     "shift_qb_markets": 0.0161,
+     "shift_other": -0.0123,
+     "brier_fair": 0.24844,
+     "shade_minus_fair": -0.00063,
+     "se": 0.00018,
+     "nudge_weight": 0.237,
+     "nudge_minus_fair": -0.00131,
+     "nudge_se": 0.0004,
+     "shade_plus_nudge_weight": 0.21,
+     "shade_plus_nudge_minus_fair": -0.00159,
+     "shade_plus_nudge_se": 0.00041,
+     "better": true
+    }
+   },
+   "rule_b": {
+    "by_season": {
+     "2023": {
+      "n": 531,
+      "under_wins": 0.5913,
+      "under_return": 0.1085,
+      "se": 0.0516,
+      "above_zero": true
+     },
+     "2024": {
+      "n": 588,
+      "under_wins": 0.5204,
+      "under_return": -0.0239,
+      "se": 0.0518,
+      "above_zero": false
+     },
+     "2025": {
+      "n": 1353,
+      "under_wins": 0.595,
+      "under_return": 0.0788,
+      "se": 0.0366,
+      "above_zero": true
+     }
+    },
+    "bands": [
+     {
+      "band": "(0.0, 0.35]",
+      "n": 2472,
+      "under_return": 0.0607,
+      "under_se": 0.026,
+      "over_return": -0.1855,
+      "over_se": 0.028,
+      "under_return_by_season": {
+       "2023": 0.1085,
+       "2024": -0.0239,
+       "2025": 0.0788
+      }
+     },
+     {
+      "band": "(0.35, 0.42]",
+      "n": 3903,
+      "under_return": 0.0179,
+      "under_se": 0.0199,
+      "over_return": -0.1396,
+      "over_se": 0.0213,
+      "under_return_by_season": {
+       "2023": -0.0191,
+       "2024": -0.0167,
+       "2025": 0.0497
+      }
+     },
+     {
+      "band": "(0.42, 0.48]",
+      "n": 4164,
+      "under_return": -0.0077,
+      "under_se": 0.0195,
+      "over_return": -0.1137,
+      "over_se": 0.0199,
+      "under_return_by_season": {
+       "2023": -0.0283,
+       "2024": -0.0479,
+       "2025": 0.0257
+      }
+     },
+     {
+      "band": "(0.48, 0.54]",
+      "n": 3803,
+      "under_return": -0.0599,
+      "under_se": 0.0202,
+      "over_return": -0.0606,
+      "over_se": 0.0202,
+      "under_return_by_season": {
+       "2023": -0.0876,
+       "2024": -0.0785,
+       "2025": -0.0414
+      }
+     },
+     {
+      "band": "(0.54, 1.0]",
+      "n": 3462,
+      "under_return": -0.0693,
+      "under_se": 0.0234,
+      "over_return": -0.0539,
+      "over_se": 0.0228,
+      "under_return_by_season": {
+       "2023": -0.0927,
+       "2024": -0.0651,
+       "2025": -0.0623
+      }
+     }
+    ],
+    "by_stat": [
+     {
+      "stat": "carries",
+      "group": "RB",
+      "n": 202,
+      "under_return": 0.1948,
+      "se": 0.0812
+     },
+     {
+      "stat": "rec_yds",
+      "group": "RB",
+      "n": 252,
+      "under_return": 0.0424,
+      "se": 0.075
+     },
+     {
+      "stat": "rec_yds",
+      "group": "TE",
+      "n": 211,
+      "under_return": 0.0683,
+      "se": 0.0823
+     },
+     {
+      "stat": "rec_yds",
+      "group": "WR",
+      "n": 658,
+      "under_return": -0.0062,
+      "se": 0.0513
+     },
+     {
+      "stat": "receptions",
+      "group": "RB",
+      "n": 131,
+      "under_return": 0.0074,
+      "se": 0.1088
+     },
+     {
+      "stat": "receptions",
+      "group": "TE",
+      "n": 128,
+      "under_return": 0.0096,
+      "se": 0.0989
+     },
+     {
+      "stat": "receptions",
+      "group": "WR",
+      "n": 306,
+      "under_return": 0.1071,
+      "se": 0.0638
+     },
+     {
+      "stat": "rush_yds",
+      "group": "RB",
+      "n": 584,
+      "under_return": 0.0939,
+      "se": 0.0507
+     }
+    ],
+    "all": {
+     "n": 2472,
+     "under_wins": 0.5765,
+     "under_return": 0.0607,
+     "se": 0.026,
+     "avg_price_decimal": 1.845
+    }
+   }
+  },
+  "close": {
+   "n": 33275,
+   "games": 851,
+   "ours_minus_books_brier": 0.0072,
+   "lean_by_season": [
+    {
+     "key": [
+      "2023"
+     ],
+     "n": 8481,
+     "over_rate": 0.4906,
+     "fair_over": 0.4999,
+     "under_return": -0.0379,
+     "under_se": 0.0156,
+     "over_return": -0.073,
+     "over_se": 0.0157
+    },
+    {
+     "key": [
+      "2024"
+     ],
+     "n": 8980,
+     "over_rate": 0.4815,
+     "fair_over": 0.5009,
+     "under_return": -0.0183,
+     "under_se": 0.0146,
+     "over_return": -0.0913,
+     "over_se": 0.0146
+    },
+    {
+     "key": [
+      "2025"
+     ],
+     "n": 15814,
+     "over_rate": 0.4635,
+     "fair_over": 0.4959,
+     "under_return": 0.0052,
+     "under_se": 0.0135,
+     "over_return": -0.1193,
+     "over_se": 0.0136
+    }
+   ],
+   "lean_by_stat": [
+    {
+     "key": [
+      "carries",
+      "RB"
+     ],
+     "n": 1287,
+     "over_rate": 0.4716,
+     "fair_over": 0.4965,
+     "under_return": -0.0161,
+     "under_se": 0.0321,
+     "over_return": -0.1114,
+     "over_se": 0.0324
+    },
+    {
+     "key": [
+      "pass_yds",
+      "QB"
+     ],
+     "n": 3055,
+     "over_rate": 0.5119,
+     "fair_over": 0.4996,
+     "under_return": -0.0775,
+     "under_se": 0.025,
+     "over_return": -0.0308,
+     "over_se": 0.025
+    },
+    {
+     "key": [
+      "rec_yds",
+      "RB"
+     ],
+     "n": 3887,
+     "over_rate": 0.479,
+     "fair_over": 0.5001,
+     "under_return": -0.015,
+     "under_se": 0.0213,
+     "over_return": -0.0946,
+     "over_se": 0.0213
+    },
+    {
+     "key": [
+      "rec_yds",
+      "TE"
+     ],
+     "n": 4007,
+     "over_rate": 0.4866,
+     "fair_over": 0.5001,
+     "under_return": -0.0294,
+     "under_se": 0.0207,
+     "over_return": -0.0804,
+     "over_se": 0.0207
+    },
+    {
+     "key": [
+      "rec_yds",
+      "WR"
+     ],
+     "n": 9848,
+     "over_rate": 0.4759,
+     "fair_over": 0.5006,
+     "under_return": -0.0081,
+     "under_se": 0.0131,
+     "over_return": -0.1011,
+     "over_se": 0.0131
+    },
+    {
+     "key": [
+      "receptions",
+      "RB"
+     ],
+     "n": 1307,
+     "over_rate": 0.4675,
+     "fair_over": 0.492,
+     "under_return": -0.011,
+     "under_se": 0.0364,
+     "over_return": -0.1064,
+     "over_se": 0.0371
+    },
+    {
+     "key": [
+      "receptions",
+      "TE"
+     ],
+     "n": 1357,
+     "over_rate": 0.4488,
+     "fair_over": 0.4882,
+     "under_return": 0.0198,
+     "under_se": 0.0343,
+     "over_return": -0.1345,
+     "over_se": 0.0363
+    },
+    {
+     "key": [
+      "receptions",
+      "WR"
+     ],
+     "n": 3072,
+     "over_rate": 0.445,
+     "fair_over": 0.4889,
+     "under_return": 0.0225,
+     "under_se": 0.0239,
+     "over_return": -0.1488,
+     "over_se": 0.0252
+    },
+    {
+     "key": [
+      "rush_yds",
+      "RB"
+     ],
+     "n": 5455,
+     "over_rate": 0.4687,
+     "fair_over": 0.5003,
+     "under_return": 0.0051,
+     "under_se": 0.0164,
+     "over_return": -0.1144,
+     "over_se": 0.0164
+    }
+   ],
+   "lean_by_book": [
+    {
+     "key": [
+      "draftkings"
+     ],
+     "n": 16928,
+     "over_rate": 0.4739,
+     "fair_over": 0.4988,
+     "under_return": -0.013,
+     "under_se": 0.0084,
+     "over_return": -0.1076,
+     "over_se": 0.0086
+    },
+    {
+     "key": [
+      "fanduel"
+     ],
+     "n": 16347,
+     "over_rate": 0.4766,
+     "fair_over": 0.4977,
+     "under_return": -0.0112,
+     "under_se": 0.0088,
+     "over_return": -0.0921,
+     "over_se": 0.0091
+    }
+   ],
+   "lean_by_group": [
+    {
+     "key": [
+      "False"
+     ],
+     "n": 30220,
+     "over_rate": 0.4715,
+     "fair_over": 0.4981,
+     "under_return": -0.0055,
+     "under_se": 0.008,
+     "over_return": -0.1069,
+     "over_se": 0.0083
+    },
+    {
+     "key": [
+      "True"
+     ],
+     "n": 3055,
+     "over_rate": 0.5119,
+     "fair_over": 0.4996,
+     "under_return": -0.0775,
+     "under_se": 0.025,
+     "over_return": -0.0308,
+     "over_se": 0.025
+    }
+   ],
+   "rule_a": {
+    "2024": {
+     "n": 8980,
+     "shift_qb_markets": 0.0238,
+     "shift_other": -0.0138,
+     "brier_fair": 0.24996,
+     "shade_minus_fair": -0.00032,
+     "se": 0.00017,
+     "nudge_weight": 0.23,
+     "nudge_minus_fair": 4e-05,
+     "nudge_se": 0.00037,
+     "shade_plus_nudge_weight": 0.199,
+     "shade_plus_nudge_minus_fair": -0.00015,
+     "shade_plus_nudge_se": 0.00037,
+     "better": true
+    },
+    "2025": {
+     "n": 15814,
+     "shift_qb_markets": 0.0133,
+     "shift_other": -0.0181,
+     "brier_fair": 0.24742,
+     "shade_minus_fair": -0.0009,
+     "se": 0.00021,
+     "nudge_weight": 0.167,
+     "nudge_minus_fair": -0.00081,
+     "nudge_se": 0.00027,
+     "shade_plus_nudge_weight": 0.115,
+     "shade_plus_nudge_minus_fair": -0.00129,
+     "shade_plus_nudge_se": 0.00031,
+     "better": true
+    }
+   },
+   "rule_b": {
+    "by_season": {
+     "2023": {
+      "n": 1197,
+      "under_wins": 0.5505,
+      "under_return": 0.0383,
+      "se": 0.0352,
+      "above_zero": true
+     },
+     "2024": {
+      "n": 1205,
+      "under_wins": 0.532,
+      "under_return": 0.0077,
+      "se": 0.0363,
+      "above_zero": true
+     },
+     "2025": {
+      "n": 2518,
+      "under_wins": 0.5969,
+      "under_return": 0.083,
+      "se": 0.0292,
+      "above_zero": true
+     }
+    },
+    "bands": [
+     {
+      "band": "(0.0, 0.35]",
+      "n": 4920,
+      "under_return": 0.0537,
+      "under_se": 0.0194,
+      "over_return": -0.1709,
+      "over_se": 0.0209,
+      "under_return_by_season": {
+       "2023": 0.0383,
+       "2024": 0.0077,
+       "2025": 0.083
+      }
+     },
+     {
+      "band": "(0.35, 0.42]",
+      "n": 6762,
+      "under_return": 0.0109,
+      "under_se": 0.0158,
+      "over_return": -0.1245,
+      "over_se": 0.0164,
+      "under_return_by_season": {
+       "2023": 0.0082,
+       "2024": -0.0045,
+       "2025": 0.0197
+      }
+     },
+     {
+      "band": "(0.42, 0.48]",
+      "n": 6774,
+      "under_return": -0.0243,
+      "under_se": 0.0151,
+      "over_return": -0.0855,
+      "over_se": 0.0152,
+      "under_return_by_season": {
+       "2023": -0.0621,
+       "2024": -0.0554,
+       "2025": 0.0202
+      }
+     },
+     {
+      "band": "(0.48, 0.54]",
+      "n": 6245,
+      "under_return": -0.0166,
+      "under_se": 0.0168,
+      "over_return": -0.0924,
+      "over_se": 0.0169,
+      "under_return_by_season": {
+       "2023": -0.0525,
+       "2024": 0.0312,
+       "2025": -0.0241
+      }
+     },
+     {
+      "band": "(0.54, 1.0]",
+      "n": 5519,
+      "under_return": -0.0429,
+      "under_se": 0.0191,
+      "over_return": -0.0712,
+      "over_se": 0.0188,
+      "under_return_by_season": {
+       "2023": -0.0714,
+       "2024": -0.03,
+       "2025": -0.0371
+      }
+     }
+    ],
+    "by_stat": [
+     {
+      "stat": "carries",
+      "group": "RB",
+      "n": 266,
+      "under_return": 0.1636,
+      "se": 0.0705
+     },
+     {
+      "stat": "rec_yds",
+      "group": "RB",
+      "n": 484,
+      "under_return": 0.0358,
+      "se": 0.0576
+     },
+     {
+      "stat": "rec_yds",
+      "group": "TE",
+      "n": 535,
+      "under_return": 0.0036,
+      "se": 0.0565
+     },
+     {
+      "stat": "rec_yds",
+      "group": "WR",
+      "n": 1457,
+      "under_return": 0.0403,
+      "se": 0.0347
+     },
+     {
+      "stat": "receptions",
+      "group": "RB",
+      "n": 239,
+      "under_return": -0.0285,
+      "se": 0.0802
+     },
+     {
+      "stat": "receptions",
+      "group": "TE",
+      "n": 257,
+      "under_return": 0.1115,
+      "se": 0.0736
+     },
+     {
+      "stat": "receptions",
+      "group": "WR",
+      "n": 592,
+      "under_return": 0.0865,
+      "se": 0.0493
+     },
+     {
+      "stat": "rush_yds",
+      "group": "RB",
+      "n": 1090,
+      "under_return": 0.0639,
+      "se": 0.0387
+     }
+    ],
+    "all": {
+     "n": 4920,
+     "under_wins": 0.5697,
+     "under_return": 0.0537,
+     "se": 0.0194,
+     "avg_price_decimal": 1.857
+    }
+   }
+  },
+  "clv_pricing_to_close": {
+   "bets": 2472,
+   "still_posted_at_close": 2422,
+   "line_fell": 0.338,
+   "line_rose": 0.261,
+   "line_same": 0.4,
+   "avg_line_move": -0.148,
+   "same_line_n": 970,
+   "same_line_fair_under_pricing": 0.5242,
+   "same_line_fair_under_close": 0.525,
+   "same_line_fair_gain": 0.0009,
+   "same_line_fair_gain_se": 0.0012,
+   "same_line_ev_at_closing_fair": -0.0545,
+   "same_line_ev_se": 0.0031
+  },
+  "rule_a_passes": false,
+  "rule_b_passes": false
+ },
+ "live_2026": {
+  "flag": {
+   "weeks": [
+    8,
+    9
+   ],
+   "over": {
+    "n": 693,
+    "win_rate": 0.4704,
+    "fair": 0.4962,
+    "return": -0.1068,
+    "se": 0.0876
+   },
+   "under": {
+    "n": 693,
+    "win_rate": 0.5296,
+    "fair": 0.5038,
+    "return": -0.0074,
+    "se": 0.0865
+   },
+   "model_agreed_unders": {
+    "n": 110,
+    "win_rate": 0.4818,
+    "return": -0.1294,
+    "se": 0.1074
+   }
+  }
+ }
+}
