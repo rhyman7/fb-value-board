@@ -241,13 +241,30 @@ boards in detail; this file is the rules.
     in pff-data's CONVENTIONS.md. No PFF key is stored in this repo.
   - `scripts/pff_identify.py` (stamps season and week on hand exports from the website by matching
     box scores) writes into the pff-data checkout (`hand/`), never here.
-- **College availability log: `data/cfb/availability/<season>/`** (`latest.json`, `log.csv`), written
-  only by the **College availability** Action (`cfbmodel/availability_log.py`, standard library
-  only, no pip step): ESPN's per-team college injury designations, which carry the power
-  conferences' availability reports, with one `log.csv` row per change (new, status, details,
-  cleared) and the time it was first seen. History for the 2026 recheck of kickoff-time
-  availability; the board's Covers.com designations (`docs/cfb/designations.json`) are not
-  read from it. Don't edit these files by hand. The box-score absence features stay in
+- **Official availability reports (college board): `docs/cfb/availability.json`**, written only
+  by the **College availability** Action (`cfb-availability.yml`, `cfbmodel/availability_log.py
+  --conferences`, standard library only, no pip step; every two hours Wednesday to Friday,
+  hourly on Saturdays). The four power conferences publish NFL-style availability reports for
+  conference games (SEC, ACC, Big 12, Big Ten: Wednesday to Friday evenings and a Game Day report
+  90 minutes to two hours before kickoff; players not listed are available), all through one
+  vendor app (app.hdintelligence.com, public JSON). The file holds each team's newest report
+  while its game is still ahead: `{source, fetched, today, teams: {school: {conf, abbr, report
+  (Initial | Update | Game Day), published, posted, game_date, game_time, opponent, players:
+  [{name, pos, number, status, season_out}]}}}`, statuses in the conferences' own words,
+  "Exempt" rows (deep-roster players exempt from reporting) left out. **The board build uses it
+  over Covers** (`cfbmodel/designations.load`, from Nov 9, 2026): for every team in it, the
+  report's designations replace the team's Covers rows (a Covers row that says out for the season
+  stays unless the report lists him; a live report listing nobody means everyone is available),
+  mapped Out O, Doubtful D, Questionable Q, Probable P, Game Time Decision Q, Out (1st Half) P,
+  with `src` the conference; the Teammates-out box names the source. The file is ignored once
+  `fetched` is more than 5 days old. Don't edit it by hand. The CFB dashboard (rhyman7/cfb) reads
+  the same vendor app into its own `data/availability.json` with the same rules.
+- **College availability history: `data/cfb/availability/<season>/`**, written by the same
+  Action: `conf_log.csv` and `conf_archive.json` (every version of every conference report,
+  season to date), `covers_log.csv` (every change in the Covers.com designations the board used)
+  and ESPN's college injury feed (`latest.json`, `log.csv`; empty for college on the Nov 3, 2026
+  dry runs, kept in case it fills). History for the recheck of kickoff-time availability against
+  the 2026 live prop log. Don't edit these files by hand. The box-score absence features stay in
   `cfbmodel/availability.py`; the two modules are unrelated.
 - **CFBD player data: `data/cfb/cfbd/`** (`recruits_`, `portal_`, `returning_`, `roster_<season>.csv`),
   written by the manual **CFBD player data** Action (`cfbmodel/cfbd_pull.py`, `CFBD_API_KEY`).
@@ -267,7 +284,8 @@ boards in detail; this file is the rules.
   replaces a hand-entered starter row and never starts a quarterback with an `out` row for
   that game, so when nfelo's list is behind the news, a hand `starter` row (or `out` row) wins.
   It commits `data/qb_check/` and `data/overrides.csv` straight to `main`.
-- **Injury designations (college board): `docs/cfb/designations.json`.** The daily college
+- **Covers.com designations (college board): `docs/cfb/designations.json`.** The source for
+  teams without a live official report (above). The daily college
   check task writes it from Covers.com's NCAAF injury page
   (https://www.covers.com/sport/football/ncaaf/injuries) and merges it through a PR like any
   other change, then starts **Update college board** so the board uses it; the Actions never

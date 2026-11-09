@@ -154,9 +154,10 @@ opening totals (2021 on), betting the model's side when it is 3+ points off went
 (including "Where the edge lives", the record split by conference tier, day of week and
 week of season) and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
 
-College limits: no official injury report (players listed Out or Doubtful on Covers.com,
-read daily into `docs/cfb/designations.json`, get no projection; see
-`cfbmodel/designations.py`), historical lines are consensus averages with no prices, and current
+College limits: official availability reports only for power-conference teams in
+conference-game weeks (`docs/cfb/availability.json`; Covers.com, read daily into
+`docs/cfb/designations.json`, covers the rest; players listed Out or Doubtful get no
+projection; see `cfbmodel/designations.py`), historical lines are consensus averages with no prices, and current
 prices come from ESPN's scoreboard (one book). When the `CFBD_API_KEY` secret is set, games
 ESPN has not priced take their line from CollegeFootballData.com instead (`cfbmodel/cfbd.py`:
 the consensus line, else DraftKings, else the first book listed; the game's line source says

@@ -25,6 +25,13 @@ the one source with history is the Covers.com designations file the daily task w
 (`--covers`: covers_log.csv, one row per change in docs/cfb/designations.json, with the file's
 "checked" date and the time the change was seen here).
 
+`--conferences` also writes **docs/cfb/availability.json**, the current state the board reads
+(designations.py): each power-conference team's newest report while its game is still ahead,
+in the shape {"source", "fetched", "today", "teams": {school: {"conf", "abbr", "report" (Initial |
+Update | Game Day), "published", "posted" (the conference's own time zone), "game_date",
+"game_time", "opponent", "players": [{"name", "pos", "number", "status", "season_out"}]}}}.
+"Exempt" rows (deep-roster players exempt from reporting) are left out of it.
+
 Files, under data/cfb/availability/{season}/:
     latest.json     every current entry: {"seen": ..., "entries": [{team_id, team, player_id, name,
                     pos, status, date, type, detail, comment, first_seen}]}
@@ -229,6 +236,67 @@ def conference_rows(org: str, payload: dict, seen: str) -> list[dict]:
     return rows
 
 
+CURRENT = C.DOCS / "availability.json"
+REPORT_ORDER = {"Initial": 0, "Update": 1, "Game Day": 2}
+LIVE_STATUSES = {"Out", "Doubtful", "Questionable", "Probable", "Game Time Decision", "Out (1st Half)"}
+
+
+def eastern_today() -> dt.date:
+    try:
+        from zoneinfo import ZoneInfo
+        return dt.datetime.now(ZoneInfo("America/New_York")).date()
+    except Exception:  # noqa: BLE001
+        return (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=5)).date()
+
+
+def current_reports(payloads: dict, seen: str, today: dt.date | None = None, abbr: dict | None = None) -> dict:
+    """docs/cfb/availability.json: each team's newest report whose game is on or after today."""
+    today = today or eastern_today()
+    if abbr is None:
+        try:
+            season = today.year if today.month >= 8 else today.year - 1
+            with (C.CACHE / f"teams_{season}.csv").open() as f:
+                abbr = {r["school"]: r["abbr"] for r in csv.DictReader(f)}
+        except OSError:
+            abbr = {}
+    best: dict[str, tuple] = {}
+    for org, pub in payloads.items():
+        for rid, rep in (pub or {}).items():
+            if not isinstance(rep, dict) or rep.get("ReportType") not in REPORT_ORDER:
+                continue
+            foot = rep.get("footer") or {}
+            try:
+                gd = dt.date.fromisoformat(str(foot.get("date") or "")[:10])
+            except ValueError:
+                continue
+            if gd < today:
+                continue
+            games = rep.get("games") or []
+            names = [g.get("teamDisplayName") or g.get("teamName") or "" for g in games]
+            for g, team in zip(games, names):
+                players = []
+                for r in g.get("rows") or []:
+                    status = str(r.get("status") or "").strip()
+                    if status not in LIVE_STATUSES:
+                        continue
+                    m = NAME_RE.match(str(r.get("name") or ""))
+                    pos, num, player = (m.group(1), m.group(2), m.group(3)) if m else ("", "", str(r.get("name") or "").strip())
+                    players.append({"name": player, "pos": pos, "number": num, "status": status,
+                                    "season_out": str(r.get("exemptStatus") or "") == "Out"})
+                others = [n for n in names if n != team]
+                key = (str(rep.get("publishDate") or ""), str(rep.get("postedTime") or ""), REPORT_ORDER[rep["ReportType"]])
+                if team not in best or key > best[team][0]:
+                    best[team] = (key, {"conf": CONFERENCES[org], "abbr": abbr.get(team, ""), "report": rep["ReportType"],
+                                        "published": key[0][:10], "posted": key[1][:8], "game_date": gd.isoformat(),
+                                        "game_time": str(foot.get("time") or "")[:8], "opponent": others[0] if len(others) == 1 else "",
+                                        "players": players})
+    missing = sorted(t for t, v in best.items() if not v[1]["abbr"])
+    if missing:
+        print(f"  current: no board abbreviation for {missing}", file=sys.stderr)
+    return {"source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
+            "fetched": seen, "today": today.isoformat(), "teams": {t: v[1] for t, v in sorted(best.items())}}
+
+
 def conference_log(d: Path, seen: str, dry_run: bool) -> None:
     """conf_log.csv: every (report version, team, player, status) the first time it is seen, Available
     rows only for players who carried another status in an earlier version of the same report;
@@ -238,12 +306,14 @@ def conference_log(d: Path, seen: str, dry_run: bool) -> None:
     keys, listed = set(state["keys"]), set(state["listed"])
     new_rows = []
     archive = json.loads(arch_path.read_text()) if arch_path.exists() else {}
+    payloads = {}
     for org in CONFERENCES:
         try:
             pub = hdi("get-publish-public", org)
         except Exception as exc:  # noqa: BLE001
             print(f"  {org}: reports failed ({type(exc).__name__}: {str(exc)[:80]})", file=sys.stderr)
             continue
+        payloads[org] = pub
         rows = conference_rows(org, pub, seen)
         n_rep = len(pub) if isinstance(pub, dict) else 0
         kept = 0
@@ -270,11 +340,17 @@ def conference_log(d: Path, seen: str, dry_run: bool) -> None:
                 print(f"  {org}: {n_rep} reports, {len(rows)} rows, {kept} new; archive unchanged")
         except Exception as exc:  # noqa: BLE001
             print(f"  {org}: {n_rep} reports, {len(rows)} rows, {kept} new; archive failed ({type(exc).__name__})", file=sys.stderr)
+    current = current_reports(payloads, seen)
+    print(f"  current: {len(current['teams'])} teams with a live report, "
+          f"{sum(len(t['players']) for t in current['teams'].values())} designations")
     if dry_run:
         for r in new_rows[:15]:
             print("  ", {k: r[k] for k in ("conf", "report_type", "publish_date", "team", "pos", "player", "status")})
         return
     d.mkdir(parents=True, exist_ok=True)
+    if payloads:
+        CURRENT.parent.mkdir(parents=True, exist_ok=True)
+        CURRENT.write_text(json.dumps(current, indent=1, ensure_ascii=False) + "\n")
     if new_rows:
         write_header = not log_path.exists()
         with log_path.open("a", newline="") as f:

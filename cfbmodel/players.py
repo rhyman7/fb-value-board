@@ -538,7 +538,8 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
                     sh = g.loc[x.key] if x.key in g.index else None
                     share = (lambda a, b: r3(sh[a] / sh[b]) if sh is not None and sh[b] > 0 else None)
                     out.append({"name": x.name, "pos": str(x.pos or ""), "status": DES.OUT_CODES[x.d] + (f", {x.injury.lower()}" if isinstance(x.injury, str) and x.injury and x.injury.lower() != "undisclosed" else ""),
-                                "rec_share": share("rec", "tr"), "car_share": share("car", "tc"), "att_share": share("pa", "ta")})
+                                "rec_share": share("rec", "tr"), "car_share": share("car", "tc"), "att_share": share("pa", "ta"),
+                                "src": str(getattr(x, "src", "") or "Covers")})
                 # biggest roles first, then linemen and defense
                 out.sort(key=lambda o: -max(o["rec_share"] or 0, o["car_share"] or 0, o["att_share"] or 0))
         teams.append({"game": game_keys[gid], "team": abbr.get(team, team), "opp": abbr.get(first["opp"], first["opp"]),
