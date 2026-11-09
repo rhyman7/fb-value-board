@@ -21,8 +21,8 @@ PAGES = {
     # Five leagues that publish reports were added Nov 9, 2026
     "mac": "https://getsomemaction.com/fbreports",
     "mac_alt": "https://getsomemaction.com/sports/2024/8/22/football-availability-reports.aspx",
-    "mw": "https://themw.com/fbreports",
-    "mw_alt": "https://themw.com/sports/football/availability-reports",
+    "mw": "https://themw.com/sports/2026/5/26/availability-reports.aspx",
+    "mw_alt": "https://themw.com/reports",
     "sec": "https://www.secsports.com/fbreports",
     "bigten": "https://bigten.org/FBReports",
     "acc": "https://theacc.co/fbreporting",

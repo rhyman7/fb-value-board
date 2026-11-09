@@ -191,9 +191,11 @@ def diff(old: list[dict], new: list[dict], seen: str) -> list[dict]:
 
 
 # ---- the conferences' own reports -------------------------------------------------------------------
-# All four power conferences publish their football availability reports through one vendor app
-# (app.hdintelligence.com, embedded on secsports.com/fbreports, theacc.com, big12sports.com and
-# bigten.org; found by the Probe availability pages Action, Nov 3, 2026). Two public JSON calls:
+# All four power conferences, the MAC and the American publish their football availability reports
+# through one vendor app (app.hdintelligence.com, embedded on secsports.com/fbreports, theacc.com,
+# big12sports.com, bigten.org and getsomemaction.com; found by the Probe availability pages Action,
+# Nov 3 and Nov 9, 2026). The MAC reports every game (gameday, three hours out); the others
+# conference games. The Mountain West publishes its own (themw.com), not through this app. Two public JSON calls:
 #   POST /api/get-publish-public  {"sport":"Football","organization":X,"conference":X}
 #        -> {report_id: {ReportType (Initial | Update | Game Day | Report Pending), publishDate,
 #            postedTime, footer{date, time, location}, games: [{teamName, teamDisplayName,
@@ -201,7 +203,9 @@ def diff(old: list[dict], new: list[dict], seen: str) -> list[dict]:
 #   POST /api/get-archive-public  same body -> {data: [{Team, Player, Number, Opponent, Week,
 #            WeekNum, Initial, Update 1, Update 2, Game Day}]}  (the season to date)
 HDI = "https://app.hdintelligence.com/api/"
-CONFERENCES = {"SEC": "SEC", "ACC": "ACC", "B12": "Big 12", "B10": "Big Ten"}
+CONFERENCES = {"SEC": "SEC", "ACC": "ACC", "B12": "Big 12", "B10": "Big Ten", "MAC": "MAC", "American": "American"}
+# the vendor's team names where they differ from the board's school names (the MAC's "Miami" is the RedHawks)
+RENAME = {("MAC", "Miami"): "Miami (OH)"}
 CONF_FIELDS = ["seen", "conf", "report_id", "report_type", "publish_date", "posted_time", "game_date", "game_time", "location",
                "team", "pos", "number", "player", "status", "exempt"]
 NAME_RE = re.compile(r"^\s*([A-Z/]{1,4})\s*#(\d+)\s+(.*?)\s*$")
@@ -225,6 +229,7 @@ def conference_rows(org: str, payload: dict, seen: str) -> list[dict]:
         foot = rep.get("footer") or {}
         for g in rep.get("games") or []:
             team = g.get("teamDisplayName") or g.get("teamName") or ""
+            team = RENAME.get((org, team), team)
             for r in g.get("rows") or []:
                 m = NAME_RE.match(str(r.get("name") or ""))
                 pos, num, player = (m.group(1), m.group(2), m.group(3)) if m else ("", "", str(r.get("name") or ""))
@@ -272,7 +277,7 @@ def current_reports(payloads: dict, seen: str, today: dt.date | None = None, abb
             if gd < today:
                 continue
             games = rep.get("games") or []
-            names = [g.get("teamDisplayName") or g.get("teamName") or "" for g in games]
+            names = [RENAME.get((org, g.get("teamDisplayName") or g.get("teamName") or ""), g.get("teamDisplayName") or g.get("teamName") or "") for g in games]
             for g, team in zip(games, names):
                 players = []
                 for r in g.get("rows") or []:
