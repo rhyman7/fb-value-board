@@ -884,3 +884,38 @@ team-game; 2012-2026, 356 to 429 kneels a season).
   test. The backtests against real lines (`props.actual`) still grade without kneels for the same
   reason; `experiments/props_over_lean_test.py` sets quarterback rushing aside.
 - College is unaffected: its box scores are the official ones.
+
+### Quarterback rushing projections on the official line (Nov 9, 2026): carries better, yards worse
+
+`python experiments/qb_kneel_proj_test.py` (results in `experiments/out/qb_kneel_proj_test.json`;
+rule committed before the run). The change: for the projected starter, add his expected kneel-downs
+to `carries_proj` and their yards to `rush_yds_proj`. Expected kneels = a + b × his team's chance of
+winning (from the game model's margin), fitted walk-forward on earlier seasons' starts (2026's fit:
+0.21 + 0.90 × win chance, −1.10 yards a kneel; a starter averages 0.66 kneels). Everything graded on
+the official line. Kept only if all eight measures are better.
+
+| Measure (adjusted minus current) | Rush attempts | Rushing yards |
+|---|---|---|
+| RMSE, tuning 2014-2018 (2,530 starts) | 2.253 → 2.102 (**−0.151**) | 14.655 → 14.689 (+0.034) |
+| RMSE, holdout 2019 on (3,920) | 2.642 → 2.486 (**−0.156**) | 17.197 → 17.235 (+0.039) |
+| Brier at the lines, pricing snapshot | **−0.0081 ± 0.0093** (224, 2025) | +0.0018 ± 0.0010 (1,261, 2023-25) |
+| Brier at the lines, close | **−0.0121 ± 0.0081** (279, 2025) | +0.0009 ± 0.0009 (1,887) |
+
+**Four of eight: not kept by the rule.** The split is clean, though: all four rush-attempt measures
+are better (the two RMSE gains are 12 and 15 standard errors on the squared error) and all four
+rushing-yards measures are worse. The reason for the yards: the projection already runs *low*
+against the official line (official minus projected +0.54 yards on the tuning seasons, +0.86 on the
+holdout), so taking another 0.7 off for kneels moves it the wrong way (bias +1.28, +1.59). The
+earlier note that a quarterback's projected rushing yards "read about a yard high" against a book
+line was the arithmetic of the kneels only; measured, they read low. For attempts the projection
+was 0.86 / 0.99 low and is 0.18 / 0.32 low once the kneels are in; at the 2025 lines the model's
+average over chance goes from 34.5% to 44.4% against 44.8% that went over.
+
+Also reported: a flat add (the average kneels, no win chance) does about as well (attempts RMSE
+−0.161 / −0.170, Brier −0.009 / −0.012; yards the same sign as above), and refitting the widths on
+the official line without moving the mean does nothing (±0.0006). 2026 alone (255 starts):
+attempts 2.434 → 2.352; yards 15.953 → 15.911, the one place yards improve, inside one standard
+error.
+
+**Nothing changes on the board.** A trade-off for Ryan: the rush-attempts half on its own is better
+on every one of its measures; the rushing-yards half should stay as it is.
