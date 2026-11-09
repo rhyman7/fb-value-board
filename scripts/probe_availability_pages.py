@@ -17,6 +17,12 @@ from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright
 
 PAGES = {
+    # the power four were probed Nov 3, 2026 (all four embed app.hdintelligence.com); the Group of
+    # Five leagues that publish reports were added Nov 9, 2026
+    "mac": "https://getsomemaction.com/fbreports",
+    "mac_alt": "https://getsomemaction.com/sports/2024/8/22/football-availability-reports.aspx",
+    "mw": "https://themw.com/sports/2026/5/26/availability-reports.aspx",
+    "mw_alt": "https://themw.com/reports",
     "sec": "https://www.secsports.com/fbreports",
     "bigten": "https://bigten.org/FBReports",
     "acc": "https://theacc.co/fbreporting",
@@ -46,6 +52,12 @@ def dump(page, url, out: Path, name: str) -> list[str]:
     (out / f"{name}.txt").write_text(info["text"])
     page.screenshot(path=str(out / f"{name}.png"), full_page=True)
     print(f"{name}: {len(info['text'])} chars, {len(info['links'])} links, {len(info['images'])} images, {len(info['iframes'])} iframes, {info['tables']} tables")
+    for f in info["iframes"]:
+        if "hdintel" in f or KEY.search(f):
+            print(f"  iframe: {f}")
+    for ln in info["links"]:
+        if KEY.search(ln["href"]) or ln["href"].lower().endswith(".pdf"):
+            print(f"  link: {ln['text'][:50]!r} {ln['href']}")
     picks = []
     for ln in info["links"]:
         href = ln["href"]
@@ -55,9 +67,32 @@ def dump(page, url, out: Path, name: str) -> list[str]:
     return picks[:LIMIT]
 
 
+def probe_vendor(out: Path):
+    """Ask the vendor app that serves the power four for likely Group of Five codes."""
+    import urllib.request
+    res = {}
+    for org in ("MAC", "American", "MW", "MWC", "Mountain West", "Mountain West Conference", "MountainWest", "TheMW", "Mountain-West", "Sun Belt", "SunBelt", "CUSA", "Conference USA", "Pac-12", "Pac12"):
+        body = json.dumps({"sport": "Football", "organization": org, "conference": org}).encode()
+        req = urllib.request.Request("https://app.hdintelligence.com/api/get-publish-public", data=body, method="POST",
+                                     headers={"Content-Type": "application/json", "Accept": "application/json",
+                                              "Referer": f"https://app.hdintelligence.com/?source={org}&sport=Football&conf={org}&type=report",
+                                              "User-Agent": "Mozilla/5.0 (cfb-model availability probe)"})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                d = json.load(r)
+            n = len(d) if isinstance(d, dict) else len(d) if isinstance(d, list) else 0
+            teams = sorted({g.get("teamDisplayName") or g.get("teamName") for rep in (d.values() if isinstance(d, dict) else []) if isinstance(rep, dict) for g in rep.get("games") or []})
+            res[org] = {"reports": n, "teams": teams[:12]}
+        except Exception as exc:  # noqa: BLE001
+            res[org] = {"error": f"{type(exc).__name__}: {str(exc)[:80]}"}
+        print(f"vendor {org}: {res[org]}")
+    (out / "vendor_probe.json").write_text(json.dumps(res, indent=1))
+
+
 def main():
     out = Path(sys.argv[1] if len(sys.argv) > 1 else "probe_out")
     out.mkdir(parents=True, exist_ok=True)
+    probe_vendor(out)
     with sync_playwright() as p:
         b = p.chromium.launch()
         page = b.new_page(viewport={"width": 1400, "height": 1000}, user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36")
