@@ -2,7 +2,11 @@
 
 player_games_<season>.csv   one row per player per game with any passing,
                             rushing or receiving involvement (regular season
-                            and playoffs; two-point tries and kneels excluded)
+                            and playoffs; two-point tries excluded). carries and
+                            rush_yds leave kneel-downs out, as the projections always
+                            have; kneels and kneel_yds carry them separately, because
+                            the books settle rushing props on the official line, which
+                            counts a kneel as a rushing attempt (SETTLE below)
 player_info_<season>.csv    position and name for every player id seen on a
                             roster that season (latest listing wins)
 
@@ -21,6 +25,19 @@ COLS = ["game_id", "season", "week", "season_type", "posteam", "defteam", "play_
         "sack", "qb_dropback", "qb_kneel", "qb_spike", "two_point_attempt", "complete_pass", "interception",
         "passing_yards", "receiving_yards", "rushing_yards", "pass_touchdown", "rush_touchdown", "td_player_id",
         "passer_player_id", "receiver_player_id", "rusher_player_id", "air_yards", "yardline_100", "fumble_lost"]
+# What a sportsbook settles a rushing prop on: the official box score, kneel-downs included
+# (2025: 0.79 kneels a team-game, about -1 yard each). Grading adds these columns to the stat;
+# the projections and every model input stay on carries / rush_yds without kneels (Nov 9, 2026).
+SETTLE = {"carries": "kneels", "rush_yds": "kneel_yds"}
+
+
+def kneels(p: pd.DataFrame, key: list) -> pd.DataFrame:
+    """Kneel-downs per rusher per game from play-by-play rows: kneels (count) and kneel_yds."""
+    k = p[(p["qb_kneel"].fillna(0) == 1) & (p["rush_attempt"] == 1) & p["rusher_player_id"].notna()]
+    return k.groupby(key + ["rusher_player_id"]).agg(kneels=("rush_attempt", "size"), kneel_yds=("rushing_yards", "sum")) \
+            .reset_index().rename(columns={"rusher_player_id": "player_id"})
+
+
 ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/weekly_rosters/roster_weekly_{season}.parquet"
 FIRST = 2012
 
@@ -60,6 +77,10 @@ def _reduce(season: int) -> tuple[pd.DataFrame, pd.DataFrame]:
         pg = pg.merge(df, on=key + ["player_id"], how="outer")
     num = [c for c in pg.columns if c not in key + ["player_id"]]
     pg[num] = pg[num].fillna(0)
+    # kneel-downs, for settling props only: a left merge, so a player whose only plays were kneels
+    # gets no row (he has no row today, and a new one would count him as having played)
+    pg = pg.merge(kneels(p, key), on=key + ["player_id"], how="left")
+    pg[["kneels", "kneel_yds"]] = pg[["kneels", "kneel_yds"]].fillna(0)
 
     # names and positions from the season's weekly rosters
     rp = C.RAW / f"roster_weekly_{season}.parquet"
@@ -84,7 +105,11 @@ def load_player_games(refresh_current: bool = False, verbose: bool = True):
             pg, info = _reduce(season)
             pg.round(2).to_csv(pp, index=False)
             info.to_csv(ip, index=False)
-        pgs.append(pd.read_csv(pp))
+        one = pd.read_csv(pp)
+        for c in SETTLE.values():          # a cache written before Nov 9, 2026
+            if c not in one:
+                one[c] = 0.0
+        pgs.append(one)
         infos.append(pd.read_csv(ip))
     pg = pd.concat(pgs, ignore_index=True)
     info = pd.concat(infos, ignore_index=True).sort_values("season").groupby("player_id").tail(1)
