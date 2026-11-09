@@ -207,8 +207,17 @@ def _new_vs(dec, hit, ours) -> dict | None:
             "brier_books": _num(D.brier(dec["fair_over"][m], hit[m]), 5)}
 
 
+# A quarterback's rush attempts are priced with his expected kneel-downs (nflmodel/kneels.py) in
+# rows priced from this UTC time on; the page labels those rows so the number is not read as his
+# carries on the Players tab. Earlier rows keep the plain label: they were priced without kneels.
+KNEELS_FROM = "2026-11-10 00:00:00"
+KNEELS_LABEL = "Rush attempts (with kneels)"
+
+
 def _rec(r) -> dict:
+    kn = r["stat"] == "carries" and r["pos"] == "QB" and str(r["time"]) >= KNEELS_FROM
     return {
+        **({"sl": KNEELS_LABEL} if kn else {}),
         "g": r["game_id"], "id": r["player_id"], "n": r["player"], "t": r["team"], "pos": r["pos"], "s": r["stat"],
         "alt": bool(str(r["market"]).endswith("_alternate")), "L": _num(r["line"], 1), "mu": _num(r["proj"], 1),
         "po": _num(r["p_over"]), "pu": _num(r["p_under"]), "pp": _num(r["p_push"]), "fo": _num(r["fair_over"]),

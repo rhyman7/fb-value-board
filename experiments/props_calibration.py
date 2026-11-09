@@ -72,6 +72,14 @@ def load_proj(path: Path | None) -> pd.DataFrame:
     return proj
 
 
+def with_kneels(proj: pd.DataFrame) -> pd.DataFrame:
+    """The walk-forward with each quarterback's kneel-downs and the starter's expected ones
+    (nflmodel/kneels.py), so a fit also stores the official rush-attempts count (props.OFFICIAL_KEY)."""
+    from nflmodel import kneels, players_data as PD
+    pg, _ = PD.load_player_games(verbose=False)
+    return kneels.project(kneels.attach(proj, pg))
+
+
 def as_baseline(df: pd.DataFrame) -> pd.DataFrame:
     """The same rows with each projection replaced by the season average."""
     b = df.copy()
@@ -288,7 +296,7 @@ def run_production(proj):
     """Refit the production widths on seasons FIT_FROM on, keeping the saved correction
     (fitted on the tuning seasons) and the same-game correlations."""
     saved = P.PropModel.load()
-    prod = P.PropModel(FAMILY).fit(proj[proj.season >= FIT_FROM])
+    prod = P.PropModel(FAMILY).fit(with_kneels(proj[proj.season >= FIT_FROM]))
     prod.iso = saved.iso if saved is not None else {}
     meta = dict(saved.meta) if saved is not None else {}
     meta.update({"fitted_through": int(proj[proj.played.astype(bool)].season.max()), "fitted_from": FIT_FROM})
@@ -367,7 +375,7 @@ def main():
 
     # ---- production parameters: every season to date, correction from tuning --------
     print("Fitting production parameters ...", flush=True)
-    prod = P.PropModel(FAMILY).fit(proj[proj.season >= FIT_FROM])
+    prod = P.PropModel(FAMILY).fit(with_kneels(proj[proj.season >= FIT_FROM]))
     prod.iso = iso_all.iso
     prod.meta = {"fitted_through": int(proj[proj.played.astype(bool)].season.max()), "fitted_from": FIT_FROM,
                  "tuning": [TUNE[0], TUNE[-1]], "holdout_from": C.HOLDOUT_FROM,

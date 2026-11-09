@@ -83,7 +83,7 @@ def build(payload: dict, model) -> dict:
             if d.empty:
                 continue
             step, s = _survival(model, d, stat, grp)
-            mu = P.mean(d, stat)
+            mu = P.line_mean(d, stat, grp, model)     # a quarterback's rush attempts: kneel-downs included
             for i, r in d.iterrows():
                 row = s[i]
                 keep = row[row >= FLOOR]

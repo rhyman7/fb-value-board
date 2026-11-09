@@ -647,7 +647,9 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
             "id": r.player_id, "name": r.name, "pos": r.position, "team": r.team, "opp": r.opp, "game": r.game_id, "week": int(r.week),
             "status": status_label(r.status, r.report, upcoming=True),
             "proj": {**{k: r1(getattr(r, k + "_proj")) for k in STATS},
-                     **{k: v for k, v in newmap.get((r.game_id, r.player_id), {}).items() if v is not None}},
+                     **{k: v for k, v in newmap.get((r.game_id, r.player_id), {}).items() if v is not None},
+                     # the starter's expected kneel-downs (kneels.py): only the rush-attempts prop reads it
+                     **({"kneels": r2(r.kneels_proj)} if getattr(r, "kneels_proj", 0) and r.kneels_proj > 0 else {})},
             "td_any": r3(1 - np.exp(-max(td, 0))),
             "why": {"tgt_share": r3(r.tgt_share), "car_share": r3(r.car_share), "att_share": r3(r.att_share),
                     "tgt_share_hist": r3(r.tgt_share_raw), "car_share_hist": r3(r.car_share_raw),
