@@ -1,6 +1,16 @@
-"""Injury designations for upcoming college games, from Covers.com.
+"""Injury designations for upcoming college games: the conferences' official availability
+reports where a team has one, Covers.com for everyone else.
 
-College football has no official injury report. The daily college check task reads
+Official reports first. The four power conferences publish availability reports for conference
+games (daily from three days out, a Game Day report 90 minutes to two hours before kickoff;
+players not listed are available). The College availability Action writes each team's newest
+live report to docs/cfb/availability.json (availability_log.current_reports). For every team in
+it, the report's designations replace the team's Covers rows (a Covers row that says out for the
+season stays unless the report lists him): Out -> O, Doubtful -> D, Questionable -> Q,
+Probable -> P, Game Time Decision -> Q, Out (1st Half) -> P (a targeting suspension: he plays
+the second half). Report rows carry `src` = the conference; Covers rows `src` = "Covers".
+
+Covers.com for the rest. The daily college check task reads
 Covers.com's NCAAF injury page and writes docs/cfb/designations.json (see CONVENTIONS.md):
 
     {"source": "Covers.com", "url": ..., "checked": "YYYY-MM-DD",
@@ -35,10 +45,14 @@ import pandas as pd
 from . import config as C
 
 PATH = C.DOCS / "designations.json"
+AVAIL_PATH = C.DOCS / "availability.json"
 MAX_AGE_DAYS = 3
+MAX_AVAIL_AGE_DAYS = 5
 OUT_CODES = {"O": "Out", "D": "Doubtful"}
 WORDS = {**OUT_CODES, "Q": "Questionable", "P": "Probable"}
-COLS = ["team", "name", "pos", "d", "injury", "updated", "season", "key"]
+# the conferences' own statuses -> the board's code
+REPORT_CODES = {"out": "O", "doubtful": "D", "questionable": "Q", "probable": "P", "game time decision": "Q", "out (1st half)": "P"}
+COLS = ["team", "name", "pos", "d", "injury", "updated", "season", "key", "src"]
 
 
 def norm(name) -> str:
@@ -47,14 +61,32 @@ def norm(name) -> str:
     return re.sub(r"[^a-z]", "", s)
 
 
-def load(path=None, today: dt.date | None = None) -> pd.DataFrame:
-    """The file's rows (team is the board abbreviation), or an empty frame if it is missing or stale."""
-    path = PATH if path is None else path
+def load(path=None, today: dt.date | None = None, avail_path=None) -> pd.DataFrame:
+    """Every current designation (team is the board abbreviation): the conference reports' rows
+    for teams with a live report, Covers' rows for the rest. Empty if both files are missing or
+    stale."""
+    today = today or dt.datetime.now(dt.timezone.utc).date()
+    cov = load_covers(PATH if path is None else path, today)
+    rep, covered = _reports(AVAIL_PATH if avail_path is None else avail_path, today)
+    if not covered:
+        return cov
+    if cov.empty:
+        return rep
+    listed = set(zip(rep["team"], rep["key"]))
+    on_team = cov["team"].isin(covered)      # a live report with nobody listed still means everyone is available
+    keep = ~on_team | (cov["season"] & ~pd.Series([(t, k) in listed for t, k in zip(cov["team"], cov["key"])], index=cov.index))
+    dropped = int((~keep).sum())
+    if dropped:
+        print(f"  designations: {dropped} Covers rows replaced by the conference reports ({len(covered)} teams)")
+    return pd.concat([cov[keep], rep], ignore_index=True)[COLS]
+
+
+def load_covers(path, today: dt.date) -> pd.DataFrame:
+    """docs/cfb/designations.json's rows, or an empty frame if it is missing or stale."""
     empty = pd.DataFrame(columns=COLS)
     if not path.exists():
         return empty
     d = json.loads(path.read_text())
-    today = today or dt.datetime.now(dt.timezone.utc).date()
     try:
         age = (today - dt.date.fromisoformat(d["checked"])).days
     except (KeyError, ValueError):
@@ -71,7 +103,49 @@ def load(path=None, today: dt.date | None = None) -> pd.DataFrame:
             o[c] = None
     o["season"] = o["season"].fillna(False).astype(bool)
     o["key"] = o["name"].map(norm)
+    o["src"] = "Covers"
     return o[COLS]
+
+
+def load_reports(path, today: dt.date) -> pd.DataFrame:
+    """docs/cfb/availability.json's live reports as designation rows (team is the board
+    abbreviation; `updated` is the report date), or an empty frame if the file is missing, old,
+    or every game in it has been played."""
+    return _reports(path, today)[0]
+
+
+def _reports(path, today: dt.date) -> tuple[pd.DataFrame, set]:
+    """(designation rows, board abbreviations of every team with a live report, listed players or not)."""
+    empty = pd.DataFrame(columns=COLS)
+    if not path.exists():
+        return empty, set()
+    try:
+        a = json.loads(path.read_text())
+        fetched = dt.datetime.fromisoformat(a["fetched"].replace("Z", "+00:00")).date()
+    except (KeyError, ValueError, TypeError):
+        print(f"  availability ignored: {path.name} unreadable")
+        return empty, set()
+    if (today - fetched).days > MAX_AVAIL_AGE_DAYS:
+        print(f"  availability ignored: fetched {fetched}, more than {MAX_AVAIL_AGE_DAYS} days ago")
+        return empty, set()
+    rows, covered = [], set()
+    for team, rep in (a.get("teams") or {}).items():
+        try:
+            if dt.date.fromisoformat(rep.get("game_date", "")) < today:
+                continue
+        except ValueError:
+            pass
+        if not rep.get("abbr"):
+            continue
+        covered.add(rep["abbr"])
+        for p in rep.get("players") or []:
+            d = REPORT_CODES.get(str(p.get("status") or "").lower())
+            if d is None or not p.get("name"):
+                continue
+            rows.append({"team": rep["abbr"], "name": p["name"], "pos": p.get("pos") or "", "d": d, "injury": "",
+                         "updated": rep.get("published"), "season": bool(p.get("season_out")), "key": norm(p["name"]),
+                         "src": rep.get("conf", "report")})
+    return (pd.DataFrame(rows)[COLS] if rows else empty), covered
 
 
 def listed(des: pd.DataFrame, abbr: dict) -> pd.DataFrame:

@@ -1,0 +1,156 @@
+"""Grade the conferences' availability reports against who actually played.
+
+    python experiments/availability_grade.py [--season 2026] [--out data/cfb/availability/2026/grade.csv]
+
+For every (team, player, game) in the vendor archive (data/cfb/availability/<season>/conf_archive.json:
+Initial, Update 1, Update 2 and Game Day statuses for every power-conference conference game since
+Week 0), says whether the player played, and tabulates played rates by report stage and status, per
+conference. "Played" is, in order of preference:
+  - PFF: offensive snaps > 0 in offense_summary for that week (private data, cfbmodel.pff_data; read
+    only, nothing from it is written row by row), for players PFF has;
+  - the board's box scores: a pass attempt, carry or reception in the game (players_data cache).
+Players with neither source for the week (linemen and defenders without PFF, walk-ons) are "unknown"
+and left out of the rates. A "Game Day: Out" player who played is the interesting kind of miss; a
+"Probable" who sat is the other.
+
+Writes grade.csv (one row per archived designation with the outcome) and prints the table. Reads
+the archive, the box-score cache and PFF; writes only the grade file. Not part of any build.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import json
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from cfbmodel import config as C, designations as DES, pff_data, players_data as PD  # noqa: E402
+
+STAGES = ["Initial", "Update 1", "Update 2", "Game Day"]
+
+
+def archive(season: int) -> pd.DataFrame:
+    a = json.loads((C.DATA / "availability" / str(season) / "conf_archive.json").read_text())
+    rows = []
+    for org, data in a.items():
+        for x in data:
+            try:
+                wk = dt.datetime.strptime(x.get("Week", ""), "%a, %d %b %Y %H:%M:%S %Z").date()
+            except ValueError:
+                wk = None
+            rows.append({"conf": org, "team": x.get("TeamDisplay") or x.get("Team"), "player": x.get("Player"),
+                         "number": x.get("Number"), "opponent": x.get("OpponentDisplay") or x.get("Opponent"),
+                         "week_sat": wk, "week_num": x.get("WeekNum"),
+                         **{s: x.get(s) or "" for s in STAGES}})
+    d = pd.DataFrame(rows)
+    d["key"] = d["player"].map(DES.norm)
+    return d
+
+
+def played_box(season: int, games: pd.DataFrame) -> pd.DataFrame:
+    """(team, key, game_date) -> played (recorded a pass, carry or catch), from the box-score cache."""
+    pg, info = PD.load_player_games(verbose=False, last_season=season)
+    pg = pg[pg["season"] == season] if "season" in pg.columns else pg.merge(games[["game_id", "season"]], on="game_id")
+    pg = pg[pg["season"] == season]
+    team = pd.concat([games[["game_id", "home_id", "home_team", "gameday"]].set_axis(["game_id", "team_id", "team", "gameday"], axis=1),
+                      games[["game_id", "away_id", "away_team", "gameday"]].set_axis(["game_id", "team_id", "team", "gameday"], axis=1)])
+    o = pg.merge(team, on=["game_id", "team_id"])
+    o["key"] = o["player_id"].map(info["name"]).map(DES.norm)
+    o = o[o[["pass_att", "carries", "receptions"]].fillna(0).sum(axis=1) > 0]
+    o["gameday"] = pd.to_datetime(o["gameday"]).dt.date
+    stat = o.groupby(["team", "key", "gameday"]).size().reset_index()[["team", "key", "gameday"]].assign(box=1)
+    # the universe: every (team, player) with a stat this season, for every game the team played
+    # after that player's first stat (so a missing stat line means he did not play, not that he is
+    # a lineman the box score never lists)
+    first = o.groupby(["team", "key"])["gameday"].min().reset_index().rename(columns={"gameday": "first"})
+    tgames = team[["team", "gameday"]].drop_duplicates()
+    tgames["gameday"] = pd.to_datetime(tgames["gameday"]).dt.date
+    uni = first.merge(tgames, on="team")
+    uni = uni[uni["gameday"] >= uni["first"]][["team", "key", "gameday"]]
+    out = uni.merge(stat, on=["team", "key", "gameday"], how="left")
+    out["box"] = out["box"].fillna(0).astype(int)
+    return out
+
+
+def played_pff(season: int) -> pd.DataFrame | None:
+    """(key, season week) -> snaps > 0 from PFF offense_summary, or None without the data."""
+    if not pff_data.available():
+        return None
+    off = pff_data.load("offense_summary", [season])
+    if off.empty:
+        return None
+    off["key"] = off["player"].map(DES.norm)
+    g = off.groupby(["key", "week"])["snap_counts_total"].max().reset_index()
+    g["pff"] = (g["snap_counts_total"] > 0).astype(int)
+    return g[["key", "week", "pff"]]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--season", type=int, default=None)
+    ap.add_argument("--out", default=None)
+    a = ap.parse_args()
+    today = dt.date.today()
+    season = a.season or (today.year if today.month >= 8 else today.year - 1)
+    out = Path(a.out) if a.out else C.DATA / "availability" / str(season) / "grade.csv"
+
+    games = pd.read_csv(C.CACHE / f"games_{season}.csv")
+    games["gameday"] = pd.to_datetime(games["kickoff"], utc=True).dt.tz_convert("America/New_York").dt.date
+    arch = archive(season)
+    # the archive's "Week" is the Saturday; the game may be Thursday-Saturday: match each team's game
+    # in the window [Tuesday, Sunday] around it
+    tg = pd.concat([games[["game_id", "home_team", "gameday", "week"]].set_axis(["game_id", "team", "gameday", "week"], axis=1),
+                    games[["game_id", "away_team", "gameday", "week"]].set_axis(["game_id", "team", "gameday", "week"], axis=1)])
+    tg = tg[tg["gameday"] <= today]
+    rows = []
+    for r in arch.to_dict("records"):
+        if r["week_sat"] is None:
+            continue
+        mine = tg[(tg["team"] == r["team"]) & (tg["gameday"] >= r["week_sat"] - dt.timedelta(days=4)) & (tg["gameday"] <= r["week_sat"] + dt.timedelta(days=1))]
+        if mine.empty:
+            continue
+        g = mine.iloc[0]
+        rows.append({**r, "game_id": g["game_id"], "gameday": g["gameday"], "week": int(g["week"])})
+    d = pd.DataFrame(rows)
+    print(f"{len(arch)} archived designations, {len(d)} matched to a played game")
+
+    box = played_box(season, games)
+    d = d.merge(box, on=["team", "key", "gameday"], how="left")
+    pff = played_pff(season)
+    if pff is not None:
+        d = d.merge(pff, on=["key", "week"], how="left")
+        print("  PFF snap counts used where available")
+    else:
+        d["pff"] = pd.NA
+        print("  no PFF data here: box-score stats only (a player with no pass, carry or catch counts as not played; "
+              "linemen and defenders are unknown)")
+    d["played"] = d["pff"].where(d["pff"].notna(), d["box"])
+    d["source"] = pd.Series(["pff"] * len(d)).where(d["pff"].notna(), pd.Series(["box"] * len(d)).where(d["box"].notna(), "unknown"))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    d.to_csv(out, index=False)
+    print(f"wrote {out}: {len(d)} rows, {(d['source'] != 'unknown').sum()} with an outcome\n")
+
+    known = d[d["source"] != "unknown"].copy()
+    known["played"] = known["played"].astype(int)
+    for stage in STAGES:
+        t = known[known[stage] != ""].groupby(stage)["played"].agg(n="size", played="mean")
+        t = t.loc[[s for s in ("Out", "Doubtful", "Questionable", "Probable", "Game Time Decision", "Out (1st Half)", "Available") if s in t.index]]
+        print(f"{stage}: " + "; ".join(f"{s} {int(v.n)} listed, {v.played:.0%} played" for s, v in t.iterrows()))
+    print()
+    gd = known[known["Game Day"] != ""]
+    t = gd.groupby(["conf", "Game Day"])["played"].agg(n="size", played="mean").reset_index()
+    print("Game Day report by conference:")
+    for conf, g in t.groupby("conf"):
+        print(f"  {conf}: " + "; ".join(f"{r['Game Day']} {int(r.n)}, {r.played:.0%} played" for _, r in g.iterrows()))
+    miss = gd[(gd["Game Day"] == "Out") & (gd["played"] == 1)]
+    if len(miss):
+        print(f"\n{len(miss)} listed Out on the Game Day report but recorded a stat (name matches worth checking):")
+        for r in miss.head(15).to_dict("records"):
+            print(f"  {r['conf']} {r['team']} {r['player']} wk {r['week']} ({r['source']})")
+
+
+if __name__ == "__main__":
+    main()

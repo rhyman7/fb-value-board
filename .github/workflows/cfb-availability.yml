@@ -1,16 +1,17 @@
 name: College availability
 
-# College availability history (cfbmodel/availability_log.py), data/cfb/availability/<season>/:
-# conf_log.csv and conf_archive.json, the four power conferences' own availability reports (one
-# vendor app serves all four: app.hdintelligence.com, public JSON); covers_log.csv, every change in the Covers.com designations the board uses (docs/cfb/designations.json,
-# written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on the
-# Nov 3, 2026 dry runs and is kept in case it fills. Reading the conference report pages directly
-# (SEC, Big Ten, ACC, Big 12) is the next step.
-# History only: the board's Covers.com designations are untouched until the kickoff-time
-# availability has been tested against the 2026 live prop log. About 2,000-4,000 ESPN calls a run,
-# two to three minutes. In season: every two hours Wednesday to Friday, hourly on Saturday
-# (reports land from three days out, the final one 90 minutes to two hours before kickoff), once
-# on the other days.
+# College availability (cfbmodel/availability_log.py). Two things:
+# 1. docs/cfb/availability.json, the board's live input (from Nov 9, 2026): each power-conference
+#    team's newest official availability report while its game is still ahead (SEC, ACC, Big 12,
+#    Big Ten; one vendor app serves all four: app.hdintelligence.com, public JSON). The board build
+#    (cfbmodel/designations.py) uses these over the Covers.com designations for every team that has one.
+# 2. History, data/cfb/availability/<season>/: conf_log.csv and conf_archive.json (every report
+#    version); covers_log.csv, every change in the Covers.com designations (docs/cfb/designations.json,
+#    written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on
+#    the Nov 3, 2026 dry runs and is kept in case it fills.
+# About 2,000-4,000 ESPN calls a run, two to three minutes. In season: every two hours Wednesday to
+# Friday, hourly on Saturday (reports land from three days out, the final one 90 minutes to two hours
+# before kickoff), once on the other days.
 
 on:
   schedule:
@@ -63,7 +64,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/cfb/availability
+          git add data/cfb/availability docs/cfb/availability.json
+          # docs/cfb/availability.json alone, with only its fetched time changed, is no change
+          if [ "$(git diff --cached --name-only)" = "docs/cfb/availability.json" ] && \
+             [ "$(git diff --cached -U0 docs/cfb/availability.json | grep -c '^[-+] *"fetched"')" = "2" ] && \
+             [ "$(git diff --cached --numstat docs/cfb/availability.json | cut -f1)" = "1" ]; then
+            git reset -q; echo "no change (timestamp only)"; exit 0
+          fi
           git diff --cached --quiet && { echo "no change"; exit 0; }
           git commit -m "College availability $(date -u +%Y-%m-%dT%H:%MZ)"
           git pull --rebase origin main

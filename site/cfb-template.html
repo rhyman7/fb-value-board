@@ -2513,7 +2513,7 @@ function diagChart(node, o) {
       }
     }
     const fb = floorBox(p); if (fb) grid.append(fb);
-    if (t.out && t.out.length) grid.append(box("Teammates out", tx(t.out.map(o => `${o.name} (${[o.pos, o.status, o.att_share >= 0.5 ? pctx(o.att_share) + " of passes" : "", o.rec_share >= 0.05 ? pctx(o.rec_share) + " of catches" : "", o.car_share >= 0.1 ? pctx(o.car_share) + " of carries" : ""].filter(Boolean).join(", ")})`).join("; ") + ". From Covers.com.")));
+    if (t.out && t.out.length) grid.append(box("Teammates out", tx(t.out.map(o => `${o.name} (${[o.pos, o.status, o.att_share >= 0.5 ? pctx(o.att_share) + " of passes" : "", o.rec_share >= 0.05 ? pctx(o.rec_share) + " of catches" : "", o.car_share >= 0.1 ? pctx(o.car_share) + " of carries" : ""].filter(Boolean).join(", ")})`).join("; ") + ". " + (r => r.length ? `From the ${r.join(" and ")} availability report${r.length > 1 ? "s" : ""}` + (t.out.some(o => !o.src || o.src === "Covers") ? " and Covers.com." : ".") : "From Covers.com.")([...new Set(t.out.map(o => o.src).filter(x => x && x !== "Covers"))]))));
     return grid;
   }
 
@@ -2544,7 +2544,7 @@ function diagChart(node, o) {
       if (open) tbody.append(H("tr", {}, H("td", { class: "why", colSpan: head.length }, why(p))));
     });
     t.replaceChildren(thead, tbody);
-    $("#players-foot").textContent = rows.length ? `${rows.length} players. College football has no official injury report: players listed Out or Doubtful on Covers.com are left out, everyone else who has played lately is projected, so check late news.` + dzFoot() : "No players match.";
+    $("#players-foot").textContent = rows.length ? `${rows.length} players. Players listed Out or Doubtful on the conference's official availability report (power-conference teams in conference-game weeks) or, for everyone else, on Covers.com are left out; everyone else who has played lately is projected, so check late news.` + dzFoot() : "No players match.";
   }
   draw();
   DZ_REDRAW.push(draw);

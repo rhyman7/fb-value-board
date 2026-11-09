@@ -21,8 +21,10 @@ Opportunity times efficiency, using only what was known before each game.
    games (the backtests), a player is expected to play if he recorded a stat in his team's
    last game (in its first game, if he played for it last season); a regular who did not
    is treated as out and his share goes to the players expected to play. For upcoming
-   games, the daily Covers.com injury designations (`docs/cfb/designations.json`,
-   `cfbmodel/designations.py`) decide instead: Out or Doubtful means out of the team's
+   games, the injury designations decide instead (`cfbmodel/designations.py`: the conference's
+   official availability report, `docs/cfb/availability.json`, for a power-conference team in a
+   conference-game week, from Nov 9, 2026; the daily Covers.com designations,
+   `docs/cfb/designations.json`, for everyone else): Out or Doubtful means out of the team's
    next game (every game, if out for the season) and his share goes to teammates; a
    regular who sat out but played in one of the team's last three games, and isn't listed
    out, is expected back. A starting quarterback listed out is replaced in the game model

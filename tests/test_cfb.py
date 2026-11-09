@@ -184,8 +184,9 @@ def test_designations_rules(tmp_path):
         {"team": "AAA", "name": "Joe Smith Jr.", "pos": "WR", "d": "O"},
         {"team": "AAA", "name": "Al Q", "pos": "RB", "d": "Q"},
         {"team": "BBB", "name": "Big Lineman", "pos": "OT", "d": "D", "season": True}]}))
-    assert D.load(f, today=dt.date(2026, 10, 25)).empty                     # more than 3 days old
-    des = D.load(f, today=dt.date(2026, 10, 22))
+    none = tmp_path / "no-availability.json"
+    assert D.load(f, today=dt.date(2026, 10, 25), avail_path=none).empty    # more than 3 days old
+    des = D.load(f, today=dt.date(2026, 10, 22), avail_path=none)
     out = D.outs(des, {"Team A": "AAA", "Team B": "BBB"})
     assert sorted(out["name"]) == ["Big Lineman", "Joe Smith Jr."]          # Q is not out
     up = pd.DataFrame({"game_id": ["g1", "g2", "g1", "g3"], "team": ["Team A", "Team A", "Team B", "Team B"], "t": [1, 2, 1, 2]})
@@ -209,7 +210,7 @@ def test_board_out_players_have_no_projection():
         f.write_text(json.dumps({"source": "Covers.com", "checked": "2026-10-21", "players": [
             {"team": "AAA", "name": "Out Guy", "pos": "WR", "d": "O"},
             {"team": "AAA", "name": "Q Guy", "pos": "RB", "d": "Q"}]}))
-        des = D.listed(D.load(f, today=dt.date(2026, 10, 21)), {"Team A": "AAA", "Team B": "BBB"})
+        des = D.listed(D.load(f, today=dt.date(2026, 10, 21), avail_path=Path(tmp) / "none.json"), {"Team A": "AAA", "Team B": "BBB"})
     base = {"team": "Team A", "opp": "Team B", "season": 2026, "active": 1, "played": False, "appeared": 0,
             "proj_team_att": 30, "proj_team_car": 35, "imp_pts": 28, "margin": 3, "wind": 5, "def_ypa": 1, "def_ypc": 1,
             "group": "WR", "position": "WR", "att_share": 0, "rec_share": 0.2, "car_share": 0.1, "rec_share_raw": 0.2,
@@ -418,3 +419,75 @@ def test_college_legs_read_the_college_prop_widths():
     a, b = json.loads(P.PARAMS_PATH.read_text()), json.loads(cfb.read_text())
     assert b["isotonic"] == a["isotonic"] and b["family"] == a["family"]      # widths only: the correction is the NFL's
     assert b["yards"] != a["yards"] and set(b["yards"]) == set(a["yards"])
+
+
+def test_designations_conference_reports_beat_covers(tmp_path):
+    """docs/cfb/availability.json (the conferences' official reports) replaces a team's Covers rows,
+    keeps Covers rows for other teams and season-long Covers outs the report doesn't list, maps the
+    conferences' statuses to the board's codes, and is ignored once the game has been played or the
+    file is old."""
+    import datetime as dt
+    import json
+    from cfbmodel import designations as D
+    cov = tmp_path / "designations.json"
+    cov.write_text(json.dumps({"source": "Covers.com", "checked": "2026-11-07", "players": [
+        {"team": "AAA", "name": "Stale Guy", "pos": "WR", "d": "Q", "updated": "2026-10-17"},
+        {"team": "AAA", "name": "Gone Guy", "pos": "LB", "d": "O", "season": True},
+        {"team": "AAA", "name": "Listed Guy", "pos": "RB", "d": "O", "season": True},
+        {"team": "CCC", "name": "Covers Guy", "pos": "QB", "d": "D"},
+        {"team": "DDD", "name": "Fine Now", "pos": "WR", "d": "Q"}]}))
+    av = tmp_path / "availability.json"
+    av.write_text(json.dumps({"fetched": "2026-11-07T01:20Z", "teams": {
+        "Team A": {"conf": "SEC", "abbr": "AAA", "report": "Update", "published": "2026-11-06", "game_date": "2026-11-07", "players": [
+            {"name": "Listed Guy", "pos": "RB", "status": "Probable", "season_out": False},
+            {"name": "Hurt Guy", "pos": "WR", "status": "Out", "season_out": True},
+            {"name": "Maybe Guy", "pos": "TE", "status": "Game Time Decision", "season_out": False},
+            {"name": "Half Guy", "pos": "DB", "status": "Out (1st Half)", "season_out": False}]},
+        "Team B": {"conf": "ACC", "abbr": "BBB", "report": "Game Day", "published": "2026-11-07", "game_date": "2026-11-07", "players": [
+            {"name": "Doubt Guy", "pos": "QB", "status": "Doubtful", "season_out": False}]},
+        "Team D": {"conf": "Big 12", "abbr": "DDD", "report": "Game Day", "published": "2026-11-07", "game_date": "2026-11-07", "players": []}}}))
+    des = D.load(cov, today=dt.date(2026, 11, 7), avail_path=av)
+    got = {(r.team, r.name): (r.d, r.src, bool(r.season)) for r in des.itertuples()}
+    assert ("AAA", "Stale Guy") not in got                      # Covers row replaced by the report
+    assert got[("AAA", "Gone Guy")] == ("O", "Covers", True)   # season-long Covers out, not on the report: kept
+    assert got[("AAA", "Listed Guy")] == ("P", "SEC", False)   # on the report: the report's status wins
+    assert got[("AAA", "Hurt Guy")] == ("O", "SEC", True)
+    assert got[("AAA", "Maybe Guy")] == ("Q", "SEC", False)    # Game Time Decision
+    assert got[("AAA", "Half Guy")] == ("P", "SEC", False)     # Out (1st Half): plays the second half
+    assert got[("BBB", "Doubt Guy")] == ("D", "ACC", False)
+    assert got[("CCC", "Covers Guy")] == ("D", "Covers", False)  # no report for this team: Covers stands
+    assert ("DDD", "Fine Now") not in got                       # a live report listing nobody: everyone available
+    assert list(des.columns) == D.COLS
+    # the game has been played: the report no longer applies, Covers (still fresh) stands alone
+    later = D.load(cov, today=dt.date(2026, 11, 8), avail_path=av)
+    assert set(later["src"]) == {"Covers"} and ("AAA", "Stale Guy") in set(zip(later["team"], later["name"]))
+    # an old availability file is ignored even if its game date were ahead
+    av.write_text(json.dumps({"fetched": "2026-10-20T01:20Z", "teams": {"Team B": {"conf": "ACC", "abbr": "BBB", "report": "Initial",
+                  "published": "2026-10-19", "game_date": "2026-11-14", "players": [{"name": "X", "pos": "QB", "status": "Out"}]}}}))
+    assert "BBB" not in set(D.load(cov, today=dt.date(2026, 11, 7), avail_path=av)["team"])
+    # reports alone, no Covers file
+    assert D.load(tmp_path / "missing.json", today=dt.date(2026, 11, 7), avail_path=av).empty
+
+
+def test_current_reports_from_vendor_payload():
+    """availability_log.current_reports: the newest live report per team from the vendor app's
+    publish payload, in the shape designations.load_reports reads; Exempt rows and Report Pending
+    dropped, played games dropped."""
+    import datetime as dt
+    from cfbmodel import availability_log as A
+    rep = lambda rid, rtype, pub, posted, gdate, games: {rid: {"ReportType": rtype, "publishDate": pub, "postedTime": posted,
+                                                              "footer": {"date": gdate, "time": "19:00:00", "location": "X"}, "games": games}}
+    teamA = lambda rows: {"teamName": "Team A", "teamDisplayName": "Team A", "rows": rows}
+    teamB = lambda rows: {"teamName": "Team B", "teamDisplayName": "Team B", "rows": rows}
+    sec = {}
+    sec.update(rep("1", "Initial", "2026-11-04", "19:10:00", "2026-11-07", [teamA([{"name": "WR #1 Hurt Guy", "status": "Questionable", "exemptStatus": "NonExempt"}]), teamB([])]))
+    sec.update(rep("2", "Update", "2026-11-05", "19:10:00", "2026-11-07", [teamA([{"name": "WR #1 Hurt Guy", "status": "Out", "exemptStatus": "Out"},
+                                                                                   {"name": "OL #70 Walk On", "status": "Exempt", "exemptStatus": "Exempt"}]), teamB([])]))
+    sec.update(rep("3", "Report Pending", "2026-11-06", "00:00:00", "2026-11-07", [teamA([]), teamB([])]))
+    sec.update(rep("4", "Game Day", "2026-10-31", "10:00:00", "2026-10-31", [teamA([{"name": "QB #7 Old Guy", "status": "Out", "exemptStatus": "NonExempt"}]), teamB([])]))
+    cur = A.current_reports({"SEC": sec}, "2026-11-06T01:20Z", today=dt.date(2026, 11, 6), abbr={"Team A": "AAA", "Team B": "BBB"})
+    a = cur["teams"]["Team A"]
+    assert (a["report"], a["published"], a["conf"], a["abbr"], a["opponent"]) == ("Update", "2026-11-05", "SEC", "AAA", "Team B")
+    assert a["players"] == [{"name": "Hurt Guy", "pos": "WR", "number": "1", "status": "Out", "season_out": True}]
+    assert cur["teams"]["Team B"]["players"] == []          # a live report with nobody listed: everyone available
+    assert A.current_reports({"SEC": sec}, "x", today=dt.date(2026, 11, 8), abbr={})["teams"] == {}   # played
