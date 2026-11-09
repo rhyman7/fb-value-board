@@ -2925,6 +2925,7 @@ const propsView = (function () {
       box(s.graded ? comma(s.graded) : "–", s.graded ? "graded" : "graded (after the games)")];
     if (s.brier_ours != null) kids.push(box(s.brier_ours.toFixed(3) + " / " + s.brier_books.toFixed(3), "Brier: ours / books' (lower is better)"));
     if (s.moved_toward != null) kids.push(box(pct(s.moved_toward, 0) + " / " + pct(s.moved_away, 0), "lines moved toward / away from us"));
+    if (s.agreed_unders && s.agreed_unders.n) kids.push(box(s.agreed_unders.record + (s.agreed_unders.return != null ? " (" + (s.agreed_unders.return >= 0 ? "+" : "") + pct(s.agreed_unders.return, 1) + ")" : ""), "model-agreed unders, a record only (not bets)"));
     kids.push(box(index.flags_on ? (s.flagged ? s.flag_record : "None") : "Off", "flagged bets"));
     $("#props-rec").replaceChildren(...kids);
     const stats = ORDER.filter(k => d.props.some(p => p.s === k));
@@ -2990,7 +2991,8 @@ const propsView = (function () {
         H("td", { class: "rng", text: rangeTxt(p), title: "About 80% of his outcomes land in this range (the model's); open the row for the whole outlook" }),
         H("td", {}, flEl(bpOf(p), p.s) || document.createTextNode("–")),
         H("td", { class: "strong", text: dec(p) == null ? "–" : pct(dec(p), 0) }),
-        H("td", { text: p.fo == null ? "–" : pct(p.fo, 0) }), H("td", {}, lean), H("td", { class: "px", text: p.dk }), H("td", { class: "px", text: p.fd }),
+        H("td", p.sh ? { title: "The books' vig-free chance " + (p.sh < 0 ? "moved " + pts(-p.sh) + " toward the under" : "moved " + pts(p.sh) + " toward the over") + " by how 2023-2025 lines on this market settled" + (p.fr != null ? "; unshaded " + pct(p.fr, 0) : "") } : {},
+          document.createTextNode(p.fo == null ? "–" : pct(p.fo, 0)), p.sh ? H("span", { class: "tag", text: "shaded" }) : null), H("td", {}, lean), H("td", { class: "px", text: p.dk }), H("td", { class: "px", text: p.fd }),
         H("td", { text: close }), H("td", { class: "l" }, p.y == null ? document.createTextNode(p.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(p.y)), resBadge(p)))];
       const k = key(p), isOpen = ps.open === k;
       const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(isOpen) }, ...cells);
@@ -3002,7 +3004,7 @@ const propsView = (function () {
     });
     $("#props-table").replaceChildren(thead, tbody);
     $("#props-foot").textContent = rows.length
-      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${deadN ? " " + deadN + " line" + (deadN === 1 ? "" : "s") + " on players ruled out (or passing lines with no starter) hidden." : ""} Range: where about 80% of his outcomes land, from the model; open a row for his whole outlook (the chance of reaching any number) and the ladder. Ours, over: our chance the over hits. Books': their chance with the vig taken out. Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
+      ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${deadN ? " " + deadN + " line" + (deadN === 1 ? "" : "s") + " on players ruled out (or passing lines with no starter) hidden." : ""} Range: where about 80% of his outcomes land, from the model; open a row for his whole outlook (the chance of reaching any number) and the ladder. Ours, over: our chance the over hits. Books': their chance with the vig taken out, shaded toward the under on receptions, receiving yards and running-back rushing (−2.7 points) and toward the over on passing yards (+1.2), by how 2023-2025 lines settled (hover a shaded cell for the plain number; rows priced before Nov 10, 2026 are unshaded). Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
       : "No props match.";
   }
 

@@ -37,6 +37,7 @@ import pandas as pd
 
 from . import config as C, odds as O
 from .oddsapi import BOOK_WEIGHT
+from . import propshade
 from .props import SPECS, PropModel, line_mean
 
 MARKET_STAT = {s.odds_key: k for k, s in SPECS.items() if s.odds_key}
@@ -242,8 +243,11 @@ def price(cons: pd.DataFrame, players: pd.DataFrame, model: PropModel) -> pd.Dat
             for i, r in enumerate(gg.to_dict("records")):
                 base = dict(r, team=dd.loc[i, "team"], pos=dd.loc[i, "pos"], status=dd.loc[i, "status"],
                             proj=float(lm[i]), role_clear=bool(role_clear(dd.iloc[[i]]).iloc[0]))
-                for side, p_win, p_lose, fair in (("over", over[i], under[i], r["fair_power"]),
-                                                  ("under", under[i], over[i], 1 - r["fair_power"])):
+                # the books' number, shaded for the over lean on the markets that showed it (propshade.py);
+                # over-only rows (alternate rungs, anytime TD) keep the plain number
+                fp = r["fair_power"] if r.get("one_sided") else propshade.apply(r["fair_power"], stat, dd.loc[i, "pos"])
+                for side, p_win, p_lose, fair in (("over", over[i], under[i], fp),
+                                                  ("under", under[i], over[i], 1 - fp)):
                     best = r.get(f"best_{side}")
                     if best is None or pd.isna(best):
                         continue

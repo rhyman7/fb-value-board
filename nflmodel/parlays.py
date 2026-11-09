@@ -301,13 +301,17 @@ def _pull(diff: float, weight: float) -> float:
 
 
 def _nv_main(r: dict) -> float | None:
-    """Books' average no-vig chance of the over on a two-sided main line (power method)."""
+    """Books' average no-vig chance of the over on a two-sided main line (power method), shaded for
+    the over lean on the markets that showed it (nflmodel/propshade.py, Nov 9, 2026)."""
     ps = []
     for b in BOOKS:
         q = (r.get("bk") or {}).get(b)
         if q and q[0] is not None and q[1] is not None:
             ps.append(float(O.no_vig_power(float(q[0]), float(q[1]))[0]))
-    return float(np.mean(ps)) if ps else None
+    if not ps:
+        return None
+    from . import propshade
+    return propshade.apply(float(np.mean(ps)), r.get("s"), r.get("pos"))
 
 
 def _fair_rung(odds: float) -> float:

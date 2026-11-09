@@ -18,7 +18,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from . import config as C, propdist as D, proplog as PLOG
+from . import config as C, odds as O, propdist as D, proplog as PLOG, propshade
 from .propmarket import LADDER_GAP
 
 OUT = C.DOCS / "props"
@@ -175,8 +175,17 @@ def summary(x: pd.DataFrame) -> dict:
         f = x[x[f"flag_{side}"] & x["result"].isin(["win", "loss", "push"])]
         won = (f["result"] == ("win" if side == "over" else "loss"))
         fl += list(np.where(f["result"] == "push", 0.0, np.where(won, 1.0, -1.0)))
+    # model-agreed unders, a record only (Nov 9, 2026; claude/betting-strategies.md strategy 4): main-line unders
+    # where the board's over chance is below AGREE, passing yards and quarterback rushing left out; never a bet
+    au = dec[~dec["market"].str.endswith("_alternate") & dec["price_under"].notna()
+             & (dec["stat"] != "pass_yds") & ~((dec["pos"] == "QB") & dec["stat"].isin(["rush_yds", "carries"]))]
+    au = au[(au["p_over"] / (au["p_over"] + au["p_under"])) < AGREE]
+    au_won = au["result"] == "loss"                                   # the over lost: the under won
+    au_ret = np.where(au_won, O.american_to_decimal(au["price_under"]) - 1, -1.0) if len(au) else np.array([])
     return {
         "props": int(len(x)), "main_lines": int(len(main)), "ladder_rungs": int(len(x) - len(main)),
+        "agreed_unders": {"n": int(len(au)), "record": f"{int(au_won.sum())}-{int((~au_won).sum())}",
+                          "return": _num(au_ret.mean(), 4) if len(au) else None},
         "players": int(x["player_id"].nunique()), "games": int(x["game_id"].nunique()),
         "graded": int(len(dec)),
         "brier_ours": _num(D.brier(ours, hit), 5) if len(dec) else None,
@@ -214,10 +223,27 @@ KNEELS_FROM = "2026-11-10 00:00:00"
 KNEELS_LABEL = "Rush attempts (with kneels)"
 
 
+AGREE = 0.35                          # model-agreed under: the board's over chance below this
+SHADE_FROM = "2026-11-10 00:00:00"    # rows priced from here carry the shaded books' number (propshade.py)
+
+
+def _plain_fair(r) -> float | None:
+    """The books' vig-free over chance before the shade, from the row's two-sided prices (the
+    unweighted average over books), for the page's hover."""
+    try:
+        bk = json.loads(r["books"]) if isinstance(r["books"], str) else (r["books"] or {})
+    except ValueError:
+        return None
+    ps = [float(O.no_vig_power(float(q[0]), float(q[1]))[0]) for q in bk.values() if q and q[0] is not None and q[1] is not None]
+    return float(np.mean(ps)) if ps else None
+
+
 def _rec(r) -> dict:
     kn = r["stat"] == "carries" and r["pos"] == "QB" and str(r["time"]) >= KNEELS_FROM
+    sh = propshade.shade_for(r["stat"], r["pos"]) if (str(r["time"]) >= SHADE_FROM and not r.get("one_sided")) else 0.0
     return {
         **({"sl": KNEELS_LABEL} if kn else {}),
+        **({"sh": round(sh, 4), "fr": _num(_plain_fair(r))} if sh else {}),
         "g": r["game_id"], "id": r["player_id"], "n": r["player"], "t": r["team"], "pos": r["pos"], "s": r["stat"],
         "alt": bool(str(r["market"]).endswith("_alternate")), "L": _num(r["line"], 1), "mu": _num(r["proj"], 1),
         "po": _num(r["p_over"]), "pu": _num(r["p_under"]), "pp": _num(r["p_push"]), "fo": _num(r["fair_over"]),
