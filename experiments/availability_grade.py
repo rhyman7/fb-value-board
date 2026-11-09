@@ -80,8 +80,11 @@ def played_box(season: int, games: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def played_pff(season: int) -> pd.DataFrame | None:
-    """(key, season week) -> snaps > 0 from PFF offense_summary, or None without the data."""
+def played_pff(season: int, names: pd.DataFrame) -> pd.DataFrame | None:
+    """(team, key, season week) -> snaps > 0 from PFF offense_summary, or None without the data.
+    PFF franchises are matched to schools by shared player names (names: team, key from the box
+    scores and the reports), as cfbmodel/pff_roles.py does, so a name shared across schools never
+    crosses teams."""
     if not pff_data.available():
         return None
     off = pff_data.load("offense_summary", [season])
@@ -89,15 +92,21 @@ def played_pff(season: int) -> pd.DataFrame | None:
         return None
     off["key"] = off["player"].map(DES.norm)
     off["snaps"] = pd.to_numeric(off["snap_counts_total"], errors="coerce").fillna(0)
-    g = off.groupby(["key", "week"]).agg(snaps=("snaps", "max"), ids=("player_id", "nunique")).reset_index()
-    g = g[g["ids"] == 1]                         # a name two PFF players share that week: no outcome
+    nm = names[["team", "key"]].drop_duplicates()
+    ov = off[["franchise_id", "key"]].drop_duplicates().merge(nm, on="key").groupby(["franchise_id", "team"]).size().rename("n").reset_index()
+    best = ov.sort_values("n", ascending=False).drop_duplicates("franchise_id").drop_duplicates("team")
+    best = best[best["n"] >= 5]
+    off = off.merge(best[["franchise_id", "team"]], on="franchise_id")
+    print(f"  PFF: {best['team'].nunique()} franchises matched to schools")
+    g = off.groupby(["team", "key", "week"]).agg(snaps=("snaps", "max"), ids=("player_id", "nunique")).reset_index()
+    g = g[g["ids"] == 1]                         # two PFF players with one name on one team that week: no outcome
     g["pff"] = (g["snaps"] > 0).astype(int)
     # his usual snaps: the mean over his earlier weeks with snaps this season
-    g = g.sort_values(["key", "week"])
+    g = g.sort_values(["team", "key", "week"])
     played = g["snaps"].where(g["snaps"] > 0)
-    g["usual"] = played.groupby(g["key"]).transform(lambda x: x.shift().expanding().mean())
+    g["usual"] = played.groupby([g["team"], g["key"]]).transform(lambda x: x.shift().expanding().mean())
     g["snap_ratio"] = (g["snaps"] / g["usual"]).where(g["usual"] > 0)
-    return g[["key", "week", "pff", "snaps", "usual", "snap_ratio"]]
+    return g[["team", "key", "week", "pff", "snaps", "usual", "snap_ratio"]]
 
 
 def main():
@@ -131,9 +140,9 @@ def main():
 
     box = played_box(season, games)
     d = d.merge(box, on=["team", "key", "gameday"], how="left")
-    pff = played_pff(season)
+    pff = played_pff(season, pd.concat([box[["team", "key"]], d[["team", "key"]]]))
     if pff is not None:
-        d = d.merge(pff, on=["key", "week"], how="left")
+        d = d.merge(pff, on=["team", "key", "week"], how="left")
         print("  PFF snap counts used where available")
     else:
         d["pff"] = pd.NA
