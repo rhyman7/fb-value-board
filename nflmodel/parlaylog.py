@@ -174,7 +174,9 @@ def leg_result(l: dict, arch: dict) -> str | None:
             y = act.get(l["s"])
             if y is None:
                 return "P"
-            y = float(y)
+            # rushing legs settle on the official line, kneel-downs included (players_data.SETTLE);
+            # an archive week frozen before the kneel fields existed grades without them
+            y = float(y) + float(act.get({"carries": "kneels", "rush_yds": "kneel_yds"}.get(l["s"]), 0) or 0)
         x = y - float(l["L"])
         x = x if l.get("d") != "under" else -x
         return "W" if x > 0 else "L" if x < 0 else "P"

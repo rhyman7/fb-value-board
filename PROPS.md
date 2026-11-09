@@ -551,7 +551,8 @@ calls, and the page says so. Whether the ladder rungs can be bet on is what
 - `prop_results.csv` append-only: the result of each priced side (void if he did not
   play), and for flagged bets the closing price and closing line value (EV of our price at
   the closing vig-free chance; if the line moved, the closing chance is carried to our
-  line with the model's own difference between the two lines).
+  line with the model's own difference between the two lines). Rushing yards and rush attempts
+  settle on the official line, kneel-downs included ("Kneel-downs and rushing props" below).
 - `weekly_summary.csv`, `summary.json`: record, units, return, average closing line value,
   share of bets that beat the close, and calibration of every live probability so far.
 - `snapshots.csv`, `api_usage.csv`: which games have had which snapshot, and credits.
@@ -795,7 +796,7 @@ kneels per team-game). A quarterback's carries are therefore graded about 0.8 lo
 yards about 0.9 high, here and in the live prop record. Quarterback rush-attempt overs "cleared"
 32% for that reason. The numbers below leave quarterback carries and quarterback rushing yards
 out (33,275 props at the close, 20,401 at pricing); the json has both versions. The verdicts are
-the same either way. Not fixed here: it changes the graded live record, so it waits for Ryan.
+the same either way. **Fixed the same day (Ryan's go-ahead), see "Kneel-downs and rushing props" below.**
 
 **The lean.** With the vig taken out the books say 49.8% over on everything but passing yards;
 47.2% went over (30,220 props at the close). At the posted prices:
@@ -854,3 +855,32 @@ flags stay off, and no under is staked. Open for Ryan: whether to shade the fair
 (three of four measures), and whether to keep a live record of the agreed unders. One look-ahead
 remains at the pricing snapshot, as above: the game model behind the projections is anchored to
 the closing spread and total.
+
+## Kneel-downs and rushing props (Nov 9, 2026)
+
+The books settle rushing yards and rush attempts on the official box score, which counts a
+kneel-down as a rushing attempt for about −1 yard. The board's box scores (`players_data.py`) leave
+kneels out of `carries` and `rush_yds`, as the projections always have, so the live record was
+grading a quarterback's rushing props about 0.8 carries low and 0.9 yards high (2025: 0.79 kneels a
+team-game; 2012-2026, 356 to 429 kneels a season).
+
+- **Box scores** now carry `kneels` and `kneel_yds` beside the unchanged `carries` and `rush_yds`
+  (`players_data.kneels`, `SETTLE`). `scripts/add_kneels.py` added the two columns to the cached
+  seasons 2012-2026 without re-reducing them, and checks that no other column moved; the Update
+  board Action writes them for the current season from here on. A player whose only plays were
+  kneels still has no row.
+- **Settlement** adds them: the live prop log (`proplog.STAT_COLS`), and prop legs on the Parlays
+  page's record (`parlaylog.leg_result`, from the `kneels` / `kneel_yds` fields the weekly archive's
+  actuals now keep). An archive week frozen before the fields existed grades as it did.
+- **The live record, corrected once** (`scripts/regrade_kneels.py`): of 1,130 graded rushing rows
+  (weeks 8-9), 99 had their `actual` moved to the official number, all quarterbacks; one result
+  changed (week 8, Bo Nix over 4.5 alternate rushing yards, 5 on the board's line and 4 officially:
+  win to loss; not a flagged bet). No logged parlay leg was affected.
+- **Not changed: the projections.** Every model input is identical before and after (the player
+  walk-forward table was rebuilt and compared). That leaves a known mismatch: a quarterback's
+  rushing projection and floor are for his runs without kneels, while the book's line counts them,
+  so against a book line his projected rushing yards read about a yard high and his carries most of
+  a carry low. Moving the projections to the official line is a model change and needs its own
+  test. The backtests against real lines (`props.actual`) still grade without kneels for the same
+  reason; `experiments/props_over_lean_test.py` sets quarterback rushing aside.
+- College is unaffected: its box scores are the official ones.

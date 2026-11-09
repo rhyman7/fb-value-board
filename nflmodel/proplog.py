@@ -149,7 +149,9 @@ def record_snapshot(event_id, kind, markets, nrows):
 # Grading
 # --------------------------------------------------------------------------
 
-STAT_COLS = {"rec_yds": ["rec_yds"], "receptions": ["receptions"], "rush_yds": ["rush_yds"], "carries": ["carries"],
+# rush_yds and carries are settled on the official line, kneel-downs included (players_data.SETTLE);
+# a box-score cache without the kneel columns grades without them, as before Nov 9, 2026
+STAT_COLS = {"rec_yds": ["rec_yds"], "receptions": ["receptions"], "rush_yds": ["rush_yds", "kneel_yds"], "carries": ["carries", "kneels"],
              "pass_yds": ["pass_yds"], "pass_att": ["pass_att"], "completions": ["completions"], "pass_td": ["pass_td"],
              "ints": ["ints"], "anytime_td": ["rec_td", "rush_td"]}
 
@@ -199,7 +201,8 @@ def grade() -> int:
             rec.update(result="void", profit_flat=0.0)
             out.append(rec)
             continue
-        y = float(box.loc[[key], STAT_COLS[r["stat"]]].sum(axis=1).sum()) if key in box.index else 0.0
+        cols = [c for c in STAT_COLS[r["stat"]] if c in box.columns]
+        y = float(box.loc[[key], cols].sum(axis=1).sum()) if key in box.index else 0.0
         line = float(r["line"])
         win = y > line if r["side"] == "over" else y < line
         push = y == line

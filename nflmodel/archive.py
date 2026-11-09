@@ -29,6 +29,7 @@ ARCH = C.DOCS / "archive"
 ET = "America/New_York"
 BOX = ["pass_att", "completions", "pass_yds", "pass_td", "ints", "carries", "rush_yds", "rush_td",
        "targets", "receptions", "rec_yds", "rec_td"]
+BOX_SETTLE = ["kneels", "kneel_yds"]   # kneel-downs, kept beside the box score so a rushing leg settles as the books do
 GAME_KEYS = ["id", "week", "date", "time", "away", "home", "away_name", "home_name", "away_record", "home_record",
              "neutral", "early", "weight", "roof", "wind", "away_qb", "home_qb", "market", "model", "proj", "win", "bets",
              "opening_spread", "opening_total", "anchor", "sharp_open", "books"]
@@ -203,7 +204,7 @@ def grade(games: pd.DataFrame, pg: pd.DataFrame | None, root: Path = ARCH, close
         b = box.loc[[gid]]
         if info is None:
             b = b[b["player_id"].isin(ids)]
-        return box_actuals(b, BOX, ids, lambda row: row.player_id, meta)
+        return box_actuals(b, BOX + [c for c in BOX_SETTLE if c in b.columns], ids, lambda row: row.player_id, meta)
 
     n = 0
     for path in sorted(root.glob("*_w*.json")):
