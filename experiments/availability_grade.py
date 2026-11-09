@@ -96,6 +96,7 @@ def played_pff(season: int, names: pd.DataFrame) -> pd.DataFrame | None:
     ov = off[["franchise_id", "key"]].drop_duplicates().merge(nm, on="key").groupby(["franchise_id", "team"]).size().rename("n").reset_index()
     best = ov.sort_values("n", ascending=False).drop_duplicates("franchise_id").drop_duplicates("team")
     best = best[best["n"] >= 5]
+    off = off.drop(columns=[c for c in ("team",) if c in off.columns])     # PFF's own team label; ours is the school
     off = off.merge(best[["franchise_id", "team"]], on="franchise_id")
     print(f"  PFF: {best['team'].nunique()} franchises matched to schools")
     g = off.groupby(["team", "key", "week"]).agg(snaps=("snaps", "max"), ids=("player_id", "nunique")).reset_index()
