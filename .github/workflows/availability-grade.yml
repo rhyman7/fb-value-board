@@ -1,0 +1,45 @@
+name: Availability grade
+
+# Manual. Grades the conferences' archived availability designations (data/cfb/availability/<season>/
+# conf_archive.json) against who played: PFF snap counts where the private data is available (the
+# PFF_DATA_TOKEN checkout, offense_summary only), box-score stats otherwise
+# (experiments/availability_grade.py). Prints aggregate tables to the log only: no artifact, no
+# commit, so no PFF row leaves the private repo. Writes nothing.
+
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season (blank: current)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: PFF data (private)
+        uses: actions/checkout@v5
+        continue-on-error: true
+        with:
+          repository: rhyman7/pff-data
+          token: ${{ secrets.PFF_DATA_TOKEN }}
+          path: .pff-data
+          sparse-checkout: |
+            ncaa/**/*_offense_summary.csv.gz
+          sparse-checkout-cone-mode: false
+      - name: Grade
+        run: |
+          args=""
+          [ -n "${{ inputs.season }}" ] && args="--season ${{ inputs.season }}"
+          python experiments/availability_grade.py $args
