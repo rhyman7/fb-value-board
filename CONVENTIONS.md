@@ -264,7 +264,9 @@ boards in detail; this file is the rules.
   season to date), `covers_log.csv` (every change in the Covers.com designations the board used)
   and ESPN's college injury feed (`latest.json`, `log.csv`; empty for college on the Nov 3, 2026
   dry runs, kept in case it fills). History for the recheck of kickoff-time availability against
-  the 2026 live prop log. Don't edit these files by hand. The box-score absence features stay in
+  the 2026 live prop log; `experiments/availability_grade.py` grades the archived designations
+  against who played (PFF snaps where the private data is checked out, else box-score stats) and
+  writes `grade.csv` beside them (not committed). Don't edit these files by hand. The box-score absence features stay in
   `cfbmodel/availability.py`; the two modules are unrelated.
 - **CFBD player data: `data/cfb/cfbd/`** (`recruits_`, `portal_`, `returning_`, `roster_<season>.csv`),
   written by the manual **CFBD player data** Action (`cfbmodel/cfbd_pull.py`, `CFBD_API_KEY`).
