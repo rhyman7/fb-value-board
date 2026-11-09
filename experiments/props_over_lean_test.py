@@ -41,6 +41,15 @@ C. THE 2026 LIVE LOG (data/props/prop_log.csv with prop_results.csv), reported o
    measures on the props logged and graded so far. Too few to judge yet.
 
 Writes experiments/out/props_over_lean_test.json.
+
+ADDED AFTER THE FIRST RUN (Nov 9, 2026), and disclosed as such: the first run showed quarterback
+rush-attempt overs clearing 32% of the time. The cause is grading, not the market: the board's box
+scores (players_data.py) leave kneel-downs out, and the books count a kneel as a rushing attempt
+for about -1 yard (2025: 0.79 kneels per team-game; 1.8 kneels and -1.9 yards in the 44% of
+team-games with any). So a quarterback's carries are graded about 0.8 low and his rushing yards
+about 0.9 high. Both rules are therefore reported twice: "as_written" (every row, the version the
+rules were written for) and "qb_rushing_out" (quarterback carries and quarterback rushing yards
+dropped), which is the one to read. Nothing else was changed.
 """
 from __future__ import annotations
 
@@ -196,7 +205,7 @@ def live_2026() -> dict:
         for side, g in x.groupby("side"):
             r[side] = {"n": int(len(g)), "win_rate": round(float(g.win.mean()), 4), "fair": round(float(g.fair.mean()), 4),
                        "return": round(float(g.ret.mean()), 4), "se": round(se(g.ret, g.game_id), 4)}
-        a = x[(x.side == "under") & (x.stat != "pass_yds") & (x.p > 1 - AGREE)]
+        a = x[(x.side == "under") & (x.stat != "pass_yds") & (x.p > 1 - AGREE) & ~((x.pos == "QB") & x.stat.isin(["carries", "rush_yds"]))]
         r["model_agreed_unders"] = {"n": int(len(a)), "win_rate": round(float(a.win.mean()), 4) if len(a) else None,
                                     "return": round(float(a.ret.mean()), 4) if len(a) else None,
                                     "se": round(se(a.ret, a.game_id), 4) if len(a) > 1 else None}
@@ -204,29 +213,51 @@ def live_2026() -> dict:
     return out
 
 
+def qb_rushing(x: pd.DataFrame) -> pd.Series:
+    """Quarterback carries and rushing yards: graded without kneel-downs, so not comparable with the books."""
+    return (x["group"] == "QB") & x["stat"].isin(["carries", "rush_yds"])
+
+
+def report(x: pd.DataFrame) -> dict:
+    return {"n": int(len(x)), "games": int(x.game_id.nunique()),
+            "ours_minus_books_brier": round(float(((x.ours - x.hit) ** 2 - (x.fair_over - x.hit) ** 2).mean()), 5),
+            "lean_by_season": lean_table(x, "season"), "lean_by_stat": lean_table(x, ["stat", "group"]),
+            "lean_by_book": lean_table(x, "book"), "lean_by_group": lean_table(x, "qbm"),
+            "rule_a": rule_a(x), "rule_b": rule_b(x)}
+
+
+def passes(v: dict) -> dict:
+    return {"rule_a_passes": all(v[n]["rule_a"][s]["better"] for n in ("pricing", "close") for s in ("2024", "2025")),
+            "rule_b_passes": all(v[n]["rule_b"]["by_season"][str(s)]["above_zero"] for n in ("pricing", "close") for s in SEASONS)}
+
+
+ROWS_CACHE = C.RAW / "props_over_lean_rows.pkl"     # data/raw is git-ignored
+
+
 def main():
-    games, _, _ = data.load_all(refresh=False, verbose=False)
-    R = roles.load_all(games, verbose=False)
-    rep = {"agree_below": AGREE, "seasons": list(SEASONS)}
-    rows = {}
-    for name, table, kind in (("pricing", RL.load_pregame(), "flag"), ("close", load_proj(None), "close")):
-        table = ML.add_features(table, R)
-        rep.setdefault("pff_route_inputs", {})[name] = bool(set(ML.ROUTE_F) <= set(table.columns) and table[ML.ROUTE_F[0]].notna().any())
-        boosted = ML.walk_forward(table, first=min(SEASONS))
-        x = board_rows(table, boosted, kind)
-        rows[name] = x
-        rep[name] = {"n": int(len(x)), "games": int(x.game_id.nunique()),
-                     "ours_minus_books_brier": round(float(((x.ours - x.hit) ** 2 - (x.fair_over - x.hit) ** 2).mean()), 5),
-                     "lean_by_season": lean_table(x, "season"), "lean_by_stat": lean_table(x, ["stat", "group"]),
-                     "lean_by_book": lean_table(x, "book"), "lean_by_group": lean_table(x, "qbm"),
-                     "rule_a": rule_a(x), "rule_b": rule_b(x)}
-        print(name, json.dumps({k: rep[name][k] for k in ("n", "ours_minus_books_brier", "rule_a")}, indent=1), flush=True)
-        print(json.dumps(rep[name]["rule_b"], indent=1), flush=True)
-    rep["clv_pricing_to_close"] = clv(rows["pricing"], rows["close"])
-    rep["rule_a_passes"] = all(rep[n]["rule_a"][s]["better"] for n in ("pricing", "close") for s in ("2024", "2025"))
-    rep["rule_b_passes"] = all(rep[n]["rule_b"]["by_season"][str(s)]["above_zero"] for n in ("pricing", "close") for s in SEASONS)
+    if ROWS_CACHE.exists():
+        rows, pff = pd.read_pickle(ROWS_CACHE)
+    else:
+        games, _, _ = data.load_all(refresh=False, verbose=False)
+        R = roles.load_all(games, verbose=False)
+        rows, pff = {}, {}
+        for name, table, kind in (("pricing", RL.load_pregame(), "flag"), ("close", load_proj(None), "close")):
+            table = ML.add_features(table, R)
+            pff[name] = bool(set(ML.ROUTE_F) <= set(table.columns) and table[ML.ROUTE_F[0]].notna().any())
+            boosted = ML.walk_forward(table, first=min(SEASONS))
+            rows[name] = board_rows(table, boosted, kind)
+        pd.to_pickle((rows, pff), ROWS_CACHE)
+    rep = {"agree_below": AGREE, "seasons": list(SEASONS), "pff_route_inputs": pff}
+    for version, keep in (("as_written", lambda x: x), ("qb_rushing_out", lambda x: x[~qb_rushing(x)])):
+        v = {name: report(keep(rows[name])) for name in ("pricing", "close")}
+        v["clv_pricing_to_close"] = clv(keep(rows["pricing"]), keep(rows["close"]))
+        v.update(passes(v))
+        rep[version] = v
+        print(version, json.dumps({n: {"rule_a": v[n]["rule_a"], "rule_b_all": v[n]["rule_b"]["all"], "rule_b_by_season": v[n]["rule_b"]["by_season"]}
+                                   for n in ("pricing", "close")}, indent=1))
+        print(json.dumps({k: v[k] for k in ("clv_pricing_to_close", "rule_a_passes", "rule_b_passes")}, indent=1), flush=True)
     rep["live_2026"] = live_2026()
-    print(json.dumps({k: rep[k] for k in ("pff_route_inputs", "clv_pricing_to_close", "rule_a_passes", "rule_b_passes", "live_2026")}, indent=1))
+    print(json.dumps({"pff_route_inputs": pff, "live_2026": rep["live_2026"]}, indent=1))
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(json.dumps(rep, indent=1))
 
