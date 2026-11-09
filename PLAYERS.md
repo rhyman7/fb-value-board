@@ -432,3 +432,52 @@ PFF row that week ran 0 routes). On the first upcoming week the change moves WR 
 a median 1.5 yards (95th percentile 4.6, largest 7.6), RB receiving yards 0.9 (largest 5.1),
 receptions about 0.1. The data comes from pff-data's daily NFL pull (10:35 UTC, before Update
 board); without it the board falls back to the projections from before.
+
+### Quarterback rushing per start (Nov 9, 2026): six of eight, a trade-off for Ryan
+
+`python experiments/qb_rush_per_start_test.py` (results in `experiments/out/qb_rush_per_start_test.json`;
+rule committed before the run). Found from one row: Carson Wentz, the projected starter in week 10, at
+0.6 carries against a book line of 2.5.
+
+**The fault.** A player's share of the carries is averaged over the games he was active for. A backup
+quarterback is active every week without playing, so his share is mostly zeros. When he takes over,
+the starter rule gives him every pass and his passing form is already his per-start average, but his
+rushing still uses the diluted share and the diluted per-game average. Projected starters in games
+they started, 2014 on, by how much of their recent active time were starts:
+
+| Recent active games that were starts | Starts | Carries: projected / actual | Rushing yards: projected / actual | Rushing-yards RMSE |
+|---|---|---|---|---|
+| Under 30% | 320 | 0.69 / 3.04 | 3.9 / 15.8 | 20.5 |
+| 30-60% | 459 | 1.36 / 2.45 | 7.6 / 13.2 | 15.6 |
+| 60-85% | 625 | 2.28 / 2.95 | 13.1 / 16.5 | 16.2 |
+| 85% and up (established) | 5,046 | 2.79 / 2.81 | 16.3 / 16.5 | 16.0 |
+
+**The change tested ("per start"),** for the projected starter's carries and rushing yards only: his
+share of the carries in the games he started (prior: the average starter's share in earlier seasons),
+his per-start average as his form, and the same small last-step regression fitted on projected
+starters who started. It mirrors what passing already does. No other row or stat is refitted.
+
+| Measure (per start against current) | Rush attempts | Rushing yards |
+|---|---|---|
+| RMSE, tuning 2014-2018 (2,530 starts) | 1.848 → 1.784 (**−0.064**) | 14.638 → 14.450 (**−0.188**) |
+| RMSE, holdout 2019 on (3,920) | 2.264 → 2.116 (**−0.148**) | 17.220 → 16.708 (**−0.512**) |
+| Brier at the lines, pricing snapshot | +0.0070 ± 0.0051 (223, 2025) | **−0.0006 ± 0.0024** (1,276, 2023-25) |
+| Brier at the lines, close | +0.0067 ± 0.0067 (273, 2025) | **−0.0048 ± 0.0026** (1,907) |
+
+**Six of eight: not kept by the rule.** The two misses are the 2025 rush-attempt lines, the only
+season with them. With the change, under-30% starters project for 2.83 carries and 15.6 yards (actual
+3.04 and 15.8) and their rushing-yards RMSE falls from 20.5 to 16.1. The cost is on established
+starters, who move from 2.79 to 2.95 carries (actual 2.81) and 16.3 to 17.5 yards (actual 16.5): a
+slight over-projection that pushes the average over chance at the 2025 attempt lines to 46.7% when
+44.7% went over (current 44.1%). 2026 alone (255 starts): carries 2.048 → 1.945, yards 15.941 →
+15.592.
+
+Week 10 under the change: Wentz 0.6 → 2.5 carries and 2.8 → 9.8 yards; Drew Lock 0.4 → 1.7 and 3.0 →
+12.9; Gardner Minshew 0.3 → 1.4 and 1.5 → 7.4; established starters within about half a carry
+(the largest, Jayden Daniels 5.5 → 4.6).
+
+Seen on the way, not changed: passing yards run high for new starters (under 30%: projected 221.0,
+actual 204.3; 30-60%: 226.0 against 208.4; established 243.4 against 245.3).
+
+**Nothing changes on the board.** For Ryan: apply as tested, or test a narrower version first (the
+per-start numbers only for quarterbacks without an established run of starts).
