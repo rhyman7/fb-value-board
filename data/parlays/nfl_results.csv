@@ -114,3 +114,12 @@ p3|dk|2026_09_GB_NE|spread|NE||cover|-3.0+2026_09_HOU_LAC|prop|00-0039391|rush_y
 p2|fd|2026_09_HOU_LAC|prop|00-0039391|rush_yds|over|24.5+2026_09_LV_SF|prop|00-0040878|rush_yds|under|41.5,nfl,p2,2026-11-09 01:11,W,3.7681,2,0,0
 p3|fd|2026_09_GB_NE|spread|NE||cover|-3.0+2026_09_HOU_LAC|prop|00-0039391|rush_yds|over|24.5+2026_09_LV_SF|prop|00-0040878|rush_yds|under|41.5,nfl,p3,2026-11-09 01:11,L,-1.0,2,1,0
 leg|2026_09_LV_SF|spread|LV||cover|9.5|fd,nfl,leg,2026-11-09 01:11,L,-1.0,0,1,0
+leg|2026_09_TB_CHI|total|||over|47.5|dk,nfl,leg,2026-11-09 15:37,W,1.1,1,0,0
+p2|dk|2026_09_JAX_BAL|prop|00-0036971|pass_td|over|1.5+2026_09_TB_CHI|total|||over|47.5,nfl,p2,2026-11-09 15:37,L,-1.0,1,1,0
+p3|dk|2026_09_DAL_IND|spread|IND||cover|6.0+2026_09_JAX_BAL|prop|00-0036971|pass_td|over|1.5+2026_09_TB_CHI|total|||over|47.5,nfl,p3,2026-11-09 15:37,L,-1.0,2,1,0
+p3|dk|2026_09_CIN_ATL|ml|CIN||cover|None+2026_09_LA_WAS|total|||over|47.5+2026_09_TB_CHI|prop|00-0039919|receptions|under|3.5,nfl,p3,2026-11-09 15:37,L,-1.0,1,2,0
+p3|dk|2026_09_DEN_CAR|prop|00-0038976|rec_yds|over|14.5+2026_09_HOU_LAC|ml|HOU||cover|None+2026_09_TB_CHI|prop|00-0039919|receptions|under|3.5,nfl,p3,2026-11-09 15:37,L,-1.0,1,2,0
+p3|dk|2026_09_DEN_CAR|prop|00-0038976|rec_yds|over|14.5+2026_09_LV_SF|total|||under|51.5+2026_09_TB_CHI|prop|00-0039919|receptions|under|3.5,nfl,p3,2026-11-09 15:37,L,-1.0,0,3,0
+p3|dk|2026_09_HOU_LAC|prop|00-0039391|rush_yds|over|24.5+2026_09_LV_SF|prop|00-0040878|rush_yds|over|39.5+2026_09_TB_CHI|prop|00-0039919|receptions|under|3.5,nfl,p3,2026-11-09 15:37,L,-1.0,1,2,0
+p2|dk|2026_09_GB_NE|spread|NE||cover|-3.0+2026_09_TB_CHI|prop|00-0039919|receptions|under|3.5,nfl,p2,2026-11-09 15:37,L,-1.0,0,2,0
+p3|dk|2026_09_ARI_SEA|prop|00-0041512|receptions|over|1.5+2026_09_GB_NE|spread|NE||cover|-3.0+2026_09_TB_CHI|prop|00-0039919|receptions|under|3.5,nfl,p3,2026-11-09 15:37,L,-1.0,1,2,0
