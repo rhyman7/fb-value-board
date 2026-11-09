@@ -118,7 +118,18 @@ def main():
     today = dt.date.today()
     season = a.season or (today.year if today.month >= 8 else today.year - 1)
     out = Path(a.out) if a.out else None
+    d = outcomes(season)
+    if out is not None:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        d.to_csv(out, index=False)
+        print(f"wrote {out}")
+    report(d)
 
+
+def outcomes(season: int) -> pd.DataFrame:
+    """Every archived designation matched to its game (game_id, gameday, week), with played (PFF snaps
+    where available, else box-score stats), source (pff | box | unknown), pos and snap_ratio."""
+    today = dt.date.today()
     games = pd.read_csv(C.CACHE / f"games_{season}.csv")
     games["gameday"] = pd.to_datetime(games["kickoff"], utc=True).dt.tz_convert("America/New_York").dt.date
     arch = archive(season)
@@ -152,10 +163,12 @@ def main():
               "linemen and defenders are unknown)")
     d["played"] = d["pff"].where(d["pff"].notna(), d["box"])
     d["source"] = pd.Series(["pff"] * len(d)).where(d["pff"].notna(), pd.Series(["box"] * len(d)).where(d["box"].notna(), "unknown"))
-    if out is not None:
-        out.parent.mkdir(parents=True, exist_ok=True)
-        d.to_csv(out, index=False)
-        print(f"wrote {out}")
+    # the last status before kickoff: Game Day where the league files one, else the last update
+    d["last"] = d["Game Day"].where(d["Game Day"] != "", d["Update 2"].where(d["Update 2"] != "", d["Update 1"].where(d["Update 1"] != "", d["Initial"])))
+    return d
+
+
+def report(d: pd.DataFrame) -> None:
     print(f"{len(d)} rows, {(d['source'] != 'unknown').sum()} with an outcome "
           f"({(d['source'] == 'pff').sum()} from PFF snaps, {(d['source'] == 'box').sum()} from box scores)\n")
 
@@ -178,8 +191,6 @@ def main():
         for grp, g in known[known["Game Day"] != ""].groupby("grp"):
             t = g.groupby("Game Day")["played"].agg(n="size", played="mean")
             print(f"  {grp}: " + "; ".join(f"{s} {int(v.n)}, {v.played:.0%}" for s, v in t.iterrows()))
-    # the last status before kickoff: Game Day where the league files one, else the last update
-    known["last"] = known["Game Day"].where(known["Game Day"] != "", known["Update 2"].where(known["Update 2"] != "", known["Update 1"].where(known["Update 1"] != "", known["Initial"])))
     print("\nLast status before kickoff (all leagues):")
     t = known.groupby("last")["played"].agg(n="size", played="mean")
     print("  " + "; ".join(f"{s} {int(v.n)}, {v.played:.0%} played" for s, v in t.iterrows()))

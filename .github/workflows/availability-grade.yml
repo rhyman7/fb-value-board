@@ -1,10 +1,11 @@
 name: Availability grade
 
-# Manual. Grades the conferences' archived availability designations (data/cfb/availability/<season>/
+# Manual. run=grade grades the conferences' archived availability designations (data/cfb/availability/<season>/
 # conf_archive.json) against who played: PFF snap counts where the private data is available (the
 # PFF_DATA_TOKEN checkout, offense_summary only), box-score stats otherwise
 # (experiments/availability_grade.py). Prints aggregate tables to the log only: no artifact, no
-# commit, so no PFF row leaves the private repo. Writes nothing.
+# commit, so no PFF row leaves the private repo. Writes nothing. run=test runs the pre-set test
+# experiments/cfb_availability_test.py (Project doc claude/plan-questionable-gtd-test-2026-11-09.md).
 
 on:
   workflow_dispatch:
@@ -13,6 +14,11 @@ on:
         description: "Season (blank: current)"
         required: false
         default: ""
+      run:
+        description: "grade (the play-rate tables) or test (experiments/cfb_availability_test.py)"
+        type: choice
+        options: [grade, test]
+        default: grade
 
 permissions:
   contents: read
@@ -42,4 +48,8 @@ jobs:
         run: |
           args=""
           [ -n "${{ inputs.season }}" ] && args="--season ${{ inputs.season }}"
-          python experiments/availability_grade.py $args
+          if [ "${{ inputs.run }}" = "test" ]; then
+            python experiments/cfb_availability_test.py $args
+          else
+            python experiments/availability_grade.py $args
+          fi
