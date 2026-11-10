@@ -6,6 +6,9 @@ name: Availability grade
 # (experiments/availability_grade.py). Prints aggregate tables to the log only: no artifact, no
 # commit, so no PFF row leaves the private repo. Writes nothing. run=test runs the pre-set test
 # experiments/cfb_availability_test.py (Project doc claude/plan-questionable-gtd-test-2026-11-09.md).
+# run=nfl-questionable runs experiments/nfl_questionable_test.py with the NFL PFF data on, as the
+# Update board Action has it (Project doc claude/plan-nfl-questionable-test-2026-11-09.md); same rule:
+# aggregates printed to the log, nothing written back.
 
 on:
   workflow_dispatch:
@@ -15,9 +18,9 @@ on:
         required: false
         default: ""
       run:
-        description: "grade (the play-rate tables) or test (experiments/cfb_availability_test.py)"
+        description: "grade (the play-rate tables), test (experiments/cfb_availability_test.py) or nfl-questionable"
         type: choice
-        options: [grade, test]
+        options: [grade, test, nfl-questionable]
         default: grade
 
 permissions:
@@ -26,7 +29,7 @@ permissions:
 jobs:
   grade:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -43,12 +46,16 @@ jobs:
           path: .pff-data
           sparse-checkout: |
             ncaa/**/*_offense_summary.csv.gz
+            nfl/**/*_receiving_summary.csv.gz
+            nfl/**/*_passing_summary.csv.gz
           sparse-checkout-cone-mode: false
       - name: Grade
         run: |
           args=""
           [ -n "${{ inputs.season }}" ] && args="--season ${{ inputs.season }}"
-          if [ "${{ inputs.run }}" = "test" ]; then
+          if [ "${{ inputs.run }}" = "nfl-questionable" ]; then
+            python experiments/nfl_questionable_test.py --out /tmp/nfl_questionable_test.json
+          elif [ "${{ inputs.run }}" = "test" ]; then
             python experiments/cfb_availability_test.py $args
           else
             python experiments/availability_grade.py $args

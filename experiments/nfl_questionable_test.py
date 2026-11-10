@@ -18,9 +18,10 @@ V3   the Questionable multiplier refit with players who sat removed (played = an
      snap or a stat), scored on Questionable players who played.
 
 Played (the outcome and the rates) = an offensive snap or any stat. Tuning 2014-2018,
-holdout 2019 on. No PFF data here (route inputs and the PFF quarterback prior are off), the
-defense-vs-position step is not applied, and the game model runs without role signals; all
-of that is the same for B0 and every variant.
+holdout 2019 on. With the private PFF data checked out (.pff-data/, as in the Update board
+Action) the PFF quarterback prior and the route inputs are on, as live; without it both are
+off. The defense-vs-position step is not applied and the game model runs without role
+signals; all of that is the same for B0 and every variant. Prints aggregates only.
 """
 from __future__ import annotations
 
@@ -143,7 +144,14 @@ def load_table(path: Path | None) -> pd.DataFrame:
     games, tg, qb = data.load_all(refresh=False, verbose=False)
     te, qe = extra.load_extra(verbose=False)
     inj = injuries.load_injuries(games, verbose=False)
-    eng = ExtRatingEngine(tg, qb, te, qe, extra_metrics=PRODUCTION_METRICS, games=games)
+    prior = None
+    try:                                     # PFF quarterback prior, as the board (None without PFF data)
+        from nflmodel import pff_qb
+        prior = pff_qb.load(qb, sorted(games.season.unique()))
+    except Exception as exc:  # noqa: BLE001
+        print(f"  PFF quarterback prior off ({exc})")
+    print(f"  quarterback prior: {'PFF' if prior is not None else 'flat'}", flush=True)
+    eng = ExtRatingEngine(tg, qb, te, qe, extra_metrics=PRODUCTION_METRICS, games=games, qb_prior_model=prior)
     frame, _ = model.walk_forward(model.build_frame(games, eng, injuries=inj))
     pg, info = PD.load_player_games(verbose=False)
     table = PL.build(frame, pg, info, PL.load_availability(verbose=False), inj, injuries.load_pass_rush(games, verbose=False), games=games)
@@ -173,7 +181,9 @@ def projections(table: pd.DataFrame, seasons: list[int]) -> pd.DataFrame:
     games = data.load_games()
     R = roles.load_all(games, verbose=False)
     truth = PL.walk_forward(table, first_test=C.FIRST_TEST_SEASON)
-    truth_f = ML.add_features(truth, R, routes=False)
+    truth_f = ML.add_features(truth, R)
+    feats = ML.feats_for(truth_f)
+    print(f"  route inputs: {'on (PFF)' if feats != list(ML.FEATS) else 'off'}", flush=True)
     feat_cols = [c for c in truth_f.columns if c not in truth.columns]
     key = ["game_id", "player_id"]
     fmap = truth_f[key + feat_cols].drop_duplicates(key)
@@ -184,7 +194,7 @@ def projections(table: pd.DataFrame, seasons: list[int]) -> pd.DataFrame:
         cur = PL.walk_forward(t, first_test=C.FIRST_TEST_SEASON, only={s})
         cur = cur.merge(fmap, on=key, how="left")
         both = pd.concat([truth_f[truth_f["season"] < s], cur], ignore_index=True)
-        ml = ML.walk_forward(both, first=s, feats=list(ML.FEATS))
+        ml = ML.walk_forward(both, first=s, feats=feats)
         b0 = ML.questionable(ml, first=s)
         clean = ml.copy()
         clean["active"] = np.where(clean["season"] < s, clean["played_snap"], clean["active"])
