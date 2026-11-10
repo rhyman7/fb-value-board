@@ -575,5 +575,9 @@ model side vs line):
 - Questionable players: B0 51.0%, V3 52.5% (263, within noise).
 - Unlisted teammates: B0 50.3%, V1 50.5%, V2 50.5% (3,893).
 
-No PFF data in this run (route inputs, quarterback prior), and defense-vs-position not
-applied: the same for B0 and every variant.
+First run without PFF data. Re-run Nov 9 with it on, as live (Availability grade Action,
+`run=nfl-questionable`; route inputs and the PFF quarterback prior): the same verdicts. V3
+holdout z −0.5 / −1.1 / −1.7 / −2.4; V1 and V2 still worse on the holdout on all four. The
+props check moved the other way, still within noise: Questionable players B0 54.0%, V3 52.9%
+(263); teammates B0 51.3%, V1 50.9%, V2 50.9%. Defense-vs-position not applied in either run,
+the same for B0 and every variant.
