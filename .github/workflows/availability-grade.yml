@@ -8,7 +8,8 @@ name: Availability grade
 # experiments/cfb_availability_test.py (Project doc claude/plan-questionable-gtd-test-2026-11-09.md).
 # run=nfl-questionable runs experiments/nfl_questionable_test.py with the NFL PFF data on, as the
 # Update board Action has it (Project doc claude/plan-nfl-questionable-test-2026-11-09.md); same rule:
-# aggregates printed to the log, nothing written back.
+# aggregates printed to the log, nothing written back. run=nfl-questionable-shade runs its second
+# test (--shade; Project doc claude/plan-nfl-questionable-shade-test-2026-11-09.md).
 
 on:
   workflow_dispatch:
@@ -20,7 +21,7 @@ on:
       run:
         description: "grade (the play-rate tables), test (experiments/cfb_availability_test.py) or nfl-questionable"
         type: choice
-        options: [grade, test, nfl-questionable]
+        options: [grade, test, nfl-questionable, nfl-questionable-shade]
         default: grade
 
 permissions:
@@ -53,7 +54,9 @@ jobs:
         run: |
           args=""
           [ -n "${{ inputs.season }}" ] && args="--season ${{ inputs.season }}"
-          if [ "${{ inputs.run }}" = "nfl-questionable" ]; then
+          if [ "${{ inputs.run }}" = "nfl-questionable-shade" ]; then
+            python experiments/nfl_questionable_test.py --shade --out /tmp/nfl_questionable_shade.json
+          elif [ "${{ inputs.run }}" = "nfl-questionable" ]; then
             python experiments/nfl_questionable_test.py --out /tmp/nfl_questionable_test.json
           elif [ "${{ inputs.run }}" = "test" ]; then
             python experiments/cfb_availability_test.py $args
