@@ -43,3 +43,21 @@ def test_verdict():
     assert T.verdict({"a": {"all": good, "listed": bad}, "b": {"all": good, "listed": good}}) == "mixed"
     assert T.verdict({"a": {"all": bad, "listed": bad}, "b": {"all": bad, "listed": bad}}) == "not kept"
     assert T.verdict({"a": {"all": good, "listed": good}, "b": {"all": bad, "listed": bad}}) == "mixed"
+
+
+def test_questionable_fit_skips_players_who_sat():
+    """The live multiplier (players_ml.questionable with snaps) ignores earlier Questionable
+    players who never got on the field; without snaps it is the old fit."""
+    from nflmodel import players_ml as ML
+    n = 40
+    hist = pd.DataFrame({"game_id": [f"g{i}" for i in range(n)], "player_id": [f"p{i}" for i in range(n)],
+                         "season": 2020, "group": "WR", "report_lvl": 1, "practice_lvl": 1, "played": True, "active": 1,
+                         "rec_yds_proj": 50.0, "rec_yds": [50.0] * (n // 2) + [0.0] * (n // 2),
+                         "targets": [6.0] * (n // 2) + [0.0] * (n // 2), "carries": 0.0, "pass_att": 0.0, "receptions": 0.0})
+    cur = hist.iloc[:1].assign(game_id="new", player_id="x", season=2021, rec_yds=np.nan)
+    p = pd.concat([hist, cur], ignore_index=True)
+    snaps = pd.DataFrame({"game_id": hist["game_id"][: n // 2], "player_id": hist["player_id"][: n // 2], "offense_snaps": 30})
+    old = ML.questionable(p, first=2021, shrink=0)
+    new = ML.questionable(p, first=2021, shrink=0, snaps=snaps)
+    assert np.isclose(old.loc[n, "rec_yds_proj"], 25.0)      # the sitters halve it
+    assert np.isclose(new.loc[n, "rec_yds_proj"], 50.0)      # only those who played

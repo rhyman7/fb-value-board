@@ -87,7 +87,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             R = R if R is not None else roles.load_all(games, refresh_current=refresh, verbose=False)
             pall = players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)
             ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=C.HOLDOUT_FROM if with_backtest else season),
-                                         first=C.FIRST_TEST_SEASON)
+                                         first=C.FIRST_TEST_SEASON, snaps=R.get("snaps"))
             new = ml[ml["season"] == season]
             print("  PFF route inputs:", "on" if players_ml.feats_for(ml) != players_ml.FEATS else "off (no private PFF data; as before Nov 5, 2026)")
         except Exception as exc:
