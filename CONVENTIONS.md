@@ -331,7 +331,10 @@ boards in detail; this file is the rules.
   receptions, receiving yards, carries and rushing yards x (1 − λ(1 − chance)). The page swaps it
   in for display (`adoptNew` in site/template.html keeps `proj_played`); teammates don't change.
   Never write the shaded numbers into `proj`, and key the shade to this week's report
-  (`report_lvl`), not the board's `status`, which can carry last week's tag until the new report.
+  (`report_lvl`), not the roster listing's game status, which carries last week's until the new
+  report. The board's Questionable / Probable superscript is kept only when this week's report
+  says so (`players.this_week`, Nov 9, 2026); Out and Doubtful stay as listed, since the
+  projections treat those players as out until the new report.
   PLAYERS.md "Questionable players: a shade on top of the clean multiplier".
   The Questionable multiplier (`players_ml.questionable`) is fitted only on earlier Questionable
   players who got on the field: the pipeline passes `snaps=R["snaps"]`. Don't fit it, or anything

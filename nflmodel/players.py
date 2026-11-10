@@ -625,6 +625,17 @@ def status_label(roster_status, report, upcoming: bool = False) -> str | None:
     return report if isinstance(report, str) else None
 
 
+def this_week(label, week_rep: dict | None, key) -> str | None:
+    """The board's status, with Questionable and Probable kept only when this week's report
+    (week_rep: {(game_id, player_id): report level, 0 Probable, 1 Questionable}) says so.
+    Without week_rep, the label as it is."""
+    want = {"Questionable": 1, "Probable": 0}.get(label)
+    if want is None or week_rep is None:
+        return label
+    lvl = week_rep.get(key)
+    return label if lvl is not None and not pd.isna(lvl) and int(lvl) == want else None
+
+
 def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFrame | None = None) -> dict:
     """Projections for the board's upcoming games, with the inputs behind them. new
     (optional): players_ml.py's projections, which replace the current ones in proj for the
@@ -639,6 +650,15 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
             x = nn[nn["group"].isin(groups)]
             for gid, pid, v in zip(x["game_id"], x["player_id"], x[st + "_proj"]):
                 newmap.setdefault((gid, pid), {})[st] = None if pd.isna(v) else round(float(v), 1)
+    # this week's injury report (roles.py, through the New projections' inputs): the Questionable
+    # and Probable superscripts come from it only. Before the week's first report the roster
+    # listing still carries last week's game status, which said Questionable for players not
+    # listed this week (Nov 9, 2026). Out and Doubtful are left as they are: the projections
+    # also treat those players as out until the new report.
+    week_rep = None
+    if new is not None and len(new) and "report_lvl" in new:
+        nn = new[new["game_id"].isin(game_ids)]
+        week_rep = dict(zip(zip(nn["game_id"], nn["player_id"]), nn["report_lvl"]))
     if p.empty:
         return {"players": [], "teams": []}
     p["name"] = p["player_id"].map(info["name"]).fillna(p["player_id"])
@@ -677,7 +697,7 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
         td = (r.rec_td_proj or 0) + (r.rush_td_proj or 0)
         players.append({
             "id": r.player_id, "name": r.name, "pos": r.position, "team": r.team, "opp": r.opp, "game": r.game_id, "week": int(r.week),
-            "status": status_label(r.status, r.report, upcoming=True),
+            "status": this_week(status_label(r.status, r.report, upcoming=True), week_rep, (r.game_id, r.player_id)),
             "proj": {**{k: r1(getattr(r, k + "_proj")) for k in STATS},
                      **{k: v for k, v in newmap.get((r.game_id, r.player_id), {}).items() if v is not None},
                      # the starter's expected kneel-downs (kneels.py): only the rush-attempts prop reads it

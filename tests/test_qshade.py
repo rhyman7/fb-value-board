@@ -45,3 +45,15 @@ def test_constants_file_loads():
     assert c and set(c["lambda"]) == set(qshade.STATS)
     for g in ("RB", "WR", "TE"):
         assert set(c["chance"][g]) == {"0", "1", "2"} and all(0 < v < 1 for v in c["chance"][g].values())
+
+
+def test_board_questionable_tag_needs_this_weeks_report():
+    from nflmodel.players import this_week
+    rep = {("g", "a"): 1, ("g", "b"): -1, ("g", "c"): 0}
+    assert this_week("Questionable", rep, ("g", "a")) == "Questionable"
+    assert this_week("Questionable", rep, ("g", "b")) is None          # last week's tag, not on this week's report
+    assert this_week("Questionable", rep, ("g", "z")) is None
+    assert this_week("Probable", rep, ("g", "c")) == "Probable"
+    assert this_week("Out", rep, ("g", "b")) == "Out"                   # Out / Doubtful / roster labels untouched
+    assert this_week("Injured reserve", rep, ("g", "b")) == "Injured reserve"
+    assert this_week("Questionable", None, ("g", "b")) == "Questionable"  # no report data: as before
