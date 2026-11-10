@@ -71,3 +71,47 @@ def apply(players: list[dict], report: dict, consts: dict | None = None) -> int:
             p["proj_ev"] = ev
             n += 1
     return n
+
+
+# Questionable starting quarterbacks (Nov 9, 2026). A team's starter from its last game who was
+# listed Questionable started 60% of the time, 2016-2026 (167): 91% after a full Friday practice
+# (34), 54% after a limited one (112), 43% after none (21). The board flags the game when the
+# game model's quarterback is on this week's report as Questionable and was limited or didn't
+# practice, so the spread and total aren't bet before the starter news. No number changes; the
+# daily QB check switches the starter (and so clears the flag) once one is reported.
+QB_STARTED = {1: 0.54, 2: 0.43}
+QB_PRACTICE = {1: "limited Friday", 2: "did not practice Friday"}
+
+
+def _key(name) -> str:
+    return "".join(ch for ch in str(name or "").lower() if ch.isalpha())
+
+
+def qb_flags(games: list[dict], report: dict, names: dict) -> int:
+    """Add qb_flag (a list of {team, name, practice, started}) to each game in the slate whose
+    game-model quarterback (away_qb / home_qb) is Questionable on this week's report after a
+    limited or no practice. report: {(game_id, player_id): (report level, practice level)};
+    names: {player_id: name}. Matched by game, team and name. Returns how many flags."""
+    by = {}
+    for (gid, pid), (rep, lvl) in report.items():
+        by.setdefault((gid, _key(names.get(pid))), []).append((rep, lvl))
+    n = 0
+    for g in games:
+        flags = []
+        for side in ("away", "home"):
+            q = g.get(side + "_qb") or {}
+            hits = by.get((g.get("id"), _key(q.get("name"))), [])
+            for rep, lvl in hits:
+                try:
+                    rep, lvl = int(rep), int(lvl)
+                except (TypeError, ValueError):
+                    continue
+                if rep == 1 and lvl in QB_STARTED:
+                    flags.append({"team": g.get(side), "name": q.get("name"), "practice": QB_PRACTICE[lvl], "started": QB_STARTED[lvl]})
+                    break
+        if flags:
+            g["qb_flag"] = flags
+            n += len(flags)
+        else:
+            g.pop("qb_flag", None)
+    return n
