@@ -1,0 +1,595 @@
+{
+ "rates": {
+  "2014": {
+   "V1": 0.555,
+   "V2": {
+    "RB full": 0.545,
+    "RB limited": 0.55,
+    "RB DNP": 0.531,
+    "TE full": 0.555,
+    "TE limited": 0.558,
+    "TE DNP": 0.532,
+    "WR full": 0.555,
+    "WR limited": 0.596,
+    "WR DNP": 0.549
+   }
+  },
+  "2015": {
+   "V1": 0.559,
+   "V2": {
+    "RB full": 0.54,
+    "RB limited": 0.561,
+    "RB DNP": 0.526,
+    "TE full": 0.573,
+    "TE limited": 0.562,
+    "TE DNP": 0.512,
+    "WR full": 0.56,
+    "WR limited": 0.62,
+    "WR DNP": 0.526
+   }
+  },
+  "2016": {
+   "V1": 0.571,
+   "V2": {
+    "RB full": 0.55,
+    "RB limited": 0.573,
+    "RB DNP": 0.528,
+    "TE full": 0.587,
+    "TE limited": 0.581,
+    "TE DNP": 0.517,
+    "WR full": 0.579,
+    "WR limited": 0.63,
+    "WR DNP": 0.539
+   }
+  },
+  "2017": {
+   "V1": 0.627,
+   "V2": {
+    "RB full": 0.611,
+    "RB limited": 0.615,
+    "RB DNP": 0.561,
+    "TE full": 0.671,
+    "TE limited": 0.625,
+    "TE DNP": 0.548,
+    "WR full": 0.68,
+    "WR limited": 0.685,
+    "WR DNP": 0.571
+   }
+  },
+  "2018": {
+   "V1": 0.626,
+   "V2": {
+    "RB full": 0.597,
+    "RB limited": 0.616,
+    "RB DNP": 0.545,
+    "TE full": 0.692,
+    "TE limited": 0.628,
+    "TE DNP": 0.532,
+    "WR full": 0.705,
+    "WR limited": 0.676,
+    "WR DNP": 0.558
+   }
+  },
+  "2019": {
+   "V1": 0.625,
+   "V2": {
+    "RB full": 0.601,
+    "RB limited": 0.609,
+    "RB DNP": 0.537,
+    "TE full": 0.699,
+    "TE limited": 0.626,
+    "TE DNP": 0.53,
+    "WR full": 0.713,
+    "WR limited": 0.668,
+    "WR DNP": 0.551
+   }
+  },
+  "2020": {
+   "V1": 0.621,
+   "V2": {
+    "RB full": 0.595,
+    "RB limited": 0.595,
+    "RB DNP": 0.527,
+    "TE full": 0.713,
+    "TE limited": 0.631,
+    "TE DNP": 0.52,
+    "WR full": 0.715,
+    "WR limited": 0.664,
+    "WR DNP": 0.539
+   }
+  },
+  "2021": {
+   "V1": 0.624,
+   "V2": {
+    "RB full": 0.6,
+    "RB limited": 0.593,
+    "RB DNP": 0.499,
+    "TE full": 0.724,
+    "TE limited": 0.644,
+    "TE DNP": 0.517,
+    "WR full": 0.732,
+    "WR limited": 0.668,
+    "WR DNP": 0.53
+   }
+  },
+  "2022": {
+   "V1": 0.632,
+   "V2": {
+    "RB full": 0.61,
+    "RB limited": 0.61,
+    "RB DNP": 0.498,
+    "TE full": 0.736,
+    "TE limited": 0.653,
+    "TE DNP": 0.509,
+    "WR full": 0.737,
+    "WR limited": 0.678,
+    "WR DNP": 0.535
+   }
+  },
+  "2023": {
+   "V1": 0.637,
+   "V2": {
+    "RB full": 0.615,
+    "RB limited": 0.611,
+    "RB DNP": 0.49,
+    "TE full": 0.734,
+    "TE limited": 0.659,
+    "TE DNP": 0.513,
+    "WR full": 0.744,
+    "WR limited": 0.688,
+    "WR DNP": 0.534
+   }
+  },
+  "2024": {
+   "V1": 0.64,
+   "V2": {
+    "RB full": 0.624,
+    "RB limited": 0.61,
+    "RB DNP": 0.492,
+    "TE full": 0.747,
+    "TE limited": 0.659,
+    "TE DNP": 0.518,
+    "WR full": 0.752,
+    "WR limited": 0.689,
+    "WR DNP": 0.529
+   }
+  },
+  "2025": {
+   "V1": 0.641,
+   "V2": {
+    "RB full": 0.637,
+    "RB limited": 0.611,
+    "RB DNP": 0.491,
+    "TE full": 0.747,
+    "TE limited": 0.658,
+    "TE DNP": 0.515,
+    "WR full": 0.756,
+    "WR limited": 0.686,
+    "WR DNP": 0.529
+   }
+  },
+  "2026": {
+   "V1": 0.641,
+   "V2": {
+    "RB full": 0.642,
+    "RB limited": 0.607,
+    "RB DNP": 0.492,
+    "TE full": 0.748,
+    "TE limited": 0.66,
+    "TE DNP": 0.516,
+    "WR full": 0.758,
+    "WR limited": 0.685,
+    "WR DNP": 0.529
+   }
+  }
+ },
+ "n_questionable": {
+  "tuning 2014-18": {
+   "listed": 1788,
+   "played": 1151
+  },
+  "holdout 2019-26": {
+   "listed": 2936,
+   "played": 1925
+  }
+ },
+ "V1": {
+  "tuning 2014-18": {
+   "all": {
+    "rec_yds": {
+     "n": 24390,
+     "rmse_b0": 18.4663,
+     "rmse_new": 18.5017,
+     "mse_diff": 1.3057,
+     "se": 2.0435,
+     "z": 0.64
+    },
+    "rush_yds": {
+     "n": 7503,
+     "rmse_b0": 21.0727,
+     "rmse_new": 20.9266,
+     "mse_diff": -6.1379,
+     "se": 3.9556,
+     "z": -1.55
+    },
+    "receptions": {
+     "n": 24390,
+     "rmse_b0": 1.3679,
+     "rmse_new": 1.3699,
+     "mse_diff": 0.0053,
+     "se": 0.0118,
+     "z": 0.45
+    },
+    "carries": {
+     "n": 7503,
+     "rmse_b0": 3.8521,
+     "rmse_new": 3.8073,
+     "mse_diff": -0.3428,
+     "se": 0.193,
+     "z": -1.78
+    }
+   },
+   "listed": {
+    "rec_yds": {
+     "n": 1788,
+     "rmse_b0": 27.4713,
+     "rmse_new": 27.3878,
+     "mse_diff": -4.5801,
+     "se": 24.5745,
+     "z": -0.19
+    },
+    "rush_yds": {
+     "n": 479,
+     "rmse_b0": 28.8797,
+     "rmse_new": 27.6993,
+     "mse_diff": -66.7895,
+     "se": 50.0473,
+     "z": -1.33
+    },
+    "receptions": {
+     "n": 1788,
+     "rmse_b0": 2.0306,
+     "rmse_new": 2.025,
+     "mse_diff": -0.0227,
+     "se": 0.1397,
+     "z": -0.16
+    },
+    "carries": {
+     "n": 479,
+     "rmse_b0": 6.0637,
+     "rmse_new": 5.72,
+     "mse_diff": -4.0506,
+     "se": 2.3483,
+     "z": -1.72
+    }
+   }
+  },
+  "holdout 2019-26": {
+   "all": {
+    "rec_yds": {
+     "n": 44224,
+     "rmse_b0": 16.2764,
+     "rmse_new": 16.3367,
+     "mse_diff": 1.968,
+     "se": 1.0394,
+     "z": 1.89
+    },
+    "rush_yds": {
+     "n": 12667,
+     "rmse_b0": 19.4235,
+     "rmse_new": 19.4684,
+     "mse_diff": 1.7429,
+     "se": 2.7277,
+     "z": 0.64
+    },
+    "receptions": {
+     "n": 44224,
+     "rmse_b0": 1.2231,
+     "rmse_new": 1.2286,
+     "mse_diff": 0.0136,
+     "se": 0.0064,
+     "z": 2.13
+    },
+    "carries": {
+     "n": 12667,
+     "rmse_b0": 3.3877,
+     "rmse_new": 3.4036,
+     "mse_diff": 0.1081,
+     "se": 0.1233,
+     "z": 0.88
+    }
+   },
+   "listed": {
+    "rec_yds": {
+     "n": 2936,
+     "rmse_b0": 24.3957,
+     "rmse_new": 24.7856,
+     "mse_diff": 19.1736,
+     "se": 13.6162,
+     "z": 1.41
+    },
+    "rush_yds": {
+     "n": 888,
+     "rmse_b0": 27.8961,
+     "rmse_new": 28.267,
+     "mse_diff": 20.832,
+     "se": 32.252,
+     "z": 0.65
+    },
+    "receptions": {
+     "n": 2936,
+     "rmse_b0": 1.8777,
+     "rmse_new": 1.9278,
+     "mse_diff": 0.1907,
+     "se": 0.0831,
+     "z": 2.3
+    },
+    "carries": {
+     "n": 888,
+     "rmse_b0": 5.3577,
+     "rmse_new": 5.4981,
+     "mse_diff": 1.524,
+     "se": 1.3622,
+     "z": 1.12
+    }
+   }
+  },
+  "verdict": "mixed"
+ },
+ "V2": {
+  "tuning 2014-18": {
+   "all": {
+    "rec_yds": {
+     "n": 24390,
+     "rmse_b0": 18.4663,
+     "rmse_new": 18.4636,
+     "mse_diff": -0.1023,
+     "se": 1.951,
+     "z": -0.05
+    },
+    "rush_yds": {
+     "n": 7503,
+     "rmse_b0": 21.0727,
+     "rmse_new": 20.923,
+     "mse_diff": -6.2877,
+     "se": 4.0776,
+     "z": -1.54
+    },
+    "receptions": {
+     "n": 24390,
+     "rmse_b0": 1.3679,
+     "rmse_new": 1.3663,
+     "mse_diff": -0.0046,
+     "se": 0.0112,
+     "z": -0.41
+    },
+    "carries": {
+     "n": 7503,
+     "rmse_b0": 3.8521,
+     "rmse_new": 3.8077,
+     "mse_diff": -0.3401,
+     "se": 0.1996,
+     "z": -1.7
+    }
+   },
+   "listed": {
+    "rec_yds": {
+     "n": 1788,
+     "rmse_b0": 27.4713,
+     "rmse_new": 27.1222,
+     "mse_diff": -19.0597,
+     "se": 23.5479,
+     "z": -0.81
+    },
+    "rush_yds": {
+     "n": 479,
+     "rmse_b0": 28.8797,
+     "rmse_new": 27.6831,
+     "mse_diff": -67.6869,
+     "se": 51.3359,
+     "z": -1.32
+    },
+    "receptions": {
+     "n": 1788,
+     "rmse_b0": 2.0306,
+     "rmse_new": 1.9991,
+     "mse_diff": -0.1272,
+     "se": 0.1339,
+     "z": -0.95
+    },
+    "carries": {
+     "n": 479,
+     "rmse_b0": 6.0637,
+     "rmse_new": 5.7224,
+     "mse_diff": -4.0229,
+     "se": 2.4274,
+     "z": -1.66
+    }
+   }
+  },
+  "holdout 2019-26": {
+   "all": {
+    "rec_yds": {
+     "n": 44224,
+     "rmse_b0": 16.2764,
+     "rmse_new": 16.3022,
+     "mse_diff": 0.8408,
+     "se": 0.9742,
+     "z": 0.86
+    },
+    "rush_yds": {
+     "n": 12667,
+     "rmse_b0": 19.4235,
+     "rmse_new": 19.4918,
+     "mse_diff": 2.6559,
+     "se": 3.0202,
+     "z": 0.88
+    },
+    "receptions": {
+     "n": 44224,
+     "rmse_b0": 1.2231,
+     "rmse_new": 1.2258,
+     "mse_diff": 0.0066,
+     "se": 0.0061,
+     "z": 1.09
+    },
+    "carries": {
+     "n": 12667,
+     "rmse_b0": 3.3877,
+     "rmse_new": 3.4122,
+     "mse_diff": 0.1668,
+     "se": 0.1396,
+     "z": 1.19
+    }
+   },
+   "listed": {
+    "rec_yds": {
+     "n": 2936,
+     "rmse_b0": 24.3957,
+     "rmse_new": 24.521,
+     "mse_diff": 6.1298,
+     "se": 12.7229,
+     "z": 0.48
+    },
+    "rush_yds": {
+     "n": 888,
+     "rmse_b0": 27.8961,
+     "rmse_new": 28.483,
+     "mse_diff": 33.09,
+     "se": 35.4241,
+     "z": 0.93
+    },
+    "receptions": {
+     "n": 2936,
+     "rmse_b0": 1.8777,
+     "rmse_new": 1.9055,
+     "mse_diff": 0.1052,
+     "se": 0.0796,
+     "z": 1.32
+    },
+    "carries": {
+     "n": 888,
+     "rmse_b0": 5.3577,
+     "rmse_new": 5.5697,
+     "mse_diff": 2.317,
+     "se": 1.5326,
+     "z": 1.51
+    }
+   }
+  },
+  "verdict": "mixed"
+ },
+ "V3": {
+  "tuning 2014-18": {
+   "rec_yds": {
+    "n": 1151,
+    "rmse_b0": 28.8667,
+    "rmse_new": 28.6604,
+    "mse_diff": -11.8673,
+    "se": 6.7637,
+    "z": -1.75
+   },
+   "rush_yds": {
+    "n": 276,
+    "rmse_b0": 29.31,
+    "rmse_new": 28.9689,
+    "mse_diff": -19.8757,
+    "se": 16.0649,
+    "z": -1.24
+   },
+   "receptions": {
+    "n": 1151,
+    "rmse_b0": 1.9971,
+    "rmse_new": 1.985,
+    "mse_diff": -0.0484,
+    "se": 0.0317,
+    "z": -1.53
+   },
+   "carries": {
+    "n": 276,
+    "rmse_b0": 5.2867,
+    "rmse_new": 5.2369,
+    "mse_diff": -0.5234,
+    "se": 0.6943,
+    "z": -0.75
+   }
+  },
+  "holdout 2019-26": {
+   "rec_yds": {
+    "n": 1925,
+    "rmse_b0": 25.949,
+    "rmse_new": 25.8998,
+    "mse_diff": -2.5531,
+    "se": 6.9267,
+    "z": -0.37
+   },
+   "rush_yds": {
+    "n": 524,
+    "rmse_b0": 29.4277,
+    "rmse_new": 29.148,
+    "mse_diff": -16.3805,
+    "se": 17.8184,
+    "z": -0.92
+   },
+   "receptions": {
+    "n": 1925,
+    "rmse_b0": 1.8938,
+    "rmse_new": 1.8771,
+    "mse_diff": -0.0628,
+    "se": 0.0371,
+    "z": -1.69
+   },
+   "carries": {
+    "n": 524,
+    "rmse_b0": 4.8466,
+    "rmse_new": 4.7012,
+    "mse_diff": -1.3879,
+    "se": 0.629,
+    "z": -2.21
+   }
+  },
+  "verdict": "kept"
+ },
+ "props": {
+  "B0": {
+   "questionable": {
+    "n": 263,
+    "correct": 0.5095
+   },
+   "teammate": {
+    "n": 3893,
+    "correct": 0.5032
+   }
+  },
+  "V1": {
+   "questionable": {
+    "n": 263,
+    "correct": 0.5361
+   },
+   "teammate": {
+    "n": 3893,
+    "correct": 0.5045
+   }
+  },
+  "V2": {
+   "questionable": {
+    "n": 263,
+    "correct": 0.5437
+   },
+   "teammate": {
+    "n": 3893,
+    "correct": 0.5048
+   }
+  },
+  "V3": {
+   "questionable": {
+    "n": 263,
+    "correct": 0.5247
+   },
+   "teammate": {
+    "n": 3893,
+    "correct": 0.5032
+   }
+  }
+ }
+}

@@ -524,3 +524,49 @@ established starters, where the term adds a little noise. Pass attempts and comp
 **Nothing changes on the board.** A trade-off for Ryan: the projections shown on the Players tab
 and reports would be more accurate for new starters, and the passing-yards prop pricing would
 be a hair worse.
+
+### Questionable players: the chance he sits (Nov 9, 2026): shading mixed, clean multiplier kept
+
+`python experiments/nfl_questionable_test.py` (pre-set rule: Project doc
+`plan-nfl-questionable-test-2026-11-09.md`). The board treats a Questionable player as playing,
+with the Questionable multiplier (above). Questionable RB/WR/TE played (an offensive snap or a
+stat) about 64% of the time in earlier seasons: WR 76% / 69% / 53% after a full / limited / no
+Friday practice, TE 75% / 66% / 52%, RB 64% / 61% / 49%. Doubtful players played 1%.
+
+Two data notes. **The usual backtest knows who sat**: from 2019 the weekly rosters mark game-day
+inactives, and the board's backtest uses them, so it never sees a Questionable player who sits.
+This test projects every game live-like instead: expected to play = rostered (active or
+inactive) and not Out or Doubtful. **Before 2019 the rosters don't mark inactives**: 19-24% of
+"active" skill-player rows then have no snap (7-11% since), so about a third of Questionable
+players who sat count as playing with zero stats. The Questionable multiplier was fitted on
+those rows too.
+
+Live-like, every player-game on a team with a Questionable RB/WR/TE (RMSE, z of the paired
+squared-error change, clustered by game; negative = better):
+
+| | Tuning 2014-18 | Holdout 2019-26 |
+|---|---|---|
+| V1, one chance to play, share to teammates: rec yds / rush yds / receptions / carries | +0.6 / −1.6 / +0.5 / −1.8 | +1.9 / +0.6 / +2.1 / +0.9 |
+| V2, by position and practice: same | −0.1 / −1.5 / −0.4 / −1.7 | +0.9 / +0.9 / +1.1 / +1.2 |
+| V3, multiplier refit without the sitters, Questionable players who played | −1.8 / −1.2 / −1.5 / −0.8 | −0.4 / −0.9 / −1.7 / −2.2 |
+
+**V1 and V2: mixed under the rule (better tuning, worse holdout on all four); not applied.**
+Why it differs from college: the board already discounts Questionable players. Their expected
+value ran high (2022-25 receiving yards 20.8 projected, 17.2 actual, sitters counted as zero),
+but by less than the chance he sits, because the multiplier (0.84 on average) and the
+projection itself already take some of it out. Shading by the full chance double-counts, and
+their teammates were already unbiased (14.6 projected, 14.8 actual), so giving them the share
+overshoots.
+
+**V3: kept under the rule, both periods, all four.** Given he plays, the board runs low on
+Questionable players (2026 to date: receiving yards 24.2 projected, 29.8 actual). The clean
+refit raises them 2-18% (most after a limited or no practice): 26.5. This changes their prop
+prices, so it waits for Ryan's call.
+
+Props check (pricing-snapshot main lines, DraftKings and FanDuel, 2023-26, players who played;
+model side vs line):
+- Questionable players: B0 51.0%, V3 52.5% (263, within noise).
+- Unlisted teammates: B0 50.3%, V1 50.5%, V2 50.5% (3,893).
+
+No PFF data in this run (route inputs, quarterback prior), and defense-vs-position not
+applied: the same for B0 and every variant.
