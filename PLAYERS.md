@@ -123,6 +123,9 @@ season on earlier seasons only and shrunk toward 1 by n / (n + 200)
 since 2019; 200 was taken because 50 overcorrected in recent seasons (projections then ran
 low by about 2.5 yards). Scored on Questionable players who played, which is what a prop
 settles on; a player who sits voids the bet.
+Since Nov 9, 2026 the multiplier is fitted only on Questionable players who got on the field (an
+offensive snap or a stat): before 2019 the rosters don't mark game-day inactives, and players who
+sat had been pulling it down ("Questionable players: the chance he sits", below).
 
 ### Route participation and snap share (Oct 31, 2026)
 
@@ -560,8 +563,12 @@ overshoots.
 
 **V3: kept under the rule, both periods, all four.** Given he plays, the board runs low on
 Questionable players (2026 to date: receiving yards 24.2 projected, 29.8 actual). The clean
-refit raises them 2-18% (most after a limited or no practice): 26.5. This changes their prop
-prices, so it waits for Ryan's call.
+refit raises them 2-18% (most after a limited or no practice): 26.5. **Applied Nov 9, 2026
+(Ryan's call)**: `players_ml.questionable(..., snaps=R["snaps"])` in the pipeline. Trade-off,
+known when applied: the one number the board shows is now right given he plays (what props
+settle on), but a Questionable player's expected value counting the games he sits, already
+high, runs a little higher. The next test (the clean multiplier plus a partial shade by the
+chance he sits) is for that number.
 
 Props check (pricing-snapshot main lines, DraftKings and FanDuel, 2023-26, players who played;
 model side vs line):

@@ -43,22 +43,40 @@ def add_features(proj: pd.DataFrame, R: dict, routes: bool = True) -> pd.DataFra
 
 # Questionable players who play get less than their usual usage (Oct 2026, players_more_test.py):
 # a multiplier per position and practice status, from earlier seasons only, shrunk toward 1
-# by n / (n + Q_SHRINK). Applied after the boosted step.
+# by n / (n + Q_SHRINK). Applied after the boosted step. Since Nov 9, 2026 it is fitted only on
+# Questionable players who got on the field (an offensive snap or a stat): before 2019 the rosters
+# don't mark game-day inactives, so players who sat looked like they played with zero stats and
+# pulled the multiplier down (experiments/nfl_questionable_test.py, V3; PLAYERS.md).
 Q_STATS = ("carries", "rush_yds", "targets", "receptions", "rec_yds")
 Q_GROUPS = ("RB", "WR", "TE")
 Q_SHRINK = 200
 Q_RANGE = (0.5, 1.2)
 
 
-def questionable(p: pd.DataFrame, first: int = 2014, shrink: float = Q_SHRINK) -> pd.DataFrame:
+def on_field(p: pd.DataFrame, snaps: pd.DataFrame) -> pd.Series:
+    """1 where the player got on the field: an offensive snap (snaps: game_id, player_id,
+    offense_snaps, as roles.load_all's "snaps") or any stat."""
+    sn = snaps[snaps["offense_snaps"].fillna(0) > 0]
+    on = pd.MultiIndex.from_frame(sn[["game_id", "player_id"]].astype(str))
+    snap = pd.MultiIndex.from_frame(p[["game_id", "player_id"]].astype(str)).isin(on)
+    stat = p.reindex(columns=["targets", "carries", "pass_att", "receptions"]).fillna(0).sum(axis=1).to_numpy() > 0
+    return pd.Series((snap | stat).astype(int), index=p.index)
+
+
+def questionable(p: pd.DataFrame, first: int = 2014, shrink: float = Q_SHRINK,
+                 snaps: pd.DataFrame | None = None) -> pd.DataFrame:
     """Scale the projections of players listed Questionable (report_lvl 1), by position and
     practice status, with multipliers fitted on earlier seasons' Questionable players who
-    played. Players not listed, or with no earlier sample, are left alone."""
+    played. snaps (roles.load_all's "snaps"): fit only on those who got on the field, as the
+    board does since Nov 9, 2026; without it, on everyone marked active (the old fit). Players
+    not listed, or with no earlier sample, are left alone."""
     p = p.copy()
     if "report_lvl" not in p or "practice_lvl" not in p:
         return p
     q = (p["report_lvl"] == 1) & p["group"].isin(Q_GROUPS)
     played = p["played"].astype(bool) & (p["active"] == 1)
+    if snaps is not None:
+        played = played & (on_field(p, snaps) == 1)
     p["q_mult"] = 1.0
     for st in Q_STATS:
         if st + "_proj" not in p or st not in p:

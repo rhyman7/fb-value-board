@@ -323,6 +323,14 @@ boards in detail; this file is the rules.
   more than 3 days old, and `tests/test_cfb.py` checks it. Ryan approved this one exception
   to "model inputs belong to the Model project" (Oct 21, 2026). The NFL board shows the same
   superscript from its own official-report status.
+- **NFL Questionable players are projected as if they play** (the board does not shade by the
+  chance he sits: tested Nov 9, 2026, mixed, PLAYERS.md "Questionable players: the chance he sits").
+  The Questionable multiplier (`players_ml.questionable`) is fitted only on earlier Questionable
+  players who got on the field: the pipeline passes `snaps=R["snaps"]`. Don't fit it, or anything
+  else about who played, on roster status "ACT" alone: before 2019 the weekly rosters don't mark
+  game-day inactives, so 19-24% of "active" skill-player rows then had no snap. Any NFL player test
+  that asks about players who might sit must project without the inactive list (the usual backtest
+  knows it from 2019; `experiments/nfl_questionable_test.py` shows how).
 - **Starting quarterbacks (college board): the CFB dashboard's weekly list.** Each build
   downloads `overrides/qb_starters.json` from rhyman7/cfb (the CFB dashboard's daily task
   checks every FBS team's expected starter on every run) and keeps a copy in
