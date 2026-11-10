@@ -1120,7 +1120,14 @@ function floorBox(p) {
    pace through a machine-learning last step) replaced the old ones on Oct 31, 2026 wherever they
    exist: a player's projection is the New number. Week files saved before then carry both
    (proj and proj_new); adoptNew keeps only the New one, so the old number is never shown. */
-const adoptNew = p => { if (p && p.proj_new) { for (const [k, v] of Object.entries(p.proj_new)) if (v != null) p.proj[k] = v; delete p.proj_new; } return p; };
+/* NFL Questionable RB/WR/TE (Nov 9, 2026, nflmodel/qshade.py): proj is what he does if he plays,
+   which his props price from; proj_ev counts part of his chance to sit. The page shows proj_ev
+   and keeps the if-he-plays number as proj_played for the card (as the college board does). */
+const adoptNew = p => {
+  if (p && p.proj_new) { for (const [k, v] of Object.entries(p.proj_new)) if (v != null) p.proj[k] = v; delete p.proj_new; }
+  if (p && p.proj_ev && p.proj) { p.proj_played = {}; for (const [k, v] of Object.entries(p.proj_ev)) { p.proj_played[k] = p.proj[k]; p.proj[k] = v; } p.partial_shade = true; delete p.proj_ev; }
+  return p;
+};
 if (DATA.players && Array.isArray(DATA.players.players)) DATA.players.players.forEach(adoptNew);
 const dzReady = Promise.race([
   fetch("designations.json", { cache: "no-cache" }).then(r => r.ok ? r.json() : null).then(j => {
@@ -2489,7 +2496,14 @@ function diagChart(node, o) {
     grid.append(box("Team volume", tx(p.team + " is projected for "), b(f1(t.pass_att) + " pass attempts"), tx(" and "), b(f1(t.carries) + " carries"),
       tx(`, with ${f1(t.imp_pts)} points implied by the game model (${t.margin >= 0 ? "favoured by " + f1(t.margin) : "underdog by " + f1(-t.margin)})` + (t.wind != null ? `, ${f0(t.wind)} mph wind.` : "."))));
     // official Questionable / GTD: the projection includes his chance to sit (college, Nov 9, 2026)
-    if (p.play_chance != null) {
+    if (p.play_chance != null && p.partial_shade) {
+      // NFL: part of his chance to sit, no share to teammates (Nov 9, 2026, nflmodel/qshade.py)
+      const pp = p.proj_played || {}, k = pp.rec_yds ? p.proj.rec_yds / pp.rec_yds : pp.rush_yds ? p.proj.rush_yds / pp.rush_yds : null;
+      const ifp = [pp.receptions >= 0.5 ? f1(pp.receptions) + " catches for " + f0(pp.rec_yds) + " yards" : "", pp.carries >= 1 ? f1(pp.carries) + " carries for " + f0(pp.rush_yds) + " yards" : ""].filter(Boolean).join(", ");
+      grid.append(box("Availability", tx("Questionable on the injury report" + (p.practice ? ", " + p.practice + " Friday" : "") + ". Players listed like this have played about "), b(Math.round(p.play_chance * 100) + "% of the time"),
+        tx(". This projection allows for that: "), b((k ? "about " + Math.round(k * 100) + "% of" : "less than") + " his if-he-plays catches and yards"),
+        tx((ifp ? " (if he plays: " + ifp + ")" : "") + ". Targets and touchdowns show the if-he-plays numbers. His teammates' projections don't change. His props are priced as if he plays (a prop is void if he sits).")));
+    } else if (p.play_chance != null) {
       const pp = p.proj_played || {}, sits = Math.round((1 - p.play_chance) * 100);
       const ifp = [pp.receptions >= 0.5 ? f1(pp.receptions) + " catches for " + f0(pp.rec_yds) + " yards" : "", pp.carries >= 1 ? f1(pp.carries) + " carries for " + f0(pp.rush_yds) + " yards" : ""].filter(Boolean).join(", ");
       grid.append(box("Availability", tx((p.status || "Listed") + " on the official availability report: this projection includes a "), b(sits + "% chance he sits"),

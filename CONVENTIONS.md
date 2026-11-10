@@ -323,8 +323,16 @@ boards in detail; this file is the rules.
   more than 3 days old, and `tests/test_cfb.py` checks it. Ryan approved this one exception
   to "model inputs belong to the Model project" (Oct 21, 2026). The NFL board shows the same
   superscript from its own official-report status.
-- **NFL Questionable players are projected as if they play** (the board does not shade by the
-  chance he sits: tested Nov 9, 2026, mixed, PLAYERS.md "Questionable players: the chance he sits").
+- **NFL Questionable players: `proj` is what he does if he plays**, and everything that prices
+  (props, parlays, best bets, alternates, outlook) reads `proj`. Since Nov 9, 2026 the board also
+  gives each RB/WR/TE on this week's report as Questionable a display-only `proj_ev` and
+  `play_chance` (`nflmodel/qshade.py`, constants in `data/questionable_shade.json`, written only
+  by `experiments/nfl_questionable_test.py --shade --write-constants` at the January recheck):
+  receptions, receiving yards, carries and rushing yards x (1 − λ(1 − chance)). The page swaps it
+  in for display (`adoptNew` in site/template.html keeps `proj_played`); teammates don't change.
+  Never write the shaded numbers into `proj`, and key the shade to this week's report
+  (`report_lvl`), not the board's `status`, which can carry last week's tag until the new report.
+  PLAYERS.md "Questionable players: a shade on top of the clean multiplier".
   The Questionable multiplier (`players_ml.questionable`) is fitted only on earlier Questionable
   players who got on the field: the pipeline passes `snaps=R["snaps"]`. Don't fit it, or anything
   else about who played, on roster status "ACT" alone: before 2019 the weekly rosters don't mark

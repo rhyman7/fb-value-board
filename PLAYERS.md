@@ -606,3 +606,10 @@ teammates went 51.1% → 50.2% at real lines (3,893), within noise.
 
 With the multiplier fixed, the shade works, unlike V1/V2 in the first test. The first test's
 shade was stacked on a multiplier that already took sitting into account.
+
+**S3 applied Nov 9, 2026 (Ryan's call), display only** (`nflmodel/qshade.py`): the Players tab
+and matchups show the shaded numbers for RB/WR/TE listed Questionable on this week's report, with
+an Availability box on the card; `proj`, and every prop, parlay and best bet, stay at the
+if-he-plays number. Targets and touchdowns are not shaded (not tested). Constants (2026: chance
+by position and practice, fitted 2012-2025; λ 0.68-0.71) in `data/questionable_shade.json`,
+refit at the January recheck.

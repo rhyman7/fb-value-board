@@ -113,6 +113,14 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         except Exception as exc:
             print(f"  expected kneel-downs skipped ({exc})")
         player_board = players.board(pproj, pinfo, upcoming_ids, new=new)
+        try:                                      # Questionable players' expected line, display only (qshade.py)
+            from . import qshade
+            rep = {}
+            if new is not None and "report_lvl" in new and "practice_lvl" in new:
+                rep = {(g, i): (r, v) for g, i, r, v in zip(new["game_id"], new["player_id"], new["report_lvl"], new["practice_lvl"])}
+            say(f"  Questionable display shade for {qshade.apply(player_board['players'], rep)} players")
+        except Exception as exc:
+            print(f"  Questionable display shade skipped ({exc})")
         try:                                      # every-game floors (floors.py): display only
             from . import floors
             say(f"  every-game floors for {floors.attach_nfl(player_board, season, pg, pinfo, games, pproj, C.CACHE)} players")
