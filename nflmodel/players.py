@@ -568,13 +568,14 @@ def calib_X(p: pd.DataFrame, stat: str, per_start: bool = False) -> np.ndarray:
     return np.column_stack(cols)
 
 
-def walk_forward(table: pd.DataFrame, first_test: int = 2013) -> pd.DataFrame:
-    """Fit volume and calibration on earlier seasons, project each season in turn."""
+def walk_forward(table: pd.DataFrame, first_test: int = 2013, only: set | None = None) -> pd.DataFrame:
+    """Fit volume and calibration on earlier seasons, project each season in turn.
+    only (optional): project just these seasons (the fits are the same as a full run)."""
     out = []
     seasons = sorted(table["season"].unique())
     tg = table.drop_duplicates(["game_id", "team"])
     for s in seasons:
-        if s < first_test:
+        if s < first_test or (only is not None and s not in only):
             continue
         tr_t = tg[(tg["season"] < s) & tg["played"].astype(bool) & tg["team_att"].notna()]
         tr_t = tr_t[tr_t["season"] >= s - 8]
