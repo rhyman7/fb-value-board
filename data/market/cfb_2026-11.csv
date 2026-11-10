@@ -28146,3 +28146,296 @@ snapshot,league,event_id,commence,home_name,away_name,book,market,side,line,pric
 2026-11-10 20:44,cfb,21c985dda7b6b34cc9820a76dfad6172,2026-11-15T03:00:00Z,UTEP Miners,Wyoming Cowboys,kalshi,spreads,home,7.5,-104.0,2026-11-10T20:43:53Z
 2026-11-10 20:44,cfb,21c985dda7b6b34cc9820a76dfad6172,2026-11-15T03:00:00Z,UTEP Miners,Wyoming Cowboys,kalshi,spreads,away,-7.5,100.0,2026-11-10T20:43:53Z
 2026-11-10 20:44,cfb,c3c46d55350226dd82d83ecf0b52891a,2026-11-15T03:30:00Z,Washington State Cougars,Colorado State Rams,kalshi,spreads,home,-9.5,-108.0,2026-11-10T20:43:53Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,fanduel,h2h,home,,550.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,fanduel,h2h,away,,-780.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,fanduel,totals,over,50.5,-115.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,fanduel,totals,under,50.5,-105.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,kalshi,spreads,home,14.5,100.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,kalshi,spreads,away,-14.5,-104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,kalshi,totals,over,50.5,-108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,kalshi,totals,under,50.5,104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,draftkings,spreads,home,15.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,draftkings,spreads,away,-15.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,draftkings,totals,over,50.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,draftkings,totals,under,50.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,betmgm,spreads,home,15.0,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,betmgm,spreads,away,-15.0,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,betmgm,totals,over,50.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,betmgm,totals,under,50.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,pinnacle,h2h,home,,525.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,pinnacle,h2h,away,,-644.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,pinnacle,spreads,home,15.5,-112.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,pinnacle,spreads,away,-15.5,100.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,pinnacle,totals,over,50.0,-117.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5fc2c0b99e391f74694276d2eb95146c,2026-11-11T00:00:00Z,Akron Zips,Western Michigan Broncos,pinnacle,totals,under,50.0,101.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,fanduel,h2h,home,,-170.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,fanduel,h2h,away,,142.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,fanduel,spreads,home,-3.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,fanduel,spreads,away,3.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,fanduel,totals,over,41.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,fanduel,totals,under,41.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,kalshi,h2h,home,,-178.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,kalshi,h2h,away,,170.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,kalshi,spreads,home,-4.5,104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,kalshi,spreads,away,4.5,-108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,kalshi,totals,over,43.5,122.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,kalshi,totals,under,43.5,-127.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,draftkings,h2h,home,,-180.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,draftkings,h2h,away,,150.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,draftkings,spreads,home,-3.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,draftkings,spreads,away,3.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,draftkings,totals,over,42.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,draftkings,totals,under,42.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,betmgm,h2h,home,,-185.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,betmgm,h2h,away,,150.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,betmgm,spreads,home,-4.0,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,betmgm,spreads,away,4.0,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,betmgm,totals,over,41.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,betmgm,totals,under,41.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,pinnacle,h2h,home,,-176.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,pinnacle,h2h,away,,158.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,pinnacle,spreads,home,-4.0,-105.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,pinnacle,spreads,away,4.0,-107.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,pinnacle,totals,over,42.0,-105.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,c827ec84e911847450bcaf12c21abd11,2026-11-11T00:00:00Z,Bowling Green Falcons,Kent State Golden Flashes,pinnacle,totals,under,42.0,-111.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,fanduel,h2h,home,,-108.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,fanduel,h2h,away,,-111.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,fanduel,totals,over,47.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,fanduel,totals,under,47.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,kalshi,h2h,home,,104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,kalshi,h2h,away,,-108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,kalshi,spreads,home,1.5,-108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,kalshi,spreads,away,-1.5,104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,draftkings,spreads,home,1.5,-118.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,draftkings,spreads,away,-1.5,-102.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,draftkings,totals,over,47.5,-105.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,draftkings,totals,under,47.5,-115.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,betmgm,totals,over,47.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,betmgm,totals,under,47.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,pinnacle,h2h,home,,-102.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,pinnacle,h2h,away,,-108.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,pinnacle,spreads,home,1.0,-107.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,pinnacle,spreads,away,-1.0,-105.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,pinnacle,totals,over,47.5,101.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8f68604c47a7db841963eb62623db417,2026-11-11T01:00:00Z,Miami (OH) RedHawks,Ohio Bobcats,pinnacle,totals,under,47.5,-117.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,fanduel,h2h,home,,106.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,fanduel,h2h,away,,-126.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,fanduel,spreads,home,2.5,-115.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,fanduel,spreads,away,-2.5,-105.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,draftkings,totals,over,50.5,-118.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,draftkings,totals,under,50.5,-102.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,betmgm,h2h,away,,-135.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,betmgm,spreads,home,2.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,a8f5a967982255fd6be0435c3b213b0f,2026-11-12T00:30:00Z,Ball State Cardinals,Buffalo Bulls,betmgm,spreads,away,-2.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,fanduel,h2h,home,,-1050.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,fanduel,h2h,away,,720.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,fanduel,spreads,home,-17.5,-105.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,fanduel,spreads,away,17.5,-115.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,kalshi,spreads,home,-17.5,-104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,kalshi,spreads,away,17.5,100.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,kalshi,totals,over,43.5,-108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,betmgm,spreads,home,-17.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,88407c59161b47299b7d8f5d730f916c,2026-11-12T00:30:00Z,Central Michigan Chippewas,Sacramento State Hornets,betmgm,spreads,away,17.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,fanduel,h2h,home,,-580.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,fanduel,h2h,away,,440.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,fanduel,spreads,home,-14.5,100.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,fanduel,spreads,away,14.5,-120.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,betmgm,spreads,home,-14.0,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,betmgm,spreads,away,14.0,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,betmgm,totals,over,51.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,pinnacle,h2h,home,,-602.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,pinnacle,h2h,away,,434.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,pinnacle,spreads,home,-14.5,101.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,pinnacle,spreads,away,14.5,-118.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,pinnacle,totals,over,52.0,-103.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,5129a94416920cd3c476cd56af387f47,2026-11-12T00:30:00Z,Toledo Rockets,UMass Minutemen,pinnacle,totals,under,52.0,-115.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,kalshi,h2h,away,,-163.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,betmgm,h2h,away,,-175.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,betmgm,h2h,home,,150.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,betmgm,totals,over,50.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,betmgm,totals,under,50.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,pinnacle,h2h,away,,-176.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,pinnacle,h2h,home,,151.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,pinnacle,spreads,away,-4.0,-102.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,pinnacle,spreads,home,4.0,-114.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,9d463c4686f84c78b890f0fcf2ac90c5,2026-11-13T01:00:00Z,South Florida Bulls,Memphis Tigers,pinnacle,totals,over,49.5,-114.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,fanduel,h2h,away,,-410.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,fanduel,h2h,home,,320.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,fanduel,spreads,away,-10.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,fanduel,spreads,home,10.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,kalshi,h2h,away,,-400.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,betmgm,h2h,home,,320.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,betmgm,spreads,away,-10.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,6a3fbf6388d7c72076555fc4a4bbedf2,2026-11-13T02:00:00Z,UL Monroe Warhawks,Louisiana Ragin Cajuns,betmgm,spreads,home,10.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,eff5d01c8683ed700c896743f0490989,2026-11-14T00:00:00Z,Pittsburgh Panthers,Florida State Seminoles,fanduel,h2h,away,,134.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,eff5d01c8683ed700c896743f0490989,2026-11-14T00:00:00Z,Pittsburgh Panthers,Florida State Seminoles,kalshi,spreads,away,3.5,-113.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,eff5d01c8683ed700c896743f0490989,2026-11-14T00:00:00Z,Pittsburgh Panthers,Florida State Seminoles,kalshi,spreads,home,-3.5,108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,eff5d01c8683ed700c896743f0490989,2026-11-14T00:00:00Z,Pittsburgh Panthers,Florida State Seminoles,betmgm,h2h,away,,140.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,eff5d01c8683ed700c896743f0490989,2026-11-14T00:00:00Z,Pittsburgh Panthers,Florida State Seminoles,betmgm,spreads,away,3.5,-115.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,draftkings,h2h,home,,300.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,draftkings,h2h,away,,-380.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,draftkings,spreads,home,9.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,draftkings,spreads,away,-9.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,kalshi,totals,over,51.5,-104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,betmgm,spreads,home,9.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,betmgm,spreads,away,-9.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,betmgm,totals,under,51.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,pinnacle,h2h,home,,302.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,pinnacle,h2h,away,,-386.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,pinnacle,spreads,home,10.0,-116.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,73d83d88b3a35eeb4bcf8462ff2070b2,2026-11-14T03:15:00Z,Colorado Buffaloes,Houston Cougars,pinnacle,spreads,away,-10.0,-101.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,d6d167714ff638b23e84d757ff522414,2026-11-14T17:00:00Z,Mississippi State Bulldogs,Auburn Tigers,kalshi,h2h,away,,-133.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,d6d167714ff638b23e84d757ff522414,2026-11-14T17:00:00Z,Mississippi State Bulldogs,Auburn Tigers,kalshi,totals,over,50.5,100.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,d6d167714ff638b23e84d757ff522414,2026-11-14T17:00:00Z,Mississippi State Bulldogs,Auburn Tigers,kalshi,totals,under,50.5,-104.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,d6d167714ff638b23e84d757ff522414,2026-11-14T17:00:00Z,Mississippi State Bulldogs,Auburn Tigers,draftkings,h2h,away,,-142.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,d6d167714ff638b23e84d757ff522414,2026-11-14T17:00:00Z,Mississippi State Bulldogs,Auburn Tigers,draftkings,h2h,home,,120.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,fanduel,h2h,away,,122.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,fanduel,h2h,home,,-146.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,fanduel,spreads,away,2.5,105.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,fanduel,spreads,home,-2.5,-125.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,draftkings,totals,over,60.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,draftkings,totals,under,60.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,betmgm,spreads,away,3.0,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,betmgm,spreads,home,-3.0,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,betmgm,totals,over,60.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,0431ccbcda08ef99781fee8c341c8932,2026-11-14T17:00:00Z,Iowa State Cyclones,Cincinnati Bearcats,betmgm,totals,under,60.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,a195a61a5f2a3c5c0ed7ba7b313572e5,2026-11-14T17:00:00Z,Miami Hurricanes,Duke Blue Devils,kalshi,spreads,away,13.5,-104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,a195a61a5f2a3c5c0ed7ba7b313572e5,2026-11-14T17:00:00Z,Miami Hurricanes,Duke Blue Devils,kalshi,spreads,home,-13.5,-104.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,a195a61a5f2a3c5c0ed7ba7b313572e5,2026-11-14T17:00:00Z,Miami Hurricanes,Duke Blue Devils,betmgm,totals,over,54.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,a195a61a5f2a3c5c0ed7ba7b313572e5,2026-11-14T17:00:00Z,Miami Hurricanes,Duke Blue Devils,betmgm,totals,under,54.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,83b67813ba763c65142b4238e3c44270,2026-11-14T17:00:00Z,UConn Huskies,James Madison Dukes,fanduel,h2h,home,,152.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,83b67813ba763c65142b4238e3c44270,2026-11-14T17:00:00Z,UConn Huskies,James Madison Dukes,fanduel,spreads,away,-4.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,83b67813ba763c65142b4238e3c44270,2026-11-14T17:00:00Z,UConn Huskies,James Madison Dukes,fanduel,spreads,home,4.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,83b67813ba763c65142b4238e3c44270,2026-11-14T17:00:00Z,UConn Huskies,James Madison Dukes,betmgm,spreads,away,-4.0,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,83b67813ba763c65142b4238e3c44270,2026-11-14T17:00:00Z,UConn Huskies,James Madison Dukes,betmgm,spreads,home,4.0,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,862cc541ca98da17b20a964513c18435,2026-11-14T17:00:00Z,Maryland Terrapins,Wisconsin Badgers,kalshi,h2h,home,,270.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,862cc541ca98da17b20a964513c18435,2026-11-14T17:00:00Z,Maryland Terrapins,Wisconsin Badgers,kalshi,spreads,home,7.5,104.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,862cc541ca98da17b20a964513c18435,2026-11-14T17:00:00Z,Maryland Terrapins,Wisconsin Badgers,kalshi,spreads,away,-7.5,-108.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,fanduel,h2h,home,,120.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,fanduel,h2h,away,,-142.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,fanduel,totals,over,54.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,fanduel,totals,under,54.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,kalshi,h2h,away,,-133.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,kalshi,spreads,home,2.5,100.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,kalshi,totals,under,53.5,100.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,betmgm,totals,over,53.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,cf67bd8ed20036fea0a72f8a0d5836e7,2026-11-14T17:00:00Z,NC State Wolfpack,Syracuse Orange,betmgm,totals,under,53.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,462e4e8a99f44d5c64f36987e966cd13,2026-11-14T17:00:00Z,Ohio State Buckeyes,Northwestern Wildcats,kalshi,spreads,away,13.5,-117.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,462e4e8a99f44d5c64f36987e966cd13,2026-11-14T17:00:00Z,Ohio State Buckeyes,Northwestern Wildcats,kalshi,spreads,home,-13.5,108.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,462e4e8a99f44d5c64f36987e966cd13,2026-11-14T17:00:00Z,Ohio State Buckeyes,Northwestern Wildcats,betmgm,spreads,away,12.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,462e4e8a99f44d5c64f36987e966cd13,2026-11-14T17:00:00Z,Ohio State Buckeyes,Northwestern Wildcats,betmgm,spreads,home,-12.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,b7d77aed1f8f75da7679a059e627dfee,2026-11-14T17:00:00Z,SMU Mustangs,Wake Forest Demon Deacons,draftkings,spreads,home,-1.5,100.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,b7d77aed1f8f75da7679a059e627dfee,2026-11-14T17:00:00Z,SMU Mustangs,Wake Forest Demon Deacons,draftkings,spreads,away,1.5,-120.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,b7d77aed1f8f75da7679a059e627dfee,2026-11-14T17:00:00Z,SMU Mustangs,Wake Forest Demon Deacons,kalshi,spreads,away,1.5,-108.0,2026-11-10T23:25:17Z
+2026-11-10 23:25,cfb,82eed9ad82fa12a1ace084358d3fd32d,2026-11-14T17:30:00Z,Clemson Tigers,Georgia Tech Yellow Jackets,kalshi,spreads,home,-13.5,-104.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,82eed9ad82fa12a1ace084358d3fd32d,2026-11-14T17:30:00Z,Clemson Tigers,Georgia Tech Yellow Jackets,kalshi,totals,under,48.5,-113.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,1742500c43d25085db47873b82f15459,2026-11-14T17:30:00Z,Rutgers Scarlet Knights,Nebraska Cornhuskers,kalshi,spreads,away,-13.5,-104.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,1742500c43d25085db47873b82f15459,2026-11-14T17:30:00Z,Rutgers Scarlet Knights,Nebraska Cornhuskers,kalshi,spreads,home,13.5,-104.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,fe42d22bafb7d5f406317697dff44ee6,2026-11-14T17:45:00Z,Vanderbilt Commodores,Alabama Crimson Tide,kalshi,totals,over,49.5,-117.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,fe42d22bafb7d5f406317697dff44ee6,2026-11-14T17:45:00Z,Vanderbilt Commodores,Alabama Crimson Tide,kalshi,totals,under,49.5,108.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,01787a755109adbf19adf48ca4d60ddb,2026-11-14T18:00:00Z,Charlotte 49ers,East Carolina Pirates,draftkings,spreads,home,11.5,-108.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,01787a755109adbf19adf48ca4d60ddb,2026-11-14T18:00:00Z,Charlotte 49ers,East Carolina Pirates,draftkings,spreads,away,-11.5,-112.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,d03caba2636ec407098ec3e1fe18fcf7,2026-11-14T19:00:00Z,Rice Owls,Tulane Green Wave,kalshi,h2h,home,,-127.0,2026-11-10T23:25:18Z
+2026-11-10 23:25,cfb,ac00a0cc63f0020c5d00d412dd706834,2026-11-14T20:00:00Z,Delaware Blue Hens,Florida International Panthers,kalshi,totals,over,54.5,100.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,ac00a0cc63f0020c5d00d412dd706834,2026-11-14T20:00:00Z,Delaware Blue Hens,Florida International Panthers,kalshi,totals,under,54.5,-113.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,4c15d7c4261fa1d8b75615a46d4d2ea7,2026-11-14T20:00:00Z,Texas A&M Aggies,Tennessee Volunteers,kalshi,spreads,away,-2.5,-108.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,4c15d7c4261fa1d8b75615a46d4d2ea7,2026-11-14T20:00:00Z,Texas A&M Aggies,Tennessee Volunteers,kalshi,spreads,home,2.5,104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,4c15d7c4261fa1d8b75615a46d4d2ea7,2026-11-14T20:00:00Z,Texas A&M Aggies,Tennessee Volunteers,kalshi,totals,under,43.5,-104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,109bd435222562d833efa2a511f9b79e,2026-11-14T20:30:00Z,UCF Knights,Arizona State Sun Devils,kalshi,spreads,away,3.5,-117.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,109bd435222562d833efa2a511f9b79e,2026-11-14T20:30:00Z,UCF Knights,Arizona State Sun Devils,kalshi,spreads,home,-3.5,108.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,109bd435222562d833efa2a511f9b79e,2026-11-14T20:30:00Z,UCF Knights,Arizona State Sun Devils,kalshi,totals,over,48.5,-108.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,5b6989e8ecca343c4de3e7d285b70aa3,2026-11-14T20:30:00Z,BYU Cougars,Baylor Bears,kalshi,h2h,home,,-257.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,5b6989e8ecca343c4de3e7d285b70aa3,2026-11-14T20:30:00Z,BYU Cougars,Baylor Bears,kalshi,totals,over,48.5,-108.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,5b6989e8ecca343c4de3e7d285b70aa3,2026-11-14T20:30:00Z,BYU Cougars,Baylor Bears,betmgm,spreads,away,7.0,-102.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5b6989e8ecca343c4de3e7d285b70aa3,2026-11-14T20:30:00Z,BYU Cougars,Baylor Bears,betmgm,spreads,home,-7.0,-115.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,kalshi,totals,under,46.5,100.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,betmgm,h2h,away,,320.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,betmgm,totals,over,46.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,betmgm,totals,under,46.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,pinnacle,h2h,away,,338.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,pinnacle,h2h,home,,-441.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,pinnacle,spreads,away,10.0,-106.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,pinnacle,spreads,home,-10.0,-110.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,pinnacle,totals,over,47.5,-101.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,d0327c5775ed8cc9854411f8e077af93,2026-11-14T20:30:00Z,Virginia Cavaliers,California Golden Bears,pinnacle,totals,under,47.5,-118.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,018349e41d033e3b1fdbc14ce9b09325,2026-11-14T20:30:00Z,Tulsa Golden Hurricane,Florida Atlantic Owls,kalshi,totals,over,73.5,-113.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,018349e41d033e3b1fdbc14ce9b09325,2026-11-14T20:30:00Z,Tulsa Golden Hurricane,Florida Atlantic Owls,kalshi,totals,under,73.5,104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,draftkings,h2h,home,,-750.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,draftkings,h2h,away,,525.0,2026-11-10T23:23:39Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,kalshi,spreads,home,-16.5,108.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,kalshi,spreads,away,16.5,-113.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,betmgm,h2h,home,,-750.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,betmgm,h2h,away,,550.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,107b8f81458dc555f99db1e929276a13,2026-11-14T20:30:00Z,Georgia Bulldogs,Missouri Tigers,betmgm,spreads,away,15.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,kalshi,spreads,away,-7.5,100.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,kalshi,spreads,home,7.5,-104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,fanduel,h2h,away,,-315.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,fanduel,h2h,home,,255.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,fanduel,spreads,away,-7.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,fanduel,spreads,home,7.5,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,betmgm,h2h,away,,-295.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,betmgm,h2h,home,,240.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,betmgm,spreads,away,-7.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,betmgm,spreads,home,7.5,-115.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,65104e496f8e5c0208eb59dd0c946475,2026-11-14T20:30:00Z,Western Kentucky Hilltoppers,Jacksonville State Gamecocks,betmgm,totals,under,54.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,873a763cc258ad94bac35324c66e361c,2026-11-14T20:30:00Z,Liberty Flames,Middle Tennessee Blue Raiders,kalshi,spreads,home,-20.5,-113.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,873a763cc258ad94bac35324c66e361c,2026-11-14T20:30:00Z,Liberty Flames,Middle Tennessee Blue Raiders,kalshi,spreads,away,20.5,104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,4c76e6c2d67084d144ebe452d7d608a0,2026-11-14T20:30:00Z,Oregon Ducks,Michigan Wolverines,betmgm,spreads,away,11.0,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,4c76e6c2d67084d144ebe452d7d608a0,2026-11-14T20:30:00Z,Oregon Ducks,Michigan Wolverines,betmgm,spreads,home,-11.0,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,4c76e6c2d67084d144ebe452d7d608a0,2026-11-14T20:30:00Z,Oregon Ducks,Michigan Wolverines,betmgm,totals,under,38.5,-115.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,c2ccf2d604c3a791b12d26ccaaf65c70,2026-11-14T20:30:00Z,Northern Illinois Huskies,Nevada Wolf Pack,kalshi,h2h,away,,-257.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,a21a2f1087d443fa1a1c71e1a03a0fe0,2026-11-14T21:00:00Z,Texas State Bobcats,Fresno State Bulldogs,kalshi,h2h,away,,317.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,a21a2f1087d443fa1a1c71e1a03a0fe0,2026-11-14T21:00:00Z,Texas State Bobcats,Fresno State Bulldogs,pinnacle,h2h,away,,297.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,a21a2f1087d443fa1a1c71e1a03a0fe0,2026-11-14T21:00:00Z,Texas State Bobcats,Fresno State Bulldogs,pinnacle,h2h,home,,-377.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,a21a2f1087d443fa1a1c71e1a03a0fe0,2026-11-14T21:00:00Z,Texas State Bobcats,Fresno State Bulldogs,pinnacle,spreads,away,10.0,-112.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,a21a2f1087d443fa1a1c71e1a03a0fe0,2026-11-14T21:00:00Z,Texas State Bobcats,Fresno State Bulldogs,pinnacle,spreads,home,-10.0,-105.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,kalshi,spreads,home,-1.5,108.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,kalshi,spreads,away,1.5,-113.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,kalshi,totals,over,48.5,-113.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,kalshi,totals,under,48.5,104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,fanduel,h2h,home,,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,fanduel,h2h,away,,-110.0,2026-11-10T23:25:00Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,betmgm,totals,over,49.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,8ad669f4c9b70f38fdb057c114588776,2026-11-14T21:15:00Z,Oklahoma Sooners,Ole Miss Rebels,betmgm,totals,under,49.5,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,1ce059ad7e592e033a7efe38d7bc7352,2026-11-14T22:00:00Z,Louisiana Tech Bulldogs,Southern Mississippi Golden Eagles,kalshi,totals,over,56.5,104.0,2026-11-10T23:25:19Z
+2026-11-10 23:25,cfb,558ce811ad052f49918a2855f3777baf,2026-11-14T23:00:00Z,Marshall Thundering Herd,Appalachian State Mountaineers,kalshi,h2h,away,,-117.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,558ce811ad052f49918a2855f3777baf,2026-11-14T23:00:00Z,Marshall Thundering Herd,Appalachian State Mountaineers,kalshi,h2h,home,,104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,558ce811ad052f49918a2855f3777baf,2026-11-14T23:00:00Z,Marshall Thundering Herd,Appalachian State Mountaineers,kalshi,spreads,home,1.5,-108.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,f9b805187f3809fdadddfa08dfa2a089,2026-11-14T23:00:00Z,Boise State Broncos,Oregon State Beavers,kalshi,spreads,home,-13.5,-104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,c113a0bd62980b8ec1ce85b27292f699,2026-11-14T23:15:00Z,Kentucky Wildcats,Florida Gators,kalshi,totals,over,52.5,-104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,3b677ea4fddccce26e4468faf7079768,2026-11-15T00:00:00Z,North Carolina Tar Heels,Louisville Cardinals,kalshi,spreads,away,-3.5,-104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,3b677ea4fddccce26e4468faf7079768,2026-11-15T00:00:00Z,North Carolina Tar Heels,Louisville Cardinals,kalshi,spreads,home,3.5,100.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,d466840e3c50d2fdad6fd7e799fdf921,2026-11-15T00:00:00Z,Penn State Nittany Lions,Minnesota Golden Gophers,kalshi,spreads,away,9.5,100.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,7b3c2958dadc616a19ce7b9b1dd2a7e4,2026-11-15T00:30:00Z,Arizona Wildcats,Utah Utes,betmgm,totals,over,54.5,-110.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,13916d6f26b193abfc3367d80f27e64c,2026-11-15T00:30:00Z,Iowa Hawkeyes,Purdue Boilermakers,kalshi,spreads,away,17.5,-113.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,13916d6f26b193abfc3367d80f27e64c,2026-11-15T00:30:00Z,Iowa Hawkeyes,Purdue Boilermakers,betmgm,spreads,home,-17.0,-112.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,13916d6f26b193abfc3367d80f27e64c,2026-11-15T00:30:00Z,Iowa Hawkeyes,Purdue Boilermakers,betmgm,spreads,away,17.0,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,5f45291a1a5e01525b2e3aebe791c436,2026-11-15T00:30:00Z,LSU Tigers,Texas Longhorns,kalshi,h2h,home,,-178.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,8982b0a852d112b25310aa03f0f104b6,2026-11-15T00:30:00Z,New Mexico Lobos,UNLV Rebels,kalshi,totals,over,46.5,-108.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,8982b0a852d112b25310aa03f0f104b6,2026-11-15T00:30:00Z,New Mexico Lobos,UNLV Rebels,kalshi,totals,under,46.5,100.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,77380a347bae20671e1f8cec27ce658b,2026-11-15T00:30:00Z,Virginia Tech Hokies,Stanford Cardinal,kalshi,h2h,home,,-567.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,77380a347bae20671e1f8cec27ce658b,2026-11-15T00:30:00Z,Virginia Tech Hokies,Stanford Cardinal,kalshi,totals,over,57.5,-117.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,77380a347bae20671e1f8cec27ce658b,2026-11-15T00:30:00Z,Virginia Tech Hokies,Stanford Cardinal,kalshi,totals,under,57.5,104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,d0cebc10547e648dd7988b83f58081cf,2026-11-15T00:45:00Z,Arkansas Razorbacks,South Carolina Gamecocks,betmgm,spreads,away,-7.5,-105.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,ee91eb14cc4d725be5df58f3285bdaa6,2026-11-15T02:00:00Z,UTSA Roadrunners,North Texas Mean Green,kalshi,totals,over,75.5,-113.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ee91eb14cc4d725be5df58f3285bdaa6,2026-11-15T02:00:00Z,UTSA Roadrunners,North Texas Mean Green,kalshi,totals,under,75.5,104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,320a213c475110f032710dcd06c94e8e,2026-11-15T02:30:00Z,Oklahoma State Cowboys,Texas Tech Red Raiders,kalshi,spreads,home,-3.5,108.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,320a213c475110f032710dcd06c94e8e,2026-11-15T02:30:00Z,Oklahoma State Cowboys,Texas Tech Red Raiders,kalshi,spreads,away,3.5,-113.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,kalshi,spreads,home,2.5,104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,kalshi,totals,over,42.5,-104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,kalshi,totals,under,42.5,-104.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,betmgm,h2h,home,,120.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,betmgm,h2h,away,,-145.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,betmgm,spreads,away,-2.5,-118.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,betmgm,totals,under,42.5,-108.0,2026-11-10T23:24:18Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,pinnacle,h2h,home,,118.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,pinnacle,h2h,away,,-135.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,pinnacle,spreads,home,2.5,-106.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,ece9b1bb56a95381f1c485d22bd36dd8,2026-11-15T02:30:00Z,San Diego State Aztecs,Utah State Aggies,pinnacle,spreads,away,-2.5,-110.0,2026-11-10T23:25:03Z
+2026-11-10 23:25,cfb,c3c46d55350226dd82d83ecf0b52891a,2026-11-15T03:30:00Z,Washington State Cougars,Colorado State Rams,kalshi,spreads,away,9.5,100.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ce88da9d6fd67bac81c1e4a70545de29,2026-11-15T04:00:00Z,Hawaii Rainbow Warriors,North Dakota State Bison,kalshi,h2h,home,,212.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ce88da9d6fd67bac81c1e4a70545de29,2026-11-15T04:00:00Z,Hawaii Rainbow Warriors,North Dakota State Bison,kalshi,h2h,away,,-233.0,2026-11-10T23:25:20Z
+2026-11-10 23:25,cfb,ce88da9d6fd67bac81c1e4a70545de29,2026-11-15T04:00:00Z,Hawaii Rainbow Warriors,North Dakota State Bison,pinnacle,h2h,home,,202.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,ce88da9d6fd67bac81c1e4a70545de29,2026-11-15T04:00:00Z,Hawaii Rainbow Warriors,North Dakota State Bison,pinnacle,h2h,away,,-241.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,ce88da9d6fd67bac81c1e4a70545de29,2026-11-15T04:00:00Z,Hawaii Rainbow Warriors,North Dakota State Bison,pinnacle,spreads,home,6.0,-102.0,2026-11-10T23:25:02Z
+2026-11-10 23:25,cfb,ce88da9d6fd67bac81c1e4a70545de29,2026-11-15T04:00:00Z,Hawaii Rainbow Warriors,North Dakota State Bison,pinnacle,spreads,away,-6.0,-115.0,2026-11-10T23:25:02Z
