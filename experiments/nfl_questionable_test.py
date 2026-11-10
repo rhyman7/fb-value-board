@@ -304,6 +304,22 @@ def rate_history(table: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------- main
+def write_constants(rates: dict, lambdas: dict) -> None:
+    """data/questionable_shade.json for nflmodel/qshade.py: the latest season's rates (fitted on
+    every earlier season) and S3 lambdas. Keeps the file's note."""
+    from nflmodel import qshade
+    s = max(lambdas)
+    old = qshade.load() or {}
+    lvl = {"full": "0", "limited": "1", "DNP": "2"}
+    chance = {"overall": rates[s]["V1"]}
+    for k, v in rates[s]["V2"].items():
+        g, l = k.split(" ")
+        chance.setdefault(g, {})[lvl[l]] = v
+    out = {"note": old.get("note", ""), "fitted_through": int(s) - 1, "chance": chance, "lambda": lambdas[s]}
+    qshade.PATH.write_text(json.dumps(out, indent=2) + "\n")
+    print(f"wrote {qshade.PATH}", flush=True)
+
+
 def shade_test(p: pd.DataFrame, q: pd.Series, c2: pd.Series) -> dict:
     """The second pre-set test (Project doc claude/plan-nfl-questionable-shade-test-2026-11-09.md):
     S1-S3 against B1, the board as live since Nov 9 (the clean multiplier)."""
@@ -356,6 +372,9 @@ def main():
     ap.add_argument("--table", type=Path, default=None)
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--shade", action="store_true", help="the second test: S1-S3 on the live (clean) multiplier")
+    ap.add_argument("--write-constants", action="store_true",
+                    help="with --shade: write data/questionable_shade.json (the board's display shade, nflmodel/qshade.py) "
+                         "from the latest season's chance-to-play rates and S3 lambdas; the January recheck only")
     args = ap.parse_args()
     table = load_table(args.table)
     table["listed"] = listed_active(table["status"], table["report"])
@@ -383,6 +402,8 @@ def main():
         rates[s] = {"V1": round(v1, 3), "V2": {f"{g} {['full', 'limited', 'DNP'][int(l)]}": round(v, 3) for (g, l), v in v2.items()}}
     if args.shade:
         res = shade_test(p, q, c2)
+        if args.write_constants:
+            write_constants(rates, res["lambda"])
         args.out.parent.mkdir(parents=True, exist_ok=True)
         args.out.write_text(json.dumps(res, indent=1, default=float))
         print(json.dumps(res, indent=1, default=float))

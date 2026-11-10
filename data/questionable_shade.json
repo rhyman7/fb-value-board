@@ -1,0 +1,9 @@
+{
+  "note": "NFL Questionable RB/WR/TE: chance to play by position and last Friday practice (0 full, 1 limited, 2 did not practice), and the share of the chance he sits the display takes out (lambda, per stat). Display only: the Players tab and matchups show proj x (1 - lambda (1 - chance)); proj itself, and every prop, parlay and best bet, stay at the if-he-plays number. From the Nov 9, 2026 test (experiments/nfl_questionable_test.py --shade, S3; PLAYERS.md), fitted on 2012-2025 (chance) and 2014-2025 (lambda). Written only by that script (--write-constants); refit at the January recheck.",
+  "fitted_through": 2025,
+  "chance": {"overall": 0.641,
+             "RB": {"0": 0.642, "1": 0.607, "2": 0.492},
+             "TE": {"0": 0.748, "1": 0.66, "2": 0.516},
+             "WR": {"0": 0.758, "1": 0.685, "2": 0.529}},
+  "lambda": {"rec_yds": 0.708, "rush_yds": 0.701, "receptions": 0.678, "carries": 0.699}
+}
