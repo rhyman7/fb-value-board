@@ -44,6 +44,7 @@ SHADE_STATS = ("receptions", "rec_yds", "carries", "rush_yds")
 MEASURES = (("rec_yds", ("WR", "TE", "RB")), ("rush_yds", ("RB",)), ("receptions", ("WR", "TE", "RB")), ("carries", ("RB",)))
 SHRINK = 200
 PERIODS = (("tuning 2014-18", 2014, C.HOLDOUT_FROM - 1), ("holdout 2019-26", C.HOLDOUT_FROM, 2100))
+SHADE_PERIODS = (("tuning 2015-18", 2015, C.HOLDOUT_FROM - 1), ("holdout 2019-26", C.HOLDOUT_FROM, 2100))
 PROP_MARKETS = {"player_receptions": "receptions", "player_reception_yds": "rec_yds", "player_rush_yds": "rush_yds"}
 
 
@@ -70,9 +71,10 @@ def play_rates(hist: pd.DataFrame, shrink: float = SHRINK) -> tuple[float, dict]
     return v1, v2
 
 
-def shade(p: pd.DataFrame, chance: pd.Series) -> pd.DataFrame:
-    """Each listed player keeps chance of the four stats; the rest goes to his teammates in the
-    game with no listing who are expected to play, in proportion to their own projection."""
+def shade(p: pd.DataFrame, chance: pd.Series, share: bool = True) -> pd.DataFrame:
+    """Each listed player keeps chance of the four stats; with share, the rest goes to his
+    teammates in the game with no listing who are expected to play, in proportion to their own
+    projection (without it, the rest is dropped)."""
     p = p.copy()
     c = chance.reindex(p.index)
     free = p["report"].isna() & (p["listed"] == 1)
@@ -84,7 +86,30 @@ def shade(p: pd.DataFrame, chance: pd.Series) -> pd.DataFrame:
         lost = (src - new).groupby(grp).transform("sum")
         base = src.where(free, 0.0)
         tot = base.groupby(grp).transform("sum")
-        p[col] = new + (lost * base / tot.replace(0, np.nan)).fillna(0.0)
+        p[col] = new + ((lost * base / tot.replace(0, np.nan)).fillna(0.0) if share else 0.0)
+    return p
+
+
+def fit_lambda(proj, chance, y) -> float:
+    """S3's partial shade: the lambda in proj x (1 - lambda (1 - chance)) with the least squared
+    error against y (least squares, clipped to 0-1). nan with nothing to fit."""
+    proj, chance, y = (np.asarray(v, float) for v in (proj, chance, y))
+    a = proj * (1 - chance)
+    den = float((a * a).sum())
+    if den <= 0:
+        return float("nan")
+    return float(np.clip((a * (proj - y)).sum() / den, 0.0, 1.0))
+
+
+def partial(p: pd.DataFrame, chance: pd.Series, lam: dict) -> pd.DataFrame:
+    """Each listed player's four stats x (1 - lambda (1 - chance)), lambda per stat; teammates
+    unchanged."""
+    p = p.copy()
+    c = chance.reindex(p.index)
+    for s in SHADE_STATS:
+        col = s + "_proj"
+        k = 1 - lam.get(s, 0.0) * (1 - c.fillna(1.0))
+        p[col] = p[col].astype(float).fillna(0.0) * k
     return p
 
 
@@ -279,10 +304,58 @@ def rate_history(table: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------- main
+def shade_test(p: pd.DataFrame, q: pd.Series, c2: pd.Series) -> dict:
+    """The second pre-set test (Project doc claude/plan-nfl-questionable-shade-test-2026-11-09.md):
+    S1-S3 against B1, the board as live since Nov 9 (the clean multiplier)."""
+    b1 = p.copy()
+    for st in SHADE_STATS:
+        b1[st + "_proj"] = p[st + "_v3"]
+    s1, s2 = shade(b1, c2), shade(b1, c2, share=False)
+    s3 = b1.copy()
+    lams = {}
+    for s in sorted(b1["season"].unique()):
+        te = q & (b1["season"] == s)
+        tr = q & (b1["season"] < s) & (b1["season"] >= C.FIRST_TEST_SEASON) & c2.notna()
+        if not te.any() or not tr.any():
+            continue
+        lam = {}
+        for st, pos in MEASURES:
+            m = tr & b1["group"].isin(pos)
+            lam[st] = fit_lambda(b1.loc[m, st + "_proj"], c2[m], b1.loc[m, st])
+        lam = {k: v for k, v in lam.items() if v == v}
+        lams[int(s)] = {k: round(v, 3) for k, v in lam.items()}
+        part = partial(b1[te], c2[te], lam)
+        for st in SHADE_STATS:
+            s3.loc[te, st + "_proj"] = part[st + "_proj"]
+    s3_ok = b1["season"].isin(list(lams))
+    team_q = q.groupby([b1["game_id"], b1["team"]]).transform("any")
+    res = {"lambda": lams, "n_questionable": {}, "S1": {}, "S2": {}, "S3": {}}
+    for label, lo, hi in SHADE_PERIODS:
+        per = (b1["season"] >= lo) & (b1["season"] <= hi) & s3_ok
+        univ = per & team_q
+        res["n_questionable"][label] = {"listed": int((q & per).sum()), "played": int((q & per & (b1["played_snap"] == 1)).sum())}
+        for name, new in (("S1", s1), ("S2", s2), ("S3", s3)):
+            res[name][label] = {"all": rmse_block(b1, new, univ), "listed": rmse_block(b1, new, univ & q)}
+    for name in ("S1", "S2", "S3"):
+        res[name]["verdict"] = verdict({k: v for k, v in res[name].items() if k != "verdict"})
+    kept = [n for n in ("S1", "S2", "S3") if res[n]["verdict"] == "kept"]
+    if len(kept) > 1:
+        hold = SHADE_PERIODS[-1][0]
+        res["winner"] = min(kept, key=lambda n: res[n][hold]["all"]["rec_yds"]["rmse_new"])
+    print("Props check ...", flush=True)
+    pc = props_check(b1, {"B1": b1, "S1": s1})
+    if "note" in pc:
+        res["props"] = pc
+    else:
+        res["props"] = {"teammates": {n: pc[n].get("teammate") for n in ("B1", "S1")}, "S2": "no prop change", "S3": "no prop change"}
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--table", type=Path, default=None)
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument("--shade", action="store_true", help="the second test: S1-S3 on the live (clean) multiplier")
     args = ap.parse_args()
     table = load_table(args.table)
     table["listed"] = listed_active(table["status"], table["report"])
@@ -308,6 +381,12 @@ def main():
         c1[te] = v1
         c2[te] = [v2.get((g, l), v1) for g, l in zip(p.loc[te, "group"], p.loc[te, "practice_lvl"])]
         rates[s] = {"V1": round(v1, 3), "V2": {f"{g} {['full', 'limited', 'DNP'][int(l)]}": round(v, 3) for (g, l), v in v2.items()}}
+    if args.shade:
+        res = shade_test(p, q, c2)
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(res, indent=1, default=float))
+        print(json.dumps(res, indent=1, default=float))
+        return
     p1, p2 = shade(p, c1), shade(p, c2)
 
     team_q = q.groupby([p["game_id"], p["team"]]).transform("any")

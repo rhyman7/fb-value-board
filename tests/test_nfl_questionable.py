@@ -61,3 +61,21 @@ def test_questionable_fit_skips_players_who_sat():
     new = ML.questionable(p, first=2021, shrink=0, snaps=snaps)
     assert np.isclose(old.loc[n, "rec_yds_proj"], 25.0)      # the sitters halve it
     assert np.isclose(new.loc[n, "rec_yds_proj"], 50.0)      # only those who played
+
+
+def test_shade_without_share_leaves_teammates():
+    p = pd.DataFrame({"game_id": ["g"] * 2, "team": ["A", "A"], "report": ["Questionable", None], "listed": [1, 1],
+                      **{s + "_proj": [10.0, 30.0] for s in T.SHADE_STATS}})
+    out = T.shade(p, pd.Series([0.6, np.nan]), share=False)
+    assert np.isclose(out.loc[0, "rec_yds_proj"], 6.0) and out.loc[1, "rec_yds_proj"] == 30.0
+
+
+def test_fit_lambda_and_partial():
+    proj, c = np.array([10.0, 10.0]), np.array([0.5, 0.5])
+    assert np.isclose(T.fit_lambda(proj, c, [5.0, 5.0]), 1.0)     # full shade fits exactly
+    assert np.isclose(T.fit_lambda(proj, c, [7.5, 7.5]), 0.5)
+    assert T.fit_lambda(proj, c, [12.0, 12.0]) == 0.0              # clipped
+    p = pd.DataFrame({**{s + "_proj": [10.0, 20.0] for s in T.SHADE_STATS}})
+    out = T.partial(p, pd.Series([0.5, np.nan]), {"rec_yds": 0.5})
+    assert np.isclose(out.loc[0, "rec_yds_proj"], 7.5) and out.loc[1, "rec_yds_proj"] == 20.0
+    assert out.loc[0, "carries_proj"] == 10.0
