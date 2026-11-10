@@ -247,6 +247,9 @@ tr.group td { font-weight: 700; padding-top: 16px; color: var(--ink); border-bot
 th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 th button[aria-sort]::after { content: " \2193"; } th button[aria-sort="ascending"]::after { content: " \2191"; }
 /* A bet worth making is flagged, in the one accent colour. */
+.tag.qbq { border-color: var(--flag); background: color-mix(in srgb, var(--flag) 22%, transparent); color: var(--ink); }
+.qb-warn { border-left: 3px solid var(--flag); background: color-mix(in srgb, var(--flag) 12%, transparent); padding: 8px 10px; font-size: 13.5px; line-height: 1.5; color: var(--ink-2); margin: 0; }
+.qb-warn strong { color: var(--ink); }
 .chip { display: inline-block; padding: 1px 8px; border-radius: 3px; background: var(--flag); color: var(--flag-ink); font-weight: 800; }
 /* bet sheet */
 .asof { margin: -6px 0 10px; font-size: 12.5px; color: var(--ink-3); }
@@ -1271,7 +1274,7 @@ function renderCards() {
     const cell = (t, cls) => H("span", { class: cls || "", text: t });
     const team = (code, rec, win, on) => H("div", { class: "bug-team" + (on ? " fav" : "") }, teamSwatch(code), H("span", { class: "code", text: code }), H("span", { class: "rec", text: rec }), H("span", { class: "win", text: pct(win, 0) }));
     return H("a", { class: "bug", href: "#" + g.id, "aria-label": g.away_name + " at " + g.home_name },
-      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph" + gusts(g), title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null, g.wet ? document.createTextNode(" ") : null, g.wet ? H("span", { class: "tag", text: g.wet.snow_cm > 0 ? "Snow forecast" : "Rain " + g.wet.rain_mm + " mm", title: "Forecast for the game window. In past games with 2+ mm of rain, totals finished under the closing line more often than not (FEATURES.md, Rain and snow); logged and graded on forecasts before it is ever a bet." }) : null), H("span", { text: "Win chance" })),
+      H("div", { class: "bug-top" }, H("span", {}, document.createTextNode(kickoff(g).replace(" ET", "")), g.early ? document.createTextNode(" ") : null, g.early ? H("span", { class: "tag", text: "Early line" }) : null, ...(g.qb_flag || []).flatMap(f => [document.createTextNode(" "), H("span", { class: "tag qbq", text: "QB questionable: " + f.team, title: `${f.name} (${f.team}) is Questionable and ${f.practice}: starters listed like this started about ${Math.round(f.started * 100)}% of the time since 2016. The spread and total assume he starts. Wait for the starter news before betting this game.` })]), g.wind && g.wind.under_angle ? document.createTextNode(" ") : null, g.wind && g.wind.under_angle ? H("span", { class: "tag", text: "Wind " + Math.round(g.wind.mph) + " mph" + gusts(g), title: "Wind in the 10 to 19 mph range, where closing totals have run high" }) : null, g.wet ? document.createTextNode(" ") : null, g.wet ? H("span", { class: "tag", text: g.wet.snow_cm > 0 ? "Snow forecast" : "Rain " + g.wet.rain_mm + " mm", title: "Forecast for the game window. In past games with 2+ mm of rain, totals finished under the closing line more often than not (FEATURES.md, Rain and snow); logged and graded on forecasts before it is ever a bet." }) : null), H("span", { text: "Win chance" })),
       team(g.away, g.away_record, 1 - p, p < 0.5), team(g.home, g.home_record, p, p >= 0.5),
       H("div", { class: "bug-lines" },
         cell("", "h"), cell("Market", "h r"), cell("Raw model", "h r"),
@@ -1916,6 +1919,12 @@ function renderGame(g) {
       const node = H("div", { class: "qb" },
         H("div", { class: "who" }, sw(side), document.createTextNode(q.name), dzEl({ team: q.team, name: q.name, status: dzStatus(g.id, q.team, q.name) })),
         H("p", { class: "note", text: `${snum(q.value, 3)} EPA per dropback against the league average, on about ${comma(q.dropbacks)} recent dropbacks. Worth ${snum(q.points)} points to ${q.team} compared with the quarterbacks behind its rating.` }));
+      // Questionable starter after a limited or no practice (Nov 9, 2026, nflmodel/qshade.py): a warning, no number changes
+      const qf = (g.qb_flag || []).find(f => f.team === q.team);
+      if (qf) node.append(H("p", { class: "qb-warn" }, H("strong", { text: `Questionable, ${qf.practice}.` }),
+        document.createTextNode(` Projected starters listed like this have started about ${Math.round(qf.started * 100)}% of the time since 2016. This spread and total assume he starts. If his backup starts, both can move. `),
+        H("strong", { text: "Wait for the starter news before betting this game, or his team's props." }),
+        document.createTextNode(" The daily QB check switches the board once a starter is reported.")));
       if (q.log && q.log.length) {
         const chart = H("div"), tb = H("table");
         node.append(H("h3", { text: "EPA per dropback, last " + q.log.length + " games" }), chart,

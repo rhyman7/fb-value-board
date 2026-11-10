@@ -57,3 +57,13 @@ def test_board_questionable_tag_needs_this_weeks_report():
     assert this_week("Out", rep, ("g", "b")) == "Out"                   # Out / Doubtful / roster labels untouched
     assert this_week("Injured reserve", rep, ("g", "b")) == "Injured reserve"
     assert this_week("Questionable", None, ("g", "b")) == "Questionable"  # no report data: as before
+
+
+def test_qb_flag_only_after_limited_or_no_practice():
+    games = [{"id": "g1", "away": "CLE", "home": "NO", "away_qb": {"name": "Deshaun Watson"}, "home_qb": {"name": "Tyler Shough"}},
+             {"id": "g2", "away": "A", "home": "B", "away_qb": {"name": "Full Guy"}, "home_qb": {"name": "No Report"}, "qb_flag": [{"stale": 1}]}]
+    names = {"w": "Deshaun Watson", "s": "Tyler Shough", "f": "Full Guy", "x": "Backup Guy"}
+    rep = {("g1", "w"): (1.0, 1.0), ("g1", "s"): (-1.0, -1.0), ("g1", "x"): (1, 2), ("g2", "f"): (1.0, 0.0)}
+    assert qshade.qb_flags(games, rep, names) == 1
+    assert games[0]["qb_flag"] == [{"team": "CLE", "name": "Deshaun Watson", "practice": "limited Friday", "started": 0.54}]
+    assert "qb_flag" not in games[1]          # full practice: no flag; an old flag is cleared

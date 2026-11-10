@@ -336,6 +336,13 @@ boards in detail; this file is the rules.
   says so (`players.this_week`, Nov 9, 2026); Out and Doubtful stay as listed, since the
   projections treat those players as out until the new report.
   PLAYERS.md "Questionable players: a shade on top of the clean multiplier".
+- **Questionable starting quarterback flag (NFL, Nov 9, 2026; `qshade.qb_flags`).** When the game
+  model's quarterback (`away_qb` / `home_qb`) is on this week's report as Questionable after a
+  limited or no Friday practice, the game gets `qb_flag`: a "QB questionable" tag on its tile and
+  a warning in the game page's Quarterbacks section. It changes no number and is not a bet rule;
+  the daily QB check switching the starter clears it. Rates (2016-2026, the starter from the
+  team's last game listed Questionable): started 91% after a full practice (no flag), 54% limited,
+  43% none.
   The Questionable multiplier (`players_ml.questionable`) is fitted only on earlier Questionable
   players who got on the field: the pipeline passes `snaps=R["snaps"]`. Don't fit it, or anything
   else about who played, on roster status "ACT" alone: before 2019 the weekly rosters don't mark

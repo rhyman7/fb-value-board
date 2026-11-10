@@ -217,6 +217,16 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     }
     out["openers"] = opening
     out["players"] = player_board
+    try:                                          # Questionable starting quarterbacks: a flag, no number changes (qshade.py)
+        from . import qshade
+        rep = {}
+        if new is not None and "report_lvl" in new and "practice_lvl" in new:
+            nq = new[new["group"] == "QB"]
+            rep = {(g, i): (r, v) for g, i, r, v in zip(nq["game_id"], nq["player_id"], nq["report_lvl"], nq["practice_lvl"])}
+        names = pinfo["name"].to_dict() if pinfo is not None and "name" in pinfo else {}
+        say(f"  Questionable starting quarterbacks flagged: {qshade.qb_flags(out['slate']['games'], rep, names)}")
+    except Exception as exc:
+        print(f"  Questionable quarterback flag skipped ({exc})")
     if with_backtest:
         out["backtest"] = backtest.summarize(frame, graded)
         out["backtest"]["wind_unders"] = backtest.wind_report(frame)
