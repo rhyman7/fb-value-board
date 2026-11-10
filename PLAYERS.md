@@ -581,3 +581,28 @@ holdout z −0.5 / −1.1 / −1.7 / −2.4; V1 and V2 still worse on the holdou
 props check moved the other way, still within noise: Questionable players B0 54.0%, V3 52.9%
 (263); teammates B0 51.3%, V1 50.9%, V2 50.9%. Defense-vs-position not applied in either run,
 the same for B0 and every variant.
+
+### Questionable players: a shade on top of the clean multiplier (Nov 9, 2026): all three kept, S3 best
+
+`python experiments/nfl_questionable_test.py --shade` (pre-set rule: Project doc
+`plan-nfl-questionable-shade-test-2026-11-09.md`; run in the Availability grade Action,
+`run=nfl-questionable-shade`, PFF inputs on). Baseline B1: the board since Nov 9 (clean
+multiplier), projected live-like. c = the chance to play by position and Friday practice
+(walk-forward, as above). z of the paired squared-error change, clustered by game, every
+player-game on a team with a Questionable RB/WR/TE; rec yds / rush yds / receptions / carries:
+
+| | Tuning 2015-18 | Holdout 2019-26 | Questionable players alone, holdout |
+|---|---|---|---|
+| S1, × c, share to teammates | −0.5 / −1.4 / −1.1 / −2.0 | −2.5 / −1.6 / −3.0 / −1.6 | −3.8 / −2.1 / −3.7 / −2.3 |
+| S2, × c, no share | −1.1 / −1.6 / −1.5 / −2.5 | −3.8 / −2.1 / −3.7 / −2.3 | same |
+| S3, × (1 − λ(1 − c)), no share | −2.1 / −2.0 / −3.0 / −2.9 | −6.1 / −3.4 / −6.8 / −4.1 | same |
+
+All three kept under the rule; **S3 wins** (lowest holdout RMSE on receiving yards: 16.40 →
+16.27; Questionable players alone 25.28 → 24.00). λ is fitted walk-forward per stat (least
+squares, clipped 0-1): about 0.95-0.98 from 2014 alone, 0.67-0.79 by 2019, 0.68-0.71 for
+2026. So the shade takes out about 70% of the chance he sits, not all of it. Giving the share
+to teammates (S1) did worse than leaving them alone (S2). Props: S2 and S3 change no prop; S1's
+teammates went 51.1% → 50.2% at real lines (3,893), within noise.
+
+With the multiplier fixed, the shade works, unlike V1/V2 in the first test. The first test's
+shade was stacked on a multiplier that already took sitting into account.
