@@ -640,3 +640,28 @@ yards with a spread of 12 points (6,862 team-games, 2014 on); the actual numbers
   every measure it touches, the holdout by 2.4 and 2.7 standard errors. It was not one of the
   candidates written down, and the team's numbers would then be closer (about 70% of the gap closed)
   but still not equal. Ryan's call.
+
+### The receiving half, re-tested on bet-time projections (Nov 11, 2026): worse on every measure, dropped
+
+Ryan approved applying the receiving half as provisional; before it was merged the production code
+showed it cutting receivers about 4% on upcoming games against about 1% on played ones, because
+before game-day inactives are known the board counts about one more receiver per team. So it was
+re-tested as the board is mid-week (`experiments/team_totals_test.py --bettime`, rule written first:
+Project doc `claude/plan-receiving-fit-bettime-test-2026-11-11.md`): projections from
+`players.build(pregame=True)`, sums over the players expected to play, shares fitted walk-forward on
+those sums (0.09 to 0.15 for yards since 2019).
+
+| Bet-time projections | Now | With the fit | Change (SE) |
+|---|---|---|---|
+| Receiving yards RMSE, 2014-18 | 28.896 | 28.951 | +0.055 (0.044) |
+| Receiving yards RMSE, 2019 on | 27.235 | 27.423 | +0.187 (0.031) |
+| Receptions RMSE, 2014-18 | 2.0676 | 2.0758 | +0.0082 (0.0032) |
+| Receptions RMSE, 2019 on | 1.9774 | 1.9984 | +0.0211 (0.0023) |
+| Brier at the 2023-25 pricing-snapshot lines | 0.25443 | 0.25755 | +0.00313 (0.00084) |
+
+13.4 receivers expected per team, average factor 0.92. The team total does land near the
+quarterback's number, but the surplus belongs to the players who turn out inactive, not to the ones
+who play, so cutting everyone makes the players who do play worse. Not applied; the branch
+`feat/team-totals-receiving` is dropped. The first test's gain was an artifact of scoring with
+game-day inactives known. A fix would have to predict who sits, which is the availability problem,
+not a team-total one.
