@@ -2083,7 +2083,8 @@ does not help; the coefficient it gives (−6.5 against −2.3) overreacts.
 
 No cap lowers the miss on both periods (0.15 is 0.0006 worse on 2014-18 and 0.0027 better on 2019 on,
 with flagged totals above zero but inside one standard error), so by the rule the cap stays. 0.15 is
-the trade-off.
+the trade-off. *Ryan, Nov 11, 2026: leave it at 0.05; recheck after the 2026 season, with 2026 as the
+season none of the caps were chosen on.*
 
 **T4. The blend weight sees this season's games: not kept.** Market-adjusted margin miss +0.0014
 (SE 0.0034) on 2014-18 and −0.0002 (SE 0.0016) on 2019 on: mixed and inside the noise. This season it
