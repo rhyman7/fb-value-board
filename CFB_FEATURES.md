@@ -372,3 +372,33 @@ the rule.
 **T4. The blend weight sees this season's games: not kept.** Market-adjusted margin miss +0.023
 (SE 0.015) on 2017-19 and 0.000 on 2021-25. In 2026 it would have walked the weight from 0.30 down to
 0.24 by week 10 and lowered the miss by 0.014 (SE 0.007), again one season outside the rule.
+
+## PFF unit ratings vs production, college (Nov 11, 2026): descriptive check
+
+The college run of FEATURES.md "PFF unit ratings vs production" (`experiments/pff_unit_check/cfb.py`,
+`cfb_split.py`; same definitions; points only, no play-by-play measures). Regular season 2017-2025,
+8,892 FBS team-games with both teams' PFF units and three earlier games; 8,058 of 8,447 games matched
+to PFF. Bowls did not match on week numbers and are not covered.
+
+The continuous unit drop is unusable in college: its sign is backwards and large (own OL −2.15
+points per grade point, t −9.1; against the spread −2.72, t −9.8), because blowouts put the backups
+on the field, so the lineup follows the score. Only the count of regulars with zero snaps is read.
+
+| Regulars missing | Games | Points vs expected | Points vs closing team total | Cover |
+|---|---|---|---|---|
+| Own OL, 2+ | 364 | +0.52 ± 0.66 | +0.42 ± 0.56 | 47.9% |
+| Own WR/TE, 1 | 1,774 | −0.57 ± 0.31 | −0.11 ± 0.27 | 49.3% |
+| Own WR/TE, 2+ | 225 | −0.84 ± 0.87 | −0.60 ± 0.76 | 48.9% |
+| Opposing DL, 2+ | 86 | +1.41 ± 1.40 | +3.77 ± 1.26 | 68.6% |
+| Opposing LB, 1 | 811 | −0.34 ± 0.46 | +0.59 ± 0.40 | 51.2% |
+| Opposing DB, 1 | 1,648 | −0.04 ± 0.33 | +0.94 ± 0.28 | 54.5% |
+| Opposing DB, 2+ | 184 | −0.25 ± 0.97 | +1.24 ± 0.84 | 51.6% |
+
+(With no regular missing the baseline against the team total is about +0.3 to +0.6.) Nothing reaches
+2 standard errors on points against the team's own expectation. One market lead: the team facing a
+secondary that is missing a regular covered 989 of 1,823 (54.3%) in 2017-2025: 55.9% in 2017-21,
+52.1% in 2022-25, and 66 of 109 in 2026. It does not come with more points than the offense's own
+trend, so it may be marking teams that are coming apart (mid-season opt-outs and departures) more
+than a coverage effect. It uses who actually played, which college books and bettors mostly could
+not know before 2024's availability reports. A lead for a bet-time test on the official reports
+(`docs/cfb/availability.json`, 2026 only so far), not a change.
