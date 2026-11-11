@@ -479,17 +479,26 @@ boards in detail; this file is the rules.
 
 ## Model tests: the keep rule
 
-- **Kept if it makes the model more accurate, however small (Ryan, Nov 4, 2026; replaces the
-  old "holdout better by 2+ standard errors" bar).** Small gains add up.
-- "More accurate" means the change's number is better on **every** accuracy measure the test
-  reports, and worse on none: projection RMSE (or the game model's average miss) on the tuning
-  seasons and on the holdout, and Brier at the real DraftKings/FanDuel lines where lines exist,
-  props included. No standard-error threshold; standard errors are still reported.
-- A mixed result (better on one measure, worse on another) is not kept. It goes to Ryan as a
-  trade-off for him to decide.
-- Still write the measures into the test script before running, still run the 2017-2025
-  walk-forward (or the NFL equivalent) before anything is kept, and still give Ryan a short plan
-  and wait for his go-ahead before a kept change goes on the live boards.
+- **Rule from Nov 11, 2026 (Ryan; replaces the Nov 4, 2026 "any improvement, however small" rule,
+  which itself replaced "holdout better by 2+ standard errors").** A model change is kept only if:
+  1. the rule and its measures are written into the test script (and a Project plan doc) before the run;
+  2. it is better on **every** accuracy measure the test reports, on both the tuning seasons and the
+     holdout, and worse on none: projection RMSE (or the game model's average miss), and Brier at the
+     real DraftKings/FanDuel lines where lines exist, props included;
+  3. the holdout improvement is at least **1 standard error** (paired by game or by player-game).
+- **Anything kept is provisional.** It is rechecked on the next full season it has not seen and
+  removed if it is worse there. Why: the 2019-on holdout has been used by well over a hundred tests,
+  so a fresh season is the only real out-of-sample check left, and gains smaller than their standard
+  error are as likely noise as signal (the Nov 4-6, 2026 college additions were 0.011 to 0.016 points
+  better on the tested seasons and 0.015 worse on 2026). The January recheck judges everything kept
+  since Nov 4, 2026 on the 2026 season alone.
+- A mixed result (better on one measure, worse on another), or better everywhere but under 1 standard
+  error on the holdout, is not kept. It goes to Ryan as a trade-off for him to decide.
+- Every model test includes a props check where relevant.
+- Still run the 2017-2025 walk-forward (or the NFL equivalent) before anything is kept, report results
+  plainly including when nothing is kept, and still give Ryan a short plan and wait for his go-ahead
+  before a kept change goes on the live boards.
+- Changes kept under the earlier rules stay until the January recheck; they are not re-judged now.
 
 ## Site structure
 
