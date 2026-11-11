@@ -32,7 +32,7 @@ Reported, not used: season split, how often the flag fires.
 
 Props check (reported; the projections don't read game-model features): QB passing-yards main
 lines at DK/FD 2023-2025, pricing snapshot, current projections, for quarterbacks whose line has
-the flag on: lines, over rate, Brier books and model, average actual minus projection. Judged only
+the flag on: lines, over rate, Brier books and model, average actual minus line. Judged only
 with 30+ lines; a bias of 2+ SE becomes its own pre-set test. No sacks prop on the board.
 """
 from __future__ import annotations
@@ -176,7 +176,6 @@ def props(a):
                 parts.append(x[(x.stat == "pass_yds") & (x.group == "QB")])
         j = pd.concat(parts, ignore_index=True).merge(a, on=["game_id", "team"], how="left")
         j = j[j.y != j.line]
-        proj = "proj" if "proj" in j.columns else next((c for c in j.columns if "proj" in c), None)
         for lab, d in (("flag on (2+ out)", j[j.n_out >= 2]), ("1 out", j[j.n_out == 1]), ("0 out", j[j.n_out == 0])):
             if d.empty:
                 print(f"props {lab}: no lines")
@@ -186,8 +185,6 @@ def props(a):
             bo = ((d.our_over / (d.our_over + d.our_under) - hit) ** 2).mean()
             g = d.drop_duplicates(["game_id", "player_id"])
             bias = f"actual - line {np.mean(g.y - g.line):+.1f} (SE {np.std(g.y - g.line, ddof=1) / np.sqrt(len(g)):.1f})"
-            if proj:
-                bias += f"; actual - projection {np.mean(g.y - g[proj]):+.1f} (SE {np.std(g.y - g[proj], ddof=1) / np.sqrt(len(g)):.1f})"
             print(f"props {lab}: lines {len(d)} ({len(g)} QB-games) over rate {hit.mean():.3f} Brier books {bm:.4f} model {bo:.4f}; {bias}")
     except Exception as exc:  # noqa: BLE001
         print(f"props check failed: {exc!r}")

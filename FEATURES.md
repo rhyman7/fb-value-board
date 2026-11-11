@@ -2089,3 +2089,62 @@ season none of the caps were chosen on.*
 **T4. The blend weight sees this season's games: not kept.** Market-adjusted margin miss +0.0014
 (SE 0.0034) on 2014-18 and −0.0002 (SE 0.0016) on 2019 on: mixed and inside the noise. This season it
 would be 0.31 against 0.30.
+
+## PFF unit ratings vs production (Nov 11, 2026): descriptive check
+
+Ryan's question: track every position group by PFF grade; when chunks of a unit are missing, does
+production fall? `experiments/pff_unit_check/` (method sent to Ryan before the run; not a model
+test). Player rating = snap-weighted PFF grade over earlier games (20-week half-life, shrunk toward
+55 with 200 snaps). Unit drop = rating of the lineup that played minus the team's usual lineup
+(snap shares over its previous 3-8 games), both at today's ratings. Regulars missing = how many of
+the unit's usual top N (OL 5, WR/TE 4, DL 4, LB 2, DB 4) took zero snaps. Production is measured
+against the team's trailing average plus the opponent's trailing allowed. 2015-2025, 4,342
+team-games, final regular-season week left out.
+
+Per 1 grade point of drop (t value), all six units in one regression with a QB-change control:
+own OL EPA/play +0.010 (3.1), sack rate −0.31 points (−4.0); own receivers EPA/play +0.011 (3.1),
+points +0.40 (2.2); opposing LB points −0.35 (−2.7), rush EPA −0.009 (−3.0); opposing DL points
+−0.30 (−1.4); opposing secondary −0.09 (−0.3); own backs nothing. The drop measure is partly game
+script (blowouts put backups and extra defensive backs on the field), so the counts below carry
+more weight.
+
+| Regulars missing | Games | Points vs expected | Points vs closing team total | Cover |
+|---|---|---|---|---|
+| Own OL, 0 | 2,401 | +0.06 ± 0.22 | +0.41 ± 0.19 | 51.1% |
+| Own OL, 1 | 1,526 | −0.01 ± 0.26 | +0.24 ± 0.23 | 49.2% |
+| Own OL, 2+ | 415 | −1.40 ± 0.47 | −0.90 ± 0.42 | 45.9% |
+| Own WR/TE, 2+ | 215 | −0.41 ± 0.67 | +0.42 ± 0.58 | 51.4% |
+| Opposing DL, 2+ | 76 | −0.93 ± 1.15 | −0.56 ± 1.04 | |
+| Opposing LB, 1+ | 813 | +0.90 ± 0.37 | +1.09 ± 0.33 | 52.7% |
+| Opposing DB, 2+ | 203 | −1.10 ± 0.71 | −0.18 ± 0.63 | |
+
+Own OL 2+ by period: 2015-18 −1.96 ± 0.81, cover 47.6% (105); 2019-25 −1.20 ± 0.57, cover 45.2%
+(294); 2026 weeks 4-8 −2.84 ± 2.46, 4 of 15. This uses who actually played (inactives are named 90
+minutes before kickoff), and it is one bucket of about fifteen: a lead, tested at bet time below.
+
+## Two or more offensive-line regulars out, known at bet time (Nov 11, 2026): no
+
+`experiments/ol_bettime_test.py` (rule committed before the first run; Project doc
+`claude/plan-ol-bettime-test-2026-11-11.md`). Of the team's usual five linemen (PFF snap share over
+its previous 8 games), how many are Out or Doubtful on the injury report or on a reserve list.
+6,600 team-games from 2015: 0 out 4,673, 1 out 1,639, 2 out 260, 3+ out 28, so the two-plus flag
+fires in 4.4% (against about 10% when counted from who actually played: most of the gap is
+game-day inactives and Questionable players who sit). Raw model, average miss:
+
+| Version | Tuning 2015-18 margin / total | Holdout 2019+ margin / total |
+|---|---|---|
+| Current model | 9.843 / 10.693 | 9.951 / 10.466 |
+| A flag 2+ | 9.847 / 10.713 | 9.949 / 10.468 |
+| B count to 3 | 9.865 / 10.697 | 9.951 / 10.467 |
+| C flag 2+, replacing d_chg_ol | 9.836 / 10.713 | 9.950 / 10.468 |
+
+No version beats the current model on both tuning measures (every version is worse on the tuning
+total, A by 0.020 with SE 0.008), so nothing is carried to the holdout and nothing is kept. Holdout
+differences are all within a third of a standard error. `d_chg_ol` already carries what the injury
+report knows about the line.
+
+Props (reported, current projections; the first run printed an "actual minus projection" figure
+from the wrong column, removed from the script): QB passing-yards main lines at DK/FD 2023-25 with
+the flag on: 115 lines, 63 QB-games, over rate 60.0%, Brier books 0.2507, model 0.2504, actual
+minus line +14.3 yards (SE 10.6). With one out: 645 lines, over 51.2%; none out: 1,901 lines, over
+50.6%. No lean to the under behind a depleted line; if anything the other way, at 1.3 SE.
