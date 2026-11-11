@@ -2148,3 +2148,56 @@ from the wrong column, removed from the script): QB passing-yards main lines at 
 the flag on: 115 lines, 63 QB-games, over rate 60.0%, Brier books 0.2507, model 0.2504, actual
 minus line +14.3 yards (SE 10.6). With one out: 645 lines, over 51.2%; none out: 1,901 lines, over
 50.6%. No lean to the under behind a depleted line; if anything the other way, at 1.3 SE.
+
+## A probability-weighted starting quarterback (Nov 11, 2026): mixed, not kept
+
+`experiments/uncertain_qb_test.py` (rule approved by Ryan and committed before the first run; Project
+doc `claude/plan-uncertain-qb-test-2026-11-11.md`; run with the PFF quarterback prior, so this is the
+production model). The idea came from an outside review of the repo: the game model takes one starter
+per team, and when last game's starter is Questionable the board keeps him until the daily QB check
+switches it. Candidate W runs the model with the incumbent and with the backup
+(`players._pick_starter`'s fallback) and averages by the incumbent's chance of starting (the earlier
+start rate at his Friday practice level, walk-forward). Baseline B0 is the model with the incumbent.
+Both use the bet-time offensive-line input.
+
+Flagged games: 161 team-games in 159 games, 2016-2026. The incumbent started 62%: 91% after a full
+practice (35), 55% limited (105), 48% none (21). When he sat, the backup pick was the quarterback who
+started 74% of the time (61).
+
+| Flagged games, W minus B0 (SE) | Tuning 2016-18 (41 games) | Holdout 2019 on (118) |
+|---|---|---|
+| Average margin miss | 9.79 → 10.05, +0.26 (0.28) | 11.10 → 11.01, −0.09 (0.12) |
+| Average total miss | 13.50 → 13.32, −0.18 (0.21) | 11.50 → 11.21, −0.29 (0.11) |
+| Brier, win chance | 0.2013 → 0.2049, +0.0036 (0.0071) | 0.2322 → 0.2300, −0.0022 (0.0034) |
+| Brier, cover chance at the opener | 0.2418 → 0.2416, −0.0002 (0.0087) | 0.2545 → 0.2547, +0.0002 (0.0039) |
+
+Mixed: worse on the tuning margin and win chance, flat on the cover chance, and only the total is
+better in both periods (holdout 2.6 SE). Not kept. Over all 2,007 games from 2019 the margin miss
+moves 9.956 → 9.951 (−0.005, SE 0.007).
+
+What the total result is: with the incumbent, the raw model's total ran 3.4 points high in these
+games in both periods, and W lowers it by 0.6 to 1.1. The board's total is 95% the market's
+(`TOTAL_WEIGHT_CAP` 0.05), so applying the total half alone would move a shown total by about 0.03
+to 0.05 points. It is one measure of four, found in a test that failed; a lead, not a result.
+
+**Second question: is the model's side against the opener worse in board-flagged games** (incumbent
+Questionable after a limited or no practice, the `qshade.qb_flags` trigger)? Bet-time forecast, graded
+at −110:
+
+| | Tuning 2016-18 | Holdout 2019 on |
+|---|---|---|
+| Board-flagged games | 14-12, +2.8% ± 19.0%, weight 0.52 ± 0.96 | 46-39, +3.3% ± 10.4%, weight 0.06 ± 0.37 |
+| Other games | 356-305, +2.8% ± 3.7%, weight 0.59 ± 0.22 | 880-771, +1.8% ± 2.3%, weight 0.55 ± 0.11 |
+| Return gap, flagged minus other | 0.0% ± 19.4% | +1.6% ± 10.6% |
+
+The rule asked for the flagged games' return to be lower by at least 1 standard error in the holdout.
+It is not lower. No hold rule is proposed; the "QB questionable" tag stays as information. The weight
+is lower in the holdout's flagged games (by 1.3 SE) and not in tuning; with 85 games that is not
+evidence either way. The other games' record is flattered by the backtest knowing each game's actual
+starter and injuries, which the opener did not.
+
+Props: no player projection is touched; no prop moves.
+
+Limits: 41 tuning games; the report is Friday's, so this is the late-week case; the opener stands in
+for the mid-week line. The forecast log (`data/forecast_log/`, from Nov 11, 2026) is what a mid-week
+version of this test would read once a season of it exists.
