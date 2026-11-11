@@ -7,7 +7,8 @@ name: College availability
 #    (cfbmodel/designations.py) uses these over the Covers.com designations for every team that has one.
 #    When the reports change, this Action starts a quick Update college board run (except Saturday
 #    afternoons, when the Market lines Action already rebuilds hourly), so Game Day reports reach the
-#    projections before kickoff.
+#    projections before kickoff. Also started by the Claude scheduled tasks "College availability
+#    backup" (see concurrency below).
 # 2. History, data/cfb/availability/<season>/: conf_log.csv and conf_archive.json (every report
 #    version); covers_log.csv, every change in the Covers.com designations (docs/cfb/designations.json,
 #    written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on
@@ -36,8 +37,14 @@ permissions:
   contents: write
   actions: write      # starts Update college board when the official reports change (workflow_dispatch)
 
+# Its own group (Nov 11, 2026): in board-commits, a newer board run waiting behind a running one
+# replaced this check while it waited, and a Game Day report could miss kickoff. It commits only
+# its own files (data/cfb/availability, docs/cfb/availability.json), rebasing and retrying if a board
+# run pushes at the same moment. A second schedule outside GitHub (two Claude scheduled tasks,
+# "College availability backup", :22 past the hour in the report windows) starts it too, because
+# GitHub dropped most of the scheduled runs on Nov 10-11.
 concurrency:
-  group: board-commits
+  group: cfb-availability
   cancel-in-progress: false
 
 jobs:
@@ -100,9 +107,11 @@ jobs:
           fi
           git diff --cached --quiet && { echo "no change"; exit 0; }
           git commit -m "College availability $(date -u +%Y-%m-%dT%H:%MZ)"
-          git pull --rebase origin main
-          git push
-          echo "pushed=true" >> "$GITHUB_OUTPUT"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && { echo "pushed=true" >> "$GITHUB_OUTPUT"; exit 0; }
+            echo "push failed (attempt $i); retrying"; sleep $((i * 10))
+          done
+          echo "could not push after 5 attempts"; exit 1
       - name: Rebuild the college board
         # A quick (no-backtest) rebuild whenever the official reports changed, so a Game Day report
         # reaches the board's projections before kickoff (Nov 9, 2026, Ryan's call). Skipped on
@@ -115,8 +124,10 @@ jobs:
           if [ "$(date -u +%u)" = "6" ] && [ "$(date -u +%H)" -ge 13 ] && [ "$(date -u +%H)" -le 23 ]; then
             echo "no rebuild: Saturday, the Market lines Action rebuilds at :50"; exit 0
           fi
-          busy=$(gh api "repos/${{ github.repository }}/actions/workflows/update-cfb.yml/runs?per_page=5" \
-                 --jq '[.workflow_runs[] | select(.status=="queued" or .status=="in_progress" or .status=="pending" or .status=="waiting")] | length')
-          if [ "${busy:-0}" != "0" ]; then echo "no rebuild: Update college board already queued or running"; exit 0; fi
+          # a run that is only waiting will check out main, with this commit, when it starts; one already
+          # running may have checked out before it, so start another (it waits its turn)
+          waiting=$(gh api "repos/${{ github.repository }}/actions/workflows/update-cfb.yml/runs?per_page=5" \
+                 --jq '[.workflow_runs[] | select(.status=="queued" or .status=="pending" or .status=="waiting")] | length')
+          if [ "${waiting:-0}" != "0" ]; then echo "no rebuild: an Update college board run is already waiting"; exit 0; fi
           echo "official reports changed: starting Update college board"
           gh api -X POST "repos/${{ github.repository }}/actions/workflows/update-cfb.yml/dispatches" -f ref=main -f 'inputs[backtest]=false'
