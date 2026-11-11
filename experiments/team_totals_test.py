@@ -42,6 +42,8 @@ from nflmodel import config as C, propbackfill as B, props as P  # noqa: E402
 CACHE = C.RAW / "team_totals_proj.pkl"
 PAIRS = (("rec_yds", "pass_yds"), ("receptions", "completions"))
 CLIP = (0.7, 1.4)
+EXPECTED = "active"
+BET_CACHE = C.RAW / "team_totals_proj_bettime.pkl"
 
 
 def build() -> pd.DataFrame:
@@ -72,7 +74,7 @@ def build() -> pd.DataFrame:
 
 
 def team_sums(p: pd.DataFrame, rec: str, qb: str):
-    act = (p["active"] == 1).to_numpy()
+    act = (p[EXPECTED] == 1).to_numpy()            # who is expected to play: `active`, or `active_pre` at bet time
     isqb = (p["group"] == "QB").to_numpy()
     key = [p["game_id"], p["team"]]
     S = pd.Series(np.where(act & ~isqb, p[rec + "_proj"], 0.0), index=p.index).groupby(key).transform("sum")
@@ -166,7 +168,116 @@ def lines(tables: dict) -> dict:
     return out
 
 
+# ------------------------------------------------------------------------------------------------
+# The bet-time re-run (Nov 11, 2026; Project doc claude/plan-receiving-fit-bettime-test-2026-11-11.md).
+# The first test scored played games, where game-day inactives are known; the board projects before
+# they are and counts about one more receiver per team, so the fit would cut receivers about 4% live
+# against about 1% in the test. Here the projections are built as of mid-week (players.build(pregame=
+# True): last week's roster and reserve lists, no inactives), the sums count who is expected to play
+# (`active_pre`), and the one candidate is the receiving half (receivers scaled to QB + a x (receivers
+# - QB), a walk-forward on bet-time sums; the quarterback unchanged).
+# Rule, written before the run: kept if receiving-yards and receptions RMSE (WR/TE/RB who played, 1+
+# projected reception) are lower on 2014-18 and 2019 on, each holdout gain at least 1 standard error,
+# and the pooled Brier at the 2023-25 pricing-snapshot lines (rec_yds, receptions) is lower.
+#     PFF_DATA_DIR=../pff-data python experiments/team_totals_test.py --bettime
+
+def build_bettime() -> pd.DataFrame:
+    if BET_CACHE.exists():
+        return pickle.load(open(BET_CACHE, "rb"))["ml"]
+    from nflmodel import data, extra, game_roles, injuries, model, pff_qb, players, players_data, players_ml, roles, weather
+    from nflmodel.features_ext import PRODUCTION_METRICS, ExtRatingEngine
+    games, tg, qb, _ = data.load_all(refresh=False, verbose=False, with_stats=True)
+    te, qe = extra.load_extra(refresh_current=False, verbose=False)
+    games = weather.fill_wind(games, verbose=False)
+    inj = injuries.load_injuries(games, refresh_current=False, verbose=False)
+    engine = ExtRatingEngine(tg, qb, te, qe, extra_metrics=PRODUCTION_METRICS, games=games, qb_prior_model=pff_qb.load(qb, sorted(games.season.unique())))
+    base = model.build_frame(games, engine, injuries=inj)
+    pg, pinfo = players_data.load_player_games(refresh_current=False, verbose=False)
+    avail = players.load_availability(refresh_current=False, verbose=False)
+    rush = injuries.load_pass_rush(games, refresh_current=False, verbose=False)
+    R = roles.load_all(games, refresh_current=False, verbose=False)
+    f0, _ = model.walk_forward(base)
+    rows = players.player_rows(players.team_games(f0, pg), pg, avail, pinfo)
+    frame, _ = model.walk_forward(game_roles.attach(base, game_roles.team_features(rows, R, avail)))
+    table = players.build(frame, pg, pinfo, avail, inj, rush, games=games, overrides=None, pregame=True)   # who plays: as of mid-week
+    pall = players.walk_forward(table, first_test=C.FIRST_TEST_SEASON)
+    ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=C.FIRST_TEST_SEASON), first=C.FIRST_TEST_SEASON, snaps=R.get("snaps"))
+    ml = ml.merge(players.season_average(table), on=["game_id", "player_id"], how="left")
+    C.RAW.mkdir(parents=True, exist_ok=True)
+    pickle.dump({"ml": ml}, open(BET_CACHE, "wb"))
+    return ml
+
+
+def receivers_only(p: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """Candidate B's receiving half: reconcile(p, "B") with the quarterback's columns put back."""
+    cand, info = reconcile(p, "B")
+    for _, qb in PAIRS:
+        cand[qb + "_proj"] = p[qb + "_proj"]
+    return cand, info
+
+
+def bettime() -> dict:
+    global EXPECTED
+    import props_real_lines as RL
+    from props_calibration import FAMILY
+    EXPECTED = "active_pre"
+    base = build_bettime()
+    cand, info = receivers_only(base)
+    res = {"fitted_a": info}
+    S, Q, _, ok, act, isqb = team_sums(base, "rec_yds", "pass_yds")
+    m = ok & (base["season"] >= 2019)
+    T = Q + pd.Series(base["season"].map(info["rec_yds"]).to_numpy(float), index=base.index) * (S - Q)
+    fac = (T / S).clip(*CLIP)[m].groupby([base["game_id"], base["team"]]).first()
+    n_exp = pd.Series((act & ~isqb).astype(float), index=base.index)[m].groupby([base["game_id"], base["team"]]).sum()
+    res["condition_2019_on"] = {"receivers_expected_per_team": round(float(n_exp.mean()), 1), "average_factor": round(float(fac.mean()), 3), "sd": round(float(fac.std()), 3)}
+    rm = {}
+    live = base["played"].astype(bool) & (base["active"] == 1) & base["group"].isin(["WR", "TE", "RB"]) & (base["receptions_proj"] >= 1) & (base["season"] >= 2014)
+    for st in ("rec_yds", "receptions"):
+        for per, pm in (("2014-18", base["season"] < 2019), ("2019 on", base["season"] >= 2019)):
+            k = live & pm & base[st].notna()
+            e0, e1 = (base.loc[k, st + "_proj"] - base.loc[k, st]) ** 2, (cand.loc[k, st + "_proj"] - cand.loc[k, st]) ** 2
+            d = (e1 - e0).to_numpy(float)
+            r0, r1 = float(np.sqrt(e0.mean())), float(np.sqrt(e1.mean()))
+            rm[f"{st} {per}"] = {"n": int(k.sum()), "now": round(r0, 4), "candidate": round(r1, 4), "diff": round(r1 - r0, 4),
+                                 "se": round(float(d.std(ddof=1) / np.sqrt(len(d)) / (2 * r0)), 4)}
+    res["rmse"] = rm
+    saved = P.PropModel.load()
+    got = {"now": [], "cand": []}
+    for season in (2023, 2024, 2025):
+        snaps = B.load(season, "flag")
+        if snaps.empty:
+            continue
+        for k, t in (("now", base), ("cand", cand)):
+            mdl = P.PropModel(FAMILY).fit(t[(t.season < season) & (t.season >= 2013)])
+            if saved is not None:
+                mdl.iso = saved.iso
+            x = RL.priced(t, mdl, snaps, season)
+            got[k].append(x[x["stat"].isin(["rec_yds", "receptions"])])
+    key = ["game_id", "nname", "market", "line", "book"]
+    b0 = pd.concat(got["now"], ignore_index=True)
+    x = pd.concat(got["cand"], ignore_index=True).merge(b0[key + ["our_over", "our_under"]].rename(columns={"our_over": "b_over", "our_under": "b_under"}), on=key, how="inner")
+    x = x[x["y"] != x["line"]]
+    hit = (x["y"] > x["line"]).astype(float)
+    ours, was, mkt = x["our_over"] / (x["our_over"] + x["our_under"]), x["b_over"] / (x["b_over"] + x["b_under"]), x["fair_over"]
+
+    def one(mask):
+        d = ((ours - hit) ** 2 - (was - hit) ** 2)[mask]
+        cl = d.groupby(x.loc[mask, "game_id"]).sum()
+        return {"n": int(mask.sum()), "now": round(float(((was - hit) ** 2)[mask].mean()), 5), "candidate": round(float(((ours - hit) ** 2)[mask].mean()), 5),
+                "books": round(float(((mkt - hit) ** 2)[mask].mean()), 5), "diff": round(float(d.mean()), 5),
+                "se": round(float(cl.std(ddof=1) * np.sqrt(len(cl)) / max(mask.sum(), 1)), 5)}
+    res["lines"] = {"pooled": one(pd.Series(True, index=x.index)), "rec_yds": one(x["stat"] == "rec_yds"), "receptions": one(x["stat"] == "receptions")}
+    res["keep"] = bool(all(v["diff"] < 0 for v in rm.values()) and all(v["diff"] <= -v["se"] for k, v in rm.items() if k.endswith("2019 on"))
+                       and res["lines"]["pooled"]["diff"] < 0)
+    (HERE / "out").mkdir(exist_ok=True)
+    (HERE / "out" / "team_totals_test_bettime.json").write_text(json.dumps(res, indent=1))
+    return res
+
+
 def main():
+    if "--bettime" in sys.argv:
+        print(json.dumps(bettime(), indent=1))
+        return
     base = build()
     res = {"ratio_now": {}}
     S, Q, _, ok, _, _ = team_sums(base, "rec_yds", "pass_yds")
