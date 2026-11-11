@@ -613,3 +613,30 @@ an Availability box on the card; `proj`, and every prop, parlay and best bet, st
 if-he-plays number. Targets and touchdowns are not shaded (not tested). Constants (2026: chance
 by position and practice, fitted 2012-2025; λ 0.68-0.71) in `data/questionable_shade.json`,
 refit at the January recheck.
+
+## Receiving and passing that add up within a team (Nov 11, 2026): not kept by the rule; the receiving half is a trade-off for Ryan
+
+`experiments/team_totals_test.py` (rule written first: the script's docstring and the Project doc
+`claude/plan-team-totals-test-2026-11-11.md`; the first test under the Nov 11, 2026 keep rule). On the
+board's projections, receivers' projected yards average 103% of their quarterback's projected passing
+yards with a spread of 12 points (6,862 team-games, 2014 on); the actual numbers are equal.
+
+- **A, receivers scaled to the quarterback's number:** receiving-yards RMSE 28.882 to 28.828 on
+  2014-18 but 27.193 to 27.203 on 2019 on. Worse on the holdout: not kept.
+- **B, both scaled to a fitted point between them** (the receivers' sum counts about 0.29 for yards
+  and 0.20 for receptions, fitted on earlier seasons):
+
+| | 2014-18 | 2019 on (SE) | Closing lines 2023-25, Brier vs now (SE) |
+|---|---|---|---|
+| Receiving yards RMSE | 28.882 → 28.803 | 27.193 → 27.137 (0.024) | −0.00057 (0.00044) |
+| Receptions RMSE | 2.0602 → 2.0541 | 1.9698 → 1.9650 (0.0018) | −0.00073 (0.00088) |
+| Passing yards RMSE | 88.42 → 88.74 | 88.25 → 88.33 (0.13) | −0.00081 (0.00116) |
+| Completions RMSE | 7.369 → 7.419 | 7.438 → 7.447 (0.007) | no lines on file |
+
+  Pooled Brier at the lines −0.00063 (SE 0.00036; the books 0.2486, the board 0.2551). The
+  quarterback's RMSE is worse on both periods, so B is mixed and not kept.
+- **The trade-off:** the receiving half of B on its own (receivers scaled to the fitted point, the
+  quarterback left alone) is exactly B's receiving rows with the passing rows unchanged: better on
+  every measure it touches, the holdout by 2.4 and 2.7 standard errors. It was not one of the
+  candidates written down, and the team's numbers would then be closer (about 70% of the gap closed)
+  but still not equal. Ryan's call.

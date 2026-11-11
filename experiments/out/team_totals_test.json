@@ -1,0 +1,291 @@
+{
+ "ratio_now": {
+  "mean": 1.027,
+  "sd": 0.122,
+  "team_games": 6862
+ },
+ "A": {
+  "rmse": {
+   "rec_yds 2014-18": {
+    "n": 18745,
+    "now": 28.8817,
+    "candidate": 28.8281,
+    "diff": -0.0536,
+    "se": 0.041,
+    "changed": true
+   },
+   "rec_yds 2019 on": {
+    "n": 28844,
+    "now": 27.193,
+    "candidate": 27.203,
+    "diff": 0.01,
+    "se": 0.032,
+    "changed": true
+   },
+   "receptions 2014-18": {
+    "n": 18745,
+    "now": 2.0602,
+    "candidate": 2.0556,
+    "diff": -0.0046,
+    "se": 0.0028,
+    "changed": true
+   },
+   "receptions 2019 on": {
+    "n": 28844,
+    "now": 1.9698,
+    "candidate": 1.9686,
+    "diff": -0.0011,
+    "se": 0.0022,
+    "changed": true
+   },
+   "pass_yds 2014-18": {
+    "n": 2670,
+    "now": 88.4211,
+    "candidate": 88.4211,
+    "diff": 0.0,
+    "se": 0.0,
+    "changed": false
+   },
+   "pass_yds 2019 on": {
+    "n": 4192,
+    "now": 88.2487,
+    "candidate": 88.2487,
+    "diff": 0.0,
+    "se": 0.0,
+    "changed": false
+   },
+   "completions 2014-18": {
+    "n": 2670,
+    "now": 7.3694,
+    "candidate": 7.3694,
+    "diff": 0.0,
+    "se": 0.0,
+    "changed": false
+   },
+   "completions 2019 on": {
+    "n": 4192,
+    "now": 7.4376,
+    "candidate": 7.4376,
+    "diff": 0.0,
+    "se": 0.0,
+    "changed": false
+   }
+  },
+  "fitted_a": {},
+  "keep": false
+ },
+ "B": {
+  "rmse": {
+   "rec_yds 2014-18": {
+    "n": 18745,
+    "now": 28.8817,
+    "candidate": 28.8028,
+    "diff": -0.0789,
+    "se": 0.0328,
+    "changed": true
+   },
+   "rec_yds 2019 on": {
+    "n": 28844,
+    "now": 27.193,
+    "candidate": 27.1366,
+    "diff": -0.0564,
+    "se": 0.0237,
+    "changed": true
+   },
+   "receptions 2014-18": {
+    "n": 18745,
+    "now": 2.0602,
+    "candidate": 2.0541,
+    "diff": -0.0061,
+    "se": 0.0021,
+    "changed": true
+   },
+   "receptions 2019 on": {
+    "n": 28844,
+    "now": 1.9698,
+    "candidate": 1.965,
+    "diff": -0.0048,
+    "se": 0.0018,
+    "changed": true
+   },
+   "pass_yds 2014-18": {
+    "n": 2670,
+    "now": 88.4211,
+    "candidate": 88.7383,
+    "diff": 0.3172,
+    "se": 0.1416,
+    "changed": true
+   },
+   "pass_yds 2019 on": {
+    "n": 4192,
+    "now": 88.2487,
+    "candidate": 88.3326,
+    "diff": 0.0839,
+    "se": 0.1307,
+    "changed": true
+   },
+   "completions 2014-18": {
+    "n": 2670,
+    "now": 7.3694,
+    "candidate": 7.4185,
+    "diff": 0.049,
+    "se": 0.0144,
+    "changed": true
+   },
+   "completions 2019 on": {
+    "n": 4192,
+    "now": 7.4376,
+    "candidate": 7.4466,
+    "diff": 0.009,
+    "se": 0.0073,
+    "changed": true
+   }
+  },
+  "fitted_a": {
+   "rec_yds": {
+    "2014": 0.28,
+    "2015": 0.44,
+    "2016": 0.062,
+    "2017": 0.123,
+    "2018": 0.156,
+    "2019": 0.258,
+    "2020": 0.259,
+    "2021": 0.268,
+    "2022": 0.279,
+    "2023": 0.29,
+    "2024": 0.297,
+    "2025": 0.291,
+    "2026": 0.287
+   },
+   "receptions": {
+    "2014": 0.28,
+    "2015": 0.6,
+    "2016": 0.145,
+    "2017": 0.106,
+    "2018": 0.163,
+    "2019": 0.184,
+    "2020": 0.182,
+    "2021": 0.2,
+    "2022": 0.191,
+    "2023": 0.208,
+    "2024": 0.226,
+    "2025": 0.211,
+    "2026": 0.203
+   }
+  },
+  "keep": false
+ },
+ "lines": {
+  "now": {
+   "pooled": {
+    "n": 26519,
+    "brier": 0.2551,
+    "books": 0.24856,
+    "vs_now": 0.0,
+    "se": 0.0
+   },
+   "rec_yds": {
+    "n": 17746,
+    "brier": 0.25709,
+    "books": 0.24992,
+    "vs_now": 0.0,
+    "se": 0.0
+   },
+   "receptions": {
+    "n": 5714,
+    "brier": 0.24975,
+    "books": 0.24344,
+    "vs_now": 0.0,
+    "se": 0.0
+   },
+   "pass_yds": {
+    "n": 3059,
+    "brier": 0.25351,
+    "books": 0.2502,
+    "vs_now": 0.0,
+    "se": 0.0
+   },
+   "completions": {
+    "n": 0,
+    "brier": null,
+    "books": null,
+    "vs_now": null,
+    "se": null
+   }
+  },
+  "A": {
+   "pooled": {
+    "n": 26326,
+    "brier": 0.25493,
+    "books": 0.24853,
+    "vs_now": -4e-05,
+    "se": 0.00052
+   },
+   "rec_yds": {
+    "n": 17573,
+    "brier": 0.25703,
+    "books": 0.24992,
+    "vs_now": 2e-05,
+    "se": 0.00059
+   },
+   "receptions": {
+    "n": 5694,
+    "brier": 0.24921,
+    "books": 0.24335,
+    "vs_now": -0.00023,
+    "se": 0.0011
+   },
+   "pass_yds": {
+    "n": 3059,
+    "brier": 0.25351,
+    "books": 0.2502,
+    "vs_now": 0.0,
+    "se": 0.0
+   },
+   "completions": {
+    "n": 0,
+    "brier": null,
+    "books": null,
+    "vs_now": null,
+    "se": null
+   }
+  },
+  "B": {
+   "pooled": {
+    "n": 26371,
+    "brier": 0.2544,
+    "books": 0.24855,
+    "vs_now": -0.00063,
+    "se": 0.00036
+   },
+   "rec_yds": {
+    "n": 17616,
+    "brier": 0.2565,
+    "books": 0.24992,
+    "vs_now": -0.00057,
+    "se": 0.00044
+   },
+   "receptions": {
+    "n": 5696,
+    "brier": 0.2488,
+    "books": 0.24341,
+    "vs_now": -0.00073,
+    "se": 0.00088
+   },
+   "pass_yds": {
+    "n": 3059,
+    "brier": 0.2527,
+    "books": 0.2502,
+    "vs_now": -0.00081,
+    "se": 0.00116
+   },
+   "completions": {
+    "n": 0,
+    "brier": null,
+    "books": null,
+    "vs_now": null,
+    "se": null
+   }
+  }
+ }
+}
