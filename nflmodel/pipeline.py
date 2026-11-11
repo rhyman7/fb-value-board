@@ -227,6 +227,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         say(f"  Questionable starting quarterbacks flagged: {qshade.qb_flags(out['slate']['games'], rep, names)}")
     except Exception as exc:
         print(f"  Questionable quarterback flag skipped ({exc})")
+        rep, names = {}, {}
     if with_backtest:
         out["backtest"] = backtest.summarize(frame, graded)
         out["backtest"]["wind_unders"] = backtest.wind_report(frame)
@@ -274,6 +275,13 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         teaserlog.update(out["slate"]["games"], season, kick, scores)
     except Exception as exc:
         print(f"  teaser log skipped ({exc})")
+    try:                                          # every forecast shown before kickoff (nflmodel/forecastlog.py); data/ only, not shown
+        from . import forecastlog
+        n_fc = forecastlog.record(out["slate"]["games"], "nfl", season, out["meta"].get("generated"),
+                                  forecastlog.qb_status(out["slate"]["games"], rep, names))
+        say(f"  forecast log: {n_fc} rows")
+    except Exception as exc:
+        print(f"  forecast log skipped ({exc})")
 
     out = _clean(out)
     C.DOCS.mkdir(exist_ok=True)
