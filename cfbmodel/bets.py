@@ -110,6 +110,8 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: flo
             "market": market, "side": side, "pick": label, "line": line, "odds": price,
             "model_prob": model_p, "market_prob": fair, "breakeven": 1 / dec,
             "edge": model_p - fair, "ev": ev, "p_push": p_push, "stake": stake,
+            # the EV the record supports: at the chance the stake is sized from (stake_prob), not the model's own
+            "ev_rec": O.expected_value(NB.stake_prob(p_win, p_push, fair, haircut), price, p_push),
             "outcome": outcome, "profit": profit,
         }))
     b = pd.concat(out, ignore_index=True)

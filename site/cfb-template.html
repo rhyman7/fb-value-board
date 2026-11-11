@@ -1192,6 +1192,25 @@ function seg(node, options, get, set) {
   paint();
 }
 const evCell = v => v > 0 ? H("span", { class: "chip", text: spct(v) }) : spct(v);
+/* Record-adjusted EV (Nov 11, 2026): the EV at the chance the stakes are sized from, i.e. the model's edge counted
+   only at the share that has shown up in graded bets (meta.haircut_factor; bets.price_games `ev_rec`, each book
+   quote's `ev_rec`). It leads wherever a model-based EV is shown; the model's own claim sits beside it in small
+   type. Price-beats-Pinnacle numbers need no model and are unchanged. null on the raw-model basis, with the
+   haircut off, or on data built before the field existed: the page then shows what it always did. */
+const evRecOf = b => {
+  if (state.basis !== "adj" || !DATA.meta.haircut_on || DATA.meta.haircut_factor == null || DATA.meta.haircut_factor >= 1 || b.ev_rec == null) return null;
+  const q = b.best != null && b.best_ev >= b.ev ? (b.books || []).find(x => x.book === b.best) : null;
+  return q && q.ev_rec != null ? q.ev_rec : b.ev_rec;
+};
+const REC_SHARE = () => { const M = DATA.meta, f = M.haircut_factor, se = M.haircut && M.haircut.se;
+  return f > 0 ? "about " + pct(f, 0) + " of the model's edge, the share that has shown up in graded bets" + (se != null && f < 2 * se ? " (not yet distinguishable from zero)" : "")
+               : "none of the model's edge, since none has shown up in graded bets: the market's own number"; };
+const REC_TIP = () => "Record-adjusted: counts " + REC_SHARE() + ". The small figure is what the model itself claims.";
+const evPair = (b, lead = true) => {
+  const r = evRecOf(b), m = evOf(b);
+  if (r == null) return evCell(m);
+  return H("span", { class: "evrec", title: REC_TIP() }, lead ? evCell(r) : H("span", { class: "ko rec", text: "record-adjusted " + spct(r) }), H("br"), H("span", { class: "ko rec", text: "model " + spct(m) }));
+};
 
 /* ---------------- state ---------------- */
 const state = { week: DATA.slate.weeks[0], market: "Spread", basis: "adj", all: false, bankroll: 1000 };
@@ -1253,6 +1272,7 @@ function renderHero() {
       H("strong", { text: all.length + (all.length === 1 ? " game" : " games") + " to play. " }),
       document.createTextNode(plus.length
         ? plus.length + (plus.length === 1 ? " bet clears" : " bets clear") + " break-even" + (state.basis === "adj" ? " once the model is weighed against the market" : " on the raw model") + ". The best is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", worth " + spct(evOf(top.b)) + " per dollar staked."
+          + (evRecOf(top.b) != null ? " Those are the model's own claims; record-adjusted, " + (n => n ? n + (n === 1 ? " clears" : " clear") : "none clears")(bets.filter(x => evRecOf(x.b) > 0).length) + " (the best is " + spct(Math.max(...bets.map(x => evRecOf(x.b)))) + ")." : "")
         : "No bet clears break-even once the model is weighed against the market. The closest is " + pickOf(top.b) + " at " + odds(oddsOf(top.b)) + (bookOf(top.b) ? " (" + bookOf(top.b) + ")" : "") + ", " + spct(evOf(top.b)) + " per dollar staked."));
     const tiers = all.flatMap(sheetBets).reduce((a, b) => { if (ON_CARD(b.tier)) a[b.tier] = (a[b.tier] || 0) + 1; return a; }, {});   // the sheet's own bets: on the NFL board the model's edges are in Model leans
     const tn = Object.values(tiers).reduce((a, b) => a + b, 0);
@@ -1338,7 +1358,7 @@ function drawBoard(W) {
     hit.addEventListener("keydown", e => { if (e.key === "Enter") { hideTip(); location.hash = g.id; } });
     hover(hit, g.away + " at " + g.home, [
       { k: "Market", v: show(mkt) }, { k: "Raw model", v: show(raw) }, { k: "Market-adjusted", v: show(adj) },
-      ...(l ? [{ k: "Best side: " + l.pick, v: spct(evOf(l)) }] : []),
+      ...(l ? [{ k: "Best side: " + l.pick, v: evRecOf(l) != null ? spct(evRecOf(l)) + " record-adjusted (model " + spct(evOf(l)) + ")" : spct(evOf(l)) }] : []),
     ]);
     svg.append(hit);
     const mark = S("g", { "pointer-events": "none" });
@@ -1359,12 +1379,12 @@ const redrawBoard = responsive($("#board"), drawBoard);
 
 const priceHead = [{ t: "Pick", l: 1 }, { t: "Odds" }, { t: "Model" }, { t: "Market, no vig" }, { t: "Break-even" }, { t: "EV per $1" }, { t: "Fair price" }, { t: "Best book", l: 1 }, { t: "Stake" }];
 const bestStake = b => shopped(b) && b.best_ev >= b.ev ? ((b.books.find(x => x.book === b.best) || {}).stake || 0) : b.stake;
-const priceRow = b => { const p = probOf(b); return [{ v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evCell(evOf(b)), odds(fairOf(p)), bestCell(b), state.basis === "adj" ? stakeText({ stake: bestStake(b) }) : "—"]; };
+const priceRow = b => { const p = probOf(b); return [{ v: b.pick, cls: "strong" }, odds(b.odds), pct(p), pct(b.market_prob), pct(b.breakeven), evPair(b), odds(fairOf(p)), bestCell(b), state.basis === "adj" ? stakeText({ stake: bestStake(b) }) : "—"]; };
 const priceNote = () => (state.basis === "adj"
     ? "Priced from the market-adjusted projection. "
     : "Priced from the raw model alone, which has overstated its edge in every season tested. Stakes are only sized from the market-adjusted numbers. ")
     + "Odds and EV are at the anchor line; Best book is the best price across DraftKings, FanDuel, BetMGM and Kalshi at that book's own line (Kalshi net of its fee), and the EV shown is the better of the two. A \u201cbeats\u201d chip means the book's price beats the sharp anchor's no-vig number before the model says anything. Fair price is the odds at which the bet breaks even, so any book offering better is value. Stake is " + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly, capped at " + pct(M.max_stake, 0) + " of bankroll" + (M.max_game_stake ? " and at " + pct(M.max_game_stake, 0) + " on one game, all sides together" : "") + "."
-    + (M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1 && M.haircut_note ? " No stake is sized from the model: " + M.haircut_note + ". The EV and chances shown are still the model's."
+    + (M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1 && M.haircut_note ? " No stake is sized from the model: " + M.haircut_note + ". The EV column leads with the record-adjusted figure (the model's edge counted at that share); the model's own claim is the small figure under it."
     : M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1 ? (M.haircut_factor > 0 ? " Stakes are sized as if only " + pct(M.haircut_factor, 0) + " of the claimed edge were real" : " No stake is sized, because none of the claimed edge")
       + (M.haircut_factor > 0 ? ", the share that" : "") + " showed up in the graded bets of the last eight seasons (" + (M.haircut && M.haircut.seasons ? M.haircut.seasons + ", " : "") + "realized profit regressed on claimed EV); the EV and chances shown are still the model's." : "");
 function mutedText() {
@@ -1539,6 +1559,7 @@ function renderSheet() {
   const hc = M.haircut_on && M.haircut_factor != null && M.haircut_factor < 1;
   $("#sheet-note").textContent = `${rows.length} ${rows.length === 1 ? "bet" : "bets"} this week, by what the edge is made of: ${n("price")} where a price beats Pinnacle, ${n("opener")} where the model is off the opener${LG === "nfl" ? `, ${n("wind")} wind ${n("wind") === 1 ? "under" : "unders"}` : ""}, ${LG === "nfl" ? `the model's own ${nModelOff} ${nModelOff === 1 ? "edge is" : "edges are"} in Model leans (not bets: no stake)` : n("model") + " on the model alone"}. Moneylines are only listed when a price beats the sharp line: since ${BT ? BT.holdout_from : 2019} they have lost at every claimed edge. Stakes are `
     + (M.kelly_fraction === 0.25 ? "quarter" : pct(M.kelly_fraction, 0)) + " Kelly" + (hc ? (M.haircut_factor > 0 ? `, sized as if ${pct(M.haircut_factor, 0)} of the claimed edge were real` : ", and the model's own edges carry no stake: " + (M.haircut_note || "none of their claimed edge has shown up in the graded bets of the last eight seasons")) + " (price bets are sized against the sharp line, so they still carry one)" : "") + "."
+    + (hc ? " Where an EV comes from the model, the figure shown is record-adjusted: it counts " + REC_SHARE() + "; the model's own claim is the small figure under it." : "")
     + weekCapText() + (priceAgeH() != null && priceAgeH() > STALE_H ? ` Book prices are ${Math.round(priceAgeH())} hours old: price bets are greyed until the next snapshot.` : "");
   host.replaceChildren();
   if (!rows.length) { host.append(H("p", { class: "note sheet-empty", text: "Nothing to bet this week: no price beats the sharp line and the model is not far enough off any opener." })); return; }
@@ -1558,7 +1579,7 @@ function renderSheet() {
         return { cls: isStale(b) ? "stale" : "", cells: [
           { v: H("span", {}, H("a", { href: "#" + g.id, text: pickOf(b) }), H("br"), H("span", { class: "ko rec", text: g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", "").replace(/^(\w{3}) \w{3} \d+, /, "$1 ") + (hoursTo(g) != null ? " (" + hoursText(hoursTo(g)) + ")" : "") })), cls: "strong" },
           { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where },
-          evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)),
+          tierOf(b) === "price" && b.sharp_ev != null ? evCell(b.sharp_ev) : evPair(b, tierOf(b) === "model"),   // opener and wind rows lead with the Record column
           { v: whyNode(g, b), cls: "why" },
           { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "when" },
           { v: bucketText(b), cls: "why" },
@@ -1656,7 +1677,7 @@ function renderBestBets() {
         const st = sheetStake(b, q);
         const why = H("span", {}, H("b", { text: TIER[tierOf(b)].h + ". " }), whyNode(g, b));
         return { cls: isStale(b) ? "stale" : "", cells: [{ v: String(++n), cls: "n nw" }, { v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home), H("br"), document.createTextNode(kickoff(g).replace(" ET", ""))), cls: "nw" },
-          { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where, cls: "nw" }, { v: evCell(tierOf(b) === "price" && b.sharp_ev != null ? b.sharp_ev : evOf(b)), cls: "nw" },
+          { v: postText(q) ? H("span", {}, document.createTextNode(where), H("br"), postNode(q)) : where, cls: "nw" }, { v: tierOf(b) === "price" && b.sharp_ev != null ? evCell(b.sharp_ev) : evPair(b, tierOf(b) === "model"), cls: "nw" },
           { v: st > 0 ? stakeText({ stake: st }) + ((q ? q.stake : bestStake(b)) <= 0 ? " (bucket)" : "") : "—", cls: "nw" },
           { v: why, cls: "wrap" }, { v: H("span", {}, H("span", { class: "verdict " + tm.cls, text: tm.t + "." }), document.createTextNode(" " + [tm.d, moveText(g, b)].filter(Boolean).join(" "))), cls: "wrap" }] };
       }));
@@ -1713,7 +1734,7 @@ function renderLeans() {
         rows.map(({ g, b }) => {
           const q = b.best ? b.books.find(x => x.book === b.best) : null, tm = timing(g, b);
           return [{ v: H("span", {}, H("b", { text: pickOf(b) }), H("br"), document.createTextNode(g.away + " @ " + g.home + ", " + kickoff(g).replace(" ET", ""))), cls: "nw" },
-            { v: q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) : odds(b.odds), cls: "nw" }, { v: evCell(evOf(b)), cls: "nw" },
+            { v: q ? bookName(q.book) + " " + qLine(b, q) + odds(q.odds) : odds(b.odds), cls: "nw" }, { v: evPair(b), cls: "nw" },
             { v: whyNode(g, b), cls: "wrap" }, { v: H("span", {}, b.missed ? H("span", { class: "verdict wait", text: "Missed. " }) : null, document.createTextNode(moveText(g, b))), cls: "wrap" }, { v: bucketText(b), cls: "wrap" }];
         }));
       kids.push(t);
@@ -1838,7 +1859,8 @@ function renderGame(g) {
                  d.temp != null ? d.temp + "°F" : null, d.wind != null ? "wind " + d.wind + " mph" : (g.wind ? "wind " + Math.round(g.wind.mph) + " mph" + gusts(g) + " (" + g.wind.source + ")" : null), wetTxt(g) || null].filter(Boolean).join(", ");
   const verdict = H("p", { class: "lede" });
   if (ev > 0) verdict.append(H("strong", { text: "Best price: " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ". " }),
-    document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked."));
+    document.createTextNode("The model gives it " + pct(probOf(b)) + " against a " + pct(b.breakeven) + " break-even, worth " + spct(ev) + " per dollar staked on the model's own number"
+      + (evRecOf(b) != null ? "; record-adjusted, " + spct(evRecOf(b)) + " (" + REC_SHARE() + ")." : ".")));
   else verdict.append(H("strong", { text: "No bet clears break-even. " }),
     document.createTextNode("The closest is " + pickOf(b) + " at " + odds(oddsOf(b)) + (bookOf(b) ? " (" + bookOf(b) + ")" : "") + ": the model gives it " + pct(probOf(b)) + " and it needs " + pct(b.breakeven) + "."));
   if (g.anchor && g.anchor !== "consensus") verdict.append(document.createTextNode(" Lines are anchored to " + bookName(g.anchor) + "'s number" + (g.books ? "; " + Object.keys(g.books).filter(k => k !== g.anchor).map(bookName).join(", ") + " shopped." : ".")));

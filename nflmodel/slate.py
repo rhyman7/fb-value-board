@@ -188,6 +188,7 @@ def build(frame: pd.DataFrame, dist: dict, engine, builder=None, records: dict |
                 "market": r.market, "side": r.side, "pick": r.pick, "odds": int(r.odds),
                 "prob": round(r.model_prob, 4), "raw_prob": round(r.raw_prob, 4), "market_prob": round(r.market_prob, 4),
                 "breakeven": round(r.breakeven, 4), "edge": round(r.edge, 4), "ev": round(r.ev, 4), "raw_ev": round(r.raw_ev, 4),
+                "ev_rec": None if pd.isna(getattr(r, "ev_rec", float("nan"))) else round(float(r.ev_rec), 4),   # record-adjusted EV (bets.price_games)
                 "fair": fair_american(r.model_prob), "stake": round(r.stake, 4),
                 **bet_books(shopped, g.game_id, r.market, r.side),
             })

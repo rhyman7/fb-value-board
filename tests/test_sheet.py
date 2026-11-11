@@ -388,3 +388,26 @@ def test_record_split_by_the_books_ryan_bets():
     for name in ("data", "data/cfb"):
         s = LG.summary(ROOT / name / "ledger.csv", ROOT / name / "ledger_results.csv")
         assert s["by_books"]["mine"]["n"] + s["by_books"]["other"]["n"] == s["all"]["n"]
+
+
+def test_record_adjusted_ev_is_the_ev_at_the_stake_chance():
+    """`ev_rec` (bets.price_games, bets.shop): the model's EV when the haircut is 1, the market's own
+    (never positive at the anchor's own two-way price) when it is 0, in between otherwise."""
+    from nflmodel import odds as O
+    p_win, push, fair = np.array([0.55]), np.array([0.02]), np.array([0.50])
+    full = float(O.expected_value(B.stake_prob(p_win, push, fair, 1.0), -110.0, push)[0])
+    none = float(O.expected_value(B.stake_prob(p_win, push, fair, 0.0), -110.0, push)[0])
+    part = float(O.expected_value(B.stake_prob(p_win, push, fair, 0.11), -110.0, push)[0])
+    assert np.isclose(full, float(O.expected_value(p_win, -110.0, push)[0]))       # haircut 1: the model's own EV
+    assert none < 0 < full and none < part < full
+    assert np.isclose(part, none + 0.11 * (full - none))            # linear in the share
+    for path in (ROOT / "docs" / "data.json", ROOT / "docs" / "cfb" / "data.json"):
+        d = json.loads(path.read_text())
+        h = d["meta"].get("haircut_factor")
+        for g in d["slate"]["games"]:
+            for b in g["bets"]:
+                if b.get("ev_rec") is None:                         # built before the field existed
+                    continue
+                assert b["ev_rec"] <= b["ev"] + 0.002 or b["prob"] <= b["market_prob"], (g["id"], b["pick"])   # rounding room: a failed check here stops a board build
+                if h == 0:
+                    assert b["ev_rec"] <= 0.005, (g["id"], b["pick"])  # the anchor's own price does not beat its own no-vig number (rounding room)

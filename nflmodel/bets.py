@@ -155,6 +155,8 @@ def price_games(df: pd.DataFrame, dist: dict, source: str = "proj", haircut: flo
             "market": market, "side": side, "pick": label, "line": line, "odds": price,
             "model_prob": model_p, "market_prob": fair, "breakeven": 1 / dec,
             "edge": model_p - fair, "ev": ev, "p_push": p_push, "stake": stake,
+            # the EV the record supports: at the chance the stake is sized from (stake_prob), not the model's own
+            "ev_rec": O.expected_value(stake_prob(p_win, p_push, fair, haircut), price, p_push),
             "outcome": outcome, "profit": profit,
         }))
     b = pd.concat(out, ignore_index=True)
@@ -222,7 +224,8 @@ def shop(df: pd.DataFrame, dist: dict, quotes: dict, books: list[str], source: s
                     "book": book, "line": None if shown is None else float(shown), "odds": float(price), "odds_net": round(net, 1),
                     "prob": round(p / (1 - push), 4), "p_push": round(push, 4), "ev": round(ev, 4),
                     "ev_line": round(float(O.expected_value(p0, net, push0)), 4) if FLAG_ODDS[0] <= float(price) <= FLAG_ODDS[1] else None,
-                    "stake": round(stake, 4), "p_post": round(float(sp), 4)})
+                    "stake": round(stake, 4), "p_post": round(float(sp), 4),
+                    "ev_rec": round(float(O.expected_value(sp, net, push)), 4)})   # EV at the chance the stake is sized from
     return with_post_at(out)
 
 
