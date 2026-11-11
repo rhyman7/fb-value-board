@@ -47,7 +47,13 @@ jobs:
             ncaa/**/*_defense_summary.csv.gz
           sparse-checkout-cone-mode: false
       - name: Browser for the best-bets PDF
-        run: pip install playwright && python -m playwright install --with-deps chromium
+        # never fails the build: the PDF step skips itself without a browser (scripts/build_pdf.py).
+        # On Nov 11, 2026 the system-package half of --with-deps could not reach Ubuntu's mirrors and
+        # failed every board run for hours; the runner image already has what Chromium needs.
+        continue-on-error: true
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium || python -m playwright install chromium
       - name: Build the college board
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}   # optional: CollegeFootballData lines for games ESPN has not priced

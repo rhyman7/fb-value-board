@@ -50,6 +50,17 @@ boards in detail; this file is the rules.
   rebuild `docs/` and the committed files under `data/` (for the NFL board including the
   shadow test log, `data/shadow/`). They share the `board-commits`
   concurrency group so they never push at once. Everything else goes through a PR.
+  **Exception: the College availability Action** (`cfb-availability.yml`) has its own group,
+  `cfb-availability` (Nov 11, 2026). In `board-commits` a newer board run waiting its turn
+  replaced it, so a Game Day report could miss kickoff. It commits only its own files and
+  rebases and retries its push. Besides its GitHub schedule, two Claude scheduled tasks
+  ("College availability backup": Tue-Fri 3:22-7:22 pm ET, Saturday 9:22 am-9:22 pm ET, hourly)
+  start it unless it ran in the last 40 minutes, because GitHub dropped most scheduled runs on
+  Nov 10-11.
+- **The "Browser for the best-bets PDF" step never fails a board build** (`continue-on-error`,
+  and it falls back to installing Chromium without system packages). On Nov 11, 2026 Ubuntu's
+  mirrors were unreachable from the runners and every Update board / Update college board run
+  failed there for hours. `scripts/build_pdf.py` skips the PDF without a browser.
 - **Shadow test (NFL): `data/shadow/`.** The **Update board** Action also writes
   `defense_games.csv` and `defense_players.csv` (`nflmodel/shadow.py`): the game model and two
   player projections refitted with the defensive-player inputs, logged and never shown on the
