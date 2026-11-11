@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Value Boards: a professional's manual (fourth edition)</title>
+<title>The Value Boards: a professional's manual (fifth edition)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   @page { size: Letter; margin: 0.8in 0.75in 0.85in 0.75in; }
@@ -57,8 +57,7 @@
   <h1>The Value Boards</h1>
   <div class="sub">A professional's manual for the NFL Value Board and the College Value Board.<br>Every page, every number, and what a bettor does with it — written for someone starting from zero.</div>
   <div class="meta">
-    <b>Revised November 11, 2026</b> for the changes that went live that day: record-adjusted EV, the DraftKings + FanDuel record, closing line value on the college board and the new rule for model changes (the box after the contents has the detail and two new screenshots). The rest is the fourth edition as written: its other screenshots and worked examples are from November 4 and October 31, before record-adjusted EV, so the EV figures in them are the model's own claims.<br><br>
-    Fourth edition, updated from the live boards on Wednesday, November 4, 2026 (NFL Week 9, college Week 10), after the Parlays page, the closing-line-value dashboard, kickoff refreshes and the Best bets alert, the college stake change and the November 4 model updates went live. New and refreshed screenshots and examples are from that day; pages that did not change keep their October 31 screenshots, and their captions say so.<br><br>
+    Fifth edition, updated from the live boards on Wednesday, November 11, 2026 (NFL Week 10, college Week 11), after the full model review: record-adjusted EV, the DraftKings + FanDuel record, closing line value on the college board, a stricter rule for model changes and a backup for skipped line snapshots. Every screenshot and worked example is from that day.<br><br>
     NFL board: rhyman7.github.io/fb-value-board/docs/ &nbsp;·&nbsp; College board: rhyman7.github.io/fb-value-board/docs/cfb/<br><br>
     For research and entertainment. Past results do not predict future results, and nothing here is betting advice.
   </div>
@@ -90,7 +89,7 @@
 </ol>
 
 <div class="box green">
-<b class="t">Revised November 11, 2026: what changed after the full model review</b>
+<b class="t">What is new in the fifth edition (November 11, 2026)</b>
 <ul>
   <li><b>The EV you see first is record-adjusted.</b> Wherever an EV comes from the model (model-edge rows on the Bet sheet and the Best bets card, Model leans, a game's price table and headline), the figure that leads counts the model's edge only at the share that has actually shown up in graded bets: about a tenth on the NFL board, and not yet distinguishable from zero; none on the college board, where it is simply the market's own number. The model's own claim sits under it as "model +x%". A row that reads −2.2% with "model +3.0%" under it is not a bet on its EV. Price-beats-Pinnacle figures need no model and are unchanged, as are the stakes, which were already sized this way. Opener and wind rows show both figures in small type, because the column that matters for them is the record of bets of that kind. (Sections 3, 7 and 8.)</li>
   <li><b>The record at your books.</b> The Live record and the Best Bets record each have two new rows: <b>DraftKings + FanDuel (the books you bet)</b> and <b>Other books</b>. The board flags prices at BetMGM and Kalshi too; if you only bet DraftKings and FanDuel, the first of those rows is your record. (Section 14.)</li>
@@ -99,14 +98,10 @@
   <li><b>Fresher prices.</b> GitHub often skips the three daily line snapshots, which left the board pricing bets off lines many hours old. A scheduled backup now starts a snapshot 40 minutes after any that did not run. (Section 17.)</li>
   <li><b>What the review found about the model itself.</b> Against the closing line the NFL team ratings add nothing the line lacks; what weight the model earns comes from knowing the starting quarterback and who is out. The college model has run about a point behind the line all of 2026. Five fixes were tested that day and none was kept. The model's place is unchanged: early lines and a fair price to shop against, not a reason to bet by itself.</li>
 </ul>
-<img class="shot" loading="lazy" alt="" src="img/nfl_sheet_ev.jpg">
-<p class="cap">The NFL Bet sheet on November 11. Opener rows show "record-adjusted" and "model" EV in small type; the sheet's note says what share of the model's edge is counted.</p>
-<img class="shot" loading="lazy" alt="" src="img/nfl_model_live_books.jpg">
-<p class="cap">The NFL Live record on November 11, with the two new rows: DraftKings + FanDuel 22-17, closing line value +2.9%; other books 6-9, −1.1%.</p>
 </div>
 
 <div class="box green">
-<b class="t">What is new in the fourth edition</b>
+<b class="t">What was new in the fourth edition (November 4, 2026)</b>
 <ul>
   <li><b>The Parlays page.</b> A leg finder, a boost finder and a builder for NFL and college parlays of up to 10 legs, with live DraftKings and FanDuel college props, and a graded record of the tools' own suggestions. (Section 16.)</li>
   <li><b>College model edges carry no stake.</b> Regraded against Pinnacle's real 2024–2025 lines, the college model's edge did not hold, so its own edges are still listed but sized at nothing. Price bets and opener bets still carry stakes. (Sections 2, 3 and 15.)</li>
@@ -128,7 +123,7 @@
 <p>Three places, and the board is built around them in this order:</p>
 <ol>
   <li><b>Prices that beat Pinnacle.</b> Pinnacle is the sharpest book in the world: it takes big bets from professionals and moves its line fast, so its price with the vig removed is the best estimate of the true chance there is. When DraftKings, FanDuel, BetMGM or Kalshi pays more than that true chance is worth, you have an edge with no model at all. These go stale within hours.</li>
-  <li><b>The opener.</b> When the model disagrees with the opening line by 2 or more points (NFL spreads), the line has historically moved toward the model before kickoff, and the side has won 54.6% at the opening number (988 bets, +4.1% per dollar, ±3.0%). <b>Read that sentence carefully: the edge is the line moving toward the model.</b> The same sides, graded at the closing line after the move, win 51.9%, below the 52.4% you need at −110. Once the market has moved, the edge is gone. That is why the board has a whole section on line movement and why your phone buzzes when a gap appears.</li>
+  <li><b>The opener.</b> When the model disagrees with the opening line by 2 or more points (NFL spreads), the line has historically moved toward the model before kickoff, and the side has won 55.4% at the opening number (1,012 bets, +5.6% per dollar, ±3.0%; since 2019, 54.7% and +4.3% ± 3.7% on 646). <b>Read that sentence carefully: the edge is the line moving toward the model.</b> The same sides, graded at the closing line after the move, win 51.9%, below the 52.4% you need at −110. Once the market has moved, the edge is gone. That is why the board has a whole section on line movement and why your phone buzzes when a gap appears.</li>
   <li><b>Wind unders</b> (NFL). Outdoor games with 10 to 19 mph of wind have gone under the closing total 56.8% of the time since 2014 (498-379-9), and 59.2% since 2019. The total falls as the forecast firms up, so these are bet early, not late. Until there is a season of these graded on forecasts rather than recorded wind, they are staked at half size.</li>
 </ol>
 <p>Everything else on the page, including the model's own leans, is information. Useful, honest information, but not a bet.</p>
@@ -140,7 +135,7 @@ Bet prices that beat the sharp line, bet the model's disagreements with the open
 
 <h3>What a professional does not do with this board</h3>
 <ul>
-  <li><b>Bet the biggest EV number on the page.</b> EV is claimed by the model; the haircut says how much of it has ever been real. On November 4 the college board's biggest number was a +13.4% moneyline on the model alone, with no stake. The stake column, not the EV column, says what the board would bet.</li>
+  <li><b>Bet the biggest EV number on the page.</b> EV is claimed by the model; the haircut says how much of it has ever been real. On November 11 the college board's biggest number was +11.0% on ORST +13.5, on the model alone, with no stake; record-adjusted it reads 0.0%. The stake column, not the EV column, says what the board would bet.</li>
   <li><b>Chase an opener bet after the line moved.</b> If the board says <b>Missed</b>, the edge you read about in the record is not on offer any more.</li>
   <li><b>Play leans.</b> The Model leans document exists so that you can see what the model thinks without confusing it with a bet.</li>
   <li><b>Judge the board on a week.</b> Fifty bets is noise. Closing line value (section 14) is the short-run signal; the win-loss record takes seasons.</li>
@@ -168,11 +163,11 @@ Bet prices that beat the sharp line, bet the model's disagreements with the open
 <table class="kv">
 <tr><td>Per bet</td><td>3% of bankroll.</td></tr>
 <tr><td>Per game</td><td>5%, all sides together. If a game's bets add to more, every stake in that game shrinks by the same factor.</td></tr>
-<tr><td>Per week</td><td>10%, everything on the sheet that week together, scaled the same way. On November 4 the NFL Week 9 sheet came to 7.8%, under the cap; next week's early lines (Week 10) already added to 11.1%, so those stakes were scaled to 90% and the sheet says so. With its model edges unstaked, the college Week 10 sheet came to 2.5%.</td></tr>
+<tr><td>Per week</td><td>10%, everything on the sheet that week together, scaled the same way. On November 11 the NFL Week 10 sheet came to 3.7%, under the cap; next week's early lines (Week 11) came to 8.7%, also under it. With its model edges unstaked, the college Week 11 sheet came to 5.1%.</td></tr>
 </table>
 <p>Stakes are shown in dollars at the bankroll in the box at the top of the Games page (default $1,000) and as a percentage. Change the box to your bankroll and every stake on the site follows.</p>
 <h3>The haircut</h3>
-<p>The model's chance is not used as is. Each Tuesday (NFL) and Monday (college) the full backtest measures the share of the model's claimed edge that turned into realized profit over the last eight seasons. The stake is sized from the model's chance shrunk toward the market's by that share. NFL: 8% on November 4 (it was 0% a week earlier; the measurement is noisy, ±30%), and the model's own NFL edges stay off the card either way. College: measured at 52%, but <b>capped at 0</b> <span class="new">NEW</span> since November 1, because the college model's edge against consensus lines did not hold against Pinnacle's real 2024–2025 numbers. The college sheet says so in its note. If the measurement is missing, the board sizes nothing rather than everything (it "fails closed").</p>
+<p>The model's chance is not used as is. Each Tuesday (NFL) and Monday (college) the full backtest measures the share of the model's claimed edge that turned into realized profit over the last eight seasons. The stake is sized from the model's chance shrunk toward the market's by that share. NFL: 11% on November 11 (8% a week earlier and 0% the week before; the measurement is noisy, ±29%), and the model's own NFL edges stay off the card either way. College: measured at 52%, but <b>capped at 0</b> <span class="new">NEW</span> since November 1, because the college model's edge against consensus lines did not hold against Pinnacle's real 2024–2025 numbers. The college sheet says so in its note. If the measurement is missing, the board sizes nothing rather than everything (it "fails closed").</p>
 <h3>Bucket stakes</h3>
 <p>Opener and wind bets do not need the model to be right; they rest on their bucket's own record. When the model sizes nothing for one of them, the board sizes a <b>bucket stake</b>: quarter Kelly on Pinnacle's chance for that side at the book's own line and price, plus the bucket's edge over a fair line (its win rate shrunk halfway to break-even, less 50%). Two details matter:</p>
 <ul>
@@ -181,7 +176,7 @@ Bet prices that beat the sharp line, bet the model's disagreements with the open
   <li><b>Wind unders are staked at half size</b> <span class="new">NEW</span> until they have a season graded on forecasts. Their record was built on the wind actually measured at the game, and live bets are placed on a forecast.</li>
 </ul>
 <h3>The closing-line-value guard <span class="new">NEW</span></h3>
-<p>Every kind of bet (price, opener, wind, model) is watched against the closing line. Once a kind has 50 or more graded bets and its average closing line value is below zero by more than two standard errors, it carries <b>no stake</b> until it recovers. Its bets stay on the sheet, marked, and stay in the ledger, so the record keeps measuring them. The Bet sheet's note names any kind that is muted. On November 4 no kind had 50 graded bets yet; the Closing line value table on the Model record page shows how close each one is (section 14).</p>
+<p>Every kind of bet (price, opener, wind, model) is watched against the closing line. Once a kind has 50 or more graded bets and its average closing line value is below zero by more than two standard errors, it carries <b>no stake</b> until it recovers. Its bets stay on the sheet, marked, and stay in the ledger, so the record keeps measuring them. The Bet sheet's note names any kind that is muted. On November 11 no NFL kind had 50 graded bets yet (price bets were at 26), and the college price tier, with 92, was at −0.1% ± 1.1% and so not muted; the Closing line value table on the Model record page shows how close each one is (section 14).</p>
 <h3>Teasers</h3>
 <p>A 6-point teaser moves the line 6 points your way on every leg, and every leg must win. A two-leg teaser at −120 breaks even when each leg wins √(120/220) = <b>73.9%</b>. The board prices each leg's chance off the market's own key-number curve (no model) and marks those that clear. <b>Wong legs</b> are NFL sides that a 6-point tease carries across both 3 and 7: favorites of −7.5 to −8.5 (teased to −1.5 to −2.5) and underdogs of +1.5 to +2.5 (teased to +7.5 to +8.5). They are the classic teaser legs; price them, do not bet them by rule.</p>
 <h3>Kalshi</h3>
@@ -191,7 +186,7 @@ Bet prices that beat the sharp line, bet the model's disagreements with the open
 <h2>3. The Games page, part one: the Bet sheet</h2>
 <p>The Games page opens with a week picker, the "Price bets from" switch (leave it on Market-adjusted), your bankroll, and then the <b>Bet sheet</b>: every bet the board would place this week, grouped by what the edge is made of.</p>
 <img class="shot" loading="lazy" alt="" src="img/nfl_top.jpg">
-<p class="cap">The top of the NFL Games page on November 4. The headline counts only the bets on the Bet sheet (3 price bets, 4 off the opener, 3 wind unders); the Bet sheet's note says the model's own three edges are in Model leans, how much of the weekly cap this week uses (7.8% of 10%), and that book prices were 13 hours old, so price bets are greyed.</p>
+<p class="cap">The top of the NFL Games page on November 11. The headline says 18 bets clear break-even on the model's own claims and none once record-adjusted; the Bet sheet has 4 opener bets and 2 wind unders, the model's own five edges are in Model leans, the week uses 3.7% of the 10% cap, and book prices were 11 hours old.</p>
 
 <h3>The four buttons</h3>
 <table class="kv">
@@ -206,7 +201,7 @@ Bet prices that beat the sharp line, bet the model's disagreements with the open
 <table>
 <tr><th>Tier</th><th>What it means</th><th>Its record</th></tr>
 <tr><td><b>Price beats Pinnacle</b></td><td>A retail price beats Pinnacle's no-vig number at that line by 1% or more per dollar, with no model. Take it now at the book named.</td><td>+EV against the sharp line by construction.</td></tr>
-<tr><td><b>Model off the opener</b></td><td>The model is 2+ points off the opening spread (3+ on totals; college: totals only) <b>and the market has not taken it yet</b>.</td><td>NFL spreads 2+: 54.6%, +4.1% on 988 bets (+4.4% on 621 since 2019).</td></tr>
+<tr><td><b>Model off the opener</b></td><td>The model is 2+ points off the opening spread (3+ on totals; college: totals only) <b>and the market has not taken it yet</b>.</td><td>NFL spreads 2+: 55.4%, +5.6% on 1,012 bets (+4.3% on 646 since 2019).</td></tr>
 <tr><td><b>Wind unders</b> (NFL)</td><td>An outdoor under in 10–19 mph of forecast wind, while the total has not already dropped 1.5 points. Half stake.</td><td>498-379-9 since 2014 (56.8%, +10.4% ± 3.2%); 2019 on: 238-164 (59.2%).</td></tr>
 <tr><td><b>Model edges</b></td><td>Everything else the market-adjusted projection makes +EV. On the NFL board these are in Model leans. On the college board they are still listed on the sheet, but <b>with no stake</b> <span class="new">NEW</span> (section 15).</td><td>Shown on every row.</td></tr>
 </table>
@@ -221,7 +216,7 @@ An opener bet stays in the tier while the line has moved no more than half a poi
 
 <h3>Reading one row, column by column</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_sheet_0.jpg">
-<p class="cap">The NFL Bet sheet on November 4: three price bets (greyed, "Check the price"), four opener bets and three wind unders.</p>
+<p class="cap">The NFL Bet sheet on November 11: no price bets, four opener bets and two wind unders. The EV column shows the record-adjusted figure with the model's own claim under it.</p>
 <table class="kv">
 <tr><td>Pick</td><td>The side and line, the game, the kickoff and how far away it is.</td></tr>
 <tr><td>Where</td><td>The book to bet at, its line and price (and the net price after Kalshi's fee). For a price bet, the book that beats Pinnacle; for a bucket bet, the book with the best price against Pinnacle; otherwise the best book. "Post on Kalshi at X¢" when a resting order is worth placing.</td></tr>
@@ -244,21 +239,21 @@ An opener bet stays in the tier while the line has moved no more than half a poi
 </table>
 
 <div class="box">
-<b class="t">How I read this week's NFL card (November 4, Week 9)</b>
-<p><b>DEN ML at DraftKings −135, NE ML at FanDuel −158, CLE ML at BetMGM +105</b> (price tier, +3.0%, +1.3% and +1.0% against Pinnacle, $2 to $10 at $1,000): pure price plays. But the rows are greyed: the book prices were 13 hours old when the board was built. I open each app, and I take a price only if it is still there or better. On game day the kickoff refresh and the Best bets alert do this check for me.</p>
-<p><b>PHI +3, IND +6, CIN −3, MIN +3</b> (opener tier, $3 to $8 bucket stakes): the model is 2.1 to 4.2 points off openers that have barely moved. These are the bets the backtest says pay. PHI and IND say "Can wait" (underdogs usually get cheaper); CIN says "Bet now" (favorites get dearer by the weekend).</p>
-<p><b>Under 40 NYG at PHI, Under 50.5 DET at MIA, Under 47 GB at NE</b> (wind, 11–14 mph, $12–$13 at half stake): bet now, before the totals drop. Note that their EV against the model is slightly negative; they are bet on the bucket's record, not the model's opinion, which is why the stake says "(bucket)".</p>
-<p>That is ten bets and 7.8% of bankroll. The model's three NFL edges are in Model leans, and I don't bet them.</p>
+<b class="t">How I read this week's NFL card (November 11, Week 10)</b>
+<p><b>No price bets.</b> The book prices were 11 hours old when the board was built and nothing beat Pinnacle by 1%. That is normal on a Wednesday; price bets appear after a fresh snapshot and are usually gone within hours, which is why the scheduled backup for skipped snapshots matters.</p>
+<p><b>SEA −6.5 (DraftKings −108), MIN +3.5 (BetMGM −112), LAC +4.5 (FanDuel −110), KC −3.5 (DraftKings −102)</b> (opener tier, $1 to $9 bucket stakes): the model was 2 or more points off each opener. Look at the EV column: record-adjusted −1.4% to −2.6%, with the model's own +0.9% to +3.0% under it in small type. On EV alone none of these is a bet. They are on the sheet because bets of this kind have won 54.7% since 2019, which is what the Record column says, and why the stake says "(bucket)". SEA, MIN and KC say "Bet now"; LAC says "Can wait" (underdogs usually get cheaper). MIN's best price is at BetMGM: if you only bet DraftKings and FanDuel, check their price on the same number, or wait for the kickoff alert, which does that for you.</p>
+<p><b>Under 51 BUF at NYJ, Under 40.5 HOU at CLE</b> (wind, 11 mph forecast, $8 and $11 at half stake): bet now, before the totals drop. Their EV is negative on both readings; they are bet on the bucket's record, not the model's opinion.</p>
+<p>That is six bets and 3.7% of bankroll. The model's five NFL edges are in Model leans, and I don't bet them.</p>
 </div>
 
 <h3>What is on the sheet versus what is in the ledger</h3>
-<p>Every bet that appears on the sheet is written into the ledger the first time it appears, at that price, and never changed. If the board later changes its mind (a quarterback ruled out, a line that moved to the model), the bet comes off the sheet and the ledger marks it <b>withdrawn</b>. By November 4 the NFL ledger had 61 bets: 28 kept on the sheet (to kickoff, or still on it this week) and 33 withdrawn before kickoff, most of them by the "Missed" rule. Section 14 explains why both records are kept.</p>
+<p>Every bet that appears on the sheet is written into the ledger the first time it appears, at that price, and never changed. If the board later changes its mind (a quarterback ruled out, a line that moved to the model), the bet comes off the sheet and the ledger marks it <b>withdrawn</b>. By November 11 the NFL ledger had 119 bets: 29 kept on the sheet (to kickoff, or still on it this week) and 90 withdrawn before kickoff, most of them by the "Missed" rule. Section 14 explains why both records are kept.</p>
 
 <div class="pb"></div>
 <h2>4. The Games page, part two: Line movement, the phone alerts and the Best bets alert</h2>
 <p>If the edge is the line moving toward the model, you want to know two things: <b>where the model disagrees with the opener</b>, and <b>how far the market has already come</b>. That is this section.</p>
 <img class="shot" loading="lazy" alt="" src="img/nfl_moves.jpg">
-<p class="cap">NFL Week 9 Line movement, measured at Pinnacle's line as of 3:41 PM ET on November 4: four sides live, none partly gone or missed.</p>
+<p class="cap">NFL Week 10 Line movement on November 11: four sides live and one partly gone.</p>
 <h3>The columns</h3>
 <table class="kv">
 <tr><td>Side</td><td>The model's side at today's line, the game and kickoff.</td></tr>
@@ -290,7 +285,7 @@ An opener bet stays in the tier while the line has moved no more than half a poi
 <p><b>Live → Partly gone:</b> the market is moving your way. If you already have it, good: that is closing line value. If you don't, the straight bet is worth much less than its record says. Look at the teaser leg.</p>
 <p><b>→ Missed:</b> the line has reached the model. No straight bet. If the teaser leg clears 73.9% (often a Wong leg), it can go into a two-team teaser with another leg that clears.</p>
 </div>
-<p class="small">College volume can be high: on November 4 the college board had 20 live sides and 4 partly gone in its buckets, against 4 on the NFL board. Treat a very large college gap (the model at 55 on an Air Force–Army total that opened 50 and is now 45.5) as a reason to look, not a reason to bet.</p>
+<p class="small">College volume can be high: on November 11 the college board had 19 live sides, 11 partly gone and 9 missed in its buckets, against 4 live and 1 partly gone on the NFL board. Treat a very large college gap (the model at 58.3 on an Auburn–Mississippi State total that opened 51.5 and is now 50) as a reason to look, not a reason to bet.</p>
 
 <h3>The Best bets alert <span class="new">NEW</span></h3>
 <p>Twenty minutes before each kickoff window, after the last pre-kickoff rebuild, the board sends that window's Best bets card to your phone (the same ntfy topic) and as a comment on the "best-bets" issue on GitHub, which emails you. Tapping the push opens the Best bets page on that league's board. It lists the card exactly as the Best Bets record will grade it, but <b>at DraftKings and FanDuel only</b>: each bet is shown at the better of the two that still qualifies under its own rule (a price bet must still beat Pinnacle's no-vig number; anything else must still be +EV). When neither book qualifies, the bet is listed as <b>NOT A BET</b> with the best price at the two books and the book the card used. A window with nothing on the card sends nothing.</p>
@@ -304,7 +299,7 @@ An opener bet stays in the tier while the line has moved no more than half a poi
 <p>Pick a side, enter the boosted odds the book is offering (or the base odds and a profit-boost percentage), choose a book, and the calculator prices it against Pinnacle's no-vig chance and against the model. A boost that is +EV against the sharp number is the best bet a recreational bettor ever gets. Boosts are capped by the book, so size to the cap, not to the Kelly number.</p>
 <h3>Teasers and alternate lines</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_tease_0.jpg">
-<p class="cap">The teaser table on October 31: DEN +7.5 (76.8%) and ATL +8.5 (76.6%) are Wong legs; LV +7 and NE −1 just clear 73.9%.</p>
+<p class="cap">The teaser table on November 11: BUF −1.5 (76.5%) and WAS +8.5 (75.7%) are Wong legs that clear 73.9%; NE +8.5 is a Wong leg that does not (72.9%).</p>
 <p>Choose 6 or 7 points and your book's two-leg price, and every leg is listed with its chance and whether it clears. "Market curve" prices legs with no model, which is the honest default. The table below lists the best two-leg pairs, treating the legs as independent. Two legs from the same game are not independent, and the board never pairs them. Each game's own page has a full alternate-line ladder with fair prices.</p>
 <p>How this ties to Line movement: when an opener bet goes <b>Missed</b>, the straight bet is gone, but the side often becomes a good teaser leg, because the line has moved onto or across a key number. That is the "lower odds, tease the line" play.</p>
 
@@ -314,7 +309,7 @@ An opener bet stays in the tier while the line has moved no more than half a poi
 <p>One row per game: the white tick is the market line, the hollow dot the raw model, the yellow dot the market-adjusted projection (28% of the way to the model on NFL spreads, 5% on totals, 17% for early lines). Switch between Spread, Total and Moneyline. The number at the right is the best EV on that market. It is the model's claim, so read it with the haircut.</p>
 <h3>The game cards</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_cards_0.jpg">
-<p class="cap">Game cards on November 4: JAX at BAL carries a "Rain 5.8 mm" tag; DET at MIA a wind tag; "Early line" marks lines four or more days out.</p>
+<p class="cap">Game cards on November 11: WAS at NYG carries a wind tag (14 mph, gusts 32) and "Rain 6.5 mm"; BUF at NYJ a wind tag; "Early line" marks lines four or more days out.</p>
 <p>Each card has the win chance (model weighed against the market), the market and raw-model spread and total, wind and rain or snow when they matter, and the single best bet with its book. "No bet clears break-even" is a perfectly good answer. Open a game for everything else.</p>
 <h3>Best prices this week</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_bets.jpg">
@@ -328,7 +323,7 @@ An opener bet stays in the tier while the line has moved no more than half a poi
 <p>The week's card in the order to take it: every bet on the sheet with the book, price, EV, stake, why and when, then the teaser legs that clear −120 with the best pairs, the week's prop flags (NFL), and the records each kind of bet carries. The header shows when the board was built, how old the prices are, the weekly cap, and once games are graded, the <b>Best Bets record</b> to date. On the NFL board the card no longer includes the model's own edges or every game's lean: <b>the card holds only bets.</b></p>
 <h3>Model leans (model-leans.pdf): what the model thinks</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_leans.jpg">
-<p>Two parts. On the NFL board, <b>the model's own edges</b>: sides the projection rates +EV with no price edge, no opener gap and no wind. On the graded bets since 2019 almost none of their claimed edge has shown up, so they carry no stake (model-only NFL spreads at EV above 0: 50.9%, −1.2% on 1,028 bets). They're kept here with their reasons and record. "Missed" marks one the market already moved to. On both boards, <b>every game: where the model leans</b>, with market, raw model and adjusted numbers, the board's side of each spread and total with its chance, the win chance, and notes (early line, wind, rain or snow, no sharp quote).</p>
+<p>Two parts. On the NFL board, <b>the model's own edges</b>: sides the projection rates +EV with no price edge, no opener gap and no wind. On the graded bets since 2019 almost none of their claimed edge has shown up, so they carry no stake (model-only NFL spreads at EV above 0: 51.3%, −0.7% on 1,079 bets). They're kept here with their reasons and record. "Missed" marks one the market already moved to. On both boards, <b>every game: where the model leans</b>, with market, raw model and adjusted numbers, the board's side of each spread and total with its chance, the win chance, and notes (early line, wind, rain or snow, no sharp quote).</p>
 <div class="box">
 <b class="t">Why two documents</b>
 A page of leans next to the bets turns a three-bet week into a fifteen-game slate. Leans are close to 50% by design. Keep the Best bets PDF for betting and the leans for understanding the games.
@@ -337,14 +332,14 @@ A page of leans next to the bets turns a three-bet week into a fifteen-game slat
 
 <div class="pb"></div>
 <h2>8. A game's own page</h2>
-<p>Click any game (a card, a chart row, a pick) to open its page. Using Baltimore at Buffalo, Week 8:</p>
+<p>Click any game (a card, a chart row, a pick) to open its page. Using Kansas City at Atlanta, Week 10:</p>
 <img class="shot" loading="lazy" alt="" src="img/nfl_game_0.jpg">
 <p class="cap">The top of the page: projected scores and win chances, the venue, weather and rest, the best price, and the Game summary.</p>
 <table class="kv">
-<tr><td>Header</td><td>Records, rest days, the projected score (24.9–29.0) and the win chance (BUF 64%), with links to the previous and next game.</td></tr>
-<tr><td>Best price</td><td>The single best bet and why, in one sentence. Here, BUF ML at DraftKings −170.</td></tr>
+<tr><td>Header</td><td>Records, rest days, the projected score (24.8–20.8) and the win chance (KC 64%), with links to the previous and next game.</td></tr>
+<tr><td>Best price</td><td>The single best bet and why, in one sentence. Here, KC −3.5 at +106: worth +0.9% on the model's own number and −2.6% record-adjusted, and the sentence says both.</td></tr>
 <tr><td>Game summary</td><td>Opening, current, model and adjusted lines side by side, and the win chance three ways (market, model, adjusted) as bars.</td></tr>
-<tr><td>How the spread is built</td><td>Every piece of the model's number in points: team ratings, home field, rest, each quarterback, offensive line injuries, skill starters out, snap shares. They add up to the model spread, and the same is shown for the total. This is where you check whether a disagreement is real ("BAL quarterback −2.1": Lamar Jackson is playing) or stale.</td></tr>
+<tr><td>How the spread is built</td><td>Every piece of the model's number in points: team ratings, home field, rest, each quarterback, offensive line injuries, skill starters out, snap shares. They add up to the model spread, and the same is shown for the total. This is where you check whether a disagreement is real ("KC quarterback −0.5", "Snap shares falling −0.4": this week's news, shown in red) or stale.</td></tr>
 <tr><td>Quarterbacks</td><td>Each starter's EPA per dropback over the last eight games, against league average.</td></tr>
 <tr><td>How they match up</td><td>Each offense against the other defense, with league ranks colored (1–6 best).</td></tr>
 <tr><td>Recent form</td><td>Each team's last ten games: margin, result against the spread and the total.</td></tr>
@@ -364,10 +359,10 @@ A page of leans next to the bets turns a three-bet week into a fifteen-game slat
 
 <h2>10. Players</h2>
 <img class="shot" loading="lazy" alt="" src="img/nfl_players_0.jpg">
-<p class="cap">The Players page (October 31).</p>
+<p class="cap">The Players page (November 11), with each player's every-game floor under his projection.</p>
 <p>Projected box scores for every quarterback, running back, receiver and tight end with a role this week: pass yards, rush yards, receptions, receiving yards and anytime-touchdown chance. Each projection is volume times efficiency. Volume is the team's expected plays and the player's share of them; efficiency is his own, adjusted for the defense. Players ruled out get no projection. The superscript after a name is his injury designation (Q questionable, P probable; out or doubtful means no projection). Select a player for how his numbers are built.</p>
 <img class="shot" loading="lazy" alt="" src="img/nfl_player_card.jpg">
-<p class="cap">A player opened on November 4: team volume, his share, his efficiency, the defense, From chain to projection, and teammates out.</p>
+<p class="cap">A player opened on November 11 (Kenneth Walker III): team volume, his share, his efficiency, the defense, From chain to projection, the every-game floor, and teammates out.</p>
 <table class="kv">
 <tr><td>Team volume</td><td>The team's projected pass attempts and carries, from the points the game model implies, the spread and the wind. <span class="new">NEW</span> Since November 4 the NFL pass attempts also use each offense's pass rate over expected and the rate its opponent allows, and carries use what the opponent allows against what its opponents usually run.</td></tr>
 <tr><td>Share and efficiency</td><td>His share of targets and carries (adjusted for who is out) and his yards per target, catch rate and yards per carry, shrunk toward his position's average.</td></tr>
@@ -399,34 +394,34 @@ A page of leans next to the bets turns a three-bet week into a fifteen-game slat
 </table>
 <h3>The Live record</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_model_live.jpg">
-<p class="cap">The NFL Live record on November 4: 61 flagged, 14 graded, 10-4, +29.6% a unit, closing line value −0.4%.</p>
-<p>Tiles for the record, return per unit, closing line value and stake, then a row per kind and per market. It reads both ways: the tile <b>Still on the sheet at kickoff</b> counts bets the board kept to the end, and the table adds rows for <b>kept</b> and <b>withdrawn</b>. Withdrawn bets are labelled in the row list. In a few weeks this tells you whether the board's changes of mind (a quarterback ruled out, a line that moved to the model) are adding value. On November 4 the kept bets were 5-0 and the withdrawn ones 5-4: far too few to say anything yet. From November 11 the table also has <b>DraftKings + FanDuel (the books you bet)</b> and <b>Other books</b>: the board flags prices at BetMGM and Kalshi as well, so the first of those rows is the record of the bets you could actually have placed (the screenshot in the box after the contents). The Best Bets record has the same two rows. On the college board the closing line value column was empty until November 11; it is filled now, for past bets too.</p>
+<p class="cap">The NFL Live record on November 11: 119 flagged, 54 graded, 28-26, −5.0% a unit, closing line value +1.8%. The DraftKings + FanDuel row is 22-17 with closing line value +2.9%; the other books are 6-9 and −1.1%.</p>
+<p>Tiles for the record, return per unit, closing line value and stake, then a row per kind and per market. It reads both ways: the tile <b>Still on the sheet at kickoff</b> counts bets the board kept to the end, and the table adds rows for <b>kept</b> and <b>withdrawn</b>. Withdrawn bets are labelled in the row list. In a few weeks this tells you whether the board's changes of mind (a quarterback ruled out, a line that moved to the model) are adding value. On November 11 the kept bets were 9-6 and the withdrawn ones 19-20: still too few to say anything. From November 11 the table also has <b>DraftKings + FanDuel (the books you bet)</b> and <b>Other books</b>: the board flags prices at BetMGM and Kalshi as well, so the first of those rows is the record of the bets you could actually have placed (22-17 on November 11, against 6-9 at the other books). The Best Bets record has the same two rows. On the college board the closing line value column was empty until November 11; it is filled now, for past bets too.</p>
 <h3>The Best Bets record</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_model_bbrec.jpg">
-<p>Started October 31, 2026. Each build logs the card: a bet that appears, changes book, line, price or stake, or leaves. When a game kicks off, the last version of its card counts. Tiles show the record, return per unit, <b>profit at the card's stakes</b> (what your bankroll actually did) and CLV. The table shows the record by week, then by kind, and the full list is underneath. The Best bets PDF quotes the record so far in its header. On November 4 the NFL card was 5-0 (+74% a unit, $35 on $47 staked) and the college card 20-18 (−0.6% a unit), all from the first weekend.</p>
+<p>Started October 31, 2026. Each build logs the card: a bet that appears, changes book, line, price or stake, or leaves. When a game kicks off, the last version of its card counts. Tiles show the record, return per unit, <b>profit at the card's stakes</b> (what your bankroll actually did) and CLV. The table shows the record by week, then by kind, and the full list is underneath. The Best bets PDF quotes the record so far in its header. On November 11 the NFL card was 9-4 (+25.7% a unit, $41 on $111 staked, closing line value 0.0%) and the college card 44-42 (−2.1% a unit, closing line value −2.4%).</p>
 <h3>Closing line value: the number to watch first <span class="new">NEW</span></h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_model_clv.jpg">
-<p class="cap">The Closing line value section on November 4: 14 NFL bets with a closing value, averaging −0.4% ± 1.0%; each kind's stake rule ("Watching 4 of 50"), and each kind's running average, bet by bet.</p>
+<p class="cap">The Closing line value section on November 11: 54 NFL bets with a closing value, averaging +1.8% ± 1.7%; each kind's stake rule ("Watching 26 of 50"), and each kind's running average, bet by bet.</p>
 <p>CLV is the EV of the price you took, measured at the closing no-vig chance. It's the one short-run proof that bets had edge: a bettor who beats the close consistently wins in the long run, whatever this week's results say. Fifty bets won't separate skill from luck on wins and losses; they will on CLV. Price-tier bets should show positive CLV almost every time. Opener bets should show it whenever the line moved toward them, which is the whole idea.</p>
 <p>The section has its own tiles (bets with a closing value, the average with its standard error, how often the close was beaten), a table by kind and by market, and a chart of each kind's running average. The <b>Stake rule</b> column says where each kind stands under the closing-line-value guard (section 2): "Watching (n of 50)" until it has 50 graded bets, then staked, or muted if it is losing to the close by more than two standard errors. The close is Pinnacle's last quote before kickoff; where Pinnacle never quoted a game, as for most college games, DraftKings' and then FanDuel's closing no-vig number is used.</p>
 <div class="box">
-<b class="t">How I read it on November 4</b>
-Early days. The opener bets were 5-2 but had lost to the close by 2.3% on average (1 of 7 beat it): the wins came from results, not from the line moving their way. That is exactly what this table is for. If it is still negative after 50 bets, the guard takes their stake off. Wind unders were +3.5% on 3 and price bets −0.1% on 4: too few to read.
+<b class="t">How I read it on November 11</b>
+Still early. Across 54 NFL bets the board has beaten the close by 1.8% ± 1.7%: encouraging, not proven. Price bets are +1.3% on 26 (18 beat the close) while losing on results (12-14): the closing line says the prices were fair bets, and the results are noise so far. Opener bets are 10-6 and average +2.6%, but only 5 of 16 beat the close, so that average rests on a few big moves. On the college board, where this table was empty until November 11, it reads −0.2% ± 0.8% on 151 bets, with the price tier at −0.1% on 92: there the claimed edge has not shown up, and the price tier's stake rule already reads "Close to the line". The row that matters most to you is on the Live record above it: DraftKings + FanDuel, +2.9% on 39 NFL bets and +0.8% on 110 college bets.
 </div>
 <h3>The backtest</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_model_record_0.jpg">
-<p>Every number is out of sample: 3,416 NFL games from 2014 to 2026, each projected using only earlier seasons and graded at the closing price. Settings were chosen on 2014–2018, so results since 2019 are the cleaner test. The headline tiles: average miss on the margin 10.02 points (the closing spread 9.91), spread picks every game 52.3%, total picks 50.2%, weight given to the model 28% on sides and 5% on totals. The backtest is rerun in full each Tuesday (NFL) and Monday (college), so the November 4 model changes show up in these tiles from the next full run. A <b>By part of the season</b> <span class="new">NEW</span> table (now on both boards) splits the holdout seasons into weeks 1–4, 5–9, 10–14, 15–18 and the playoffs, with the average miss for the raw model, the adjusted projection and the line, and how often each picked the winner. The charts show the miss by season, whether claimed EV showed up (the dots should sit on the diagonal; they mostly don't), units won or lost, and calibration of win chances (which is good).</p>
+<p>Every number is out of sample: 3,431 NFL games from 2014 to 2026, each projected using only earlier seasons and graded at the closing price. Settings were chosen on 2014–2018, so results since 2019 are the cleaner test. The headline tiles: average miss on the margin 10.01 points (the closing spread 9.91), spread picks every game 52.9%, total picks 50.2%, weight given to the model 30% on sides and 5% on totals. The backtest is rerun in full each Tuesday (NFL) and Monday (college), so model changes show up in these tiles from the next full run. A <b>By part of the season</b> <span class="new">NEW</span> table (now on both boards) splits the holdout seasons into weeks 1–4, 5–9, 10–14, 15–18 and the playoffs, with the average miss for the raw model, the adjusted projection and the line, and how often each picked the winner. The charts show the miss by season, whether claimed EV showed up (the dots should sit on the diagonal; they mostly don't), units won or lost, and calibration of win chances (which is good).</p>
 <h3>Wind unders and against opening lines</h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_model_openers.jpg">
-<p><b>Against opening lines</b> replays the model against the opening spread: 2,690 games, with games after a team's Monday-night game left out because their openers were posted before that game. At 2+ points of disagreement the model's side won 54.6% at the opener (526-438-24, +4.1% ± 3.0%; +4.4% on 621 bets since 2019) and 51.9% at the close. The line moved toward the model 50% of the time and away from it 28%. That table is the basis of the opener tier, the Line movement section and the phone alerts. <b>Wind unders</b> shows the 10–19 mph record by era. <b>Key numbers</b> shows how often NFL games land on each margin (3 and 7 above all), which is why a half point through 3 is worth so much and why Wong legs exist.</p>
+<p><b>Against opening lines</b> replays the model against the opening spread: 2,701 games, with games after a team's Monday-night game left out because their openers were posted before that game. At 2+ points of disagreement the model's side won 55.4% at the opener (548-442-22, +5.6% ± 3.0%; +4.3% ± 3.7% on 646 bets since 2019) and 52.7% at the close. The line moved toward the model 49% of the time and away from it 28%. That table is the basis of the opener tier, the Line movement section and the phone alerts. <b>Wind unders</b> shows the 10–19 mph record by era. <b>Key numbers</b> shows how often NFL games land on each margin (3 and 7 above all), which is why a half point through 3 is worth so much and why Wong legs exist.</p>
 <h3>Totals at the opening total <span class="new">NEW</span></h3>
 <img class="shot" loading="lazy" alt="" src="img/nfl_model_opentotals.jpg">
-<p>Under Against opening lines, a tracking table replays the model's total against the opening total (520 games since 2024, the first season with opening totals on file) at 2+, 3+ and 4+ point gaps: the record and return at the opener, the same sides at the close, how often and how far the total moved toward the model, and a column for this season. At 3+ points the total moved toward the model 57% of the time, by 0.65 points on average, but the return at the opener (+6.8% ± 9.2%) is nowhere near proof. <b>These are not bets</b>, and nothing on the sheet uses them. The live column is there to see whether the pattern holds.</p>
+<p>Under Against opening lines, a tracking table replays the model's total against the opening total (531 games since 2024, the first season with opening totals on file) at 2+, 3+ and 4+ point gaps: the record and return at the opener, the same sides at the close, how often and how far the total moved toward the model, and a column for this season. At 3+ points the total moved toward the model 58% of the time, by 0.72 points on average, but the return at the opener (+5.7% ± 9.1%) is nowhere near proof. <b>These are not bets</b>, and nothing on the sheet uses them. The live column is there to see whether the pattern holds.</p>
 
 <div class="pb"></div>
 <h2>15. The College board: what is different</h2>
 <img class="shot" loading="lazy" alt="" src="img/cfb_sheet_0.jpg">
-<p class="cap">The college Bet sheet on November 4: one price bet, two opener totals, then 32 model edges listed with no stake. The note says why, and the week uses 2.5% of the cap.</p>
+<p class="cap">The college Bet sheet on November 11: five price bets (greyed, "Check the price": the prices were 11 hours old), two opener totals, then 34 model edges listed with no stake, whose record-adjusted EV is the market's own number with the model's claim under it. The week uses 5.1% of the cap.</p>
 <table class="kv">
 <tr><td>Model edges: no stake <span class="new">NEW</span></td><td>The haircut measured on consensus lines is 52% (2,434 bets 2018–2025: claimed +3.6%, realized +1.7%), but regraded against Pinnacle's real 2024–2025 lines the college model's edge did not hold. Since November 1 the haircut is capped at 0: model edges are still listed on the college sheet and the Best bets card (so they are recorded and graded), but they carry no stake. Price bets and opener totals are sized as before. The Best Bets record's college Week 9 model-edge stakes were set before this change.</td></tr>
 <tr><td>Opener tier: totals only</td><td>College spreads off the opener have lost on the holdout seasons at every threshold below 5 points, so no college spread is ever in the opener tier. College totals 3+ points off the opener: 55.3%, +5.6% on 1,288 bets since 2021. A side marked Missed there means the total has already moved to the model.</td></tr>
@@ -439,13 +434,13 @@ Early days. The opener bets were 5-2 but had lost to the close by 2.3% on averag
 <tr><td>How the spread is built <span class="new">NEW</span></td><td>Since November 4 the college spread card has two more rows, <b>Coverage defenders out</b> (the share of a team's main coverage defenders who recorded nothing in its last game) and <b>Mid-season coaching change</b>, and "Returning defensive production" is now <b>Returning production</b>. Section 17 lists the other college model changes.</td></tr>
 </table>
 <img class="shot" loading="lazy" alt="" src="img/cfb_moves_0.jpg">
-<p class="cap">College Line movement (October 31).</p>
+<p class="cap">College Line movement (November 11): 19 sides live, 11 partly gone, 9 missed.</p>
 
 <div class="pb"></div>
 <h2>16. The Parlays page: leg finder, boost finder, builder and record <span class="new">NEW</span></h2>
 <p>The Parlays page (rhyman7.github.io/fb-value-board/docs/parlays.html, linked from the landing page under both boards) builds and prices parlays from both boards' legs: spreads, totals, moneylines, moved lines and player props, NFL and college, at DraftKings and FanDuel. It has five tabs.</p>
 <img class="shot" loading="lazy" alt="" src="img/parlays_boost.jpg">
-<p class="cap">The Boost finder on November 4: a 30% profit boost at DraftKings, $25 maximum wager, 3 to 5 legs from different games. The top card is a 5-leg parlay at +2228, boosted to +2896, worth +37.7% with a 4.6% chance of cashing and a half-unit stake.</p>
+<p class="cap">The Boost finder on November 11: a 30% profit boost at DraftKings, $25 maximum wager, 3 to 5 legs from different games. The top card is a 5-leg parlay at +2932, boosted to +3812, worth +43.4% with a 3.5% chance of cashing and a half-unit stake.</p>
 <table class="kv">
 <tr><td>Leg finder</td><td>The best parlays of 2 to 10 legs, ranked by value or by chance of cashing, with filters for the games (this week, next week's early lines, or both), league, book, minimum parlay odds, minimum odds and chance per leg, markets, and same-game rules. <b>Only this game</b> limits every leg to one game you pick.</td></tr>
 <tr><td>Boost finder</td><td>The same search for a profit boost: enter the boost %, the minimum and maximum legs, the minimum parlay odds and the boost's maximum wager. If the boost names one game (a Thursday, Sunday or Monday night game), pick it in Only this game.</td></tr>
@@ -464,7 +459,7 @@ Early days. The opener bets were 5-2 but had lost to the close by 2.3% on averag
 <tr><td>Each leg</td><td>Its chance, its price at the book, and its own value. Prop legs also show the player's share of his team's targets or carries this game, his usual share when the two differ by 2 points or more, and "teammates out" when his team has players ruled out.</td></tr>
 </table>
 <img class="shot" loading="lazy" alt="" src="img/parlays_record.jpg">
-<p class="cap">The Record tab on November 4: NFL legs 22-11 in Week 8 (66.7% against the 55.4% the tool said), best 2-leg parlays 2-5, best 3-leg 3-4; college legs 5-12 so far in Week 10.</p>
+<p class="cap">The Record tab on November 11: NFL legs 51-32 for the season (61.5% against the 55.5% the tool said), best 2-leg parlays 8-24, best 3-leg 8-26; college legs 399-376 (51.5% against 49.2% said).</p>
 <h3>Where the chances come from</h3>
 <ul>
   <li><b>Game lines</b> (spreads, totals, moneylines and moved lines): the board's market-adjusted projection read off the key-number curve, shrunk to the market by the haircut. On both boards that means the market's own number: the legs carry no model edge the results have not earned.</li>
@@ -475,7 +470,7 @@ Early days. The opener bets were 5-2 but had lost to the close by 2.3% on averag
 <b class="t">How a professional uses this page</b>
 <p>A parlay without a boost is almost always negative value: every leg pays the book's margin. The page earns its keep with <b>boosts</b>. When a book offers one, enter it in the Boost finder, set the book, the maximum wager and the game if the boost names one, and take the top card <b>at the book that offered the boost</b>. Check every leg's price in the app first, and skip the parlay if the app quotes less than "Needs".</p>
 <p>Don't rank by chance of cashing. Heavy favourites parlayed together lose more than they win: in 2025, alternate rungs priced −400 to −1000 cleared less often than their prices said. The boosted 5-leg card above, at +37.7% value, still loses about 19 times in 20. Stake it small and expect long losing runs.</p>
-<p>Read the Record tab like the Best Bets record: is the hit rate near the chance the tool said, and is the return near what it claimed? On November 4 the NFL legs were 22-11 (66.7% against 55.4% said) and the first college legs 5-12: one week each, which says nothing yet.</p>
+<p>Read the Record tab like the Best Bets record: is the hit rate near the chance the tool said, and is the return near what it claimed? On November 11 the NFL legs were 51-32 (61.5% against 55.5% said) and the college legs 399-376 (51.5% against 49.2% said); the best NFL 2-leg parlays were 8-24 (25% against 29% said). Two weeks of NFL legs still say little; the college legs are tracking what the tool claimed.</p>
 </div>
 
 <h2>17. Behind the scenes: where the numbers come from, when they change, and how the model changes</h2>
@@ -560,7 +555,7 @@ Early days. The opener bets were 5-2 but had lost to the close by 2.3% on averag
 <p class="term"><b>Close win rate.</b> How the opener bucket's sides did graded at the closing line: 51.9% for NFL spreads 2+, below break-even.</p>
 <p class="term"><b>Defense against each position.</b> A defense's record against wide receivers, tight ends and backs, against what those players were projected for, applied to the player projections as a small factor.</p>
 <p class="term"><b>EV.</b> Expected value per dollar staked.</p>
-<p class="term"><b>Haircut.</b> The share of the model's claimed edge that has shown up as profit in the last eight seasons; stakes are sized from it. NFL 8% on November 4 (model edges kept off the card); college measured 52% but capped at 0 since November 1.</p>
+<p class="term"><b>Haircut.</b> The share of the model's claimed edge that has shown up as profit in the last eight seasons; stakes are sized from it. NFL 11% ± 29% on November 11 (model edges kept off the card); college measured 52% but capped at 0 since November 1.</p>
 <p class="term"><b>Keep rule.</b> Since November 11, 2026: a model change is kept if it is better on every measure its test reports, on the tuning seasons and the holdout, the holdout by at least one standard error; it is then provisional until rechecked on a season it has not seen. (November 4 to 10: any gain, however small.)</p>
 <p class="term"><b>Record-adjusted EV.</b> The EV at the chance the stakes are sized from: the model's edge counted only at the share that has shown up in graded bets. It leads wherever a model EV is shown, with the model's own claim under it.</p>
 <p class="term"><b>Kept / withdrawn.</b> Whether a ledger bet was still on the sheet at kickoff, or came off before.</p>
@@ -588,6 +583,6 @@ Early days. The opener bets were 5-2 but had lost to the close by 2.3% on averag
 <p class="term"><b>Wind under.</b> An outdoor NFL under in 10–19 mph of forecast wind, staked at half size until graded on forecasts.</p>
 <p class="term"><b>Wong teaser.</b> A 6-point teaser leg that crosses both 3 and 7: a favorite of −7.5 to −8.5 or an underdog of +1.5 to +2.5. Price them, do not bet them by rule.</p>
 
-<p class="small" style="margin-top:24pt">Fourth edition, updated November 4, 2026 from the live boards (third edition October 31). Numbers change every day; the explanations do not. For research and entertainment; nothing here is betting advice.</p>
+<p class="small" style="margin-top:24pt">Fifth edition, updated November 11, 2026 from the live boards (fourth edition November 4, third October 31). The screenshots are re-shot with <code>scripts/manual_shots.py</code>. Numbers change every day; the explanations do not. For research and entertainment; nothing here is betting advice.</p>
 </body>
 </html>
