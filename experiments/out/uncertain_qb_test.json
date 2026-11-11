@@ -1,0 +1,155 @@
+{
+ "qb_prior": "pff",
+ "cases_from_2012": 192,
+ "flagged_team_games": 161,
+ "start_rate": {
+  "all": 0.621,
+  "full": {
+   "n": 35,
+   "started": 0.914,
+   "avg_chance_used": 0.816
+  },
+  "limited": {
+   "n": 105,
+   "started": 0.552,
+   "avg_chance_used": 0.573
+  },
+  "none": {
+   "n": 21,
+   "started": 0.476,
+   "avg_chance_used": 0.58
+  }
+ },
+ "backup_pick_right_when_incumbent_sat": {
+  "n": 61,
+  "right": 0.738
+ },
+ "flagged_games": 159,
+ "measures": {
+  "tuning 2016-18": {
+   "margin miss": {
+    "B0": 9.7855,
+    "W": 10.0482,
+    "diff": 0.2627,
+    "se": 0.2833,
+    "n": 41,
+    "knowing the starter (not in the rule)": 9.4508
+   },
+   "total miss": {
+    "B0": 13.4966,
+    "W": 13.3191,
+    "diff": -0.1775,
+    "se": 0.2144,
+    "n": 41,
+    "knowing the starter (not in the rule)": 13.5037
+   },
+   "win Brier": {
+    "B0": 0.2013,
+    "W": 0.2049,
+    "diff": 0.0036,
+    "se": 0.0071,
+    "n": 39,
+    "knowing the starter (not in the rule)": 0.194
+   },
+   "cover Brier (opener)": {
+    "B0": 0.2418,
+    "W": 0.2416,
+    "diff": -0.0002,
+    "se": 0.0087,
+    "n": 37,
+    "knowing the starter (not in the rule)": 0.2355
+   }
+  },
+  "holdout 2019 on": {
+   "margin miss": {
+    "B0": 11.1018,
+    "W": 11.0144,
+    "diff": -0.0874,
+    "se": 0.1244,
+    "n": 118,
+    "knowing the starter (not in the rule)": 11.1798
+   },
+   "total miss": {
+    "B0": 11.4951,
+    "W": 11.2064,
+    "diff": -0.2887,
+    "se": 0.1112,
+    "n": 118,
+    "knowing the starter (not in the rule)": 10.933
+   },
+   "win Brier": {
+    "B0": 0.2322,
+    "W": 0.23,
+    "diff": -0.0022,
+    "se": 0.0034,
+    "n": 118,
+    "knowing the starter (not in the rule)": 0.2323
+   },
+   "cover Brier (opener)": {
+    "B0": 0.2545,
+    "W": 0.2547,
+    "diff": 0.0002,
+    "se": 0.0039,
+    "n": 105,
+    "knowing the starter (not in the rule)": 0.2621
+   }
+  }
+ },
+ "keep": false,
+ "verdict": "not kept: mixed or under 1 SE (a trade-off for Ryan)",
+ "all_games_2019_on": {
+  "n": 2007,
+  "B0": 9.9561,
+  "W": 9.9509,
+  "diff": -0.0051,
+  "se": 0.0073
+ },
+ "second_question": {
+  "tuning 2016-18": {
+   "board-flagged": {
+    "n": 26,
+    "record": "14-12",
+    "win_pct": 0.5385,
+    "return": 0.028,
+    "return_se": 0.1903,
+    "weight": 0.516,
+    "weight_se": 0.962
+   },
+   "other games": {
+    "n": 661,
+    "record": "356-305",
+    "win_pct": 0.5386,
+    "return": 0.0282,
+    "return_se": 0.037,
+    "weight": 0.587,
+    "weight_se": 0.216
+   },
+   "return gap (flagged - other)": -0.0002,
+   "gap_se": 0.1939
+  },
+  "holdout 2019 on": {
+   "board-flagged": {
+    "n": 85,
+    "record": "46-39",
+    "win_pct": 0.5412,
+    "return": 0.0332,
+    "return_se": 0.1038,
+    "weight": 0.059,
+    "weight_se": 0.373
+   },
+   "other games": {
+    "n": 1651,
+    "record": "880-771",
+    "win_pct": 0.533,
+    "return": 0.0176,
+    "return_se": 0.0234,
+    "weight": 0.554,
+    "weight_se": 0.112
+   },
+   "return gap (flagged - other)": 0.0156,
+   "gap_se": 0.1064
+  }
+ },
+ "propose_hold": false,
+ "props": "no player projection is touched; no prop moves"
+}

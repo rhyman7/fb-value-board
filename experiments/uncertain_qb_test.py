@@ -63,7 +63,7 @@ Props: no player projection is touched, so no prop moves.
 Known limits: about 45 flagged games in tuning; the report is Friday's, so this is the late-week
 case; the opener stands in for the line the board bets into mid-week.
 
-Writes experiments/out/uncertain_qb_test.json.
+Writes experiments/out/uncertain_qb_test.json, and the flagged games and cases beside it as CSV.
 """
 from __future__ import annotations
 
@@ -281,13 +281,13 @@ def main() -> None:
     # chances: the weighted mean of the chances under each quarterback
     combos = ("II", "KI", "IK", "KK")
     d["win"] = np.where(d.result > 0, 1.0, np.where(d.result < 0, 0.0, np.nan))
-    d["cov"] = np.where(d.open_spread.isna() | (d.result == d.open_spread), np.nan, (d.result > d.open_spread).astype(float))
+    d["covered"] = np.where(d.open_spread.isna() | (d.result == d.open_spread), np.nan, (d.result > d.open_spread).astype(float))
     d["pw_b0"], d["pw_aa"] = ndtr(d.m_b0 / d.sd), ndtr(d.m_aa / d.sd)
     d["pw_w"] = sum(d[f"w_{n}"] * ndtr(d[f"m_{n}"] / d.sd) for n in combos)
     d["pc_b0"], d["pc_aa"] = ndtr((d.m_b0 - d.open_spread) / d.sd), ndtr((d.m_aa - d.open_spread) / d.sd)
     d["pc_w"] = sum(d[f"w_{n}"] * ndtr((d[f"m_{n}"] - d.open_spread) / d.sd) for n in combos)
     loss = {"margin miss": lambda v: (d[f"m_{v}"] - d.result).abs(), "total miss": lambda v: (d[f"t_{v}"] - d.total).abs(),
-            "win Brier": lambda v: (d[f"pw_{v}"] - d.win) ** 2, "cover Brier (opener)": lambda v: (d[f"pc_{v}"] - d.cov) ** 2}
+            "win Brier": lambda v: (d[f"pw_{v}"] - d.win) ** 2, "cover Brier (opener)": lambda v: (d[f"pc_{v}"] - d["covered"]) ** 2}
     res["measures"], better, se_ok = {}, [], []
     for per, fn in PERIODS.items():
         k = fn(d.season)
@@ -344,6 +344,8 @@ def main() -> None:
     res["props"] = "no player projection is touched; no prop moves"
 
     OUT.mkdir(exist_ok=True)
+    d.round(4).to_csv(OUT / "uncertain_qb_test_games.csv", index=False)          # one row per flagged game, for checking
+    test.to_csv(OUT / "uncertain_qb_test_cases.csv", index=False)
     (OUT / "uncertain_qb_test.json").write_text(json.dumps(res, indent=1))
     print(json.dumps(res, indent=1))
 
