@@ -158,7 +158,8 @@ def summary(path: Path, results_path: Path, now: dt.datetime | None = None) -> d
     out = {"since": str(df["at"].min())[:10], "all": L._rec(x), "pending": pending,
            "by_week": [{"season": int(s), "week": int(w), **L._rec(y)} for (s, w), y in x.groupby(["season", "week"])],
            "by_tier": {t: L._rec(y) for t, y in x.groupby("tier")},
-           "by_market": {m: L._rec(y) for m, y in x.groupby("market")}}
+           "by_market": {m: L._rec(y) for m, y in x.groupby("market")},
+           "by_books": L.by_books(x)}
     rows = x.sort_values(["kickoff", "game_id", "market", "side"], ascending=[False, True, True, True])
     out["rows"] = [{k: (None if (isinstance(v, float) and np.isnan(v)) else v) for k, v in r.items()}
                    for r in rows.drop(columns=["anchor_spread", "anchor_total", "on_card"]).to_dict("records")]

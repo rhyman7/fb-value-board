@@ -14,6 +14,20 @@ from . import archive, backtest, bets, board, config as C, cfbd, data, designati
 from . import pff_returning as PFFRET
 from .ratings import CFBRatingEngine
 
+def close_by_id(close: dict) -> dict:
+    """market.closing_quotes keyed the way the ledger keys a game (`data_id`, the ESPN id as a
+    whole-number string). The matched market rows carry the id as a float once any row is
+    unmatched, so str() gave "401856733.0" and no college bet ever found its closing quote
+    (no closing line value on the college board until Nov 11, 2026)."""
+    out = {}
+    for k, v in (close or {}).items():
+        try:
+            out[str(int(float(k)))] = v
+        except (TypeError, ValueError):
+            out[str(k)] = v
+    return out
+
+
 PLAYER_PERIODS = {"tuning": (2017, 2019), "holdout": (C.HOLDOUT_FROM, 2100)}
 
 
@@ -189,7 +203,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         close = market.closing_quotes(done, "cfb", {g.game_id: pd.Timestamp(g.kickoff) for g in done.itertuples()}, names={v: k for k, v in names.items()})
         scores = {str(int(g.game_id)): (g.home_score, g.away_score) for g in done.itertuples()}
         halves = {str(int(h.game_id)): (h.home_h1, h.away_h1) for h in half.itertuples()} if len(half) else {}
-        n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, {str(k): v for k, v in close.items()},
+        n_graded = ledger.grade(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv", scores, close_by_id(close),
                                 lambda df: bets.curves(df, dist, "line"), halves=halves)
         out["ledger"] = ledger.summary(C.DATA / "ledger.csv", C.DATA / "ledger_results.csv")
         say(f"  ledger: {n_new} bets flagged, {n_graded} graded")
@@ -201,7 +215,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     try:                                          # the Best Bets record (nflmodel/bestbets.py): the card as it stood at kickoff
         kk = {g["id"]: kick[str(g["game_id"])] for g in slate["games"] if str(g["game_id"]) in kick}
         bestbets.record(slate["games"], season, kk, C.DATA / "bestbets.csv", "cfb")
-        n_bb = bestbets.grade(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv", scores, {str(k): v for k, v in close.items()},
+        n_bb = bestbets.grade(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv", scores, close_by_id(close),
                               lambda df: bets.curves(df, dist, "line"), halves=halves)
         out["best_record"] = bestbets.summary(C.DATA / "bestbets.csv", C.DATA / "bestbets_results.csv")
         say(f"  best bets record: {n_bb} graded")

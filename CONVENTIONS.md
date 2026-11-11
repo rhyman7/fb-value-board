@@ -452,7 +452,7 @@ boards in detail; this file is the rules.
   `ledger_status.csv` beside each ledger (append-only, written by `ledger.track` inside
   `record`) logs each time a row leaves the sheet or comes back before kickoff, so the record
   reads both ways: `kept` (still on the sheet at kickoff) and `withdrawn`; each summary row
-  has `kept`. `data.json` carries the summary as
+  has `kept`. The record is also split by where the bet would be placed (`by_books`, `ledger.by_books`, Nov 11, 2026): `mine` is DraftKings and FanDuel, the only books Ryan bets (`ledger.MY_BOOKS`, the same pair as `kickoff.MY_BOOKS`), `other` is BetMGM, Kalshi and consensus rows; both records' tables on the Model record page show the two rows, and the Best Bets record carries the same split. **College closing line value** (Nov 11, 2026): `cfbmodel/pipeline.close_by_id` keys the closing quotes by the whole-number ESPN id before grading; until then they were keyed "401856733.0" and no college row had a `clv`. One sanctioned correction: `scripts/backfill_cfb_clv.py --write` filled `close_line`, `close_prob` and `clv` (those three columns only) on the 151 college ledger results and 86 Best Bets results graded before the fix; `tests/test_cfb.py` fails if most graded college rows lack one. `data.json` carries the summary as
   `ledger` (records overall, kept, withdrawn, by tier, by market and by week, plus every row) and the Model
   record page leads with it as **Live record**; `tests/test_sheet.py` checks the files.
 - **The Best Bets record (both boards): `data/bestbets.csv`, `data/bestbets_results.csv`, and

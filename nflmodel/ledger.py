@@ -251,6 +251,18 @@ def _clv(r, close: dict | None, curve) -> dict:
             "close_prob": round(p / (1 - push), 4), "clv": round(float(O.expected_value(p, float(r.odds_net), push)), 4)}
 
 
+MY_BOOKS = ("draftkings", "fanduel")   # the only books Ryan bets (the kickoff alert uses the same pair)
+
+
+def by_books(x: pd.DataFrame) -> dict:
+    """The record split by where the bet would be placed: `mine` (DraftKings and FanDuel, the
+    books Ryan bets) and `other` (BetMGM, Kalshi, a consensus line). The other rows are still
+    logged, since a price that beats the sharp line there says something about the method, but
+    the record that counts for his betting is `mine`."""
+    mine = x["book"].astype(str).str.lower().isin(MY_BOOKS)
+    return {"mine": _rec(x[mine]), "other": _rec(x[~mine])}
+
+
 def _rec(x: pd.DataFrame) -> dict:
     g = x[x["result"].notna()]
     w, l, p = int((g.result == "W").sum()), int((g.result == "L").sum()), int((g.result == "P").sum())
@@ -290,6 +302,7 @@ def summary(path: Path, results_path: Path) -> dict:
            "kept": _rec(x[x["kept"]]), "withdrawn": _rec(x[~x["kept"]]),
            "by_tier": {t: _rec(y) for t, y in x.groupby("tier")},
            "by_market": {m: _rec(y) for m, y in x.groupby("market")},
+           "by_books": by_books(x),
            "by_week": [{"season": int(s), "week": int(w), **_rec(y)} for (s, w), y in x.groupby(["season", "week"])]}
     rows = x.sort_values(["kickoff", "game_id", "market", "side"], ascending=[False, True, True, True])
     out["rows"] = [{k: (None if (isinstance(v, float) and np.isnan(v)) else v) for k, v in r.items()}
