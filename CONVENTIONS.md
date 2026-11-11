@@ -150,6 +150,12 @@ boards in detail; this file is the rules.
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
+  **Backup for skipped runs (Nov 11, 2026):** GitHub often drops the three daily snapshots (02:05,
+  14:05, 20:05 UTC; on Nov 11 the board was built on prices 8 hours old), so a Claude scheduled
+  task, "Market lines backup", runs at 02:45, 14:45 and 20:45 UTC and starts one plain snapshot
+  (no derivatives, no alternates, about 6 credits) unless a Market lines run was created in the
+  last 60 minutes or one is queued or running. It starts nothing else and edits nothing. If the
+  three daily times change, change the task's schedule with them.
   Kalshi prices are the contract price; `odds.kalshi_effective_odds` adds the exchange fee
   (taker 7% x p x (1-p) per contract, maker 1.75%; the schedule and its date are cited in
   `odds.py`, check it each season) before any EV is computed. Every Kalshi quote on a side
@@ -495,6 +501,13 @@ boards in detail; this file is the rules.
 - A mixed result (better on one measure, worse on another), or better everywhere but under 1 standard
   error on the holdout, is not kept. It goes to Ryan as a trade-off for him to decide.
 - Every model test includes a props check where relevant.
+- **Player-projection tests are scored at bet time too (Nov 11, 2026).** Any change whose input is
+  who is expected to play (shares, team sums, usage handed to teammates, availability) is scored on
+  bet-time projections (`players.build(pregame=True)`, the pricing-snapshot lines) as well as on the
+  game-day table, and must pass on both. The game-day table knows the inactives (from 2019); the
+  board, mid-week, does not and counts about one more receiver per team. Scaling receivers to fit
+  the quarterback was better on every measure on played games and worse on every measure at bet
+  time (PLAYERS.md, `experiments/team_totals_test.py --bettime`).
 - Still run the 2017-2025 walk-forward (or the NFL equivalent) before anything is kept, report results
   plainly including when nothing is kept, and still give Ryan a short plan and wait for his go-ahead
   before a kept change goes on the live boards.

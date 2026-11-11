@@ -49,60 +49,69 @@ The output is a static site in `docs/` that GitHub Pages can serve as is.
 
 ## What it found
 
-Backtested walk-forward on 3,387 games, 2014 through week 6 of 2026, graded at
-closing prices:
+Backtested walk-forward on 3,431 games, 2014 through week 9 of 2026, graded at
+closing prices (numbers as of Nov 11, 2026):
 
 | | Model | Closing line |
 |---|---|---|
-| Average miss on the margin | 10.04 pts | 9.91 pts |
-| Average miss on the total | 10.56 pts | 10.46 pts |
-| Picks the winner | 65.5% | 66.0% |
+| Average miss on the margin | 10.01 pts | 9.91 pts |
+| Average miss on the total | 10.57 pts | 10.46 pts |
+| Picks the winner | 66.3% | 66.3% |
 
 | Raw model, one bet on every game | Record | Win rate | Return |
 |---|---|---|---|
-| Spreads | 1,690-1,610-87 | 51.2% | -0.6% |
-| Totals | 1,684-1,672-31 | 50.2% | -2.8% |
-| Moneylines | 1,701-1,673-12 | 50.4% | -2.2% |
+| Spreads | 1,768-1,576-87 | 52.9% | +2.5% |
+| Totals | 1,708-1,692-31 | 50.2% | -2.7% |
+| Moneylines | 1,859-1,559-12 | 54.4% | +0.1% |
 
 **The model is close to the closing line and does not beat it.** A spread bettor
 needs 52.4% at -110. Since 2019, the seasons the settings were not tuned on, the
-spread picks are 50.5%.
+spread picks are 52.1%.
 
 So the dashboard prices bets from a market-adjusted projection: the market line,
 moved toward the model by only as much as the model has earned. That weight is
-currently 17% on sides and 5% on totals (totals are capped there; see
-FEATURES.md). Market-adjusted spread bets with EV above 2% went 603-513-25
-(54.0%, +5.4% return, standard error 2.9%), but only 51.9% since 2019, so the
-improvement over earlier versions comes mostly from seasons the settings were
-chosen on and is not yet proof.
+currently 30% on sides and 5% on totals (totals are capped there; see
+FEATURES.md). Market-adjusted spread bets with EV above 2% went 832-702-33
+(54.2%, +5.6% return, standard error 2.4%), but only 52.1% since 2019, so the
+gain comes mostly from seasons the settings were chosen on and is not proof.
+
+**What the weight is made of** (the Nov 11, 2026 review, FEATURES.md): against the
+closing line since 2019 the model earns a weight of 0.26 ± 0.11, and nearly all of
+it comes from knowing the actual starting quarterback and who is out. Without
+those inputs it earns 0.08 ± 0.09: the team ratings add nothing the closing line
+lacks. The backtest knows those inputs with certainty; the board knows them only
+partly until kickoff. And of the EV the market-adjusted projection has claimed,
+about a tenth has shown up in graded bets (0.11 ± 0.29, not distinguishable from
+zero), which is why the EV the page leads with is record-adjusted (below).
 
 ### Against opening lines
 
 The picture is better when the bet is placed at the opening spread instead of
-the closing one. On 2,667 games since 2014:
+the closing one. On 2,701 games since 2014:
 
 | Model disagrees with the opener by | Record | Win rate | Return |
 |---|---|---|---|
-| any amount | 1,348-1,260-59 | 51.7% | -1.3% |
-| 1+ points | 895-805-38 | 52.6% | +0.5% |
-| 2+ points | 521-433-23 | 54.6% | +4.2% |
-| 3+ points | 265-228-9 | 53.8% | +2.5% |
+| any amount | 1,381-1,260-60 | 52.3% | -0.1% |
+| 1+ points | 931-826-39 | 53.0% | +1.2% |
+| 2+ points | 548-442-22 | 55.4% | +5.6% |
+| 3+ points | 278-234-11 | 54.3% | +3.6% |
 
-On the 2+ point bets the line later moved toward the model 51% of the time
+On the 2+ point bets the line later moved toward the model 49% of the time
 and away from it 28%, for an average of +0.6 points of closing line value.
-The same sides bet at the close won 52.0%.
+The same sides bet at the close won 52.7%. Since 2019 alone the 2+ point bets
+are 54.7%, +4.3% ± 3.7%.
 
 This test is deliberately strict: the model is not told about quarterback
-changes announced during the week, and 345 games where a team had played the
+changes announced during the week, and 353 games where a team had played the
 previous Monday night are left out. It is still not proof. The 2+ point return
-is 1.4 standard errors above zero, and opening numbers move fast and take
-small bets, so real results would land between the opening and closing records.
+is 1.9 standard errors above zero (1.2 since 2019), and opening numbers move fast
+and take small bets, so real results would land between the opening and closing
+records.
 
 Games four or more days away are marked on the board as early lines and priced
-with the weight the model has earned against opening spreads (17%, against 17%
-for closing lines). The difference is small because that is what the data
-supports: replaying that pricing on past openers flagged 825 bets that went
-430-376-19 (53.4%) and returned +1.9%, about half the +3.4% the pricing claimed.
+with the weight the model has earned against opening spreads (21%, against 30%
+for closing lines): replaying that pricing on past openers flagged 940 bets that
+went 495-425-20 (53.8%) and returned +2.7%, against the +3.5% the pricing claimed.
 
 **So the model's value is early in the week.** By kickoff the market has
 absorbed what it knows. Use it to find spreads that look off when they open, and
@@ -112,7 +121,7 @@ as a fair price to shop against.
 
 Closing totals do not fully account for wind. Unders at the closing total in
 outdoor games with 10 to 19 mph of recorded wind went 498-379-9 (56.8%, +10.4%
-return), and 238-164-4 (59.2%, +14.2% ± 4.7%) since 2019. The effect shows up
+return), and 238-164-4 (59.2%, +14.3% ± 4.7%) since 2019. The effect shows up
 from 2014 on and not before. The band was chosen after looking at every season
 and the backtest uses wind measured at the game rather than a forecast, so it is
 a lead to keep testing. The board tags games forecast in that band.
@@ -142,15 +151,17 @@ one of its edits.
 Walk-forward on FBS-against-FBS games, settings chosen on 2017-2019, graded at −110 at
 the consensus closing line:
 
-| Since 2021 (4,143 games) | Model | Closing line |
+| Since 2021 (4,203 games, through week 9 of 2026) | Model | Closing line |
 |---|---|---|
-| Average miss on the margin | 12.35 pts | 12.05 pts |
-| Average miss on the total | 12.60 pts | 12.43 pts |
-| Picks the winner | 73.4% | 73.5% |
+| Average miss on the margin | 12.35 pts | 12.04 pts |
+| Average miss on the total | 12.63 pts | 12.47 pts |
+| Picks the winner | 73.2% | 73.4% |
 
-It trails the line by about a point in weeks 0 to 5 and is level from week 6 on. Against
+It trails the line by about a point in weeks 0 to 5 and is level from week 6 on; in 2026 it
+has trailed by about a point all season (12.4 against 11.5 through week 10), and two fixes
+tested on Nov 11, 2026 were not kept (CFB_FEATURES.md). Against
 opening totals (2021 on), betting the model's side when it is 3+ points off went
-694-562-12 (55.3%, +5.4% ± 2.7%). See [CFB_FEATURES.md](CFB_FEATURES.md) for every test
+706-570-12 (55.3%, +5.6% ± 2.6%). See [CFB_FEATURES.md](CFB_FEATURES.md) for every test
 (including "Where the edge lives", the record split by conference tier, day of week and
 week of season) and [CFB_PLAYERS.md](CFB_PLAYERS.md) for the player projections.
 
@@ -230,11 +241,14 @@ check its first run.
    price, and a quarter-Kelly stake capped at 3% of bankroll and 5% a game, all
    sides together. The stake is sized from the model probability shrunk toward the
    market's by the share of claimed edge that has shown up in the last eight
-   seasons' graded bets (`backtest.edge_haircut`; 0 on the NFL board as of
-   October 2026, so no NFL stake is sized until that changes, and 0 whenever
-   the factor has not been measured: it fails closed); the EV and
-   probabilities shown are the model's. See FEATURES.md, "Edge tests, late
-   October 2026".
+   seasons' graded bets (`backtest.edge_haircut`; 0.11 on the NFL board as of
+   Nov 11, 2026 and 0 on the college board, and 0 whenever
+   the factor has not been measured: it fails closed). **The EV the page leads
+   with is record-adjusted** (Nov 11, 2026): the EV at that same shrunk chance
+   (`ev_rec` on every bet and book quote), with the model's own claim under it as
+   "model +x%". Price-beats-Pinnacle figures need no model and are shown as they
+   are; opener and wind rows lead with their bucket's record. See FEATURES.md,
+   "Edge tests, late October 2026", and CONVENTIONS.md, "Record-adjusted EV".
 
 ## The bet sheet and the ledger
 
@@ -290,7 +304,9 @@ Every flagged bet goes into the **ledger** (`nflmodel/ledger.py`, `data/ledger.c
 book, line and price it was first flagged at (and `ledger_status.csv` notes when the board
 withdraws it before kickoff, so the Live record reads both ways: every bet flagged, and only
 those still on the sheet at kickoff), and is graded on the result and on closing line
-value against Pinnacle's close; the Model record page leads with that live record. The
+value against Pinnacle's close (on both boards; the college board's was missing until
+Nov 11, 2026); the Model record page leads with that live record, which also splits it
+into **DraftKings + FanDuel**, the books Ryan bets, and the other books (`ledger.by_books`). The
 Teasers section prices every leg with 6 or 7 points added off the key-number curve (Wong
 legs marked), and each game's page carries the alternate-line ladder with fair prices
 (`nflmodel/alts.py`).
@@ -313,7 +329,9 @@ Pinnacle, DraftKings, FanDuel, BetMGM and Kalshi, from The Odds API (`nflmodel/m
 night to Tuesday, when the week's lines open, plus hourly on game days for the league
 playing (college Saturdays, NFL Sundays and Thursday nights), each game-day snapshot followed
 by a quick rebuild of that board so its prices are never much more than an hour old; any
-snapshot that sends a line-movement alert also rebuilds that league's board, any day). The
+snapshot that sends a line-movement alert also rebuilds that league's board, any day; GitHub
+often skips the three daily runs, so a Claude scheduled task, "Market lines backup", starts a
+plain snapshot 40 minutes after each one that did not run). The
 **Kickoff refresh** Action (`kickoff.yml`, `nflmodel/kickoff.py`) adds a snapshot and rebuild
 35 and 20 minutes before each kickoff window (the first kickoff of each 30-minute cluster;
 NFL and college refreshes within 5 minutes of each other run as one), so the Best bets card
