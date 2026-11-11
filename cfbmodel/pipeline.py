@@ -222,6 +222,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     except Exception as exc:
         print(f"  best bets record skipped ({exc})")
         out["best_record"] = prev.get("best_record")
+    try:                                          # every forecast shown before kickoff (nflmodel/forecastlog.py); data/ only, not shown
+        from nflmodel import forecastlog
+        say(f"  forecast log: {forecastlog.record(slate['games'], 'cfb', season, out['meta'].get('generated'))} rows")
+    except Exception as exc:
+        print(f"  forecast log skipped ({exc})")
     out = _clean(out)
     C.DOCS.mkdir(parents=True, exist_ok=True)
     (C.DOCS / "data.json").write_text(json.dumps(out, separators=(",", ":")))

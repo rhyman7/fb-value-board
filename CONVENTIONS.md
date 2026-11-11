@@ -78,6 +78,20 @@ boards in detail; this file is the rules.
   `nfl_record.json`. It reads the slate and writes only `data/teasers/`; the board shows none of it,
   and a failure never stops the build. The strategy's rule (underdog legs, total 49.5 or less, two-team
   teasers at -120 or better) is fixed in the module's constants; change it only with Ryan.
+- **Forecast log (both boards): `data/forecast_log/<league>_<season>.csv`** (`nflmodel/forecastlog.py`,
+  from Nov 11, 2026; Project doc `claude/plan-uncertain-qb-test-2026-11-11.md`). Every **Update board**
+  and **Update college board** run appends a row for each game that has not kicked off when its line,
+  either quarterback or his status changed, or its forecast or weight moved past a small tolerance
+  (`forecastlog.TOL`: the model is refitted every build and wobbles by a hundredth of a point): the
+  raw model, the line it was blended with, the blend shown, the weight, both quarterbacks and, on the
+  NFL board, each quarterback's level on the week's injury report and Friday practice. Append-only:
+  never edit or delete rows. The board shows none of it and a failure never stops a build. Why it
+  exists: `docs/archive/` keeps only the last refresh before kickoff, so the opener and midweek
+  forecasts lived only in git history; a test of the blend weight at the times the board is used
+  reads this log. Rows marked `backfill` were rebuilt from that history on Nov 11, 2026
+  (`scripts/forecast_log_backfill.py`, one-off; NFL from Oct 7, college from Oct 19) and carry no
+  quarterback status. `qb_flag` is deliberately not in the archive's game keys: a past week's page
+  would start showing the tag.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
