@@ -2202,6 +2202,7 @@ function diagChart(node, o) {
   const recRow = (label, r) => [label, r.n, r.graded ? `${r.w}-${r.l}${r.p ? "-" + r.p : ""}` : "—", r.graded ? pct(r.win_pct) : "—", r.graded ? spct(r.roi) : "—", r.clv_n ? spct(r.clv) + " (" + r.beat_close + " of " + r.clv_n + ")" : "—", spct(r.claimed_ev)];
   table($("#live-tiers"), [{ t: "Kind", l: 1 }, { t: "Flagged" }, { t: "Record" }, { t: "Win rate" }, { t: "Return" }, { t: "CLV (beat close)" }, { t: "Claimed EV" }],
     [...["price", "opener", "wind", "model"].filter(t => L.by_tier[t]).map(t => recRow(TIER[t].h, L.by_tier[t])), ...Object.keys(L.by_market).map(m => recRow(m + "s", L.by_market[m])),
+     ...(L.by_books ? [recRow("DraftKings + FanDuel (the books you bet)", L.by_books.mine), recRow("Other books (BetMGM, Kalshi, consensus)", L.by_books.other)] : []),
      ...(L.kept ? [recRow("Still on the sheet at kickoff", L.kept), recRow("Withdrawn before kickoff", L.withdrawn)] : [])]);
   table($("#live-rows"), [{ t: "Flagged", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "Close" }, { t: "CLV" }],
     L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick + (r.kept === false ? " (withdrawn)" : ""), cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
@@ -2280,7 +2281,8 @@ function diagChart(node, o) {
   const rec = r => [r.graded ? `${r.w}-${r.l}${r.p ? "-" + r.p : ""}` : "—", r.graded ? pct(r.win_pct) : "—", r.graded ? spct(r.roi) : "—", r.staked > 0 && r.graded ? spct(r.return) : "—", r.clv_n ? spct(r.clv) + " (" + r.beat_close + " of " + r.clv_n + ")" : "—"];
   table($("#bbrec-weeks"), [{ t: "Week, then kind", l: 1 }, { t: "Bets" }, { t: "Record" }, { t: "Win rate" }, { t: "Return per unit" }, { t: "Profit on stakes" }, { t: "CLV (beat close)" }],
     [...R.by_week.slice().reverse().map(w => ["Week " + w.week + (w.season !== R.by_week[R.by_week.length - 1].season ? ", " + w.season : ""), w.n, ...rec(w)]),
-     ...["price", "opener", "wind", "model"].filter(t => R.by_tier[t]).map(t => [TIER[t].h, R.by_tier[t].n, ...rec(R.by_tier[t])])]);
+     ...["price", "opener", "wind", "model"].filter(t => R.by_tier[t]).map(t => [TIER[t].h, R.by_tier[t].n, ...rec(R.by_tier[t])]),
+     ...(R.by_books ? [["DraftKings + FanDuel (the books you bet)", R.by_books.mine.n, ...rec(R.by_books.mine)], ["Other books", R.by_books.other.n, ...rec(R.by_books.other)]] : [])]);
   table($("#bbrec-rows"), [{ t: "Kickoff", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "CLV" }],
     R.rows.map(r => [String(r.kickoff).slice(5, 16).replace("T", " "), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick, cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
       r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.clv == null ? "" : spct(r.clv)]));

@@ -376,3 +376,15 @@ def test_wind_bucket_stake_is_halved():
     finally:
         S.WIND_STAKE_SCALE = keep
     assert full > 0 and abs(half - full / 2) < 1e-3
+
+
+def test_record_split_by_the_books_ryan_bets():
+    """ledger.by_books: DraftKings and FanDuel are `mine`; everything else is `other`."""
+    x = pd.DataFrame({"book": ["draftkings", "FanDuel", "betmgm", "kalshi", "consensus"], "result": ["W", "L", "W", "L", None],
+                      "units": [0.9, -1.0, 1.1, -1.0, np.nan], "stake": [0.01] * 5, "clv": [0.01, 0.02, -0.03, 0.0, np.nan], "ev": [0.02] * 5})
+    b = LG.by_books(x)
+    assert (b["mine"]["n"], b["mine"]["w"], b["mine"]["l"]) == (2, 1, 1)
+    assert (b["other"]["n"], b["other"]["graded"]) == (3, 2)
+    for name in ("data", "data/cfb"):
+        s = LG.summary(ROOT / name / "ledger.csv", ROOT / name / "ledger_results.csv")
+        assert s["by_books"]["mine"]["n"] + s["by_books"]["other"]["n"] == s["all"]["n"]

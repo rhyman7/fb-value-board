@@ -527,3 +527,22 @@ def test_availability_shade_and_props_use_played():
     assert w["players"]["players"][1]["proj"]["receptions"] == 3.0
     assert payload["players"]["players"][0]["proj"]["receptions"] == 4.0           # the board's copy unchanged
     assert D.PLAY_CHANCE == {"Questionable": 0.66, "Game Time Decision": 0.64}
+
+
+def test_college_closing_quotes_reach_the_ledger():
+    """The closing quotes come back under float ids once any market row is unmatched; the ledger
+    keys a game by the whole-number ESPN id. Until Nov 11, 2026 str() left them as "401856733.0"
+    and no college bet got a closing line value (cfbmodel/pipeline.close_by_id)."""
+    import numpy as np
+    from cfbmodel.pipeline import close_by_id
+    got = close_by_id({401856733.0: {"a": 1}, np.int64(401856734): {"a": 2}, "401856735": {"a": 3}, np.float64(401856736.0): {"a": 4}})
+    assert set(got) == {"401856733", "401856734", "401856735", "401856736"}
+    assert close_by_id(None) == {}
+    # and the files: most graded college bets carry a closing line value
+    for name in ("ledger_results.csv", "bestbets_results.csv"):
+        path = Path(__file__).resolve().parent.parent / "data" / "cfb" / name
+        if not path.exists():
+            continue
+        res = pd.read_csv(path)
+        if len(res) >= 50:
+            assert res["clv"].notna().mean() > 0.5, f"{name}: closing line value missing on most graded rows"
