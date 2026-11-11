@@ -2140,7 +2140,7 @@ game-day inactives and Questionable players who sit). Raw model, average miss:
 
 No version beats the current model on both tuning measures (every version is worse on the tuning
 total, A by 0.020 with SE 0.008), so nothing is carried to the holdout and nothing is kept. Holdout
-differences are all within a third of a standard error. `d_chg_ol` already carries what the injury
+differences are all under one standard error (A: margin −0.0025, SE 0.0080; total +0.0018, SE 0.0026). `d_chg_ol` already carries what the injury
 report knows about the line.
 
 Props (reported, current projections; the first run printed an "actual minus projection" figure
