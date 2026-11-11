@@ -355,3 +355,20 @@ so A's margin half on its own is exactly A's margin numbers with the totals unch
 (margin 12.354 / 12.313, totals 13.452 / 12.619). Update college board checks out PFF
 `ncaa/**/*_defense_summary.csv.gz` too; without the PFF data `d_pffret` is 0 and the board runs as
 before. Shown in the spread card under "Talent and returning production".
+
+## Fixes from the Nov 11, 2026 review, tested (Nov 11, 2026): none kept
+
+`experiments/review_fix_tests.py cfb` (rules written first; run with the PFF returning production).
+College 2026 is what prompted both: the model misses by 12.38 against the line's 11.55 through week
+10, where the usual gap is 0.2 to 0.3.
+
+**T3. A first-FBS-season feature (`d_newfbs`): not kept.** Eleven team-seasons since 2015 (Charlotte
+2015 to Sacramento State and North Dakota State 2026). Raw margin miss +0.048 (SE 0.022) on 2017-19
+and +0.005 (SE 0.007) on 2021-25: worse on both. In the 84 earlier games with a first-year team the
+feature made the miss 1.5 points worse (12.69 to 14.22): earlier newcomers played about as the model
+already said. On 2026's 15 such games it helped by 0.37 (SE 0.48), which is one season and not in
+the rule.
+
+**T4. The blend weight sees this season's games: not kept.** Market-adjusted margin miss +0.023
+(SE 0.015) on 2017-19 and 0.000 on 2021-25. In 2026 it would have walked the weight from 0.30 down to
+0.24 by week 10 and lowered the miss by 0.014 (SE 0.007), again one season outside the rule.

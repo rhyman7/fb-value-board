@@ -1,0 +1,127 @@
+{
+ "pffret": true,
+ "t3_new_teams": [
+  "Charlotte 2015",
+  "Coastal Carolina 2017",
+  "Delaware 2025",
+  "Jacksonville State 2023",
+  "James Madison 2022",
+  "Kennesaw State 2024",
+  "Liberty 2018",
+  "Missouri State 2025",
+  "North Dakota State 2026",
+  "Sacramento State 2026",
+  "Sam Houston 2023"
+ ],
+ "t3": {
+  "2017-19": {
+   "n": 2206,
+   "now": 12.3562,
+   "candidate": 12.4041,
+   "blend_now": 12.1961,
+   "blend_candidate": 12.1981,
+   "line": 12.2215,
+   "diff": 0.0479,
+   "se": 0.0222
+  },
+  "2021-25": {
+   "n": 3755,
+   "now": 12.3196,
+   "candidate": 12.3243,
+   "blend_now": 12.1117,
+   "blend_candidate": 12.1121,
+   "line": 12.1277,
+   "diff": 0.0046,
+   "se": 0.0068
+  },
+  "2026 (not in the rule)": {
+   "n": 562,
+   "now": 12.3764,
+   "candidate": 12.3681,
+   "blend_now": 11.6723,
+   "blend_candidate": 11.6691,
+   "line": 11.5485,
+   "diff": -0.0083,
+   "se": 0.0126
+  },
+  "first-year games, 2017-25": {
+   "n": 84,
+   "now": 12.692,
+   "candidate": 14.2212,
+   "blend_now": 12.8846,
+   "blend_candidate": 12.9956,
+   "line": 12.9921,
+   "diff": 1.5292,
+   "se": 0.6333
+  },
+  "first-year games, 2026": {
+   "n": 15,
+   "now": 16.7397,
+   "candidate": 16.3732,
+   "blend_now": 13.7951,
+   "blend_candidate": 13.7451,
+   "line": 12.8667,
+   "diff": -0.3665,
+   "se": 0.4772
+  },
+  "coef_by_season": {
+   "2017": -15.5097,
+   "2018": -6.0697,
+   "2019": -5.0931,
+   "2020": -4.9534,
+   "2021": -5.1194,
+   "2022": -5.3617,
+   "2023": -3.4773,
+   "2024": -2.0602,
+   "2025": -2.1791,
+   "2026": -1.8249
+  },
+  "keep": false
+ },
+ "t4": {
+  "2017-19": {
+   "now": 12.1961,
+   "candidate": 12.2187,
+   "line": 12.2215,
+   "diff": 0.0225,
+   "se": 0.0145,
+   "n": 2206
+  },
+  "2021-25": {
+   "now": 12.1117,
+   "candidate": 12.1118,
+   "line": 12.1277,
+   "diff": 0.0,
+   "se": 0.0014,
+   "n": 3755
+  },
+  "2026 (not in the rule)": {
+   "now": 11.6723,
+   "candidate": 11.6579,
+   "line": 11.5485,
+   "diff": -0.0144,
+   "se": 0.0069,
+   "n": 562
+  },
+  "keep": false,
+  "this_season_weight": {
+   "now": 0.301,
+   "candidate_by_week": {
+    "1": 0.301,
+    "2": 0.288,
+    "3": 0.282,
+    "4": 0.273,
+    "5": 0.259,
+    "6": 0.252,
+    "7": 0.248,
+    "8": 0.249,
+    "9": 0.243,
+    "10": 0.24,
+    "11": 0.242,
+    "12": 0.242,
+    "13": 0.242,
+    "15": 0.242
+   }
+  }
+ }
+}

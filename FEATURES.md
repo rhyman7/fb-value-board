@@ -2051,3 +2051,40 @@ Volume is better on all four measures, so it passes the keep rule. 116 picks cha
 before, 85 after. Over all team-games the pick is right 94.9% / 93.6% (tuning / holdout) against
 94.6% / 92.4%. Props: fallback-game QB passing-yards main lines 2023-25 (74 lines, 35 games), Brier
 0.2450 against 0.2453 (books 0.2497). Applied Nov 6, 2026 (Ryan's go-ahead): `players._pick_starter`.
+
+## Fixes from the Nov 11, 2026 review, tested (Nov 11, 2026): none kept
+
+`experiments/review_fix_tests.py nfl` (rules written first: the script's docstring and the Project doc
+`claude/plan-review-fixes-tests-2026-11-11.md`; run with the PFF quarterback prior, so this is the
+production model). The review is `claude/model-review-2026-11-11.md`.
+
+**T1. `d_chg_ol` built the same way for played and upcoming games: not kept.** The played-game input
+counts game-day inactives; the upcoming-game input cannot (it differs on 81% of played games). Both
+versions were scored predicting from the bet-time input, which is what the board has:
+
+| Average margin miss | 2014-18 | 2019 on |
+|---|---|---|
+| Fitted on the full-information input (now) | 10.104 | 9.956 |
+| Fitted on the bet-time input | 10.130 | 9.960 |
+| Difference (SE) | +0.026 (0.013) | +0.004 (0.003) |
+
+Worse on both, so the fit stays as it is. The mismatch is real but refitting on the thinner input
+does not help; the coefficient it gives (−6.5 against −2.3) overreacts.
+
+**T2. The totals cap (`TOTAL_WEIGHT_CAP`, 0.05): stays; one small trade-off for Ryan.**
+
+| Cap | Blend total miss 2014-18 | 2019 on | Totals flagged +EV, 2019 on |
+|---|---|---|---|
+| 0.05 (now) | 10.5750 | 10.3866 | 2 bets |
+| 0.15 | 10.5756 | 10.3839 | 130 bets, 55.8%, +7.9% ± 8.4% |
+| 0.25 | 10.5799 | 10.3855 | 191 bets, 52.4%, +1.5% ± 7.0% |
+| none | 10.5934 | 10.3855 | 191 bets, 52.4%, +1.5% ± 7.0% |
+| Closing line | 10.5753 | 10.3900 | |
+
+No cap lowers the miss on both periods (0.15 is 0.0006 worse on 2014-18 and 0.0027 better on 2019 on,
+with flagged totals above zero but inside one standard error), so by the rule the cap stays. 0.15 is
+the trade-off.
+
+**T4. The blend weight sees this season's games: not kept.** Market-adjusted margin miss +0.0014
+(SE 0.0034) on 2014-18 and −0.0002 (SE 0.0016) on 2019 on: mixed and inside the noise. This season it
+would be 0.31 against 0.30.
