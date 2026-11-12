@@ -2245,3 +2245,9 @@ above. Not fixed or tested here.
 
 A trade-off for Ryan, since the current input is known to be wrong: match the names for correctness
 (accuracy unchanged on 3,431 games), or leave the fitted model alone.
+
+**Applied anyway (Ryan, Nov 11, 2026): the offensive line's names are matched** (`injuries.alias_map`,
+`ALIAS_GROUPS = ("ol",)`), because the input was wrong as it stood and accuracy is the same either way.
+Every season's `miss_ol` in `data/cache/injury_groups_<season>.csv` was rebuilt (953 team-games changed,
+2013 on; no other column moved). Provisional: re-run this test with the 2026 season complete and the PFF
+data at the January recheck. The other groups keep the exact match until tested with a props check.
