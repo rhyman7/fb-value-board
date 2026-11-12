@@ -10,7 +10,10 @@ Columns:
   kind       starter  - this quarterback starts: the game model's quarterback feature, and
                         he takes the team's passes in the player projections (whoever started
                         the team's last game)
-             out      - the player does not play (the player projections)
+             out      - the player does not play: the player projections and the role signals,
+                        and, for a core offensive lineman, the game model's offensive-line
+                        input (injuries.py; data/cache/ol_core_<season>.csv lists the five
+                        linemen it counts for each team's next game, with their ids)
   player_id  gsis id, e.g. 00-0034869
   name       display name
   status     for kind=out, the label shown (Out, Doubtful, Injured reserve); default Out

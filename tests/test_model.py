@@ -601,3 +601,53 @@ def test_tendency_uses_only_earlier_games_and_shrinks():
     assert abs(r[2] - w2 / (w2 + PL.TEND_SHRINK)) < 1e-12
     assert r[3] == r[4]                                         # the game with no value changes nothing for the next one
     assert 0 < r[3] < 1
+
+
+def test_out_overrides_reach_the_offensive_line_input(tmp_path, monkeypatch):
+    """An `out` row in data/overrides.csv counts a core offensive lineman as unavailable in a game
+    his team has not played (confirmed late news reaches d_chg_ol); played games, and the other
+    position groups (the shadow test's inputs), are never changed by it."""
+    from nflmodel import config as C, injuries as I, overrides as OV
+    monkeypatch.setattr(C, "RAW", tmp_path)
+    monkeypatch.setattr(C, "CACHE", tmp_path)
+    monkeypatch.setattr(I, "FIRST", 2026)
+    monkeypatch.setattr(I, "current_season", lambda: 2026)
+    ol = [f"Line Man {x}" for x in "ABCDE"]
+
+    def raw():
+        snaps = [{"game_type": "REG", "team": "AAA", "player": n, "position": "G", "week": w, "offense_pct": 1.0, "defense_pct": 0.0}
+                 for n in ol for w in (1, 2)]
+        snaps += [{"game_type": "REG", "team": "AAA", "player": "Wide Out", "position": "WR", "week": w, "offense_pct": 0.9, "defense_pct": 0.0} for w in (1, 2)]
+        pd.DataFrame(snaps).to_parquet(tmp_path / "snap_counts_2026.parquet")
+        pd.DataFrame([{"team": "ZZZ", "week": 1, "full_name": "Nobody", "report_status": "Out"}]).to_parquet(tmp_path / "injuries_2026.parquet")
+        pd.DataFrame([{"team": "AAA", "week": w, "full_name": n, "status": "ACT", "game_type": "REG", "gsis_id": f"00-000000{i}"}
+                      for i, n in enumerate(ol + ["Wide Out"]) for w in (1, 2)]).to_parquet(tmp_path / "roster_weekly_2026.parquet")
+
+    sched = pd.DataFrame({"season": 2026, "game_type": "REG", "game_id": ["G1", "G2", "G3"], "week": [1, 2, 3],
+                          "home_team": "AAA", "away_team": ["BBB", "CCC", "DDD"]})
+    p = tmp_path / "overrides.csv"
+    p.write_text("game_id,team,kind,player_id,name,status,source\n"
+                 "G3,AAA,out,00-0000000,Line Man A,Inactive,test\n"
+                 "G2,AAA,out,00-0000001,Line Man B,Out,test\n"          # a played game: ignored
+                 "G3,AAA,out,00-0000005,Wide Out,Out,test\n"            # not a lineman: this input ignores it
+                 "G3,AAA,starter,00-0000002,Line Man C,,test\n")        # not an out row
+    ov = OV.load(p)
+    assert I.override_keys(ov) == {("AAA", "G3"): {"linemana", "wideout"}, ("AAA", "G2"): {"linemanb"}}
+
+    raw()
+    base = I._season(2026, sched).set_index(["team", "game_id"])
+    raw()
+    core = []
+    got = I._season(2026, sched, extra_out=I.override_keys(ov), core_log=core).set_index(["team", "game_id"])
+    assert base.loc[("AAA", "G3"), "miss_ol"] == 0 and abs(got.loc[("AAA", "G3"), "miss_ol"] - 0.2) < 1e-9
+    assert got.loc[("AAA", "G2"), "miss_ol"] == 0                           # played: untouched
+    other = [c for c in got.columns if c.startswith(("miss_", "mrec_")) and c != "miss_ol"]
+    assert (got[other] == base[other]).all().all()                          # only the offensive line moves
+    assert [(r["name"], r["player_id"], r["out"], r["reason"]) for r in core if r["out"]] == [("Line Man A", "00-0000000", 1, "override")]
+    assert len(core) == 5 and {r["game_id"] for r in core} == {"G3"} and abs(sum(r["share"] for r in core) - 1) < 1e-3
+
+    raw()
+    inj = I.load_injuries(sched, refresh_current=True, verbose=False, overrides=ov)
+    assert abs(inj.set_index(["team", "game_id"]).loc[("AAA", "G3"), "miss_ol"] - 0.2) < 1e-9
+    saved = pd.read_csv(tmp_path / "ol_core_2026.csv")
+    assert list(saved.columns) == I.CORE_COLS and saved["out"].sum() == 1 and len(saved) == 5
