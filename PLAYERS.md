@@ -665,3 +665,44 @@ who play, so cutting everyone makes the players who do play worse. Not applied; 
 `feat/team-totals-receiving` is dropped. The first test's gain was an artifact of scoring with
 game-day inactives known. A fix would have to predict who sits, which is the availability problem,
 not a team-total one.
+
+## Defensive backs the name match loses (Nov 12, 2026): mixed, not kept; a trade-off for Ryan
+
+`experiments/db_name_match_test.py`, rule written first (Project doc
+`claude/plan-db-name-match-test-2026-11-12.md`). The injury groups match a team's core players to
+the injury report and roster by full name; a player the files spell differently counts as out
+every week. Fixed for the offensive line on Nov 11 (FEATURES.md). Of the other groups only
+defensive backs reach a number on the board (`opp_miss_db` in the receiving-yards and receptions
+calibration). Linebackers are merged into the player table and used by nothing, the defensive line
+and running backs feed nothing, and pass catchers feed the shadow test, which stays fixed.
+
+How often the defensive-back input is wrong: 5% to 9% of team-games in 2013-18, 9% to 11% in
+2019-20, 17% to 23% in 2021-25, 24% in 2026. The 2026 average share counted missing falls from
+0.121 to 0.054 with the loose match.
+
+Candidate: `ALIAS_GROUPS = ("ol", "db")`. Board projections, WR/TE/RB who played with 1+ projected
+reception; change = candidate minus now (standard error).
+
+| Measure | Now | Candidate | Change |
+|---|---|---|---|
+| Receiving yards RMSE, game-day, 2014-18 | 28.916 | 28.864 | −0.051 (0.024) |
+| Receiving yards RMSE, game-day, 2019 on | 27.211 | 27.206 | −0.004 (0.016) |
+| Receptions RMSE, game-day, 2014-18 | 2.0635 | 2.0649 | +0.0013 (0.0016) |
+| Receptions RMSE, game-day, 2019 on | 1.9700 | 1.9695 | −0.0004 (0.0010) |
+| Receiving yards RMSE, bet-time, 2014-18 | 28.955 | 28.927 | −0.028 (0.025) |
+| Receiving yards RMSE, bet-time, 2019 on | 27.233 | 27.241 | +0.008 (0.016) |
+| Receptions RMSE, bet-time, 2014-18 | 2.0650 | 2.0644 | −0.0006 (0.0015) |
+| Receptions RMSE, bet-time, 2019 on | 1.9773 | 1.9761 | −0.0012 (0.0010) |
+| Brier, closing lines 2023-25, game-day (23,376) | 0.25591 | 0.25556 | −0.00035 (0.00022) |
+| Brier, pricing snapshot 2023-25, bet-time (13,447) | 0.25444 | 0.25485 | +0.00041 (0.00030) |
+
+Not kept: worse on game-day receptions in 2014-18, on bet-time receiving yards from 2019 on and on
+the bet-time Brier; the one holdout gain over a standard error is bet-time receptions. 2026 alone
+(reported, not in the rule): receptions worse on both tables (+0.0050 ± 0.0032 game-day, +0.0061 ±
+0.0035 bet-time), receiving yards −0.046 ± 0.058 game-day and +0.015 ± 0.046 bet-time. Passing
+yards and completions unchanged.
+
+Applying it would move this week's 232 receiving-yards projections by 1.15 yards on average (7.3 at
+most; 135 by half a yard or more), because the calibration and the boosted step refit on the
+corrected input. The books' Brier on the same lines is 0.2484 to 0.2489, so neither version is close.
+Run with the PFF data (the production model). Left as is unless Ryan chooses to correct the input.

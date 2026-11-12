@@ -1,0 +1,364 @@
+{
+ "versions": {
+  "now": [
+   "ol"
+  ],
+  "cand": [
+   "ol",
+   "db"
+  ]
+ },
+ "pff_routes_on": true,
+ "input": {
+  "2012": {
+   "team_games": 512,
+   "differ": 0.0,
+   "mean_missing_now": 0.0,
+   "mean_missing_candidate": 0.0
+  },
+  "2013": {
+   "team_games": 512,
+   "differ": 0.0547,
+   "mean_missing_now": 0.1131,
+   "mean_missing_candidate": 0.0986
+  },
+  "2014": {
+   "team_games": 512,
+   "differ": 0.0859,
+   "mean_missing_now": 0.1521,
+   "mean_missing_candidate": 0.129
+  },
+  "2015": {
+   "team_games": 512,
+   "differ": 0.0762,
+   "mean_missing_now": 0.1603,
+   "mean_missing_candidate": 0.1422
+  },
+  "2016": {
+   "team_games": 512,
+   "differ": 0.0879,
+   "mean_missing_now": 0.0926,
+   "mean_missing_candidate": 0.0685
+  },
+  "2017": {
+   "team_games": 512,
+   "differ": 0.0645,
+   "mean_missing_now": 0.082,
+   "mean_missing_candidate": 0.0667
+  },
+  "2018": {
+   "team_games": 512,
+   "differ": 0.0527,
+   "mean_missing_now": 0.0873,
+   "mean_missing_candidate": 0.0655
+  },
+  "2019": {
+   "team_games": 512,
+   "differ": 0.1094,
+   "mean_missing_now": 0.1393,
+   "mean_missing_candidate": 0.1045
+  },
+  "2020": {
+   "team_games": 512,
+   "differ": 0.0898,
+   "mean_missing_now": 0.1392,
+   "mean_missing_candidate": 0.11
+  },
+  "2021": {
+   "team_games": 544,
+   "differ": 0.2077,
+   "mean_missing_now": 0.1641,
+   "mean_missing_candidate": 0.1125
+  },
+  "2022": {
+   "team_games": 542,
+   "differ": 0.2251,
+   "mean_missing_now": 0.1763,
+   "mean_missing_candidate": 0.121
+  },
+  "2023": {
+   "team_games": 544,
+   "differ": 0.2279,
+   "mean_missing_now": 0.1824,
+   "mean_missing_candidate": 0.1184
+  },
+  "2024": {
+   "team_games": 544,
+   "differ": 0.1691,
+   "mean_missing_now": 0.1429,
+   "mean_missing_candidate": 0.0986
+  },
+  "2025": {
+   "team_games": 544,
+   "differ": 0.2316,
+   "mean_missing_now": 0.1704,
+   "mean_missing_candidate": 0.11
+  },
+  "2026": {
+   "team_games": 544,
+   "differ": 0.2426,
+   "mean_missing_now": 0.1206,
+   "mean_missing_candidate": 0.0544
+  }
+ },
+ "rmse": {
+  "gameday": {
+   "rec_yds 2014-18": {
+    "n": 18708,
+    "now": 28.9156,
+    "candidate": 28.8644,
+    "diff": -0.05118,
+    "se": 0.02366,
+    "rows_changed": 18708
+   },
+   "rec_yds 2019 on": {
+    "n": 28869,
+    "now": 27.2107,
+    "candidate": 27.2062,
+    "diff": -0.00448,
+    "se": 0.01569,
+    "rows_changed": 28869
+   },
+   "rec_yds 2026 alone": {
+    "n": 1778,
+    "now": 27.5514,
+    "candidate": 27.5055,
+    "diff": -0.04587,
+    "se": 0.05761,
+    "rows_changed": 1778
+   },
+   "receptions 2014-18": {
+    "n": 18708,
+    "now": 2.0635,
+    "candidate": 2.0649,
+    "diff": 0.00133,
+    "se": 0.00155,
+    "rows_changed": 18708
+   },
+   "receptions 2019 on": {
+    "n": 28869,
+    "now": 1.97,
+    "candidate": 1.9695,
+    "diff": -0.00044,
+    "se": 0.00097,
+    "rows_changed": 28869
+   },
+   "receptions 2026 alone": {
+    "n": 1778,
+    "now": 1.9689,
+    "candidate": 1.9739,
+    "diff": 0.005,
+    "se": 0.0032,
+    "rows_changed": 1778
+   },
+   "pass_yds 2014-18": {
+    "n": 2670,
+    "now": 88.4211,
+    "candidate": 88.4211,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "pass_yds 2019 on": {
+    "n": 4192,
+    "now": 88.2492,
+    "candidate": 88.2492,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "pass_yds 2026 alone": {
+    "n": 272,
+    "now": 83.0178,
+    "candidate": 83.0178,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "completions 2014-18": {
+    "n": 2670,
+    "now": 7.3694,
+    "candidate": 7.3694,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "completions 2019 on": {
+    "n": 4192,
+    "now": 7.4377,
+    "candidate": 7.4377,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "completions 2026 alone": {
+    "n": 272,
+    "now": 6.8942,
+    "candidate": 6.8942,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   }
+  },
+  "bettime": {
+   "rec_yds 2014-18": {
+    "n": 18745,
+    "now": 28.9554,
+    "candidate": 28.9271,
+    "diff": -0.02828,
+    "se": 0.0251,
+    "rows_changed": 18745
+   },
+   "rec_yds 2019 on": {
+    "n": 28857,
+    "now": 27.233,
+    "candidate": 27.2411,
+    "diff": 0.00802,
+    "se": 0.0164,
+    "rows_changed": 28857
+   },
+   "rec_yds 2026 alone": {
+    "n": 1791,
+    "now": 27.6569,
+    "candidate": 27.6723,
+    "diff": 0.01535,
+    "se": 0.04568,
+    "rows_changed": 1791
+   },
+   "receptions 2014-18": {
+    "n": 18745,
+    "now": 2.065,
+    "candidate": 2.0644,
+    "diff": -0.00055,
+    "se": 0.00154,
+    "rows_changed": 18745
+   },
+   "receptions 2019 on": {
+    "n": 28857,
+    "now": 1.9773,
+    "candidate": 1.9761,
+    "diff": -0.00123,
+    "se": 0.00096,
+    "rows_changed": 28857
+   },
+   "receptions 2026 alone": {
+    "n": 1791,
+    "now": 1.9637,
+    "candidate": 1.9698,
+    "diff": 0.00611,
+    "se": 0.00348,
+    "rows_changed": 1791
+   },
+   "pass_yds 2014-18": {
+    "n": 2563,
+    "now": 89.6184,
+    "candidate": 89.6184,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "pass_yds 2019 on": {
+    "n": 3911,
+    "now": 86.048,
+    "candidate": 86.048,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "pass_yds 2026 alone": {
+    "n": 253,
+    "now": 81.2666,
+    "candidate": 81.2666,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "completions 2014-18": {
+    "n": 2563,
+    "now": 7.4535,
+    "candidate": 7.4535,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "completions 2019 on": {
+    "n": 3911,
+    "now": 7.2318,
+    "candidate": 7.2318,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   },
+   "completions 2026 alone": {
+    "n": 253,
+    "now": 6.7526,
+    "candidate": 6.7526,
+    "diff": 0.0,
+    "se": 0.0,
+    "rows_changed": 0
+   }
+  }
+ },
+ "brier": {
+  "closing lines, game-day": {
+   "pooled": {
+    "n": 23376,
+    "now": 0.25591,
+    "candidate": 0.25556,
+    "books": 0.24835,
+    "diff": -0.00035,
+    "se": 0.000224
+   },
+   "rec_yds": {
+    "n": 17680,
+    "now": 0.25783,
+    "candidate": 0.25757,
+    "books": 0.24992,
+    "diff": -0.000262,
+    "se": 0.000239
+   },
+   "receptions": {
+    "n": 5696,
+    "now": 0.24996,
+    "candidate": 0.24934,
+    "books": 0.2435,
+    "diff": -0.000623,
+    "se": 0.000505
+   }
+  },
+  "pricing snapshot, bet-time": {
+   "pooled": {
+    "n": 13447,
+    "now": 0.25444,
+    "candidate": 0.25485,
+    "books": 0.24886,
+    "diff": 0.000412,
+    "se": 0.000302
+   },
+   "rec_yds": {
+    "n": 10013,
+    "now": 0.25567,
+    "candidate": 0.256,
+    "books": 0.25,
+    "diff": 0.000327,
+    "se": 0.00033
+   },
+   "receptions": {
+    "n": 3434,
+    "now": 0.25084,
+    "candidate": 0.2515,
+    "books": 0.24554,
+    "diff": 0.00066,
+    "se": 0.000584
+   }
+  }
+ },
+ "kept": false,
+ "this_week": {
+  "week": 10,
+  "players": 232,
+  "rec_yds_move_mean": 1.152,
+  "rec_yds_move_max": 7.324,
+  "moved_half_yard": 135
+ }
+}
