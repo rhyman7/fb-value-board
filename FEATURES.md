@@ -2201,3 +2201,47 @@ Props: no player projection is touched; no prop moves.
 Limits: 41 tuning games; the report is Friday's, so this is the late-week case; the opener stands in
 for the mid-week line. The forecast log (`data/forecast_log/`, from Nov 11, 2026) is what a mid-week
 version of this test would read once a season of it exists.
+
+## Offensive-line input: linemen the name match loses (Nov 11, 2026): flat, not kept
+
+`experiments/ol_name_match_test.py`, rule in the docstring and committed before the first run (Project
+doc `claude/plan-late-availability-2026-11-11.md`). Run without the private PFF data (flat quarterback
+prior), so this is not exactly the production model.
+
+**The defect.** `injuries._season` matches a team's core players, named as the snap counts spell them,
+to the injury report and the weekly roster by normalised full name. Where the files spell a player
+differently ("Paris Johnson" / "Paris Johnson Jr.", "Delmar Glaze" / "DJ Glaze", "Samuel Cosmi" /
+"Sam Cosmi") the roster lookup finds nothing and he counts as off the roster, so unavailable, in every
+game, in the fit and on the live board. It has grown as the snap counts dropped suffixes:
+
+| | 2014-17 | 2018-20 | 2021-24 | 2025 | 2026 |
+|---|---|---|---|---|---|
+| Team-games where the offensive-line share differs once names are matched | 1% to 9% | 9% to 14% | 19% to 20% | 24% | 21% |
+| Average share of the line counted missing: as is / matched | 0.10 / 0.09 | 0.11 / 0.09 | 0.14 / 0.10 | 0.155 / 0.100 | 0.107 / 0.058 |
+
+On the Nov 11 board, 9 of the 14 core linemen counted as out were this error. All six groups are
+affected (team-games that differ, 2012 on: OL 11.7%, DB 12.6%, DL 8.1%, WR/TE 6.4%, LB 4.8%, RB 1.0%).
+
+**Candidate.** The same input with a looser match used only when the exact one fails, within the team:
+the names agree once a Jr./Sr./II/III/IV suffix is dropped; or same last name and first initial with
+only one such player on the team. `d_chg_ol` differs in 23.6% of games from 2014.
+
+**Result** (average miss, played games with a closing spread; change is candidate minus current):
+
+| Measure | Tuning 2014-18 (1,335) | Holdout 2019 on (2,096) | 2026 alone (136) |
+|---|---|---|---|
+| Raw model margin | 10.1042 → 10.1043, +0.0001 (SE 0.0083) | 9.9537 → 9.9565, +0.0028 (SE 0.0056) | −0.0188 (SE 0.0247) |
+| Market-adjusted margin | 10.0353 → 10.0375, +0.0022 (SE 0.0046) | 9.8061 → 9.8065, +0.0003 (SE 0.0022) | −0.0073 (SE 0.0078) |
+
+Flat: every difference is inside one standard error, and none is lower on tuning or holdout. Not kept
+under the rule. The coefficient on `d_chg_ol` goes from −2.31 to −2.41 with the matched names. On this
+week's 27 upcoming games the board's margin would move by 0.08 points on average and 0.20 at most (raw
+model 0.52 at most).
+
+Totals: no injury input, nothing moves. Props: the player projections do not read the offensive-line
+group; none changed. They do read the defensive-back and linebacker groups (`opp_miss_db`,
+`opp_miss_lb`), and the shadow test reads the pass catchers; the same match fails there at the rates
+above. Not fixed or tested here.
+
+A trade-off for Ryan, since the current input is known to be wrong: match the names for correctness
+(accuracy unchanged on 3,431 games), or leave the fitted model alone.

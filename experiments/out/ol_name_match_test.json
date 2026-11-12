@@ -1,0 +1,251 @@
+{
+ "qb_prior": "flat",
+ "measures": {
+  "raw model margin": {
+   "tuning 2014-18": {
+    "now": 10.1042,
+    "candidate": 10.1043,
+    "diff": 0.0001,
+    "se": 0.0083,
+    "n": 1335
+   },
+   "holdout 2019 on": {
+    "now": 9.9537,
+    "candidate": 9.9565,
+    "diff": 0.0028,
+    "se": 0.0056,
+    "n": 2096
+   },
+   "2026 alone": {
+    "now": 9.4872,
+    "candidate": 9.4684,
+    "diff": -0.0188,
+    "se": 0.0247,
+    "n": 136
+   }
+  },
+  "market-adjusted margin": {
+   "tuning 2014-18": {
+    "now": 10.0353,
+    "candidate": 10.0375,
+    "diff": 0.0022,
+    "se": 0.0046,
+    "n": 1335
+   },
+   "holdout 2019 on": {
+    "now": 9.8061,
+    "candidate": 9.8065,
+    "diff": 0.0003,
+    "se": 0.0022,
+    "n": 2096
+   },
+   "2026 alone": {
+    "now": 9.4646,
+    "candidate": 9.4573,
+    "diff": -0.0073,
+    "se": 0.0078,
+    "n": 136
+   }
+  }
+ },
+ "kept": false,
+ "defect": {
+  "aliases_by_season (season, roster, report)": [
+   [
+    2012,
+    0,
+    0
+   ],
+   [
+    2013,
+    27,
+    25
+   ],
+   [
+    2014,
+    29,
+    27
+   ],
+   [
+    2015,
+    30,
+    26
+   ],
+   [
+    2016,
+    25,
+    27
+   ],
+   [
+    2017,
+    32,
+    28
+   ],
+   [
+    2018,
+    47,
+    33
+   ],
+   [
+    2019,
+    60,
+    40
+   ],
+   [
+    2020,
+    44,
+    48
+   ],
+   [
+    2021,
+    68,
+    60
+   ],
+   [
+    2022,
+    72,
+    64
+   ],
+   [
+    2023,
+    71,
+    62
+   ],
+   [
+    2024,
+    99,
+    59
+   ],
+   [
+    2025,
+    127,
+    82
+   ],
+   [
+    2026,
+    125,
+    65
+   ]
+  ],
+  "by_group": {
+   "ol": {
+    "team_games_differ": 0.1165,
+    "mean_missing_now": 0.1099,
+    "mean_missing_candidate": 0.0843
+   },
+   "pc": {
+    "team_games_differ": 0.0644,
+    "mean_missing_now": 0.1057,
+    "mean_missing_candidate": 0.0839
+   },
+   "rb": {
+    "team_games_differ": 0.0101,
+    "mean_missing_now": 0.1162,
+    "mean_missing_candidate": 0.1069
+   },
+   "dl": {
+    "team_games_differ": 0.0807,
+    "mean_missing_now": 0.0954,
+    "mean_missing_candidate": 0.0752
+   },
+   "lb": {
+    "team_games_differ": 0.0483,
+    "mean_missing_now": 0.1035,
+    "mean_missing_candidate": 0.0796
+   },
+   "db": {
+    "team_games_differ": 0.1262,
+    "mean_missing_now": 0.1298,
+    "mean_missing_candidate": 0.0956
+   }
+  },
+  "ol_by_season": {
+   "2012": {
+    "team_games_differ": 0.0,
+    "mean_missing_now": 0.0,
+    "mean_missing_candidate": 0.0
+   },
+   "2013": {
+    "team_games_differ": 0.0156,
+    "mean_missing_now": 0.0784,
+    "mean_missing_candidate": 0.0758
+   },
+   "2014": {
+    "team_games_differ": 0.0078,
+    "mean_missing_now": 0.1209,
+    "mean_missing_candidate": 0.1201
+   },
+   "2015": {
+    "team_games_differ": 0.0879,
+    "mean_missing_now": 0.1135,
+    "mean_missing_candidate": 0.0936
+   },
+   "2016": {
+    "team_games_differ": 0.0273,
+    "mean_missing_now": 0.0734,
+    "mean_missing_candidate": 0.0675
+   },
+   "2017": {
+    "team_games_differ": 0.0586,
+    "mean_missing_now": 0.0914,
+    "mean_missing_candidate": 0.0815
+   },
+   "2018": {
+    "team_games_differ": 0.123,
+    "mean_missing_now": 0.0981,
+    "mean_missing_candidate": 0.0747
+   },
+   "2019": {
+    "team_games_differ": 0.1367,
+    "mean_missing_now": 0.1074,
+    "mean_missing_candidate": 0.0791
+   },
+   "2020": {
+    "team_games_differ": 0.0938,
+    "mean_missing_now": 0.1301,
+    "mean_missing_candidate": 0.1096
+   },
+   "2021": {
+    "team_games_differ": 0.1985,
+    "mean_missing_now": 0.146,
+    "mean_missing_candidate": 0.1033
+   },
+   "2022": {
+    "team_games_differ": 0.19,
+    "mean_missing_now": 0.1399,
+    "mean_missing_candidate": 0.092
+   },
+   "2023": {
+    "team_games_differ": 0.1857,
+    "mean_missing_now": 0.1322,
+    "mean_missing_candidate": 0.0929
+   },
+   "2024": {
+    "team_games_differ": 0.1857,
+    "mean_missing_now": 0.1442,
+    "mean_missing_candidate": 0.0989
+   },
+   "2025": {
+    "team_games_differ": 0.2426,
+    "mean_missing_now": 0.155,
+    "mean_missing_candidate": 0.1002
+   },
+   "2026": {
+    "team_games_differ": 0.2132,
+    "mean_missing_now": 0.1065,
+    "mean_missing_candidate": 0.0583
+   }
+  }
+ },
+ "games_where_d_chg_ol_differs": 0.2364,
+ "coef_d_chg_ol (all played seasons)": {
+  "now": -2.3107,
+  "candidate": -2.4075
+ },
+ "upcoming_games": {
+  "n": 27,
+  "board_margin_moves_mean": 0.079,
+  "board_margin_moves_max": 0.199,
+  "raw_model_moves_max": 0.518
+ }
+}
