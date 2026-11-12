@@ -35,7 +35,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     openers = data.load_openers(refresh=refresh)
     team_extra, qb_extra = extra.load_extra(refresh_current=refresh, verbose=verbose)
     games = weather.fill_wind(games, verbose=verbose)
-    inj = injuries.load_injuries(games, refresh_current=refresh, verbose=verbose)
+    inj = injuries.load_injuries(games, refresh_current=refresh, verbose=verbose, overrides=ov)
     season = int(games[games.played].season.max())
 
     say("Rating teams week by week ...")

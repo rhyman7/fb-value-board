@@ -324,7 +324,17 @@ boards in detail; this file is the rules.
   `starter` sets that game's starting quarterback for the game model and makes him the
   quarterback who takes the team's passes in the player projections (whoever started the
   team's last game, and whatever the injury report says), `out` takes a player out of the
-  player projections. Use it only for confirmed news the nflverse schedule or the
+  player projections. **An `out` row for a core offensive lineman also reaches the game model**
+  (Nov 11, 2026; `injuries.override_keys`, `load_injuries(overrides=)`): he counts as unavailable
+  in `d_chg_ol` for that game, as a game-day inactive does in the seasons the model is fitted on.
+  Until then the live board only knew Out / Doubtful and the reserve lists, so news after Friday's
+  report (a Questionable lineman ruled out, the inactives 90 minutes before kickoff) never reached
+  it. Offensive line only: the other position groups feed the shadow test, whose inputs are fixed.
+  The fit is unchanged (played games are never touched), so this is a data input, not a model
+  change. Each build writes `data/cache/ol_core_<season>.csv`: the five linemen the model counts
+  for each team's next game (`name` as the snap counts spell it, `player_id`, `share`, `out`,
+  `reason`). A lineman row must use that file's `name`, since the match is by name. Use `out`
+  only for confirmed news the nflverse schedule or the
   official injury report hasn't picked up yet, and put the source and date in `source`. Rows
   only touch games not yet played, so they lapse by themselves; delete stale rows when you
   see them. Hand edits go through a PR like any other change; after merging, run **Update

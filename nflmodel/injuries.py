@@ -13,6 +13,15 @@ For each team and game:
 
 Groups: ol (5), pc = pass catchers WR/TE (3), rb (1), dl (4), lb (2), db (4).
 Week 1 and games without snap data get zeros (no information).
+
+Late news (Nov 11, 2026). For a game not yet played, an `out` row in data/overrides.csv
+(overrides.py) also counts a core offensive lineman as unavailable, so confirmed news
+(official inactives, a player ruled out or reported out after Friday's report) reaches
+d_chg_ol, the one group input the game model uses. The model is fitted on who was
+actually inactive; before this the live board only knew Out / Doubtful and the reserve
+lists. Offensive line only: the other groups feed the shadow test, whose inputs are
+fixed. The linemen the model counts for each team's next game are written to
+data/cache/ol_core_<season>.csv.
 """
 from __future__ import annotations
 
@@ -39,8 +48,27 @@ def _norm(name: str) -> str:
     return "".join(ch for ch in str(name).lower() if ch.isalpha())
 
 
-def _season(season: int, sched: pd.DataFrame) -> pd.DataFrame:
-    """sched: the nflverse games table (regular season used), for each team's game list."""
+OVERRIDE_GROUPS = ("ol",)      # groups an `out` override row reaches (see the module docstring)
+CORE_COLS = ["game_id", "team", "name", "player_id", "share", "out", "reason"]
+
+
+def override_keys(ov: pd.DataFrame | None) -> dict:
+    """{(team, game_id): {normalised names}} from the `out` rows of data/overrides.csv."""
+    out: dict = {}
+    if ov is None or ov.empty:
+        return out
+    for r in ov[ov["kind"] == "out"].itertuples():
+        out.setdefault((r.team, r.game_id), set()).add(_norm(r.name))
+    return out
+
+
+def _season(season: int, sched: pd.DataFrame, extra_out: dict | None = None,
+            core_log: list | None = None) -> pd.DataFrame:
+    """sched: the nflverse games table (regular season used), for each team's game list.
+    extra_out: override_keys() of the hand overrides; applied to games the team has not
+    played, offensive line only. core_log: if a list, gets one row per core offensive
+    lineman of each team's next unplayed game (CORE_COLS)."""
+    extra_out = extra_out or {}
     paths = {k: C.RAW / f"{k}_{season}.parquet" for k in ("snap_counts", "injuries", "roster_weekly")}
     for k, path in paths.items():
         kind = "weekly_rosters" if k == "roster_weekly" else k
@@ -48,7 +76,7 @@ def _season(season: int, sched: pd.DataFrame) -> pd.DataFrame:
             _download(URL.format(kind=kind, season=season).replace(f"/{kind}_{season}", f"/{k}_{season}"), path)
     s = pd.read_parquet(paths["snap_counts"])
     inj = pd.read_parquet(paths["injuries"])
-    ros = pd.read_parquet(paths["roster_weekly"], columns=["team", "week", "full_name", "status", "game_type"])
+    ros = pd.read_parquet(paths["roster_weekly"], columns=["team", "week", "full_name", "status", "game_type", "gsis_id"])
     s = s[s["game_type"] == "REG"]
     ros = ros[ros["game_type"] == "REG"]
     for df in (s, inj, ros):
@@ -59,19 +87,23 @@ def _season(season: int, sched: pd.DataFrame) -> pd.DataFrame:
     report = inj.groupby(["team", "week", "key"])["report_status"].last().to_dict()
     roster = ros.groupby(["team", "week", "key"])["status"].first().to_dict()
     roster_weeks = ros.groupby("team")["week"].apply(lambda w: sorted(set(w))).to_dict()
+    ids = ros.dropna(subset=["gsis_id"]).groupby(["team", "key"])["gsis_id"].last().to_dict()
+    names = s.groupby(["team", "key"])["player"].last().to_dict()
 
     g = sched[(sched["season"] == season) & (sched["game_type"] == "REG")]
     long = pd.concat([g[["game_id", "week", "home_team"]].rename(columns={"home_team": "team"}),
                       g[["game_id", "week", "away_team"]].rename(columns={"away_team": "team"})])
-    played_weeks = set(s["week"])
     rows = []
     for team, tg in long.groupby("team"):
         tg = tg.sort_values("week")
         t = s[s["team"] == team]
         have = sorted(set(t["week"]))
+        ahead = [w for w in tg["week"] if w not in have and (not have or w > have[-1])]
+        next_wk = min(ahead) if ahead else None            # the team's next game not yet played
         for gid, wk in zip(tg["game_id"], tg["week"]):
             row = {"season": season, "game_id": gid, "team": team}
             prior = [w for w in have if w < wk]
+            forced = extra_out.get((team, gid), set()) if wk not in have else set()
             # roster status for this week, or the latest earlier week for an upcoming game
             rw = [w for w in roster_weeks.get(team, []) if w <= wk]
             rweek = rw[-1] if rw else None
@@ -87,20 +119,28 @@ def _season(season: int, sched: pd.DataFrame) -> pd.DataFrame:
                 core = core[core > 0.2]
                 if core.empty:
                     continue
-                out_now = []
+                out_now, why = [], {}
                 for key in core.index:
                     rep = report.get((team, wk, key))
                     st = roster.get((team, rweek, key)) if rweek is not None else "ACT"
                     if rep in ("Out", "Doubtful"):
-                        out_now.append(key)
+                        why[key] = f"report: {rep}"
+                    elif grp in OVERRIDE_GROUPS and key in forced:
+                        why[key] = "override"              # confirmed news, data/overrides.csv
                     elif rweek is None:
                         continue
                     elif st is None:                       # no longer on the roster (released, traded)
-                        out_now.append(key)
+                        why[key] = "roster: off the roster"
                     elif exact and st != "ACT":            # reserve lists, game-day inactive, suspended
-                        out_now.append(key)
+                        why[key] = f"roster: {st}"
                     elif not exact and st not in ("ACT", "INA"):   # upcoming game: only longer-term lists
+                        why[key] = f"roster: {st}"
+                    if key in why:
                         out_now.append(key)
+                if core_log is not None and grp == "ol" and wk == next_wk:
+                    core_log.extend({"game_id": gid, "team": team, "name": names.get((team, key), key),
+                                     "player_id": ids.get((team, key), ""), "share": round(float(core[key] / core.sum()), 4),
+                                     "out": int(key in why), "reason": why.get(key, "")} for key in core.index)
                 row[f"miss_{grp}"] = float(core[out_now].sum() / core.sum())
                 rec = prior[-RECENT:]
                 played = share.loc[core.index, rec] > 0
@@ -111,7 +151,10 @@ def _season(season: int, sched: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def load_injuries(sched: pd.DataFrame, refresh_current: bool = False, verbose: bool = True) -> pd.DataFrame:
+def load_injuries(sched: pd.DataFrame, refresh_current: bool = False, verbose: bool = True,
+                  overrides: pd.DataFrame | None = None) -> pd.DataFrame:
+    """overrides: data/overrides.csv (overrides.load()). Its `out` rows count a core offensive
+    lineman as unavailable in games not yet played, when the current season is rebuilt."""
     now = current_season()
     out = []
     for season in range(FIRST, now + 1):
@@ -120,7 +163,18 @@ def load_injuries(sched: pd.DataFrame, refresh_current: bool = False, verbose: b
             if verbose:
                 print(f"  injuries and snap counts {season} ...", flush=True)
             try:
-                _season(season, sched).round(4).to_csv(path, index=False)
+                if season == now:
+                    core: list = []
+                    df = _season(season, sched, extra_out=override_keys(overrides), core_log=core)
+                    cdf = pd.DataFrame(core, columns=CORE_COLS).sort_values(["game_id", "team", "share"], ascending=[True, True, False])
+                    cdf.to_csv(C.CACHE / f"ol_core_{season}.csv", index=False)
+                    n = int((cdf["reason"] == "override").sum())
+                    if verbose and n:
+                        print(f"  offensive linemen out on confirmed news (overrides): {n} "
+                              f"({', '.join(cdf.loc[cdf['reason'] == 'override', 'name'])})")
+                else:
+                    df = _season(season, sched)
+                df.round(4).to_csv(path, index=False)
             except Exception as exc:
                 print(f"  no injury data for {season} ({exc})")
                 continue
