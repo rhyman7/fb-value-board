@@ -1,9 +1,19 @@
 {
- "checked_utc": "2026-11-11T22:34:49Z",
+ "checked_utc": "2026-11-12T22:10:15Z",
  "games": 18,
  "compared": 26,
  "not_in_nfelo": 6,
- "disagree": [],
+ "disagree": [
+  {
+   "game_id": "2026_10_MIA_IND",
+   "team": "MIA",
+   "board": "Kyle McCord",
+   "nfelo": "Malik Willis",
+   "kickoff": "2026-11-15T18:00Z"
+  }
+ ],
  "changed": true,
- "key": []
+ "key": [
+  "2026_10_MIA_IND|MIA|Kyle McCord|Malik Willis"
+ ]
 }
