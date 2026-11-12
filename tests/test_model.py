@@ -651,3 +651,33 @@ def test_out_overrides_reach_the_offensive_line_input(tmp_path, monkeypatch):
     assert abs(inj.set_index(["team", "game_id"]).loc[("AAA", "G3"), "miss_ol"] - 0.2) < 1e-9
     saved = pd.read_csv(tmp_path / "ol_core_2026.csv")
     assert list(saved.columns) == I.CORE_COLS and saved["out"].sum() == 1 and len(saved) == 5
+
+
+def test_offensive_line_names_are_matched_across_files(tmp_path, monkeypatch):
+    """A lineman the snap counts, roster and injury report spell differently is still found
+    (injuries.alias_map): before, he counted as off the roster, so unavailable, every week."""
+    from nflmodel import config as C, injuries as I
+    src = pd.DataFrame({"team": "AAA", "name": ["Paris Johnson", "Delmar Glaze", "Sam Smith", "Pat Jones", "Exact Name"]})
+    dst = pd.DataFrame({"team": ["AAA"] * 6 + ["BBB"],
+                        "name": ["Paris Johnson Jr.", "DJ Glaze", "Sean Smith", "Steve Smith", "Exact Name", "Other Guy", "Pat Jones"]})
+    assert I.alias_map(src, dst) == {("AAA", "parisjohnson"): "parisjohnsonjr",      # suffix dropped
+                                     ("AAA", "delmarglaze"): "djglaze"}              # initial + last name, unique
+    # two S. Smiths: no guess; Pat Jones is on another team: no match; an exact match needs no alias
+
+    monkeypatch.setattr(C, "RAW", tmp_path)
+    ol = ["Line Man A", "Line Man B", "Line Man C", "Line Man D", "Paris Johnson"]
+    snaps = [{"game_type": "REG", "team": "AAA", "player": n, "position": "T", "week": w, "offense_pct": 1.0, "defense_pct": 0.0}
+             for n in ol for w in (1, 2)]
+    snaps += [{"game_type": "REG", "team": "AAA", "player": "Corner Back", "position": "CB", "week": w, "offense_pct": 0.0, "defense_pct": 1.0} for w in (1, 2)]
+    pd.DataFrame(snaps).to_parquet(tmp_path / "snap_counts_2026.parquet")
+    pd.DataFrame([{"team": "ZZZ", "week": 1, "full_name": "Nobody", "report_status": "Out"}]).to_parquet(tmp_path / "injuries_2026.parquet")
+    names = ol[:4] + ["Paris Johnson Jr.", "Corner Back Jr."]
+    pd.DataFrame([{"team": "AAA", "week": w, "full_name": n, "status": "ACT", "game_type": "REG", "gsis_id": f"00-000000{i}"}
+                  for i, n in enumerate(names) for w in (1, 2)]).to_parquet(tmp_path / "roster_weekly_2026.parquet")
+    sched = pd.DataFrame({"season": 2026, "game_type": "REG", "game_id": ["G1", "G2", "G3"], "week": [1, 2, 3],
+                          "home_team": "AAA", "away_team": ["BBB", "CCC", "DDD"]})
+    core = []
+    got = I._season(2026, sched, core_log=core).set_index(["team", "game_id"])
+    assert got.loc[("AAA", "G2"), "miss_ol"] == 0 and got.loc[("AAA", "G3"), "miss_ol"] == 0     # the Jr. is on the roster
+    assert {r["name"]: r["player_id"] for r in core}["Paris Johnson"] == "00-0000004" and not any(r["out"] for r in core)
+    assert got.loc[("AAA", "G2"), "miss_db"] == 1        # other groups keep the exact match (untested there)

@@ -34,6 +34,10 @@ Reported, not in the rule: how often the two inputs differ, by season; the candi
 the 2026 season alone; the share of core player-games each group loses to the name match.
 
 Writes experiments/out/ol_name_match_test.json.
+
+Since Nov 11, 2026 the candidate is in production for the offensive line (injuries.alias_map), so
+run as is this script compares the model with itself. To repeat the test, set
+injuries.ALIAS_GROUPS = () before building the current version (B0).
 """
 from __future__ import annotations
 

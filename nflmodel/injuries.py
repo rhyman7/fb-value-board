@@ -14,6 +14,11 @@ For each team and game:
 Groups: ol (5), pc = pass catchers WR/TE (3), rb (1), dl (4), lb (2), db (4).
 Week 1 and games without snap data get zeros (no information).
 
+Names (Nov 11, 2026). Players are matched across the three files by normalised full name.
+For the offensive line, a player the exact match loses is matched loosely (alias_map);
+before, he counted as off the roster every week (FEATURES.md, "Offensive-line input:
+linemen the name match loses"). The other groups still use the exact match only.
+
 Late news (Nov 11, 2026). For a game not yet played, an `out` row in data/overrides.csv
 (overrides.py) also counts a core offensive lineman as unavailable, so confirmed news
 (official inactives, a player ruled out or reported out after Friday's report) reaches
@@ -46,6 +51,48 @@ RECENT = 4
 
 def _norm(name: str) -> str:
     return "".join(ch for ch in str(name).lower() if ch.isalpha())
+
+
+SUFFIX = {"jr", "sr", "ii", "iii", "iv", "v"}
+ALIAS_GROUPS = ("ol",)         # groups whose names are matched loosely (alias_map; Nov 11, 2026)
+
+
+def _tokens(name: str) -> list[str]:
+    t = ["".join(ch for ch in w if ch.isalpha()) for w in str(name).lower().replace("-", " ").split()]
+    t = [w for w in t if w]
+    while len(t) > 1 and t[-1] in SUFFIX:
+        t.pop()
+    return t
+
+
+def alias_map(src: pd.DataFrame, dst: pd.DataFrame) -> dict:
+    """{(team, src key): dst key} for src names with no exact match in dst on the same team
+    (frames with team and name columns, raw names). The snap counts, the roster and the injury
+    report spell some players differently ("Paris Johnson" / "Paris Johnson Jr.", "Delmar Glaze" /
+    "DJ Glaze"); unmatched, such a player counted as off the roster, so unavailable, every week.
+    Tried in order, only when the exact match fails: the names agree once a Jr./Sr./II/III/IV
+    suffix is dropped; same last name and first initial, with only one such player on the team."""
+    out = {}
+    dst = dst.drop_duplicates(["team", "name"])
+    by_team = {t: list(g["name"]) for t, g in dst.groupby("team")}
+    for team, g in src.drop_duplicates(["team", "name"]).groupby("team"):
+        names = by_team.get(team, [])
+        keys = {_norm(n) for n in names}
+        base, fl = {}, {}
+        for n in names:
+            tk = _tokens(n)
+            if not tk:
+                continue
+            base.setdefault("".join(tk), set()).add(_norm(n))
+            fl.setdefault((tk[0][0], tk[-1]), set()).add(_norm(n))
+        for n in g["name"]:
+            k, tk = _norm(n), _tokens(n)
+            if k in keys or not tk:
+                continue
+            hit = base.get("".join(tk)) or fl.get((tk[0][0], tk[-1])) or set()
+            if len(hit) == 1:
+                out[(team, k)] = next(iter(hit))
+    return out
 
 
 OVERRIDE_GROUPS = ("ol",)      # groups an `out` override row reaches (see the module docstring)
@@ -88,6 +135,23 @@ def _season(season: int, sched: pd.DataFrame, extra_out: dict | None = None,
     roster = ros.groupby(["team", "week", "key"])["status"].first().to_dict()
     roster_weeks = ros.groupby("team")["week"].apply(lambda w: sorted(set(w))).to_dict()
     ids = ros.dropna(subset=["gsis_id"]).groupby(["team", "key"])["gsis_id"].last().to_dict()
+    # Offensive linemen the exact name match loses: file their report and roster entries under
+    # the snap counts' spelling too (alias_map). Offensive line only: the other groups feed the
+    # player projections and the shadow test and have not been tested with it.
+    pos = set().union(*(GROUPS[g][0] for g in ALIAS_GROUPS))
+    sn = s.loc[s["position"].isin(pos), ["team", "player"]].rename(columns={"player": "name"})
+    al_ros = alias_map(sn, ros[["team", "full_name"]].rename(columns={"full_name": "name"}))
+    al_rep = alias_map(sn, inj[["team", "full_name"]].rename(columns={"full_name": "name"}))
+    for d, al in ((roster, al_ros), (report, al_rep)):
+        rev = {}
+        for (team, k), to in al.items():
+            rev.setdefault((team, to), []).append(k)
+        for (team, wk_, key_), v in list(d.items()):
+            for k in rev.get((team, key_), ()):
+                d.setdefault((team, wk_, k), v)
+    for (team, k), to in al_ros.items():
+        if (team, to) in ids:
+            ids.setdefault((team, k), ids[(team, to)])
     names = s.groupby(["team", "key"])["player"].last().to_dict()
 
     g = sched[(sched["season"] == season) & (sched["game_type"] == "REG")]

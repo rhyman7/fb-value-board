@@ -333,7 +333,20 @@ boards in detail; this file is the rules.
   The fit is unchanged (played games are never touched), so this is a data input, not a model
   change. Each build writes `data/cache/ol_core_<season>.csv`: the five linemen the model counts
   for each team's next game (`name` as the snap counts spell it, `player_id`, `share`, `out`,
-  `reason`). A lineman row must use that file's `name`, since the match is by name. Use `out`
+  `reason`). A lineman row must use that file's `name`, since the match is by name.
+  **Offensive-line names are matched loosely across the source files** (Nov 11, 2026, Ryan's call
+  after a flat pre-set test; `injuries.alias_map`, FEATURES.md "Offensive-line input: linemen the
+  name match loses"): a lineman the snap counts, roster and report spell differently (a dropped
+  "Jr.", "DJ" for "Delmar") used to count as missing every week. Provisional like any applied
+  change: re-run `experiments/ol_name_match_test.py` at the January recheck. The other position
+  groups still use the exact match (`ALIAS_GROUPS`); widening it changes the player projections'
+  and the shadow test's inputs and needs its own test with a props check.
+  **Late news rows are entered by four Claude scheduled tasks** ("NFL late availability": Saturday
+  6:40 pm, Sunday 9:40 and 11:40 am, Sunday 3:05 and 7:05 pm, Monday and Thursday 7:05 pm ET), which
+  read the official inactives, team announcements and reports by Adam Schefter, Ian Rapoport or Tom
+  Pelissero, add `out` / `starter` rows marked "(auto, news)" through a pull request they merge,
+  and start Update board. Their wording is `scripts/tasks/nfl_late_availability.md`; they touch
+  nothing but this file. Use `out`
   only for confirmed news the nflverse schedule or the
   official injury report hasn't picked up yet, and put the source and date in `source`. Rows
   only touch games not yet played, so they lapse by themselves; delete stale rows when you
