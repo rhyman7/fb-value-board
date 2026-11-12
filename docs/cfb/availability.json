@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-12T19:48Z",
+ "fetched": "2026-11-12T23:23Z",
  "today": "2026-11-12",
  "teams": {
   "Alabama": {
@@ -1585,6 +1585,53 @@
      "number": "98",
      "status": "Questionable",
      "season_out": false
+    }
+   ]
+  },
+  "Memphis": {
+   "conf": "American",
+   "abbr": "MEM",
+   "report": "Game Day",
+   "published": "2026-11-12",
+   "posted": "17:00:00",
+   "game_date": "2026-11-12",
+   "game_time": "19:00:00",
+   "opponent": "South Florida",
+   "players": [
+    {
+     "name": "Desmond Cox",
+     "pos": "LB",
+     "number": "39",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trey McDonald",
+     "pos": "LB",
+     "number": "40",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Aaron Karas",
+     "pos": "OL",
+     "number": "59",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Richard Thigpen",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "J'Mari Monette",
+     "pos": "DL",
+     "number": "94",
+     "status": "Out",
+     "season_out": true
     }
    ]
   },
@@ -3335,6 +3382,137 @@
      "name": "Seth Smith",
      "pos": "OL",
      "number": "78",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "South Florida": {
+   "conf": "American",
+   "abbr": "USF",
+   "report": "Game Day",
+   "published": "2026-11-12",
+   "posted": "17:00:00",
+   "game_date": "2026-11-12",
+   "game_time": "19:00:00",
+   "opponent": "Memphis",
+   "players": [
+    {
+     "name": "Grayson Howard",
+     "pos": "LB",
+     "number": "0",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "C.J. Hicks",
+     "pos": "DE",
+     "number": "1",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Michael Van Buren Jr.",
+     "pos": "QB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Arhmad Branch",
+     "pos": "WR",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "D.J. Crowther",
+     "pos": "RB",
+     "number": "5",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Amarion Fortenberry",
+     "pos": "CB",
+     "number": "8",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jaden Alexis",
+     "pos": "WR",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "JeyQuan Smith",
+     "pos": "WR",
+     "number": "19",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "A'Mon Lane-Ganus",
+     "pos": "S",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Jenkins",
+     "pos": "DT",
+     "number": "28",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ashton Mosley",
+     "pos": "JCK",
+     "number": "33",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keyshaun Birks",
+     "pos": "CB",
+     "number": "34",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Thomas Shrader",
+     "pos": "OL",
+     "number": "67",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cash Hudson",
+     "pos": "OL",
+     "number": "72",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ethan Green",
+     "pos": "OL",
+     "number": "79",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Gabe Legrand",
+     "pos": "WR",
+     "number": "82",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Iverson Garcia-Ponce",
+     "pos": "NT",
+     "number": "95",
      "status": "Out",
      "season_out": false
     }
