@@ -346,7 +346,11 @@ boards in detail; this file is the rules.
   read the official inactives, team announcements and reports by Adam Schefter, Ian Rapoport or Tom
   Pelissero, add `out` / `starter` rows marked "(auto, news)" through a pull request they merge,
   and start Update board. Their wording is `scripts/tasks/nfl_late_availability.md`; they touch
-  nothing but this file. Use `out`
+  nothing but this file. Kickoffs those times miss get a one-time run of the same wording about 75
+  minutes before kickoff (Nov 12, 2026: ten for the rest of the 2026 regular season: Munich,
+  Thanksgiving eve and day, the Friday after, Saturday Dec 19, Christmas; the list is in the Project
+  doc `claude/late-availability-task-prompt-2026-11-11.md`). Week 18 and the playoffs need theirs
+  once the league sets the times. Use `out`
   only for confirmed news the nflverse schedule or the
   official injury report hasn't picked up yet, and put the source and date in `source`. Rows
   only touch games not yet played, so they lapse by themselves; delete stale rows when you

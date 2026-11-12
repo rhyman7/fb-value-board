@@ -104,11 +104,7 @@ def build() -> dict:
             pall = players.walk_forward(table, first_test=C.FIRST_TEST_SEASON)
             ml = players_ml.questionable(players_ml.walk_forward(players_ml.add_features(pall, R), first=C.FIRST_TEST_SEASON),
                                          first=C.FIRST_TEST_SEASON, snaps=R.get("snaps"))
-            keep = ["game_id", "player_id", "season", "week", "team", "opp", "group", "played", "active", "opp_miss_db"] + \
-                [c for c in ml.columns if c.endswith("_proj") or c.endswith("_sd")] + \
-                [c for c in ("rec_yds", "receptions", "targets", "pass_yds", "completions", "pass_att", "rush_yds", "carries",
-                             "pass_td", "rec_td", "rush_td", "ints", "active_pre") if c in ml.columns]
-            out[(v, when)] = ml[list(dict.fromkeys(keep))].reset_index(drop=True)
+            out[(v, when)] = ml.merge(players.season_average(table), on=["game_id", "player_id"], how="left").reset_index(drop=True)
     C.RAW.mkdir(parents=True, exist_ok=True)
     pickle.dump(out, open(CACHE, "wb"))
     return out
