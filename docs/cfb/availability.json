@@ -1,6 +1,227 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-13T19:31Z",
+ "fetched": "2026-11-13T22:24Z",
  "today": "2026-11-13",
- "teams": {}
+ "teams": {
+  "Florida State": {
+   "conf": "ACC",
+   "abbr": "FSU",
+   "report": "Game Day",
+   "published": "2026-11-13",
+   "posted": "17:00:00",
+   "game_date": "2026-11-13",
+   "game_time": "19:00:00",
+   "opponent": "Pittsburgh",
+   "players": [
+    {
+     "name": "Quindarrius Jones",
+     "pos": "DB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Duce Robinson",
+     "pos": "WR",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Samuel Singleton Jr.",
+     "pos": "RB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Quintrevion Wisner",
+     "pos": "RB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Deante McCray",
+     "pos": "DL",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Karson Hobbs",
+     "pos": "DB",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jamari Howard",
+     "pos": "DB",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Izayia Williams",
+     "pos": "LB",
+     "number": "30",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ousmane Kromah",
+     "pos": "RB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Daylen Green",
+     "pos": "LB",
+     "number": "38",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Noah LaVallee",
+     "pos": "LB",
+     "number": "45",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Bradyn Welch-Joiner",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kevin Wynn",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Conor McAneney",
+     "pos": "K",
+     "number": "93",
+     "status": "Game Time Decision",
+     "season_out": false
+    }
+   ]
+  },
+  "Pittsburgh": {
+   "conf": "ACC",
+   "abbr": "PITT",
+   "report": "Game Day",
+   "published": "2026-11-13",
+   "posted": "17:00:00",
+   "game_date": "2026-11-13",
+   "game_time": "19:00:00",
+   "opponent": "Florida State",
+   "players": [
+    {
+     "name": "Shawn Lee Jr.",
+     "pos": "DB",
+     "number": "3",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Mason Heintschel",
+     "pos": "QB",
+     "number": "6",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "DeMarco Ward",
+     "pos": "LB",
+     "number": "7",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Ja'Kyrian Turner",
+     "pos": "RB",
+     "number": "9",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Holden Geriner",
+     "pos": "QB",
+     "number": "15",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Eliyt Nairne",
+     "pos": "DL",
+     "number": "16",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Elijah Lagg",
+     "pos": "TE",
+     "number": "17",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Max Hunt",
+     "pos": "TE",
+     "number": "18",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Cameron Lindsey",
+     "pos": "LB",
+     "number": "24",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Tyreek Robinson",
+     "pos": "WR",
+     "number": "24",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Allen Bryant",
+     "pos": "DB",
+     "number": "26",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Isaac Patterson",
+     "pos": "DB",
+     "number": "41",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Sean FitzSimmons",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rodney Dunbar",
+     "pos": "WR",
+     "number": "81",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  }
+ }
 }
