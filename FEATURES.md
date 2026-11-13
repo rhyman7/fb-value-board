@@ -793,6 +793,32 @@ the opener edge is real in direction but small. Derivatives are not in it: the b
 endpoint has no team totals or first-half lines. College (2024-2025, about 3,400 credits with
 spreads and totals) is waiting for the next month's credits.
 
+**2023 added (Nov 13, 2026).** The 2023 lines were backfilled (142 snapshots, 4,260 credits) and the
+grade re-run on three seasons with the model as it stands now: `python experiments/pinnacle_grade.py
+--league nfl --seasons 2023 2024 2025`. 2023 is a season none of these rules was chosen on.
+
+| | Bets | Return | CLV vs Pinnacle's close | Line moved toward the model | 2023 alone |
+|---|---|---|---|---|---|
+| Price tier, Monday open | 131 | +13.6% ± 9.7% | +0.6% ± 0.9% | | 47 bets, −1.3%, CLV −0.7% ± 1.0% |
+| Price tier, close | 94 | +4.2% ± 10.7% | (the close itself) | | 25 bets, +24.4% |
+| Opener gap, spread 2+ (the board's rule) | 236 | +3.3% ± 6.2% | −0.2% ± 0.6% | +0.44 pts | 70 bets, −9.9%, CLV +0.2% |
+| Opener gap, total 3+ (the board's rule) | 127 | +4.1% ± 8.5% | **+1.4% ± 0.7%** | +0.75 pts | 42 bets, +5.9%, **CLV +2.9% ± 1.3%** |
+| Opener gap, total 2+ | 228 | +7.2% ± 6.3% | +1.2% ± 0.6% | +0.73 pts | 85 bets, +11.3%, CLV +1.6% ± 0.9% |
+
+- **Totals off the opener held up on the unseen season.** In 2023 the model's side at Pinnacle's
+  Monday total beat Pinnacle's own close (+2.9% ± 1.3% at 3+ points) and the line moved almost a point
+  its way. Over three seasons the 3+ rule beats Pinnacle's close by 1.4% ± 0.7% (1.9 standard errors).
+  That is the only NFL edge here that beats the sharp close, not just the consensus one.
+- **Spreads off the opener did not.** 2023 lost (−9.9%) with closing line value about zero; three seasons
+  together are flat against Pinnacle's close. The line moves toward the model, too little to beat the price.
+- **The price tier faded.** Its 2023 Monday-open bets lost slightly and did not beat the close; on three
+  seasons its closing line value is +0.6% ± 0.9% against +1.9% claimed. The moneylines' big return
+  (+32% on 54) is still luck: they did not beat the close (−1.2%).
+
+Nothing on the board changes. The 2024-2025 rows above the 2023 paragraph were graded on the October
+model; with today's model the 2024-2025 numbers moved slightly (spread 2+ 166 bets +8.8%, total 3+ 85
+bets +3.2%, CLV +0.7%).
+
 ## Where the edge lives (Oct 31, 2026)
 
 The walk-forward backtest split by segment, the way the college board's was (CFB_FEATURES.md,
@@ -1087,6 +1113,58 @@ college legs. Rules were written into the script before it ran.
 So the "not market-tested" college legs on the Parlays page (the model alone) are the weakest
 number available. College props should come from live book prices: two-sided lines at the books'
 no-vig chance, ladders through a college reading, anytime TD at about a 17.5% margin.
+
+## College props on a second season: 2024 lines (Nov 13, 2026)
+
+Every college prop test above was judged on the 2025 lines alone. The 2024 college prop backfill
+(`data/props/history_cfb/2024/`, pulled Nov 13: weeks 1-16, 855 games with DraftKings or FanDuel
+props, 36,142 credits) gives a second season. `python experiments/cfb_props_real_lines.py --season 2024
+--params data/cfb/prop_params.json` (and `--season 2025` for the same numbers on 2025), and
+`python experiments/cfb_props_2024_recheck.py` for near-miss #7. Chances are the board's: the college
+walk-forward projections with the PFF inputs and the college-fitted widths (`data/cfb/prop_params.json`,
+applied Nov 4). Those widths were fitted on 2017-2024 results (so 2024's outcomes, not its prices, were
+in the fit) and chosen on the 2025 lines. Game-day projections, as in the original tests. Nothing
+here changes the board.
+
+**Main lines, model minus books (Brier, lower is better):**
+
+| | 2024 (4,071 props) | 2025 (4,321 props) |
+|---|---|---|
+| The model alone | +0.0036 ± 0.0018 | +0.0041 ± 0.0017 |
+| Rushing yards, model alone | +0.0097 ± 0.0041 | +0.0088 ± 0.0040 |
+| Receiving yards, model alone | +0.0011 ± 0.0025 | +0.0047 ± 0.0023 |
+| Passing yards, model alone | +0.0058 ± 0.0037 | −0.0015 ± 0.0037 |
+| **The nudge** (books moved 20% toward the model, at most 3 points; legs 25+ points apart left out) | **−0.0009 ± 0.0003** | **−0.0008 ± 0.0003** |
+| Nudge: passing TDs / passing yards / receiving / rushing | −0.0009 / −0.0005 / −0.0011 / −0.0008 | −0.0007 / −0.0016 / −0.0006 / −0.0007 |
+
+- **The model alone is still behind the books** in both seasons, mostly on rushing yards.
+- **The nudge now beats the books in both seasons and on all four stats** (3.0 and 2.6 standard
+  errors overall). On Nov 1 it missed (0.0004 ± 0.0003, with the NFL widths); the change is the college
+  widths applied Nov 4. This passes the Nov 1 rule ("the nudge only if it beats the books by 2 standard
+  errors") on a season that rule never saw. Under the Nov 11 keep rule it is close but not clean:
+  passing yards on 2024 is only 0.7 standard errors. Today college props are priced off the books
+  alone, so the nudge would change what the Parlays page and the college Props page show: Ryan's call,
+  with its rule written first.
+- **Near-miss #2 (passing yards alone, 2.05 standard errors on 2025) did not repeat**: 0.7 on 2024. It
+  was one stat of four; the all-stats nudge above is the measure that held.
+
+**Ladders (2024: 44,201 over-only rungs).** The college reading (`parlays.CFB_RUNG_CAL`, fitted on
+2025's rungs) held on 2024 in 8 of 10 bands, but **reads high at the top**: rungs it puts at 80-90%
+cleared 82.2% against 84.6% (± 1.0), and 90%+ cleared 86.6% against 91.3% (± 2.0). In 2025 those bands
+held. These are the rungs the floors strategy uses, so in 2024 terms the safest college rungs were 2-5
+points less safe than the board says. The model's own rung chances were worse than the reading in both
+seasons (+0.0033 ± 0.0010, +0.0045 ± 0.0008).
+
+**Anytime TD (2024: 9,751 props).** At the board's 17.5% margin the model alone beat the books in both
+seasons (2024 −0.0035 ± 0.0011, 2025 −0.0051 ± 0.0012), but the books' best margin in 2024 was 20%, so
+part of that is the reading. **Near-miss #3** (the model ranks scorers better, both corrected the same
+way): 2024 −0.0011 ± 0.0008 (1.4 standard errors), 2025 −0.0021 ± 0.0009. Same direction, weaker on the
+new season.
+
+**Near-miss #7 (backs' usage by down type × margin)** at the rushing-yards main lines, new minus current
+projections: 2024 −0.0007 ± 0.0007 (1.0 SE), 2025 −0.0010 ± 0.0006 (1.7 SE, on today's model). Same
+direction in both seasons; carries are still slightly worse on the 2021+ holdout (mean squared error
++0.006 ± 0.012). Still a trade-off.
 
 ## Live college prop prices (Nov 1, 2026)
 
@@ -1693,7 +1771,7 @@ moves 1.6 SE, short of 2. Snap share adds nothing to the rushing chain at the li
 or the rungs. No walk-forward (the rule runs it only after a pass). Nothing touches the board.
 
 Worth a recheck rather than a near-miss slot: the receiving floor-rung score (1.6 SE) on 2025 + 2026
-lines, and with the 2024 college prop backfill when Ryan buys it in December. The other 50 PFF tables
+lines, and on the 2024 college prop lines (pulled Nov 13, 2026; not yet re-run for this test). The other 50 PFF tables
 (depth, concept, scheme, blocking, pass rush, coverage; pulled Nov 4) are untested.
 
 **Re-judged the same day under the new keep rule (CONVENTIONS.md, "Model tests"): anything that makes
