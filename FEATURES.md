@@ -815,6 +815,27 @@ grade re-run on three seasons with the model as it stands now: `python experimen
   seasons its closing line value is +0.6% ± 0.9% against +1.9% claimed. The moneylines' big return
   (+32% on 54) is still luck: they did not beat the close (−1.2%).
 
+**Strategy 3 (price beats Pinnacle *and* the model agrees) with NFL 2023 (Nov 13, 2026).**
+`python experiments/pinnacle_reference_test.py`, a re-implementation of the Nov 6 test (Project doc
+`claude/betting-strategies.md` §3; its script never reached the repo) with the same rule: agrees beats
+disagrees on closing line value against Pinnacle's close in every league-season, the pooled gap 2+ SE,
+and the agrees bets' return no worse than the tier's. College now includes moneylines (backfilled Nov 13).
+
+| Monday-open price bets | Agrees: bets, return, CLV | Disagrees: bets, return, CLV |
+|---|---|---|
+| **NFL 2023 (unseen)** | 23, −3.5%, −0.3% ± 1.5% | 24, +0.8%, −1.0% ± 1.2% |
+| NFL 2024 | 25, +16.2%, +2.0% ± 1.8% | 18, −13.1%, −0.3% ± 3.6% |
+| NFL 2025 | 13, +55.2%, +9.2% ± 3.8% | 28, +34.1%, −1.8% ± 2.9% |
+| NFL 2023-25 | 61, +17.1%, **+2.6% ± 1.3%** | 70, +10.6%, −1.2% ± 1.5% |
+| College 2024 | 61, −3.8%, −1.3% ± 1.0% | 70, −8.4%, −0.2% ± 1.0% |
+| College 2025 | 31, +20.3%, +2.5% ± 1.1% | 58, +5.5%, −2.9% ± 1.1% |
+
+Pooled gap +2.4% ± 1.0% (2.3 SE); agrees' return +9.4% against the tier's +5.5%. **Still not kept**: college
+2024 is still the cell that goes the wrong way. The new season, NFL 2023, sided with "agrees" only
+barely: both lost to Pinnacle's close, agrees by less. The NFL three-season record stays the strongest
+price-tier result here, but most of it is 2025. Nothing changes; the live-ledger recheck after the
+season stands.
+
 Nothing on the board changes. The 2024-2025 rows above the 2023 paragraph were graded on the October
 model; with today's model the 2024-2025 numbers moved slightly (spread 2+ 166 bets +8.8%, total 3+ 85
 bets +3.2%, CLV +0.7%).
@@ -1165,6 +1186,34 @@ new season.
 projections: 2024 −0.0007 ± 0.0007 (1.0 SE), 2025 −0.0010 ± 0.0006 (1.7 SE, on today's model). Same
 direction in both seasons; carries are still slightly worse on the 2021+ holdout (mean squared error
 +0.006 ± 0.012). Still a trade-off.
+
+### More college tests re-scored on 2024 (Nov 13, 2026)
+
+Same lines, same way as each original test (board projections with the piece against without it,
+Brier at the main lines, new minus current; NFL widths as the originals). Scripts:
+`experiments/cfb_pff_role_2024_recheck.py`, `experiments/cfb_prop_tests_2024_recheck.py`.
+
+| Test (status) | Lines | 2024 | 2025 (today's model) |
+|---|---|---|---|
+| PFF route + snap share, receiving (on the board since Nov 4) | receiving yards | −0.0001 ± 0.0011 | −0.0005 ± 0.0010 |
+| same, **floor rungs** (books' reading 65-95%) | 1,932 / 6,717 rungs | **+0.0000 ± 0.0008** | −0.0008 ± 0.0005 (1.6 SE) |
+| same, receiving-yards RMSE | | 29.78 → 29.59 (4.7 SE better) | 29.45 → 29.31 (3.7 SE) |
+| Rushing calibrated per position group (on the board) | rushing yards | −0.0002 ± 0.0004 | −0.0007 ± 0.0006 |
+| Defense against each position (on the board) | receiving yards | **−0.0005 ± 0.0002 (2.4 SE)** | −0.0004 ± 0.0003 |
+| | rushing yards | +0.0001 ± 0.0004 | −0.0003 ± 0.0004 |
+| | passing yards | +0.0006 ± 0.0007 | −0.0007 ± 0.0008 |
+| Early-season role prior, w = 1 (not kept) | rushing yards, weeks 1-8 | −0.0004 ± 0.0010 | −0.0004 ± 0.0009 |
+
+- **The PFF floor-rung lead did not repeat.** Route share still makes the receiving projections more
+  accurate (4.7 SE on 2024), but on 2024's floor rungs it changes nothing. It stays on the board (kept
+  Nov 4 on the projections); the floor-rung recheck is closed.
+- **Defense against each position holds on receiving** (2.4 SE better at the 2024 lines, the clearest
+  confirmation of any college input), is flat on rushing, and is mixed on passing yards (worse on
+  2024, better on 2025, both under 1 SE). For the January pass: the QB passing-yards pair.
+- **Rushing by position group and the role prior:** same direction both seasons, too small to read. The
+  role prior is nothing even with 2024's week 1-2 lines, which 2025 could not test.
+- On 2024's floor rungs the books' reading put them at 76.5% and they cleared 73.3%: the same high
+  reading at the top of the college ladder as above.
 
 ## The model nudge on college main lines, pre-set test (Nov 13, 2026): a trade-off, 19 of 20
 
@@ -1806,7 +1855,7 @@ moves 1.6 SE, short of 2. Snap share adds nothing to the rushing chain at the li
 or the rungs. No walk-forward (the rule runs it only after a pass). Nothing touches the board.
 
 Worth a recheck rather than a near-miss slot: the receiving floor-rung score (1.6 SE) on 2025 + 2026
-lines, and on the 2024 college prop lines (pulled Nov 13, 2026; not yet re-run for this test). The other 50 PFF tables
+lines, and on the 2024 college prop lines (re-run Nov 13, 2026: flat, +0.0000 ± 0.0008; closed, see "More college tests re-scored on 2024"). The other 50 PFF tables
 (depth, concept, scheme, blocking, pass rush, coverage; pulled Nov 4) are untested.
 
 **Re-judged the same day under the new keep rule (CONVENTIONS.md, "Model tests"): anything that makes

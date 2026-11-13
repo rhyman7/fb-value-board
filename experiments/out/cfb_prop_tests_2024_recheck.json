@@ -1,0 +1,118 @@
+{
+ "rush_group_calibration": {
+  "2024 rush_yds": {
+   "props": 1040.0,
+   "brier_books": 0.250015,
+   "brier_current": 0.260268,
+   "brier_new": 0.260088,
+   "new_minus_current": -0.000181,
+   "se": 0.000438,
+   "z": -0.412458,
+   "new_minus_books": 0.010073,
+   "books_se": 0.004341
+  },
+  "2025 rush_yds": {
+   "props": 1106.0,
+   "brier_books": 0.250001,
+   "brier_current": 0.261078,
+   "brier_new": 0.260431,
+   "new_minus_current": -0.000647,
+   "se": 0.000548,
+   "z": -1.180393,
+   "new_minus_books": 0.01043,
+   "books_se": 0.004143
+  }
+ },
+ "defense_vs_position": {
+  "2024 rec_yds": {
+   "props": 1790.0,
+   "brier_books": 0.250062,
+   "brier_current": 0.253958,
+   "brier_new": 0.253415,
+   "new_minus_current": -0.000544,
+   "se": 0.000228,
+   "z": -2.389021,
+   "new_minus_books": 0.003352,
+   "books_se": 0.002526
+  },
+  "2024 rush_yds": {
+   "props": 1040.0,
+   "brier_books": 0.250015,
+   "brier_current": 0.260017,
+   "brier_new": 0.260088,
+   "new_minus_current": 7.1e-05,
+   "se": 0.00044,
+   "z": 0.160679,
+   "new_minus_books": 0.010073,
+   "books_se": 0.004341
+  },
+  "2024 pass_yds": {
+   "props": 617.0,
+   "brier_books": 0.250027,
+   "brier_current": 0.257048,
+   "brier_new": 0.25765,
+   "new_minus_current": 0.000602,
+   "se": 0.000719,
+   "z": 0.836224,
+   "new_minus_books": 0.007623,
+   "books_se": 0.004162
+  },
+  "2025 rec_yds": {
+   "props": 1960.0,
+   "brier_books": 0.249949,
+   "brier_current": 0.256377,
+   "brier_new": 0.255939,
+   "new_minus_current": -0.000438,
+   "se": 0.000248,
+   "z": -1.762249,
+   "new_minus_books": 0.00599,
+   "books_se": 0.002302
+  },
+  "2025 rush_yds": {
+   "props": 1106.0,
+   "brier_books": 0.250001,
+   "brier_current": 0.260691,
+   "brier_new": 0.260431,
+   "new_minus_current": -0.00026,
+   "se": 0.000402,
+   "z": -0.645233,
+   "new_minus_books": 0.01043,
+   "books_se": 0.004143
+  },
+  "2025 pass_yds": {
+   "props": 629.0,
+   "brier_books": 0.24996,
+   "brier_current": 0.252505,
+   "brier_new": 0.251772,
+   "new_minus_current": -0.000733,
+   "se": 0.000798,
+   "z": -0.918103,
+   "new_minus_books": 0.001813,
+   "books_se": 0.003767
+  }
+ },
+ "role_prior_weeks_1_8": {
+  "2024 rush_yds": {
+   "props": 532.0,
+   "brier_books": 0.25,
+   "brier_current": 0.262957,
+   "brier_new": 0.262524,
+   "new_minus_current": -0.000433,
+   "se": 0.000954,
+   "z": -0.453967,
+   "new_minus_books": 0.012524,
+   "books_se": 0.006955
+  },
+  "2025 rush_yds": {
+   "props": 489.0,
+   "brier_books": 0.250003,
+   "brier_current": 0.267977,
+   "brier_new": 0.267593,
+   "new_minus_current": -0.000385,
+   "se": 0.000929,
+   "z": -0.414197,
+   "new_minus_books": 0.01759,
+   "books_se": 0.006856
+  }
+ }
+}
