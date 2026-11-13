@@ -271,6 +271,30 @@ open (44-38, CLV −1.8% ± 1.1%) and 62 at the close (30-32, CLV +2.5% ± 0.7%)
 The consensus close the backtests use sits 0.40 points from Pinnacle's close on spreads and 0.42
 on totals, and differs on 33% of games.
 
+## Graded against Pinnacle: moneylines, 2024-2025 (Nov 13, 2026)
+
+Moneylines were added to the 2024 and 2025 backfills (h2h, 3,370 credits) and the grade re-run:
+`python experiments/pinnacle_grade.py --league cfb --seasons 2024 2025`. On the college board a
+moneyline is a bet only in the price tier (a DraftKings or FanDuel price beating Pinnacle's no-vig
+number by 1%; never on the model's opinion, `sheet.annotate`), so that is what is graded.
+
+| Taken at | Bets | W-L | Return | EV claimed | CLV vs Pinnacle's close |
+|---|---|---|---|---|---|
+| Monday open | 138 | 91-47 | −0.6% ± 6.5% | +1.8% | −0.3% ± 0.5% |
+| Close | 70 | 38-32 | −12.9% ± 10.7% | +1.9% | (the close itself) |
+
+**College moneyline prices that beat Pinnacle's don't hold.** At the open they beat Pinnacle's close
+about half the time (51%) and lost the claimed edge by the close; at the close they lost. Nearly all are
+favourites (131 of 138 at the open, median −193). By season at the open: 2024 −6.9% on 97 (closing line
+value +0.1%), 2025 +14.4% on 41 (−1.1%). Every price-tier bet together (spreads, totals and moneylines)
+at the open: 220 bets, +0.6% ± 5.9%, closing line value −0.9% ± 0.6%. Against the live record (the
+price tier by book, `claude/near-misses-and-rechecks.md`) this is one more reason the January recheck
+should look at college price bets by market.
+
+The same run, on today's model, moved the opener-gap totals slightly: total 3+ 404 bets +11.5% ±
+4.7%, line moved +0.66 pts toward the model, closing line value against Pinnacle still −1.4% ± 0.4%.
+Spreads unchanged (no edge).
+
 ## Drive ratings, FEI / SP+ style (tested Nov 2, 2026: not kept; dve applied Nov 4 under the keep rule)
 
 FEI rates college teams per drive (points against what the starting spot was worth) and SP+ has

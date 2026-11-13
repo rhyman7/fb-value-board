@@ -1,6 +1,12 @@
 """The college prop numbers against real DraftKings and FanDuel lines, 2025.
 
     python experiments/cfb_props_real_lines.py
+    python experiments/cfb_props_real_lines.py --season 2024 --params data/cfb/prop_params.json
+
+(Nov 13, 2026: --season picks another season's lines, data/props/history_cfb/<season>/, and --params
+prices with another prop_params.json, the board's college widths being data/cfb/prop_params.json.
+The ladder and TD results also score the board's college reading and TD margin, held out on any
+season but 2025. NUDGE_MAX pins the nudge's cap at the 3 points this rule used.)
 
 Lines: data/props/history_cfb/2025/ (nflmodel/cfbpropbackfill.py), one snapshot per game ten
 minutes before kickoff: 451 games with props, weeks 3-16 (week 3 partly). Projections: the
@@ -52,13 +58,25 @@ from nflmodel import market as M, odds as O, parlays as PA, propdist as D, propm
 
 warnings.filterwarnings("ignore")
 ROOT = Path(__file__).resolve().parent.parent
-HIST = ROOT / "data" / "props" / "history_cfb" / "2025"
+SEASON = 2025          # --season: which season's lines (Nov 13, 2026: 2024 added)
+HIST = ROOT / "data" / "props" / "history_cfb" / str(SEASON)
 OUT = Path(__file__).resolve().parent / "out" / "cfb_props_real_lines.json"
+PARAMS = None          # --params: a prop_params.json; None is the NFL fit (the Nov 1 test)
+
+
+def set_season(season: int) -> None:
+    """Point every function here at one season's lines and player table (other tests import this module)."""
+    global SEASON, HIST, OUT
+    SEASON = int(season)
+    HIST = ROOT / "data" / "props" / "history_cfb" / str(SEASON)
+    OUT = Path(__file__).resolve().parent / "out" / ("cfb_props_real_lines.json" if SEASON == 2025 else f"cfb_props_real_lines_{SEASON}.json")
+NUDGE_MAX = 0.03       # the Nov 1 rule's cap (parlays.PULL_MAX has been 0.075 since Nov 4)
 BANDS = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 
 
-def projections(cache=Path("/tmp/cfb_pproj_2025.pkl")):
-    """The college walk-forward player table for 2025 (cached: it takes about a minute)."""
+def projections(cache=None):
+    """The college walk-forward player table for SEASON (cached: it takes about a minute)."""
+    cache = cache or Path(f"/tmp/cfb_pproj_{SEASON}.pkl")
     from cfbmodel import data, model, players, players_data
     from cfbmodel.ratings import CFBRatingEngine
     if cache.exists():
@@ -67,7 +85,7 @@ def projections(cache=Path("/tmp/cfb_pproj_2025.pkl")):
     engine = CFBRatingEngine(tg, qb, games=games)
     frame, _ = model.walk_forward(model.build_frame(games, engine))
     pg, pinfo = players_data.load_player_games(verbose=False)
-    pproj = players.walk_forward(players.build(games, frame, pg, pinfo, None, None), first_test=2025)
+    pproj = players.walk_forward(players.build(games, frame, pg, pinfo, None, None), first_test=SEASON)
     return pproj, pinfo, games
 
 
@@ -88,7 +106,7 @@ def snapshots() -> pd.DataFrame:
 def match_events(s: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
     """event_id -> game_id, by the two teams (either way round) and kickoff within two days."""
     from cfbmodel import teams as T
-    t = T.load_teams(2025, refresh=False)
+    t = T.load_teams(SEASON, refresh=False)
     look = {M._norm(n): sch for sch, n in t["name"].items()}
     for k, v in M.CFB_ALIASES.items():
         nk, nv = M._norm(k), M._norm(v)
@@ -99,7 +117,7 @@ def match_events(s: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
     ev = s.drop_duplicates("event_id")[["event_id", "home_name", "away_name", "commence"]].copy()
     ev["h"], ev["a"] = ev["home_name"].map(lambda x: look.get(M._norm(x))), ev["away_name"].map(lambda x: look.get(M._norm(x)))
     ev["ts"] = pd.to_datetime(ev["commence"], utc=True)
-    g = games[games.season == 2025][["game_id", "home_team", "away_team", "kickoff"]].copy()
+    g = games[games.season == SEASON][["game_id", "home_team", "away_team", "kickoff"]].copy()
     g["kickoff"] = pd.to_datetime(g["kickoff"], utc=True)
     out = {}
     for e in ev.itertuples():
@@ -111,7 +129,7 @@ def match_events(s: pd.DataFrame, games: pd.DataFrame) -> pd.DataFrame:
 
 
 def player_frame(pproj, pinfo) -> pd.DataFrame:
-    rows = pproj[(pproj.season == 2025) & pproj["played"].astype(bool)].copy()
+    rows = pproj[(pproj.season == SEASON) & pproj["played"].astype(bool)].copy()
     rows["name"] = rows["player_id"].map(pinfo["name"])
     rows["nname"] = rows["name"].map(PM.norm_name)
     rows = rows[~rows.duplicated(["game_id", "nname"], keep=False)]
@@ -147,7 +165,7 @@ def compare(x: pd.DataFrame, weight: float, label: str) -> dict:
     mkt = x["fair"].to_numpy()
     gap = ours - mkt
     keep = np.abs(gap) <= PA.CONFLICT
-    nudged = mkt + np.clip(weight * gap, -PA.PULL_MAX, PA.PULL_MAX)
+    nudged = mkt + np.clip(weight * gap, -NUDGE_MAX, NUDGE_MAX)
     m_vs, m_se = clustered_diff(ours, mkt, hit, x["game_id"])
     n_vs, n_se = clustered_diff(nudged[keep], mkt[keep], hit[keep], x["game_id"].to_numpy()[keep])
     return {"what": label, "props": int(len(x)), "games": int(x["game_id"].nunique()), "over_rate": round(float(hit.mean()), 4),
@@ -181,9 +199,9 @@ def main():
     s["stat"] = s["market"].map(PM.MARKET_STAT)
     s["alt"] = s["market"].str.endswith("_alternate")
     rows = player_frame(pproj, pinfo)
-    model = P.PropModel.load()
-    res = {"events_with_props": int(s["event_id"].nunique()), "events_matched": int(gid.size),
-           "player_rows_2025": int(len(rows))}
+    model = P.PropModel.load(PARAMS) if PARAMS else P.PropModel.load()
+    res = {"season": SEASON, "params": str(PARAMS) if PARAMS else "nfl","events_with_props": int(s["event_id"].nunique()), "events_matched": int(gid.size),
+           "player_rows": int(len(rows))}
 
     # 1. main lines, two-sided
     main = s[~s["alt"] & (s["market"] != "player_anytime_td")]
@@ -214,6 +232,13 @@ def main():
                       "brier_nfl_read": round(D.brier(r["nfl_read"].to_numpy(), hit), 5), "brier_model": round(D.brier(ours, hit), 5)}
     m_vs, m_se = clustered_diff(ours, r["nfl_read"].to_numpy(), hit, r["game_id"])
     res["ladders"]["model_minus_nfl_read"], res["ladders"]["model_se"] = round(m_vs, 5), round(m_se, 5)
+    # the college reading (parlays.CFB_RUNG_CAL, fitted on 2025's rungs): on any other season a held-out check
+    cr = np.interp(r["implied"], *zip(*PA.CFB_RUNG_CAL))
+    cb = bands(cr, hit, r["game_id"].to_numpy())
+    res["ladders"].update({"cfb_reading": cb, "cfb_reading_holds": all(b["within_2se"] for b in cb if b["within_2se"] is not None),
+                           "brier_cfb_read": round(D.brier(cr, hit), 5)})
+    m2, s2 = clustered_diff(ours, cr, hit, r["game_id"])
+    res["ladders"]["model_minus_cfb_read"], res["ladders"]["model_minus_cfb_read_se"] = round(m2, 5), round(s2, 5)
 
     # 3. anytime TD, over-only
     t = s[(s["market"] == "player_anytime_td") & (s["side"] == "over")].copy()
@@ -233,6 +258,10 @@ def main():
     fm = IsotonicRegression(out_of_bounds="clip").fit(ours, hit).predict(ours)
     d1, s1 = clustered_diff(ours, fb, hit, td["game_id"])
     d2, s2 = clustered_diff(fm, fb, hit, td["game_id"])
+    # the board's college TD margin (parlays.CFB_TD_MARGIN, fitted on 2025's prices): held out on any other season
+    fc = np.asarray(O.one_sided_fair(td["price"], PA.CFB_TD_MARGIN, "power"))
+    d3, s3 = clustered_diff(ours, fc, hit, td["game_id"])
+    res["anytime_td"].update({"brier_books_cfb_margin": round(D.brier(fc, hit), 5), "model_minus_books_cfb_margin": round(d3, 5), "cfb_margin_se": round(s3, 5)})
     res["anytime_td"].update({"books_best_margin": round(float(best[0]), 3), "model_minus_books_recalibrated": round(d1, 5),
                               "recalibrated_se": round(s1, 5), "ranking_only_model_minus_books": round(d2, 5), "ranking_se": round(s2, 5)})
     # college ladder reading, fitted on these 2025 rungs (to be checked on 2026's before use)
@@ -247,4 +276,13 @@ def main():
 
 
 if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--season", type=int, default=2025)
+    ap.add_argument("--params", help="prop_params.json to price with (default: the NFL fit); data/cfb/prop_params.json is the board's")
+    a = ap.parse_args()
+    set_season(a.season)
+    if a.params:
+        PARAMS = Path(a.params)
+        OUT = OUT.with_name(OUT.stem + "_cfbparams.json")
     main()
