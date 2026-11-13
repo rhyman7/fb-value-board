@@ -1195,6 +1195,12 @@ make none). They claim about +0.3% a leg. 2024: 579 bets, +5.2% ± 3.7% (bet-tim
 (game-day); 2025: 252, −3.1% ± 6.3% and 300, −2.9% ± 5.6%. Not an edge to bet on its own: the nudge is
 for pricing legs, not for flagging them. The NFL's 7.5-point cap (reported only) came out about the same.
 
+**Applied Nov 13, 2026 (Ryan's call on the trade-off), provisional:** `parlays.cfb_book_legs` prices
+college two-sided main-line legs with the nudge exactly as tested (`CFB_W_MAIN`, `CFB_PULL_MAX`;
+CONVENTIONS.md). On the Nov 13 slate it touched 874 legs, moving them 1.1 points on average (5% at
+the 3-point cap). Rechecked in January on the full 2026 season's live lines; removed if worse than
+the books there.
+
 ## Live college prop prices (Nov 1, 2026)
 
 `nflmodel/cfbprops.py` (workflow **College props**) pulls DraftKings and FanDuel college player props

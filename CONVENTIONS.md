@@ -673,13 +673,24 @@ boards in detail; this file is the rules.
     (after the build; a failure never stops it). It spends no Odds API credits: it reads the
     files the **College props** Action pulls (`data/props/history_cfb_live/`). The first time a
     line appears it appends one row to `data/props/cfb_prop_log.csv` with the books' prices, the
-    vig-free chance (priced as the Parlays page prices college legs) and the model's chance then
+    books' vig-free chance (the Parlays page's college legs start from it; on two-sided main lines
+    the page then adds the provisional model nudge, below) and the model's chance then
     (college projections on `data/cfb/prop_params.json`, reception share standing in for target
     share, `cfbpropboard.with_target_share`). The row is never rewritten. Close comes from the
     game's file after kickoff; results from the archive's `actuals`. Not market-tested, so
     `flags_on` is false and nothing is flagged. Display only: it never feeds the model, the bets,
     the Bet sheet or the Parlays page.
   Never edit past weeks by hand; the files are rebuilt from the logs.
+- **College prop legs on the Parlays page** (`parlays.cfb_book_legs`): priced off DraftKings and
+  FanDuel. From Nov 13, 2026 (Ryan's call, provisional) two-sided main lines in passing yards,
+  passing TDs, rushing yards and receiving yards carry the model nudge: the books' no-vig chance
+  moved `CFB_W_MAIN` (0.2) toward the model, at most `CFB_PULL_MAX` (3 points), legs more than
+  `CONFLICT` apart left at the books'. That is exactly the version tested
+  (`experiments/cfb_props_nudge_test.py`, FEATURES.md "The model nudge on college main lines": 19 of
+  20 measures); don't change the weight or cap without a new pre-set test. Value is scored on the
+  books' number (`wv`), never the nudged one. Ladders and anytime TD are not nudged. It is rechecked
+  in the January 2027 pass on the full 2026 season's live lines (Project doc
+  `claude/january-recheck-additions.md`) and removed if it is worse than the books there.
 - **One set of player projections** (Ryan's call, Oct 31, 2026). The New projections
   (`nflmodel/players_ml.py`) replace the current ones wherever `players_ml.ADOPT` covers the stat
   and position (RB carries and rushing yards; WR and RB receptions and receiving yards); every

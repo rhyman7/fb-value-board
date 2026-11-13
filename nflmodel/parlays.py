@@ -37,9 +37,12 @@ Where w comes from, and why. A parlay is only as honest as its legs' chances:
                sides the nudged chance made +EV lost about 4% to the close at every cap
                (PROPS.md, "How far the model may move a prop"), so the nudge is shown as the
                chance and never counted as an edge.
-  college      no prop prices exist (CFB_PLAYERS.md), so college props are the model's chance
-  props        alone, from the NFL prop distributions on the college projections, tagged
-               "not market-tested".
+  college      the books' prices where DraftKings or FanDuel post the player (cfb_book_legs):
+  props        two-sided main lines at the books' no-vig chance moved 20% toward the model, at
+               most 3 points (provisional from Nov 13, 2026, CFB_W_MAIN; value still scored on
+               the books' number), rungs through CFB_RUNG_CAL, anytime TD at CFB_TD_MARGIN.
+               Where the books post nothing, the model's chance alone on the college widths,
+               tagged "not market-tested".
 
 Nothing here is a bet by itself; the page says what each combination is worth at the price
 the bettor can get.
@@ -77,14 +80,24 @@ CONFLICT = 0.25       # model and books more than 25 points apart: different new
 MOVE_LO, MOVE_HI = 0.55, 0.95     # moved prop lines kept between these chances
 MOVE_MAX = 6          # at most this many moved lines per player, stat and side
 # College props priced off the books (experiments/out/cfb_props_real_lines.json, Nov 1, 2026: on
-# 2025's lines the model alone was worse than the books and the NFL nudge didn't clear 2 SE, so
-# there is no model nudge): two-sided lines at the books' no-vig chance; over-only rungs read
+# 2025's lines the model alone was worse than the books and the NFL nudge didn't clear 2 SE; from
+# Nov 13, 2026 two-sided main lines carry the provisional nudge below): two-sided lines at the
+# books' no-vig chance; over-only rungs read
 # through how 2025's college rungs at each raw implied chance cleared (the NFL reading ran 1-3
 # points high for college; to be rechecked on 2026's rungs); anytime TD at a 17.5% margin (the
 # books' best-fitting margin on 2025's college TD prices; the NFL's 10% read them too high).
 CFB_RUNG_CAL = [(0.0, 0.0), (0.05, 0.0066), (0.1, 0.0635), (0.2, 0.1733), (0.3, 0.2513), (0.4, 0.3714), (0.5, 0.4437),
                 (0.6, 0.521), (0.7, 0.6094), (0.8, 0.7312), (0.9, 0.8407), (0.95, 0.8863), (1.0, 0.9237)]
 CFB_TD_MARGIN = 0.175
+# The model nudge on college two-sided main lines (provisional, Nov 13, 2026; FEATURES.md "The model
+# nudge on college main lines", experiments/cfb_props_nudge_test.py): the books' no-vig chance moved
+# CFB_W_MAIN of the way to the model, at most CFB_PULL_MAX; legs CONFLICT apart stay at the books'.
+# Better than the books on 19 of 20 pre-set measures (2024 holdout 2.75-3.0 SE); Ryan applied it as a
+# trade-off, to be rechecked on the full 2026 season's live lines in January. Ladders and anytime TD
+# are not nudged. Value is scored on the books' number (wv), as on NFL legs.
+CFB_W_MAIN = 0.2
+CFB_PULL_MAX = 0.03
+CFB_NUDGE_STATS = ("pass_yds", "pass_td", "rush_yds", "rec_yds")
 CFB_ROLES = ("QB", "R1", "R2", "RB1")
 CFB_MOVE_MAX = 3
 CFB_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions", "anytime_td")
@@ -623,12 +636,45 @@ def _cfb_games(payload: dict, snaps: pd.DataFrame) -> dict:
     return out
 
 
-def cfb_book_legs(payload: dict, roles: dict, now: dt.datetime, snaps: pd.DataFrame) -> list[dict]:
+def _cfb_model_over(model, frame: pd.DataFrame | None, g: str, pid, stat: str, L: float) -> float | None:
+    """The college model's chance of the over at a line (push left out), or None."""
+    if model is None or frame is None or frame.empty:
+        return None
+    from . import props as P
+    d = frame[(frame["game_id"] == g) & (frame["player_id"].astype(str) == str(pid))]
+    if len(d) != 1:
+        return None
+    d = d.reset_index(drop=True)
+    grp = d["group"].iloc[0]
+    if (stat, grp) not in model.counts and (stat, grp) not in model.yards:
+        return None
+    for c in P.SPECS[stat].proj:
+        if c not in d:
+            d[c] = 0.0
+    try:                       # a failure here only drops the nudge, never the books' leg
+        if not float(np.ravel(P.mean(d, stat))[0]) > 0:
+            return None
+        over, _, under = model.probs(d, stat, grp, np.array([L]))
+    except Exception:
+        return None
+    o, u = float(np.ravel(over)[0]), float(np.ravel(under)[0])
+    return o / (o + u) if o + u > 0 else None
+
+
+def cfb_book_legs(payload: dict, roles: dict, now: dt.datetime, snaps: pd.DataFrame, model=None) -> list[dict]:
     """College props at the books' own prices (CFB_RUNG_CAL, CFB_TD_MARGIN above): only the lines
-    DraftKings and FanDuel post, no model nudge, no moved lines."""
+    DraftKings and FanDuel post, no moved lines. Two-sided main lines in CFB_NUDGE_STATS carry the
+    provisional model nudge (CFB_W_MAIN, CFB_PULL_MAX) when `model` is given."""
     from . import propmarket as PM
     if snaps is None or snaps.empty:
         return []
+    frame = None
+    if model is not None:
+        try:
+            from .cfbpropboard import with_target_share
+            frame = PM.board_players(with_target_share(payload))
+        except Exception as e:
+            print(f"  college prop nudge skipped: {e}")
     gid = _cfb_games(payload, snaps)
     s = snaps[snaps["event_id"].isin(gid)].copy()
     if s.empty:
@@ -645,12 +691,13 @@ def cfb_book_legs(payload: dict, roles: dict, now: dt.datetime, snaps: pd.DataFr
         who.setdefault((p["game"], PM.norm_name(p["name"])), []).append(p)
     legs, seen = [], set()
 
-    def leg(p, g, stat, L, side, w, prices, tags):
+    def leg(p, g, stat, L, side, w, prices, tags, wv=None, pm=None):
         n = p["name"]
         lab = (f"{n} anytime TD" if stat == "anytime_td" else f"{n} {int(L + 0.5)}+ {STAT_LABEL.get(stat, stat)}" if "alt rung" in tags
                else f"{n} {side} {L:g} {STAT_LABEL.get(stat, stat)}")
         return {"lg": "cfb", "g": g, "ko": ko[g], "m": "prop", "pl": n, "tm": p["team"], "pos": p.get("pos"), "s": stat, "lab": lab,
-                "L": float(L), "d": side, "w": _r(w), "wv": _r(w), "h": 0.0, "pk": _r(w), "bk": prices, "src": "books", "t": tags,
+                "L": float(L), "d": side, "w": _r(w), "wv": _r(w if wv is None else wv), "h": 0.0, "pk": _r(w if wv is None else wv),
+                **({"pm": _r(pm)} if pm is not None else {}), "bk": prices, "src": "books" if pm is None else "blend", "t": tags,
                 "c": {"k": "prop", "p": str(p["id"]), "tm": p["team"], "r": roles.get((g, p["id"])), "s": stat, "dir": side}}
 
     for (g, nn, stat, L, alt), x in s.dropna(subset=["stat"]).groupby(["g", "nn", "stat", "line", "alt"]):
@@ -685,6 +732,13 @@ def cfb_book_legs(payload: dict, roles: dict, now: dt.datetime, snaps: pd.DataFr
         if not nv:
             continue
         o = float(np.mean(nv))
+        po = _cfb_model_over(model, frame, g, p["id"], stat, float(L)) if stat in CFB_NUDGE_STATS else None
+        if po is not None and abs(po - o) <= CONFLICT:
+            nudged = o + float(np.clip(CFB_W_MAIN * (po - o), -CFB_PULL_MAX, CFB_PULL_MAX))
+            for side, w, wv, pm in (("over", nudged, o, po), ("under", 1 - nudged, 1 - o, 1 - po)):
+                seen.add((g, p["id"], stat, side, float(L)))
+                legs.append(leg(p, g, stat, L, side, w, q[side], [], wv=wv, pm=pm))
+            continue
         for side, w in (("over", o), ("under", 1 - o)):
             seen.add((g, p["id"], stat, side, float(L)))
             legs.append(leg(p, g, stat, L, side, w, q[side], []))
@@ -780,7 +834,7 @@ def build(payload: dict, league: str, props_dir: Path | None = None, prop_model=
     if league == "cfb":
         try:                       # the books' prices where they post a player and stat (nflmodel/cfbprops.py)
             from . import cfbprops
-            priced = cfb_book_legs(payload, roles, now, cfbprops.load(int((payload.get("meta") or {}).get("season") or now.year), now))
+            priced = cfb_book_legs(payload, roles, now, cfbprops.load(int((payload.get("meta") or {}).get("season") or now.year), now), prop_model)
         except Exception as exc:
             print(f"  parlays: college prop prices skipped ({exc})")
             priced = []
