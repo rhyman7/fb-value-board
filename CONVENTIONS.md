@@ -158,7 +158,8 @@ boards in detail; this file is the rules.
   `league`-scoped snapshot and that board's rebuild 35 and 20 minutes before each kickoff window,
   about 150 credits a week in a full week, retrying a failed run until 10 minutes past its time;
   after each window's 20-minute refresh it sends that window's Best bets card from
-  `bestbets.csv` to ntfy and the open `best-bets` issue, nothing when the card is empty, at
+  `bestbets.csv` to ntfy and the week's `best-bets` issue (one per Tuesday-to-Monday week, the old
+  one closed by the new week's first alert), nothing when the card is empty, at
   DraftKings and FanDuel only (`kickoff.MY_BOOKS`; a bet neither qualifies is listed as NOT A BET); it only
   dispatches existing workflows, reads and sends, and never changes the model) and commits only the
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
