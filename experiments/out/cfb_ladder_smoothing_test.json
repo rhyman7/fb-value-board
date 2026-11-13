@@ -1,0 +1,102 @@
+{
+ "seasons": {
+  "2024": {
+   "player_games": 3421,
+   "differ": 1744,
+   "legs_changed": 3796,
+   "mean_change": 0.0104,
+   "main_over_shift_current": -0.0048,
+   "main_overs": {
+    "legs": 1744,
+    "diff": 2e-06,
+    "se": 0.000328,
+    "z": 0.0
+   },
+   "rungs": {
+    "legs": 19067,
+    "diff": -2.7e-05,
+    "se": 3.9e-05,
+    "z": -0.71
+   },
+   "all_overs": {
+    "legs": 20811,
+    "diff": -2.5e-05,
+    "se": 6.2e-05,
+    "z": -0.4
+   }
+  },
+  "2025": {
+   "player_games": 3684,
+   "differ": 2158,
+   "legs_changed": 4819,
+   "mean_change": 0.0103,
+   "main_over_shift_current": -0.0055,
+   "main_overs": {
+    "legs": 2158,
+    "diff": 0.000232,
+    "se": 0.000289,
+    "z": 0.8
+   },
+   "rungs": {
+    "legs": 38485,
+    "diff": 1.2e-05,
+    "se": 2.4e-05,
+    "z": 0.51
+   },
+   "all_overs": {
+    "legs": 40643,
+    "diff": 2.4e-05,
+    "se": 3.7e-05,
+    "z": 0.64
+   }
+  },
+  "2026_live": {
+   "player_games": 419,
+   "differ": 273,
+   "legs_changed": 799,
+   "mean_change": 0.0127,
+   "main_over_shift_current": -0.0069,
+   "main_overs": {
+    "legs": 384,
+    "diff": 0.000291,
+    "se": 0.001035,
+    "z": 0.28
+   },
+   "rungs": {
+    "legs": 5122,
+    "diff": -0.000151,
+    "se": 0.00011,
+    "z": -1.37
+   },
+   "all_overs": {
+    "legs": 5506,
+    "diff": -0.00012,
+    "se": 0.000168,
+    "z": -0.72
+   }
+  }
+ },
+ "verdict": {
+  "checks": {
+   "2024": [
+    false,
+    true,
+    true
+   ],
+   "2025": [
+    false,
+    false,
+    false
+   ],
+   "2026_live": [
+    false,
+    true,
+    true
+   ]
+  },
+  "measures_better": 4,
+  "measures": 9,
+  "holdout_by_1se": false,
+  "kept": false
+ }
+}

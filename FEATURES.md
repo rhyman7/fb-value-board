@@ -1235,6 +1235,25 @@ reading is worse than the current one. So 2024's high top band looks like one se
 lasting bias; the current reading stays and no guard is needed. The January recheck on the full 2026
 season's rungs stands.
 
+### Smoothing college main-line overs with the rungs, pre-set test (Nov 13, 2026): not kept, 4 of 9
+
+`parlays.monotone` pools each player's over legs (main line and rungs) so the chance falls as the line
+rises; where the rungs just below the main line read under it, the main-line over is pulled down (by
+0.5-0.7 points on average, up to about 4), so the main over and under no longer add to 1.
+`python experiments/cfb_ladder_smoothing_test.py` (rule in the script and the Project doc
+`claude/plan-cfb-ladder-smoothing-test-2026-11-13.md`, written first) tested keeping the main-line over
+fixed and smoothing the rungs around it. Brier, candidate minus current, on player-games where they differ:
+
+| | Main-line overs | Rungs | All over legs |
+|---|---|---|---|
+| 2024 (1,744 player-games) | +0.0000 ± 0.0003 | −0.00003 ± 0.00004 | −0.00003 ± 0.00006 |
+| 2025 (2,158) | +0.0002 ± 0.0003 | +0.00001 ± 0.00002 | +0.00002 ± 0.00004 |
+| 2026 live (273) | +0.0003 ± 0.0010 | −0.00015 ± 0.00011 | −0.00012 ± 0.00017 |
+
+**Not kept.** Keeping the main-line over at its own number is never better on the main overs; the pulled-
+down over is as good or slightly better, consistent with overs going in less often than the books'
+vig-free number. The mismatch is harmless and the smoothing stays as it is.
+
 ## The model nudge on college main lines, pre-set test (Nov 13, 2026): a trade-off, 19 of 20
 
 `python experiments/cfb_props_nudge_test.py` (results in `experiments/out/cfb_props_nudge_test.json`;
