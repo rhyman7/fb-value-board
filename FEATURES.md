@@ -1215,6 +1215,26 @@ Brier at the main lines, new minus current; NFL widths as the originals). Script
 - On 2024's floor rungs the books' reading put them at 76.5% and they cleared 73.3%: the same high
   reading at the top of the college ladder as above.
 
+### The college ladder reading refitted on 2024 + 2025, pre-set test (Nov 13, 2026): not kept, 5 of 9
+
+`python experiments/cfb_rung_reading_test.py` (rule in the script and the Project doc
+`claude/plan-cfb-rung-reading-test-2026-11-13.md`, written before the run). Candidate: `CFB_RUNG_CAL`'s
+fit on 2024 and 2025 pooled instead of 2025 alone. Holdout: the 2026 live college rungs (8,150 graded,
+40 games, at the price the board first logged), unseen by either reading.
+
+| Candidate minus current | 2024 (44,201 rungs) | 2025 (67,028) | 2026 live (8,150) |
+|---|---|---|---|
+| Brier, all rungs | +0.00000 | −0.00002 | +0.00013 ± 0.00013 |
+| Brier, floor rungs (read 65-95%) | −0.00008 | +0.00005 | −0.00003 |
+| 80%+ band: cleared vs current / candidate reading | 82.8% vs 85.5 / 85.2 | 84.9% vs 85.2 / 85.0 | **86.1% vs 84.9 / 84.7** |
+
+**Not kept.** The pooled reading barely moves (it is 85.2% where the current is 85.5% in the top band),
+and the 2026 rungs go the other way from 2024: the safest college rungs cleared 1.2 points *more* than
+the board reads, and the floor band 80.7% against 78.1%. Fit on 2024 alone and scored on 2025, the
+reading is worse than the current one. So 2024's high top band looks like one season's swing, not a
+lasting bias; the current reading stays and no guard is needed. The January recheck on the full 2026
+season's rungs stands.
+
 ## The model nudge on college main lines, pre-set test (Nov 13, 2026): a trade-off, 19 of 20
 
 `python experiments/cfb_props_nudge_test.py` (results in `experiments/out/cfb_props_nudge_test.json`;
