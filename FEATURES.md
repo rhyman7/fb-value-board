@@ -2130,6 +2130,33 @@ passing projections moved 5.1 yards on average (95th percentile 12, at most 24) 
 1.5 (95th percentile 4.8). Rechecked in January on the full 2026 season; removed if worse there. Nothing from
 the rushing tables helped; the line, depth-of-target and slot inputs did not pass.
 
+## The college PFF pairs on the NFL projections (Nov 13, 2026): passing kept, receiving not
+
+`python experiments/nfl_pff_pairs_test.py` (rule in the script and the Project doc
+`claude/plan-nfl-pff-pairs-test-2026-11-13.md`, written before the run; private PFF data, scores only).
+The two pairs that went onto the college board (above) built the same way on NFL data (league
+constants 2014-18) and run through the board's full pipeline, game-day and bet-time tables, the Nov 12
+template. Each pair kept only if better on every measure, each holdout gain at least 1 SE.
+
+**Passing (the QB's PFF passing grade + the opponent's coverage grade in the passing-yards calibration): kept.**
+
+| | 2014-18 | 2019 on (holdout) |
+|---|---|---|
+| Passing-yards RMSE, game-day (QBs with 10+ projected attempts) | 88.52 → 88.05 (2.8 SE) | 88.26 → 87.94 (**3.0 SE**) |
+| Same, bet-time | 89.72 → 89.26 (3.0 SE) | 86.07 → 85.91 (**1.6 SE**) |
+
+Brier at the 2023-25 DK/FD passing-yards lines: closing lines, game-day −0.0007 ± 0.0009 (books
+0.2502, model 0.2536 → 0.2528); pricing snapshot, bet-time −0.0003 ± 0.0009 (books 0.2502). Better
+everywhere, still behind the books.
+
+**Receiving (yards per route run + opponent coverage, calibration and the boosted step): not kept, flat.**
+Game-day holdout receiving-yards RMSE 27.182 → 27.190 (worse, 0.4 SE); receptions 2014-18 worse; the
+lines −0.0001 ± 0.0003 (game-day) and −0.0001 ± 0.0004 (bet-time). The NFL boosted step already has PFF
+route share and targets per route; this adds nothing. Do not re-test unless Ryan asks.
+
+Not yet applied: the passing pair changes the NFL passing projections, so it waits for Ryan with a
+short plan (Project doc `claude/nfl-pff-pairs-test-results-2026-11-13.md`).
+
 ## Quarterback value from PFF grades (Nov 5, 2026): kept, on the board
 
 `experiments/qb_pff_grade_test.py` (rule written and committed before the first run). A
