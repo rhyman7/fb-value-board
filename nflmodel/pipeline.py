@@ -275,6 +275,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         teaserlog.update(out["slate"]["games"], season, kick, scores)
     except Exception as exc:
         print(f"  teaser log skipped ({exc})")
+    try:                                          # teams missing 2+ usual linemen, a paper record (nflmodel/olwatch.py); data/ only, not shown
+        from . import olwatch
+        olwatch.update(out["slate"]["games"], season, kick, scores)
+    except Exception as exc:
+        print(f"  offensive-line watch skipped ({exc})")
     try:                                          # every forecast shown before kickoff (nflmodel/forecastlog.py); data/ only, not shown
         from . import forecastlog
         n_fc = forecastlog.record(out["slate"]["games"], "nfl", season, out["meta"].get("generated"),
