@@ -18,7 +18,9 @@ name: Kickoff refresh
 #
 # After a window's last refresh (20 minutes before), its Best bets card, as the record will
 # grade it, goes to the phone through ntfy (secret NTFY_TOPIC, the same topic as the
-# line-movement alerts) and as a comment on the week's best-bets issue (GitHub emails it).
+# line-movement alerts) and as a comment on the week's best-bets issue (GitHub emails it); one
+# issue per betting week (Tuesday to Monday, Eastern), the previous week's closed by the first
+# alert of the new week.
 # Only DraftKings and FanDuel are shown; a card bet neither qualifies is listed as not a bet
 # there. Nothing is sent when the card is empty. Reading and sending only: it changes no file.
 
@@ -72,10 +74,21 @@ jobs:
             else
               echo "  NTFY_TOPIC not set: no push"
             fi
-            n=$(gh issue list -R "$REPO" --label best-bets --state open --json number --jq '.[0].number')
+            # one issue per betting week (Tuesday to Monday, Eastern): the title carries the
+            # week's Tuesday; an open issue from an earlier week is closed and a new one opened
+            dow=$(TZ=America/New_York date +%u)                       # 1 = Monday ... 7 = Sunday
+            back=$(( (dow + 5) % 7 ))                                  # days since Tuesday
+            week=$(TZ=America/New_York date -d "-$back days" +%Y-%m-%d)
+            title="Best bets, week of $week"
+            open_=$(gh issue list -R "$REPO" --label best-bets --state open --json number,title --jq '.[0] | "\(.number)\t\(.title)"')
+            n=${open_%%$'\t'*}; otitle=${open_#*$'\t'}
+            if [ -n "$n" ] && [ "$otitle" != "$title" ]; then
+              gh issue close "$n" -R "$REPO" --comment "Week over; this week's card is in the next best-bets issue." > /dev/null || echo "  close failed"
+              n=""
+            fi
             if [ -z "$n" ]; then
               gh label create best-bets -R "$REPO" --color 1D76DB --description "Best bets card at the last rebuild before each kickoff window" 2>/dev/null || true
-              gh issue create -R "$REPO" --title "Best bets, week of $(date -u +%Y-%m-%d)" --label best-bets --body-file /tmp/bestbets.md > /dev/null || echo "  issue failed"
+              gh issue create -R "$REPO" --title "$title" --label best-bets --body-file /tmp/bestbets.md > /dev/null || echo "  issue failed"
             else
               gh issue comment "$n" -R "$REPO" --body-file /tmp/bestbets.md > /dev/null || echo "  comment failed"
             fi
