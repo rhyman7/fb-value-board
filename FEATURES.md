@@ -2083,6 +2083,48 @@ Side finding, not a rule (Nov 5, 2026 consultant review): the curve puts both ki
 teaser at -120 needs; on 2014-18 both cleared about 76%. The gap is 1.5 standard errors, so the board's
 pricing is unchanged; it is a candidate for the live teaser record (`claude/betting-strategies.md`).
 
+## The other PFF college tables in the player projections (Nov 13, 2026): four pass, two pairs
+
+`python experiments/cfb_pff_tables_test.py` (rule in the script and the Project doc
+`claude/plan-cfb-pff-tables-test-2026-11-13.md`, written before the run; private PFF data, scores only).
+14 candidates from the PFF tables not used before (receiving, rushing and passing summaries; team
+grades from team_overview), each as of the game from earlier games only and entering the chain's last
+calibration step like the route and snap shares. Stage 1: walk-forward RMSE better on every stat in
+2017-19 and 2021-25, the holdout by 2+ SE (2, not 1, for screening 14 at once). Stage 2: Brier at the
+2024 and 2025 DK/FD main lines, game-day and bet-time projections, college widths, all four better.
+
+| Candidate | Stage 1 (tuning z, holdout z) | Stage 2 (lines) |
+|---|---|---|
+| R1 yards per route run → rec yds | −0.5, **−2.8** | passes (all four −0.0002 to −0.0003) |
+| R2 targets per route | +0.5 / +0.8 worse | — |
+| R3 depth of target (receivers) | −2.4, −1.4 | — |
+| R4 slot rate | −1.5, −1.1 | — |
+| U1 yards after contact per carry | +1.4, +1.3 worse | — |
+| U2 avoided tackles per carry | +0.1, −3.1 | — (tuning worse) |
+| P1 PFF passing grade → pass yds | −2.0, **−2.9** | passes (2024 −0.0010, 2025 −0.0004) |
+| P2 QB depth of target | +1.7 worse | — |
+| T1 own run-block grade | worse on tuning | — |
+| T2 opponent run-defense grade | −0.9 at best | — |
+| T3 own pass-block grade → pass yds | −2.4, **−4.5** | fails (2024 worse) |
+| T4 opponent pass-rush grade → pass yds | −2.5, **−3.5** | fails (2025 worse) |
+| T5 opponent coverage grade → pass yds | −0.3, **−3.5** | passes (2024 −0.0010, 2025 −0.0003 to −0.0005) |
+| T6 opponent coverage grade → receptions, rec yds | −2.5, **−3.5** | passes (2024 −0.0006 to −0.0008, 2025 −0.0002 to −0.0003) |
+
+Two passers in each chain, so the pairs were run as the rule says; each beat both its singles on every
+measure (receptions: R1 does not enter it, so the pair ties T6 there):
+
+| Pair | RMSE tuning / holdout | 2024 lines (game-day / bet-time) | 2025 lines | vs books, 2025 |
+|---|---|---|---|---|
+| **Passing: P1 + T5** | 93.87 → 93.82 (1.5 SE) / 89.25 → 88.99 (**4.4 SE**) | −0.0020 ± 0.0009 / −0.0018 ± 0.0009 | −0.0006 / −0.0007 | −0.0006 (even with the books) |
+| **Receiving: R1 + T6** | 31.46 → 31.43 (2.0 SE) / 30.02 → 29.98 (**4.5 SE**) | −0.0008 ± 0.0004 / −0.0009 ± 0.0004 | −0.0005 / −0.0005 | +0.0047 (still behind) |
+
+**Kept under the pre-set rule, provisional: the two pairs.** Small gains (a quarter-yard on an
+89-yard passing miss, 0.04 yards on receiving), the same direction in every season and at bet time.
+Floor rungs (reported, NFL widths): receiving pair flat to better; passing pair worse on 2024
+(+0.0004 ± 0.0005), better on 2025. Not yet applied: it changes the college projections, so it waits
+for Ryan's go-ahead (Project doc `claude/cfb-pff-tables-test-results-2026-11-13.md`). Nothing from
+the rushing tables helped; the line, depth-of-target and slot inputs did not pass.
+
 ## Quarterback value from PFF grades (Nov 5, 2026): kept, on the board
 
 `experiments/qb_pff_grade_test.py` (rule written and committed before the first run). A
