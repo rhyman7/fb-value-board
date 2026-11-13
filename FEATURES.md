@@ -2261,3 +2261,41 @@ A trade-off for Ryan, since the current input is known to be wrong: match the na
 Every season's `miss_ol` in `data/cache/injury_groups_<season>.csv` was rebuilt (953 team-games changed,
 2013 on; no other column moved). Provisional: re-run this test with the 2026 season complete and the PFF
 data at the January recheck. The other groups keep the exact match until tested with a props check.
+
+## Projected unit matchup gaps from PFF grades (Nov 13, 2026): no
+
+`experiments/unit_matchup_test.py` (rule committed before the first run; Project doc
+`claude/plan-unit-matchup-test-2026-11-13.md`). Ryan's question: the private unit tracker now sets
+each offensive unit against the defensive unit it faces this week; should the game model use it?
+The Nov 5 and Nov 11 tests added what was missing from a unit. This one adds the unit's level and
+sets it against the unit across from it: line v defensive line, receivers v secondary, backs v
+linebackers, at bet-time knowledge (usual lineup, less players Out, Doubtful or on a reserve list,
+their snaps passed to depth players; each unit rating against the league average that week).
+
+Raw model average miss, margin / total, tuning 2015-18 (1,068 games) then holdout 2019 on (2,097):
+
+| Version | Tuning | Holdout |
+|---|---|---|
+| Current model | 9.841 / 10.693 | 9.950 / 10.462 |
+| A three gaps, projected | 9.870 / 10.723 | 9.943 / 10.463 |
+| B one gap (mean of three), projected | 9.843 / 10.706 | 9.949 / 10.453 |
+| C shift only (what the week's absences move) | 9.847 / 10.751 | 9.966 / 10.471 |
+| D three gaps, usual lineup (no injury information) | 9.872 / 10.735 | 9.939 / 10.466 |
+
+- No version beats the current model on both tuning measures (none on either), so nothing is
+  carried to the holdout and nothing is kept.
+- Reported, not used: the holdout differences are all within about 1 standard error (A margin
+  -0.008 ± 0.009; B total -0.009 ± 0.012; D margin -0.012 ± 0.011; C worse on both).
+- The closing spread already explains 43.5% of version B's margin feature: the gap is mostly how
+  good the two teams are, which the ratings and the line already carry. The shift from a week's
+  absences is small (SD about 1 grade point per matchup against about 4 for the level).
+- How often regulars are out at bet time, of 6,512 team-games: offensive line two or more 4.4%,
+  receivers 3.1%, secondary 2.7%, defensive line 1.6%, linebackers 0.7%.
+- Props (reported): QB passing-yards main lines at DK/FD 2023-25 by thirds of the offense's
+  projected receivers-v-secondary gap. Bottom third: 863 lines, over 49.0%, actual minus line -1.6
+  yards (SE 3.4). Middle: 907, 52.6%, +3.6 (3.3). Top: 891, 51.6%, +5.9 (3.2). The top third is
+  1.8 SE, under the 2 SE bar for its own test; the model's Brier is worse than the books' in the
+  top and bottom thirds (0.2528 and 0.2542 against 0.2501 and 0.2502).
+- Reading: with the Nov 5 and Nov 11 results, three framings of PFF unit strength (value missing,
+  a two-linemen flag, matchup gaps) add nothing to the game model at bet time. What remains open
+  is game-day absences, which `data/ol_watch/` records from Nov 13, 2026.
