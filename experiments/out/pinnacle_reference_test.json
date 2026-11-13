@@ -1,0 +1,273 @@
+{
+ "nfl_2023": {
+  "all": {
+   "n": 47,
+   "w": 26,
+   "l": 20,
+   "return": -0.0132,
+   "return_se": 0.1399,
+   "clv": -0.0067,
+   "clv_se": 0.0096,
+   "beat_close": 0.383
+  },
+  "agrees": {
+   "n": 23,
+   "w": 12,
+   "l": 10,
+   "return": -0.0354,
+   "return_se": 0.2012,
+   "clv": -0.0034,
+   "clv_se": 0.0149,
+   "beat_close": 0.348
+  },
+  "disagrees": {
+   "n": 24,
+   "w": 14,
+   "l": 10,
+   "return": 0.008,
+   "return_se": 0.1975,
+   "clv": -0.0098,
+   "clv_se": 0.0123,
+   "beat_close": 0.417
+  }
+ },
+ "nfl_2024": {
+  "all": {
+   "n": 43,
+   "w": 21,
+   "l": 22,
+   "return": 0.0394,
+   "return_se": 0.1998,
+   "clv": 0.0101,
+   "clv_se": 0.0181,
+   "beat_close": 0.674
+  },
+  "agrees": {
+   "n": 25,
+   "w": 14,
+   "l": 11,
+   "return": 0.1617,
+   "return_se": 0.2733,
+   "clv": 0.0196,
+   "clv_se": 0.0182,
+   "beat_close": 0.72
+  },
+  "disagrees": {
+   "n": 18,
+   "w": 7,
+   "l": 11,
+   "return": -0.1305,
+   "return_se": 0.2944,
+   "clv": -0.003,
+   "clv_se": 0.0357,
+   "beat_close": 0.611
+  }
+ },
+ "nfl_2025": {
+  "all": {
+   "n": 41,
+   "w": 30,
+   "l": 11,
+   "return": 0.408,
+   "return_se": 0.1589,
+   "clv": 0.0166,
+   "clv_se": 0.0204,
+   "beat_close": 0.585
+  },
+  "agrees": {
+   "n": 13,
+   "w": 10,
+   "l": 3,
+   "return": 0.5523,
+   "return_se": 0.2949,
+   "clv": 0.0918,
+   "clv_se": 0.0379,
+   "beat_close": 0.769
+  },
+  "disagrees": {
+   "n": 28,
+   "w": 20,
+   "l": 8,
+   "return": 0.341,
+   "return_se": 0.1832,
+   "clv": -0.0183,
+   "clv_se": 0.0294,
+   "beat_close": 0.5
+  }
+ },
+ "nfl": {
+  "all": {
+   "n": 131,
+   "w": 77,
+   "l": 53,
+   "return": 0.1359,
+   "return_se": 0.097,
+   "clv": 0.0061,
+   "clv_se": 0.0093,
+   "beat_close": 0.542
+  },
+  "agrees": {
+   "n": 61,
+   "w": 36,
+   "l": 24,
+   "return": 0.1706,
+   "return_se": 0.1494,
+   "clv": 0.0263,
+   "clv_se": 0.013,
+   "beat_close": 0.59
+  },
+  "disagrees": {
+   "n": 70,
+   "w": 41,
+   "l": 29,
+   "return": 0.1056,
+   "return_se": 0.1255,
+   "clv": -0.0115,
+   "clv_se": 0.0153,
+   "beat_close": 0.5
+  }
+ },
+ "cfb_2024": {
+  "all": {
+   "n": 131,
+   "w": 79,
+   "l": 52,
+   "return": -0.0624,
+   "return_se": 0.0689,
+   "clv": -0.0072,
+   "clv_se": 0.0071,
+   "beat_close": 0.527
+  },
+  "agrees": {
+   "n": 61,
+   "w": 38,
+   "l": 23,
+   "return": -0.0378,
+   "return_se": 0.0991,
+   "clv": -0.0132,
+   "clv_se": 0.0096,
+   "beat_close": 0.541
+  },
+  "disagrees": {
+   "n": 70,
+   "w": 41,
+   "l": 29,
+   "return": -0.0838,
+   "return_se": 0.0961,
+   "clv": -0.002,
+   "clv_se": 0.0103,
+   "beat_close": 0.514
+  }
+ },
+ "cfb_2025": {
+  "all": {
+   "n": 89,
+   "w": 56,
+   "l": 33,
+   "return": 0.1066,
+   "return_se": 0.1032,
+   "clv": -0.0103,
+   "clv_se": 0.0088,
+   "beat_close": 0.449
+  },
+  "agrees": {
+   "n": 31,
+   "w": 22,
+   "l": 9,
+   "return": 0.2028,
+   "return_se": 0.155,
+   "clv": 0.0251,
+   "clv_se": 0.0108,
+   "beat_close": 0.677
+  },
+  "disagrees": {
+   "n": 58,
+   "w": 34,
+   "l": 24,
+   "return": 0.0552,
+   "return_se": 0.1286,
+   "clv": -0.0292,
+   "clv_se": 0.0113,
+   "beat_close": 0.328
+  }
+ },
+ "cfb": {
+  "all": {
+   "n": 220,
+   "w": 135,
+   "l": 85,
+   "return": 0.006,
+   "return_se": 0.0587,
+   "clv": -0.0085,
+   "clv_se": 0.0055,
+   "beat_close": 0.495
+  },
+  "agrees": {
+   "n": 92,
+   "w": 60,
+   "l": 32,
+   "return": 0.0432,
+   "return_se": 0.0843,
+   "clv": -0.0003,
+   "clv_se": 0.0076,
+   "beat_close": 0.587
+  },
+  "disagrees": {
+   "n": 128,
+   "w": 75,
+   "l": 53,
+   "return": -0.0208,
+   "return_se": 0.0784,
+   "clv": -0.0143,
+   "clv_se": 0.0077,
+   "beat_close": 0.43
+  }
+ },
+ "pooled": {
+  "all": {
+   "n": 351,
+   "w": 212,
+   "l": 138,
+   "return": 0.0545,
+   "return_se": 0.0516,
+   "clv": -0.003,
+   "clv_se": 0.0049,
+   "beat_close": 0.513
+  },
+  "agrees": {
+   "n": 153,
+   "w": 96,
+   "l": 56,
+   "return": 0.094,
+   "return_se": 0.0781,
+   "clv": 0.0103,
+   "clv_se": 0.0069,
+   "beat_close": 0.588
+  },
+  "disagrees": {
+   "n": 198,
+   "w": 116,
+   "l": 82,
+   "return": 0.0239,
+   "return_se": 0.0673,
+   "clv": -0.0133,
+   "clv_se": 0.0073,
+   "beat_close": 0.455
+  }
+ },
+ "rule": {
+  "a_every_league_season": {
+   "nfl_2023": true,
+   "nfl_2024": true,
+   "nfl_2025": true,
+   "cfb_2024": false,
+   "cfb_2025": true
+  },
+  "a": false,
+  "b_gap": 0.0236,
+  "b_se": 0.0101,
+  "b": true,
+  "c": true,
+  "kept": false
+ }
+}
