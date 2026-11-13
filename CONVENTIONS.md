@@ -276,11 +276,14 @@ boards in detail; this file is the rules.
     Actions add only named paths, keep it that way.
   - **Used on the college board** (Nov 4, 2026): `cfbmodel/pff_roles.py` adds route share and snap
     share to the player table (`players.build`) for the receiving calibration (`players.CAL_EXTRA`).
-    The **Update college board** Action checks out only the two tables it needs
-    (`receiving_summary`, `offense_summary`) into `.pff-data/`; every college rebuild (kickoff,
+    From Nov 13, 2026 `cfbmodel/pff_skill.py` adds three more (yards per route run, the quarterback's
+    passing grade, the opponent's coverage grade) to the passing and receiving calibration
+    (provisional; January recheck). The **Update college board** Action checks out only the tables
+    it needs (`receiving_summary`, `offense_summary`, `defense_summary`, `passing_summary`,
+    `team_overview`) into `.pff-data/`: a new PFF input needs its table added there; every college rebuild (kickoff,
     line alerts) runs through that Action, so a new workflow that builds the college board must
     add the same step. With no data, or PFF more than a week behind the board's latest games,
-    both columns are 0 and the board is what it was before. Neither column goes into the board
+    every PFF column is 0 and the board is what it was before. No PFF column goes into the board
     JSON, the card or any file under `docs/` or `data/`.
   - The pull (`pff_pull.py`, the **PFF pull** Action, the `PFF_API_KEY` secret) and its rules are
     in pff-data's CONVENTIONS.md. No PFF key is stored in this repo.

@@ -41,7 +41,7 @@ from nflmodel.players import Lin, _shrink, asof
 
 from . import config as C
 from . import designations as DES
-from . import pff_roles
+from . import pff_roles, pff_skill
 from .players_data import GROUP
 
 SEASON_LEN = 22
@@ -266,7 +266,8 @@ def build(games: pd.DataFrame, frame: pd.DataFrame, pg: pd.DataFrame, info: pd.D
         f = starters[starters["qb_id"] != "replacement"].set_index(["game_id", "team"])["qb_id"].astype(np.int64)
         out["forced_qb"] = [f.get((g, t)) for g, t in zip(out["game_id"], out["team"])]
     out["started"] = out["start"]      # did he start (half the team's passes)? an outcome, used to fit and score passing
-    return pff_roles.add(out, info)    # PFF route and snap share (0 without the private data)
+    out = pff_roles.add(out, info)     # PFF route and snap share (0 without the private data)
+    return pff_skill.add(out, info)    # PFF yards per route run, passing grade, opponent coverage (Nov 13, 2026)
 
 
 def _pick_starter(d: pd.DataFrame):
@@ -328,6 +329,14 @@ CAL_EXTRA = {s: [] for s in STATS}
 # 3.7 SE tuning, 10.1 SE holdout; 2025 lines and floor rungs). Not in rushing (worse walk-forward).
 CAL_EXTRA["receptions"] = ["route_share", "snap_share"]
 CAL_EXTRA["rec_yds"] = ["route_share", "snap_share"]
+# PFF skill and matchup inputs (Nov 13, 2026; cfbmodel/pff_skill.py, experiments/cfb_pff_tables_test.py,
+# provisional until the January recheck on the full 2026 season): passing yards get the quarterback's
+# PFF passing grade and the opponent's coverage grade; receiving gets yards per route run (yards only)
+# and the opponent's coverage grade. Each pair better on every measure (walk-forward holdout 4.4 / 4.5
+# SE; the 2024 and 2025 lines, game-day and bet-time). 0 without the private data: no weight.
+CAL_EXTRA["receptions"] = CAL_EXTRA["receptions"] + ["pff_opp_cov"]
+CAL_EXTRA["rec_yds"] = CAL_EXTRA["rec_yds"] + ["pff_yprr", "pff_opp_cov"]
+CAL_EXTRA["pass_yds"] = CAL_EXTRA["pass_yds"] + ["pff_pass_grade", "pff_opp_cov"]
 # Rushing is calibrated per position group (Nov 3, 2026, experiments/cfb_rush_group_calib_test.py):
 # one fit on everyone who appeared is mostly receivers and quarterbacks with a few carries and
 # settles on about 0.71 x chain + 0.43 x recent, where running backs alone want about 0.76 /
