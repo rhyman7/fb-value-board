@@ -1166,6 +1166,35 @@ projections: 2024 −0.0007 ± 0.0007 (1.0 SE), 2025 −0.0010 ± 0.0006 (1.7 SE
 direction in both seasons; carries are still slightly worse on the 2021+ holdout (mean squared error
 +0.006 ± 0.012). Still a trade-off.
 
+## The model nudge on college main lines, pre-set test (Nov 13, 2026): a trade-off, 19 of 20
+
+`python experiments/cfb_props_nudge_test.py` (results in `experiments/out/cfb_props_nudge_test.json`;
+rule in the script and the Project doc `claude/plan-cfb-props-nudge-test-2026-11-13.md`, written before
+the run). Candidate: the books' no-vig chance on two-sided college main lines moved 20% toward the board's
+model, at most 3 points, legs 25+ points apart left at the books. Rule: below the books on all 20 measures
+(four stats and all together, 2025 and 2024, game-day and bet-time projections) and on 2024 overall by 1+
+standard error for both kinds. Bet-time: active = expected to play (a stat in the previous game), no
+designations, so harsher than the live board.
+
+Brier, nudged minus books (negative = better than the books):
+
+| | All | Passing yards | Passing TDs | Rushing yards | Receiving yards |
+|---|---|---|---|---|---|
+| 2025, game-day | −0.0007 ± 0.0003 | −0.0015 | −0.0007 | −0.0007 | −0.0005 |
+| 2025, bet-time | −0.0005 ± 0.0003 | −0.0015 | −0.0007 | **+0.0002 ± 0.0006** | −0.0004 |
+| 2024, game-day (holdout) | −0.0009 ± 0.0003 | −0.0005 | −0.0009 | −0.0008 | −0.0011 |
+| 2024, bet-time (holdout) | −0.0008 ± 0.0003 | −0.0006 | −0.0009 | −0.0007 | −0.0009 |
+| 2026 live, as logged (40 games, reported) | −0.0020 ± 0.0008 | −0.0036 | −0.0041 | −0.0025 | −0.0005 |
+
+**Not kept under the rule: 19 of 20 measures better; the miss is rushing yards on bet-time 2025
+(+0.0002 ± 0.0006, a zero).** The holdout passes for both kinds (2.75 and 3.0 standard errors) and the
+2026 live lines, unseen by anything, agree. A trade-off for Ryan.
+
+Props check (reported): legs the nudge makes +EV at the better DraftKings/FanDuel price (the books alone
+make none). They claim about +0.3% a leg. 2024: 579 bets, +5.2% ± 3.7% (bet-time), 637, +8.4% ± 3.7%
+(game-day); 2025: 252, −3.1% ± 6.3% and 300, −2.9% ± 5.6%. Not an edge to bet on its own: the nudge is
+for pricing legs, not for flagging them. The NFL's 7.5-point cap (reported only) came out about the same.
+
 ## Live college prop prices (Nov 1, 2026)
 
 `nflmodel/cfbprops.py` (workflow **College props**) pulls DraftKings and FanDuel college player props
