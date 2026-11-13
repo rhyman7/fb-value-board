@@ -2121,8 +2121,13 @@ measure (receptions: R1 does not enter it, so the pair ties T6 there):
 **Kept under the pre-set rule, provisional: the two pairs.** Small gains (a quarter-yard on an
 89-yard passing miss, 0.04 yards on receiving), the same direction in every season and at bet time.
 Floor rungs (reported, NFL widths): receiving pair flat to better; passing pair worse on 2024
-(+0.0004 ± 0.0005), better on 2025. Not yet applied: it changes the college projections, so it waits
-for Ryan's go-ahead (Project doc `claude/cfb-pff-tables-test-results-2026-11-13.md`). Nothing from
+(+0.0004 ± 0.0005), better on 2025.
+
+**Applied Nov 13, 2026 (Ryan's go-ahead), provisional:** `cfbmodel/pff_skill.py` (`pff_yprr`,
+`pff_pass_grade`, `pff_opp_cov`) in `players.CAL_EXTRA`; the board's walk-forward reproduces the test
+exactly (passing holdout 89.248 → 88.992, receiving 30.024 → 29.982). On the Nov 13 slate quarterback
+passing projections moved 5.1 yards on average (95th percentile 12, at most 24) and receiving yards
+1.5 (95th percentile 4.8). Rechecked in January on the full 2026 season; removed if worse there. Nothing from
 the rushing tables helped; the line, depth-of-target and slot inputs did not pass.
 
 ## Quarterback value from PFF grades (Nov 5, 2026): kept, on the board

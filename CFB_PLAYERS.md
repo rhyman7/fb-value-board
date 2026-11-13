@@ -49,6 +49,9 @@ Opportunity times efficiency, using only what was known before each game.
    if he starts. Receptions and receiving yards also get the player's PFF route share
    (routes per team pass play) and snap share, as of the game, from earlier games
    (`cfbmodel/pff_roles.py`, Nov 4, 2026; PFF data is private and never shown on the page).
+   Receiving yards also get his PFF yards per route run, and receptions, receiving yards and
+   passing yards the opponent's PFF coverage grade; passing yards the quarterback's PFF passing
+   grade (`cfbmodel/pff_skill.py`, Nov 13, 2026, provisional until the January recheck).
    Without current PFF data (no token, or PFF more than a week behind) they are left out.
 
 8. **Matchup.** Defense against each position (`nflmodel/dvp.py`, the NFL board's rating):

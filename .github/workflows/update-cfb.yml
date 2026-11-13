@@ -29,9 +29,10 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      # PFF route/snap share for the receiving projections (cfbmodel/pff_roles.py) and the
+      # PFF route/snap share for the receiving projections (cfbmodel/pff_roles.py), the
       # transfer-aware returning production in the margin model (cfbmodel/pff_returning.py, offense
-      # and defense summaries). Private data: checked out into .pff-data/ (git-ignored, never added
+      # and defense summaries) and, from Nov 13, 2026, yards per route run, passing grade and the
+      # opponent's coverage grade (cfbmodel/pff_skill.py: passing summary and team overview). Private data: checked out into .pff-data/ (git-ignored, never added
       # below). Without the PFF_DATA_TOKEN secret, or if the checkout fails, the board builds without
       # them, as before Nov 4, 2026 (d_pffret = 0).
       - name: PFF data (private)
@@ -45,6 +46,8 @@ jobs:
             ncaa/**/*_receiving_summary.csv.gz
             ncaa/**/*_offense_summary.csv.gz
             ncaa/**/*_defense_summary.csv.gz
+            ncaa/**/*_passing_summary.csv.gz
+            ncaa/**/*_team_overview.csv.gz
           sparse-checkout-cone-mode: false
       - name: Browser for the best-bets PDF
         # never fails the build: the PDF step skips itself without a browser (scripts/build_pdf.py).
