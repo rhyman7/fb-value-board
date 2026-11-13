@@ -2149,6 +2149,16 @@ the flag on: 115 lines, 63 QB-games, over rate 60.0%, Brier books 0.2507, model 
 minus line +14.3 yards (SE 10.6). With one out: 645 lines, over 51.2%; none out: 1,901 lines, over
 50.6%. No lean to the under behind a depleted line; if anything the other way, at 1.3 SE.
 
+**Paper record from Nov 13, 2026 (`nflmodel/olwatch.py`, `data/ol_watch/`).** The market gap in the
+descriptive check came from absences known only near kickoff, which this test could not see. Since
+the confirmed-news rows in `data/overrides.csv` now reach `ol_core` before kickoff, every board build
+logs each team with two or more of its five linemen out, with its spread and implied team total at
+that moment and at the last build before kickoff, and grades it afterwards. Rule written before any
+result: nothing is bet or shown from it; about 25 to 30 flags are expected in the rest of 2026, too
+few to read; it is read after the 2027 season on the combined record and becomes a model test only if
+the flagged teams fall short of the flag-time team total by at least 2 standard errors. The five
+linemen are the game model's, not the PFF regulars of the descriptive check.
+
 ## A probability-weighted starting quarterback (Nov 11, 2026): mixed, not kept
 
 `experiments/uncertain_qb_test.py` (rule approved by Ryan and committed before the first run; Project

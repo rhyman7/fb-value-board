@@ -78,6 +78,19 @@ boards in detail; this file is the rules.
   `nfl_record.json`. It reads the slate and writes only `data/teasers/`; the board shows none of it,
   and a failure never stops the build. The strategy's rule (underdog legs, total 49.5 or less, two-team
   teasers at -120 or better) is fixed in the module's constants; change it only with Ryan.
+- **Offensive-line watch (NFL): `data/ol_watch/`** (`nflmodel/olwatch.py`, from Nov 13, 2026; Project
+  doc `claude/plan-unit-tracker-this-week-2026-11-13.md`). A paper record of the one lead from the
+  Nov 11 unit check: teams missing two or more of their usual five linemen. Every **Update board** run
+  logs each team with two or more of its `data/cache/ol_core_<season>.csv` linemen out (report,
+  reserve list, or a confirmed-news row in `data/overrides.csv`) to `nfl_log.csv` (a row whenever the
+  linemen out or the team's spread or total change, until kickoff; append-only), grades it after the
+  game into `nfl_results.csv` (append-only: points against the implied team total and cover, at the
+  first flag and at the last line before kickoff) and writes the summary `nfl_record.json`. It writes
+  only `data/ol_watch/`; the board shows none of it, no bet is flagged from it, and a failure never
+  stops the build. The reading rule is in the module's docstring (read after the 2027 season; a
+  model test only if the shortfall against the flag-time team total reaches 2 standard errors);
+  change it only with Ryan. The "NFL late availability" tasks mention these teams in their report
+  ("Offensive-line watch") but write nothing here.
 - **Forecast log (both boards): `data/forecast_log/<league>_<season>.csv`** (`nflmodel/forecastlog.py`,
   from Nov 11, 2026; Project doc `claude/plan-uncertain-qb-test-2026-11-11.md`). Every **Update board**
   and **Update college board** run appends a row for each game that has not kicked off when its line,
