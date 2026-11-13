@@ -1,0 +1,393 @@
+{
+ "current": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   0.05,
+   0.0066
+  ],
+  [
+   0.1,
+   0.0635
+  ],
+  [
+   0.2,
+   0.1733
+  ],
+  [
+   0.3,
+   0.2513
+  ],
+  [
+   0.4,
+   0.3714
+  ],
+  [
+   0.5,
+   0.4437
+  ],
+  [
+   0.6,
+   0.521
+  ],
+  [
+   0.7,
+   0.6094
+  ],
+  [
+   0.8,
+   0.7312
+  ],
+  [
+   0.9,
+   0.8407
+  ],
+  [
+   0.95,
+   0.8863
+  ],
+  [
+   1.0,
+   0.9237
+  ]
+ ],
+ "candidate": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   0.05,
+   0.0063
+  ],
+  [
+   0.1,
+   0.0652
+  ],
+  [
+   0.2,
+   0.1665
+  ],
+  [
+   0.3,
+   0.2508
+  ],
+  [
+   0.4,
+   0.3362
+  ],
+  [
+   0.5,
+   0.4416
+  ],
+  [
+   0.6,
+   0.5356
+  ],
+  [
+   0.7,
+   0.5966
+  ],
+  [
+   0.8,
+   0.7354
+  ],
+  [
+   0.9,
+   0.843
+  ],
+  [
+   0.95,
+   0.8788
+  ],
+  [
+   1.0,
+   0.9064
+  ]
+ ],
+ "refit_2025_alone": [
+  [
+   0.0,
+   0.0
+  ],
+  [
+   0.05,
+   0.0066
+  ],
+  [
+   0.1,
+   0.0635
+  ],
+  [
+   0.2,
+   0.174
+  ],
+  [
+   0.3,
+   0.2517
+  ],
+  [
+   0.4,
+   0.3717
+  ],
+  [
+   0.5,
+   0.4437
+  ],
+  [
+   0.6,
+   0.522
+  ],
+  [
+   0.7,
+   0.6094
+  ],
+  [
+   0.8,
+   0.7314
+  ],
+  [
+   0.9,
+   0.8407
+  ],
+  [
+   0.95,
+   0.8863
+  ],
+  [
+   1.0,
+   0.9237
+  ]
+ ],
+ "fit_2024_alone": [
+  [
+   0.0,
+   0.0182
+  ],
+  [
+   0.05,
+   0.0182
+  ],
+  [
+   0.1,
+   0.0638
+  ],
+  [
+   0.2,
+   0.1679
+  ],
+  [
+   0.3,
+   0.2492
+  ],
+  [
+   0.4,
+   0.3296
+  ],
+  [
+   0.5,
+   0.4434
+  ],
+  [
+   0.6,
+   0.5556
+  ],
+  [
+   0.7,
+   0.6231
+  ],
+  [
+   0.8,
+   0.7368
+  ],
+  [
+   0.9,
+   0.82
+  ],
+  [
+   0.95,
+   0.864
+  ],
+  [
+   1.0,
+   0.881
+  ]
+ ],
+ "seasons": {
+  "2024": {
+   "rungs": 44201,
+   "games": 507,
+   "all_brier": {
+    "current": 0.16622,
+    "candidate": 0.16622,
+    "diff": 1e-06,
+    "se": 5e-05
+   },
+   "floor_brier": {
+    "rungs": 5464,
+    "diff": -8.1e-05,
+    "se": 4.9e-05,
+    "cleared": 0.7575,
+    "read_current": 0.7767,
+    "read_candidate": 0.776
+   },
+   "top_80": {
+    "rungs": 2253,
+    "cleared": 0.8282,
+    "read_current": 0.8548,
+    "read_candidate": 0.8523,
+    "miss_current": 0.0266,
+    "miss_candidate": 0.024
+   }
+  },
+  "2025": {
+   "rungs": 67028,
+   "games": 403,
+   "all_brier": {
+    "current": 0.15919,
+    "candidate": 0.15917,
+    "diff": -1.8e-05,
+    "se": 5.2e-05
+   },
+   "floor_brier": {
+    "rungs": 14550,
+    "diff": 4.8e-05,
+    "se": 2.7e-05,
+    "cleared": 0.784,
+    "read_current": 0.7878,
+    "read_candidate": 0.7874
+   },
+   "top_80": {
+    "rungs": 7033,
+    "cleared": 0.849,
+    "read_current": 0.8523,
+    "read_candidate": 0.8504,
+    "miss_current": 0.0033,
+    "miss_candidate": 0.0014
+   }
+  },
+  "2026_live": {
+   "rungs": 8150,
+   "games": 40,
+   "all_brier": {
+    "current": 0.15518,
+    "candidate": 0.15531,
+    "diff": 0.000131,
+    "se": 0.000127
+   },
+   "floor_brier": {
+    "rungs": 1520,
+    "diff": -2.7e-05,
+    "se": 5.1e-05,
+    "cleared": 0.8066,
+    "read_current": 0.7808,
+    "read_candidate": 0.7808
+   },
+   "top_80": {
+    "rungs": 684,
+    "cleared": 0.8611,
+    "read_current": 0.8485,
+    "read_candidate": 0.8474,
+    "miss_current": 0.0126,
+    "miss_candidate": 0.0137
+   }
+  }
+ },
+ "reported_only": {
+  "fit_2024_scored_2025_vs_current": {
+   "rungs": 67028,
+   "games": 403,
+   "all_brier": {
+    "current": 0.15919,
+    "candidate": 0.15926,
+    "diff": 7.8e-05,
+    "se": 4.9e-05
+   },
+   "floor_brier": {
+    "rungs": 14550,
+    "diff": 0.00016,
+    "se": 0.000135,
+    "cleared": 0.784,
+    "read_current": 0.7878,
+    "read_candidate": 0.7793
+   },
+   "top_80": {
+    "rungs": 7033,
+    "cleared": 0.849,
+    "read_current": 0.8523,
+    "read_candidate": 0.8316,
+    "miss_current": 0.0033,
+    "miss_candidate": 0.0174
+   }
+  },
+  "fit_2025_scored_2024_vs_current": {
+   "rungs": 44201,
+   "games": 507,
+   "all_brier": {
+    "current": 0.16622,
+    "candidate": 0.16622,
+    "diff": -0.0,
+    "se": 4e-06
+   },
+   "floor_brier": {
+    "rungs": 5464,
+    "diff": 2e-06,
+    "se": 2e-06,
+    "cleared": 0.7575,
+    "read_current": 0.7767,
+    "read_candidate": 0.7767
+   },
+   "top_80": {
+    "rungs": 2253,
+    "cleared": 0.8282,
+    "read_current": 0.8548,
+    "read_candidate": 0.8548,
+    "miss_current": 0.0266,
+    "miss_candidate": 0.0266
+   }
+  }
+ },
+ "reading_at": {
+  "0.8": {
+   "current": 0.7312,
+   "candidate": 0.7354
+  },
+  "0.85": {
+   "current": 0.7859,
+   "candidate": 0.7892
+  },
+  "0.9": {
+   "current": 0.8407,
+   "candidate": 0.843
+  },
+  "0.95": {
+   "current": 0.8863,
+   "candidate": 0.8788
+  }
+ },
+ "verdict": {
+  "checks": {
+   "2024": [
+    false,
+    true,
+    true
+   ],
+   "2025": [
+    true,
+    false,
+    true
+   ],
+   "2026_live": [
+    false,
+    true,
+    false
+   ]
+  },
+  "measures_better": 5,
+  "measures": 9,
+  "holdout_by_1se": false,
+  "kept": false
+ }
+}
