@@ -1,0 +1,145 @@
+{
+ "coverage_2019_25": {
+  "pff_yprr (WR/TE/RB)": 0.914,
+  "pff_pass_grade (QB)": 0.905,
+  "pff_opp_cov": 1.0
+ },
+ "passing": {
+  "rmse": {
+   "gameday": {
+    "pass_yds 2014-18": {
+     "n": 2670,
+     "now": 88.5223,
+     "candidate": 88.0506,
+     "diff": -0.47167,
+     "se": 0.16785
+    },
+    "pass_yds 2019 on": {
+     "n": 4194,
+     "now": 88.2586,
+     "candidate": 87.9379,
+     "diff": -0.32067,
+     "se": 0.10691
+    }
+   },
+   "bettime": {
+    "pass_yds 2014-18": {
+     "n": 2563,
+     "now": 89.7237,
+     "candidate": 89.2598,
+     "diff": -0.46386,
+     "se": 0.15412
+    },
+    "pass_yds 2019 on": {
+     "n": 3912,
+     "now": 86.0709,
+     "candidate": 85.9076,
+     "diff": -0.16328,
+     "se": 0.0999
+    }
+   }
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 3059,
+    "now": 0.25356,
+    "candidate": 0.25283,
+    "books": 0.2502,
+    "diff": -0.000732,
+    "se": 0.000912
+   },
+   "pricing snapshot, bet-time": {
+    "n": 2595,
+    "now": 0.25121,
+    "candidate": 0.25093,
+    "books": 0.25016,
+    "diff": -0.000282,
+    "se": 0.000892
+   }
+  },
+  "kept": true
+ },
+ "receiving": {
+  "rmse": {
+   "gameday": {
+    "rec_yds 2014-18": {
+     "n": 18735,
+     "now": 28.8822,
+     "candidate": 28.8443,
+     "diff": -0.03794,
+     "se": 0.03039
+    },
+    "rec_yds 2019 on": {
+     "n": 28927,
+     "now": 27.1818,
+     "candidate": 27.1898,
+     "diff": 0.00796,
+     "se": 0.01897
+    },
+    "receptions 2014-18": {
+     "n": 18735,
+     "now": 2.0631,
+     "candidate": 2.0644,
+     "diff": 0.00129,
+     "se": 0.00192
+    },
+    "receptions 2019 on": {
+     "n": 28927,
+     "now": 1.9678,
+     "candidate": 1.9671,
+     "diff": -0.00073,
+     "se": 0.00113
+    }
+   },
+   "bettime": {
+    "rec_yds 2014-18": {
+     "n": 18728,
+     "now": 28.9426,
+     "candidate": 28.9169,
+     "diff": -0.0257,
+     "se": 0.02938
+    },
+    "rec_yds 2019 on": {
+     "n": 28871,
+     "now": 27.2635,
+     "candidate": 27.2626,
+     "diff": -0.00085,
+     "se": 0.01896
+    },
+    "receptions 2014-18": {
+     "n": 18728,
+     "now": 2.0674,
+     "candidate": 2.0665,
+     "diff": -0.00088,
+     "se": 0.00187
+    },
+    "receptions 2019 on": {
+     "n": 28871,
+     "now": 1.9765,
+     "candidate": 1.9773,
+     "diff": 0.00084,
+     "se": 0.00112
+    }
+   }
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 23389,
+    "now": 0.25574,
+    "candidate": 0.25561,
+    "books": 0.24838,
+    "diff": -0.000127,
+    "se": 0.000269
+   },
+   "pricing snapshot, bet-time": {
+    "n": 13456,
+    "now": 0.25436,
+    "candidate": 0.25426,
+    "books": 0.24884,
+    "diff": -0.000104,
+    "se": 0.000365
+   }
+  },
+  "kept": false
+ }
+}
