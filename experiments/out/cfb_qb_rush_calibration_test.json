@@ -1,0 +1,216 @@
+{
+ "fits": {
+  "game_day 2024": {
+   "A_shift": 0.3
+  },
+  "game_day 2025": {
+   "A_shift": 0.3
+  },
+  "live 2026": {
+   "A_shift": 0.3
+  },
+  "bet_time 2024": {
+   "A_shift": 0.28
+  },
+  "bet_time 2025": {
+   "A_shift": 0.29
+  }
+ },
+ "lines": {
+  "game_day 2024": {
+   "props": 258,
+   "games": 207,
+   "current_mean_chance": 0.35,
+   "cleared": 0.5,
+   "brier_books": 0.24995,
+   "brier_current": 0.27641,
+   "A": {
+    "mean_chance": 0.4193,
+    "brier": 0.261,
+    "diff": -0.015412,
+    "se": 0.004261,
+    "z": -3.62
+   },
+   "B": {
+    "mean_chance": 0.4428,
+    "brier": 0.25413,
+    "diff": -0.022283,
+    "se": 0.005928,
+    "z": -3.76
+   }
+  },
+  "game_day 2025": {
+   "props": 309,
+   "games": 248,
+   "current_mean_chance": 0.3489,
+   "cleared": 0.479,
+   "brier_books": 0.25009,
+   "brier_current": 0.26776,
+   "A": {
+    "mean_chance": 0.4183,
+    "brier": 0.25494,
+    "diff": -0.012821,
+    "se": 0.003944,
+    "z": -3.25
+   },
+   "B": {
+    "mean_chance": 0.4372,
+    "brier": 0.25083,
+    "diff": -0.016928,
+    "se": 0.005296,
+    "z": -3.2
+   }
+  },
+  "bet_time 2024": {
+   "props": 261,
+   "games": 209,
+   "current_mean_chance": 0.3576,
+   "cleared": 0.5057,
+   "brier_books": 0.24994,
+   "brier_current": 0.27408,
+   "A": {
+    "mean_chance": 0.4226,
+    "brier": 0.25942,
+    "diff": -0.014663,
+    "se": 0.003972,
+    "z": -3.69
+   },
+   "B": {
+    "mean_chance": 0.4115,
+    "brier": 0.27439,
+    "diff": 0.000307,
+    "se": 0.007305,
+    "z": 0.04
+   }
+  },
+  "bet_time 2025": {
+   "props": 306,
+   "games": 248,
+   "current_mean_chance": 0.3514,
+   "cleared": 0.4804,
+   "brier_books": 0.25009,
+   "brier_current": 0.2686,
+   "A": {
+    "mean_chance": 0.4186,
+    "brier": 0.25619,
+    "diff": -0.012415,
+    "se": 0.003876,
+    "z": -3.2
+   },
+   "B": {
+    "mean_chance": 0.4086,
+    "brier": 0.26723,
+    "diff": -0.001375,
+    "se": 0.006044,
+    "z": -0.23
+   }
+  }
+ },
+ "nudge": {
+  "game_day 2024": {
+   "A": {
+    "diff": -0.000274,
+    "se": 0.00087,
+    "z": -0.31
+   },
+   "B": {
+    "diff": -0.001088,
+    "se": 0.001152,
+    "z": -0.94
+   }
+  },
+  "game_day 2025": {
+   "A": {
+    "diff": -0.000611,
+    "se": 0.000768,
+    "z": -0.8
+   },
+   "B": {
+    "diff": -0.000402,
+    "se": 0.001004,
+    "z": -0.4
+   }
+  },
+  "bet_time 2024": {
+   "A": {
+    "diff": -0.000352,
+    "se": 0.000806,
+    "z": -0.44
+   },
+   "B": {
+    "diff": -0.001086,
+    "se": 0.0009,
+    "z": -1.21
+   }
+  },
+  "bet_time 2025": {
+   "A": {
+    "diff": -0.000552,
+    "se": 0.000732,
+    "z": -0.75
+   },
+   "B": {
+    "diff": -0.000335,
+    "se": 0.000844,
+    "z": -0.4
+   }
+  }
+ },
+ "rungs": {
+  "2024": {
+   "rungs": 3157,
+   "A": {
+    "diff": -0.00518,
+    "se": 0.001916,
+    "z": -2.7
+   },
+   "B": {
+    "diff": 0.021474,
+    "se": 0.003982,
+    "z": 5.39
+   }
+  },
+  "2025": {
+   "rungs": 4792,
+   "A": {
+    "diff": -0.006554,
+    "se": 0.001855,
+    "z": -3.53
+   },
+   "B": {
+    "diff": 0.022024,
+    "se": 0.002839,
+    "z": 7.76
+   }
+  }
+ },
+ "live_2026": {
+  "props": 55,
+  "games": 27,
+  "A": {
+   "diff": -0.012644,
+   "se": 0.012175,
+   "z": -1.04
+  },
+  "B": {
+   "diff": -0.018283,
+   "se": 0.01463,
+   "z": -1.25
+  }
+ },
+ "verdict": {
+  "A": {
+   "all_four_better": true,
+   "holdout_1se": true,
+   "live_not_worse": true,
+   "passes": true
+  },
+  "B": {
+   "all_four_better": false,
+   "holdout_1se": false,
+   "live_not_worse": true,
+   "passes": false
+  },
+  "kept": "A"
+ }
+}

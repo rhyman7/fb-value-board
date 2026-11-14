@@ -1325,6 +1325,32 @@ Where the rest of the gap sits (game-day, both seasons):
 Note: the college Props page shows the model's QB rushing chance, and the Parlays nudge moves QB
 rushing overs toward it (at most 3 points), so both lean to the under on quarterbacks until this is fixed.
 
+### Correcting the college QB rushing chance, pre-set test (Nov 13, 2026): A kept
+
+`python experiments/cfb_qb_rush_calibration_test.py` (rule in the script and the Project doc
+`claude/plan-cfb-qb-rush-calibration-test-2026-11-13.md`, written before the run). Two corrections of
+the model's chance of the over for college QB rushing yards only, fitted walk-forward **without any
+betting lines** (earlier seasons' QB games scored at synthetic lines at 0.7x, 1x and 1.3x the
+projection): A, a logit shift; B, an isotonic recalibration. The fitted shift is stable: +0.30 (2024,
+2025 and 2017-25), +0.28 to +0.29 at bet time.
+
+Brier at the DK/FD QB rushing main lines, new minus current:
+
+| | Props | Current chance / cleared | A: shift | B: isotonic |
+|---|---|---|---|---|
+| 2024 game-day | 258 | 35.0% / 50.0% | **−0.0154 ± 0.0043** | −0.0223 ± 0.0059 |
+| 2024 bet-time | 261 | 35.8% / 50.6% | **−0.0147 ± 0.0040** | +0.0003 ± 0.0073 |
+| 2025 game-day (holdout) | 309 | 34.9% / 47.9% | **−0.0128 ± 0.0039** | −0.0169 ± 0.0053 |
+| 2025 bet-time (holdout) | 306 | 35.1% / 48.0% | **−0.0124 ± 0.0039** | −0.0014 ± 0.0060 |
+| 2026 live (55 props, logged chances) | | | −0.0126 ± 0.0122 | −0.0183 ± 0.0146 |
+
+**A is kept under the rule** (all four better, holdout 3.2 SE both kinds, 2026 live better); B fails at
+bet time. Reported: QB rushing ladder rungs, A −0.0052 ± 0.0019 (2024) and −0.0066 ± 0.0019 (2025),
+B much worse (+0.022); the Parlays nudge with A's chance, −0.0003 to −0.0006 (under 1 SE). The shifted
+chance averages 42% against 48-50% cleared, so it closes about half the miss; at the lines the model
+goes from 0.268 to 0.255 against the books' 0.250 (2025). Not yet applied: it changes the college
+Props page's QB rushing chances and the Parlays nudge on those legs, so it waits for Ryan with a plan.
+
 ## Live college prop prices (Nov 1, 2026)
 
 `nflmodel/cfbprops.py` (workflow **College props**) pulls DraftKings and FanDuel college player props
