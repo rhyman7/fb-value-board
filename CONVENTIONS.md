@@ -11,7 +11,9 @@ boards in detail; this file is the rules.
 - The matchup dashboards (rhyman7/nfl, rhyman7/cfb) and the Weekly Gridiron Board
   (rhyman7.github.io) are separate sites with their own CONVENTIONS.md.
 - **What the dashboards read from here** (`docs/feed/`, written by every board build): the
-  matchup feed `<league>.json` (`nflmodel/dashfeed.py`) and the Likeliest TD Scorers tracker
+  matchup feed `<league>.json` (`nflmodel/dashfeed.py`; when the week changes, the last feed of the
+  week just left is kept as `<league>_prev.json`, which the dashboards' reports read for that week's
+  late games, Nov 14, 2026) and the Likeliest TD Scorers tracker
   `td_tracker_<league>.json` (`nflmodel/tdtracker.py` for the NFL, also run by the props run;
   `cfbmodel/tdtracker.py` for college, from Nov 4, 2026). The two trackers write the same shape,
   which each report's `build_report.py` turns into its Touchdown tracker page: keep them in step,
