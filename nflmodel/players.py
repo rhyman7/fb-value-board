@@ -421,7 +421,8 @@ def build(frame: pd.DataFrame, pg: pd.DataFrame, info: pd.DataFrame, avail: pd.D
         pr = pass_rush[["game_id", "team", "miss_pr"]].rename(columns={"team": "opp", "miss_pr": "opp_miss_pr"})
         out = out.merge(pr, on=["game_id", "opp"], how="left")
     out["opp_miss_pr"] = out["opp_miss_pr"].fillna(0.0) if "opp_miss_pr" in out else 0.0
-    return out
+    from . import pff_passing          # PFF passing grade and opponent coverage (Nov 13, 2026; 0 without the private data)
+    return pff_passing.add(out)
 
 
 # --------------------------------------------------------------------------
@@ -541,7 +542,9 @@ QB_RUSH = ("carries", "rush_yds")     # a starting quarterback's rushing: per-st
 
 CAL_EXTRA = {   # extra terms in the calibration of each stat (multiplied by the raw projection).
     # Defensive injuries are kept only where they helped on 2013-2018 (receiving); see FEATURES.md.
-    "pass_yds": ["wind"], "completions": ["wind"], "pass_td": [],
+    # pass_yds: the quarterback's PFF passing grade and the opponent's PFF coverage grade (Nov 13, 2026,
+    # nflmodel/pff_passing.py, experiments/nfl_pff_pairs_test.py; provisional, January recheck)
+    "pass_yds": ["wind", "pff_pass_grade", "pff_opp_cov"], "completions": ["wind"], "pass_td": [],
     "rec_yds": ["opp_miss_db", "opp_miss_pr", "wind"], "receptions": ["opp_miss_db", "wind"], "targets": ["wind"],
     "rush_yds": [], "carries": [], "rec_td": [], "rush_td": [], "ints": [], "pass_att": ["wind"],
 }

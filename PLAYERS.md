@@ -64,6 +64,13 @@ earlier start so the per-start baselines exist.
 The model beats both baselines on every stat in both 2013-2018 and 2019 on.
 Rerun with `python experiments/players_test.py`.
 
+### PFF passing grade and opponent coverage in passing yards (Nov 13, 2026, provisional)
+
+The passing-yards calibration also takes the quarterback's PFF passing grade and the opponent's PFF
+coverage grade, each times the raw projection (`nflmodel/pff_passing.py`; FEATURES.md "The college PFF
+pairs on the NFL projections"): holdout passing-yards RMSE 88.26 → 87.94 game-day, 86.07 → 85.91
+bet-time, better at the 2023-25 lines. Zero without the private PFF data. Rechecked in January.
+
 ### The passing fix, October 2026
 
 Passing yards had run about 7 yards low. The yardage math was fine; the cause
