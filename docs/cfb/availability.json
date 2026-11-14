@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-14T16:22Z",
+ "fetched": "2026-11-14T18:23Z",
  "today": "2026-11-14",
  "teams": {
   "Alabama": {
@@ -731,6 +731,60 @@
      "name": "Ka'Mori Moore",
      "pos": "DT",
      "number": "95",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Kansas State": {
+   "conf": "Big 12",
+   "abbr": "KSU",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "11:30:00",
+   "game_date": "2026-11-14",
+   "game_time": "13:00:00",
+   "opponent": "TCU",
+   "players": [
+    {
+     "name": "Koy Beasley",
+     "pos": "S",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Avery Johnson",
+     "pos": "QB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jacob Knuth",
+     "pos": "QB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Max Lovett",
+     "pos": "WR",
+     "number": "14",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Sawyer Schilke",
+     "pos": "LB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Eli Jackson",
+     "pos": "DT",
+     "number": "88",
      "status": "Out",
      "season_out": false
     }
@@ -1526,6 +1580,74 @@
      "pos": "WR",
      "number": "88",
      "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "TCU": {
+   "conf": "Big 12",
+   "abbr": "TCU",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "11:30:00",
+   "game_date": "2026-11-14",
+   "game_time": "13:00:00",
+   "opponent": "Kansas State",
+   "players": [
+    {
+     "name": "Jon Denman",
+     "pos": "RB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ace Theus",
+     "pos": "WR",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Devondre McGee",
+     "pos": "CB",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cade Bennett",
+     "pos": "OL",
+     "number": "60",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keagan Cunningham",
+     "pos": "WR",
+     "number": "83",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cooper Reid",
+     "pos": "WR",
+     "number": "84",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Braden Bach",
+     "pos": "TE",
+     "number": "89",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ansel Din-Mbuh",
+     "pos": "DT",
+     "number": "92",
+     "status": "Game Time Decision",
      "season_out": false
     }
    ]
