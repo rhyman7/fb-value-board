@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-13T22:24Z",
+ "fetched": "2026-11-14T00:23Z",
  "today": "2026-11-13",
  "teams": {
   "Florida State": {
@@ -113,6 +113,116 @@
     }
    ]
   },
+  "Illinois": {
+   "conf": "Big Ten",
+   "abbr": "ILL",
+   "report": "Game Day",
+   "published": "2026-11-13",
+   "posted": "18:00:00",
+   "game_date": "2026-11-13",
+   "game_time": "20:00:00",
+   "opponent": "UCLA",
+   "players": [
+    {
+     "name": "Jayshon Platt",
+     "pos": "WR",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ca'Lil Valentine",
+     "pos": "RB",
+     "number": "5",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Michael Clayton II",
+     "pos": "QB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jacob Eberhart",
+     "pos": "DB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Javari Barnett",
+     "pos": "RB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Will Holmes",
+     "pos": "DL",
+     "number": "24",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Tywan Cox",
+     "pos": "DB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Beerman",
+     "pos": "LB",
+     "number": "33",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Carter Smith",
+     "pos": "DL",
+     "number": "48",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kai Pritchard",
+     "pos": "OL",
+     "number": "53",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Demetrius John",
+     "pos": "DL",
+     "number": "54",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "TJ McMillen",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jake Renfro",
+     "pos": "OL",
+     "number": "59",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "BJ Thurman",
+     "pos": "TE",
+     "number": "87",
+     "status": "Game Time Decision",
+     "season_out": false
+    }
+   ]
+  },
   "Pittsburgh": {
    "conf": "ACC",
    "abbr": "PITT",
@@ -218,6 +328,88 @@
      "name": "Rodney Dunbar",
      "pos": "WR",
      "number": "81",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "UCLA": {
+   "conf": "Big Ten",
+   "abbr": "UCLA",
+   "report": "Game Day",
+   "published": "2026-11-13",
+   "posted": "18:00:00",
+   "game_date": "2026-11-13",
+   "game_time": "20:00:00",
+   "opponent": "Illinois",
+   "players": [
+    {
+     "name": "Mikey Matthews",
+     "pos": "WR",
+     "number": "7",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Nico Iamaleava",
+     "pos": "QB",
+     "number": "9",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Ryan McCulloch",
+     "pos": "OLB",
+     "number": "19",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Shane Rosenthal",
+     "pos": "WR",
+     "number": "20",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Jonah Smith",
+     "pos": "WR",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ashton Sanders",
+     "pos": "DL",
+     "number": "44",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Riley Robell",
+     "pos": "OL",
+     "number": "51",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Sam Yoon",
+     "pos": "OL",
+     "number": "64",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Hall Schmidt",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jalen Saint Paul",
+     "pos": "WR",
+     "number": "86",
      "status": "Out",
      "season_out": true
     }
