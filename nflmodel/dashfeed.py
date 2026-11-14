@@ -11,6 +11,7 @@ the ESPN id the dashboard uses. Players are keyed "TEAM|normalized name".
 """
 from __future__ import annotations
 
+import csv
 import json
 import re
 from pathlib import Path
@@ -24,6 +25,12 @@ PROJ_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions", "targets", "carri
 # target allowed to the player's position (NFL), per carry, and per pass attempt
 DEF_KEYS = {"def_ypt": "ypt", "def_ypc": "ypc", "def_ypa": "ypa"}
 LINE_STATS = ("pass_yds", "rush_yds", "rec_yds", "receptions")
+# the yardage ladders the reports show and track for Best Overall Matchups (Nov 14, 2026): each
+# book's main line and the next three alternate "over" lines below it, from the live prop logs
+LADDER_STATS = ("pass_yds", "rush_yds", "rec_yds")
+LADDER_LOG = {"nfl": ("prop_log.csv", "time"), "cfb": ("cfb_prop_log.csv", "logged")}
+LADDER_BOOKS = {"draftkings": "dk", "fanduel": "fd"}
+LADDER_RUNGS = 3
 
 
 def norm(name: str) -> str:
@@ -71,6 +78,53 @@ def _lines(week: int | None, season: int | None) -> dict:
     return out
 
 
+def _ladders(league: str, week: int | None, season: int | None, log_dir: Path | None = None) -> dict:
+    """{(team, norm name): {stat: {"dk": [[line, over price], ...], "fd": [...]}}} from the week's prop log:
+    each book's main line first, then up to LADDER_RUNGS alternate lines below it, nearest first. Uses each
+    player's latest logged pull for the stat. Empty when the log has nothing for the week."""
+    name, tcol = LADDER_LOG[league]
+    f = (log_dir or ROOT / "data" / "props") / name
+    if week is None or not f.exists():
+        return {}
+    latest, rows = {}, {}
+    with f.open(newline="") as fh:
+        for r in csv.DictReader(fh):
+            try:
+                if int(float(r["season"])) != season or int(float(r["week"])) != int(week) or r["stat"] not in LADDER_STATS:
+                    continue
+            except (KeyError, ValueError):
+                continue
+            k = (r["team"], norm(r["player"]), r["stat"])
+            t = r[tcol]
+            if t > latest.get(k, ""):
+                latest[k], rows[k] = t, []
+            if t == latest[k]:
+                rows[k].append(r)
+    out = {}
+    for (team, nm, stat), rs in rows.items():
+        main, alts = {}, {}
+        for r in rs:
+            try:
+                line, books = float(r["line"]), json.loads(r["books"] or "{}")
+            except ValueError:
+                continue
+            for book, px in books.items():
+                b = LADDER_BOOKS.get(book)
+                if not b or not px or px[0] is None:
+                    continue
+                if r["market"].endswith("_alternate"):
+                    alts.setdefault(b, {})[line] = int(px[0])
+                else:
+                    main[b] = (line, int(px[0]))
+        lad = {}
+        for b, (ml, mp) in main.items():
+            below = sorted(((l, p) for l, p in alts.get(b, {}).items() if l < ml - 0.01), reverse=True)[:LADDER_RUNGS]
+            lad[b] = [[ml, mp]] + [[l, p] for l, p in below]
+        if lad:
+            out.setdefault((team, nm), {})[stat] = lad
+    return out
+
+
 def build(league: str, data: dict | None = None) -> dict:
     d = data if data is not None else json.loads(SRC[league].read_text())
     meta = d.get("meta", {})
@@ -81,6 +135,7 @@ def build(league: str, data: dict | None = None) -> dict:
     pl = (d.get("players") or {}).get("players", [])
     week = next((p.get("week") for p in pl if p.get("week") is not None), None)
     lines = _lines(week, meta.get("season")) if league == "nfl" else {}
+    ladders = _ladders(league, week, meta.get("season"))
     players = {}
     for p in pl:
         k = f"{p['team']}|{norm(p['name'])}"
@@ -94,6 +149,8 @@ def build(league: str, data: dict | None = None) -> dict:
         ln = {s: lines[(p["team"], norm(p["name"]), s)] for s in LINE_STATS if (p["team"], norm(p["name"]), s) in lines}
         if ln:
             row["L"] = ln
+        if (p["team"], norm(p["name"])) in ladders:
+            row["R"] = ladders[(p["team"], norm(p["name"]))]
         players[k] = row
     return {"league": league, "season": meta.get("season"), "week": week, "generated": meta.get("generated"),
             "games": games, "players": players}

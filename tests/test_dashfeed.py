@@ -77,3 +77,20 @@ def test_write_keeps_last_feed_of_the_week_just_left(tmp_path, monkeypatch):
     dashfeed.write("nfl", d8)                                  # going back a week never overwrites it
     assert json.loads((tmp_path / "nfl_prev.json").read_text())["week"] == 8
 
+
+def test_ladders_main_line_then_three_rungs_below(tmp_path):
+    cols = ["season", "week", "team", "player", "stat", "market", "line", "books", "time"]
+    def row(t, market, line, books): return dict(zip(cols, [2026, 8, "KC", "Kenneth Walker III", "rush_yds", market, line, json.dumps(books), t]))
+    rows = [row("2026-10-25 12:00", "player_rush_yds", 70.5, {"draftkings": [-110, -110]}),                 # an older pull: ignored
+            row("2026-10-25 15:00", "player_rush_yds", 80.5, {"draftkings": [-112, -112]}),
+            row("2026-10-25 15:00", "player_rush_yds", 79.5, {"fanduel": [-114, -114]})]
+    for line, dk, fd in ((89.5, 130, 140), (69.5, -167, -162), (59.5, -262, -250), (49.5, -439, None), (39.5, -810, -800), (29.5, -1700, None)):
+        rows.append(row("2026-10-25 15:00", "player_rush_yds_alternate", line, {"draftkings": [dk, None], **({"fanduel": [fd, None]} if fd else {})}))
+    import csv
+    with (tmp_path / "prop_log.csv").open("w", newline="") as fh:
+        w = csv.DictWriter(fh, cols); w.writeheader(); w.writerows(rows)
+    lad = dashfeed._ladders("nfl", 8, 2026, tmp_path)[("KC", "kenneth walker")]["rush_yds"]
+    assert lad["dk"] == [[80.5, -112], [69.5, -167], [59.5, -262], [49.5, -439]]      # nothing above the main line, three below
+    assert lad["fd"] == [[79.5, -114], [69.5, -162], [59.5, -250], [39.5, -800]]
+    assert dashfeed._ladders("nfl", 9, 2026, tmp_path) == {}
+
