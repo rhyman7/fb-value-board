@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-14T20:23Z",
+ "fetched": "2026-11-14T21:23Z",
  "today": "2026-11-14",
  "teams": {
   "Alabama": {
@@ -82,6 +82,32 @@
      "number": "92",
      "status": "Out",
      "season_out": true
+    }
+   ]
+  },
+  "Arizona State": {
+   "conf": "Big 12",
+   "abbr": "ASU",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "15:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "16:30:00",
+   "opponent": "UCF",
+   "players": [
+    {
+     "name": "Wade Helton",
+     "pos": "OL",
+     "number": "64",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Harry Hassmann",
+     "pos": "WR",
+     "number": "89",
+     "status": "Out",
+     "season_out": false
     }
    ]
   },
@@ -1224,6 +1250,109 @@
      "name": "Nate Marshall",
      "pos": "DE",
      "number": "94",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Michigan State": {
+   "conf": "Big Ten",
+   "abbr": "MSU",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "14:30:00",
+   "game_date": "2026-11-14",
+   "game_time": "16:30:00",
+   "opponent": "Washington",
+   "players": [
+    {
+     "name": "Cam Edwards",
+     "pos": "RB",
+     "number": "0",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Devin Vaught",
+     "pos": "S",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rodney Bullard Jr.",
+     "pos": "WR",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tre Bell",
+     "pos": "CB",
+     "number": "3",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Jaziun Patterson",
+     "pos": "RB",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jordan Hall",
+     "pos": "LB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marvis Parrish",
+     "pos": "RB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brayden Thomas",
+     "pos": "S",
+     "number": "28",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jayden Savoury",
+     "pos": "TE",
+     "number": "31",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jay Coyne",
+     "pos": "FB",
+     "number": "44",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ben Roberts",
+     "pos": "DL",
+     "number": "55",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Tristan Comer",
+     "pos": "OL",
+     "number": "79",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joe Caudill",
+     "pos": "TE",
+     "number": "87",
      "status": "Out",
      "season_out": false
     }
@@ -2714,6 +2843,88 @@
     }
    ]
   },
+  "UCF": {
+   "conf": "Big 12",
+   "abbr": "UCF",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "15:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "16:30:00",
+   "opponent": "Arizona State",
+   "players": [
+    {
+     "name": "DJ Bell",
+     "pos": "DB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Demari Henderson",
+     "pos": "DB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Waden Charles",
+     "pos": "WR",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keyone Jenkins",
+     "pos": "QB",
+     "number": "12",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Kahmel Johnson",
+     "pos": "DB",
+     "number": "14",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Duke Watson",
+     "pos": "RB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Matthew Occhipinti",
+     "pos": "LB",
+     "number": "32",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Jacob Maiava",
+     "pos": "OL",
+     "number": "55",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Tyler Gibson",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dylan Burk",
+     "pos": "TE",
+     "number": "83",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
   "USC": {
    "conf": "Big Ten",
    "abbr": "USC",
@@ -3011,6 +3222,60 @@
      "number": "81",
      "status": "Out",
      "season_out": false
+    }
+   ]
+  },
+  "Washington": {
+   "conf": "Big Ten",
+   "abbr": "WASH",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "14:30:00",
+   "game_date": "2026-11-14",
+   "game_time": "16:30:00",
+   "opponent": "Michigan State",
+   "players": [
+    {
+     "name": "Jordan Washington",
+     "pos": "RB",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Christian Moss",
+     "pos": "WR",
+     "number": "5",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Quaid Carr",
+     "pos": "RB",
+     "number": "21",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Trey Cooley",
+     "pos": "RB",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Landen Hatchett",
+     "pos": "OL",
+     "number": "66",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "S CJ Christian",
+     "pos": "",
+     "number": "",
+     "status": "Out",
+     "season_out": true
     }
    ]
   },
