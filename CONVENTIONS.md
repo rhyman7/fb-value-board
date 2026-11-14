@@ -692,6 +692,15 @@ boards in detail; this file is the rules.
     `flags_on` is false and nothing is flagged. Display only: it never feeds the model, the bets,
     the Bet sheet or the Parlays page.
   Never edit past weeks by hand; the files are rebuilt from the logs.
+- **College QB rushing chance shift** (Nov 13, 2026, provisional; FEATURES.md "Correcting the college QB
+  rushing chance", `experiments/cfb_qb_rush_calibration_test.py`): `data/cfb/prop_params.json` carries
+  `"chance_shift": {"rush_yds|QB": 0.30}`, a logit shift on the chance of the over that
+  `props.PropModel.probs` applies after the correction, for that stat and group only. Every college prop
+  chance goes through `probs`, so the Props page, the Parlays legs and nudge, the outlook ranges and the
+  floors read it alike. The NFL parameters (`data/prop_params.json`) have no shift. A refit of the college
+  file (`experiments/cfb_propdist_test.py --save`) carries it over; don't change the value without a new
+  pre-set test. Rechecked in January on the full 2026 season. The Props page's logged rows keep the
+  chance they were first priced at; lines first seen after the change carry the shift.
 - **College prop legs on the Parlays page** (`parlays.cfb_book_legs`): priced off DraftKings and
   FanDuel. From Nov 13, 2026 (Ryan's call, provisional) two-sided main lines in passing yards,
   passing TDs, rushing yards and receiving yards carry the model nudge: the books' no-vig chance

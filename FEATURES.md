@@ -1348,8 +1348,13 @@ Brier at the DK/FD QB rushing main lines, new minus current:
 bet time. Reported: QB rushing ladder rungs, A −0.0052 ± 0.0019 (2024) and −0.0066 ± 0.0019 (2025),
 B much worse (+0.022); the Parlays nudge with A's chance, −0.0003 to −0.0006 (under 1 SE). The shifted
 chance averages 42% against 48-50% cleared, so it closes about half the miss; at the lines the model
-goes from 0.268 to 0.255 against the books' 0.250 (2025). Not yet applied: it changes the college
-Props page's QB rushing chances and the Parlays nudge on those legs, so it waits for Ryan with a plan.
+goes from 0.268 to 0.255 against the books' 0.250 (2025).
+
+**Applied Nov 13, 2026 (Ryan's go-ahead), provisional:** `data/cfb/prop_params.json` `chance_shift`
+`rush_yds|QB` = 0.30 (the 2017-2025 fit), applied in `props.PropModel.probs`; the board reproduces the
+test exactly (2025 game-day −0.01282). On the Nov 13 slate the model-only QB rushing overs on the Parlays
+page rose 6.1 points on average and the nudged QB rushing overs 1.0 point; running backs and every
+other stat unchanged. Rechecked in January on the full 2026 season.
 
 ## Live college prop prices (Nov 1, 2026)
 

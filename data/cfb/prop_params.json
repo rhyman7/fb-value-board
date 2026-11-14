@@ -1432,6 +1432,14 @@
    ],
    "written": "2026-11-04",
    "note": "widths fitted on the college walk-forward; correction and the rest from data/prop_params.json"
+  },
+  "chance_shift": {
+   "rush_yds|QB": {
+    "value": 0.3,
+    "written": "2026-11-13",
+    "source": "experiments/cfb_qb_rush_calibration_test.py candidate A, fitted on 2017-2025 college QB games at synthetic lines (no betting lines); provisional, January recheck",
+    "note": "a refit of this file (experiments/cfb_propdist_test.py --save) must carry chance_shift over"
+   }
   }
  },
  "family": {
@@ -2501,5 +2509,8 @@
     1.0
    ]
   }
+ },
+ "chance_shift": {
+  "rush_yds|QB": 0.3
  }
 }
