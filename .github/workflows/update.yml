@@ -27,8 +27,10 @@ jobs:
           python-version: "3.12"
           cache: pip
       - run: pip install -r requirements.txt
-      # PFF route share for the New projections (nflmodel/pff_routes.py) and the PFF-grade
-      # quarterback prior for the game model (nflmodel/pff_qb.py). Private data: checked out into
+      # PFF route share for the New projections (nflmodel/pff_routes.py), the PFF-grade
+      # quarterback prior for the game model (nflmodel/pff_qb.py) and, from Nov 13, 2026, the
+      # passing grade and opponent coverage in the passing-yards projection (nflmodel/pff_passing.py,
+      # passing summary and team overview). Private data: checked out into
       # .pff-data/ (git-ignored, never added below). Without the PFF_DATA_TOKEN secret, or if the
       # checkout fails, the board builds without them, as before Nov 5, 2026 (QB prior -0.13).
       - name: PFF data (private)
@@ -41,6 +43,7 @@ jobs:
           sparse-checkout: |
             nfl/**/*_receiving_summary.csv.gz
             nfl/**/*_passing_summary.csv.gz
+            nfl/**/*_team_overview.csv.gz
           sparse-checkout-cone-mode: false
       - name: Browser for the best-bets PDF
         # never fails the build: the PDF step skips itself without a browser (scripts/build_pdf.py).

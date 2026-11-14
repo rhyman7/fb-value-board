@@ -2154,8 +2154,10 @@ Game-day holdout receiving-yards RMSE 27.182 → 27.190 (worse, 0.4 SE); recepti
 lines −0.0001 ± 0.0003 (game-day) and −0.0001 ± 0.0004 (bet-time). The NFL boosted step already has PFF
 route share and targets per route; this adds nothing. Do not re-test unless Ryan asks.
 
-Not yet applied: the passing pair changes the NFL passing projections, so it waits for Ryan with a
-short plan (Project doc `claude/nfl-pff-pairs-test-results-2026-11-13.md`).
+**Passing pair applied Nov 13, 2026 (Ryan's go-ahead), provisional:** `nflmodel/pff_passing.py` in
+`players.build`, both columns in `players.CAL_EXTRA["pass_yds"]`; the module reproduces the test's
+inputs exactly. On the week 10 slate starting quarterbacks' passing projections moved 5.4 yards on
+average (at most 18); receiving and rushing unchanged. Rechecked in January on the full 2026 season.
 
 ## Quarterback value from PFF grades (Nov 5, 2026): kept, on the board
 

@@ -268,6 +268,14 @@ boards in detail; this file is the rules.
     Without the data the prior is −0.13 for everyone, exactly the old model; the build log says
     "quarterback prior: PFF grades" or "flat -0.13". Only the derived quarterback values (EPA
     scale) reach the board, never a PFF grade.
+  - **NFL passing-yards projection** (Nov 13, 2026, provisional; January recheck): `nflmodel/pff_passing.py`
+    adds the quarterback's PFF passing grade and the opponent's PFF coverage grade (`team_overview`) to
+    the player table (`players.build`), used in `players.CAL_EXTRA["pass_yds"]` (FEATURES.md "The college
+    PFF pairs on the NFL projections"). Update board checks out `nfl/**/*_team_overview.csv.gz` too.
+    team_overview is **not** on pff-data's daily NFL pull unless it is added there: if it falls more than a
+    week behind, the opponent coverage column is 0 for every row (the calibration refits without it) and
+    the build log says so; if the passing table is stale, both columns are 0. Build log: "PFF passing
+    inputs: ...". Never written to docs/ or data/.
   - Reading it: `cfbmodel/pff_data.py` (`pff_data.load(table, seasons)`) looks in `$PFF_DATA_DIR`,
     then `.pff-data/` (git-ignored), then `../pff-data`. An Action that needs it checks it out with
     the **PFF_DATA_TOKEN** secret (a fine-grained token: read-only Contents on rhyman7/pff-data
