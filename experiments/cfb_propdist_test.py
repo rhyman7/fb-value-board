@@ -176,6 +176,10 @@ def main():
             out.counts, out.yards, out.iso = dict(fits["widths_2017"].counts), dict(fits["widths_2017"].yards), dict(saved.iso)
             out.meta = dict(saved.meta) | {"college_widths": {"fit_seasons": [FIT_FROM, FIT_TO], "written": "2026-11-04",
                                                               "note": "widths fitted on the college walk-forward; correction and the rest from data/prop_params.json"}}
+            prev = P.PropModel.load(CFB_PARAMS) if CFB_PARAMS.exists() else None
+            if prev is not None and prev.shift:      # the college QB rushing shift (Nov 13, 2026) is kept across refits
+                out.shift = dict(prev.shift)
+                out.meta["chance_shift"] = prev.meta.get("chance_shift")
             out.save(CFB_PARAMS)
             print(f"wrote {CFB_PARAMS}")
     OUT.write_text(json.dumps(res, indent=1, default=float))

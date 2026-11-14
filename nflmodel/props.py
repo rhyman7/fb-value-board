@@ -167,6 +167,10 @@ class PropModel:
         self.counts: dict[tuple, CountFit] = {}
         self.yards: dict[tuple, YardsFit] = {}
         self.iso: dict[str, Isotonic] = {}
+        # a logit shift on the chance of the over per "stat|group", after the correction (Nov 13, 2026:
+        # college QB rushing yards, data/cfb/prop_params.json "chance_shift"; FEATURES.md "Correcting the
+        # college QB rushing chance"). Empty for the NFL parameters.
+        self.shift: dict[str, float] = {}
         self.meta: dict = {}
 
     # ---- fitting ---------------------------------------------------------
@@ -250,10 +254,15 @@ class PropModel:
         Lf = np.where(np.isnan(L), 0.5, L)
         over, push, under = settle_probs(f, Lf)
         iso = self.iso.get(f"{stat}|{g}") or self.iso.get(stat)     # per position group where fitted
-        if calibrate and iso is not None:
+        shift = self.shift.get(f"{stat}|{g}")
+        if calibrate and (iso is not None or shift):
             # the correction is fitted on half-point lines; keep the push share and rescale the rest
             p_dec = over / np.maximum(over + under, 1e-9)
-            p_dec = iso(p_dec)
+            if iso is not None:
+                p_dec = iso(p_dec)
+            if shift:
+                q = np.clip(p_dec, 1e-4, 1 - 1e-4)
+                p_dec = 1 / (1 + np.exp(-(np.log(q / (1 - q)) + shift)))
             rest = 1 - push
             over, under = p_dec * rest, (1 - p_dec) * rest
         nan = np.isnan(L)
@@ -267,6 +276,7 @@ class PropModel:
             "counts": {f"{k[0]}|{k[1]}": asdict(v) for k, v in self.counts.items()},
             "yards": {f"{k[0]}|{k[1]}": asdict(v) for k, v in self.yards.items()},
             "isotonic": {k: v.to_dict() for k, v in self.iso.items()},
+            **({"chance_shift": dict(self.shift)} if self.shift else {}),
         }
 
     @classmethod
@@ -276,6 +286,7 @@ class PropModel:
         m.counts = {tuple(k.split("|")): CountFit(**v) for k, v in d.get("counts", {}).items()}
         m.yards = {tuple(k.split("|")): YardsFit(**v) for k, v in d.get("yards", {}).items()}
         m.iso = {k: Isotonic(np.array(v["x"]), np.array(v["y"])) for k, v in d.get("isotonic", {}).items()}
+        m.shift = {k: float(v) for k, v in d.get("chance_shift", {}).items()}
         return m
 
     def save(self, path=PARAMS_PATH):
