@@ -1289,6 +1289,42 @@ CONVENTIONS.md). On the Nov 13 slate it touched 874 legs, moving them 1.1 points
 the 3-point cap). Rechecked in January on the full 2026 season's live lines; removed if worse than
 the books there.
 
+## Where the college rushing gap lives (Nov 13, 2026): quarterbacks' chances run 13 points low
+
+`python experiments/cfb_rush_gap_diag.py` (read-only diagnostic; results in
+`experiments/out/cfb_rush_gap_diag.json`). The board as it stands on Nov 13 (PFF inputs, college prop
+widths), rushing-yards main lines at DK/FD, 2024 and 2025 (2,147 props), game-day and bet-time.
+Model minus books, Brier: +0.0093 ± 0.0029 game-day, +0.0109 ± 0.0028 bet-time; the same in both
+seasons. Each prop's share is (model − hit)² − (books − hit)².
+
+**The main finding: the model's chance of the over is too low, and almost all of that is quarterbacks.**
+
+| | Props | Model's average chance of the over | Share that cleared | Gap per prop |
+|---|---|---|---|---|
+| Quarterbacks | 568 (26%) | 35.7% | 48.9% | +0.019 ± 0.007 (55% of the gap) |
+| Running backs | 1,579 (74%) | 44.0% | 45.9% | +0.006 ± 0.003 |
+
+Both seasons, both kinds of projection. A quarterback's projection sits right on the line (median
+39.9 against 39.5 on 30-50 yard lines; median result 40) but the model puts the over at 35%: its
+distribution for college QB rushing is shaped wrong (its median far below its mean; 13% of these QBs
+finish at 0 yards or below, sacks counted). **One logit shift per group, fitted on one season and
+scored on the other, closes most of the QB gap:** fit 2024 → 2025, QB +0.016 → +0.002; fit 2025 →
+2024, +0.023 → +0.003; all rushing props +0.009 → +0.005 both ways. Running backs barely move (+0.006
+→ +0.006). This is a diagnostic, not a rule-based test; a fix needs its own pre-set test.
+
+Where the rest of the gap sits (game-day, both seasons):
+- **Role disagreements:** props where the projection is 30%+ off the line are 17% of props and 49% of
+  the gap; within 10% of the line the model ties the books (+0.001).
+- **Early season:** weeks 3-5 are 19% of props and 47% of the gap (+0.023 a prop); weeks 6-9 +0.004.
+- **A regular back missing (post hoc):** 28% of props, 60% of the gap; the books knew at kickoff and
+  the backtest's model did not (the live board has the official availability reports since Nov 9).
+- **Not the problem:** transfers and players new to FBS (about even with the books), underdogs by 7+
+  (−0.006), recent role changes.
+- The best weight toward the model, as a description: 0.25 game-day, 0.15 bet-time (the live nudge is 0.2).
+
+Note: the college Props page shows the model's QB rushing chance, and the Parlays nudge moves QB
+rushing overs toward it (at most 3 points), so both lean to the under on quarterbacks until this is fixed.
+
 ## Live college prop prices (Nov 1, 2026)
 
 `nflmodel/cfbprops.py` (workflow **College props**) pulls DraftKings and FanDuel college player props
