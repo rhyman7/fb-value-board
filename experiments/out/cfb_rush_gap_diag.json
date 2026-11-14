@@ -1,0 +1,2652 @@
+{
+ "game_day": {
+  "both": {
+   "props": 2147,
+   "games": 771,
+   "gap_per_prop": 0.00927,
+   "se": 0.00285,
+   "brier_model": 0.25927,
+   "brier_books": 0.25001,
+   "spread_model": 0.1099,
+   "spread_books": 0.0001,
+   "corr_model_books": 0.003,
+   "mean_model_chance": 0.4182,
+   "over_rate": 0.4672,
+   "mean_books_chance": 0.5,
+   "by_group_chance_vs_cleared": {
+    "QB": {
+     "props": 568,
+     "model": 0.3568,
+     "cleared": 0.4894
+    },
+    "RB": {
+     "props": 1579,
+     "model": 0.4403,
+     "cleared": 0.4592
+    }
+   },
+   "group": [
+    {
+     "group": "QB",
+     "props": 568,
+     "share_of_props": 0.265,
+     "gap_per_prop": 0.01919,
+     "se": 0.00653,
+     "share_of_gap": 0.548,
+     "model_minus_line_pct": 3.2,
+     "proj_minus_actual": -1.5,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.489
+    },
+    {
+     "group": "RB",
+     "props": 1579,
+     "share_of_props": 0.735,
+     "gap_per_prop": 0.0057,
+     "se": 0.00309,
+     "share_of_gap": 0.452,
+     "model_minus_line_pct": 2.2,
+     "proj_minus_actual": -2.9,
+     "line_minus_actual": -3.2,
+     "over_rate": 0.459
+    }
+   ],
+   "distance": [
+    {
+     "distance": "<10%",
+     "props": 843,
+     "share_of_props": 0.393,
+     "gap_per_prop": 0.00094,
+     "se": 0.0036,
+     "share_of_gap": 0.04,
+     "model_minus_line_pct": 0.2,
+     "proj_minus_actual": -3.1,
+     "line_minus_actual": -3.3,
+     "over_rate": 0.461
+    },
+    {
+     "distance": "10-30%",
+     "props": 945,
+     "share_of_props": 0.44,
+     "gap_per_prop": 0.00984,
+     "se": 0.00413,
+     "share_of_gap": 0.467,
+     "model_minus_line_pct": 12.5,
+     "proj_minus_actual": -2.6,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.484
+    },
+    {
+     "distance": ">30%",
+     "props": 359,
+     "share_of_props": 0.167,
+     "gap_per_prop": 0.02733,
+     "se": 0.01042,
+     "share_of_gap": 0.493,
+     "model_minus_line_pct": 36.6,
+     "proj_minus_actual": -1.1,
+     "line_minus_actual": -0.2,
+     "over_rate": 0.437
+    }
+   ],
+   "line_band": [
+    {
+     "line_band": "<40",
+     "props": 576,
+     "share_of_props": 0.268,
+     "gap_per_prop": 0.00459,
+     "se": 0.00527,
+     "share_of_gap": 0.133,
+     "model_minus_line_pct": 13.7,
+     "proj_minus_actual": 1.0,
+     "line_minus_actual": -3.3,
+     "over_rate": 0.453
+    },
+    {
+     "line_band": "40-69.5",
+     "props": 954,
+     "share_of_props": 0.444,
+     "gap_per_prop": 0.01238,
+     "se": 0.00431,
+     "share_of_gap": 0.594,
+     "model_minus_line_pct": 2.9,
+     "proj_minus_actual": -2.0,
+     "line_minus_actual": -3.3,
+     "over_rate": 0.473
+    },
+    {
+     "line_band": "70+",
+     "props": 617,
+     "share_of_props": 0.287,
+     "gap_per_prop": 0.00881,
+     "se": 0.00558,
+     "share_of_gap": 0.273,
+     "model_minus_line_pct": -4.8,
+     "proj_minus_actual": -6.6,
+     "line_minus_actual": -2.0,
+     "over_rate": 0.472
+    }
+   ],
+   "week_band": [
+    {
+     "week_band": "1-2",
+     "props": 95,
+     "share_of_props": 0.044,
+     "gap_per_prop": 0.01984,
+     "se": 0.02164,
+     "share_of_gap": 0.095,
+     "model_minus_line_pct": -12.2,
+     "proj_minus_actual": -11.0,
+     "line_minus_actual": -1.8,
+     "over_rate": 0.474
+    },
+    {
+     "week_band": "3-5",
+     "props": 414,
+     "share_of_props": 0.193,
+     "gap_per_prop": 0.02282,
+     "se": 0.00717,
+     "share_of_gap": 0.475,
+     "model_minus_line_pct": -0.3,
+     "proj_minus_actual": -2.2,
+     "line_minus_actual": -1.5,
+     "over_rate": 0.461
+    },
+    {
+     "week_band": "6-9",
+     "props": 682,
+     "share_of_props": 0.318,
+     "gap_per_prop": 0.0041,
+     "se": 0.00495,
+     "share_of_gap": 0.141,
+     "model_minus_line_pct": 2.3,
+     "proj_minus_actual": -0.0,
+     "line_minus_actual": -0.9,
+     "over_rate": 0.433
+    },
+    {
+     "week_band": "10+",
+     "props": 956,
+     "share_of_props": 0.445,
+     "gap_per_prop": 0.00603,
+     "se": 0.00376,
+     "share_of_gap": 0.29,
+     "model_minus_line_pct": 4.6,
+     "proj_minus_actual": -3.6,
+     "line_minus_actual": -5.1,
+     "over_rate": 0.494
+    }
+   ],
+   "history": [
+    {
+     "history": "decayed games < 1.5",
+     "props": 3,
+     "share_of_props": 0.001,
+     "gap_per_prop": -0.03575,
+     "se": 0.04917,
+     "share_of_gap": -0.005,
+     "model_minus_line_pct": 19.0,
+     "proj_minus_actual": -21.4,
+     "line_minus_actual": -32.8,
+     "over_rate": 0.667
+    },
+    {
+     "history": "1.5-3.5",
+     "props": 222,
+     "share_of_props": 0.103,
+     "gap_per_prop": 0.00504,
+     "se": 0.01223,
+     "share_of_gap": 0.056,
+     "model_minus_line_pct": -5.2,
+     "proj_minus_actual": -3.0,
+     "line_minus_actual": 1.3,
+     "over_rate": 0.405
+    },
+    {
+     "history": "3.5+",
+     "props": 1922,
+     "share_of_props": 0.895,
+     "gap_per_prop": 0.00983,
+     "se": 0.00289,
+     "share_of_gap": 0.949,
+     "model_minus_line_pct": 3.1,
+     "proj_minus_actual": -2.4,
+     "line_minus_actual": -3.4,
+     "over_rate": 0.474
+    }
+   ],
+   "new_team": [
+    {
+     "new_team": "new team",
+     "props": 527,
+     "share_of_props": 0.245,
+     "gap_per_prop": 0.00305,
+     "se": 0.00558,
+     "share_of_gap": 0.081,
+     "model_minus_line_pct": 5.2,
+     "proj_minus_actual": 1.1,
+     "line_minus_actual": -0.9,
+     "over_rate": 0.455
+    },
+    {
+     "new_team": "no prior FBS season",
+     "props": 279,
+     "share_of_props": 0.13,
+     "gap_per_prop": -0.00371,
+     "se": 0.00727,
+     "share_of_gap": -0.052,
+     "model_minus_line_pct": 2.4,
+     "proj_minus_actual": -2.7,
+     "line_minus_actual": -3.7,
+     "over_rate": 0.441
+    },
+    {
+     "new_team": "same team",
+     "props": 1341,
+     "share_of_props": 0.625,
+     "gap_per_prop": 0.01441,
+     "se": 0.00374,
+     "share_of_gap": 0.971,
+     "model_minus_line_pct": 1.9,
+     "proj_minus_actual": -3.9,
+     "line_minus_actual": -3.5,
+     "over_rate": 0.477
+    }
+   ],
+   "role_change": [
+    {
+     "role_change": "last game down 10+ pts",
+     "props": 87,
+     "share_of_props": 0.041,
+     "gap_per_prop": -0.00157,
+     "se": 0.01503,
+     "share_of_gap": -0.007,
+     "model_minus_line_pct": 9.0,
+     "proj_minus_actual": -1.3,
+     "line_minus_actual": -2.6,
+     "over_rate": 0.46
+    },
+    {
+     "role_change": "last game up 10+ pts",
+     "props": 863,
+     "share_of_props": 0.402,
+     "gap_per_prop": 0.00838,
+     "se": 0.00442,
+     "share_of_gap": 0.364,
+     "model_minus_line_pct": -0.6,
+     "proj_minus_actual": -2.8,
+     "line_minus_actual": -1.7,
+     "over_rate": 0.461
+    },
+    {
+     "role_change": "steady",
+     "props": 1197,
+     "share_of_props": 0.558,
+     "gap_per_prop": 0.01069,
+     "se": 0.00398,
+     "share_of_gap": 0.643,
+     "model_minus_line_pct": 5.6,
+     "proj_minus_actual": -2.4,
+     "line_minus_actual": -3.8,
+     "over_rate": 0.472
+    }
+   ],
+   "expected_by_model": [
+    {
+     "expected_by_model": "expected",
+     "props": 2116,
+     "share_of_props": 0.986,
+     "gap_per_prop": 0.00982,
+     "se": 0.00287,
+     "share_of_gap": 1.045,
+     "model_minus_line_pct": 2.5,
+     "proj_minus_actual": -2.7,
+     "line_minus_actual": -3.2,
+     "over_rate": 0.47
+    },
+    {
+     "expected_by_model": "not expected (post hoc)",
+     "props": 31,
+     "share_of_props": 0.014,
+     "gap_per_prop": -0.02876,
+     "se": 0.02915,
+     "share_of_gap": -0.045,
+     "model_minus_line_pct": 2.7,
+     "proj_minus_actual": 13.0,
+     "line_minus_actual": 16.2,
+     "over_rate": 0.258
+    }
+   ],
+   "teammate_out": [
+    {
+     "teammate_out": "no",
+     "props": 1546,
+     "share_of_props": 0.72,
+     "gap_per_prop": 0.00516,
+     "se": 0.00307,
+     "share_of_gap": 0.401,
+     "model_minus_line_pct": 4.6,
+     "proj_minus_actual": -0.8,
+     "line_minus_actual": -2.5,
+     "over_rate": 0.455
+    },
+    {
+     "teammate_out": "regular back out (post hoc)",
+     "props": 601,
+     "share_of_props": 0.28,
+     "gap_per_prop": 0.01984,
+     "se": 0.00647,
+     "share_of_gap": 0.599,
+     "model_minus_line_pct": -3.2,
+     "proj_minus_actual": -7.0,
+     "line_minus_actual": -4.0,
+     "over_rate": 0.498
+    }
+   ],
+   "script": [
+    {
+     "script": "favourite 7+",
+     "props": 691,
+     "share_of_props": 0.322,
+     "gap_per_prop": 0.01258,
+     "se": 0.00597,
+     "share_of_gap": 0.437,
+     "model_minus_line_pct": -3.5,
+     "proj_minus_actual": -5.9,
+     "line_minus_actual": -2.0,
+     "over_rate": 0.46
+    },
+    {
+     "script": "underdog 7+",
+     "props": 440,
+     "share_of_props": 0.205,
+     "gap_per_prop": -0.00576,
+     "se": 0.00542,
+     "share_of_gap": -0.127,
+     "model_minus_line_pct": 12.4,
+     "proj_minus_actual": 5.2,
+     "line_minus_actual": -0.4,
+     "over_rate": 0.423
+    },
+    {
+     "script": "within 7",
+     "props": 1016,
+     "share_of_props": 0.473,
+     "gap_per_prop": 0.01352,
+     "se": 0.00388,
+     "share_of_gap": 0.69,
+     "model_minus_line_pct": 3.0,
+     "proj_minus_actual": -3.6,
+     "line_minus_actual": -4.6,
+     "over_rate": 0.491
+    }
+   ],
+   "reliability": [
+    {
+     "model_band": "(-0.001, 0.3]",
+     "props": 202,
+     "model_mean": 0.24,
+     "books_mean": 0.5,
+     "cleared": 0.47
+    },
+    {
+     "model_band": "(0.3, 0.4]",
+     "props": 809,
+     "model_mean": 0.343,
+     "books_mean": 0.5,
+     "cleared": 0.446
+    },
+    {
+     "model_band": "(0.4, 0.45]",
+     "props": 348,
+     "model_mean": 0.437,
+     "books_mean": 0.5,
+     "cleared": 0.503
+    },
+    {
+     "model_band": "(0.45, 0.5]",
+     "props": 209,
+     "model_mean": 0.479,
+     "books_mean": 0.5,
+     "cleared": 0.435
+    },
+    {
+     "model_band": "(0.5, 0.55]",
+     "props": 344,
+     "model_mean": 0.526,
+     "books_mean": 0.5,
+     "cleared": 0.48
+    },
+    {
+     "model_band": "(0.55, 0.6]",
+     "props": 181,
+     "model_mean": 0.571,
+     "books_mean": 0.5,
+     "cleared": 0.486
+    },
+    {
+     "model_band": "(0.6, 0.7]",
+     "props": 44,
+     "model_mean": 0.638,
+     "books_mean": 0.5,
+     "cleared": 0.5
+    },
+    {
+     "model_band": "(0.7, 1.0]",
+     "props": 10,
+     "model_mean": 0.72,
+     "books_mean": 0.5,
+     "cleared": 0.6
+    }
+   ],
+   "disagree_5pt": {
+    "props": 1594,
+    "share": 0.742,
+    "model_side_won": 0.529,
+    "model_side_over_share": 0.147
+   },
+   "best_blend_weight": {
+    "w": 0.25,
+    "brier_at_best": 0.24894,
+    "brier_books": 0.25001
+   }
+  },
+  "2024": {
+   "props": 1041,
+   "games": 385,
+   "gap_per_prop": 0.00973,
+   "se": 0.00409,
+   "brier_model": 0.25974,
+   "brier_books": 0.25001,
+   "spread_model": 0.1098,
+   "spread_books": 0.0001,
+   "corr_model_books": 0.027,
+   "mean_model_chance": 0.42,
+   "over_rate": 0.4726,
+   "mean_books_chance": 0.5,
+   "by_group_chance_vs_cleared": {
+    "QB": {
+     "props": 259,
+     "model": 0.3574,
+     "cleared": 0.5019
+    },
+    "RB": {
+     "props": 782,
+     "model": 0.4408,
+     "cleared": 0.4629
+    }
+   },
+   "group": [
+    {
+     "group": "QB",
+     "props": 259,
+     "share_of_props": 0.249,
+     "gap_per_prop": 0.02309,
+     "se": 0.00961,
+     "share_of_gap": 0.59,
+     "model_minus_line_pct": 3.0,
+     "proj_minus_actual": -3.3,
+     "line_minus_actual": -4.0,
+     "over_rate": 0.502
+    },
+    {
+     "group": "RB",
+     "props": 782,
+     "share_of_props": 0.751,
+     "gap_per_prop": 0.00531,
+     "se": 0.00433,
+     "share_of_gap": 0.41,
+     "model_minus_line_pct": 2.1,
+     "proj_minus_actual": -2.8,
+     "line_minus_actual": -3.0,
+     "over_rate": 0.463
+    }
+   ],
+   "distance": [
+    {
+     "distance": "<10%",
+     "props": 418,
+     "share_of_props": 0.402,
+     "gap_per_prop": -0.00011,
+     "se": 0.00488,
+     "share_of_gap": -0.005,
+     "model_minus_line_pct": -0.3,
+     "proj_minus_actual": -2.2,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.457
+    },
+    {
+     "distance": "10-30%",
+     "props": 440,
+     "share_of_props": 0.423,
+     "gap_per_prop": 0.01276,
+     "se": 0.00614,
+     "share_of_gap": 0.554,
+     "model_minus_line_pct": 12.8,
+     "proj_minus_actual": -3.7,
+     "line_minus_actual": -5.2,
+     "over_rate": 0.493
+    },
+    {
+     "distance": ">30%",
+     "props": 183,
+     "share_of_props": 0.176,
+     "gap_per_prop": 0.02495,
+     "se": 0.01572,
+     "share_of_gap": 0.451,
+     "model_minus_line_pct": 35.9,
+     "proj_minus_actual": -2.9,
+     "line_minus_actual": -1.1,
+     "over_rate": 0.459
+    }
+   ],
+   "line_band": [
+    {
+     "line_band": "<40",
+     "props": 270,
+     "share_of_props": 0.259,
+     "gap_per_prop": 0.00249,
+     "se": 0.00764,
+     "share_of_gap": 0.066,
+     "model_minus_line_pct": 12.5,
+     "proj_minus_actual": -1.7,
+     "line_minus_actual": -5.3,
+     "over_rate": 0.463
+    },
+    {
+     "line_band": "40-69.5",
+     "props": 439,
+     "share_of_props": 0.422,
+     "gap_per_prop": 0.00987,
+     "se": 0.00654,
+     "share_of_gap": 0.428,
+     "model_minus_line_pct": 2.9,
+     "proj_minus_actual": -1.4,
+     "line_minus_actual": -2.9,
+     "over_rate": 0.476
+    },
+    {
+     "line_band": "70+",
+     "props": 332,
+     "share_of_props": 0.319,
+     "gap_per_prop": 0.01544,
+     "se": 0.00766,
+     "share_of_gap": 0.506,
+     "model_minus_line_pct": -4.1,
+     "proj_minus_actual": -6.0,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.476
+    }
+   ],
+   "week_band": [
+    {
+     "week_band": "1-2",
+     "props": 95,
+     "share_of_props": 0.091,
+     "gap_per_prop": 0.01984,
+     "se": 0.02164,
+     "share_of_gap": 0.186,
+     "model_minus_line_pct": -12.2,
+     "proj_minus_actual": -11.0,
+     "line_minus_actual": -1.8,
+     "over_rate": 0.474
+    },
+    {
+     "week_band": "3-5",
+     "props": 216,
+     "share_of_props": 0.207,
+     "gap_per_prop": 0.0229,
+     "se": 0.00946,
+     "share_of_gap": 0.488,
+     "model_minus_line_pct": -1.1,
+     "proj_minus_actual": -1.4,
+     "line_minus_actual": -1.0,
+     "over_rate": 0.435
+    },
+    {
+     "week_band": "6-9",
+     "props": 297,
+     "share_of_props": 0.285,
+     "gap_per_prop": -0.00175,
+     "se": 0.00707,
+     "share_of_gap": -0.051,
+     "model_minus_line_pct": 2.1,
+     "proj_minus_actual": -1.8,
+     "line_minus_actual": -3.0,
+     "over_rate": 0.438
+    },
+    {
+     "week_band": "10+",
+     "props": 433,
+     "share_of_props": 0.416,
+     "gap_per_prop": 0.00882,
+     "se": 0.00527,
+     "share_of_gap": 0.377,
+     "model_minus_line_pct": 5.9,
+     "proj_minus_actual": -2.7,
+     "line_minus_actual": -4.9,
+     "over_rate": 0.515
+    }
+   ],
+   "history": [
+    {
+     "history": "decayed games < 1.5",
+     "props": 2,
+     "share_of_props": 0.002,
+     "gap_per_prop": -0.00199,
+     "se": 0.06193,
+     "share_of_gap": -0.0,
+     "model_minus_line_pct": 21.9,
+     "proj_minus_actual": -50.6,
+     "line_minus_actual": -66.0,
+     "over_rate": 1.0
+    },
+    {
+     "history": "1.5-3.5",
+     "props": 129,
+     "share_of_props": 0.124,
+     "gap_per_prop": 0.01452,
+     "se": 0.0176,
+     "share_of_gap": 0.185,
+     "model_minus_line_pct": -9.0,
+     "proj_minus_actual": -6.6,
+     "line_minus_actual": 0.0,
+     "over_rate": 0.426
+    },
+    {
+     "history": "3.5+",
+     "props": 910,
+     "share_of_props": 0.874,
+     "gap_per_prop": 0.00908,
+     "se": 0.00408,
+     "share_of_gap": 0.815,
+     "model_minus_line_pct": 3.3,
+     "proj_minus_actual": -2.3,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.478
+    }
+   ],
+   "new_team": [
+    {
+     "new_team": "new team",
+     "props": 257,
+     "share_of_props": 0.247,
+     "gap_per_prop": -0.00628,
+     "se": 0.00811,
+     "share_of_gap": -0.159,
+     "model_minus_line_pct": 1.9,
+     "proj_minus_actual": 1.1,
+     "line_minus_actual": 0.3,
+     "over_rate": 0.447
+    },
+    {
+     "new_team": "no prior FBS season",
+     "props": 93,
+     "share_of_props": 0.089,
+     "gap_per_prop": 0.00137,
+     "se": 0.01238,
+     "share_of_gap": 0.013,
+     "model_minus_line_pct": 5.1,
+     "proj_minus_actual": -6.4,
+     "line_minus_actual": -8.7,
+     "over_rate": 0.441
+    },
+    {
+     "new_team": "same team",
+     "props": 691,
+     "share_of_props": 0.664,
+     "gap_per_prop": 0.01681,
+     "se": 0.00523,
+     "share_of_gap": 1.147,
+     "model_minus_line_pct": 2.2,
+     "proj_minus_actual": -4.0,
+     "line_minus_actual": -3.9,
+     "over_rate": 0.486
+    }
+   ],
+   "role_change": [
+    {
+     "role_change": "last game down 10+ pts",
+     "props": 42,
+     "share_of_props": 0.04,
+     "gap_per_prop": -0.00784,
+     "se": 0.02344,
+     "share_of_gap": -0.033,
+     "model_minus_line_pct": -3.5,
+     "proj_minus_actual": -4.8,
+     "line_minus_actual": -1.8,
+     "over_rate": 0.429
+    },
+    {
+     "role_change": "last game up 10+ pts",
+     "props": 415,
+     "share_of_props": 0.399,
+     "gap_per_prop": 0.01124,
+     "se": 0.00608,
+     "share_of_gap": 0.46,
+     "model_minus_line_pct": -0.6,
+     "proj_minus_actual": -2.2,
+     "line_minus_actual": -1.5,
+     "over_rate": 0.463
+    },
+    {
+     "role_change": "steady",
+     "props": 584,
+     "share_of_props": 0.561,
+     "gap_per_prop": 0.00993,
+     "se": 0.0057,
+     "share_of_gap": 0.572,
+     "model_minus_line_pct": 6.0,
+     "proj_minus_actual": -3.3,
+     "line_minus_actual": -4.6,
+     "over_rate": 0.483
+    }
+   ],
+   "expected_by_model": [
+    {
+     "expected_by_model": "expected",
+     "props": 1029,
+     "share_of_props": 0.988,
+     "gap_per_prop": 0.00984,
+     "se": 0.00408,
+     "share_of_gap": 0.999,
+     "model_minus_line_pct": 2.4,
+     "proj_minus_actual": -3.2,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.475
+    },
+    {
+     "expected_by_model": "not expected (post hoc)",
+     "props": 12,
+     "share_of_props": 0.012,
+     "gap_per_prop": 0.00087,
+     "se": 0.06307,
+     "share_of_gap": 0.001,
+     "model_minus_line_pct": -8.2,
+     "proj_minus_actual": 14.4,
+     "line_minus_actual": 23.7,
+     "over_rate": 0.25
+    }
+   ],
+   "teammate_out": [
+    {
+     "teammate_out": "no",
+     "props": 736,
+     "share_of_props": 0.707,
+     "gap_per_prop": 0.0062,
+     "se": 0.00426,
+     "share_of_gap": 0.45,
+     "model_minus_line_pct": 4.9,
+     "proj_minus_actual": -0.9,
+     "line_minus_actual": -2.9,
+     "over_rate": 0.465
+    },
+    {
+     "teammate_out": "regular back out (post hoc)",
+     "props": 305,
+     "share_of_props": 0.293,
+     "gap_per_prop": 0.01826,
+     "se": 0.0096,
+     "share_of_gap": 0.55,
+     "model_minus_line_pct": -3.5,
+     "proj_minus_actual": -7.9,
+     "line_minus_actual": -4.2,
+     "over_rate": 0.492
+    }
+   ],
+   "script": [
+    {
+     "script": "favourite 7+",
+     "props": 366,
+     "share_of_props": 0.352,
+     "gap_per_prop": 0.01998,
+     "se": 0.00865,
+     "share_of_gap": 0.722,
+     "model_minus_line_pct": -3.0,
+     "proj_minus_actual": -6.2,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.478
+    },
+    {
+     "script": "underdog 7+",
+     "props": 230,
+     "share_of_props": 0.221,
+     "gap_per_prop": -0.00867,
+     "se": 0.00745,
+     "share_of_gap": -0.197,
+     "model_minus_line_pct": 11.6,
+     "proj_minus_actual": 4.5,
+     "line_minus_actual": -0.8,
+     "over_rate": 0.448
+    },
+    {
+     "script": "within 7",
+     "props": 445,
+     "share_of_props": 0.427,
+     "gap_per_prop": 0.01082,
+     "se": 0.0055,
+     "share_of_gap": 0.475,
+     "model_minus_line_pct": 3.0,
+     "proj_minus_actual": -4.1,
+     "line_minus_actual": -5.4,
+     "over_rate": 0.481
+    }
+   ],
+   "reliability": [
+    {
+     "model_band": "(-0.001, 0.3]",
+     "props": 100,
+     "model_mean": 0.229,
+     "books_mean": 0.5,
+     "cleared": 0.5
+    },
+    {
+     "model_band": "(0.3, 0.4]",
+     "props": 371,
+     "model_mean": 0.343,
+     "books_mean": 0.5,
+     "cleared": 0.445
+    },
+    {
+     "model_band": "(0.4, 0.45]",
+     "props": 182,
+     "model_mean": 0.436,
+     "books_mean": 0.5,
+     "cleared": 0.516
+    },
+    {
+     "model_band": "(0.45, 0.5]",
+     "props": 98,
+     "model_mean": 0.48,
+     "books_mean": 0.5,
+     "cleared": 0.429
+    },
+    {
+     "model_band": "(0.5, 0.55]",
+     "props": 164,
+     "model_mean": 0.526,
+     "books_mean": 0.5,
+     "cleared": 0.451
+    },
+    {
+     "model_band": "(0.55, 0.6]",
+     "props": 97,
+     "model_mean": 0.571,
+     "books_mean": 0.5,
+     "cleared": 0.526
+    },
+    {
+     "model_band": "(0.6, 0.7]",
+     "props": 24,
+     "model_mean": 0.639,
+     "books_mean": 0.5,
+     "cleared": 0.5
+    },
+    {
+     "model_band": "(0.7, 1.0]",
+     "props": 5,
+     "model_mean": 0.719,
+     "books_mean": 0.5,
+     "cleared": 0.8
+    }
+   ],
+   "disagree_5pt": {
+    "props": 779,
+    "share": 0.748,
+    "model_side_won": 0.528,
+    "model_side_over_share": 0.162
+   },
+   "best_blend_weight": {
+    "w": 0.25,
+    "brier_at_best": 0.24899,
+    "brier_books": 0.25001
+   }
+  },
+  "2025": {
+   "props": 1106,
+   "games": 386,
+   "gap_per_prop": 0.00883,
+   "se": 0.00399,
+   "brier_model": 0.25883,
+   "brier_books": 0.25,
+   "spread_model": 0.1099,
+   "spread_books": 0.0,
+   "corr_model_books": -0.022,
+   "mean_model_chance": 0.4164,
+   "over_rate": 0.462,
+   "mean_books_chance": 0.5,
+   "by_group_chance_vs_cleared": {
+    "QB": {
+     "props": 309,
+     "model": 0.3563,
+     "cleared": 0.479
+    },
+    "RB": {
+     "props": 797,
+     "model": 0.4397,
+     "cleared": 0.4555
+    }
+   },
+   "group": [
+    {
+     "group": "QB",
+     "props": 309,
+     "share_of_props": 0.279,
+     "gap_per_prop": 0.01592,
+     "se": 0.00892,
+     "share_of_gap": 0.504,
+     "model_minus_line_pct": 3.5,
+     "proj_minus_actual": -0.0,
+     "line_minus_actual": -0.6,
+     "over_rate": 0.479
+    },
+    {
+     "group": "RB",
+     "props": 797,
+     "share_of_props": 0.721,
+     "gap_per_prop": 0.00608,
+     "se": 0.00442,
+     "share_of_gap": 0.496,
+     "model_minus_line_pct": 2.4,
+     "proj_minus_actual": -2.9,
+     "line_minus_actual": -3.4,
+     "over_rate": 0.455
+    }
+   ],
+   "distance": [
+    {
+     "distance": "<10%",
+     "props": 425,
+     "share_of_props": 0.384,
+     "gap_per_prop": 0.00197,
+     "se": 0.00531,
+     "share_of_gap": 0.086,
+     "model_minus_line_pct": 0.6,
+     "proj_minus_actual": -4.0,
+     "line_minus_actual": -4.4,
+     "over_rate": 0.466
+    },
+    {
+     "distance": "10-30%",
+     "props": 505,
+     "share_of_props": 0.457,
+     "gap_per_prop": 0.0073,
+     "se": 0.00559,
+     "share_of_gap": 0.377,
+     "model_minus_line_pct": 11.8,
+     "proj_minus_actual": -1.6,
+     "line_minus_actual": -2.2,
+     "over_rate": 0.475
+    },
+    {
+     "distance": ">30%",
+     "props": 176,
+     "share_of_props": 0.159,
+     "gap_per_prop": 0.0298,
+     "se": 0.01366,
+     "share_of_gap": 0.537,
+     "model_minus_line_pct": 37.9,
+     "proj_minus_actual": 0.8,
+     "line_minus_actual": 0.6,
+     "over_rate": 0.415
+    }
+   ],
+   "line_band": [
+    {
+     "line_band": "<40",
+     "props": 306,
+     "share_of_props": 0.277,
+     "gap_per_prop": 0.00645,
+     "se": 0.0073,
+     "share_of_gap": 0.202,
+     "model_minus_line_pct": 14.3,
+     "proj_minus_actual": 3.4,
+     "line_minus_actual": -1.5,
+     "over_rate": 0.444
+    },
+    {
+     "line_band": "40-69.5",
+     "props": 515,
+     "share_of_props": 0.466,
+     "gap_per_prop": 0.01452,
+     "se": 0.00571,
+     "share_of_gap": 0.766,
+     "model_minus_line_pct": 2.7,
+     "proj_minus_actual": -2.4,
+     "line_minus_actual": -3.7,
+     "over_rate": 0.47
+    },
+    {
+     "line_band": "70+",
+     "props": 285,
+     "share_of_props": 0.258,
+     "gap_per_prop": 0.0011,
+     "se": 0.00812,
+     "share_of_gap": 0.032,
+     "model_minus_line_pct": -6.0,
+     "proj_minus_actual": -7.4,
+     "line_minus_actual": -1.8,
+     "over_rate": 0.467
+    }
+   ],
+   "week_band": [
+    {
+     "week_band": "3-5",
+     "props": 198,
+     "share_of_props": 0.179,
+     "gap_per_prop": 0.02273,
+     "se": 0.01097,
+     "share_of_gap": 0.461,
+     "model_minus_line_pct": 0.4,
+     "proj_minus_actual": -2.9,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.49
+    },
+    {
+     "week_band": "6-9",
+     "props": 385,
+     "share_of_props": 0.348,
+     "gap_per_prop": 0.00862,
+     "se": 0.00687,
+     "share_of_gap": 0.34,
+     "model_minus_line_pct": 2.4,
+     "proj_minus_actual": 1.3,
+     "line_minus_actual": 0.7,
+     "over_rate": 0.429
+    },
+    {
+     "week_band": "10+",
+     "props": 523,
+     "share_of_props": 0.473,
+     "gap_per_prop": 0.00373,
+     "se": 0.00533,
+     "share_of_gap": 0.2,
+     "model_minus_line_pct": 3.5,
+     "proj_minus_actual": -4.3,
+     "line_minus_actual": -5.2,
+     "over_rate": 0.476
+    }
+   ],
+   "history": [
+    {
+     "history": "decayed games < 1.5",
+     "props": 1,
+     "share_of_props": 0.001,
+     "gap_per_prop": -0.10326,
+     "se": NaN,
+     "share_of_gap": -0.011,
+     "model_minus_line_pct": 19.0,
+     "proj_minus_actual": 37.0,
+     "line_minus_actual": 33.5,
+     "over_rate": 0.0
+    },
+    {
+     "history": "1.5-3.5",
+     "props": 93,
+     "share_of_props": 0.084,
+     "gap_per_prop": -0.0081,
+     "se": 0.01604,
+     "share_of_gap": -0.077,
+     "model_minus_line_pct": -1.5,
+     "proj_minus_actual": 2.0,
+     "line_minus_actual": 3.2,
+     "over_rate": 0.376
+    },
+    {
+     "history": "3.5+",
+     "props": 1012,
+     "share_of_props": 0.915,
+     "gap_per_prop": 0.0105,
+     "se": 0.00408,
+     "share_of_gap": 1.088,
+     "model_minus_line_pct": 2.9,
+     "proj_minus_actual": -2.5,
+     "line_minus_actual": -3.1,
+     "over_rate": 0.47
+    }
+   ],
+   "new_team": [
+    {
+     "new_team": "new team",
+     "props": 270,
+     "share_of_props": 0.244,
+     "gap_per_prop": 0.01192,
+     "se": 0.00766,
+     "share_of_gap": 0.33,
+     "model_minus_line_pct": 8.0,
+     "proj_minus_actual": 1.0,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.463
+    },
+    {
+     "new_team": "no prior FBS season",
+     "props": 186,
+     "share_of_props": 0.168,
+     "gap_per_prop": -0.00625,
+     "se": 0.00899,
+     "share_of_gap": -0.119,
+     "model_minus_line_pct": 1.9,
+     "proj_minus_actual": -0.9,
+     "line_minus_actual": -1.2,
+     "over_rate": 0.441
+    },
+    {
+     "new_team": "same team",
+     "props": 650,
+     "share_of_props": 0.588,
+     "gap_per_prop": 0.01186,
+     "se": 0.00536,
+     "share_of_gap": 0.789,
+     "model_minus_line_pct": 1.6,
+     "proj_minus_actual": -3.8,
+     "line_minus_actual": -3.2,
+     "over_rate": 0.468
+    }
+   ],
+   "role_change": [
+    {
+     "role_change": "last game down 10+ pts",
+     "props": 45,
+     "share_of_props": 0.041,
+     "gap_per_prop": 0.00428,
+     "se": 0.01939,
+     "share_of_gap": 0.02,
+     "model_minus_line_pct": 15.8,
+     "proj_minus_actual": 2.0,
+     "line_minus_actual": -3.4,
+     "over_rate": 0.489
+    },
+    {
+     "role_change": "last game up 10+ pts",
+     "props": 448,
+     "share_of_props": 0.405,
+     "gap_per_prop": 0.00574,
+     "se": 0.0064,
+     "share_of_gap": 0.263,
+     "model_minus_line_pct": -0.6,
+     "proj_minus_actual": -3.4,
+     "line_minus_actual": -1.9,
+     "over_rate": 0.46
+    },
+    {
+     "role_change": "steady",
+     "props": 613,
+     "share_of_props": 0.554,
+     "gap_per_prop": 0.01142,
+     "se": 0.00558,
+     "share_of_gap": 0.717,
+     "model_minus_line_pct": 5.2,
+     "proj_minus_actual": -1.5,
+     "line_minus_actual": -3.0,
+     "over_rate": 0.462
+    }
+   ],
+   "expected_by_model": [
+    {
+     "expected_by_model": "expected",
+     "props": 1087,
+     "share_of_props": 0.983,
+     "gap_per_prop": 0.00982,
+     "se": 0.00404,
+     "share_of_gap": 1.092,
+     "model_minus_line_pct": 2.7,
+     "proj_minus_actual": -2.4,
+     "line_minus_actual": -2.8,
+     "over_rate": 0.466
+    },
+    {
+     "expected_by_model": "not expected (post hoc)",
+     "props": 19,
+     "share_of_props": 0.017,
+     "gap_per_prop": -0.04747,
+     "se": 0.02692,
+     "share_of_gap": -0.092,
+     "model_minus_line_pct": 2.7,
+     "proj_minus_actual": 12.1,
+     "line_minus_actual": 11.6,
+     "over_rate": 0.263
+    }
+   ],
+   "teammate_out": [
+    {
+     "teammate_out": "no",
+     "props": 810,
+     "share_of_props": 0.732,
+     "gap_per_prop": 0.00421,
+     "se": 0.0044,
+     "share_of_gap": 0.349,
+     "model_minus_line_pct": 4.3,
+     "proj_minus_actual": -0.7,
+     "line_minus_actual": -2.1,
+     "over_rate": 0.447
+    },
+    {
+     "teammate_out": "regular back out (post hoc)",
+     "props": 296,
+     "share_of_props": 0.268,
+     "gap_per_prop": 0.02148,
+     "se": 0.00867,
+     "share_of_gap": 0.651,
+     "model_minus_line_pct": -3.2,
+     "proj_minus_actual": -6.0,
+     "line_minus_actual": -3.8,
+     "over_rate": 0.503
+    }
+   ],
+   "script": [
+    {
+     "script": "favourite 7+",
+     "props": 325,
+     "share_of_props": 0.294,
+     "gap_per_prop": 0.00425,
+     "se": 0.0081,
+     "share_of_gap": 0.142,
+     "model_minus_line_pct": -3.9,
+     "proj_minus_actual": -5.6,
+     "line_minus_actual": -1.9,
+     "over_rate": 0.44
+    },
+    {
+     "script": "underdog 7+",
+     "props": 210,
+     "share_of_props": 0.19,
+     "gap_per_prop": -0.00257,
+     "se": 0.00791,
+     "share_of_gap": -0.055,
+     "model_minus_line_pct": 13.0,
+     "proj_minus_actual": 6.0,
+     "line_minus_actual": 0.1,
+     "over_rate": 0.395
+    },
+    {
+     "script": "within 7",
+     "props": 571,
+     "share_of_props": 0.516,
+     "gap_per_prop": 0.01563,
+     "se": 0.00542,
+     "share_of_gap": 0.914,
+     "model_minus_line_pct": 3.1,
+     "proj_minus_actual": -3.1,
+     "line_minus_actual": -4.0,
+     "over_rate": 0.499
+    }
+   ],
+   "reliability": [
+    {
+     "model_band": "(-0.001, 0.3]",
+     "props": 102,
+     "model_mean": 0.25,
+     "books_mean": 0.5,
+     "cleared": 0.441
+    },
+    {
+     "model_band": "(0.3, 0.4]",
+     "props": 438,
+     "model_mean": 0.343,
+     "books_mean": 0.5,
+     "cleared": 0.447
+    },
+    {
+     "model_band": "(0.4, 0.45]",
+     "props": 166,
+     "model_mean": 0.437,
+     "books_mean": 0.5,
+     "cleared": 0.488
+    },
+    {
+     "model_band": "(0.45, 0.5]",
+     "props": 111,
+     "model_mean": 0.479,
+     "books_mean": 0.5,
+     "cleared": 0.441
+    },
+    {
+     "model_band": "(0.5, 0.55]",
+     "props": 180,
+     "model_mean": 0.526,
+     "books_mean": 0.5,
+     "cleared": 0.506
+    },
+    {
+     "model_band": "(0.55, 0.6]",
+     "props": 84,
+     "model_mean": 0.572,
+     "books_mean": 0.5,
+     "cleared": 0.44
+    },
+    {
+     "model_band": "(0.6, 0.7]",
+     "props": 20,
+     "model_mean": 0.636,
+     "books_mean": 0.5,
+     "cleared": 0.5
+    },
+    {
+     "model_band": "(0.7, 1.0]",
+     "props": 5,
+     "model_mean": 0.721,
+     "books_mean": 0.5,
+     "cleared": 0.4
+    }
+   ],
+   "disagree_5pt": {
+    "props": 815,
+    "share": 0.737,
+    "model_side_won": 0.531,
+    "model_side_over_share": 0.134
+   },
+   "best_blend_weight": {
+    "w": 0.25,
+    "brier_at_best": 0.24889,
+    "brier_books": 0.25
+   }
+  }
+ },
+ "bet_time": {
+  "both": {
+   "props": 2118,
+   "games": 770,
+   "gap_per_prop": 0.01089,
+   "se": 0.0028,
+   "brier_model": 0.2609,
+   "brier_books": 0.25001,
+   "spread_model": 0.1046,
+   "spread_books": 0.0001,
+   "corr_model_books": -0.007,
+   "mean_model_chance": 0.4201,
+   "over_rate": 0.4707,
+   "mean_books_chance": 0.5,
+   "by_group_chance_vs_cleared": {
+    "QB": {
+     "props": 567,
+     "model": 0.3603,
+     "cleared": 0.4921
+    },
+    "RB": {
+     "props": 1551,
+     "model": 0.442,
+     "cleared": 0.4629
+    }
+   },
+   "group": [
+    {
+     "group": "QB",
+     "props": 567,
+     "share_of_props": 0.268,
+     "gap_per_prop": 0.01945,
+     "se": 0.00649,
+     "share_of_gap": 0.478,
+     "model_minus_line_pct": 4.5,
+     "proj_minus_actual": -1.6,
+     "line_minus_actual": -2.4,
+     "over_rate": 0.492
+    },
+    {
+     "group": "RB",
+     "props": 1551,
+     "share_of_props": 0.732,
+     "gap_per_prop": 0.00776,
+     "se": 0.00298,
+     "share_of_gap": 0.522,
+     "model_minus_line_pct": 1.4,
+     "proj_minus_actual": -3.5,
+     "line_minus_actual": -3.5,
+     "over_rate": 0.463
+    }
+   ],
+   "distance": [
+    {
+     "distance": "<10%",
+     "props": 877,
+     "share_of_props": 0.414,
+     "gap_per_prop": 0.00213,
+     "se": 0.00346,
+     "share_of_gap": 0.081,
+     "model_minus_line_pct": 0.3,
+     "proj_minus_actual": -2.9,
+     "line_minus_actual": -2.9,
+     "over_rate": 0.463
+    },
+    {
+     "distance": "10-30%",
+     "props": 919,
+     "share_of_props": 0.434,
+     "gap_per_prop": 0.01464,
+     "se": 0.00405,
+     "share_of_gap": 0.583,
+     "model_minus_line_pct": 12.4,
+     "proj_minus_actual": -4.8,
+     "line_minus_actual": -5.0,
+     "over_rate": 0.494
+    },
+    {
+     "distance": ">30%",
+     "props": 322,
+     "share_of_props": 0.152,
+     "gap_per_prop": 0.02407,
+     "se": 0.01028,
+     "share_of_gap": 0.336,
+     "model_minus_line_pct": 38.9,
+     "proj_minus_actual": 2.0,
+     "line_minus_actual": 1.0,
+     "over_rate": 0.425
+    }
+   ],
+   "line_band": [
+    {
+     "line_band": "<40",
+     "props": 569,
+     "share_of_props": 0.269,
+     "gap_per_prop": 0.00604,
+     "se": 0.00506,
+     "share_of_gap": 0.149,
+     "model_minus_line_pct": 16.9,
+     "proj_minus_actual": 1.5,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.459
+    },
+    {
+     "line_band": "40-69.5",
+     "props": 940,
+     "share_of_props": 0.444,
+     "gap_per_prop": 0.01217,
+     "se": 0.00408,
+     "share_of_gap": 0.496,
+     "model_minus_line_pct": 3.8,
+     "proj_minus_actual": -1.8,
+     "line_minus_actual": -3.5,
+     "over_rate": 0.473
+    },
+    {
+     "line_band": "70+",
+     "props": 609,
+     "share_of_props": 0.288,
+     "gap_per_prop": 0.01345,
+     "se": 0.0056,
+     "share_of_gap": 0.355,
+     "model_minus_line_pct": -6.4,
+     "proj_minus_actual": -9.0,
+     "line_minus_actual": -2.5,
+     "over_rate": 0.478
+    }
+   ],
+   "week_band": [
+    {
+     "week_band": "1-2",
+     "props": 89,
+     "share_of_props": 0.042,
+     "gap_per_prop": 0.01947,
+     "se": 0.0194,
+     "share_of_gap": 0.075,
+     "model_minus_line_pct": -5.2,
+     "proj_minus_actual": -8.5,
+     "line_minus_actual": -3.1,
+     "over_rate": 0.483
+    },
+    {
+     "week_band": "3-5",
+     "props": 412,
+     "share_of_props": 0.195,
+     "gap_per_prop": 0.02326,
+     "se": 0.0072,
+     "share_of_gap": 0.415,
+     "model_minus_line_pct": 0.8,
+     "proj_minus_actual": -1.8,
+     "line_minus_actual": -1.7,
+     "over_rate": 0.464
+    },
+    {
+     "week_band": "6-9",
+     "props": 674,
+     "share_of_props": 0.318,
+     "gap_per_prop": 0.00581,
+     "se": 0.00492,
+     "share_of_gap": 0.17,
+     "model_minus_line_pct": 2.4,
+     "proj_minus_actual": -0.5,
+     "line_minus_actual": -1.0,
+     "over_rate": 0.435
+    },
+    {
+     "week_band": "10+",
+     "props": 943,
+     "share_of_props": 0.445,
+     "gap_per_prop": 0.00831,
+     "se": 0.00372,
+     "share_of_gap": 0.34,
+     "model_minus_line_pct": 3.4,
+     "proj_minus_actual": -4.7,
+     "line_minus_actual": -5.4,
+     "over_rate": 0.498
+    }
+   ],
+   "history": [
+    {
+     "history": "decayed games < 1.5",
+     "props": 3,
+     "share_of_props": 0.001,
+     "gap_per_prop": -0.08298,
+     "se": 0.01906,
+     "share_of_gap": -0.011,
+     "model_minus_line_pct": 40.5,
+     "proj_minus_actual": -15.0,
+     "line_minus_actual": -32.8,
+     "over_rate": 0.667
+    },
+    {
+     "history": "1.5-3.5",
+     "props": 212,
+     "share_of_props": 0.1,
+     "gap_per_prop": 0.0054,
+     "se": 0.0112,
+     "share_of_gap": 0.05,
+     "model_minus_line_pct": -1.2,
+     "proj_minus_actual": -1.0,
+     "line_minus_actual": 0.6,
+     "over_rate": 0.41
+    },
+    {
+     "history": "3.5+",
+     "props": 1903,
+     "share_of_props": 0.898,
+     "gap_per_prop": 0.01165,
+     "se": 0.00287,
+     "share_of_gap": 0.961,
+     "model_minus_line_pct": 2.6,
+     "proj_minus_actual": -3.2,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.477
+    }
+   ],
+   "new_team": [
+    {
+     "new_team": "new team",
+     "props": 513,
+     "share_of_props": 0.242,
+     "gap_per_prop": 0.00274,
+     "se": 0.00537,
+     "share_of_gap": 0.061,
+     "model_minus_line_pct": 4.9,
+     "proj_minus_actual": 0.7,
+     "line_minus_actual": -1.3,
+     "over_rate": 0.458
+    },
+    {
+     "new_team": "no prior FBS season",
+     "props": 279,
+     "share_of_props": 0.132,
+     "gap_per_prop": -0.00237,
+     "se": 0.00682,
+     "share_of_gap": -0.029,
+     "model_minus_line_pct": 5.4,
+     "proj_minus_actual": -2.1,
+     "line_minus_actual": -3.7,
+     "over_rate": 0.441
+    },
+    {
+     "new_team": "same team",
+     "props": 1326,
+     "share_of_props": 0.626,
+     "gap_per_prop": 0.01684,
+     "se": 0.00373,
+     "share_of_gap": 0.968,
+     "model_minus_line_pct": 0.7,
+     "proj_minus_actual": -4.6,
+     "line_minus_actual": -3.8,
+     "over_rate": 0.482
+    }
+   ],
+   "role_change": [
+    {
+     "role_change": "last game down 10+ pts",
+     "props": 84,
+     "share_of_props": 0.04,
+     "gap_per_prop": 0.0063,
+     "se": 0.01456,
+     "share_of_gap": 0.023,
+     "model_minus_line_pct": 11.4,
+     "proj_minus_actual": -0.7,
+     "line_minus_actual": -3.0,
+     "over_rate": 0.464
+    },
+    {
+     "role_change": "last game up 10+ pts",
+     "props": 854,
+     "share_of_props": 0.403,
+     "gap_per_prop": 0.01065,
+     "se": 0.00436,
+     "share_of_gap": 0.394,
+     "model_minus_line_pct": -1.7,
+     "proj_minus_actual": -3.8,
+     "line_minus_actual": -1.9,
+     "over_rate": 0.464
+    },
+    {
+     "role_change": "steady",
+     "props": 1180,
+     "share_of_props": 0.557,
+     "gap_per_prop": 0.01139,
+     "se": 0.00381,
+     "share_of_gap": 0.583,
+     "model_minus_line_pct": 5.9,
+     "proj_minus_actual": -2.5,
+     "line_minus_actual": -4.2,
+     "over_rate": 0.476
+    }
+   ],
+   "expected_by_model": [
+    {
+     "expected_by_model": "expected",
+     "props": 2118,
+     "share_of_props": 1.0,
+     "gap_per_prop": 0.01089,
+     "se": 0.0028,
+     "share_of_gap": 1.0,
+     "model_minus_line_pct": 2.3,
+     "proj_minus_actual": -3.0,
+     "line_minus_actual": -3.2,
+     "over_rate": 0.471
+    }
+   ],
+   "teammate_out": [
+    {
+     "teammate_out": "no",
+     "props": 1535,
+     "share_of_props": 0.725,
+     "gap_per_prop": 0.00746,
+     "se": 0.00306,
+     "share_of_gap": 0.497,
+     "model_minus_line_pct": 3.6,
+     "proj_minus_actual": -1.7,
+     "line_minus_actual": -2.7,
+     "over_rate": 0.458
+    },
+    {
+     "teammate_out": "regular back out (post hoc)",
+     "props": 583,
+     "share_of_props": 0.275,
+     "gap_per_prop": 0.01992,
+     "se": 0.00618,
+     "share_of_gap": 0.503,
+     "model_minus_line_pct": -0.5,
+     "proj_minus_actual": -6.4,
+     "line_minus_actual": -4.5,
+     "over_rate": 0.504
+    }
+   ],
+   "script": [
+    {
+     "script": "favourite 7+",
+     "props": 685,
+     "share_of_props": 0.323,
+     "gap_per_prop": 0.01331,
+     "se": 0.00582,
+     "share_of_gap": 0.395,
+     "model_minus_line_pct": -4.7,
+     "proj_minus_actual": -6.4,
+     "line_minus_actual": -2.3,
+     "over_rate": 0.463
+    },
+    {
+     "script": "underdog 7+",
+     "props": 431,
+     "share_of_props": 0.203,
+     "gap_per_prop": -0.00166,
+     "se": 0.00509,
+     "share_of_gap": -0.031,
+     "model_minus_line_pct": 14.5,
+     "proj_minus_actual": 5.4,
+     "line_minus_actual": -0.8,
+     "over_rate": 0.427
+    },
+    {
+     "script": "within 7",
+     "props": 1002,
+     "share_of_props": 0.473,
+     "gap_per_prop": 0.01464,
+     "se": 0.00386,
+     "share_of_gap": 0.636,
+     "model_minus_line_pct": 3.0,
+     "proj_minus_actual": -4.2,
+     "line_minus_actual": -4.9,
+     "over_rate": 0.495
+    }
+   ],
+   "reliability": [
+    {
+     "model_band": "(-0.001, 0.3]",
+     "props": 162,
+     "model_mean": 0.241,
+     "books_mean": 0.5,
+     "cleared": 0.469
+    },
+    {
+     "model_band": "(0.3, 0.4]",
+     "props": 801,
+     "model_mean": 0.344,
+     "books_mean": 0.5,
+     "cleared": 0.469
+    },
+    {
+     "model_band": "(0.4, 0.45]",
+     "props": 365,
+     "model_mean": 0.436,
+     "books_mean": 0.5,
+     "cleared": 0.49
+    },
+    {
+     "model_band": "(0.45, 0.5]",
+     "props": 231,
+     "model_mean": 0.477,
+     "books_mean": 0.5,
+     "cleared": 0.433
+    },
+    {
+     "model_band": "(0.5, 0.55]",
+     "props": 353,
+     "model_mean": 0.525,
+     "books_mean": 0.5,
+     "cleared": 0.499
+    },
+    {
+     "model_band": "(0.55, 0.6]",
+     "props": 165,
+     "model_mean": 0.57,
+     "books_mean": 0.5,
+     "cleared": 0.436
+    },
+    {
+     "model_band": "(0.6, 0.7]",
+     "props": 36,
+     "model_mean": 0.627,
+     "books_mean": 0.5,
+     "cleared": 0.417
+    },
+    {
+     "model_band": "(0.7, 1.0]",
+     "props": 5,
+     "model_mean": 0.732,
+     "books_mean": 0.5,
+     "cleared": 0.6
+    }
+   ],
+   "disagree_5pt": {
+    "props": 1533,
+    "share": 0.724,
+    "model_side_won": 0.513,
+    "model_side_over_share": 0.134
+   },
+   "best_blend_weight": {
+    "w": 0.15,
+    "brier_at_best": 0.24955,
+    "brier_books": 0.25001
+   }
+  },
+  "2024": {
+   "props": 1031,
+   "games": 384,
+   "gap_per_prop": 0.00965,
+   "se": 0.00396,
+   "brier_model": 0.25966,
+   "brier_books": 0.25001,
+   "spread_model": 0.1023,
+   "spread_books": 0.0001,
+   "corr_model_books": 0.004,
+   "mean_model_chance": 0.4238,
+   "over_rate": 0.4762,
+   "mean_books_chance": 0.5,
+   "by_group_chance_vs_cleared": {
+    "QB": {
+     "props": 261,
+     "model": 0.3632,
+     "cleared": 0.5057
+    },
+    "RB": {
+     "props": 770,
+     "model": 0.4444,
+     "cleared": 0.4662
+    }
+   },
+   "group": [
+    {
+     "group": "QB",
+     "props": 261,
+     "share_of_props": 0.253,
+     "gap_per_prop": 0.02249,
+     "se": 0.00934,
+     "share_of_gap": 0.59,
+     "model_minus_line_pct": 5.0,
+     "proj_minus_actual": -3.1,
+     "line_minus_actual": -4.2,
+     "over_rate": 0.506
+    },
+    {
+     "group": "RB",
+     "props": 770,
+     "share_of_props": 0.747,
+     "gap_per_prop": 0.00529,
+     "se": 0.00418,
+     "share_of_gap": 0.41,
+     "model_minus_line_pct": 1.3,
+     "proj_minus_actual": -3.4,
+     "line_minus_actual": -3.4,
+     "over_rate": 0.466
+    }
+   ],
+   "distance": [
+    {
+     "distance": "<10%",
+     "props": 430,
+     "share_of_props": 0.417,
+     "gap_per_prop": 0.00159,
+     "se": 0.0046,
+     "share_of_gap": 0.069,
+     "model_minus_line_pct": 0.3,
+     "proj_minus_actual": -0.7,
+     "line_minus_actual": -0.8,
+     "over_rate": 0.442
+    },
+    {
+     "distance": "10-30%",
+     "props": 438,
+     "share_of_props": 0.425,
+     "gap_per_prop": 0.00926,
+     "se": 0.00592,
+     "share_of_gap": 0.408,
+     "model_minus_line_pct": 12.5,
+     "proj_minus_actual": -6.8,
+     "line_minus_actual": -7.2,
+     "over_rate": 0.516
+    },
+    {
+     "distance": ">30%",
+     "props": 163,
+     "share_of_props": 0.158,
+     "gap_per_prop": 0.03193,
+     "se": 0.01571,
+     "share_of_gap": 0.523,
+     "model_minus_line_pct": 37.9,
+     "proj_minus_actual": -0.9,
+     "line_minus_actual": -1.6,
+     "over_rate": 0.46
+    }
+   ],
+   "line_band": [
+    {
+     "line_band": "<40",
+     "props": 271,
+     "share_of_props": 0.263,
+     "gap_per_prop": 0.00424,
+     "se": 0.00719,
+     "share_of_gap": 0.115,
+     "model_minus_line_pct": 18.4,
+     "proj_minus_actual": -0.9,
+     "line_minus_actual": -5.5,
+     "over_rate": 0.469
+    },
+    {
+     "line_band": "40-69.5",
+     "props": 433,
+     "share_of_props": 0.42,
+     "gap_per_prop": 0.00654,
+     "se": 0.00605,
+     "share_of_gap": 0.285,
+     "model_minus_line_pct": 4.3,
+     "proj_minus_actual": -1.2,
+     "line_minus_actual": -3.2,
+     "over_rate": 0.476
+    },
+    {
+     "line_band": "70+",
+     "props": 327,
+     "share_of_props": 0.317,
+     "gap_per_prop": 0.01824,
+     "se": 0.00759,
+     "share_of_gap": 0.6,
+     "model_minus_line_pct": -4.2,
+     "proj_minus_actual": -8.2,
+     "line_minus_actual": -2.7,
+     "over_rate": 0.483
+    }
+   ],
+   "week_band": [
+    {
+     "week_band": "1-2",
+     "props": 89,
+     "share_of_props": 0.086,
+     "gap_per_prop": 0.01947,
+     "se": 0.0194,
+     "share_of_gap": 0.174,
+     "model_minus_line_pct": -5.2,
+     "proj_minus_actual": -8.5,
+     "line_minus_actual": -3.1,
+     "over_rate": 0.483
+    },
+    {
+     "week_band": "3-5",
+     "props": 216,
+     "share_of_props": 0.21,
+     "gap_per_prop": 0.02459,
+     "se": 0.00971,
+     "share_of_gap": 0.534,
+     "model_minus_line_pct": -0.3,
+     "proj_minus_actual": -1.3,
+     "line_minus_actual": -1.3,
+     "over_rate": 0.44
+    },
+    {
+     "week_band": "6-9",
+     "props": 295,
+     "share_of_props": 0.286,
+     "gap_per_prop": -0.00312,
+     "se": 0.0069,
+     "share_of_gap": -0.092,
+     "model_minus_line_pct": 2.3,
+     "proj_minus_actual": -2.5,
+     "line_minus_actual": -3.3,
+     "over_rate": 0.441
+    },
+    {
+     "week_band": "10+",
+     "props": 431,
+     "share_of_props": 0.418,
+     "gap_per_prop": 0.00886,
+     "se": 0.00517,
+     "share_of_gap": 0.384,
+     "model_minus_line_pct": 4.3,
+     "proj_minus_actual": -3.8,
+     "line_minus_actual": -5.1,
+     "over_rate": 0.517
+    }
+   ],
+   "history": [
+    {
+     "history": "decayed games < 1.5",
+     "props": 2,
+     "share_of_props": 0.002,
+     "gap_per_prop": -0.06392,
+     "se": 0.0,
+     "share_of_gap": -0.013,
+     "model_minus_line_pct": 43.1,
+     "proj_minus_actual": -40.2,
+     "line_minus_actual": -66.0,
+     "over_rate": 1.0
+    },
+    {
+     "history": "1.5-3.5",
+     "props": 122,
+     "share_of_props": 0.118,
+     "gap_per_prop": 0.01183,
+     "se": 0.01605,
+     "share_of_gap": 0.145,
+     "model_minus_line_pct": -5.1,
+     "proj_minus_actual": -4.2,
+     "line_minus_actual": -0.9,
+     "over_rate": 0.434
+    },
+    {
+     "history": "3.5+",
+     "props": 907,
+     "share_of_props": 0.88,
+     "gap_per_prop": 0.00952,
+     "se": 0.00404,
+     "share_of_gap": 0.868,
+     "model_minus_line_pct": 2.8,
+     "proj_minus_actual": -3.1,
+     "line_minus_actual": -3.9,
+     "over_rate": 0.481
+    }
+   ],
+   "new_team": [
+    {
+     "new_team": "new team",
+     "props": 248,
+     "share_of_props": 0.241,
+     "gap_per_prop": -0.00859,
+     "se": 0.00763,
+     "share_of_gap": -0.214,
+     "model_minus_line_pct": 3.1,
+     "proj_minus_actual": 1.2,
+     "line_minus_actual": -0.2,
+     "over_rate": 0.452
+    },
+    {
+     "new_team": "no prior FBS season",
+     "props": 93,
+     "share_of_props": 0.09,
+     "gap_per_prop": -0.00342,
+     "se": 0.01184,
+     "share_of_gap": -0.032,
+     "model_minus_line_pct": 6.5,
+     "proj_minus_actual": -5.8,
+     "line_minus_actual": -8.7,
+     "over_rate": 0.441
+    },
+    {
+     "new_team": "same team",
+     "props": 690,
+     "share_of_props": 0.669,
+     "gap_per_prop": 0.01796,
+     "se": 0.00511,
+     "share_of_gap": 1.246,
+     "model_minus_line_pct": 1.3,
+     "proj_minus_actual": -4.6,
+     "line_minus_actual": -4.2,
+     "over_rate": 0.49
+    }
+   ],
+   "role_change": [
+    {
+     "role_change": "last game down 10+ pts",
+     "props": 42,
+     "share_of_props": 0.041,
+     "gap_per_prop": 0.0081,
+     "se": 0.02216,
+     "share_of_gap": 0.034,
+     "model_minus_line_pct": 0.9,
+     "proj_minus_actual": -5.7,
+     "line_minus_actual": -4.5,
+     "over_rate": 0.452
+    },
+    {
+     "role_change": "last game up 10+ pts",
+     "props": 410,
+     "share_of_props": 0.398,
+     "gap_per_prop": 0.01102,
+     "se": 0.00598,
+     "share_of_gap": 0.454,
+     "model_minus_line_pct": -1.4,
+     "proj_minus_actual": -3.4,
+     "line_minus_actual": -1.7,
+     "over_rate": 0.466
+    },
+    {
+     "role_change": "steady",
+     "props": 579,
+     "share_of_props": 0.562,
+     "gap_per_prop": 0.00879,
+     "se": 0.00537,
+     "share_of_gap": 0.512,
+     "model_minus_line_pct": 6.4,
+     "proj_minus_actual": -3.1,
+     "line_minus_actual": -4.9,
+     "over_rate": 0.485
+    }
+   ],
+   "expected_by_model": [
+    {
+     "expected_by_model": "expected",
+     "props": 1031,
+     "share_of_props": 1.0,
+     "gap_per_prop": 0.00965,
+     "se": 0.00396,
+     "share_of_gap": 1.0,
+     "model_minus_line_pct": 2.2,
+     "proj_minus_actual": -3.3,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.476
+    }
+   ],
+   "teammate_out": [
+    {
+     "teammate_out": "no",
+     "props": 735,
+     "share_of_props": 0.713,
+     "gap_per_prop": 0.00625,
+     "se": 0.00419,
+     "share_of_gap": 0.462,
+     "model_minus_line_pct": 3.7,
+     "proj_minus_actual": -1.7,
+     "line_minus_actual": -3.0,
+     "over_rate": 0.467
+    },
+    {
+     "teammate_out": "regular back out (post hoc)",
+     "props": 296,
+     "share_of_props": 0.287,
+     "gap_per_prop": 0.01808,
+     "se": 0.00896,
+     "share_of_gap": 0.538,
+     "model_minus_line_pct": -0.4,
+     "proj_minus_actual": -7.4,
+     "line_minus_actual": -5.1,
+     "over_rate": 0.5
+    }
+   ],
+   "script": [
+    {
+     "script": "favourite 7+",
+     "props": 365,
+     "share_of_props": 0.354,
+     "gap_per_prop": 0.01874,
+     "se": 0.00819,
+     "share_of_gap": 0.688,
+     "model_minus_line_pct": -3.4,
+     "proj_minus_actual": -6.5,
+     "line_minus_actual": -2.5,
+     "over_rate": 0.482
+    },
+    {
+     "script": "underdog 7+",
+     "props": 226,
+     "share_of_props": 0.219,
+     "gap_per_prop": -0.00634,
+     "se": 0.00694,
+     "share_of_gap": -0.144,
+     "model_minus_line_pct": 14.7,
+     "proj_minus_actual": 5.1,
+     "line_minus_actual": -1.0,
+     "over_rate": 0.451
+    },
+    {
+     "script": "within 7",
+     "props": 440,
+     "share_of_props": 0.427,
+     "gap_per_prop": 0.01031,
+     "se": 0.00551,
+     "share_of_gap": 0.456,
+     "model_minus_line_pct": 2.7,
+     "proj_minus_actual": -5.0,
+     "line_minus_actual": -5.9,
+     "over_rate": 0.484
+    }
+   ],
+   "reliability": [
+    {
+     "model_band": "(-0.001, 0.3]",
+     "props": 81,
+     "model_mean": 0.235,
+     "books_mean": 0.5,
+     "cleared": 0.519
+    },
+    {
+     "model_band": "(0.3, 0.4]",
+     "props": 363,
+     "model_mean": 0.345,
+     "books_mean": 0.5,
+     "cleared": 0.46
+    },
+    {
+     "model_band": "(0.4, 0.45]",
+     "props": 178,
+     "model_mean": 0.436,
+     "books_mean": 0.5,
+     "cleared": 0.494
+    },
+    {
+     "model_band": "(0.45, 0.5]",
+     "props": 121,
+     "model_mean": 0.476,
+     "books_mean": 0.5,
+     "cleared": 0.364
+    },
+    {
+     "model_band": "(0.5, 0.55]",
+     "props": 188,
+     "model_mean": 0.525,
+     "books_mean": 0.5,
+     "cleared": 0.532
+    },
+    {
+     "model_band": "(0.55, 0.6]",
+     "props": 77,
+     "model_mean": 0.571,
+     "books_mean": 0.5,
+     "cleared": 0.506
+    },
+    {
+     "model_band": "(0.6, 0.7]",
+     "props": 19,
+     "model_mean": 0.627,
+     "books_mean": 0.5,
+     "cleared": 0.421
+    },
+    {
+     "model_band": "(0.7, 1.0]",
+     "props": 4,
+     "model_mean": 0.734,
+     "books_mean": 0.5,
+     "cleared": 0.75
+    }
+   ],
+   "disagree_5pt": {
+    "props": 721,
+    "share": 0.699,
+    "model_side_won": 0.52,
+    "model_side_over_share": 0.137
+   },
+   "best_blend_weight": {
+    "w": 0.2,
+    "brier_at_best": 0.24934,
+    "brier_books": 0.25001
+   }
+  },
+  "2025": {
+   "props": 1087,
+   "games": 386,
+   "gap_per_prop": 0.01207,
+   "se": 0.00396,
+   "brier_model": 0.26208,
+   "brier_books": 0.25,
+   "spread_model": 0.1067,
+   "spread_books": 0.0,
+   "corr_model_books": -0.021,
+   "mean_model_chance": 0.4166,
+   "over_rate": 0.4655,
+   "mean_books_chance": 0.5,
+   "by_group_chance_vs_cleared": {
+    "QB": {
+     "props": 306,
+     "model": 0.3577,
+     "cleared": 0.4804
+    },
+    "RB": {
+     "props": 781,
+     "model": 0.4397,
+     "cleared": 0.4597
+    }
+   },
+   "group": [
+    {
+     "group": "QB",
+     "props": 306,
+     "share_of_props": 0.282,
+     "gap_per_prop": 0.01686,
+     "se": 0.00904,
+     "share_of_gap": 0.393,
+     "model_minus_line_pct": 4.3,
+     "proj_minus_actual": -0.4,
+     "line_minus_actual": -0.8,
+     "over_rate": 0.48
+    },
+    {
+     "group": "RB",
+     "props": 781,
+     "share_of_props": 0.718,
+     "gap_per_prop": 0.0102,
+     "se": 0.00425,
+     "share_of_gap": 0.607,
+     "model_minus_line_pct": 1.5,
+     "proj_minus_actual": -3.5,
+     "line_minus_actual": -3.6,
+     "over_rate": 0.46
+    }
+   ],
+   "distance": [
+    {
+     "distance": "<10%",
+     "props": 447,
+     "share_of_props": 0.411,
+     "gap_per_prop": 0.00264,
+     "se": 0.00515,
+     "share_of_gap": 0.09,
+     "model_minus_line_pct": 0.3,
+     "proj_minus_actual": -5.0,
+     "line_minus_actual": -4.9,
+     "over_rate": 0.483
+    },
+    {
+     "distance": "10-30%",
+     "props": 481,
+     "share_of_props": 0.443,
+     "gap_per_prop": 0.01955,
+     "se": 0.00555,
+     "share_of_gap": 0.716,
+     "model_minus_line_pct": 12.2,
+     "proj_minus_actual": -2.9,
+     "line_minus_actual": -3.1,
+     "over_rate": 0.474
+    },
+    {
+     "distance": ">30%",
+     "props": 159,
+     "share_of_props": 0.146,
+     "gap_per_prop": 0.01601,
+     "se": 0.0132,
+     "share_of_gap": 0.194,
+     "model_minus_line_pct": 39.6,
+     "proj_minus_actual": 5.0,
+     "line_minus_actual": 3.7,
+     "over_rate": 0.39
+    }
+   ],
+   "line_band": [
+    {
+     "line_band": "<40",
+     "props": 298,
+     "share_of_props": 0.274,
+     "gap_per_prop": 0.00769,
+     "se": 0.00712,
+     "share_of_gap": 0.175,
+     "model_minus_line_pct": 16.4,
+     "proj_minus_actual": 3.6,
+     "line_minus_actual": -1.8,
+     "over_rate": 0.45
+    },
+    {
+     "line_band": "40-69.5",
+     "props": 507,
+     "share_of_props": 0.466,
+     "gap_per_prop": 0.01698,
+     "se": 0.00552,
+     "share_of_gap": 0.656,
+     "model_minus_line_pct": 3.5,
+     "proj_minus_actual": -2.3,
+     "line_minus_actual": -3.7,
+     "over_rate": 0.471
+    },
+    {
+     "line_band": "70+",
+     "props": 282,
+     "share_of_props": 0.259,
+     "gap_per_prop": 0.00788,
+     "se": 0.0083,
+     "share_of_gap": 0.169,
+     "model_minus_line_pct": -8.0,
+     "proj_minus_actual": -9.8,
+     "line_minus_actual": -2.3,
+     "over_rate": 0.472
+    }
+   ],
+   "week_band": [
+    {
+     "week_band": "3-5",
+     "props": 196,
+     "share_of_props": 0.18,
+     "gap_per_prop": 0.02179,
+     "se": 0.01078,
+     "share_of_gap": 0.325,
+     "model_minus_line_pct": 3.3,
+     "proj_minus_actual": -2.4,
+     "line_minus_actual": -2.2,
+     "over_rate": 0.49
+    },
+    {
+     "week_band": "6-9",
+     "props": 379,
+     "share_of_props": 0.349,
+     "gap_per_prop": 0.01276,
+     "se": 0.00686,
+     "share_of_gap": 0.368,
+     "model_minus_line_pct": 2.7,
+     "proj_minus_actual": 1.1,
+     "line_minus_actual": 0.7,
+     "over_rate": 0.43
+    },
+    {
+     "week_band": "10+",
+     "props": 512,
+     "share_of_props": 0.471,
+     "gap_per_prop": 0.00785,
+     "se": 0.0053,
+     "share_of_gap": 0.306,
+     "model_minus_line_pct": 2.1,
+     "proj_minus_actual": -5.5,
+     "line_minus_actual": -5.7,
+     "over_rate": 0.482
+    }
+   ],
+   "history": [
+    {
+     "history": "decayed games < 1.5",
+     "props": 1,
+     "share_of_props": 0.001,
+     "gap_per_prop": -0.1211,
+     "se": NaN,
+     "share_of_gap": -0.009,
+     "model_minus_line_pct": 10.2,
+     "proj_minus_actual": 35.4,
+     "line_minus_actual": 33.5,
+     "over_rate": 0.0
+    },
+    {
+     "history": "1.5-3.5",
+     "props": 90,
+     "share_of_props": 0.083,
+     "gap_per_prop": -0.00332,
+     "se": 0.015,
+     "share_of_gap": -0.023,
+     "model_minus_line_pct": 3.8,
+     "proj_minus_actual": 3.4,
+     "line_minus_actual": 2.7,
+     "over_rate": 0.378
+    },
+    {
+     "history": "3.5+",
+     "props": 996,
+     "share_of_props": 0.916,
+     "gap_per_prop": 0.0136,
+     "se": 0.00408,
+     "share_of_gap": 1.032,
+     "model_minus_line_pct": 2.1,
+     "proj_minus_actual": -3.2,
+     "line_minus_actual": -3.4,
+     "over_rate": 0.474
+    }
+   ],
+   "new_team": [
+    {
+     "new_team": "new team",
+     "props": 265,
+     "share_of_props": 0.244,
+     "gap_per_prop": 0.01335,
+     "se": 0.00751,
+     "share_of_gap": 0.27,
+     "model_minus_line_pct": 6.3,
+     "proj_minus_actual": 0.3,
+     "line_minus_actual": -2.3,
+     "over_rate": 0.464
+    },
+    {
+     "new_team": "no prior FBS season",
+     "props": 186,
+     "share_of_props": 0.171,
+     "gap_per_prop": -0.00185,
+     "se": 0.00837,
+     "share_of_gap": -0.026,
+     "model_minus_line_pct": 4.8,
+     "proj_minus_actual": -0.3,
+     "line_minus_actual": -1.2,
+     "over_rate": 0.441
+    },
+    {
+     "new_team": "same team",
+     "props": 636,
+     "share_of_props": 0.585,
+     "gap_per_prop": 0.01561,
+     "se": 0.00545,
+     "share_of_gap": 0.757,
+     "model_minus_line_pct": 0.2,
+     "proj_minus_actual": -4.6,
+     "line_minus_actual": -3.5,
+     "over_rate": 0.473
+    }
+   ],
+   "role_change": [
+    {
+     "role_change": "last game down 10+ pts",
+     "props": 42,
+     "share_of_props": 0.039,
+     "gap_per_prop": 0.0045,
+     "se": 0.01919,
+     "share_of_gap": 0.014,
+     "model_minus_line_pct": 18.3,
+     "proj_minus_actual": 4.2,
+     "line_minus_actual": -1.5,
+     "over_rate": 0.476
+    },
+    {
+     "role_change": "last game up 10+ pts",
+     "props": 444,
+     "share_of_props": 0.408,
+     "gap_per_prop": 0.01031,
+     "se": 0.00633,
+     "share_of_gap": 0.349,
+     "model_minus_line_pct": -2.2,
+     "proj_minus_actual": -4.2,
+     "line_minus_actual": -2.0,
+     "over_rate": 0.462
+    },
+    {
+     "role_change": "steady",
+     "props": 601,
+     "share_of_props": 0.553,
+     "gap_per_prop": 0.01391,
+     "se": 0.00541,
+     "share_of_gap": 0.637,
+     "model_minus_line_pct": 5.4,
+     "proj_minus_actual": -2.0,
+     "line_minus_actual": -3.5,
+     "over_rate": 0.468
+    }
+   ],
+   "expected_by_model": [
+    {
+     "expected_by_model": "expected",
+     "props": 1087,
+     "share_of_props": 1.0,
+     "gap_per_prop": 0.01207,
+     "se": 0.00396,
+     "share_of_gap": 1.0,
+     "model_minus_line_pct": 2.3,
+     "proj_minus_actual": -2.6,
+     "line_minus_actual": -2.8,
+     "over_rate": 0.466
+    }
+   ],
+   "teammate_out": [
+    {
+     "teammate_out": "no",
+     "props": 800,
+     "share_of_props": 0.736,
+     "gap_per_prop": 0.00858,
+     "se": 0.00444,
+     "share_of_gap": 0.523,
+     "model_minus_line_pct": 3.6,
+     "proj_minus_actual": -1.7,
+     "line_minus_actual": -2.4,
+     "over_rate": 0.45
+    },
+    {
+     "teammate_out": "regular back out (post hoc)",
+     "props": 287,
+     "share_of_props": 0.264,
+     "gap_per_prop": 0.02182,
+     "se": 0.00851,
+     "share_of_gap": 0.477,
+     "model_minus_line_pct": -0.7,
+     "proj_minus_actual": -5.3,
+     "line_minus_actual": -3.9,
+     "over_rate": 0.509
+    }
+   ],
+   "script": [
+    {
+     "script": "favourite 7+",
+     "props": 320,
+     "share_of_props": 0.294,
+     "gap_per_prop": 0.00712,
+     "se": 0.00822,
+     "share_of_gap": 0.174,
+     "model_minus_line_pct": -5.4,
+     "proj_minus_actual": -6.2,
+     "line_minus_actual": -2.0,
+     "over_rate": 0.441
+    },
+    {
+     "script": "underdog 7+",
+     "props": 205,
+     "share_of_props": 0.189,
+     "gap_per_prop": 0.00349,
+     "se": 0.0075,
+     "share_of_gap": 0.054,
+     "model_minus_line_pct": 14.2,
+     "proj_minus_actual": 5.7,
+     "line_minus_actual": -0.5,
+     "over_rate": 0.4
+    },
+    {
+     "script": "within 7",
+     "props": 562,
+     "share_of_props": 0.517,
+     "gap_per_prop": 0.01803,
+     "se": 0.00536,
+     "share_of_gap": 0.772,
+     "model_minus_line_pct": 3.2,
+     "proj_minus_actual": -3.6,
+     "line_minus_actual": -4.1,
+     "over_rate": 0.504
+    }
+   ],
+   "reliability": [
+    {
+     "model_band": "(-0.001, 0.3]",
+     "props": 81,
+     "model_mean": 0.247,
+     "books_mean": 0.5,
+     "cleared": 0.42
+    },
+    {
+     "model_band": "(0.3, 0.4]",
+     "props": 438,
+     "model_mean": 0.344,
+     "books_mean": 0.5,
+     "cleared": 0.477
+    },
+    {
+     "model_band": "(0.4, 0.45]",
+     "props": 187,
+     "model_mean": 0.436,
+     "books_mean": 0.5,
+     "cleared": 0.487
+    },
+    {
+     "model_band": "(0.45, 0.5]",
+     "props": 110,
+     "model_mean": 0.477,
+     "books_mean": 0.5,
+     "cleared": 0.509
+    },
+    {
+     "model_band": "(0.5, 0.55]",
+     "props": 165,
+     "model_mean": 0.525,
+     "books_mean": 0.5,
+     "cleared": 0.461
+    },
+    {
+     "model_band": "(0.55, 0.6]",
+     "props": 88,
+     "model_mean": 0.569,
+     "books_mean": 0.5,
+     "cleared": 0.375
+    },
+    {
+     "model_band": "(0.6, 0.7]",
+     "props": 17,
+     "model_mean": 0.627,
+     "books_mean": 0.5,
+     "cleared": 0.412
+    },
+    {
+     "model_band": "(0.7, 1.0]",
+     "props": 1,
+     "model_mean": 0.723,
+     "books_mean": 0.5,
+     "cleared": 0.0
+    }
+   ],
+   "disagree_5pt": {
+    "props": 812,
+    "share": 0.747,
+    "model_side_won": 0.507,
+    "model_side_over_share": 0.131
+   },
+   "best_blend_weight": {
+    "w": 0.15,
+    "brier_at_best": 0.2497,
+    "brier_books": 0.25
+   }
+  }
+ }
+}
