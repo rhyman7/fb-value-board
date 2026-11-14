@@ -102,7 +102,16 @@ def build(league: str, data: dict | None = None) -> dict:
 def write(league: str, data: dict | None = None) -> Path:
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"{league}.json"
-    path.write_text(json.dumps(build(league, data), separators=(",", ":")))
+    feed = build(league, data)
+    try:   # moving on to a new week: keep the last feed of the week just left as <league>_prev.json. Its
+        # last game is often still to play (Monday night), and the dashboards' reports read it then.
+        old = json.loads(path.read_text())
+        if (old.get("season") == feed.get("season") and old.get("players")
+                and isinstance(old.get("week"), int) and isinstance(feed.get("week"), int) and old["week"] < feed["week"]):
+            (OUT / f"{league}_prev.json").write_text(json.dumps(old, separators=(",", ":")))
+    except Exception:
+        pass
+    path.write_text(json.dumps(feed, separators=(",", ":")))
     return path
 
 

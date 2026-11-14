@@ -61,3 +61,19 @@ def test_prop_lines_attach_main_lines_only(tmp_path, monkeypatch):
     monkeypatch.setattr(dashfeed, "DOCS", tmp_path)
     p = dashfeed.build("nfl", _data())["players"]["KC|kenneth walker"]
     assert p["L"] == {"rush_yds": {"L": 89.5, "fo": 0.501}}
+
+
+def test_write_keeps_last_feed_of_the_week_just_left(tmp_path, monkeypatch):
+    monkeypatch.setattr(dashfeed, "OUT", tmp_path)
+    d8 = _data()
+    dashfeed.write("nfl", d8)
+    assert not (tmp_path / "nfl_prev.json").exists()
+    dashfeed.write("nfl", d8)                                  # same week again: nothing kept
+    assert not (tmp_path / "nfl_prev.json").exists()
+    d9 = _data(); d9["players"]["players"][0]["week"] = 9; d9["slate"]["games"][0]["id"] = "2026_09_BAL_BUF"
+    dashfeed.write("nfl", d9)
+    assert json.loads((tmp_path / "nfl.json").read_text())["week"] == 9
+    assert json.loads((tmp_path / "nfl_prev.json").read_text())["week"] == 8
+    dashfeed.write("nfl", d8)                                  # going back a week never overwrites it
+    assert json.loads((tmp_path / "nfl_prev.json").read_text())["week"] == 8
+
