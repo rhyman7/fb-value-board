@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-14T23:23Z",
+ "fetched": "2026-11-15T01:23Z",
  "today": "2026-11-14",
  "teams": {
   "Alabama": {
@@ -2322,6 +2322,130 @@
     }
    ]
   },
+  "North Texas": {
+   "conf": "American",
+   "abbr": "UNT",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "18:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "20:00:00",
+   "opponent": "UTSA",
+   "players": [
+    {
+     "name": "Corri Milliner",
+     "pos": "WR",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Taye Seymore",
+     "pos": "S",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Josiah Martin",
+     "pos": "WR",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Shandon King",
+     "pos": "WR",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Caden Jenkins",
+     "pos": "CB",
+     "number": "8",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Chaston Ditta",
+     "pos": "QB",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kyle Koch",
+     "pos": "WR",
+     "number": "14",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Julian Knox Sr.",
+     "pos": "S",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Colin Page",
+     "pos": "RB",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zach Johnson",
+     "pos": "CB",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Aaden Little",
+     "pos": "S",
+     "number": "31",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kailer Pettijohn",
+     "pos": "LB",
+     "number": "40",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Drew Clemens",
+     "pos": "TE",
+     "number": "85",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Roberto Rodriguez",
+     "pos": "OL",
+     "number": "97",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Amarion Berry",
+     "pos": "OL",
+     "number": "98",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Avion Carter",
+     "pos": "DL",
+     "number": "99",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "Northwestern": {
    "conf": "Big Ten",
    "abbr": "NU",
@@ -2508,6 +2632,53 @@
     {
      "name": "Maxence LeBlanc",
      "pos": "TE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Oklahoma State": {
+   "conf": "Big 12",
+   "abbr": "OKST",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "19:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "20:30:00",
+   "opponent": "Texas Tech",
+   "players": [
+    {
+     "name": "Tate Romney",
+     "pos": "LB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dayvon Standard",
+     "pos": "WR",
+     "number": "19",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carson Kolb",
+     "pos": "TE",
+     "number": "44",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Desmond Magiya",
+     "pos": "OL",
+     "number": "76",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Landon Dean",
+     "pos": "DT",
      "number": "88",
      "status": "Out",
      "season_out": false
@@ -3669,6 +3840,60 @@
     }
    ]
   },
+  "Texas Tech": {
+   "conf": "Big 12",
+   "abbr": "TTU",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "19:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "20:30:00",
+   "opponent": "Oklahoma State",
+   "players": [
+    {
+     "name": "Quinten Joyner",
+     "pos": "RB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Coy Eakin",
+     "pos": "WR",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jalen Jones",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Leyton Stone",
+     "pos": "WR",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Miquel Dingle Jr.",
+     "pos": "S",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ansel Nedore",
+     "pos": "OLB",
+     "number": "33",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "Tulane": {
    "conf": "American",
    "abbr": "TULN",
@@ -4082,6 +4307,81 @@
      "pos": "OL",
      "number": "68",
      "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "UTSA": {
+   "conf": "American",
+   "abbr": "UTSA",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "18:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "20:00:00",
+   "opponent": "North Texas",
+   "players": [
+    {
+     "name": "Brandon Tucker",
+     "pos": "LB",
+     "number": "4",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Marcellus Wilkerson",
+     "pos": "S",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "DJ Allen Jr.",
+     "pos": "WR",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chris Bryson II",
+     "pos": "MB",
+     "number": "16",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Johnny Bowens III",
+     "pos": "DL",
+     "number": "19",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Bryson Donnell",
+     "pos": "RB",
+     "number": "22",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Mykha Green",
+     "pos": "RB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "James Walley Jr.",
+     "pos": "LB",
+     "number": "34",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Darrell Jones",
+     "pos": "OL",
+     "number": "74",
+     "status": "Questionable",
      "season_out": false
     }
    ]
