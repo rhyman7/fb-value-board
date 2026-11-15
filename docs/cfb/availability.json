@@ -1,6 +1,199 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-15T06:13Z",
+ "fetched": "2026-11-15T20:58Z",
  "today": "2026-11-15",
- "teams": {}
+ "teams": {
+  "Oklahoma": {
+   "conf": "SEC",
+   "abbr": "OU",
+   "report": "Game Day",
+   "published": "2026-11-15",
+   "posted": "10:30:00",
+   "game_date": "2026-11-15",
+   "game_time": "12:00:00",
+   "opponent": "Ole Miss",
+   "players": [
+    {
+     "name": "Tory Blaylock",
+     "pos": "RB",
+     "number": "6",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Taylor Heim",
+     "pos": "LB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dakoda Fields",
+     "pos": "DB",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trell Harris",
+     "pos": "WR",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trynae Washington",
+     "pos": "TE",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Fodje",
+     "pos": "OL",
+     "number": "70",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Fred Hinton",
+     "pos": "OL",
+     "number": "72",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kenny Ozowalu",
+     "pos": "DL",
+     "number": "94",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Ole Miss": {
+   "conf": "SEC",
+   "abbr": "MISS",
+   "report": "Game Day",
+   "published": "2026-11-15",
+   "posted": "10:30:00",
+   "game_date": "2026-11-15",
+   "game_time": "12:00:00",
+   "opponent": "Oklahoma",
+   "players": [
+    {
+     "name": "Kam Franklin",
+     "pos": "DE",
+     "number": "5",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Kewan Lacy",
+     "pos": "RB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Sharif Denson",
+     "pos": "S",
+     "number": "7",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Keaton Thomas",
+     "pos": "LB",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Izaiah Hartrup",
+     "pos": "WR",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Edwin Joseph",
+     "pos": "S",
+     "number": "14",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "MJ Preston",
+     "pos": "S",
+     "number": "19",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Makhi Frazier",
+     "pos": "RB",
+     "number": "25",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Ant Davis Jr.",
+     "pos": "LB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kervin Johnson Jr.",
+     "pos": "WR",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "JaMichael Garrett",
+     "pos": "LB",
+     "number": "30",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Gerald Lacy Jr.",
+     "pos": "S",
+     "number": "39",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nascar McCoy",
+     "pos": "S",
+     "number": "46",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carius Curne",
+     "pos": "OL",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Patrick Kutas",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brady Prieskorn",
+     "pos": "TE",
+     "number": "86",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  }
+ }
 }
