@@ -1,4 +1,106 @@
 {
  "rule": "paper record only; read after the 2027 season; see nflmodel/olwatch.py",
- "built": "2026-11-15 17:33 UTC"
+ "all": {
+  "n": 1,
+  "vs_flag_total": {
+   "n": 1,
+   "mean": -13.75,
+   "se": null
+  },
+  "vs_last_total": {
+   "n": 1,
+   "mean": -14.25,
+   "se": null
+  },
+  "cover_flag": {
+   "w": 0,
+   "l": 1,
+   "p": 0,
+   "rate": 0.0
+  },
+  "cover_last": {
+   "w": 0,
+   "l": 1,
+   "p": 0,
+   "rate": 0.0
+  }
+ },
+ "late news among the linemen out": {
+  "n": 0,
+  "vs_flag_total": {
+   "n": 0,
+   "mean": null,
+   "se": null
+  },
+  "vs_last_total": {
+   "n": 0,
+   "mean": null,
+   "se": null
+  },
+  "cover_flag": {
+   "w": 0,
+   "l": 0,
+   "p": 0,
+   "rate": null
+  },
+  "cover_last": {
+   "w": 0,
+   "l": 0,
+   "p": 0,
+   "rate": null
+  }
+ },
+ "injury report and roster only": {
+  "n": 1,
+  "vs_flag_total": {
+   "n": 1,
+   "mean": -13.75,
+   "se": null
+  },
+  "vs_last_total": {
+   "n": 1,
+   "mean": -14.25,
+   "se": null
+  },
+  "cover_flag": {
+   "w": 0,
+   "l": 1,
+   "p": 0,
+   "rate": 0.0
+  },
+  "cover_last": {
+   "w": 0,
+   "l": 1,
+   "p": 0,
+   "rate": 0.0
+  }
+ },
+ "by_season": {
+  "2026": {
+   "n": 1,
+   "vs_flag_total": {
+    "n": 1,
+    "mean": -13.75,
+    "se": null
+   },
+   "vs_last_total": {
+    "n": 1,
+    "mean": -14.25,
+    "se": null
+   },
+   "cover_flag": {
+    "w": 0,
+    "l": 1,
+    "p": 0,
+    "rate": 0.0
+   },
+   "cover_last": {
+    "w": 0,
+    "l": 1,
+    "p": 0,
+    "rate": 0.0
+   }
+  }
+ },
+ "built": "2026-11-15 17:48 UTC"
 }
