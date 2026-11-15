@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-15T01:23Z",
+ "fetched": "2026-11-15T02:23Z",
  "today": "2026-11-14",
  "teams": {
   "Alabama": {
@@ -82,6 +82,81 @@
      "number": "92",
      "status": "Out",
      "season_out": true
+    }
+   ]
+  },
+  "Arizona": {
+   "conf": "Big 12",
+   "abbr": "ARIZ",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "20:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "21:30:00",
+   "opponent": "Utah",
+   "players": [
+    {
+     "name": "Max Harris",
+     "pos": "LB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Shane King",
+     "pos": "TE",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cam Chapa",
+     "pos": "S",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Malcolm Hartzog Jr.",
+     "pos": "S",
+     "number": "15",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Ismail Mahdi",
+     "pos": "RB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keytrin Harris",
+     "pos": "DL",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Swayde Griffin",
+     "pos": "CB",
+     "number": "28",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kevin Moorer Jr.",
+     "pos": "DL",
+     "number": "38",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ezra Funa",
+     "pos": "DL",
+     "number": "92",
+     "status": "Out",
+     "season_out": false
     }
    ]
   },
@@ -4382,6 +4457,25 @@
      "pos": "OL",
      "number": "74",
      "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Utah": {
+   "conf": "Big 12",
+   "abbr": "UTAH",
+   "report": "Game Day",
+   "published": "2026-11-14",
+   "posted": "20:00:00",
+   "game_date": "2026-11-14",
+   "game_time": "21:30:00",
+   "opponent": "Arizona",
+   "players": [
+    {
+     "name": "Karson Kaufusi",
+     "pos": "DT",
+     "number": "51",
+     "status": "Game Time Decision",
      "season_out": false
     }
    ]
