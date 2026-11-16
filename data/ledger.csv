@@ -127,3 +127,5 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_11_BAL_CAR|Moneyline|away,2026-11-15 23:38,2026,11,2026_11_BAL_CAR,2026_11_BAL_CAR,2026-11-22T18:00Z,Moneyline,away,BAL ML,price,fanduel,,116.0,116.0,-0.0021,0.0038,consensus,1.5,44.5,2.9,44.65
 2026_11_MIN_SF|Moneyline|away,2026-11-15 23:38,2026,11,2026_11_MIN_SF,2026_11_MIN_SF,2026-11-23T01:20Z,Moneyline,away,MIN ML,price,fanduel,,168.0,168.0,0.0645,0.0026,consensus,3.5,46.5,0.68,44.4
 2026_11_TEN_DAL|Moneyline|away,2026-11-16 00:49,2026,11,2026_11_TEN_DAL,2026_11_TEN_DAL,2026-11-22T18:00Z,Moneyline,away,TEN ML,price,fanduel,,380.0,380.0,-0.0291,0.0022,consensus,7.5,52.5,10.27,53.16
+2026_11_TEN_DAL|Spread|home,2026-11-16 01:28,2026,11,2026_11_TEN_DAL,2026_11_TEN_DAL,2026-11-22T18:00Z,Spread,home,DAL -8,opener,betmgm,-7.5,-112.0,-112.0,0.0072,0.0066,pinnacle,8.0,53.5,10.16,54.24
+2026_11_MIN_SF|Total|under,2026-11-16 01:28,2026,11,2026_11_MIN_SF,2026_11_MIN_SF,2026-11-23T01:20Z,Total,under,Under 45.5,model,fanduel,46.5,-110.0,-110.0,0.008,0.0022,pinnacle,3.0,45.5,0.66,45.56
