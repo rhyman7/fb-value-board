@@ -1,6 +1,192 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-17T20:24Z",
+ "fetched": "2026-11-17T22:23Z",
  "today": "2026-11-17",
- "teams": {}
+ "teams": {
+  "Eastern Michigan": {
+   "conf": "MAC",
+   "abbr": "EMU",
+   "report": "Game Day",
+   "published": "2026-11-17",
+   "posted": "17:00:00",
+   "game_date": "2026-11-17",
+   "game_time": "18:00:00",
+   "opponent": "Western Michigan",
+   "players": [
+    {
+     "name": "Noah Kim",
+     "pos": "QB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Barry Manning",
+     "pos": "LB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaivian Norman",
+     "pos": "DB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jason Marshall",
+     "pos": "DB",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Caleb Coley",
+     "pos": "DB",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joey Mattord",
+     "pos": "RB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Alijah Lacey",
+     "pos": "DL",
+     "number": "53",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Javon Thomas",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joshua Anderson",
+     "pos": "OL",
+     "number": "66",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Samuel Adjin",
+     "pos": "OL",
+     "number": "70",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cole Powell",
+     "pos": "OL",
+     "number": "77",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tanner Lemaster",
+     "pos": "TE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Western Michigan": {
+   "conf": "MAC",
+   "abbr": "WMU",
+   "report": "Game Day",
+   "published": "2026-11-17",
+   "posted": "17:00:00",
+   "game_date": "2026-11-17",
+   "game_time": "18:00:00",
+   "opponent": "Eastern Michigan",
+   "players": [
+    {
+     "name": "Emazon Littlejohn",
+     "pos": "WR",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Aveion Chenault",
+     "pos": "WR",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Justyce Betts",
+     "pos": "LB",
+     "number": "5",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Trey Petty",
+     "pos": "QB",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ofa \"Lolo\" Mataele",
+     "pos": "RB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jeremy Schleicher",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Westrich",
+     "pos": "OL",
+     "number": "67",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Harper Hughes",
+     "pos": "WR",
+     "number": "80",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Brotherton",
+     "pos": "TE",
+     "number": "83",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "August Johanningsmeier",
+     "pos": "DE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Noah Bishop",
+     "pos": "DE",
+     "number": "97",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  }
+ }
 }
