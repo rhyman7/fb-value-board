@@ -60,8 +60,10 @@ def curves(cur: pd.DataFrame, g: str) -> pd.DataFrame:
     return pd.DataFrame(rows, columns=["i", "ty", "p60", "p150", "L", "dec"]).set_index("i")
 
 
-def score(cur, C, p0, seasons, at="ty") -> dict:
-    k = cur.loc[C.index, "season"].isin(seasons).to_numpy()
+def score(cur, C, p0, seasons, at="ty", from_week=0) -> dict:
+    k = (cur.loc[C.index, "season"].isin(seasons) & (cur.loc[C.index, "week"] >= from_week)).to_numpy()
+    if not k.any():
+        return {"n": 0}
     c = C[k]
     y = cur.loc[c.index, "rec_yds"].to_numpy(float)
     line = c["ty"].to_numpy() * {"ty": 1.0, "p60": 0.6, "p150": 1.5}[at]
@@ -110,7 +112,9 @@ def main():
             r["verdict"] = "KEPT (provisional)" if better and r["holdout"]["z"] <= -1 else ("Trade-off: better on all 4, the holdout gain under 1 SE" if better else "Trade-off: mixed across the 4 measures")
             r["reported"] = {"other_version": {"version": other, "holdout": score(cur, C, p0[other], HOLD), "lines": {str(s): Q.at_lines(cur, p0[other], pinfo, games, g, s) for s in (2024, 2025)}},
                              "holdout at 60% of Typical": score(cur, C, p0[pick], HOLD, "p60"), "holdout at 150% of Typical": score(cur, C, p0[pick], HOLD, "p150"),
-                             "2026 weeks 1-11 (seen)": score(cur, C, p0[pick], [2026])}
+                             "2026 all weeks so far": score(cur, C, p0[pick], [2026]),
+                             # the watch Ryan chose on Nov 18, 2026: weeks unseen when the test was designed
+                             "2026 weeks 12+ (unseen on Nov 18)": score(cur, C, p0[pick], [2026], from_week=12)}
             k = cur.loc[C.index, "season"].isin(HOLD).to_numpy()
             d = cur.loc[C.index[k]].assign(p0=p0[pick][cur.index.get_indexer(C.index[k])])
             r["reported"]["by_projected_receptions_holdout"] = {str(b): {"n": int(len(x)), "actual": round(float(x["shut"].mean()), 4), "predicted": round(float(x["p0"].mean()), 4)}
