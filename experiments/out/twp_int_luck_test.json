@@ -1,0 +1,153 @@
+{
+ "3b game model": {
+  "inputs": {
+   "int_per_twp_by_season": {
+    "2014": 0.582,
+    "2015": 0.582,
+    "2016": 0.565,
+    "2017": 0.563,
+    "2018": 0.568,
+    "2019": 0.565,
+    "2020": 0.561,
+    "2021": 0.563,
+    "2022": 0.566,
+    "2023": 0.569,
+    "2024": 0.572,
+    "2025": 0.574,
+    "2026": 0.571
+   },
+   "int_per_chance_by_season": {
+    "2014": 0.618,
+    "2015": 0.618,
+    "2016": 0.62,
+    "2017": 0.616,
+    "2018": 0.612,
+    "2019": 0.613,
+    "2020": 0.617,
+    "2021": 0.617,
+    "2022": 0.621,
+    "2023": 0.624,
+    "2024": 0.627,
+    "2025": 0.632,
+    "2026": 0.637
+   },
+   "qb_games": 8209,
+   "defense_games": 6748
+  },
+  "spread_of_terms_2019_25": {
+   "d_il_qb": 0.00489,
+   "d_il_def": 0.00299
+  },
+  "tuning": {
+   "A (QB side)": {
+    "margin": {
+     "n": 1068,
+     "now": 9.8413,
+     "candidate": 9.8932,
+     "diff": 0.05185,
+     "se": 0.02897
+    },
+    "total": {
+     "n": 1068,
+     "now": 10.6925,
+     "candidate": 10.6865,
+     "diff": -0.00605,
+     "se": 0.01435
+    }
+   },
+   "B (QB side + defense)": {
+    "margin": {
+     "n": 1068,
+     "now": 9.8413,
+     "candidate": 9.8924,
+     "diff": 0.05107,
+     "se": 0.02903
+    },
+    "total": {
+     "n": 1068,
+     "now": 10.6925,
+     "candidate": 10.684,
+     "diff": -0.00853,
+     "se": 0.01659
+    }
+   }
+  },
+  "better_on_both_tuning": [],
+  "verdict": "No version better on both tuning measures: nothing carried to the holdout, nothing kept.",
+  "reported_ats_2015_25": {
+   "luckiest fifth": {
+    "record_ats": "583-599",
+    "cover_rate": 0.4932,
+    "se": 0.0145
+   },
+   "unluckiest fifth": {
+    "record_ats": "583-599",
+    "cover_rate": 0.4932,
+    "se": 0.0145
+   },
+   "everyone else": {
+    "record_ats": "1787-1755",
+    "cover_rate": 0.5045,
+    "se": 0.0084
+   }
+  }
+ },
+ "3a interceptions projection": {
+  "league_twp_per_dropback_2014_18": 0.0382,
+  "coverage_starters_2019_25": 0.989,
+  "spread_of_twp_gap": 0.149,
+  "measures": {
+   "RMSE gameday, tuning 2015-18": {
+    "n": 2018,
+    "now": 0.9206,
+    "candidate": 0.91856,
+    "diff": -0.002043,
+    "se": 0.000749
+   },
+   "Brier 1+ interception, tuning 2015-18": {
+    "n": 2018,
+    "now": 0.25053,
+    "candidate": 0.24947,
+    "diff": -0.001064,
+    "se": 0.000337,
+    "threw_one": 0.5258
+   },
+   "RMSE gameday, holdout 2019-25": {
+    "n": 3665,
+    "now": 0.87614,
+    "candidate": 0.87509,
+    "diff": -0.001048,
+    "se": 0.001102
+   },
+   "Brier 1+ interception, holdout 2019-25": {
+    "n": 3665,
+    "now": 0.25024,
+    "candidate": 0.25024,
+    "diff": 7e-06,
+    "se": 0.00054,
+    "threw_one": 0.4963
+   },
+   "RMSE bettime, tuning 2015-18": {
+    "n": 1927,
+    "now": 0.91736,
+    "candidate": 0.91512,
+    "diff": -0.002235,
+    "se": 0.000879
+   },
+   "RMSE bettime, holdout 2019-25": {
+    "n": 3467,
+    "now": 0.8723,
+    "candidate": 0.8715,
+    "diff": -0.000798,
+    "se": 0.001178
+   }
+  },
+  "better_on": "5 of 6",
+  "kept": false,
+  "verdict": "Mixed or worse: not kept by the rule.",
+  "live_log_interception_lines_2026": {
+   "rows": 332,
+   "lines": 93
+  }
+ }
+}

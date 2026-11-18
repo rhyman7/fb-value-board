@@ -1,0 +1,209 @@
+{
+ "coverage_2019_25": {
+  "air_unreal": 0.922,
+  "air_gap3": 0.285,
+  "ay_minus": 1.0,
+  "wopr": 1.0
+ },
+ "spread_2019_25": {
+  "air_unreal": 0.0808,
+  "air_gap3": 0.1975,
+  "ay_minus": 0.0449,
+  "wopr": 0.77
+ },
+ "1 unrealized air yards": {
+  "tuning": {
+   "A": {
+    "rec_yds gameday": {
+     "n": 13758,
+     "now": 31.5106,
+     "candidate": 31.5089,
+     "diff": -0.00175,
+     "se": 0.03415
+    },
+    "rec_yds bettime": {
+     "n": 13783,
+     "now": 31.5185,
+     "candidate": 31.5118,
+     "diff": -0.00672,
+     "se": 0.03972
+    }
+   },
+   "B": {
+    "rec_yds gameday": {
+     "n": 13758,
+     "now": 31.5106,
+     "candidate": 31.511,
+     "diff": 0.00035,
+     "se": 0.03124
+    },
+    "rec_yds bettime": {
+     "n": 13783,
+     "now": 31.5185,
+     "candidate": 31.4931,
+     "diff": -0.02546,
+     "se": 0.03452
+    }
+   }
+  },
+  "better_on_every_tuning_measure": [
+   "A"
+  ],
+  "chosen": "A (air_unreal)",
+  "holdout": {
+   "rec_yds gameday": {
+    "n": 20109,
+    "now": 29.698,
+    "candidate": 29.7076,
+    "diff": 0.00958,
+    "se": 0.02223
+   },
+   "rec_yds bettime": {
+    "n": 20164,
+    "now": 29.7504,
+    "candidate": 29.7809,
+    "diff": 0.03056,
+    "se": 0.02281
+   }
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 17652,
+    "now": 0.25705,
+    "candidate": 0.25726,
+    "books": 0.24993,
+    "diff": 0.000214,
+    "se": 0.000268
+   },
+   "pricing snapshot, bet-time": {
+    "n": 10013,
+    "now": 0.2559,
+    "candidate": 0.25593,
+    "books": 0.25001,
+    "diff": 3.6e-05,
+    "se": 0.000388
+   }
+  },
+  "better_on": "2 of 6",
+  "kept": false,
+  "verdict": "Mixed: a trade-off for Ryan, not kept by the rule.",
+  "reported_top_fifth_air_unreal_2019_25": {
+   "top fifth": {
+    "n": 3995,
+    "avg_actual_minus_proj_now": 0.29,
+    "se": 0.44,
+    "after": -0.05,
+    "rec_td_rate": 0.1625,
+    "board_rec_td_chance": 0.1511
+   },
+   "the rest": {
+    "n": 15976,
+    "avg_actual_minus_proj_now": 0.11,
+    "se": 0.24,
+    "after": 0.13,
+    "rec_td_rate": 0.2121,
+    "board_rec_td_chance": 0.1863
+   }
+  }
+ },
+ "2 air-yards share / WOPR": {
+  "tuning": {
+   "A": {
+    "rec_yds gameday": {
+     "n": 18750,
+     "now": 28.918,
+     "candidate": 28.9119,
+     "diff": -0.00614,
+     "se": 0.02832
+    },
+    "rec_yds bettime": {
+     "n": 18777,
+     "now": 28.9176,
+     "candidate": 28.9412,
+     "diff": 0.02352,
+     "se": 0.02869
+    },
+    "receptions gameday": {
+     "n": 18750,
+     "now": 2.0597,
+     "candidate": 2.0597,
+     "diff": 1e-05,
+     "se": 0.00157
+    },
+    "receptions bettime": {
+     "n": 18777,
+     "now": 2.0664,
+     "candidate": 2.0637,
+     "diff": -0.00265,
+     "se": 0.00172
+    }
+   },
+   "B": {
+    "rec_yds gameday": {
+     "n": 18750,
+     "now": 28.918,
+     "candidate": 28.8826,
+     "diff": -0.03545,
+     "se": 0.02799
+    },
+    "rec_yds bettime": {
+     "n": 18777,
+     "now": 28.9176,
+     "candidate": 28.9386,
+     "diff": 0.02094,
+     "se": 0.03065
+    },
+    "receptions gameday": {
+     "n": 18750,
+     "now": 2.0597,
+     "candidate": 2.0613,
+     "diff": 0.00157,
+     "se": 0.00179
+    },
+    "receptions bettime": {
+     "n": 18777,
+     "now": 2.0664,
+     "candidate": 2.0654,
+     "diff": -0.00098,
+     "se": 0.00177
+    }
+   }
+  },
+  "better_on_every_tuning_measure": [],
+  "verdict": "No version better on every tuning measure: nothing carried to the holdout, nothing kept.",
+  "reported_wopr_thirds_2019_25": {
+   "low": {
+    "n": 4267,
+    "avg_proj": 46.8,
+    "avg_actual": 45.2,
+    "cleared_80pct": 0.5278,
+    "cleared_60pct": 0.6438,
+    "sd_of_actual_over_proj": 0.745
+   },
+   "mid": {
+    "n": 4260,
+    "avg_proj": 47.2,
+    "avg_actual": 47.7,
+    "cleared_80pct": 0.5491,
+    "cleared_60pct": 0.6761,
+    "sd_of_actual_over_proj": 0.736
+   },
+   "high": {
+    "n": 4260,
+    "avg_proj": 47.8,
+    "avg_actual": 49.9,
+    "cleared_80pct": 0.5683,
+    "cleared_60pct": 0.6833,
+    "sd_of_actual_over_proj": 0.778
+   },
+   "high minus low, typical": {
+    "diff": 0.0405,
+    "se": 0.0108
+   },
+   "high minus low, floor": {
+    "diff": 0.0396,
+    "se": 0.0102
+   }
+  }
+ }
+}
