@@ -722,6 +722,16 @@ boards in detail; this file is the rules.
   pieces not applied (college receiving, NFL rushing) and the applied ones are rechecked in January on
   2026 alone (Project doc `claude/january-recheck-additions.md`). `PropModel.save` keeps top-level keys it
   does not own (e.g. `shade`) since Nov 17, 2026; before that a refit through `save` dropped them.
+- **WOPR standing in WR/TE receiving yards** (Nov 18, 2026, provisional, Ryan's call on a 14-of-15
+  trade-off; FEATURES.md "NFL: receivers whose WOPR is high for their projection",
+  `experiments/wopr_standing_test.py`, `nflmodel/woprstanding.py`): after the boosted and Questionable
+  steps and before defense-vs-position, a wide receiver's or tight end's receiving-yards projection
+  (10+ yards) is multiplied by `1 + b x z`, z being how far his WOPR sits from the usual for his
+  projection. The line, its spread and b are constants in `data/wopr_standing.json`, written only by
+  `experiments/wopr_standing_test.py --write-constants` (fitted on game-day projections before 2026).
+  Don't change the constants, the 10-yard cut-off or the clip without a new pre-set test; refit only
+  at the January recheck. Receptions and running backs are untouched. `woprstanding.APPLIED = False`
+  (or removing the file) puts the board back as it was.
 - **College prop legs on the Parlays page** (`parlays.cfb_book_legs`): priced off DraftKings and
   FanDuel. From Nov 13, 2026 (Ryan's call, provisional) two-sided main lines in passing yards,
   passing TDs, rushing yards and receiving yards carry the model nudge: the books' no-vig chance
