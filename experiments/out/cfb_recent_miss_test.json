@@ -1,0 +1,65 @@
+{
+ "rule": "see docstring",
+ "versions": {},
+ "tuning": {
+  "A": {
+   "games": 2203,
+   "base": [
+    12.345,
+    13.468
+   ],
+   "new": [
+    12.35,
+    13.479
+   ],
+   "diff": [
+    0.0047,
+    0.0114
+   ],
+   "se": [
+    0.0201,
+    0.0126
+   ]
+  },
+  "B": {
+   "games": 2203,
+   "base": [
+    12.345,
+    13.468
+   ],
+   "new": [
+    12.336,
+    13.482
+   ],
+   "diff": [
+    -0.0089,
+    0.0142
+   ],
+   "se": [
+    0.0253,
+    0.0154
+   ]
+  },
+  "C": {
+   "games": 2203,
+   "base": [
+    12.345,
+    13.468
+   ],
+   "new": [
+    12.34,
+    13.481
+   ],
+   "diff": [
+    -0.0052,
+    0.0132
+   ],
+   "se": [
+    0.0177,
+    0.017
+   ]
+  }
+ },
+ "better_on_both_tuning": [],
+ "verdict": "No version is better on both tuning measures: nothing carried to the holdout, nothing kept."
+}
