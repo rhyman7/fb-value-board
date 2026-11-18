@@ -1,0 +1,1194 @@
+{
+ "rungs": {
+  "2025": {
+   "n": 14298,
+   "games": 272,
+   "cleared": 0.7857,
+   "model_says": 0.751,
+   "books_say": 0.7867,
+   "brier_model": 0.16777,
+   "brier_books": 0.16189,
+   "model_minus_books": 0.00588,
+   "se": 0.00126
+  },
+  "2026 weeks 8-10": {
+   "n": 1964,
+   "games": 43,
+   "cleared": 0.7933,
+   "model_says": 0.7277,
+   "books_say": 0.7857,
+   "brier_model": 0.16713,
+   "brier_books": 0.15873,
+   "model_minus_books": 0.00839,
+   "se": 0.00374
+  }
+ },
+ "weeks_2026": [
+  8,
+  9,
+  10
+ ],
+ "step1": {
+  "2025": {
+   "all": {
+    "n": 14298,
+    "model": {
+     "calibration_miss": 0.00404,
+     "sorting": 0.00452,
+     "brier": 0.16777
+    },
+    "books": {
+     "calibration_miss": 1e-05,
+     "sorting": 0.0063,
+     "brier": 0.16189
+    }
+   },
+   "pass_yds": {
+    "n": 3263,
+    "model": {
+     "calibration_miss": 0.00088,
+     "sorting": 0.00682,
+     "brier": 0.16071
+    },
+    "books": {
+     "calibration_miss": 0.00034,
+     "sorting": 0.00645,
+     "brier": 0.16045
+    }
+   },
+   "rec_yds": {
+    "n": 7090,
+    "model": {
+     "calibration_miss": 0.00479,
+     "sorting": 0.0048,
+     "brier": 0.16652
+    },
+    "books": {
+     "calibration_miss": 0.00011,
+     "sorting": 0.00669,
+     "brier": 0.15983
+    }
+   },
+   "rush_yds": {
+    "n": 3945,
+    "model": {
+     "calibration_miss": 0.00811,
+     "sorting": 0.00453,
+     "brier": 0.17586
+    },
+    "books": {
+     "calibration_miss": 0.00036,
+     "sorting": 0.00619,
+     "brier": 0.16677
+    }
+   },
+   "cleared_by_model_band": [
+    {
+     "model_says": "40-50%",
+     "n": 168,
+     "avg_model": 0.46,
+     "avg_books": 0.71,
+     "cleared": 0.738
+    },
+    {
+     "model_says": "50-60%",
+     "n": 1026,
+     "avg_model": 0.561,
+     "avg_books": 0.711,
+     "cleared": 0.701
+    },
+    {
+     "model_says": "60-70%",
+     "n": 2620,
+     "avg_model": 0.66,
+     "avg_books": 0.721,
+     "cleared": 0.702
+    },
+    {
+     "model_says": "70-80%",
+     "n": 5480,
+     "avg_model": 0.753,
+     "avg_books": 0.777,
+     "cleared": 0.777
+    },
+    {
+     "model_says": "80-90%",
+     "n": 4052,
+     "avg_model": 0.844,
+     "avg_books": 0.842,
+     "cleared": 0.853
+    },
+    {
+     "model_says": "90-100%",
+     "n": 839,
+     "avg_model": 0.923,
+     "avg_books": 0.901,
+     "cleared": 0.908
+    }
+   ]
+  },
+  "2026 weeks 8-10": {
+   "all": {
+    "n": 1964,
+    "model": {
+     "calibration_miss": 0.00947,
+     "sorting": 0.00641,
+     "brier": 0.16713
+    },
+    "books": {
+     "calibration_miss": 0.00024,
+     "sorting": 0.00597,
+     "brier": 0.15873
+    }
+   },
+   "pass_yds": {
+    "n": 489,
+    "model": {
+     "calibration_miss": 0.00444,
+     "sorting": 0.01375,
+     "brier": 0.17194
+    },
+    "books": {
+     "calibration_miss": 0.00067,
+     "sorting": 0.00452,
+     "brier": 0.17748
+    }
+   },
+   "rec_yds": {
+    "n": 1034,
+    "model": {
+     "calibration_miss": 0.01221,
+     "sorting": 0.00417,
+     "brier": 0.16489
+    },
+    "books": {
+     "calibration_miss": 0.00115,
+     "sorting": 0.0063,
+     "brier": 0.15277
+    }
+   },
+   "rush_yds": {
+    "n": 441,
+    "model": {
+     "calibration_miss": 0.01659,
+     "sorting": 0.00969,
+     "brier": 0.16702
+    },
+    "books": {
+     "calibration_miss": 0.00087,
+     "sorting": 0.00856,
+     "brier": 0.15194
+    }
+   },
+   "cleared_by_model_band": [
+    {
+     "model_says": "40-50%",
+     "n": 51,
+     "avg_model": 0.464,
+     "avg_books": 0.697,
+     "cleared": 0.725
+    },
+    {
+     "model_says": "50-60%",
+     "n": 192,
+     "avg_model": 0.558,
+     "avg_books": 0.708,
+     "cleared": 0.677
+    },
+    {
+     "model_says": "60-70%",
+     "n": 462,
+     "avg_model": 0.66,
+     "avg_books": 0.726,
+     "cleared": 0.762
+    },
+    {
+     "model_says": "70-80%",
+     "n": 661,
+     "avg_model": 0.752,
+     "avg_books": 0.792,
+     "cleared": 0.812
+    },
+    {
+     "model_says": "80-90%",
+     "n": 500,
+     "avg_model": 0.842,
+     "avg_books": 0.857,
+     "cleared": 0.848
+    },
+    {
+     "model_says": "90-100%",
+     "n": 76,
+     "avg_model": 0.921,
+     "avg_books": 0.89,
+     "cleared": 0.882
+    }
+   ]
+  },
+  "re-read model, 2025 weeks 10-18": {
+   "as is": {
+    "n": 7567,
+    "games": 140,
+    "cleared": 0.7813,
+    "model_says": 0.7468,
+    "books_say": 0.7857,
+    "brier_model": 0.17309,
+    "brier_books": 0.16525,
+    "model_minus_books": 0.00783,
+    "se": 0.00169
+   },
+   "re-read": {
+    "n": 7567,
+    "games": 140,
+    "cleared": 0.7813,
+    "model_says": 0.7831,
+    "books_say": 0.7857,
+    "brier_model": 0.1697,
+    "brier_books": 0.16525,
+    "model_minus_books": 0.00445,
+    "se": 0.00131
+   }
+  },
+  "re-read model, 2026 weeks 8-10": {
+   "as is": {
+    "n": 1964,
+    "games": 43,
+    "cleared": 0.7933,
+    "model_says": 0.7277,
+    "books_say": 0.7857,
+    "brier_model": 0.16713,
+    "brier_books": 0.15873,
+    "model_minus_books": 0.00839,
+    "se": 0.00374
+   },
+   "re-read": {
+    "n": 1964,
+    "games": 43,
+    "cleared": 0.7933,
+    "model_says": 0.7692,
+    "books_say": 0.7857,
+    "brier_model": 0.1621,
+    "brier_books": 0.15873,
+    "model_minus_books": 0.00336,
+    "se": 0.00222
+   }
+  }
+ },
+ "step2": {
+  "stat": {
+   "pass_yds": {
+    "2025": {
+     "n": 3263,
+     "games": 272,
+     "cleared": 0.7885,
+     "model_says": 0.8044,
+     "books_say": 0.7853,
+     "brier_model": 0.16071,
+     "brier_books": 0.16045,
+     "model_minus_books": 0.00026,
+     "se": 0.00148
+    },
+    "2026 weeks 8-10": {
+     "n": 489,
+     "games": 43,
+     "cleared": 0.7628,
+     "model_says": 0.7315,
+     "books_say": 0.776,
+     "brier_model": 0.17194,
+     "brier_books": 0.17748,
+     "model_minus_books": -0.00554,
+     "se": 0.01127
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "rec_yds": {
+    "2025": {
+     "n": 7090,
+     "games": 257,
+     "cleared": 0.7887,
+     "model_says": 0.753,
+     "books_say": 0.7844,
+     "brier_model": 0.16652,
+     "brier_books": 0.15983,
+     "model_minus_books": 0.00669,
+     "se": 0.0015
+    },
+    "2026 weeks 8-10": {
+     "n": 1034,
+     "games": 43,
+     "cleared": 0.8046,
+     "model_says": 0.7337,
+     "books_say": 0.7871,
+     "brier_model": 0.16489,
+     "brier_books": 0.15277,
+     "model_minus_books": 0.01212,
+     "se": 0.00352
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "rush_yds": {
+    "2025": {
+     "n": 3945,
+     "games": 258,
+     "cleared": 0.7779,
+     "model_says": 0.7031,
+     "books_say": 0.7921,
+     "brier_model": 0.17586,
+     "brier_books": 0.16677,
+     "model_minus_books": 0.00909,
+     "se": 0.00323
+    },
+    "2026 weeks 8-10": {
+     "n": 441,
+     "games": 43,
+     "cleared": 0.8005,
+     "model_says": 0.7095,
+     "books_say": 0.7933,
+     "brier_model": 0.16702,
+     "brier_books": 0.15194,
+     "model_minus_books": 0.01509,
+     "se": 0.00652
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "position": {
+   "QB": {
+    "2025": {
+     "n": 3893,
+     "games": 272,
+     "cleared": 0.7837,
+     "model_says": 0.7943,
+     "books_say": 0.782,
+     "brier_model": 0.16414,
+     "brier_books": 0.1644,
+     "model_minus_books": -0.00026,
+     "se": 0.00139
+    },
+    "2026 weeks 8-10": {
+     "n": 559,
+     "games": 43,
+     "cleared": 0.7388,
+     "model_says": 0.727,
+     "books_say": 0.7744,
+     "brier_model": 0.18163,
+     "brier_books": 0.18946,
+     "model_minus_books": -0.00783,
+     "se": 0.01016
+    },
+    "met_2025_bar": true,
+    "lead": false
+   },
+   "RB": {
+    "2025": {
+     "n": 3907,
+     "games": 258,
+     "cleared": 0.7776,
+     "model_says": 0.6974,
+     "books_say": 0.7913,
+     "brier_model": 0.17615,
+     "brier_books": 0.1657,
+     "model_minus_books": 0.01046,
+     "se": 0.00312
+    },
+    "2026 weeks 8-10": {
+     "n": 483,
+     "games": 43,
+     "cleared": 0.8095,
+     "model_says": 0.7085,
+     "books_say": 0.7894,
+     "brier_model": 0.16519,
+     "brier_books": 0.14909,
+     "model_minus_books": 0.0161,
+     "se": 0.00715
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "TE": {
+    "2025": {
+     "n": 1593,
+     "games": 225,
+     "cleared": 0.7922,
+     "model_says": 0.7458,
+     "books_say": 0.7749,
+     "brier_model": 0.16736,
+     "brier_books": 0.16071,
+     "model_minus_books": 0.00666,
+     "se": 0.00315
+    },
+    "2026 weeks 8-10": {
+     "n": 284,
+     "games": 43,
+     "cleared": 0.7993,
+     "model_says": 0.735,
+     "books_say": 0.7847,
+     "brier_model": 0.15742,
+     "brier_books": 0.15288,
+     "model_minus_books": 0.00454,
+     "se": 0.00624
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "WR": {
+    "2025": {
+     "n": 4905,
+     "games": 254,
+     "cleared": 0.7916,
+     "model_says": 0.7609,
+     "books_say": 0.7907,
+     "brier_model": 0.1641,
+     "brier_books": 0.15724,
+     "model_minus_books": 0.00686,
+     "se": 0.00189
+    },
+    "2026 weeks 8-10": {
+     "n": 638,
+     "games": 43,
+     "cleared": 0.826,
+     "model_says": 0.7397,
+     "books_say": 0.7932,
+     "brier_model": 0.1602,
+     "brier_books": 0.14172,
+     "model_minus_books": 0.01849,
+     "se": 0.00519
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "projection": {
+   "high third": {
+    "2025": {
+     "n": 4766,
+     "games": 255,
+     "cleared": 0.8084,
+     "model_says": 0.7909,
+     "books_say": 0.8046,
+     "brier_model": 0.1501,
+     "brier_books": 0.14875,
+     "model_minus_books": 0.00136,
+     "se": 0.00154
+    },
+    "2026 weeks 8-10": {
+     "n": 655,
+     "games": 42,
+     "cleared": 0.8061,
+     "model_says": 0.7804,
+     "books_say": 0.8062,
+     "brier_model": 0.15666,
+     "brier_books": 0.15145,
+     "model_minus_books": 0.00521,
+     "se": 0.00346
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "low third": {
+    "2025": {
+     "n": 4767,
+     "games": 259,
+     "cleared": 0.7655,
+     "model_says": 0.7043,
+     "books_say": 0.765,
+     "brier_model": 0.18724,
+     "brier_books": 0.17412,
+     "model_minus_books": 0.01312,
+     "se": 0.00281
+    },
+    "2026 weeks 8-10": {
+     "n": 655,
+     "games": 42,
+     "cleared": 0.7359,
+     "model_says": 0.6729,
+     "books_say": 0.7595,
+     "brier_model": 0.19364,
+     "brier_books": 0.19038,
+     "model_minus_books": 0.00326,
+     "se": 0.00944
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "middle third": {
+    "2025": {
+     "n": 4765,
+     "games": 251,
+     "cleared": 0.7832,
+     "model_says": 0.7578,
+     "books_say": 0.7907,
+     "brier_model": 0.16596,
+     "brier_books": 0.16279,
+     "model_minus_books": 0.00317,
+     "se": 0.00181
+    },
+    "2026 weeks 8-10": {
+     "n": 654,
+     "games": 43,
+     "cleared": 0.8379,
+     "model_says": 0.7299,
+     "books_say": 0.7915,
+     "brier_model": 0.15106,
+     "brier_books": 0.13434,
+     "model_minus_books": 0.01672,
+     "se": 0.00524
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "rung_vs_main": {
+   "50-70%": {
+    "2025": {
+     "n": 5282,
+     "games": 270,
+     "cleared": 0.7609,
+     "model_says": 0.7232,
+     "books_say": 0.7605,
+     "brier_model": 0.18337,
+     "brier_books": 0.17783,
+     "model_minus_books": 0.00554,
+     "se": 0.00184
+    },
+    "2026 weeks 8-10": {
+     "n": 590,
+     "games": 43,
+     "cleared": 0.7627,
+     "model_says": 0.6972,
+     "books_say": 0.7528,
+     "brier_model": 0.18577,
+     "brier_books": 0.17837,
+     "model_minus_books": 0.0074,
+     "se": 0.00504
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "70-90%": {
+    "2025": {
+     "n": 3022,
+     "games": 272,
+     "cleared": 0.7234,
+     "model_says": 0.7303,
+     "books_say": 0.7291,
+     "brier_model": 0.19629,
+     "brier_books": 0.19544,
+     "model_minus_books": 0.00085,
+     "se": 0.00193
+    },
+    "2026 weeks 8-10": {
+     "n": 415,
+     "games": 43,
+     "cleared": 0.7349,
+     "model_says": 0.6853,
+     "books_say": 0.7353,
+     "brier_model": 0.18913,
+     "brier_books": 0.19215,
+     "model_minus_books": -0.00302,
+     "se": 0.00991
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "90%+": {
+    "2025": {
+     "n": 1,
+     "games": 1,
+     "cleared": 1.0,
+     "model_says": 0.6855,
+     "books_say": 0.6502,
+     "brier_model": 0.09893,
+     "brier_books": 0.12235,
+     "model_minus_books": -0.02341,
+     "se": null
+    },
+    "2026 weeks 8-10": null,
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "no main line": {
+    "2025": {
+     "n": 36,
+     "games": 5,
+     "cleared": 0.7778,
+     "model_says": 0.6913,
+     "books_say": 0.7756,
+     "brier_model": 0.17318,
+     "brier_books": 0.15763,
+     "model_minus_books": 0.01555,
+     "se": 0.00592
+    },
+    "2026 weeks 8-10": null,
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "under 50%": {
+    "2025": {
+     "n": 5957,
+     "games": 261,
+     "cleared": 0.8393,
+     "model_says": 0.7864,
+     "books_say": 0.8394,
+     "brier_model": 0.13945,
+     "brier_books": 0.13076,
+     "model_minus_books": 0.00868,
+     "se": 0.00138
+    },
+    "2026 weeks 8-10": {
+     "n": 959,
+     "games": 43,
+     "cleared": 0.8373,
+     "model_says": 0.7648,
+     "books_say": 0.8277,
+     "brier_model": 0.14614,
+     "brier_books": 0.13219,
+     "model_minus_books": 0.01394,
+     "se": 0.00293
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "books_reading": {
+   "65-75%": {
+    "2025": {
+     "n": 5368,
+     "games": 272,
+     "cleared": 0.6962,
+     "model_says": 0.6755,
+     "books_say": 0.6982,
+     "brier_model": 0.21612,
+     "brier_books": 0.21104,
+     "model_minus_books": 0.00509,
+     "se": 0.00173
+    },
+    "2026 weeks 8-10": {
+     "n": 758,
+     "games": 43,
+     "cleared": 0.7045,
+     "model_says": 0.6435,
+     "books_say": 0.6985,
+     "brier_model": 0.21836,
+     "brier_books": 0.20861,
+     "model_minus_books": 0.00975,
+     "se": 0.00412
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "75-85%": {
+    "2025": {
+     "n": 5036,
+     "games": 271,
+     "cleared": 0.8048,
+     "model_says": 0.7653,
+     "books_say": 0.8029,
+     "brier_model": 0.16165,
+     "brier_books": 0.15609,
+     "model_minus_books": 0.00557,
+     "se": 0.00141
+    },
+    "2026 weeks 8-10": {
+     "n": 654,
+     "games": 43,
+     "cleared": 0.8211,
+     "model_says": 0.7457,
+     "books_say": 0.8024,
+     "brier_model": 0.15677,
+     "brier_books": 0.14757,
+     "model_minus_books": 0.0092,
+     "se": 0.00474
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "85-95%": {
+    "2025": {
+     "n": 3894,
+     "games": 270,
+     "cleared": 0.8844,
+     "model_says": 0.8365,
+     "books_say": 0.8879,
+     "brier_model": 0.10901,
+     "brier_books": 0.10163,
+     "model_minus_books": 0.00739,
+     "se": 0.00126
+    },
+    "2026 weeks 8-10": {
+     "n": 552,
+     "games": 43,
+     "cleared": 0.8822,
+     "model_says": 0.822,
+     "books_say": 0.8856,
+     "brier_model": 0.10905,
+     "brier_books": 0.10348,
+     "model_minus_books": 0.00557,
+     "se": 0.00412
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "disagreement": {
+   "model 5+ above": {
+    "2025": {
+     "n": 1539,
+     "games": 232,
+     "cleared": 0.7472,
+     "model_says": 0.8072,
+     "books_say": 0.7294,
+     "brier_model": 0.18787,
+     "brier_books": 0.18442,
+     "model_minus_books": 0.00345,
+     "se": 0.00312
+    },
+    "2026 weeks 8-10": {
+     "n": 102,
+     "games": 27,
+     "cleared": 0.7353,
+     "model_says": 0.8277,
+     "books_say": 0.7422,
+     "brier_model": 0.2101,
+     "brier_books": 0.19629,
+     "model_minus_books": 0.01381,
+     "se": 0.01229
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "model 5+ below": {
+    "2025": {
+     "n": 5117,
+     "games": 261,
+     "cleared": 0.7801,
+     "model_says": 0.6757,
+     "books_say": 0.7964,
+     "brier_model": 0.1798,
+     "brier_books": 0.16471,
+     "model_minus_books": 0.01509,
+     "se": 0.00316
+    },
+    "2026 weeks 8-10": {
+     "n": 942,
+     "games": 43,
+     "cleared": 0.7898,
+     "model_says": 0.6682,
+     "books_say": 0.7898,
+     "brier_model": 0.1734,
+     "brier_books": 0.15802,
+     "model_minus_books": 0.01538,
+     "se": 0.00706
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "within 5": {
+    "2025": {
+     "n": 7642,
+     "games": 272,
+     "cleared": 0.7972,
+     "model_says": 0.79,
+     "books_say": 0.7918,
+     "brier_model": 0.15567,
+     "brier_books": 0.15546,
+     "model_minus_books": 0.00021,
+     "se": 0.00038
+    },
+    "2026 weeks 8-10": {
+     "n": 920,
+     "games": 43,
+     "cleared": 0.8033,
+     "model_says": 0.7776,
+     "books_say": 0.7863,
+     "brier_model": 0.15594,
+     "brier_books": 0.1553,
+     "model_minus_books": 0.00063,
+     "se": 0.00125
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "injury_report": {
+   "listed": {
+    "2025": {
+     "n": 613,
+     "games": 88,
+     "cleared": 0.6868,
+     "model_says": 0.7542,
+     "books_say": 0.7894,
+     "brier_model": 0.2219,
+     "brier_books": 0.21818,
+     "model_minus_books": 0.00372,
+     "se": 0.00521
+    },
+    "2026 weeks 8-10": {
+     "n": 140,
+     "games": 22,
+     "cleared": 0.9,
+     "model_says": 0.7483,
+     "books_say": 0.7959,
+     "brier_model": 0.11613,
+     "brier_books": 0.09832,
+     "model_minus_books": 0.01781,
+     "se": 0.00953
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "not listed": {
+    "2025": {
+     "n": 13685,
+     "games": 272,
+     "cleared": 0.7901,
+     "model_says": 0.7508,
+     "books_say": 0.7866,
+     "brier_model": 0.16534,
+     "brier_books": 0.15936,
+     "model_minus_books": 0.00598,
+     "se": 0.0013
+    },
+    "2026 weeks 8-10": {
+     "n": 1824,
+     "games": 43,
+     "cleared": 0.7851,
+     "model_says": 0.7261,
+     "books_say": 0.7849,
+     "brier_model": 0.17104,
+     "brier_books": 0.16337,
+     "model_minus_books": 0.00767,
+     "se": 0.00433
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "role_change": {
+   "changed": {
+    "2025": {
+     "n": 2470,
+     "games": 233,
+     "cleared": 0.8445,
+     "model_says": 0.7199,
+     "books_say": 0.7933,
+     "brier_model": 0.1431,
+     "brier_books": 0.12657,
+     "model_minus_books": 0.01653,
+     "se": 0.00369
+    },
+    "2026 weeks 8-10": {
+     "n": 324,
+     "games": 41,
+     "cleared": 0.8179,
+     "model_says": 0.735,
+     "books_say": 0.7953,
+     "brier_model": 0.16788,
+     "brier_books": 0.14668,
+     "model_minus_books": 0.02121,
+     "se": 0.00832
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "steady": {
+    "2025": {
+     "n": 11828,
+     "games": 272,
+     "cleared": 0.7734,
+     "model_says": 0.7574,
+     "books_say": 0.7854,
+     "brier_model": 0.17292,
+     "brier_books": 0.16926,
+     "model_minus_books": 0.00366,
+     "se": 0.00133
+    },
+    "2026 weeks 8-10": {
+     "n": 1640,
+     "games": 43,
+     "cleared": 0.7884,
+     "model_says": 0.7263,
+     "books_say": 0.7838,
+     "brier_model": 0.16698,
+     "brier_books": 0.16112,
+     "model_minus_books": 0.00586,
+     "se": 0.00448
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "margin": {
+   "favourite by 7+": {
+    "2025": {
+     "n": 2195,
+     "games": 72,
+     "cleared": 0.8046,
+     "model_says": 0.7604,
+     "books_say": 0.788,
+     "brier_model": 0.15794,
+     "brier_books": 0.15328,
+     "model_minus_books": 0.00466,
+     "se": 0.00299
+    },
+    "2026 weeks 8-10": {
+     "n": 299,
+     "games": 12,
+     "cleared": 0.8161,
+     "model_says": 0.7307,
+     "books_say": 0.7844,
+     "brier_model": 0.15128,
+     "brier_books": 0.14343,
+     "model_minus_books": 0.00785,
+     "se": 0.00607
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "underdog by 7+": {
+    "2025": {
+     "n": 1499,
+     "games": 69,
+     "cleared": 0.7332,
+     "model_says": 0.7507,
+     "books_say": 0.7844,
+     "brier_model": 0.19691,
+     "brier_books": 0.18862,
+     "model_minus_books": 0.00829,
+     "se": 0.00383
+    },
+    "2026 weeks 8-10": {
+     "n": 216,
+     "games": 12,
+     "cleared": 0.6898,
+     "model_says": 0.7543,
+     "books_say": 0.7789,
+     "brier_model": 0.22095,
+     "brier_books": 0.21177,
+     "model_minus_books": 0.00918,
+     "se": 0.00861
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "within 7": {
+    "2025": {
+     "n": 10604,
+     "games": 200,
+     "cleared": 0.7892,
+     "model_says": 0.749,
+     "books_say": 0.7868,
+     "brier_model": 0.16568,
+     "brier_books": 0.15989,
+     "model_minus_books": 0.0058,
+     "se": 0.00152
+    },
+    "2026 weeks 8-10": {
+     "n": 1449,
+     "games": 31,
+     "cleared": 0.804,
+     "model_says": 0.7231,
+     "books_say": 0.787,
+     "brier_model": 0.16237,
+     "brier_books": 0.15399,
+     "model_minus_books": 0.00839,
+     "se": 0.00468
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "total": {
+   "total 44.5 or less": {
+    "2025": {
+     "n": 5511,
+     "games": 118,
+     "cleared": 0.7715,
+     "model_says": 0.7452,
+     "books_say": 0.7842,
+     "brier_model": 0.17643,
+     "brier_books": 0.16928,
+     "model_minus_books": 0.00715,
+     "se": 0.00206
+    },
+    "2026 weeks 8-10": {
+     "n": 708,
+     "games": 17,
+     "cleared": 0.7867,
+     "model_says": 0.7201,
+     "books_say": 0.7821,
+     "brier_model": 0.17418,
+     "brier_books": 0.16279,
+     "model_minus_books": 0.01139,
+     "se": 0.00779
+    },
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "total above 44.5": {
+    "2025": {
+     "n": 8787,
+     "games": 154,
+     "cleared": 0.7946,
+     "model_says": 0.7546,
+     "books_say": 0.7883,
+     "brier_model": 0.16234,
+     "brier_books": 0.15725,
+     "model_minus_books": 0.00509,
+     "se": 0.0016
+    },
+    "2026 weeks 8-10": {
+     "n": 1256,
+     "games": 26,
+     "cleared": 0.797,
+     "model_says": 0.732,
+     "books_say": 0.7877,
+     "brier_model": 0.16315,
+     "brier_books": 0.15645,
+     "model_minus_books": 0.0067,
+     "se": 0.00395
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  },
+  "weeks": {
+   "weeks 1-6": {
+    "2025": {
+     "n": 4824,
+     "games": 90,
+     "cleared": 0.7848,
+     "model_says": 0.7522,
+     "books_say": 0.7877,
+     "brier_model": 0.16619,
+     "brier_books": 0.16168,
+     "model_minus_books": 0.00451,
+     "se": 0.00238
+    },
+    "2026 weeks 8-10": null,
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "weeks 13-18": {
+    "2025": {
+     "n": 5168,
+     "games": 97,
+     "cleared": 0.7827,
+     "model_says": 0.7447,
+     "books_say": 0.7851,
+     "brier_model": 0.17184,
+     "brier_books": 0.16542,
+     "model_minus_books": 0.00642,
+     "se": 0.00202
+    },
+    "2026 weeks 8-10": null,
+    "met_2025_bar": false,
+    "lead": false
+   },
+   "weeks 7-12": {
+    "2025": {
+     "n": 4306,
+     "games": 85,
+     "cleared": 0.7903,
+     "model_says": 0.7571,
+     "books_say": 0.7876,
+     "brier_model": 0.16465,
+     "brier_books": 0.15788,
+     "model_minus_books": 0.00678,
+     "se": 0.00216
+    },
+    "2026 weeks 8-10": {
+     "n": 1964,
+     "games": 43,
+     "cleared": 0.7933,
+     "model_says": 0.7277,
+     "books_say": 0.7857,
+     "brier_model": 0.16713,
+     "brier_books": 0.15873,
+     "model_minus_books": 0.00839,
+     "se": 0.00374
+    },
+    "met_2025_bar": false,
+    "lead": false
+   }
+  }
+ },
+ "leads": [],
+ "step3": {
+  "2025": {
+   "model 5+ above the books": {
+    "bets": 1308,
+    "games": 232,
+    "cleared": 0.7477,
+    "avg_decimal_price": 1.267,
+    "return_per_dollar": -0.0587,
+    "se": 0.0243,
+    "price_clv": {
+     "n": 1293,
+     "mean": 0.0105,
+     "se": 0.0017
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.1498,
+     "boost_25pct": -0.0418
+    }
+   },
+   "every floor rung": {
+    "bets": 10839,
+    "games": 272,
+    "cleared": 0.7889,
+    "avg_decimal_price": 1.1932,
+    "return_per_dollar": -0.0676,
+    "se": 0.0094,
+    "price_clv": {
+     "n": 10568,
+     "mean": -0.0006,
+     "se": 0.0006
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.1658,
+     "boost_25pct": -0.0801
+    }
+   }
+  },
+  "2026 weeks 8-10": {
+   "model 5+ above the books": {
+    "bets": 102,
+    "games": 27,
+    "cleared": 0.7353,
+    "avg_decimal_price": 1.2486,
+    "return_per_dollar": -0.0834,
+    "se": 0.0767,
+    "price_clv": {
+     "n": 38,
+     "mean": 0.0149,
+     "se": 0.0069
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.2262,
+     "boost_25pct": -0.1321
+    }
+   },
+   "every floor rung": {
+    "bets": 1964,
+    "games": 43,
+    "cleared": 0.7933,
+    "avg_decimal_price": 1.1939,
+    "return_per_dollar": -0.0606,
+    "se": 0.0237,
+    "price_clv": {
+     "n": 930,
+     "mean": -0.0199,
+     "se": 0.0035
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.1505,
+     "boost_25pct": -0.063
+    }
+   }
+  }
+ }
+}
