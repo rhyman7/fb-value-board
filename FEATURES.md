@@ -2795,3 +2795,34 @@ points at the projection, 0.7 at 80% of it, 0.8 at 65%), about 0.3 / 0.5 / 0.6 i
 the same refit without it. NFL receiving this week: 0.3 / 0.5 / 0.6 points. Projections do not change.
 Rechecked in January on 2026 alone, with the two pieces not applied (Project doc
 `claude/january-recheck-additions.md`).
+
+## NFL: pulling back projections that sit well above a player's season average (Nov 18, 2026): a trade-off, not applied
+
+Lead: the Weekly Review's Best Matchups page (2026 weeks 7-10) showed listed NFL players reaching
+their typical game less often than similar unlisted players. Rule written before the run: Project doc
+`claude/plan-nfl-lift-shrink-test-2026-11-18.md`. Script `experiments/nfl_lift_shrink_test.py`,
+output `experiments/out/nfl_lift_shrink_test.json`.
+
+The change tested, after the final projection: `new = proj - b * max(0, proj - (1+T) * season
+average)`, players with 3+ earlier games this season, b per stat fitted on earlier seasons only.
+Versions A T=0, B T=0.25, C T=0.50; A was chosen on tuning for all three stats.
+
+| Stat | Tuning RMSE game-day | Tuning RMSE bet-time | Holdout RMSE game-day | Holdout RMSE bet-time | Brier, closing lines | Brier, pricing snapshot |
+|---|---|---|---|---|---|---|
+| Passing | -0.141 (se 0.086) | -0.228 (0.100) | -0.125 (0.105) | -0.142 (0.117) | **+0.0034 (0.0012) worse** | **+0.0031 (0.0012) worse** |
+| Rushing | -0.023 (0.028) | -0.038 (0.035) | -0.063 (0.027) | -0.093 (0.031) | **+0.0006 (0.0003) worse** | +0.0003 (0.0004) worse |
+| Receiving | -0.068 (0.014) | -0.048 (0.012) | -0.009 (0.011) | -0.021 (0.010) | **+0.0011 (0.0002) worse** | **+0.0009 (0.0003) worse** |
+
+(Negative = candidate better. Tuning 2014-18, holdout 2019-25, Brier at 2023-25 DK/FD main lines.)
+
+- Mixed on every stat: yardage error a hair better (0.1% to 0.3%), the calls at the books' lines
+  worse on all six prop measures, most by 2.5 to 5 standard errors. Under the rule that is a
+  trade-off for Ryan, not a keep. Recommendation: do not apply; the board is used for the calls at
+  the lines, and those get worse.
+- The lead is real on average but small: players projected 25%+ above their season average finished
+  under the projection by 2.4 yards rushing (se 0.6, n 2,146) and 1.6 receiving (se 0.3, n 5,801) in
+  the holdout, and 18 passing (se 9, n 75). The fitted pull-back over-corrects (after it they run
+  1.1 to 1.3 yards over), and b drifts down across seasons.
+- Fitted b in the holdout: passing 0.43-0.57, rushing 0.24-0.28, receiving 0.28-0.36. Share of
+  player-games touched by version A: 29% passing, 40% rushing, 40% receiving.
+- Nothing in the model, boards or Best Overall list changed.

@@ -1,0 +1,381 @@
+{
+ "pass_yds": {
+  "tuning": {
+   "A": {
+    "gameday": {
+     "n": 2670,
+     "now": 87.9463,
+     "candidate": 87.805,
+     "diff": -0.14129,
+     "se": 0.08605
+    },
+    "bettime": {
+     "n": 2563,
+     "now": 89.1526,
+     "candidate": 88.9246,
+     "diff": -0.22803,
+     "se": 0.09954
+    }
+   },
+   "B": {
+    "gameday": {
+     "n": 2670,
+     "now": 87.9463,
+     "candidate": 87.9648,
+     "diff": 0.01847,
+     "se": 0.02527
+    },
+    "bettime": {
+     "n": 2563,
+     "now": 89.1526,
+     "candidate": 89.1441,
+     "diff": -0.00852,
+     "se": 0.03111
+    }
+   },
+   "C": {
+    "gameday": {
+     "n": 2670,
+     "now": 87.9463,
+     "candidate": 87.9463,
+     "diff": 0.0,
+     "se": 0.0
+    },
+    "bettime": {
+     "n": 2563,
+     "now": 89.1526,
+     "candidate": 89.1526,
+     "diff": 0.0,
+     "se": 0.0
+    }
+   }
+  },
+  "better_on_both_tuning": [
+   "A"
+  ],
+  "touched_share_tuning": {
+   "A": 0.294,
+   "B": 0.015,
+   "C": 0.001
+  },
+  "big_lift_tuning": {
+   "n": 39,
+   "avg_actual_minus_proj_now": -20.1,
+   "se": 16.01,
+   "after": -20.1,
+   "met_now": 0.513
+  },
+  "chosen": "A",
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.52,
+   "2016": 0.448,
+   "2017": 0.529,
+   "2018": 0.421,
+   "2019": 0.534,
+   "2020": 0.491,
+   "2021": 0.425,
+   "2022": 0.508,
+   "2023": 0.572,
+   "2024": 0.563,
+   "2025": 0.473,
+   "2026": 0.436
+  },
+  "holdout": {
+   "gameday": {
+    "n": 3920,
+    "now": 88.3027,
+    "candidate": 88.1777,
+    "diff": -0.12495,
+    "se": 0.10535
+   },
+   "bettime": {
+    "n": 3659,
+    "now": 86.2378,
+    "candidate": 86.096,
+    "diff": -0.14183,
+    "se": 0.11658
+   }
+  },
+  "big_lift_holdout": {
+   "n": 75,
+   "avg_actual_minus_proj_now": -18.32,
+   "se": 9.13,
+   "after": 13.58,
+   "met_now": 0.467
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 3055,
+    "now": 0.25284,
+    "candidate": 0.25629,
+    "books": 0.2502,
+    "diff": 0.003447,
+    "se": 0.001159
+   },
+   "pricing snapshot, bet-time": {
+    "n": 2597,
+    "now": 0.25088,
+    "candidate": 0.25394,
+    "books": 0.25016,
+    "diff": 0.003057,
+    "se": 0.00121
+   }
+  },
+  "verdict": "Trade-off: mixed across the six measures"
+ },
+ "rush_yds": {
+  "tuning": {
+   "A": {
+    "gameday": {
+     "n": 6027,
+     "now": 32.3134,
+     "candidate": 32.2907,
+     "diff": -0.02273,
+     "se": 0.02809
+    },
+    "bettime": {
+     "n": 5984,
+     "now": 32.5954,
+     "candidate": 32.5577,
+     "diff": -0.0377,
+     "se": 0.03483
+    }
+   },
+   "B": {
+    "gameday": {
+     "n": 6027,
+     "now": 32.3134,
+     "candidate": 32.3026,
+     "diff": -0.01084,
+     "se": 0.0247
+    },
+    "bettime": {
+     "n": 5984,
+     "now": 32.5954,
+     "candidate": 32.5508,
+     "diff": -0.04458,
+     "se": 0.0298
+    }
+   },
+   "C": {
+    "gameday": {
+     "n": 6027,
+     "now": 32.3134,
+     "candidate": 32.295,
+     "diff": -0.01846,
+     "se": 0.02304
+    },
+    "bettime": {
+     "n": 5984,
+     "now": 32.5954,
+     "candidate": 32.5639,
+     "diff": -0.03156,
+     "se": 0.02684
+    }
+   }
+  },
+  "better_on_both_tuning": [
+   "A",
+   "B",
+   "C"
+  ],
+  "touched_share_tuning": {
+   "A": 0.399,
+   "B": 0.224,
+   "C": 0.142
+  },
+  "big_lift_tuning": {
+   "n": 1348,
+   "avg_actual_minus_proj_now": -2.57,
+   "se": 0.83,
+   "after": -2.57,
+   "met_now": 0.355
+  },
+  "chosen": "A",
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0,
+   "2016": 0.325,
+   "2017": 0.289,
+   "2018": 0.271,
+   "2019": 0.248,
+   "2020": 0.282,
+   "2021": 0.271,
+   "2022": 0.258,
+   "2023": 0.238,
+   "2024": 0.246,
+   "2025": 0.252,
+   "2026": 0.242
+  },
+  "holdout": {
+   "gameday": {
+    "n": 8610,
+    "now": 30.472,
+    "candidate": 30.4086,
+    "diff": -0.06333,
+    "se": 0.02689
+   },
+   "bettime": {
+    "n": 8592,
+    "now": 30.7041,
+    "candidate": 30.6114,
+    "diff": -0.09278,
+    "se": 0.03139
+   }
+  },
+  "big_lift_holdout": {
+   "n": 2146,
+   "avg_actual_minus_proj_now": -2.39,
+   "se": 0.63,
+   "after": 1.11,
+   "met_now": 0.369
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 7514,
+    "now": 0.25867,
+    "candidate": 0.2593,
+    "books": 0.24992,
+    "diff": 0.000637,
+    "se": 0.000334
+   },
+   "pricing snapshot, bet-time": {
+    "n": 4656,
+    "now": 0.25436,
+    "candidate": 0.25464,
+    "books": 0.2499,
+    "diff": 0.000283,
+    "se": 0.000419
+   }
+  },
+  "verdict": "Trade-off: mixed across the six measures"
+ },
+ "rec_yds": {
+  "tuning": {
+   "A": {
+    "gameday": {
+     "n": 18750,
+     "now": 28.918,
+     "candidate": 28.8504,
+     "diff": -0.06759,
+     "se": 0.01431
+    },
+    "bettime": {
+     "n": 18777,
+     "now": 28.9176,
+     "candidate": 28.8698,
+     "diff": -0.04786,
+     "se": 0.01233
+    }
+   },
+   "B": {
+    "gameday": {
+     "n": 18750,
+     "now": 28.918,
+     "candidate": 28.8782,
+     "diff": -0.03978,
+     "se": 0.0104
+    },
+    "bettime": {
+     "n": 18777,
+     "now": 28.9176,
+     "candidate": 28.8864,
+     "diff": -0.03128,
+     "se": 0.00959
+    }
+   },
+   "C": {
+    "gameday": {
+     "n": 18750,
+     "now": 28.918,
+     "candidate": 28.895,
+     "diff": -0.023,
+     "se": 0.00846
+    },
+    "bettime": {
+     "n": 18777,
+     "now": 28.9176,
+     "candidate": 28.898,
+     "diff": -0.01964,
+     "se": 0.00764
+    }
+   }
+  },
+  "better_on_both_tuning": [
+   "A",
+   "B",
+   "C"
+  ],
+  "touched_share_tuning": {
+   "A": 0.398,
+   "B": 0.208,
+   "C": 0.123
+  },
+  "big_lift_tuning": {
+   "n": 3897,
+   "avg_actual_minus_proj_now": -2.6,
+   "se": 0.4,
+   "after": -2.6,
+   "met_now": 0.347
+  },
+  "chosen": "A",
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.192,
+   "2016": 0.327,
+   "2017": 0.395,
+   "2018": 0.397,
+   "2019": 0.364,
+   "2020": 0.317,
+   "2021": 0.307,
+   "2022": 0.312,
+   "2023": 0.3,
+   "2024": 0.298,
+   "2025": 0.283,
+   "2026": 0.266
+  },
+  "holdout": {
+   "gameday": {
+    "n": 27045,
+    "now": 27.1742,
+    "candidate": 27.1655,
+    "diff": -0.00875,
+    "se": 0.01106
+   },
+   "bettime": {
+    "n": 27075,
+    "now": 27.2302,
+    "candidate": 27.2096,
+    "diff": -0.02061,
+    "se": 0.01048
+   }
+  },
+  "big_lift_holdout": {
+   "n": 5801,
+   "avg_actual_minus_proj_now": -1.57,
+   "se": 0.31,
+   "after": 1.28,
+   "met_now": 0.359
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 17582,
+    "now": 0.25699,
+    "candidate": 0.25811,
+    "books": 0.24993,
+    "diff": 0.001121,
+    "se": 0.000211
+   },
+   "pricing snapshot, bet-time": {
+    "n": 10016,
+    "now": 0.25579,
+    "candidate": 0.25669,
+    "books": 0.25002,
+    "diff": 0.000904,
+    "se": 0.000256
+   }
+  },
+  "verdict": "Trade-off: mixed across the six measures"
+ }
+}
