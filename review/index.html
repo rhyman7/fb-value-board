@@ -157,6 +157,19 @@ td.closer { color: var(--good); font-weight: 700; }
 .pn { display: flex; justify-content: space-between; gap: 12px; font-size: .875rem; }
 .pn a { color: var(--text-dim); text-decoration: none; } .pn a:hover { color: var(--text); }
 .scroll { overflow-x: auto; }
+.tiles.two { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.tile .of { font-size: 1rem; font-weight: 600; color: var(--text-dim); font-stretch: 80%; }
+.tile .bar { height: 6px; border-radius: 3px; background: var(--neg-bg); margin: 8px 0 6px; overflow: hidden; } .tile .bar i { display: block; height: 100%; background: var(--good); }
+.tile.luck { border-color: rgba(251,191,36,.45); } .tile.luck .tag { color: var(--luck); }
+.filters { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-bottom: 12px; }
+.fg { display: flex; flex-wrap: wrap; gap: 4px; }
+.fb { font: inherit; font-size: .8125rem; font-weight: 600; min-height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; }
+.fb:hover { color: var(--text); } .fb.on { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+#pq { font: inherit; font-size: .875rem; min-height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); min-width: 180px; }
+th.srt { cursor: pointer; white-space: nowrap; user-select: none; } th.srt:hover, th.srt.on { color: var(--text); } th.l, .ptab td:nth-child(-n+4) { text-align: left; }
+.ptab td { white-space: nowrap; } .ptab td:first-child { white-space: normal; min-width: 150px; } .ptab .sm2 { white-space: normal; }
+@media (max-width: 860px) { .tiles.two { grid-template-columns: minmax(0,1fr); } .topnav { flex-wrap: wrap; } .weeknav { flex-basis: 100%; min-height: 36px; } .wk-label { margin-left: 0; } }
+
 .sp { padding: 10px 0; border-bottom: 1px solid rgba(53,58,66,.55); } .sp:first-of-type { padding-top: 0; }
 .sp-top { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; } .sp-n { margin-left: auto; font-size: 1.1rem; font-stretch: 68%; font-weight: 800; }
 .sm2 { font-size: .78rem; margin-top: 2px; }
@@ -262,20 +275,22 @@ async function week(lg, w) {
 }
 
 /* ---------- pieces ---------- */
-function weekStrip(lg, i, sel) {
+function weekStrip(lg, i, sel, mode) {
+  const wk = w => mode === "players" ? href(lg, "players", w) : href(lg, w);
   const done = new Set(i.weeks.map(w => w.week));
   const last = i.weeks.length ? i.weeks[i.weeks.length - 1].week : 0;
   const top = lg === "nfl" ? 18 : 15;
   let ws = "";
   for (let w = 1; w <= top; w++) {
-    if (done.has(w)) ws += `<a class="wk${w === sel ? " sel" : ""}" href="${href(lg, w)}"${w === sel ? ' aria-current="page"' : ""} title="Week ${w}: reviewed">${w}</a>`;
+    if (done.has(w)) ws += `<a class="wk${w === sel ? " sel" : ""}" href="${wk(w)}"${w === sel ? ' aria-current="page"' : ""} title="Week ${w}: reviewed">${w}</a>`;
     else if (w < last) ws += `<span class="wk next" title="Week ${w}: not on the board's archive">${w}</span>`;
     else if (w === last + 1) ws += `<span class="wk grading" title="Week ${w}: reviewed ${LEAGUES[lg].when}">${w}</span>`;
     else ws += `<span class="wk next" title="Week ${w}: not played yet">${w}</span>`;
   }
   return `<header class="topbar"><h1><a href="#">Weekly Review</a></h1>
-    <nav class="topnav" aria-label="Sections"><a href="#nfl"${lg === "nfl" && sel !== "patterns" ? ' class="on"' : ""}>NFL</a><a href="#cfb"${lg === "cfb" && sel !== "patterns" ? ' class="on"' : ""}>CFB</a>
+    <nav class="topnav" aria-label="Sections"><a href="#nfl"${lg === "nfl" && sel !== "patterns" && mode !== "players" ? ' class="on"' : ""}>NFL</a><a href="#cfb"${lg === "cfb" && sel !== "patterns" && mode !== "players" ? ' class="on"' : ""}>CFB</a>
     <a href="${href(lg, "patterns")}"${sel === "patterns" ? ' class="on"' : ""}>Season patterns</a>
+    <a href="${href(lg, "players")}"${mode === "players" ? ' class="on"' : ""}>Players</a>
     <div class="weeknav" role="navigation" aria-label="Weeks"><span class="wk-label">Week</span>${ws}</div></nav></header>`;
 }
 function verdictOf(reads, g) { return ((reads.games[g.id] || {}).verdict) || Object.fromEntries(Object.entries(g.leans).map(([k, v]) => [k, v.result])); }
@@ -534,6 +549,76 @@ async function patterns(lg) {
    <p class="note">The three largest margin misses each week where chance didn't decide the side.</p></section></div>`;
 }
 
+
+/* ---------- Players: every projection against what the player did ---------- */
+const PV = { lg: null, w: null, data: null, pos: "All", show: "counted", q: "", sort: "diff", dir: 1 };
+const PSTAT = { pass_yds: "Pass yds", rush_yds: "Rush yds", rec_yds: "Rec yds" };
+const pctOf = (a, b) => b ? Math.round(100 * a / b) + "%" : "–";
+function playerRows() {
+  const d = PV.data, q = PV.q.trim().toLowerCase();
+  let r = d.rows.filter(x => (PV.pos === "All" || x.p === PV.pos) &&
+    (PV.show === "all" || (PV.show === "counted" && x.st === "played" && x.c) || (PV.show === "left" && x.st === "left") ||
+     (PV.show === "out" && (x.st === "dnp" || x.st === "nostat")) || (PV.show === "small" && x.st === "played" && !x.c)) &&
+    (!q || x.n.toLowerCase().includes(q) || x.t.toLowerCase().includes(q) || x.o.toLowerCase().includes(q)));
+  const key = { diff: x => x.a - x.pj, pct: x => (x.a - x.pj) / x.pj, proj: x => x.pj, act: x => x.a, name: x => x.n, team: x => x.t, pos: x => x.p, stat: x => x.s }[PV.sort];
+  r.sort((a, b) => { const x = key(a), y = key(b); return (x < y ? -1 : x > y ? 1 : 0) * PV.dir; });
+  return r;
+}
+function playerTable() {
+  const r = playerRows();
+  const res = x => x.st === "left" ? `<span class="chip c" title="${esc(x.note || "")}">Left early</span>`
+    : x.st === "dnp" ? `<span class="chip">Didn't play</span>` : x.st === "nostat" ? `<span class="chip" title="${esc(x.note || "No box-score line")}">No stats recorded</span>`
+    : !x.c ? `<span class="chip">Under ${PV.data.count_min} yds, not scored</span>` : x.a >= x.pj ? `<span class="chip w">Met</span>` : `<span class="chip l">Short</span>`;
+  const th = (k, lbl, cls = "") => `<th class="srt ${cls}${PV.sort === k ? " on" : ""}" data-sort="${k}" tabindex="0" role="button">${lbl}${PV.sort === k ? (PV.dir > 0 ? " ▲" : " ▼") : ""}</th>`;
+  const body = r.map(x => { const d = x.a - x.pj;
+    return `<tr><td><a href="${href(PV.lg, PV.w, x.g)}">${esc(x.n)}</a>${x.note ? `<div class="dim sm2">${esc(x.note)}</div>` : ""}</td><td>${x.p}</td><td>${esc(x.t)} <span class="dim">v ${esc(x.o)}</span></td><td class="dim">${PSTAT[x.s]}</td>
+      <td>${f1(x.pj)}</td><td>${Math.round(x.a)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(d, 0)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(100 * d / x.pj, 0)}%</td><td>${res(x)}</td></tr>`; }).join("");
+  return `<p class="note" style="margin:0 0 8px">${r.length} projection${r.length === 1 ? "" : "s"} shown. Click a column to sort; click a player for his game's review.</p>
+    <div class="scroll"><table class="ptab"><tr>${th("name", "Player", "l")}${th("pos", "Pos", "l")}${th("team", "Team", "l")}${th("stat", "Stat", "l")}${th("proj", "Proj")}${th("act", "Actual")}${th("diff", "Diff")}${th("pct", "%")}<th>Result</th></tr>${body}</table></div>`;
+}
+function playerFilters() {
+  const b = (grp, v, lbl) => `<button type="button" class="fb${PV[grp] === v ? " on" : ""}" data-${grp}="${v}" aria-pressed="${PV[grp] === v}">${lbl}</button>`;
+  const c = PV.data.card;
+  return `<div class="filters"><div class="fg">${["All", "QB", "RB", "WR", "TE"].map(p => b("pos", p, p)).join("")}</div>
+    <div class="fg">${b("show", "counted", "Scored")}${b("show", "left", `Left early (${c.left.players})`)}${b("show", "out", `${PV.lg === "nfl" ? "Didn't play" : "No stats recorded"} (${c.dnp.players})`)}${b("show", "small", "Small projections")}${b("show", "all", "Everything")}</div>
+    <input type="search" id="pq" placeholder="Player or team" value="${esc(PV.q)}" aria-label="Search players or teams"></div>`;
+}
+async function playersPage(lg, w) {
+  document.body.className = "";
+  const i = await idx(lg);
+  if (!w) w = i.weeks.length ? i.weeks[i.weeks.length - 1].week : null;
+  const e = i.weeks.find(x => x.week === w);
+  const d = e && await get(`data/${lg}/${e.file.replace(".json", ".players.json")}`);
+  if (!d) return weekStrip(lg, i, w, "players") + `<div class="page"><p class="lede">No player results for week ${w ?? ""} yet.</p></div>`;
+  if (PV.lg !== lg || PV.w !== w) Object.assign(PV, { lg, w, pos: "All", show: "counted", q: "", sort: "diff", dir: 1 });
+  PV.data = d;
+  const c = d.card, a = c.all;
+  const tile = (tag, t, sm) => `<div class="tile"><div class="tag">${tag}</div><div class="big">${t.met} <span class="of">of ${t.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${t.n ? 100 * t.met / t.n : 0}%"></i></div><div class="sm">${pctOf(t.met, t.n)} met or beat · ${t.short} short${sm ? " · " + sm : ""}</div></div>`;
+  const season = i.weeks.filter(x => x.players).reduce((s, x) => ({ met: s.met + x.players.all.met, n: s.n + x.players.all.n, left: s.left + x.players.left.players }), { met: 0, n: 0, left: 0 });
+  const byWeek = i.weeks.filter(x => x.players).map(x => `<tr><td><a href="${href(lg, "players", x.week)}">Week ${x.week}</a></td><td>${x.players.all.met}</td><td>${x.players.all.short}</td><td>${pctOf(x.players.all.met, x.players.all.n)}</td>${["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(x.players.by_stat[s].met, x.players.by_stat[s].n)}</td>`).join("")}<td>${sgn(x.players.all.avg_miss)}</td><td>${x.players.left.players}</td><td>${x.players.dnp.players}</td></tr>`).join("");
+  return weekStrip(lg, i, w, "players") + `<div class="page"><div class="crumb"><a href="#">Weekly Review</a> / <a href="#${lg}">${LEAGUES[lg].name}</a> / <a href="${href(lg, w)}">Week ${w}</a></div>
+  <h2 class="pg">Week ${w} players</h2>
+  <p class="lede">Every projection the board froze at kickoff against what the player did: quarterbacks' passing and rushing yards, backs' rushing and receiving, receivers' and tight ends' receiving. Met means the actual was at or above the projection.</p>
+  <div class="tag" style="margin-bottom:8px">Scorecard: players who played their usual game</div>
+  <div class="tiles">${tile("All projections", a, "average miss " + sgn(a.avg_miss) + " yds")}${["pass_yds", "rush_yds", "rec_yds"].map(s => tile(PSTAT[s], c.by_stat[s], "avg " + sgn(c.by_stat[s].avg_miss))).join("")}</div>
+  <div class="tiles">${["QB", "RB", "WR", "TE"].map(p => tile(p, c.by_pos[p], "avg " + sgn(c.by_pos[p].avg_miss))).join("")}</div>
+  <div class="tag" style="margin:6px 0 8px">Not counted against the model</div>
+  <div class="tiles two">
+   <div class="tile luck"><div class="tag">Left early</div><div class="big">${c.left.players} <span class="of">player${c.left.players === 1 ? "" : "s"}</span></div><div class="sm">${c.left.n} projections: ${c.left.met} met, ${c.left.short} short${c.left.avg_miss != null ? ", average miss " + sgn(c.left.avg_miss) + " yds" : ""}. ${lg === "nfl" ? "A regular who played under half his usual snaps, or a quarterback who left." : "An estimate: touches under 40% of his usual with none after halftime, or a quarterback who left."}</div></div>
+   <div class="tile"><div class="tag">${lg === "nfl" ? "Didn't play" : "No stats recorded"}</div><div class="big">${c.dnp.players} <span class="of">player${c.dnp.players === 1 ? "" : "s"}</span></div><div class="sm">${lg === "nfl" ? "Projected, no offensive snaps. A player on the field with no stats counts as a real zero." : "No box-score line. College has no public snap counts, so it can't be told whether he played or was shut out."}</div></div>
+  </div>
+  <p class="note" style="margin:-4px 0 18px">Scored: projections of ${d.count_min} yards or more. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
+  <section class="card"><h3>Projections and results</h3><div id="pfilters">${playerFilters()}</div><div id="ptable">${playerTable()}</div></section>
+  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Pass</th><th>Rush</th><th>Rec</th><th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
+}
+document.addEventListener("click", ev => {
+  const f = ev.target.closest(".fb"), s = ev.target.closest(".srt");
+  if (f && PV.data) { if (f.dataset.pos) PV.pos = f.dataset.pos; if (f.dataset.show) PV.show = f.dataset.show; $("#pfilters").innerHTML = playerFilters(); $("#ptable").innerHTML = playerTable(); }
+  else if (s && PV.data) { const k = s.dataset.sort; if (PV.sort === k) PV.dir = -PV.dir; else { PV.sort = k; PV.dir = ["name", "team", "pos", "stat"].includes(k) ? 1 : 1; } $("#ptable").innerHTML = playerTable(); }
+});
+document.addEventListener("keydown", ev => { if ((ev.key === "Enter" || ev.key === " ") && ev.target.classList && ev.target.classList.contains("srt")) { ev.preventDefault(); ev.target.click(); } });
+document.addEventListener("input", ev => { if (ev.target.id === "pq" && PV.data) { PV.q = ev.target.value; $("#ptable").innerHTML = playerTable(); } });
+
 async function route() {
   const raw = location.hash.replace(/^#/, "");
   const h = raw ? raw.split("-").map(decodeURIComponent) : [];
@@ -542,6 +627,7 @@ async function route() {
   try {
     if (!lg) html = await landing();
     else if (h[1] === "patterns") html = await patterns(lg);
+    else if (h[1] === "players") html = await playersPage(lg, h[2] ? +h[2] : null);
     else if (h[1] && h[2]) html = await gamePage(lg, +h[1], h.slice(2).join("-"));
     else if (h[1]) html = await weekPage(lg, +h[1]);
     else {
