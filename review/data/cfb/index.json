@@ -1,0 +1,808 @@
+{
+ "league": "cfb",
+ "weeks": [
+  {
+   "file": "2026_w01.json",
+   "season": 2026,
+   "week": 1,
+   "summary": {
+    "games": 51,
+    "graded_of": 51,
+    "lean_spread": [
+     21,
+     28,
+     2
+    ],
+    "lean_total": [
+     27,
+     24,
+     0
+    ],
+    "model_closer_margin": 19,
+    "model_closer_total": 26,
+    "mae": {
+     "model_margin": 15.49,
+     "market_margin": 13.51,
+     "model_total": 12.15,
+     "market_total": 11.65
+    },
+    "chance_games": 20,
+    "bets": [
+     13,
+     19,
+     2
+    ],
+    "units": -7.18
+   },
+   "reads": "draft",
+   "read_games": 51,
+   "verdicts": {
+    "spread": {
+     "W": 18,
+     "L": 20,
+     "chance": 11,
+     "push": 2
+    },
+    "total": {
+     "W": 22,
+     "L": 18,
+     "chance": 11,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "wku-nev",
+     "away": "WKU",
+     "home": "NEV",
+     "miss": 44.5,
+     "mkt": 35.0
+    },
+    {
+     "slug": "mass-rutg",
+     "away": "MASS",
+     "home": "RUTG",
+     "miss": -43.4,
+     "mkt": -45.5
+    },
+    {
+     "slug": "clem-lsu",
+     "away": "CLEM",
+     "home": "LSU",
+     "miss": 35.6,
+     "mkt": 31.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w02.json",
+   "season": 2026,
+   "week": 2,
+   "summary": {
+    "games": 49,
+    "graded_of": 49,
+    "lean_spread": [
+     24,
+     24,
+     1
+    ],
+    "lean_total": [
+     19,
+     30,
+     0
+    ],
+    "model_closer_margin": 19,
+    "model_closer_total": 18,
+    "mae": {
+     "model_margin": 11.95,
+     "market_margin": 10.71,
+     "model_total": 11.62,
+     "market_total": 10.88
+    },
+    "chance_games": 26,
+    "bets": [
+     16,
+     16,
+     0
+    ],
+    "units": -1.45
+   },
+   "reads": "draft",
+   "read_games": 49,
+   "verdicts": {
+    "spread": {
+     "W": 15,
+     "L": 20,
+     "chance": 13,
+     "push": 1
+    },
+    "total": {
+     "W": 11,
+     "L": 25,
+     "chance": 13,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "sac-fres",
+     "away": "SAC",
+     "home": "FRES",
+     "miss": 43.7,
+     "mkt": 28.0
+    },
+    {
+     "slug": "ore-okst",
+     "away": "ORE",
+     "home": "OKST",
+     "miss": 40.8,
+     "mkt": 32.0
+    },
+    {
+     "slug": "unlv-unt",
+     "away": "UNLV",
+     "home": "UNT",
+     "miss": 34.2,
+     "mkt": 40.5
+    }
+   ]
+  },
+  {
+   "file": "2026_w03.json",
+   "season": 2026,
+   "week": 3,
+   "summary": {
+    "games": 57,
+    "graded_of": 57,
+    "lean_spread": [
+     26,
+     30,
+     1
+    ],
+    "lean_total": [
+     35,
+     21,
+     1
+    ],
+    "model_closer_margin": 21,
+    "model_closer_total": 34,
+    "mae": {
+     "model_margin": 9.76,
+     "market_margin": 8.69,
+     "model_total": 13.59,
+     "market_total": 14.02
+    },
+    "chance_games": 19,
+    "bets": [
+     15,
+     12,
+     0
+    ],
+    "units": 1.64
+   },
+   "reads": "draft",
+   "read_games": 57,
+   "verdicts": {
+    "spread": {
+     "W": 24,
+     "L": 18,
+     "chance": 14,
+     "push": 1
+    },
+    "total": {
+     "W": 28,
+     "L": 20,
+     "chance": 8,
+     "push": 1
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "uk-ta&m",
+     "away": "UK",
+     "home": "TA&M",
+     "miss": -42.9,
+     "mkt": -26.5
+    },
+    {
+     "slug": "colo-nu",
+     "away": "COLO",
+     "home": "NU",
+     "miss": 32.7,
+     "mkt": 30.5
+    },
+    {
+     "slug": "wvu-uva",
+     "away": "WVU",
+     "home": "UVA",
+     "miss": -23.6,
+     "mkt": -22.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w04.json",
+   "season": 2026,
+   "week": 4,
+   "summary": {
+    "games": 58,
+    "graded_of": 58,
+    "lean_spread": [
+     22,
+     35,
+     1
+    ],
+    "lean_total": [
+     24,
+     33,
+     1
+    ],
+    "model_closer_margin": 20,
+    "model_closer_total": 21,
+    "mae": {
+     "model_margin": 12.66,
+     "market_margin": 11.36,
+     "model_total": 11.43,
+     "market_total": 10.55
+    },
+    "chance_games": 29,
+    "bets": [
+     7,
+     16,
+     0
+    ],
+    "units": -9.64
+   },
+   "reads": "draft",
+   "read_games": 58,
+   "verdicts": {
+    "spread": {
+     "W": 15,
+     "L": 28,
+     "chance": 14,
+     "push": 1
+    },
+    "total": {
+     "W": 17,
+     "L": 28,
+     "chance": 12,
+     "push": 1
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "ucla-md",
+     "away": "UCLA",
+     "home": "MD",
+     "miss": -53.6,
+     "mkt": -48.5
+    },
+    {
+     "slug": "mass-sac",
+     "away": "MASS",
+     "home": "SAC",
+     "miss": -36.5,
+     "mkt": -23.0
+    },
+    {
+     "slug": "ta&m-lsu",
+     "away": "TA&M",
+     "home": "LSU",
+     "miss": 27.9,
+     "mkt": 20.5
+    }
+   ]
+  },
+  {
+   "file": "2026_w05.json",
+   "season": 2026,
+   "week": 5,
+   "summary": {
+    "games": 56,
+    "graded_of": 56,
+    "lean_spread": [
+     20,
+     35,
+     1
+    ],
+    "lean_total": [
+     29,
+     26,
+     1
+    ],
+    "model_closer_margin": 20,
+    "model_closer_total": 28,
+    "mae": {
+     "model_margin": 13.85,
+     "market_margin": 13.1,
+     "model_total": 13.04,
+     "market_total": 12.84
+    },
+    "chance_games": 20,
+    "bets": [
+     7,
+     12,
+     1
+    ],
+    "units": -5.64
+   },
+   "reads": "draft",
+   "read_games": 56,
+   "verdicts": {
+    "spread": {
+     "W": 13,
+     "L": 28,
+     "chance": 14,
+     "push": 1
+    },
+    "total": {
+     "W": 22,
+     "L": 22,
+     "chance": 11,
+     "push": 1
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "bay-asu",
+     "away": "BAY",
+     "home": "ASU",
+     "miss": -40.9,
+     "mkt": -39.5
+    },
+    {
+     "slug": "stan-wake",
+     "away": "STAN",
+     "home": "WAKE",
+     "miss": 40.2,
+     "mkt": 39.5
+    },
+    {
+     "slug": "mtsu-ku",
+     "away": "MTSU",
+     "home": "KU",
+     "miss": 37.5,
+     "mkt": 34.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w06.json",
+   "season": 2026,
+   "week": 6,
+   "summary": {
+    "games": 58,
+    "graded_of": 58,
+    "lean_spread": [
+     30,
+     28,
+     0
+    ],
+    "lean_total": [
+     25,
+     33,
+     0
+    ],
+    "model_closer_margin": 29,
+    "model_closer_total": 23,
+    "mae": {
+     "model_margin": 11.9,
+     "market_margin": 11.48,
+     "model_total": 12.85,
+     "market_total": 12.25
+    },
+    "chance_games": 20,
+    "bets": [
+     16,
+     12,
+     0
+    ],
+    "units": 2.55
+   },
+   "reads": "draft",
+   "read_games": 58,
+   "verdicts": {
+    "spread": {
+     "W": 24,
+     "L": 25,
+     "chance": 9,
+     "push": 0
+    },
+    "total": {
+     "W": 19,
+     "L": 30,
+     "chance": 9,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "sdsu-orst",
+     "away": "SDSU",
+     "home": "ORST",
+     "miss": 47.3,
+     "mkt": 37.5
+    },
+    {
+     "slug": "buff-tol",
+     "away": "BUFF",
+     "home": "TOL",
+     "miss": -38.9,
+     "mkt": -34.0
+    },
+    {
+     "slug": "sc-fla",
+     "away": "SC",
+     "home": "FLA",
+     "miss": -30.8,
+     "mkt": -29.5
+    }
+   ]
+  },
+  {
+   "file": "2026_w07.json",
+   "season": 2026,
+   "week": 7,
+   "summary": {
+    "games": 59,
+    "graded_of": 59,
+    "lean_spread": [
+     31,
+     25,
+     3
+    ],
+    "lean_total": [
+     31,
+     27,
+     1
+    ],
+    "model_closer_margin": 27,
+    "model_closer_total": 27,
+    "mae": {
+     "model_margin": 11.26,
+     "market_margin": 10.69,
+     "model_total": 12.59,
+     "market_total": 12.69
+    },
+    "chance_games": 26,
+    "bets": [
+     7,
+     8,
+     1
+    ],
+    "units": -1.64
+   },
+   "reads": "draft",
+   "read_games": 59,
+   "verdicts": {
+    "spread": {
+     "W": 22,
+     "L": 19,
+     "chance": 15,
+     "push": 3
+    },
+    "total": {
+     "W": 22,
+     "L": 22,
+     "chance": 14,
+     "push": 1
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "ohio-sac",
+     "away": "OHIO",
+     "home": "SAC",
+     "miss": -28.5,
+     "mkt": -24.5
+    },
+    {
+     "slug": "fau-army",
+     "away": "FAU",
+     "home": "ARMY",
+     "miss": 27.4,
+     "mkt": 29.5
+    },
+    {
+     "slug": "troy-ul",
+     "away": "TROY",
+     "home": "UL",
+     "miss": 26.8,
+     "mkt": 24.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w08.json",
+   "season": 2026,
+   "week": 8,
+   "summary": {
+    "games": 56,
+    "graded_of": 56,
+    "lean_spread": [
+     21,
+     35,
+     0
+    ],
+    "lean_total": [
+     29,
+     27,
+     0
+    ],
+    "model_closer_margin": 17,
+    "model_closer_total": 28,
+    "mae": {
+     "model_margin": 12.07,
+     "market_margin": 10.81,
+     "model_total": 14.93,
+     "market_total": 14.79
+    },
+    "chance_games": 28,
+    "bets": [
+     16,
+     27,
+     0
+    ],
+    "units": -8.64
+   },
+   "reads": "draft",
+   "read_games": 56,
+   "verdicts": {
+    "spread": {
+     "W": 13,
+     "L": 29,
+     "chance": 14,
+     "push": 0
+    },
+    "total": {
+     "W": 24,
+     "L": 20,
+     "chance": 12,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "ore-ill",
+     "away": "ORE",
+     "home": "ILL",
+     "miss": 31.4,
+     "mkt": 21.0
+    },
+    {
+     "slug": "bc-gt",
+     "away": "BC",
+     "home": "GT",
+     "miss": -30.8,
+     "mkt": -28.5
+    },
+    {
+     "slug": "haw-niu",
+     "away": "HAW",
+     "home": "NIU",
+     "miss": -27.3,
+     "mkt": -32.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w09.json",
+   "season": 2026,
+   "week": 9,
+   "summary": {
+    "games": 56,
+    "graded_of": 56,
+    "lean_spread": [
+     25,
+     30,
+     1
+    ],
+    "lean_total": [
+     17,
+     37,
+     2
+    ],
+    "model_closer_margin": 23,
+    "model_closer_total": 15,
+    "mae": {
+     "model_margin": 13.0,
+     "market_margin": 12.71,
+     "model_total": 12.33,
+     "market_total": 11.3
+    },
+    "chance_games": 31,
+    "bets": [
+     17,
+     14,
+     1
+    ],
+    "units": 1.11
+   },
+   "reads": "draft",
+   "read_games": 56,
+   "verdicts": {
+    "spread": {
+     "W": 22,
+     "L": 20,
+     "chance": 13,
+     "push": 1
+    },
+    "total": {
+     "W": 12,
+     "L": 30,
+     "chance": 12,
+     "push": 2
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "bc-duke",
+     "away": "BC",
+     "home": "DUKE",
+     "miss": 35.7,
+     "mkt": 38.0
+    },
+    {
+     "slug": "uva-wake",
+     "away": "UVA",
+     "home": "WAKE",
+     "miss": 32.9,
+     "mkt": 30.5
+    },
+    {
+     "slug": "fiu-lib",
+     "away": "FIU",
+     "home": "LIB",
+     "miss": 25.7,
+     "mkt": 25.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w10.json",
+   "season": 2026,
+   "week": 10,
+   "summary": {
+    "games": 62,
+    "graded_of": 62,
+    "lean_spread": [
+     31,
+     30,
+     1
+    ],
+    "lean_total": [
+     28,
+     34,
+     0
+    ],
+    "model_closer_margin": 30,
+    "model_closer_total": 26,
+    "mae": {
+     "model_margin": 12.77,
+     "market_margin": 12.53,
+     "model_total": 13.62,
+     "market_total": 12.9
+    },
+    "chance_games": 23,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "draft",
+   "read_games": 62,
+   "verdicts": {
+    "spread": {
+     "W": 25,
+     "L": 24,
+     "chance": 12,
+     "push": 1
+    },
+    "total": {
+     "W": 24,
+     "L": 30,
+     "chance": 8,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "tlsa-tuln",
+     "away": "TLSA",
+     "home": "TULN",
+     "miss": -48.6,
+     "mkt": -47.0
+    },
+    {
+     "slug": "utsa-fau",
+     "away": "UTSA",
+     "home": "FAU",
+     "miss": 37.6,
+     "mkt": 38.0
+    },
+    {
+     "slug": "duke-ncsu",
+     "away": "DUKE",
+     "home": "NCSU",
+     "miss": -35.8,
+     "mkt": -34.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w11.json",
+   "season": 2026,
+   "week": 11,
+   "summary": {
+    "games": 67,
+    "graded_of": 67,
+    "lean_spread": [
+     41,
+     26,
+     0
+    ],
+    "lean_total": [
+     26,
+     41,
+     0
+    ],
+    "model_closer_margin": 40,
+    "model_closer_total": 24,
+    "mae": {
+     "model_margin": 12.62,
+     "market_margin": 13.41,
+     "model_total": 13.81,
+     "market_total": 12.5
+    },
+    "chance_games": 26,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "draft",
+   "read_games": 67,
+   "verdicts": {
+    "spread": {
+     "W": 33,
+     "L": 18,
+     "chance": 16,
+     "push": 0
+    },
+    "total": {
+     "W": 21,
+     "L": 34,
+     "chance": 12,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "csu-wsu",
+     "away": "CSU",
+     "home": "WSU",
+     "miss": 51.7,
+     "mkt": 58.5
+    },
+    {
+     "slug": "wake-smu",
+     "away": "WAKE",
+     "home": "SMU",
+     "miss": -39.7,
+     "mkt": -44.5
+    },
+    {
+     "slug": "sc-ark",
+     "away": "SC",
+     "home": "ARK",
+     "miss": 36.5,
+     "mkt": 35.0
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "nfl": {
+  "fumble": 3.25,
+  "nonoff_td": 6.26,
+  "fg_miss": 1.39,
+  "fit": {
+   "n": 816,
+   "fumble": 3.25,
+   "nonoff_td": 6.26,
+   "fg_miss": 1.39,
+   "se": {
+    "fumble": 0.6,
+    "nonoff_td": 0.81,
+    "fg_miss": 0.91
+   },
+   "resid_sd": 12.64,
+   "resid_sd_after": 11.91
+  }
+ },
+ "cfb": {
+  "fumble": 3.09,
+  "nonoff_td": 6.99,
+  "fg_miss": 1.38,
+  "fit": {
+   "n": 2669,
+   "fumble": 3.09,
+   "nonoff_td": 6.99,
+   "fg_miss": 1.38,
+   "se": {
+    "fumble": 0.43,
+    "nonoff_td": 0.45,
+    "fg_miss": 0.42
+   },
+   "resid_sd": 15.14,
+   "resid_sd_after": 14.33
+  }
+ }
+}
