@@ -1,0 +1,97 @@
+{
+ "plan": "claude/plan-cfb-shutout-pricing-test-2026-11-18.md",
+ "positions": {
+  "TE": {
+   "tuning": {
+    "P1": {
+     "gd": {
+      "n": 4092,
+      "reach_typical": 0.4592,
+      "candidate_says": 0.388,
+      "shut_out_rate": 0.2309,
+      "diff": 0.002656,
+      "se": 0.001758,
+      "z": 1.51
+     },
+     "bt": {
+      "n": 4179,
+      "reach_typical": 0.5049,
+      "candidate_says": 0.3762,
+      "shut_out_rate": 0.2565,
+      "diff": 0.01755,
+      "se": 0.001983,
+      "z": 8.85
+     }
+    },
+    "P2": {
+     "gd": {
+      "n": 4092,
+      "reach_typical": 0.4592,
+      "candidate_says": 0.387,
+      "shut_out_rate": 0.2309,
+      "diff": 0.001954,
+      "se": 0.0018,
+      "z": 1.09
+     },
+     "bt": {
+      "n": 4179,
+      "reach_typical": 0.5049,
+      "candidate_says": 0.3756,
+      "shut_out_rate": 0.2565,
+      "diff": 0.014319,
+      "se": 0.002041,
+      "z": 7.01
+     }
+    }
+   },
+   "better_on_both_tuning": [],
+   "verdict": "Neither version better on both tuning measures: nothing kept."
+  },
+  "WR": {
+   "tuning": {
+    "P1": {
+     "gd": {
+      "n": 13892,
+      "reach_typical": 0.4668,
+      "candidate_says": 0.4403,
+      "shut_out_rate": 0.1289,
+      "diff": -0.000193,
+      "se": 0.000594,
+      "z": -0.32
+     },
+     "bt": {
+      "n": 13975,
+      "reach_typical": 0.4912,
+      "candidate_says": 0.434,
+      "shut_out_rate": 0.1443,
+      "diff": 0.005427,
+      "se": 0.000641,
+      "z": 8.47
+     }
+    },
+    "P2": {
+     "gd": {
+      "n": 13892,
+      "reach_typical": 0.4668,
+      "candidate_says": 0.4392,
+      "shut_out_rate": 0.1289,
+      "diff": -0.000399,
+      "se": 0.000618,
+      "z": -0.65
+     },
+     "bt": {
+      "n": 13975,
+      "reach_typical": 0.4912,
+      "candidate_says": 0.4336,
+      "shut_out_rate": 0.1443,
+      "diff": 0.004187,
+      "se": 0.000664,
+      "z": 6.3
+     }
+    }
+   },
+   "better_on_both_tuning": [],
+   "verdict": "Neither version better on both tuning measures: nothing kept."
+  }
+ }
+}
