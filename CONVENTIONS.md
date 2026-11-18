@@ -851,6 +851,17 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
   `best` (the picks and their scorecard, plus the record's own "beat his average" grade) into the
   week's `.players.json`; the index carries each week's `best` scorecard. Weeks without a record
   (before NFL week 7, college week 8) say so.
+  **On the ladder** (Nov 18, 2026, Ryan's ask): did each pick clear the books' O/U, or one, two
+  or three rungs below it? `reviewplayers.ladder` reads the record's `lad` (per book the main line
+  and the next three alternate overs, at his kickoff) and `ly` (his yards on that stat; backs on
+  the rushing ladder) into each pick's `lad`: the book shown (DraftKings where posted, else
+  FanDuel), every line with over/under, and `deep` (first line cleared: 0 the O/U, 1-3 the rungs).
+  `card.rungs` (`rung_card`): `ou` (every pick with a ladder against the O/U) and `n`/`hit` (picks
+  with the full four lines: how many had cleared by the O/U, -1, -2, -3), at the book shown;
+  left-early picks aren't counted. The page shows four tiles with the season so far, an "On the
+  ladder" table (FanDuel's line under DraftKings' where different, and FanDuel's result when it
+  differs) and two week-by-week columns. Ladders exist from NFL week 8 and college week 10 (when
+  alternate lines were first logged); earlier weeks say so.
 - **Chance ledger values** are fitted on 2023-25 by `experiments/review_chance_fit.py` into
   `data/review_chance.json` (points each item moved the margin past the closing line: fumble
   bounces, non-offensive TDs, missed field goals from 45 yards or closer). Refit with the script,
