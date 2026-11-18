@@ -1,0 +1,367 @@
+{
+ "plan": "claude/plan-role-change-spread-test-2026-11-17.md",
+ "league": "nfl",
+ "u_share": {
+  "carries u >= 0.15": 0.0438,
+  "catch u >= 0.15": 0.0077
+ },
+ "loglik": {
+  "receptions tuning": {
+   "all": {
+    "rows": 18725,
+    "ll_base": -1.96583,
+    "ll_u": -1.96553,
+    "gain": 0.0003,
+    "se": 0.000304,
+    "z": 0.99
+   },
+   "u >= 0.15": {
+    "rows": 287,
+    "ll_base": -2.11933,
+    "ll_u": -2.11049,
+    "gain": 0.008832,
+    "se": 0.00575,
+    "z": 1.54
+   }
+  },
+  "receptions holdout": {
+   "all": {
+    "rows": 29035,
+    "ll_base": -1.93728,
+    "ll_u": -1.9372,
+    "gain": 8.4e-05,
+    "se": 0.00017,
+    "z": 0.49
+   },
+   "u >= 0.15": {
+    "rows": 581,
+    "ll_base": -2.21156,
+    "ll_u": -2.21465,
+    "gain": -0.003084,
+    "se": 0.00348,
+    "z": -0.89
+   }
+  },
+  "carries tuning": {
+   "all": {
+    "rows": 5647,
+    "ll_base": -3.01401,
+    "ll_u": -3.01109,
+    "gain": 0.002924,
+    "se": 0.001018,
+    "z": 2.87
+   },
+   "u >= 0.15": {
+    "rows": 1587,
+    "ll_base": -3.09029,
+    "ll_u": -3.08308,
+    "gain": 0.007217,
+    "se": 0.003012,
+    "z": 2.4
+   }
+  },
+  "carries holdout": {
+   "all": {
+    "rows": 8494,
+    "ll_base": -2.93862,
+    "ll_u": -2.93583,
+    "gain": 0.002785,
+    "se": 0.001035,
+    "z": 2.69
+   },
+   "u >= 0.15": {
+    "rows": 2196,
+    "ll_base": -3.00819,
+    "ll_u": -3.0089,
+    "gain": -0.000703,
+    "se": 0.003174,
+    "z": -0.22
+   }
+  },
+  "rec_yds tuning": {
+   "all": {
+    "rows": 18875,
+    "ll_base": -4.03972,
+    "ll_u": -4.03849,
+    "gain": 0.001232,
+    "se": 0.000303,
+    "z": 4.06
+   },
+   "u >= 0.15": {
+    "rows": 282,
+    "ll_base": -4.38687,
+    "ll_u": -4.37691,
+    "gain": 0.009962,
+    "se": 0.005823,
+    "z": 1.71
+   }
+  },
+  "rec_yds holdout": {
+   "all": {
+    "rows": 29139,
+    "ll_base": -4.02421,
+    "ll_u": -4.02368,
+    "gain": 0.00053,
+    "se": 0.000219,
+    "z": 2.42
+   },
+   "u >= 0.15": {
+    "rows": 584,
+    "ll_base": -4.57408,
+    "ll_u": -4.57627,
+    "gain": -0.002189,
+    "se": 0.003548,
+    "z": -0.62
+   }
+  },
+  "rush_yds tuning": {
+   "all": {
+    "rows": 6027,
+    "ll_base": -4.34293,
+    "ll_u": -4.33948,
+    "gain": 0.003454,
+    "se": 0.000967,
+    "z": 3.57
+   },
+   "u >= 0.15": {
+    "rows": 1641,
+    "ll_base": -4.40204,
+    "ll_u": -4.3921,
+    "gain": 0.009937,
+    "se": 0.003006,
+    "z": 3.31
+   }
+  },
+  "rush_yds holdout": {
+   "all": {
+    "rows": 9251,
+    "ll_base": -4.36653,
+    "ll_u": -4.36472,
+    "gain": 0.001813,
+    "se": 0.000826,
+    "z": 2.19
+   },
+   "u >= 0.15": {
+    "rows": 2294,
+    "ll_base": -4.45198,
+    "ll_u": -4.45811,
+    "gain": -0.006137,
+    "se": 0.002244,
+    "z": -2.73
+   }
+  }
+ },
+ "coef": {
+  "tune 2014": {
+   "receptions|WR": 5.082,
+   "receptions|TE": 1.257,
+   "receptions|RB": 3.73,
+   "carries|RB": 1.749,
+   "rec_yds|WR": 0.727,
+   "rec_yds|TE": -2.628,
+   "rec_yds|RB": -2.338,
+   "rush_yds|RB": -0.749
+  },
+  "tune 2015": {
+   "receptions|WR": 3.42,
+   "receptions|TE": -1.249,
+   "receptions|RB": 3.479,
+   "carries|RB": 1.811,
+   "rec_yds|WR": 0.844,
+   "rec_yds|TE": -3.693,
+   "rec_yds|RB": -3.952,
+   "rush_yds|RB": -0.582
+  },
+  "tune 2016": {
+   "receptions|WR": 3.255,
+   "receptions|TE": -0.748,
+   "receptions|RB": 3.353,
+   "carries|RB": 1.697,
+   "rec_yds|WR": 0.471,
+   "rec_yds|TE": -4.608,
+   "rec_yds|RB": -2.944,
+   "rush_yds|RB": -0.275
+  },
+  "tune 2017": {
+   "receptions|WR": 4.608,
+   "receptions|TE": -2.47,
+   "receptions|RB": 3.083,
+   "carries|RB": 1.762,
+   "rec_yds|WR": 1.335,
+   "rec_yds|TE": -1.038,
+   "rec_yds|RB": -1.036,
+   "rush_yds|RB": -0.577
+  },
+  "tune 2018": {
+   "receptions|WR": 4.107,
+   "receptions|TE": 0.375,
+   "receptions|RB": 3.892,
+   "carries|RB": 2.0,
+   "rec_yds|WR": -0.005,
+   "rec_yds|TE": -5.861,
+   "rec_yds|RB": -1.776,
+   "rush_yds|RB": -0.515
+  },
+  "hold 2019": {
+   "receptions|WR": 4.112,
+   "receptions|TE": -0.59,
+   "receptions|RB": 3.502,
+   "carries|RB": 1.81,
+   "rec_yds|WR": -0.183,
+   "rec_yds|TE": 0.001,
+   "rec_yds|RB": -2.363,
+   "rush_yds|RB": -0.54
+  },
+  "hold 2020": {
+   "receptions|WR": 3.121,
+   "receptions|TE": 1.737,
+   "receptions|RB": 2.482,
+   "carries|RB": 1.882,
+   "rec_yds|WR": -0.649,
+   "rec_yds|TE": 0.0,
+   "rec_yds|RB": -3.049,
+   "rush_yds|RB": -0.537
+  },
+  "hold 2021": {
+   "receptions|WR": 4.013,
+   "receptions|TE": 2.526,
+   "receptions|RB": 3.8,
+   "carries|RB": 0.007,
+   "rec_yds|WR": -0.012,
+   "rec_yds|TE": -3.009,
+   "rec_yds|RB": -3.535,
+   "rush_yds|RB": -2.198
+  },
+  "hold 2022": {
+   "receptions|WR": 3.573,
+   "receptions|TE": 4.274,
+   "receptions|RB": 3.561,
+   "carries|RB": 1.721,
+   "rec_yds|WR": 0.003,
+   "rec_yds|TE": -2.72,
+   "rec_yds|RB": -3.096,
+   "rush_yds|RB": -0.676
+  },
+  "hold 2023": {
+   "receptions|WR": 3.054,
+   "receptions|TE": 4.271,
+   "receptions|RB": 3.887,
+   "carries|RB": 1.652,
+   "rec_yds|WR": -0.669,
+   "rec_yds|TE": -2.006,
+   "rec_yds|RB": -2.927,
+   "rush_yds|RB": -0.789
+  },
+  "hold 2024": {
+   "receptions|WR": 3.109,
+   "receptions|TE": 4.013,
+   "receptions|RB": 3.68,
+   "carries|RB": 1.951,
+   "rec_yds|WR": -1.053,
+   "rec_yds|TE": -1.984,
+   "rec_yds|RB": -2.647,
+   "rush_yds|RB": -0.747
+  },
+  "hold 2025": {
+   "receptions|WR": 2.668,
+   "receptions|TE": 3.089,
+   "receptions|RB": 4.007,
+   "carries|RB": 1.663,
+   "rec_yds|WR": 0.588,
+   "rec_yds|TE": -2.264,
+   "rec_yds|RB": -2.507,
+   "rush_yds|RB": -0.849
+  },
+  "hold 2026": {
+   "receptions|WR": 3.006,
+   "receptions|TE": 3.045,
+   "receptions|RB": 4.427,
+   "carries|RB": 1.709,
+   "rec_yds|WR": 0.183,
+   "rec_yds|TE": -2.221,
+   "rec_yds|RB": -2.388,
+   "rush_yds|RB": -0.857
+  }
+ },
+ "lines": {
+  "2023-25 main lines game-day (close)": {
+   "props": 23210,
+   "games": 848,
+   "brier_base": 0.25832,
+   "brier_u": 0.25821,
+   "u_minus_base": -0.000104,
+   "se": 5.8e-05,
+   "z": -1.78,
+   "base_minus_books": 0.00839,
+   "u_minus_books": 0.00828,
+   "books_se": 0.00099,
+   "mean_abs_move": 0.0036,
+   "rec_yds": {
+    "props": 17761,
+    "u_minus_base": -0.0001,
+    "se": 5.4e-05
+   },
+   "rush_yds": {
+    "props": 5449,
+    "u_minus_base": -0.000116,
+    "se": 0.000182
+   }
+  },
+  "2023-25 main lines bet-time (flag)": {
+   "props": 13368,
+   "games": 815,
+   "brier_base": 0.25577,
+   "brier_u": 0.25567,
+   "u_minus_base": -0.000101,
+   "se": 6.5e-05,
+   "z": -1.56,
+   "base_minus_books": 0.00575,
+   "u_minus_books": 0.00564,
+   "books_se": 0.00123,
+   "mean_abs_move": 0.0032,
+   "rec_yds": {
+    "props": 10040,
+    "u_minus_base": -5.4e-05,
+    "se": 6.1e-05
+   },
+   "rush_yds": {
+    "props": 3328,
+    "u_minus_base": -0.000243,
+    "se": 0.000189
+   }
+  }
+ },
+ "rungs": {
+  "2025 floor rungs game-day": {
+   "props": 10502,
+   "games": 285,
+   "brier_base": 0.1674,
+   "brier_u": 0.1676,
+   "u_minus_base": 0.000199,
+   "se": 0.000113,
+   "z": 1.77,
+   "base_minus_books": 0.00927,
+   "u_minus_books": 0.00947,
+   "books_se": 0.0014,
+   "mean_abs_move": 0.0052,
+   "rec_yds": {
+    "props": 7712,
+    "u_minus_base": -4.6e-05,
+    "se": 8.3e-05
+   },
+   "rush_yds": {
+    "props": 2790,
+    "u_minus_base": 0.000876,
+    "se": 0.00036
+   }
+  }
+ },
+ "measures": {
+  "loglik": 8,
+  "lines": 2,
+  "rungs": 1
+ },
+ "kept": false,
+ "loglik_pass": false,
+ "lines_pass": false
+}

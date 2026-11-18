@@ -2643,3 +2643,62 @@ Raw model average miss, margin / total, tuning 2015-18 (1,068 games) then holdou
 - Reading: with the Nov 5 and Nov 11 results, three framings of PFF unit strength (value missing,
   a two-linemen flag, matchup gaps) add nothing to the game model at bet time. What remains open
   is game-day absences, which `data/ol_watch/` records from Nov 13, 2026.
+
+## Prop spread that widens after a role change (Nov 17, 2026): trade-offs in both leagues, not kept
+
+`python experiments/role_change_spread_test.py --league cfb|nfl` (rule in the script and the Project doc
+`claude/plan-role-change-spread-test-2026-11-17.md`, written before the run; scores only, results in
+`experiments/out/role_change_spread_test_<league>.json`). One term added to the prop distributions'
+spread: u = |share in the last appearance − decayed share coming in| (carries; catches in college,
+targets in the NFL), capped at 0.30, in the negative-binomial dispersion (counts) and the per-play
+gamma shape (yards), for RB carries and rushing yards and WR/TE/RB receptions and receiving yards.
+Projections do not change. Baseline: the same fit on the same rows with the term at zero; the saved
+isotonic correction in both. Rule: better on every measure, each holdout log-likelihood gain 1+ SE.
+
+**College (11 of 14 better; not kept)**
+
+| Measure | Tuning 2017-19 | Holdout 2021-25 |
+|---|---|---|
+| Log-likelihood gain, receptions | +0.0008 (2.3 SE) | +0.0013 (3.5 SE) |
+| carries | +0.0008 (2.0 SE) | +0.0013 (5.2 SE) |
+| receiving yards | **−0.0003 (−1.2 SE)** | +0.0017 (5.5 SE) |
+| rushing yards | +0.0021 (4.6 SE) | +0.0017 (6.4 SE) |
+
+Brier at the DK/FD main lines (receiving and rushing yards, WR/TE/RB): 2024 **worse**, game-day +0.0003
+± 0.0002 and bet-time +0.0004 ± 0.0003 (receiving yards carries it); 2025 slightly better (−0.0001 /
+−0.0001). Floor rungs: 2024 −0.0002 ± 0.0002, 2025 −0.0006 ± 0.0002 (3.4 SE; gap to the books +0.0064
+→ +0.0058).
+
+**NFL (9 of 11 better in direction; not kept)**
+
+| Measure | Tuning 2014-18 | Holdout 2019 on |
+|---|---|---|
+| Log-likelihood gain, receptions | +0.0003 (1.0 SE) | +0.0001 (**0.5 SE**, under the 1 SE bar) |
+| carries | +0.0029 (2.9 SE) | +0.0028 (2.7 SE) |
+| receiving yards | +0.0012 (4.1 SE) | +0.0005 (2.4 SE) |
+| rushing yards | +0.0035 (3.6 SE) | +0.0018 (2.2 SE) |
+
+Main lines 2023-25: close, game-day −0.0001 ± 0.0001 (1.8 SE); pricing snapshot, bet-time −0.0001 ±
+0.0001. Floor rungs 2025: **worse**, +0.0002 ± 0.0001 (rushing yards +0.0009 ± 0.0004).
+
+Reported, not judged:
+- Rows with u ≥ 0.15 (4% of college carries rows, 3% of catches; NFL 4% and under 1%): college rushing
+  better (holdout 4.4 SE) and college receiving worse (−2.9 SE); NFL rushing worse on the holdout (−2.7
+  SE). The term helps on average but does not reliably help the players it is aimed at.
+- Fitted terms (latest holdout fit): positive on reception and carry dispersion in both leagues (wider
+  after a change); the yards-shape terms vary in sign by group.
+- Chances move little: average |change| at the main lines 0.7-0.9 points in college, 0.3-0.4 in the NFL;
+  on rungs 0.9-1.0 and 0.5.
+
+Process notes: (1) The first college run started the candidate's six-parameter fit cold, and the
+optimizer stalled below the baseline in sample (receptions and receiving yards fit the training seasons
+worse with the extra term, which a nested model cannot do at its optimum); every holdout measure came out
+worse. The candidate now starts from the baseline's optimum with the term at zero, so it can only match
+or beat it in sample. Rule and measures untouched. (2) The candidate's yards fit gets 900 iterations
+against the baseline's 600 for the extra parameter. (3) The NFL walk-forward table starts in 2014, so the
+NFL tuning seasons are 2014-18. (4) QB props are not scored (the term does not apply to them).
+(5) The plan's "this week's move on the first two rungs" is reported as the average move on the scored
+lines and rungs instead.
+
+Not applied; nothing on the boards changed. A version for college rushing alone (where the log-likelihood,
+the high-u rows and both seasons' rungs agree) was found on these seasons and would need 2026 to judge.
