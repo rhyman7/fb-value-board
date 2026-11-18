@@ -3060,7 +3060,7 @@ Reported, "fade the lucky team": against the closing spread 2015-25, the luckies
 team-games went 583-599 (49.3%), the unluckiest fifth 583-599 (49.3%), everyone else 1787-1755
 (50.5%). Nothing to bet.
 
-## NFL: receivers whose WOPR is high for their projection (Nov 18, 2026): 14 of 15, a trade-off, not applied
+## NFL: receivers whose WOPR is high for their projection (Nov 18, 2026): 14 of 15, a trade-off; applied provisionally (Ryan's call)
 
 Follow-up to the WOPR side table above, Ryan's yes. Rule written before the run: Project doc
 `claude/plan-wopr-standing-test-2026-11-18.md`. Script `experiments/wopr_standing_test.py`, output
@@ -3102,4 +3102,15 @@ the same projection band), high third minus low third:
 | Bet-time 2026 weeks 1-10 | +5.8 ± 2.7 | +2.2 ± 4.0 (51.9% v 49.7%) | +5.0 ± 3.8 |
 
 The gap shows in every period and has narrowed since 2019. Typical's Brier was scored on 2015 on
-(the prop model has too little history to fit before then). **Not applied.**
+(the prop model has too little history to fit before then).
+
+*Applied Nov 18, 2026 (Ryan's call), provisional:* `nflmodel/woprstanding.py`, called from
+`pipeline.run` after the boosted and Questionable steps and before defense-vs-position (wide
+receivers on the New projections, tight ends on the current ones). Constants in
+`data/wopr_standing.json` (`--write-constants`): b 0.0523 and the WOPR-on-projection lines, fitted
+on game-day projections 2014-2025. That is the game-day b; the bet-time measures above used the
+bet-time fit (0.063), so the board's nudge is a little smaller than the one scored at bet time.
+The module reproduces the test's 2026 game-day candidate to 0.002 yards. On the week 11 slate
+(147 WR/TE, before defense-vs-position) it moves a projection 1.5 yards on average, 3.9 at the
+90th percentile, from −3.9 to +6.9. Typical, prop chances and Parlays legs follow the projection.
+January recheck: Project doc `claude/january-recheck-additions.md`.

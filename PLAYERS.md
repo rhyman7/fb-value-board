@@ -64,6 +64,15 @@ earlier start so the per-start baselines exist.
 The model beats both baselines on every stat in both 2013-2018 and 2019 on.
 Rerun with `python experiments/players_test.py`.
 
+### WOPR standing in WR/TE receiving yards (Nov 18, 2026, provisional)
+
+A wide receiver's or tight end's receiving-yards projection (10+ yards) is nudged by how far his
+WOPR (1.5 x target share + 0.7 x air-yards share) sits from the usual for his projection:
+`x (1 + 0.0523 x z)`, z held to +/-2.5 (`nflmodel/woprstanding.py`, `data/wopr_standing.json`;
+FEATURES.md "NFL: receivers whose WOPR is high for their projection"). A 14-of-15 trade-off Ryan
+chose to apply: better on every bet-time measure and on 2026 weeks 1-10, flat at the closing lines.
+About 1.5-2 yards on the average receiver. Rechecked in January.
+
 ### PFF passing grade and opponent coverage in passing yards (Nov 13, 2026, provisional)
 
 The passing-yards calibration also takes the quarterback's PFF passing grade and the opponent's PFF

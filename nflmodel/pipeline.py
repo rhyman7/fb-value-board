@@ -92,6 +92,17 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             print("  PFF route inputs:", "on" if players_ml.feats_for(ml) != players_ml.FEATS else "off (no private PFF data; as before Nov 5, 2026)")
         except Exception as exc:
             print(f"  new projections skipped ({exc})")
+        try:                                      # WOPR standing (woprstanding.py): WR/TE receiving yards, provisional
+            from . import woprstanding
+            if new is not None:                   # wide receivers show the New projections, tight ends the current ones
+                new, n_wr = woprstanding.apply(new, ptable, season, groups=("WR",))
+                pproj, n_te = woprstanding.apply(pproj, ptable, season, groups=("TE",))
+            else:
+                pproj, n_wr = woprstanding.apply(pproj, ptable, season)
+                n_te = 0
+            say(f"  WOPR standing applied to {n_wr + n_te} receiver projections")
+        except Exception as exc:
+            print(f"  WOPR standing skipped ({exc})")
         try:                                      # defense against each position (dvp.py), the last multiplier
             from . import dvp
             from .players_ml import ADOPT

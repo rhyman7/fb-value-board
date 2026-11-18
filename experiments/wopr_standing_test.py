@@ -195,7 +195,33 @@ def thirds(base, key, per) -> dict:
     return out
 
 
+def write_constants():
+    """data/wopr_standing.json for nflmodel/woprstanding.py: version A's line, spread and b, fitted on the
+    game-day walk-forward projections of the seasons before 2026 (what the test's 2026 measures used)."""
+    from nflmodel import woprstanding as WS
+    p = current()["gameday"]
+    proj, w, y, season, grp = (p[ST + "_proj"].to_numpy(float), p["wopr_raw"].to_numpy(float), p[ST].to_numpy(float),
+                               p["season"].to_numpy(), p["group"].to_numpy())
+    hist = live(p) & (proj >= WS.MIN_PROJ) & (season >= 2014) & (season < 2026)
+    k = {"fitted": "game-day walk-forward projections, seasons 2014-2025", "version": "A", "min_proj": WS.MIN_PROJ, "clip": WS.CLIP, "line": {}}
+    z = np.zeros(len(p))
+    for g in GROUPS:
+        m = hist & (grp == g)
+        c1, c0 = np.polyfit(proj[m], w[m], 1)
+        sd = float((w[m] - (c0 + c1 * proj[m])).std())
+        k["line"][g] = {"c0": round(float(c0), 6), "c1": round(float(c1), 8), "sd": round(sd, 6), "n": int(m.sum())}
+        z[m] = np.clip((w[m] - (c0 + c1 * proj[m])) / sd, -WS.CLIP, WS.CLIP)
+    # b as the test fitted it for 2026: z from the walk-forward lines, earlier seasons only
+    zz = standing(p)
+    h = np.where(hist, proj * zz, 0.0)
+    k["b"] = round(float(np.clip((h[hist] @ (y[hist] - proj[hist])) / (h[hist] @ h[hist]), 0, 0.2)), 4)
+    WS.PATH.write_text(json.dumps(k, indent=1) + "\n")
+    print(json.dumps(k))
+
+
 def main():
+    if "--write-constants" in sys.argv:
+        return write_constants()
     N = current()
     Z = {k: standing(N[k]) for k in N}
     res = {"tuning": {}}
