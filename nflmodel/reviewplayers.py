@@ -308,10 +308,52 @@ def best_matchups(rows: list[dict], wk: dict | None, ids: dict) -> dict | None:
         for r in mine:
             r["bm"] = k.get("rk")
         listed += mine
-        out.append({"rk": k.get("rk"), "n": k.get("name"), "p": k.get("pos"), "t": team, "o": k.get("opp"), "kind": k.get("kind"),
-                    "avg": k.get("avg"), "proj": k.get("proj"), "y": k.get("y"), "res": k.get("res"), "v": k.get("v"),
-                    "found": bool(mine)})
+        pick = {"rk": k.get("rk"), "n": k.get("name"), "p": k.get("pos"), "t": team, "o": k.get("opp"), "kind": k.get("kind"),
+                "avg": k.get("avg"), "proj": k.get("proj"), "y": k.get("y"), "res": k.get("res"), "v": k.get("v"),
+                "found": bool(mine)}
+        lad = ladder(k, "left" if any(r["st"] == "left" for r in mine) else None)
+        if lad:
+            pick["lad"] = lad
+        out.append(pick)
     graded = [x for x in out if x["res"] in ("beat", "miss")]
     card = scorecard(listed)
     card["beat_avg"] = {"n": len(graded), "beat": sum(x["res"] == "beat" for x in graded)}
+    card["rungs"] = rung_card(out)
     return {"picks": out, "card": card}
+
+
+# Best Matchups on the ladder (Nov 18, 2026, Ryan's ask): did each pick clear the books' O/U, or
+# one, two or three rungs below it? The record keeps each pick's DraftKings / FanDuel yardage
+# ladder at its kickoff (`lad`: per book the main line then the next three alternate overs below
+# it) and his yards on that stat (`ly`). Backs are on the rushing ladder: the books post no
+# rushing + receiving ladder (the dashboards' LADDER_STAT).
+LADDER_STAT = {"pass": "pass_yds", "scrim": "rush_yds", "rec": "rec_yds"}
+RUNGS = 4   # the O/U and three rungs below it
+
+
+def ladder(k: dict, st: str | None = None) -> dict | None:
+    """One pick's ladder: per book the lines with whether he went over each, the book shown
+    (DraftKings when it posted one, else FanDuel) and `deep`, the first line he cleared at that
+    book (0 the O/U, 1-3 the rungs below it; None: none). `st` "left": he left early, not counted."""
+    lad, ly = k.get("lad") or {}, k.get("ly")
+    books = {b: [[float(l), p] for l, p in lad[b][:RUNGS]] for b in ("dk", "fd") if lad.get(b)}
+    if not books or ly is None:
+        return None
+    first = lambda ls: next((i for i, (l, _) in enumerate(ls) if ly > l), None)
+    book = "dk" if "dk" in books else "fd"
+    out = {"stat": LADDER_STAT.get(k.get("kind")), "y": ly, "book": book, "books": books,
+           "deep": first(books[book]), "deep_by": {b: first(v) for b, v in books.items()}}
+    if st:
+        out["st"] = st
+    return out
+
+
+def rung_card(picks: list[dict]) -> dict:
+    """The week's ladder tally, at the book shown for each pick. `ou`: every pick with a ladder
+    against the O/U. `hit`: picks with the full ladder (the O/U and three rungs), how many had
+    cleared by each rung (by the O/U, by -1, -2, -3). Left-early picks aren't counted."""
+    ls = [x["lad"] for x in picks if x.get("lad") and x["lad"].get("st") != "left"]
+    full = [l for l in ls if len(l["books"][l["book"]]) >= RUNGS]
+    return {"ou": {"n": len(ls), "hit": sum(l["deep"] == 0 for l in ls)},
+            "n": len(full), "hit": [sum(l["deep"] is not None and l["deep"] <= i for l in full) for i in range(RUNGS)],
+            "no_alts": len(ls) - len(full), "left": sum(1 for x in picks if (x.get("lad") or {}).get("st") == "left")}

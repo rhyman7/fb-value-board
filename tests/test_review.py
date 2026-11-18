@@ -110,6 +110,31 @@ def test_best_matchups_marks_only_listed_players_on_their_stat():
     assert P.best_matchups(rows, None, ids) is None
 
 
+def test_best_matchups_ladder_rungs():
+    from nflmodel import reviewplayers as P
+    row = lambda n, t, p, s, pj, a, st="played": {"n": n, "t": t, "p": p, "s": s, "pj": pj, "a": a, "st": st, "c": True}
+    rows = [row("A Back", "AAA", "RB", "rush_yds", 60, 55), row("B Wideout", "BBB", "WR", "rec_yds", 70, 10),
+            row("C End", "CCC", "TE", "rec_yds", 40, 50), row("D Left", "DDD", "WR", "rec_yds", 50, 5, "left")]
+    ids = {0: "1", 1: "2", 2: "3", 3: "4"}
+    lad4 = lambda a: [[a, -110], [a - 10, -160], [a - 20, -250], [a - 30, -400]]
+    wk = {"picks": {
+        "AAA": {"rk": 1, "name": "A Back", "log": "AAA|1", "kind": "scrim", "res": "miss", "ly": 55,
+                "lad": {"dk": lad4(59.5), "fd": [[50.5, -114], [40.5, -150], [30.5, -250], [20.5, -400]]}},
+        "BBB": {"rk": 2, "name": "B Wideout", "log": "BBB|2", "kind": "rec", "res": "miss", "ly": 10, "lad": {"fd": lad4(49.5)}},
+        "CCC": {"rk": 3, "name": "C End", "log": "CCC|3", "kind": "rec", "res": "beat", "ly": 50, "lad": {"fd": [[39.5, -114]]}},
+        "DDD": {"rk": 4, "name": "D Left", "log": "DDD|4", "kind": "rec", "res": "miss", "ly": 5, "lad": {"dk": lad4(45.5)}},
+        "EEE": {"rk": 5, "name": "No Ladder", "log": "EEE|5", "kind": "rec", "res": "beat", "ly": 80}}}
+    b = P.best_matchups(rows, wk, ids)
+    L = {x["t"]: x.get("lad") for x in b["picks"]}
+    assert L["AAA"]["book"] == "dk" and L["AAA"]["stat"] == "rush_yds" and L["AAA"]["deep"] == 1
+    assert L["AAA"]["deep_by"] == {"dk": 1, "fd": 0}
+    assert L["BBB"]["book"] == "fd" and L["BBB"]["deep"] is None
+    assert L["DDD"]["st"] == "left" and L["EEE"] is None
+    r = b["card"]["rungs"]
+    assert r["ou"] == {"n": 3, "hit": 1} and r["n"] == 2 and r["hit"] == [0, 1, 1, 1]
+    assert r["no_alts"] == 1 and r["left"] == 1
+
+
 def test_college_no_stat_players_sorted_by_snaps():
     from nflmodel import reviewplayers as P
     snaps = {P._pkey("Joe Smith Jr."): (40.0, 45.0), P._pkey("Al Low"): (8.0, 40.0), P._pkey("New Guy"): (30.0, None)}

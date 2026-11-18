@@ -402,6 +402,21 @@
     "beat_avg": {
      "n": 11,
      "beat": 7
+    },
+    "rungs": {
+     "ou": {
+      "n": 0,
+      "hit": 0
+     },
+     "n": 0,
+     "hit": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "no_alts": 0,
+     "left": 0
     }
    },
    "real_misses": [
@@ -663,6 +678,21 @@
     "beat_avg": {
      "n": 15,
      "beat": 5
+    },
+    "rungs": {
+     "ou": {
+      "n": 15,
+      "hit": 5
+     },
+     "n": 15,
+     "hit": [
+      5,
+      6,
+      9,
+      11
+     ],
+     "no_alts": 0,
+     "left": 0
     }
    },
    "real_misses": [
@@ -924,6 +954,21 @@
     "beat_avg": {
      "n": 17,
      "beat": 8
+    },
+    "rungs": {
+     "ou": {
+      "n": 15,
+      "hit": 6
+     },
+     "n": 15,
+     "hit": [
+      6,
+      9,
+      10,
+      11
+     ],
+     "no_alts": 0,
+     "left": 1
     }
    },
    "real_misses": [
@@ -1185,6 +1230,21 @@
     "beat_avg": {
      "n": 13,
      "beat": 8
+    },
+    "rungs": {
+     "ou": {
+      "n": 11,
+      "hit": 5
+     },
+     "n": 10,
+     "hit": [
+      5,
+      7,
+      7,
+      7
+     ],
+     "no_alts": 1,
+     "left": 0
     }
    },
    "real_misses": [

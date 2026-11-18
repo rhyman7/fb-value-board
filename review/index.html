@@ -585,6 +585,28 @@ function playerFilters() {
     <div class="fg">${b("show", "counted", "Scored")}${b("show", "left", `Left early (${c.left.players})`)}${b("show", "out", `${PV.lg === "nfl" ? "Didn't play" : "No stats recorded"} (${c.dnp.players})`)}${PV.best ? "" : b("show", "small", "QB rushing under 10")}${b("show", "all", "Everything")}</div>
     <input type="search" id="pq" placeholder="Player or team" value="${esc(PV.q)}" aria-label="Search players or teams"></div>`;
 }
+/* Best Matchups on the ladder (Nov 18, 2026): the O/U and the three rungs below it, per pick */
+const RUNG = ["O/U", "\u22121", "\u22122", "\u22123"], BOOK = { dk: "DK", fd: "FD" };
+const rungName = i => i == null ? "Missed all" : i === 0 ? "Over the O/U" : RUNG[i] + " rung";
+function ladderCard(lg, d) {
+  const P = d.best.picks.filter(x => x.lad).sort((a, b) => (a.rk ?? 99) - (b.rk ?? 99));
+  if (!P.length) return `<section class="card"><h3>On the ladder</h3><p class="note">No DraftKings or FanDuel ladders were logged for this week's picks. Alternate lines were first logged in ${lg === "nfl" ? "NFL week 8" : "college week 10"}.</p></section>`;
+  const cell = (x, i) => { const L = x.lad, ls = L.books[L.book], o = L.book === "dk" ? L.books.fd : null;
+    if (!ls[i]) return `<td class="dim">\u2013</td>`;
+    const hit = L.y > ls[i][0], alt = o && o[i] && o[i][0] !== ls[i][0] ? `<div class="dim sm2">FD ${o[i][0]}</div>` : "";
+    return `<td class="${L.st ? "dim" : hit ? "pos" : "neg"}">${ls[i][0]} ${hit ? "\u2713" : "\u2717"}${alt}</td>`; };
+  const res = x => { const L = x.lad, ls = L.books[L.book];
+    if (L.st === "left") return `<span class="chip c">Left early, not counted</span>`;
+    const main = L.deep == null && ls.length < 4 ? `<span class="chip">Missed the O/U, no rungs posted</span>`
+      : `<span class="chip ${L.deep == null ? "l" : "w"}">${rungName(L.deep)}</span>`;
+    const other = Object.entries(L.deep_by).filter(([b, v]) => b !== L.book && v !== L.deep);
+    return main + other.map(([b, v]) => ` <span class="dim sm2">${BOOK[b]}: ${v == null ? "missed all" : v === 0 ? "over the O/U" : RUNG[v] + " rung"}</span>`).join(""); };
+  const body = P.map(x => { const L = x.lad;
+    return `<tr><td class="dim">${x.rk ?? ""}</td><td>${esc(x.n)}</td><td>${x.p}</td><td>${esc(x.t)} <span class="dim">v ${esc(x.o)}</span></td><td class="dim">${PSTAT[L.stat]}${L.book === "fd" ? " (FD)" : ""}</td><td>${Math.round(L.y)}</td>${[0, 1, 2, 3].map(i => cell(x, i)).join("")}<td>${res(x)}</td></tr>`; }).join("");
+  return `<section class="card"><h3>On the ladder</h3>
+   <p class="note" style="margin:0 0 8px">Each pick's yardage ladder at his kickoff: the book's O/U and the next three alternate overs below it, DraftKings where it posted one (FanDuel's line under it where different), otherwise FanDuel. Backs are on the rushing ladder; the books post no rushing + receiving ladder.</p>
+   <div class="scroll"><table class="ptab bmt"><tr><th class="l">List #</th><th class="l">Player</th><th class="l">Pos</th><th class="l">Team</th><th class="l">Ladder</th><th>Yds</th><th>O/U</th><th>\u22121</th><th>\u22122</th><th>\u22123</th><th>Cleared</th></tr>${body}</table></div></section>`;
+}
 async function playersPage(lg, w, best) {
   const mode = best ? "best" : "players", pk = x => best ? x.best : x.players;
   document.body.className = "";
@@ -598,7 +620,7 @@ async function playersPage(lg, w, best) {
   const c = best ? d.best.card : d.card, a = c.all;
   const tile = (tag, t, sm) => best && !t.n ? "" : `<div class="tile"><div class="tag">${tag}</div><div class="big">${t.met} <span class="of">of ${t.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${t.n ? 100 * t.met / t.n : 0}%"></i></div><div class="sm">${pctOf(t.met, t.n)} met or beat · ${t.short} short${sm ? " · " + sm : ""}</div>${t.typ_n ? `<div class="typ" title="Share who reached the model's 50/50 number for them. About 50% means the model's spread is right."><b>${pctOf(t.typ_met, t.typ_n)}</b> reached their typical game <span class="dim">(target 50%)</span></div>` : ""}</div>`;
   const season = i.weeks.filter(pk).reduce((s, x) => ({ met: s.met + pk(x).all.met, n: s.n + pk(x).all.n, tm: s.tm + pk(x).all.typ_met, tn: s.tn + pk(x).all.typ_n, b: s.b + ((pk(x).beat_avg || {}).beat || 0), bn: s.bn + ((pk(x).beat_avg || {}).n || 0) }), { met: 0, n: 0, tm: 0, tn: 0, b: 0, bn: 0 });
-  const byWeek = i.weeks.filter(pk).map(x => { const P = pk(x); return `<tr><td><a href="${href(lg, mode, x.week)}">Week ${x.week}</a></td><td>${P.all.met}</td><td>${P.all.short}</td><td>${pctOf(P.all.met, P.all.n)}</td><td>${P.all.typ_n ? pctOf(P.all.typ_met, P.all.typ_n) : "–"}</td>${best ? `<td>${P.beat_avg ? P.beat_avg.beat + " of " + P.beat_avg.n : "–"}</td>` : ["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(P.by_stat[s].met, P.by_stat[s].n)}</td>`).join("")}<td>${sgn(P.all.avg_miss)}</td><td>${P.left.players}</td><td>${P.dnp.players}</td></tr>`; }).join("");
+  const byWeek = i.weeks.filter(pk).map(x => { const P = pk(x); return `<tr><td><a href="${href(lg, mode, x.week)}">Week ${x.week}</a></td><td>${P.all.met}</td><td>${P.all.short}</td><td>${pctOf(P.all.met, P.all.n)}</td><td>${P.all.typ_n ? pctOf(P.all.typ_met, P.all.typ_n) : "–"}</td>${best ? `<td>${P.beat_avg ? P.beat_avg.beat + " of " + P.beat_avg.n : "–"}</td><td>${P.rungs && P.rungs.ou.n ? P.rungs.ou.hit + " of " + P.rungs.ou.n : "–"}</td><td>${P.rungs && P.rungs.n ? P.rungs.hit[3] + " of " + P.rungs.n : "–"}</td>` : ["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(P.by_stat[s].met, P.by_stat[s].n)}</td>`).join("")}<td>${sgn(P.all.avg_miss)}</td><td>${P.left.players}</td><td>${P.dnp.players}</td></tr>`; }).join("");
   const ba = c.beat_avg;
   return weekStrip(lg, i, w, mode) + `<div class="page"><div class="crumb"><a href="#">Weekly Review</a> / <a href="#${lg}">${LEAGUES[lg].name}</a> / <a href="${href(lg, w)}">Week ${w}</a></div>
   <h2 class="pg">Week ${w} ${best ? "best matchups" : "players"}</h2>
@@ -608,6 +630,11 @@ async function playersPage(lg, w, best) {
   <div class="tiles">${["QB", "RB", "WR", "TE"].map(p => tile(p, c.by_pos[p], "avg " + sgn(c.by_pos[p].avg_miss))).join("")}</div>
   ${best && ba ? `<div class="tiles two"><div class="tile"><div class="tag">Beat his season average</div><div class="big">${ba.beat} <span class="of">of ${ba.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${ba.n ? 100 * ba.beat / ba.n : 0}%"></i></div><div class="sm">${pctOf(ba.beat, ba.n)}. The list's own test, from the report's record: his main yardage stat against his per-game average going in (a back's rushing and receiving together). Other regulars do it about 41% of the time.</div></div>
    <div class="tile"><div class="tag">Season so far</div><div class="big">${season.met} <span class="of">of ${season.n} met</span></div><div class="sm">${pctOf(season.met, season.n)} met the projection · ${pctOf(season.tm, season.tn)} reached their typical game · ${season.b} of ${season.bn} beat their average (${pctOf(season.b, season.bn)})</div></div></div>` : ""}
+  ${best && c.rungs ? (() => { const R = c.rungs, S = i.weeks.filter(x => x.best && x.best.rungs).reduce((q, x) => { const u = x.best.rungs; return { n: q.n + u.n, h: q.h.map((v, j) => v + u.hit[j]), on: q.on + u.ou.n, oh: q.oh + u.ou.hit }; }, { n: 0, h: [0, 0, 0, 0], on: 0, oh: 0 });
+   const rt = (tag, h, n, sm) => `<div class="tile"><div class="tag">${tag}</div><div class="big">${h} <span class="of">of ${n}</span></div><div class="bar" aria-hidden="true"><i style="width:${n ? 100 * h / n : 0}%"></i></div><div class="sm">${pctOf(h, n)}${sm}</div></div>`;
+   return `<div class="tag" style="margin:6px 0 8px">On the ladder: cleared the O/U or a rung below it</div>
+  ${R.ou.n ? `<div class="tiles">${rt("Over the O/U", R.ou.hit, R.ou.n, ` this week \u00b7 season ${pctOf(S.oh, S.on)} (${S.oh} of ${S.on})`)}${[1, 2, 3].map(j => rt(`Cleared by ${RUNG[j]} rung`, R.hit[j], R.n, ` this week \u00b7 season ${pctOf(S.h[j], S.n)} (${S.h[j]} of ${S.n})`)).join("")}</div>
+  <p class="note" style="margin:-6px 0 16px">Rung tiles count the picks with the full ladder (the O/U and three rungs) at the book shown; clearing a higher line counts for every rung below it.${R.no_alts ? ` ${R.no_alts} pick${R.no_alts === 1 ? " had" : "s had"} only the O/U posted (in the O/U tile only).` : ""}${R.left ? ` ${R.left} left early and ${R.left === 1 ? "isn't" : "aren't"} counted.` : ""}</p>` : `<p class="note" style="margin:0 0 16px">No ladders were logged for this week's picks. Alternate lines were first logged in ${lg === "nfl" ? "NFL week 8" : "college week 10"}.</p>`}`; })() : ""}
   <div class="tag" style="margin:6px 0 8px">Not counted against the model</div>
   <div class="tiles two">
    <div class="tile luck"><div class="tag">Left early</div><div class="big">${c.left.players} <span class="of">player${c.left.players === 1 ? "" : "s"}</span></div><div class="sm">${c.left.n} projections: ${c.left.met} met, ${c.left.short} short${c.left.avg_miss != null ? ", average miss " + sgn(c.left.avg_miss) + " yds" : ""}. ${lg === "nfl" ? "A regular who played under half his usual snaps, or a quarterback who left." : "An estimate: touches under 40% of his usual with none after halftime, or a quarterback who left."}</div></div>
@@ -622,7 +649,8 @@ async function playersPage(lg, w, best) {
   </div>`; })() : ""}
   <p class="note" style="margin:-4px 0 18px">Left off this page and not counted: receivers projected 20 yards or fewer, tight ends 15 or fewer, backs' rushing 15 or fewer and backs' receiving under 10. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. <b>Typical</b> is the model's own 50/50 number for the player (green when he reached it): if the model's spread is right, about half reach it, so a share well off 50% is a real miss. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
   <section class="card"><h3>Projections and results</h3><div id="pfilters">${playerFilters()}</div><div id="ptable">${playerTable()}</div></section>
-  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Typical %</th>${best ? "<th>Beat his average</th>" : "<th>Pass</th><th>Rush</th><th>Rec</th>"}<th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
+  ${best ? ladderCard(lg, d) : ""}
+  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Typical %</th>${best ? "<th>Beat his average</th><th>Over O/U</th><th>By \u22123 rung</th>" : "<th>Pass</th><th>Rush</th><th>Rec</th>"}<th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
 }
 document.addEventListener("click", ev => {
   const f = ev.target.closest(".fb"), s = ev.target.closest(".srt");
