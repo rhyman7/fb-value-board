@@ -125,6 +125,12 @@ boards in detail; this file is the rules.
   One file per snapshot, never edited; a header-only file is a snapshot the API had nothing
   for. Resume a stopped run with a new run and the same inputs, never **Re-run**. The boards
   never read these files; `experiments/pinnacle_grade.py` does.
+- **Frozen test fits: `experiments/frozen/`.** A pre-set test that is scored on weeks still to
+  be played freezes its fit here before those weeks are scored (first: the NFL floor-rung
+  re-reading, `rung_recalibration_map.json`, Nov 18, 2026, fitted on data through 2026 week 10
+  and scored on weeks 11-13; Project doc `claude/plan-rung-recalibration-test-2026-11-18.md`).
+  Never edit or refit a frozen file; the script refuses to overwrite one. Only coefficients go
+  here, never PFF rows. The boards do not read these files.
 - The **Wind history** Action (`wind-history.yml`, by hand only) runs
   `experiments/fetch_wind_history.py` and commits only `data/cache/wind_history.csv`: the
   archive wind at kickoff (speed, gusts, direction, along-field and crosswind parts) for

@@ -1,0 +1,113 @@
+{
+ "written": "2026-11-18T16:31-05:00",
+ "plan": "claude/plan-rung-recalibration-test-2026-11-18.md",
+ "fit_rows": {
+  "2025": 14298,
+  "2026 weeks 8-10": 1964
+ },
+ "last_2026_week_in_fit": 10,
+ "tuning_crossfit_2025": {
+  "A": {
+   "brier": {
+    "raw": 0.16777,
+    "re_read": 0.16487,
+    "gain": 0.0029,
+    "se": 0.0008
+   },
+   "log_loss": {
+    "raw": 0.51441,
+    "re_read": 0.51323,
+    "gain": 0.00118,
+    "se": 0.00258
+   }
+  },
+  "B": {
+   "brier": {
+    "raw": 0.16777,
+    "re_read": 0.16469,
+    "gain": 0.00308,
+    "se": 0.00078
+   },
+   "log_loss": {
+    "raw": 0.51441,
+    "re_read": 0.50819,
+    "gain": 0.00622,
+    "se": 0.00187
+   }
+  },
+  "C": {
+   "brier": {
+    "raw": 0.16777,
+    "re_read": 0.16389,
+    "gain": 0.00388,
+    "se": 0.00102
+   },
+   "log_loss": {
+    "raw": 0.51441,
+    "re_read": 0.50622,
+    "gain": 0.00819,
+    "se": 0.00259
+   }
+  }
+ },
+ "chosen": "C",
+ "map": {
+  "pass_yds": {
+   "version": "C",
+   "intercept": 3.350074,
+   "coef": [
+    0.442405,
+    -3.512192,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "terms": [
+    "logit(model)",
+    "rung/main line",
+    "pos=RB",
+    "pos=WR",
+    "pos=TE"
+   ],
+   "median_share": 0.751046
+  },
+  "rush_yds": {
+   "version": "C",
+   "intercept": 1.910044,
+   "coef": [
+    0.407987,
+    -2.662683,
+    0.54021,
+    0.0,
+    0.0
+   ],
+   "terms": [
+    "logit(model)",
+    "rung/main line",
+    "pos=RB",
+    "pos=WR",
+    "pos=TE"
+   ],
+   "median_share": 0.526786
+  },
+  "rec_yds": {
+   "version": "C",
+   "intercept": 1.377548,
+   "coef": [
+    0.318271,
+    -2.023209,
+    0.257621,
+    0.554943,
+    0.564984
+   ],
+   "terms": [
+    "logit(model)",
+    "rung/main line",
+    "pos=RB",
+    "pos=WR",
+    "pos=TE"
+   ],
+   "median_share": 0.441441
+  }
+ }
+}
