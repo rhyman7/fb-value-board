@@ -1,8 +1,118 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-18T20:22Z",
+ "fetched": "2026-11-18T23:23Z",
  "today": "2026-11-18",
  "teams": {
+  "Akron": {
+   "conf": "MAC",
+   "abbr": "AKR",
+   "report": "Game Day",
+   "published": "2026-11-18",
+   "posted": "18:00:00",
+   "game_date": "2026-11-18",
+   "game_time": "19:00:00",
+   "opponent": "Massachusetts",
+   "players": [
+    {
+     "name": "Daymon David",
+     "pos": "S",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Alex Branch",
+     "pos": "DB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Iesa Jarmon",
+     "pos": "DB",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cameron Monteiro",
+     "pos": "WR",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rodrick Hunter",
+     "pos": "S",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaborree Riggins",
+     "pos": "WR",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Paul Davis",
+     "pos": "WR",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Catrell White",
+     "pos": "DB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chris Gee",
+     "pos": "RB",
+     "number": "25",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Gavin James",
+     "pos": "LB",
+     "number": "31",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ian Falkner",
+     "pos": "OL",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luke Sivon",
+     "pos": "WR",
+     "number": "81",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Malakai Ross-Graves",
+     "pos": "DL",
+     "number": "94",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaiden Brown-Demery",
+     "pos": "DL",
+     "number": "99",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "Clemson": {
    "conf": "ACC",
    "abbr": "CLEM",
@@ -343,6 +453,144 @@
      "pos": "DT",
      "number": "95",
      "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Massachusetts": {
+   "conf": "MAC",
+   "abbr": "MASS",
+   "report": "Game Day",
+   "published": "2026-11-18",
+   "posted": "18:00:00",
+   "game_date": "2026-11-18",
+   "game_time": "19:00:00",
+   "opponent": "Akron",
+   "players": [
+    {
+     "name": "Jordan Washington",
+     "pos": "RB",
+     "number": "0",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Joseph Griffin Jr.",
+     "pos": "WR",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "T.Y. Harding",
+     "pos": "WR",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Joshua Nobles",
+     "pos": "DL",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Chris Stanley",
+     "pos": "CB",
+     "number": "4",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "William \"Pop\" Watson III",
+     "pos": "QB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "TJ Magee",
+     "pos": "CB",
+     "number": "7",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Justin Krueger",
+     "pos": "DL",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Aubrey Melvin",
+     "pos": "DL",
+     "number": "10",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Dallas Elliott",
+     "pos": "WR",
+     "number": "17",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Zachary Betts",
+     "pos": "DL",
+     "number": "17",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "David Chiavegato",
+     "pos": "S",
+     "number": "19",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Justin Lewis",
+     "pos": "RB",
+     "number": "33",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Zeraun Daniel",
+     "pos": "S",
+     "number": "38",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Mills",
+     "pos": "LS",
+     "number": "51",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Greg Klingensmith",
+     "pos": "OL",
+     "number": "78",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Romando Johnson",
+     "pos": "DL",
+     "number": "92",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "William DePaepe",
+     "pos": "DL",
+     "number": "98",
+     "status": "Questionable",
      "season_out": false
     }
    ]
