@@ -1,9 +1,19 @@
 {
- "checked_utc": "2026-11-17T00:06:39Z",
- "games": 14,
- "compared": 2,
- "not_in_nfelo": 24,
- "disagree": [],
+ "checked_utc": "2026-11-18T22:54:03Z",
+ "games": 18,
+ "compared": 26,
+ "not_in_nfelo": 6,
+ "disagree": [
+  {
+   "game_id": "2026_11_TB_DET",
+   "team": "TB",
+   "board": "Baker Mayfield",
+   "nfelo": "Jalon Daniels",
+   "kickoff": "2026-11-22T18:00Z"
+  }
+ ],
  "changed": true,
- "key": []
+ "key": [
+  "2026_11_TB_DET|TB|Baker Mayfield|Jalon Daniels"
+ ]
 }
