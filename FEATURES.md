@@ -2871,3 +2871,39 @@ from 38.8% met / 50.5% reaching Typical to 37.4% / 48.7%. By position, reaching 
 to 51.0%, RB 50.7% to 50.3%, WR 50.1% to 47.9%, **TE 50.5% to 44.2%**. Lead for a pre-set test:
 college tight ends (and to a lesser degree receivers) with a 15+ yard projection are shut out
 more often than the projection allows.
+
+## College: counting shut-outs in the receiving projections (Nov 18, 2026): trade-offs, nothing applied
+
+Lead: the college Players page with shut-outs counted (tight ends over 15 projected yards reach
+Typical 44%). Cause confirmed: `players.player_rows` keeps a player-game only when he has a pass
+attempt, carry or catch, so a game played without one is treated as a game missed, and every
+receiving projection is "yards if he records a stat". Rule written before the run: Project doc
+`claude/plan-cfb-shutout-test-2026-11-18.md`. Script `experiments/cfb_shutout_test.py`, output
+`experiments/out/cfb_shutout_test.json` (scores only).
+
+How often it happens (2021-25, on the field by PFF's snap counts, at the Players page minimums):
+tight ends 19% of player-games, wide receivers 10%, backs 1%. The projections for those rows run
+5.1 yards high (tight ends) and 4.2 (wide receivers) once the zeros are counted.
+
+A: `proj x (1 - p0)`, p0 from projected receptions. B: shut-outs as zero games in the history,
+chain rebuilt. Rows: on the field, a shut-out scores 0. B was chosen on tuning for both positions.
+
+| | Tuning RMSE gd / bt | Holdout RMSE gd / bt | Bias after (holdout gd) | Brier at DK/FD lines, 2024 gd/bt, 2025 gd/bt |
+|---|---|---|---|---|
+| TE, B (chosen) | 22.54 to 21.96 / 22.86 to 21.99 | 22.46 to 21.97 (10 se) / 22.65 to 21.90 (15 se) | -5.07 to +0.15 | **all four worse**: +0.0004, +0.0009, +0.0025, +0.0008 (each about 1 se or less) |
+| TE, A (reported) | 22.28 / 22.50 | 21.90 (13 se) / 21.96 (14 se) | -0.59 | all four better: -0.0008, -0.0016, -0.0025, -0.0050 (each about 1 se or less) |
+| WR, B (chosen) | 34.55 to 34.22 / 34.78 to 34.33 | 33.40 to 33.08 (13 se) / 33.54 to 33.12 (17 se) | -4.18 to -0.79 | 2024 better (-0.0003, -0.0007), **2025 worse** (+0.0017, +0.0011; 2.4 and 1.6 se) |
+| WR, A (reported) | 34.41 / 34.56 | 33.13 (14 se) / 33.21 (16 se) | -0.85 | +0.0009, -0.0001, +0.0009, +0.0007 |
+
+- Under the rule both positions are **trade-offs** (the chosen version is better on the four
+  yardage measures by 10+ standard errors and worse at the lines). Nothing applied.
+- For tight ends, version A is better on all eight measures, but it was not the version chosen on
+  tuning, so it is not a keep; it goes to Ryan as the trade-off worth considering.
+- Props counts: 253-309 tight-end lines and 1,295-1,506 wide-receiver lines per measure; 19-23
+  tight ends and 62-64 receivers a year had a line, took a snap and recorded nothing.
+- Process note: the first run's B changed nothing (the chain drops rows with no attempt, carry
+  or catch), which left A as the only version and showed "kept" for tight ends. B was fixed with a
+  negligible reception count on the added rows and the whole test rerun; these are the rerun's numbers.
+- A's curve is too flat: it predicts a 9% shut-out chance for tight ends projected for 4+ catches
+  (actual 1%) and 25% at 1-1.5 (actual 31%).
+- Not done from the plan's reported list: the share reaching Typical before and after.
