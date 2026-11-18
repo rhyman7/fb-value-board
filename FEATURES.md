@@ -2795,3 +2795,18 @@ points at the projection, 0.7 at 80% of it, 0.8 at 65%), about 0.3 / 0.5 / 0.6 i
 the same refit without it. NFL receiving this week: 0.3 / 0.5 / 0.6 points. Projections do not change.
 Rechecked in January on 2026 alone, with the two pieces not applied (Project doc
 `claude/january-recheck-additions.md`).
+
+## Weekly Review: college shut-outs counted on the Players page (Nov 18, 2026)
+
+Ryan's ask: count the college "no stats recorded" players properly (about 200 a week were left
+out because the public data can't say whether they played). PFF's offensive snap counts (private)
+now sort them: shut out (played his usual snaps, a real zero), limited, sat, or unknown. The page
+adds a second scorecard with the shut-outs counted and the four totals; no player's row says
+which he was (licensed data). `nflmodel/reviewplayers.py`, `review/index.html`.
+
+Weeks 1-11, 2026: of 2,330 no-stat players, 452 were shut out, 201 limited, 987 sat, 690 unknown
+(611 of those in week 1, a box-score gap). Counting the shut-outs moves the college scorecard
+from 38.8% met / 50.5% reaching Typical to 37.4% / 48.7%. By position, reaching Typical: QB 51.2%
+to 51.0%, RB 50.7% to 50.3%, WR 50.1% to 47.9%, **TE 50.5% to 44.2%**. Lead for a pre-set test:
+college tight ends (and to a lesser degree receivers) with a 15+ yard projection are shut out
+more often than the projection allows.
