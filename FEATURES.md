@@ -2972,3 +2972,90 @@ WR over 20. Brier, candidate minus current (se):
 - 2026 weeks 1-11 (already seen): tight ends -0.0179 (0.0040), wide receivers -0.0096 (0.0016).
 - **Not applied.** Applying it changes college tight-end odds and Typical on the board, Props and
   Parlays pages: plan and before/after sample to Ryan first.
+
+## NFL: air yards, WOPR and interception luck, from the "Hidden Stats" betting guide (Nov 18, 2026): nothing kept
+
+Ryan shared ilovefootballseason.com's advanced-metrics guide and said yes to pre-set tests of the
+three ideas in it the board had not tested. Rule written before the run: Project doc
+`claude/plan-air-yards-wopr-twp-tests-2026-11-18.md`. Scripts `experiments/air_yards_wopr_test.py`
+(tests 1 and 2) and `experiments/twp_int_luck_test.py` (test 3), outputs in `experiments/out/`
+(scores only, never PFF rows). The board's full pipeline, game-day and bet-time; tuning 2014-18
+(2015-18 where PFF is an input), holdout 2019-25; DK/FD lines 2023-25. Candidate minus current
+(paired se); negative is better.
+
+**1. Unrealized air yards in receiving yards (WR, TE).** A: the share of his air yards that went
+uncaught (decayed, shrunk by 300 air yards). B: the article's last-3-games (air yards − receiving
+yards) ÷ air yards. In the receiving-yards calibration and the boosted step.
+
+| | Tuning game-day | Tuning bet-time | Holdout game-day | Holdout bet-time | Lines, close | Lines, pricing |
+|---|---|---|---|---|---|---|
+| Current (RMSE / Brier) | 31.511 | 31.519 | 29.698 | 29.750 | 0.25705 | 0.25590 |
+| A (chosen) | −0.002 (0.034) | −0.007 (0.040) | **+0.010 (0.022)** | **+0.031 (0.023)** | **+0.00021 (0.00027)** | **+0.00004 (0.00039)** |
+| B | **+0.000 (0.031)** | −0.025 (0.035) | not read | not read | not read | not read |
+
+Better on 2 of 6, and those two by a twentieth of a standard error. Not kept. Reported: the
+"buy-low" fifth (highest uncaught share, 3,995 player-games 2019-25) finished +0.3 ± 0.4 yards
+against the current projection, the rest +0.1 ± 0.2. No bounce-back the projection is missing.
+Their receiving-TD rate was 16.3% against the board's 15.1% (the rest: 21.2% against 18.6%), so
+no extra touchdown signal either.
+
+**2. Air-yards share / WOPR in receptions and receiving yards (WR, TE, RB).** A: air-yards share
+minus target share. B: WOPR (1.5 × target share + 0.7 × air-yards share) against the position
+average. In both calibrations and the boosted step.
+
+| Tuning | Rec yards game-day | Rec yards bet-time | Receptions game-day | Receptions bet-time |
+|---|---|---|---|---|
+| Current RMSE | 28.918 | 28.918 | 2.0597 | 2.0664 |
+| A | −0.006 (0.028) | **+0.024 (0.029)** | **+0.00001 (0.0016)** | −0.0027 (0.0017) |
+| B | −0.035 (0.028) | **+0.021 (0.031)** | **+0.0016 (0.0018)** | −0.0010 (0.0018) |
+
+Neither version is better on every tuning measure, so nothing went to the holdout or the lines.
+Not kept. Target share already carries what WOPR says about the average game.
+
+Reported, and the one lead here: among WR/TE projected 25+ yards who played (2019-25, game-day),
+split into thirds by WOPR within the same projection band:
+
+| WOPR third | Player-games | Projected | Actual | Cleared 80% of projection | Cleared 60% |
+|---|---|---|---|---|---|
+| Low | 4,267 | 46.8 | 45.2 | 52.8% | 64.4% |
+| Middle | 4,260 | 47.2 | 47.7 | 54.9% | 67.6% |
+| High | 4,260 | 47.8 | 49.9 | 56.8% | 68.3% |
+
+High minus low: +4.1 ± 1.1 points at 80% of the projection, +4.0 ± 1.0 at 60%. This is a
+look at the holdout that the rule did not judge, on the game-day table, with 80% and 60% of the
+projection standing in for Typical and a floor rung. The spread is not tighter for the high third
+(sd of actual ÷ projection 0.78 against 0.75): the gap is in the middle of the distribution, not
+a steadier floor. A pre-set test on the floor rungs and Typical would be its own plan.
+
+**3a. Turnover-worthy plays in the quarterback's interceptions projection.** His PFF
+turnover-worthy plays per dropback (decayed, shrunk by 200 dropbacks, against the league's 3.8%)
+in the interceptions calibration. Projected starters who started, 10+ projected attempts. No
+interception lines in the history (93 in the 2026 live log), so the price measure is the Brier of
+the chance of 1+ interception (Poisson on the projection).
+
+| | Tuning 2015-18 | Holdout 2019-25 |
+|---|---|---|
+| RMSE game-day (0.9206 / 0.8761) | −0.0020 (0.0007) | −0.0010 (0.0011), 0.95 se |
+| RMSE bet-time (0.9174 / 0.8723) | −0.0022 (0.0009) | −0.0008 (0.0012), 0.68 se |
+| Brier, 1+ interception (0.2505 / 0.2502) | −0.0011 (0.0003) | **+0.00001 (0.0005)** |
+
+Better on 5 of 6, the holdout gains under 1 standard error and the holdout Brier flat. Not kept;
+the closest of the three, and a January-recheck candidate if Ryan wants it.
+
+**3b. Interception luck in the game model.** Quarterback side: (interceptions − league rate ×
+turnover-worthy plays) per dropback for the game's starter. Defense side: (interceptions − league
+rate × (interceptions + dropped interceptions)) per opponent dropback. Decayed, shrunk by 200
+dropbacks (set before the run; the plan had no shrink), added to the production margin and total
+models. Average miss, tuning 2015-18 (1,068 games):
+
+| | Margin (9.841) | Total (10.693) |
+|---|---|---|
+| A, QB side | **+0.052 (0.029)** | −0.006 (0.014) |
+| B, QB side + defense | **+0.051 (0.029)** | −0.009 (0.017) |
+
+Margin worse in both, so nothing went to the holdout. Not kept. The plan doc said turnover-free
+ratings had been rejected; that was wrong: they were applied to the margin model on Nov 4
+(`d_pnt`, `d_rnt`), so the margin already ignores interceptions, which fits this result.
+Reported, "fade the lucky team": against the closing spread 2015-25, the luckiest fifth of
+team-games went 583-599 (49.3%), the unluckiest fifth 583-599 (49.3%), everyone else 1787-1755
+(50.5%). Nothing to bet.
