@@ -112,7 +112,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
                                 on=["game_id", "player_id"], how="left")
         except Exception as exc:
             print(f"  expected kneel-downs skipped ({exc})")
-        player_board = players.board(pproj, pinfo, upcoming_ids, new=new)
+        player_board = players.board(pproj, pinfo, upcoming_ids, new=new, table=ptable)
         try:                                      # Questionable players' expected line, display only (qshade.py)
             from . import qshade
             rep = {}

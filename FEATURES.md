@@ -2672,3 +2672,126 @@ seasons before it. Raw model average miss, margin / total, tuning 2017-19 (2,203
 - The closing line already holds it in both leagues: a team's recent misses against the model do
   not predict its next cover (NFL −0.01 ± 0.04, college 0.00 ± 0.03).
 - No props check: nothing passed, so no prop number can move.
+
+## A boosted-trees step for the college player projections (Nov 17, 2026): a trade-off, not kept
+
+`python experiments/cfb_boosted_props_test.py` (rule in the script and the Project doc
+`claude/plan-cfb-boosted-props-test-2026-11-17.md`, written before the run; private PFF data, scores only;
+results in `experiments/out/cfb_boosted_props_test.json`). One candidate: the NFL's boosted last step
+(`nflmodel/players_ml._model()`, settings unchanged) after the college chain, for RB carries and rushing
+yards and WR/RB receptions and receiving yards, walk-forward by season. Inputs: the chain's projection
+and parts, shares, team volume, game context, defense, PFF route/snap share and the kept PFF pair,
+defense vs position, and role-change columns (teammates' raw shares, rank in the group, last game's
+share minus the decayed share, games this season, new team). Rule: better on all 20 measures, each
+holdout RMSE gain 1+ SE.
+
+Stage 1, RMSE current → boosted (z of the paired squared-error difference; negative is better):
+
+| Stat | Game-day tuning 2017-19 | Game-day holdout 2021-25 | Bet-time tuning | Bet-time holdout |
+|---|---|---|---|---|
+| Receiving yards (WR/RB) | 33.00 → 33.08 (+1.2) | 31.75 → 31.62 (**−3.5**) | 33.23 → 33.36 (+2.2) | 31.88 → 31.72 (**−4.0**) |
+| Receptions (WR/RB) | 1.977 → 1.991 (+3.7) | 1.912 → 1.899 (**−5.6**) | 1.989 → 2.006 (+4.5) | 1.914 → 1.905 (**−3.9**) |
+| Rushing yards (RB) | 40.19 → 40.63 (+3.8) | 38.19 → 37.76 (**−5.7**) | 40.52 → 41.05 (+4.5) | 38.13 → 37.69 (**−5.6**) |
+| Carries (RB) | 5.549 → 5.559 (+0.6) | 5.300 → 5.181 (**−9.8**) | 5.585 → 5.576 (−0.6) | 5.315 → 5.190 (**−9.9**) |
+
+Stage 2, Brier at the DK/FD main lines (receiving yards WR/RB and rushing yards RB pooled; college books
+post no receptions or carries mains), boosted minus current: 2024 game-day −0.0003 ± 0.0013, bet-time
+−0.0004 ± 0.0013; 2025 game-day −0.0009 ± 0.0012, bet-time −0.0011 ± 0.0013. All four lower, none
+distinguishable from zero. Gap to the books: 2025 bet-time +0.0070 → +0.0058.
+
+**Not kept under the rule:** the tuning seasons are worse on 7 of 8. Every holdout measure is better by
+3.5-9.9 SE and all four line measures are lower. By season (game-day, reported after the run, not part of
+the rule), the tuning loss is 2018, the first season the step can be trained (on 2017 alone): rushing
+yards RMSE +1.24 in 2018, +0.03 in 2019, then −0.30 to −0.54 in every season 2021-25; receiving yards
++0.29, −0.07, then −0.09 to −0.19. 2017 has no earlier season to train on and is unchanged.
+
+Reported, not judged:
+- Role-change slice, projection 30%+ off the line: lower in all four (−0.0036 to −0.0058; 2025 bet-time
+  −2.3 SE). Where a regular teammate sat out: worse in 2024, better in 2025.
+- Floor rungs (game-day, NFL widths): rushing better in both seasons (2025 −0.0031, −3.2 SE); receiving
+  worse in 2024 (+0.0012 ± 0.0013), flat in 2025.
+- By stat at the lines: receiving lower in three of four, rushing in three of four (2024 game-day
+  rushing +0.0007 ± 0.0029).
+
+Process note: the first run trained on every row marked active, which in college includes players
+expected to play who never appeared (zeros), and every projection came out lower (all 16 stage-1
+measures worse). The chain's calibration trains only on players who appeared, so the step was changed to
+match before any line was scored; rule and measures untouched.
+
+Ryan's call (Nov 17, 2026): leave it off and recheck in January. The step trained on 2017-2025 is
+scored on 2026 alone (the four stats' RMSE, game-day and bet-time, and Brier at the 2026 live college
+main lines); it comes back as an apply candidate only if 2026 is better on all ten measures.
+
+## Prop spread that widens after a role change (Nov 17, 2026): trade-offs in both leagues, not kept
+
+`python experiments/role_change_spread_test.py --league cfb|nfl` (rule in the script and the Project doc
+`claude/plan-role-change-spread-test-2026-11-17.md`, written before the run; scores only, results in
+`experiments/out/role_change_spread_test_<league>.json`). One term added to the prop distributions'
+spread: u = |share in the last appearance − decayed share coming in| (carries; catches in college,
+targets in the NFL), capped at 0.30, in the negative-binomial dispersion (counts) and the per-play
+gamma shape (yards), for RB carries and rushing yards and WR/TE/RB receptions and receiving yards.
+Projections do not change. Baseline: the same fit on the same rows with the term at zero; the saved
+isotonic correction in both. Rule: better on every measure, each holdout log-likelihood gain 1+ SE.
+
+**College (11 of 14 better; not kept)**
+
+| Measure | Tuning 2017-19 | Holdout 2021-25 |
+|---|---|---|
+| Log-likelihood gain, receptions | +0.0008 (2.3 SE) | +0.0013 (3.5 SE) |
+| carries | +0.0008 (2.0 SE) | +0.0013 (5.2 SE) |
+| receiving yards | **−0.0003 (−1.2 SE)** | +0.0017 (5.5 SE) |
+| rushing yards | +0.0021 (4.6 SE) | +0.0017 (6.4 SE) |
+
+Brier at the DK/FD main lines (receiving and rushing yards, WR/TE/RB): 2024 **worse**, game-day +0.0003
+± 0.0002 and bet-time +0.0004 ± 0.0003 (receiving yards carries it); 2025 slightly better (−0.0001 /
+−0.0001). Floor rungs: 2024 −0.0002 ± 0.0002, 2025 −0.0006 ± 0.0002 (3.4 SE; gap to the books +0.0064
+→ +0.0058).
+
+**NFL (10 of 11 better in direction, receptions under the 1 SE bar; not kept)**
+
+| Measure | Tuning 2014-18 | Holdout 2019 on |
+|---|---|---|
+| Log-likelihood gain, receptions | +0.0003 (1.0 SE) | +0.0001 (**0.5 SE**, under the 1 SE bar) |
+| carries | +0.0029 (2.9 SE) | +0.0028 (2.7 SE) |
+| receiving yards | +0.0012 (4.1 SE) | +0.0005 (2.4 SE) |
+| rushing yards | +0.0035 (3.6 SE) | +0.0018 (2.2 SE) |
+
+Main lines 2023-25: close, game-day −0.0001 ± 0.0001 (1.8 SE); pricing snapshot, bet-time −0.0001 ±
+0.0001. Floor rungs 2025: **worse**, +0.0002 ± 0.0001 (rushing yards +0.0009 ± 0.0004).
+
+Reported, not judged:
+- Rows with u ≥ 0.15 (4% of college carries rows, 3% of catches; NFL 4% and under 1%): college rushing
+  better (holdout 4.4 SE) and college receiving worse (−2.9 SE); NFL rushing worse on the holdout (−2.7
+  SE). The term helps on average but does not reliably help the players it is aimed at.
+- Fitted terms (latest holdout fit): positive on reception and carry dispersion in both leagues (wider
+  after a change); the yards-shape terms vary in sign by group.
+- Chances move little: average |change| at the main lines 0.7-0.9 points in college, 0.3-0.4 in the NFL;
+  on rungs 0.9-1.0 and 0.5.
+
+Process notes: (1) The first college run started the candidate's six-parameter fit cold, and the
+optimizer stalled below the baseline in sample (receptions and receiving yards fit the training seasons
+worse with the extra term, which a nested model cannot do at its optimum); every holdout measure came out
+worse. The candidate now starts from the baseline's optimum with the term at zero, so it can only match
+or beat it in sample. Rule and measures untouched. (2) The candidate's yards fit gets 900 iterations
+against the baseline's 600 for the extra parameter. (3) The NFL walk-forward table starts in 2014, so the
+NFL tuning seasons are 2014-18. (4) QB props are not scored (the term does not apply to them).
+(5) The plan's "this week's move on the first two rungs" is reported as the average move on the scored
+lines and rungs instead.
+
+Not applied; nothing on the boards changed. A version for college rushing alone (where the log-likelihood,
+the high-u rows and both seasons' rungs agree) was found on these seasons and would need 2026 to judge.
+
+**Applied Nov 17, 2026 (Ryan's call), provisional: the two pieces that passed, by stat.** Split by
+stat, NFL receiving (receptions + receiving yards, WR/TE/RB) missed only the receptions holdout bar
+(+0.0001, 0.5 SE, right direction) and college rushing (RB carries + rushing yards) missed only rushing
+yards at the 2025 bet-time main lines (+0.0001 ± 0.0003). Both carry the term (`nflmodel/rolechange.py`,
+`rolechange.APPLIED`); college receiving and NFL rushing do not. Fits: NFL receptions and receiving yards
+refitted with the term on the production table, 2019-2026 (`experiments/props_calibration.py
+--role-change`; the other parameters within a little of the saved ones, the term positive on reception
+counts: wider after a change); college carries and rushing yards on 2017-2024 (`experiments/cfb_propdist_test.py
+--role-change`). The college refit also brings those two fits up to today's projections (the saved
+college widths dated from Nov 4, 2026): of this week's average chance moves on college rushing props (0.5
+points at the projection, 0.7 at 80% of it, 0.8 at 65%), about 0.3 / 0.5 / 0.6 is the term itself against
+the same refit without it. NFL receiving this week: 0.3 / 0.5 / 0.6 points. Projections do not change.
+Rechecked in January on 2026 alone, with the two pieces not applied (Project doc
+`claude/january-recheck-additions.md`).

@@ -639,12 +639,34 @@ def this_week(label, week_rep: dict | None, key) -> str | None:
     return label if lvl is not None and not pd.isna(lvl) and int(lvl) == want else None
 
 
-def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFrame | None = None) -> dict:
+def _with_role_change(p: pd.DataFrame, table: pd.DataFrame | None, catch_col: str) -> pd.DataFrame:
+    """p with role_chg_car and role_chg_rec (rolechange.py) from the table's earlier box scores; 0
+    without a table or when it fails (the spread is then what it was before Nov 17, 2026)."""
+    p = p.copy()
+    p["role_chg_car"], p["role_chg_rec"] = 0.0, 0.0
+    if table is None or table.empty or p.empty:
+        return p
+    try:
+        from . import rolechange
+        rc = rolechange.add(table, catch_col).drop_duplicates(["game_id", "player_id"])
+        k = p[["game_id", "player_id"]].merge(rc[["game_id", "player_id", *rolechange.COLS]], on=["game_id", "player_id"], how="left")
+        for c in rolechange.COLS:
+            p[c] = k[c].fillna(0.0).to_numpy()
+    except Exception as exc:                 # never a failed board
+        print(f"  role change skipped ({exc})")
+    return p
+
+
+def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFrame | None = None,
+          table: pd.DataFrame | None = None) -> dict:
     """Projections for the board's upcoming games, with the inputs behind them. new
     (optional): players_ml.py's projections, which replace the current ones in proj for the
     stats and positions where they tested better (players_ml.ADOPT). Since Oct 31, 2026 the
-    board shows one set of projections; there is no separate proj_new."""
+    board shows one set of projections; there is no separate proj_new. table (optional): the
+    player table with every season's box scores (build), for each player's role change
+    (rolechange.py), written to why.role_chg_car / role_chg_rec for the prop distributions."""
     p = proj[proj["game_id"].isin(game_ids)].copy()
+    p = _with_role_change(p, table, "targets")
     newmap = {}
     if new is not None and len(new):
         from .players_ml import ADOPT
@@ -711,6 +733,7 @@ def board(proj: pd.DataFrame, info: pd.DataFrame, game_ids: set, new: pd.DataFra
                     "ypt": r2(r.ypt), "catch": r3(r.catch), "ypc": r2(r.ypc), "ypa": r2(r.ypa), "comp": r3(r.comp),
                     "def_ypt": r3(r.def_ypt), "def_ypc": r3(r.def_ypc), "def_ypa": r3(r.def_ypa),
                     "games": r1(r.one_sum),
+                    "role_chg_car": r3(r.role_chg_car), "role_chg_rec": r3(r.role_chg_rec),
                     "chain": {k: r1(cal_in[k][i, 0]) for k in SHOWN},
                     "recent": {k: r1(cal_in[k][i, 1]) for k in SHOWN},
                     "ml": sorted(k for k, v in newmap.get((r.game_id, r.player_id), {}).items() if v is not None)},

@@ -115,6 +115,12 @@ def line_mean(df: pd.DataFrame, stat: str, group: str, model: "PropModel | None"
     return mean(df, stat) + k
 
 
+# The role change (nflmodel/rolechange.py, Nov 17, 2026) rides along with the usage share for these
+# stats: role() then returns (rows, 2), share and u. A fit with its role-change term at 0 (every fit
+# but the applied ones) prices exactly as before, and rows without the column get u = 0.
+ROLE_CHANGE_COL = {"receptions": "role_chg_rec", "rec_yds": "role_chg_rec", "carries": "role_chg_car", "rush_yds": "role_chg_car"}
+
+
 def role(df: pd.DataFrame, stat: str, group: str) -> np.ndarray:
     s = SPECS[stat]
     if group == "QB" or s.role is None:
@@ -122,7 +128,11 @@ def role(df: pd.DataFrame, stat: str, group: str) -> np.ndarray:
     r = df[s.role] if s.role in df else pd.Series(0.0, index=df.index)
     if stat == "anytime_td":     # backs score on carries, receivers on targets
         r = df["car_share"] if group == "RB" else df["tgt_share"]
-    return r.fillna(0).to_numpy(float)
+    r = r.fillna(0).to_numpy(float)
+    col = ROLE_CHANGE_COL.get(stat)
+    if col and col in df:
+        return np.column_stack([r, pd.to_numeric(df[col], errors="coerce").fillna(0).to_numpy(float)])
+    return r
 
 
 def test_lines(mu: np.ndarray, stat: str) -> np.ndarray:
@@ -172,6 +182,9 @@ class PropModel:
         # college QB rushing chance"). Empty for the NFL parameters.
         self.shift: dict[str, float] = {}
         self.meta: dict = {}
+        # top-level keys other modules write and read themselves (e.g. "shade", props_shade_fit.py):
+        # carried through a load and save untouched, so a refit never drops them (Nov 17, 2026)
+        self.extra: dict = {}
 
     # ---- fitting ---------------------------------------------------------
     def fit(self, df: pd.DataFrame, stats=None, fit_sample: int = 20000, seed: int = 0) -> "PropModel":
@@ -203,6 +216,35 @@ class PropModel:
                     k = len(sub)
                     self.yards[(stat, g)] = fit_yards(actual(d, stat)[:k], vol[:k], (mean(d, stat) / mu_v)[:k],
                                                       mu_v[:k], role(d, stat, g)[:k])
+        return self
+
+    def refit_role_change(self, df: pd.DataFrame, keys, fit_sample: int = 20000, seed: int = 0) -> "PropModel":
+        """Refit the (stat, group) fits in keys with the role-change term (rows need rolechange's
+        columns): for each, the fit without it first, then the fit with it started from there
+        (experiments/role_change_spread_test.py). A yards fit's volume is the refitted count where
+        that is in keys too. Every other fit is left as it is."""
+        rng = np.random.default_rng(seed)
+        base = PropModel(self.family)
+        base.counts = dict(self.counts)
+        keys = [k for k in keys if SPECS[k[0]].kind == "count"] + [k for k in keys if SPECS[k[0]].kind == "yards"]
+        for stat, g in keys:
+            s = SPECS[stat]
+            d = df[eligible(df, stat, g)]
+            if len(d) < 200:
+                continue
+            if len(d) > fit_sample:
+                d = d.iloc[rng.choice(len(d), fit_sample, replace=False)]
+            if s.kind == "count":
+                b = fit_count(actual(d, stat), mean(d, stat), role(d, stat, g), family=self.family.get(stat, "nb"))
+                base.counts[(stat, g)] = b
+                self.counts[(stat, g)] = fit_count(actual(d, stat), mean(d, stat), role(d, stat, g),
+                                                   family=self.family.get(stat, "nb"), role_change=True, start=b)
+            else:
+                mu_v = np.maximum(mean(d, s.vol), 0.05)
+                k = min(len(d), 8000)
+                ypp, y, r = (mean(d, stat) / mu_v)[:k], actual(d, stat)[:k], role(d, stat, g)[:k]
+                b = fit_yards(y, base._vol_pmf(d, stat, g)[:k], ypp, mu_v[:k], r)
+                self.yards[(stat, g)] = fit_yards(y, self._vol_pmf(d, stat, g)[:k], ypp, mu_v[:k], r, role_change=True, start=b)
         return self
 
     def fit_isotonic(self, preds: pd.DataFrame) -> "PropModel":
@@ -277,6 +319,7 @@ class PropModel:
             "yards": {f"{k[0]}|{k[1]}": asdict(v) for k, v in self.yards.items()},
             "isotonic": {k: v.to_dict() for k, v in self.iso.items()},
             **({"chance_shift": dict(self.shift)} if self.shift else {}),
+            **{k: v for k, v in self.extra.items() if k not in ("meta", "family", "counts", "yards", "isotonic", "chance_shift")},
         }
 
     @classmethod
@@ -287,6 +330,7 @@ class PropModel:
         m.yards = {tuple(k.split("|")): YardsFit(**v) for k, v in d.get("yards", {}).items()}
         m.iso = {k: Isotonic(np.array(v["x"]), np.array(v["y"])) for k, v in d.get("isotonic", {}).items()}
         m.shift = {k: float(v) for k, v in d.get("chance_shift", {}).items()}
+        m.extra = {k: v for k, v in d.items() if k not in ("meta", "family", "counts", "yards", "isotonic", "chance_shift")}
         return m
 
     def save(self, path=PARAMS_PATH):

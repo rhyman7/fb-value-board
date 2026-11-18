@@ -707,6 +707,21 @@ boards in detail; this file is the rules.
   file (`experiments/cfb_propdist_test.py --save`) carries it over; don't change the value without a new
   pre-set test. Rechecked in January on the full 2026 season. The Props page's logged rows keep the
   chance they were first priced at; lines first seen after the change carry the shift.
+- **Role change in the prop spread** (Nov 17, 2026, provisional; FEATURES.md "Prop spread that widens
+  after a role change", `experiments/role_change_spread_test.py`, `nflmodel/rolechange.py`): each player's
+  role change u (his share in his last appearance against his decayed share; carries, and targets in the
+  NFL / catches in college) widens or narrows the distribution through one term, `CountFit.d` (counts) and
+  `YardsFit.e` (yards). It is on only where it passed: **NFL WR/TE/RB receptions and receiving yards**
+  (`data/prop_params.json`) and **college RB carries and rushing yards** (`data/cfb/prop_params.json`),
+  listed in `rolechange.APPLIED`; every other fit has the term at 0 and prices as before. The boards write
+  u to `why.role_chg_car` / `why.role_chg_rec` (`players.board(..., table=ptable)`), `propmarket.board_players`
+  reads it and `props.role` hands it to the fits, so the Props pages, Parlays legs, outlook and floors all
+  see it. A refit keeps it: `experiments/props_calibration.py --production` and `--role-change`, and
+  `experiments/cfb_propdist_test.py --save` and `--role-change`, refit those fits with the term (each
+  started from its fit without it). Don't switch it on for another stat without a new pre-set test. The
+  pieces not applied (college receiving, NFL rushing) and the applied ones are rechecked in January on
+  2026 alone (Project doc `claude/january-recheck-additions.md`). `PropModel.save` keeps top-level keys it
+  does not own (e.g. `shade`) since Nov 17, 2026; before that a refit through `save` dropped them.
 - **College prop legs on the Parlays page** (`parlays.cfb_book_legs`): priced off DraftKings and
   FanDuel. From Nov 13, 2026 (Ryan's call, provisional) two-sided main lines in passing yards,
   passing TDs, rushing yards and receiving yards carry the model nudge: the books' no-vig chance

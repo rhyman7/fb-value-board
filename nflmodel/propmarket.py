@@ -106,7 +106,8 @@ def board_players(payload: dict) -> pd.DataFrame:
             if v is not None:
                 r[f"{k}_proj_new"] = v
         why = p.get("why") or {}
-        for k in ("tgt_share", "car_share", "att_share", "tgt_share_hist", "car_share_hist", "games"):
+        for k in ("tgt_share", "car_share", "att_share", "tgt_share_hist", "car_share_hist", "games",
+                  "role_chg_car", "role_chg_rec"):      # the role change (rolechange.py): props.role reads it
             r[k] = why.get(k)
         rows.append(r)
     df = pd.DataFrame(rows)
