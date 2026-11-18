@@ -55,7 +55,12 @@ NFL_COLS = ["game_id", "week", "posteam", "defteam", "home_team", "away_team", "
             "success", "yards_gained", "interception", "fumble", "fumble_lost", "fumble_out_of_bounds",
             "td_team", "touchdown", "play_type", "field_goal_attempt", "field_goal_result", "kick_distance",
             "down", "fourth_down_converted", "yardline_100", "drive", "qb_dropback", "passer_player_name",
-            "qtr", "time", "desc", "home_score", "away_score", "spread_line", "total_line", "season_type"]
+            "qtr", "time", "desc", "home_score", "away_score", "spread_line", "total_line", "season_type",
+            # Weekly Review context (nflmodel/reviewctx.py)
+            "passer_player_id", "receiver_player_id", "rusher_player_id", "receiver_player_name", "rusher_player_name",
+            "pass_defense_1_player_name", "pass_defense_2_player_name", "interception_player_name", "sack_player_name",
+            "solo_tackle_1_player_name", "fixed_drive", "fixed_drive_result", "game_seconds_remaining",
+            "total_home_score", "total_away_score", "score_differential", "air_yards", "complete_pass", "two_point_attempt"]
 
 
 def box_nfl(p: pd.DataFrame) -> pd.DataFrame:
@@ -113,7 +118,12 @@ CFB_COLS = ["game_id", "week", "pos_team_id", "def_pos_team_id", "homeTeamId", "
             "int", "fumble_vec", "fumble_lost", "touchdown", "type.text", "fg_attempt", "fg_made", "yds_fg",
             "down", "start.yardsToEndzone", "drive.id", "passer_player_name", "clock.displayValue", "text",
             "start.homeScore", "start.awayScore", "end.homeScore", "end.awayScore", "homeFinalScore", "awayFinalScore",
-            "homeTeamSpread", "overUnder", "seasonType"]
+            "homeTeamSpread", "overUnder", "seasonType",
+            # Weekly Review context (nflmodel/reviewctx.py)
+            "passer_player_id", "receiver_player_id", "rusher_player_id", "receiver_player_name", "rusher_player_name",
+            "yds_rushed", "yds_receiving", "pass_breakup_player_name", "interception_player_name", "sack_player_name",
+            "fumble_forced_player_name", "drive.result", "drive.displayResult", "clock.minutes", "clock.seconds",
+            "completion", "target"]
 
 
 def box_cfb(p: pd.DataFrame, id_to_abbr: dict | None = None) -> pd.DataFrame:
@@ -367,10 +377,27 @@ def write_index(league: str) -> dict:
     return idx
 
 
-def run(league: str, season: int, weeks: list[int], pbp_path: Path | None = None) -> list[Path]:
+def _nan_free(x):
+    """JSON has no NaN: the page's JSON.parse would fail on it."""
+    if isinstance(x, dict):
+        return {k: _nan_free(v) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [_nan_free(v) for v in x]
+    if isinstance(x, (float, np.floating)):
+        return None if np.isnan(x) else float(x)
+    if isinstance(x, (np.integer,)):
+        return int(x)
+    if isinstance(x, (np.bool_,)):
+        return bool(x)
+    return x
+
+
+def run(league: str, season: int, weeks: list[int], pbp_path: Path | None = None, local: dict | None = None) -> list[Path]:
+    from nflmodel import reviewctx
     p = load_pbp(league, season, pbp_path)
     p = p[p["week"].isin(weeks)]
     box = box_nfl(p) if league == "nfl" else box_cfb(p)
+    src = reviewctx.Sources(league, season, local)
     out = []
     (OUT / league).mkdir(parents=True, exist_ok=True)
     for w in weeks:
@@ -379,8 +406,9 @@ def run(league: str, season: int, weeks: list[int], pbp_path: Path | None = None
         if f is None:
             print(f"  {league} {season} week {w}: no graded games")
             continue
+        f = _nan_free(reviewctx.add(f, league, season, w, p[p["week"] == w], src))
         path = OUT / league / f"{season}_w{w:02d}.json"
-        path.write_text(json.dumps(f, indent=1, default=lambda o: o.item() if hasattr(o, "item") else str(o)))
+        path.write_text(json.dumps(f, separators=(",", ":"), allow_nan=False, default=lambda o: o.item() if hasattr(o, "item") else str(o)))
         miss = sum(1 for g in f["games"] if g["box"] is None)
         print(f"  {league} {season} week {w}: {len(f['games'])} games ({miss} without play-by-play)")
         out.append(path)
@@ -395,5 +423,7 @@ if __name__ == "__main__":
     ap.add_argument("season", type=int)
     ap.add_argument("weeks", type=int, nargs="+")
     ap.add_argument("--pbp", type=Path, help="local play-by-play parquet (default: download)")
+    ap.add_argument("--local", nargs="*", default=[], metavar="KEY=FILE",
+                    help="local copies of the NFL context files (games, snaps, injuries, stats, roster_<season>)")
     a = ap.parse_args()
-    run(a.league, a.season, a.weeks, a.pbp)
+    run(a.league, a.season, a.weeks, a.pbp, dict(x.split("=", 1) for x in a.local))

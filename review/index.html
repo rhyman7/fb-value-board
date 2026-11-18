@@ -157,6 +157,15 @@ td.closer { color: var(--good); font-weight: 700; }
 .pn { display: flex; justify-content: space-between; gap: 12px; font-size: .875rem; }
 .pn a { color: var(--text-dim); text-decoration: none; } .pn a:hover { color: var(--text); }
 .scroll { overflow-x: auto; }
+.sp { padding: 10px 0; border-bottom: 1px solid rgba(53,58,66,.55); } .sp:first-of-type { padding-top: 0; }
+.sp-top { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; } .sp-n { margin-left: auto; font-size: 1.1rem; font-stretch: 68%; font-weight: 800; }
+.sm2 { font-size: .78rem; margin-top: 2px; }
+.tgs { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+.tg { display: inline-block; font-size: .72rem; padding: 2px 7px; border-radius: 9px; background: var(--panel-alt); color: var(--text-dim); }
+.tg.bad { background: var(--neg-bg); color: var(--neg); } .tg.lk { background: var(--luck-bg); color: var(--luck); }
+td.lft { text-align: right; font-size: .8rem; }
+.ctx-t { margin-top: 12px; } .ctx-t ul { margin: 6px 0 0; padding-left: 18px; font-size: .85rem; } .ctx-t li + li { margin-top: 4px; }
+
 td.dim { white-space: nowrap; }
 .card td a { color: var(--text); }
 .cross-link { margin: 40px 0 0; text-align: center; font-size: 1.125rem; font-weight: 600; display: flex; gap: 28px; justify-content: center; flex-wrap: wrap; }
@@ -337,6 +346,92 @@ async function weekPage(lg, w) {
   <div class="cols"><span>Game</span><span>Model</span><span>Market</span><span>Result</span><span>Review</span></div>${rows}</div>`;
 }
 
+
+const STATN = { pass_yds: "pass yds", rush_yds: "rush yds", rec_yds: "rec yds" };
+const VOLN = { pass_att: "att", carries: "car", targets: "tgt" };
+const pct = x => x == null ? "–" : Math.round(x * 100) + "%";
+function shortCard(g) {
+  const sh = g.short || [], beat = g.beat || [], dnp = g.dnp || [];
+  if (!sh.length && !beat.length && !dnp.length) {
+    const old = (g.players || []).filter(p => p.miss < 0).slice(0, 6);
+    if (!old.length) return "";
+    return `<section class="card"><h3>Who came up short</h3><table><tr><th>Player</th><th></th><th>Proj</th><th>Actual</th></tr>${old.map(p => `<tr><td>${esc(p.name)} <span class="dim">${p.pos} ${esc(p.team)}</span></td><td class="dim">${STATN[p.stat]}</td><td>${Math.round(p.proj)}</td><td class="neg">${Math.round(p.act)}</td></tr>`).join("")}</table></section>`;
+  }
+  const row = m => {
+    const tags = [];
+    const v = m.volume || {};
+    if (v.act != null && v.proj) tags.push(`<span class="tg${v.act < 0.7 * v.proj ? " bad" : ""}">${v.act} ${VOLN[v.kind]} (proj ${f1(v.proj)})</span>`);
+    if (m.target_share != null && m.target_share_avg != null) tags.push(`<span class="tg${m.target_share < m.target_share_avg - 0.06 ? " bad" : ""}">share ${pct(m.target_share)} (usual ${pct(m.target_share_avg)})</span>`);
+    if (m.snap_pct != null) tags.push(`<span class="tg${m.snap_pct_avg != null && m.snap_pct < m.snap_pct_avg - 0.15 ? " bad" : ""}">snaps ${pct(m.snap_pct)}${m.snap_pct_avg != null ? ` (usual ${pct(m.snap_pct_avg)})` : ""}</span>`);
+    const r = m.injury_report || {};
+    if (r.status) tags.push(`<span class="tg bad">${esc(r.status)}${r.injury ? " · " + esc(r.injury) : ""}</span>`);
+    const q = m.qb || {};
+    if (q.att != null) tags.push(`<span class="tg">${q.ints || 0} INT · ${q.sacks || 0} sacks${q.cpoe != null ? " · CPOE " + sgn(q.cpoe) : ""}</span>`);
+    const sc = m.script || {};
+    if (m.stat === "rush_yds" && sc.trailing9 >= 0.4) tags.push(`<span class="tg bad">trailing 9+ on ${pct(sc.trailing9)} of plays</span>`);
+    if (m.stat !== "rush_yds" && sc.leading9 >= 0.4) tags.push(`<span class="tg bad">leading 9+ on ${pct(sc.leading9)} of plays</span>`);
+    const d = (m.defenders || {}).broke_up || [];
+    if (d.length) tags.push(`<span class="tg">defended by ${d.map(x => esc(x[0])).join(", ")}</span>`);
+    if (m.former_team) tags.push(`<span class="tg lk">vs former team (${esc(m.former_team.when)})</span>`);
+    const hist = [m.prev ? `last game ${Math.round(m.prev.val)}` : "", m.season_avg != null ? `avg ${f1(m.season_avg)}` : "", m.season_low != null && m.act <= m.season_low ? "season low" : ""].filter(Boolean).join(" · ");
+    return `<div class="sp"><div class="sp-top"><b>${esc(m.name)}</b> <span class="dim">${m.pos} ${esc(m.team)} · ${STATN[m.stat]}</span><span class="sp-n"><span class="neg">${Math.round(m.act)}</span> <span class="dim">/ ${Math.round(m.proj)}</span></span></div>
+      ${hist ? `<div class="dim sm2">${hist}</div>` : ""}<div class="tgs">${tags.join("")}</div></div>`;
+  };
+  return `<section class="card"><h3>Who came up short</h3>${sh.map(row).join("") || '<p class="placeholder">Nobody fell well short of a projection.</p>'}
+    ${dnp.length ? `<p class="note">Projected but didn't play: ${dnp.map(d => esc(d.name) + ` (${d.pos})`).join(", ")}.</p>` : ""}
+    ${beat.length ? `<p class="note">Beat projections: ${beat.map(b => `${esc(b.name)} ${b.act} (${b.proj})`).join("; ")}.</p>` : ""}</section>`;
+}
+function flowCard(g) {
+  const f = g.flow; if (!f || f.error) return "";
+  const tm = [g.away, g.home], q = f.quarters || {};
+  const nq = Math.max(...tm.map(t => (q[t] || []).length), 4);
+  const qh = Array.from({ length: nq }, (_, i) => `<th>${i < 4 ? "Q" + (i + 1) : "OT"}</th>`).join("");
+  const qr = tm.map(t => `<tr><td>${esc(t)}</td>${Array.from({ length: nq }, (_, i) => `<td>${(q[t] || [])[i] ?? "–"}</td>`).join("")}<td><b>${t === g.home ? g.score[1] : g.score[0]}</b></td></tr>`).join("");
+  const K = ["TD", "FG", "Missed FG", "Punt", "Turnover", "Downs"];
+  const dr = tm.map(t => { const d = (f.drives || {})[t] || {}; return `<tr><td>${esc(t)}</td><td>${d.n ?? "–"}</td>${K.map(k => `<td>${d[k] || 0}</td>`).join("")}<td>${d.per_drive != null ? d.per_drive.toFixed(2) : "–"}</td></tr>`; }).join("");
+  const gp = Object.entries(f.garbage_pts || {}).map(([t, v]) => `${esc(t)} ${v}`).join(", ");
+  const st = f.cover_settled;
+  return `<section class="card"><h3>Game flow</h3>
+    <table><tr><th></th>${qh}<th>Final</th></tr>${qr}</table>
+    <div class="scroll" style="margin-top:12px"><table><tr><th></th><th>Drives</th><th>TD</th><th>FG</th><th>Miss FG</th><th>Punt</th><th>TO</th><th>Downs</th><th>Pts/drive</th></tr>${dr}</table></div>
+    <p class="note">${f.over_at ? `Went over ${f1(g.market.total)} at ${esc(f.over_at)}.` : `Never went over ${f1(g.market.total)}.`}
+    ${st ? ` The cover was settled by ${esc(st.team)}'s ${st.pts}-point score, Q${st.q} ${esc(st.clock)} (${esc(st.score)})${st.late ? ", a late swing" : ""}.` : ""}
+    ${gp ? ` Points with a team up 17+ in the 4th: ${gp}.` : ""}${f.plays ? ` Plays: ${tm.map(t => esc(t) + " " + (f.plays[t] ?? "–")).join(", ")}.` : ""}</p></section>`;
+}
+function contextCard(g) {
+  const c = g.context; if (!c || c.error) return "";
+  const tm = [g.away, g.home], T = c.teams || {};
+  const prev = t => { const p = (T[t] || {}).prev; if (!p) return "–";
+    return `${p.margin > 0 ? "W" : p.margin < 0 ? "L" : "T"} ${esc(p.score)} ${p.home ? "vs" : "@"} ${esc(p.opp)} · cover ${sgn(p.cover)}${p.label ? ` <span class="tg ${p.label === "good week" ? "" : "bad"}">${p.label}</span>` : ""}`; };
+  const facts = [];
+  if (c.division) facts.push("Division game");
+  if (c.conference_game === true) facts.push("Conference game"); else if (c.conference_game === false) facts.push("Non-conference");
+  if (c.rematch) facts.push(`Rematch: ${esc(c.rematch.winner)} won ${esc(c.rematch.score)} in week ${c.rematch.week}`);
+  if (c.neutral) facts.push("Neutral site");
+  if (c.slot) facts.push(esc(c.slot) + " ET");
+  if (c.roof && c.roof !== "outdoors") facts.push(esc(c.roof)); else if (c.temp != null || c.wind != null) facts.push(`${c.temp != null ? c.temp + "°" : ""}${c.wind != null ? " wind " + c.wind + " mph" : ""}`);
+  if (c.referee) facts.push("Referee " + esc(c.referee));
+  if (c.time_zones) facts.push("Crossed time zones");
+  const pe = g.personnel || {};
+  const people = tm.map(t => { const x = pe[t]; if (!x || x.error) return "";
+    const li = [];
+    if ((x.regulars_out || []).length) li.push(`<li><b>Regulars who didn't play:</b> ${x.regulars_out.map(r => `${esc(r.name)} <span class="dim">${esc(r.pos || r.side)}${r.report ? ", " + esc(r.report) : ""}</span>`).join(", ")}</li>`);
+    if ((x.more_than_usual || []).length) li.push(`<li><b>More than usual:</b> ${x.more_than_usual.map(r => `${esc(r.name)} <span class="dim">${esc(r.pos || r.side)}, ${r.pct != null ? pct(r.pct) + " of snaps (usual " + pct(r.usual) + ")" : r.tackles + " tackles (usual " + r.usual + ")"}</span>`).join(", ")}</li>`);
+    if ((x.playmakers || []).length) li.push(`<li><b>Defensive plays:</b> ${x.playmakers.map(r => `${esc(r.name)} <span class="dim">${esc(r.line)}</span>`).join("; ")}</li>`);
+    return li.length ? `<div class="ctx-t"><div class="tag">${esc(t)}</div><ul>${li.join("")}</ul></div>` : ""; }).join("");
+  const fx = (g.former_team || []).slice(0, 10);
+  return `<section class="card"><h3>Context</h3>
+    <table><tr><th></th><th>${esc(g.away)}</th><th>${esc(g.home)}</th></tr>
+     <tr><td>Previous game</td>${tm.map(t => `<td class="lft">${prev(t)}</td>`).join("")}</tr>
+     <tr><td>Rest</td>${tm.map(t => { const x = T[t] || {}; return `<td>${x.rest != null ? x.rest + " days" : "–"}${x.after_bye ? " (bye)" : ""}</td>`; }).join("")}</tr>
+     <tr><td>Against the spread</td>${tm.map(t => `<td>${rec((T[t] || {}).ats)}</td>`).join("")}</tr>
+     <tr><td>Model miss, last 3</td>${tm.map(t => `<td>${((T[t] || {}).last3 || []).map(x => sgn(x.model_miss, 0)).join(", ") || "–"}</td>`).join("")}</tr></table>
+    ${facts.length ? `<p class="note">${facts.join(" · ")}</p>` : ""}
+    ${people}
+    ${fx.length ? `<div class="ctx-t"><div class="tag">Facing a former team</div><ul>${fx.map(x => `<li>${esc(x.name)} <span class="dim">${esc(x.pos || "")} ${esc(x.team)}, with ${esc(x.vs)} ${esc(x.when)}</span></li>`).join("")}</ul></div>` : ""}
+    <p class="note">Model miss: result minus the model's number from that team's side (positive: better than the model expected).</p></section>`;
+}
+
 async function gamePage(lg, w, slug) {
   document.body.className = "";
   const i = await idx(lg), W = await week(lg, w);
@@ -396,8 +491,9 @@ async function gamePage(lg, w, slug) {
       <tr><td>Points defense and returns put on the total</td><td class="lk">${c.total_pts_nonoff}</td></tr></table>
      ${c.qb_exits.map(q => `<p class="note lk">${esc(q.qb)} left in quarter ${q.qtr} (${esc(q.time)})${q.why === "injured" ? ", injured" : ""}. He threw ${Math.round(q.share * 100)}% of the team's passes.</p>`).join("")}
      <p class="note">Point values fitted on 2023-25 games: how far each item moved the final margin past the closing line. Display only; never used by the model.</p></section>` : ""}
-    <section class="card"><h3>Biggest player misses</h3>
-     ${pl || up ? `<table><tr><th>Player</th><th></th><th>Proj</th><th>Actual</th><th>Miss</th></tr>${pl}${up}</table>` : `<p class="placeholder">No player projections for this game.</p>`}</section>
+    ${shortCard(g)}
+    ${flowCard(g)}
+    ${contextCard(g)}
    </div></div></div>`;
 }
 

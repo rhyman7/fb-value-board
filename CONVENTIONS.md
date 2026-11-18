@@ -777,6 +777,16 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
   `docs/cfb/archive`; graded games only) and the season's play-by-play (nflverse; cfbfastR,
   matched by the ESPN `game_id`), and rewrites `review/data/<league>/index.json`. A lean is the
   side of the market line the model's own number (`model`, not the blended `proj`) sat on.
+- **Context** (`nflmodel/reviewctx.py`, Nov 18, 2026, Ryan's ask: think outside the box): each
+  game also gets `flow` (quarters, drive outcomes, when the total went over, garbage-time points,
+  the score that settled the cover), `context` (previous game and its cover / model miss, record
+  against the spread, rest, bye, division or conference game, rematch, weather, slot, referee,
+  coaches), `short` (players who came up short, with usage, share, snaps, injury report, script,
+  defenders, previous game, season average, former team), `beat` (one line: Ryan cares less about
+  these), `dnp`, `personnel` (defensive playmakers, players used far more than usual, regulars who
+  didn't play) and `former_team`. NFL sources: nflverse schedule, snap counts, injuries, weekly
+  stats and rosters; college: `data/cfb/cache` (games, player_games, player_info). Facts files are
+  written compact (no indentation) to keep them small.
 - **Chance ledger values** are fitted on 2023-25 by `experiments/review_chance_fit.py` into
   `data/review_chance.json` (points each item moved the margin past the closing line: fumble
   bounces, non-offensive TDs, missed field goals from 45 yards or closer). Refit with the script,

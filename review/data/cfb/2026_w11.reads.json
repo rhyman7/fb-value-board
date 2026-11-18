@@ -18,20 +18,31 @@
    },
    "right": [
     "The side lean, TTU +3.5 (model TTU by 3.2), won: TTU by 25.",
-    "On the margin the model was closer than the market (missed by 21.8 against 28.5)."
+    "On the margin the model was closer than the market (missed by 21.8 against 28.5).",
+    "Beat their projections: Micah Hudson 89 (37 projected); Terrence Lewis 78 (33 projected)."
    ],
    "wrong": [
     "The total lean, under 73.5 (model 65.3), lost: 79 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the total the market was closer than the model (missed by 5.5 against 13.7).",
-    "Biggest player misses: Micah Hudson 89 receiving yards against 37 projected; Terrence Lewis 78 receiving yards against 33 projected; Cameron Dickey 5 rushing yards against 50 projected."
+    "Chase Campbell (WR, TTU): 0 receiving yards against 26 projected. His team led by 9+ on 92% of its plays, so less need to throw. (previous game 56, season average 20.2, a season low).",
+    "Cameron Dickey (RB, TTU): 5 rushing yards against 50 projected. Usage fell: 3 carries against 11.4 projected. (previous game 8, season average 40.6, a season low).",
+    "Wyatt Young (WR, OKST): 20 receiving yards against 58 projected. (previous game 50, season average 84.8).",
+    "Terrance Carter Jr. (TE, TTU): 24 receiving yards against 47 projected. His team led by 9+ on 92% of its plays, so less need to throw. (previous game 81, season average 39.1)."
    ],
    "chance": [
     "Defensive or return touchdowns: TTU 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been TTU by 19.5 (actual TTU by 25)."
+    "With even luck the margin would have been TTU by 19.5 (actual TTU by 25).",
+    "Why the total went over 73.5: TTU 19 drives, 7 TDs, 1 FG, 1 turnover, 8 punts (2.7 points a drive); OKST 16 drives, 3 TDs, 2 FGs, 2 turnovers, 3 turnovers on downs, 6 punts (1.7 points a drive). By quarter: TTU 21-7-7-17 / OKST 0-20-0-7. It went over at Q4 0:54. 17 points came with one team up 17+ in the fourth quarter."
    ],
    "improve": [
-    "Projected but didn't play: Israel Polk, Coy Eakin. Worth checking how late their status was known.",
-    "Broderick Vehrs (QB, OKST) had 57 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Israel Polk (WR), Coy Eakin (WR), Quinten Joyner (RB), Tre Page III (RB). Check how late that was known.",
+    "Broderick Vehrs (QB, OKST) had 57 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The model also missed TTU's previous game by 18.2 (worse than it expected): two misses in a row could mean its rating for TTU is behind.",
+    "Possibility: OKST came off a good week: beat KSU 66-28 and covered by 31. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed OKST's previous game by 33.4 (better than it expected): two misses in a row could mean its rating for OKST is behind.",
+    "Possibility: Mo Horn (CB, OKST) faced TTU, his team in 2023-2025: each side knows the other's habits.",
+    "Possibility: Braylon Rigsby (DT, OKST) faced TTU, his team in 2024-2025: each side knows the other's habits.",
+    "Possibility: TTU played without regulars: Quinten Joyner (RB). The board's projections may not have known."
    ]
   },
   "2026_11_TEX_LSU": {
@@ -43,12 +54,18 @@
    },
    "right": [
     "The side lean, TEX +4.5 (model LSU by 2.2), won: TEX by 1.",
-    "On the margin the model was closer than the market (missed by 3.2 against 5.5)."
+    "On the margin the model was closer than the market (missed by 3.2 against 5.5).",
+    "Beat their projections: Dilin Jones 125 (66 projected); Eugene Wilson III 96 (44 projected).",
+    "The cover was settled by TEX's 6-point score in quarter 4 (0:03), making it 22-21 — a late swing."
    ],
    "wrong": [
     "The total lean, over 47.5 (model 50.5), lost: 43 points.",
     "On the total the market was closer than the model (missed by 4.5 against 7.5).",
-    "Biggest player misses: Dilin Jones 125 rushing yards against 66 projected; Eugene Wilson III 96 receiving yards against 44 projected; Cam Coleman 0 receiving yards against 45 projected."
+    "Sam Leavitt (QB, LSU): -3 rushing yards against 31 projected. -0.3 yards per carry against 3 expected. (previous game 16, season average 37.8, a season low).",
+    "Cam Coleman (WR, TEX): 0 receiving yards against 45 projected. (previous game 61, season average 51.1, a season low).",
+    "Corey Barber Jr. (WR, LSU): 3 receiving yards against 22 projected. (previous game 8, season average 27, a season low).",
+    "Dilin Jones (RB, LSU): 9 receiving yards against 31 projected. (previous game 36, season average 28.1).",
+    "Why the total went under 47.5: TEX 11 drives, 2 TDs, 3 FGs, 3 turnovers, 3 punts (2 points a drive); LSU 12 drives, 3 TDs, 3 turnovers, 1 missed FG, 4 punts (1.8 points a drive). By quarter: TEX 7-3-3-9 / LSU 7-7-7-0."
    ],
    "chance": [
     "LSU played the better game play for play (success rate 37% to 36%, EPA per play +0.04 to −0.14) and still lost.",
@@ -56,7 +73,11 @@
     "With even luck the margin would have been LSU by 1.9 (actual TEX by 1)."
    ],
    "improve": [
-    "Projected but didn't play: Hollywood Smothers, Roman Mothershed. Worth checking how late their status was known."
+    "Projected but didn't play: Hollywood Smothers (RB), Roman Mothershed (WR). Check how late that was known.",
+    "Possibility: LSU came off a bad week: lost to ALA 13-31 and missed the cover by 23.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed LSU's previous game by 24.3 (worse than it expected): two misses in a row could mean its rating for LSU is behind.",
+    "Possibility: TEX's defensive playmakers: J.McDonald 3 INT; Justin Cryer 1 sack; Rasheem Biles 1 sack.",
+    "Possibility: LSU's defensive playmakers: Ty Benefield 1 sack, 2 INT; Princewill Umanmielen 2 sacks, 1 pass breakup; Jordan Ross 1 sack, 1 pass breakup."
    ]
   },
   "2026_11_MISS_OU": {
@@ -66,13 +87,19 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: John Mateer 70 (31 projected); Caleb Odom 56 (33 projected)."
+   ],
    "wrong": [
     "The side lean, MISS +2.5 (model MISS by 1.7), lost: OU by 7.",
     "The total lean, over 49 (model 52.4), lost: 41 points.",
     "On the margin the market was closer than the model (missed by 4.5 against 8.7).",
     "On the total the market was closer than the model (missed by 8 against 11.4).",
-    "Biggest player misses: Isaiah Sategna III 3 receiving yards against 69 projected; Trinidad Chambliss 84 rushing yards against 19 projected; Joshua Dye 58 rushing yards against 8 projected."
+    "Johntay Cook II (WR, MISS): 0 receiving yards against 28 projected. (previous game 8, season average 10.2, a season low).",
+    "Isaiah Sategna III (WR, OU): 3 receiving yards against 69 projected. (previous game 34, season average 69.4, a season low).",
+    "Horatio Fields (WR, MISS): 5 receiving yards against 47 projected. (previous game 96, season average 50.2, a season low).",
+    "Deuce Alexander (WR, MISS): 18 receiving yards against 57 projected. (previous game 0, season average 74.3).",
+    "Why the total went under 49: MISS 9 drives, 3 TDs, 1 FG, 1 turnover on downs, 4 punts (1.9 points a drive); OU 9 drives, 2 TDs, 1 FG, 2 missed FGs, 2 punts (2.7 points a drive). By quarter: MISS 0-7-0-10 / OU 14-0-7-3."
    ],
    "chance": [
     "Fumble bounces went MISS's way, worth about 3.1 points (MISS 2 fumbles, 0 lost; OU 0 fumbles, 0 lost).",
@@ -81,7 +108,13 @@
     "With even luck the margin would have been OU by 4.5 (actual OU by 7)."
    ],
    "improve": [
-    "Projected but didn't play: Kewan Lacy, Makhi Frazier. Worth checking how late their status was known."
+    "Projected but didn't play: Kewan Lacy (RB), Makhi Frazier (RB), Caleb Cunningham (WR), Elijah Thomas (WR). Check how late that was known.",
+    "Possibility: MISS came off a bad week: lost to UGA 7-42 and missed the cover by 31.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed MISS's previous game by 35.5 (worse than it expected): two misses in a row could mean its rating for MISS is behind.",
+    "Possibility: OU came off a good week: beat FLA 23-7 and covered by 20.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed OU's previous game by 18 (better than it expected): two misses in a row could mean its rating for OU is behind.",
+    "Possibility: MISS played without regulars: Kam Franklin (DE), Keaton Thomas (LB), Makhi Frazier (RB), Kewan Lacy (RB). The board's projections may not have known.",
+    "Possibility: MISS's defensive playmakers: Blake Purchase 1 sack; Tah'j Butler 1 sack; Landon Barnes 1 sack."
    ]
   },
   "2026_11_TENN_TA&M": {
@@ -91,19 +124,31 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Javin Gordon 78 (31 projected); Mario Craver 49 (24 projected)."
+   ],
    "wrong": [
     "The side lean, TA&M +1 (model TA&M by 2.8), lost: TENN by 15.",
     "The total lean, over 43.5 (model 48.6), lost: 29 points. The model was 5.1 points off the market here, one of its bigger gaps.",
     "On the margin the market was closer than the model (missed by 14 against 17.8).",
     "On the total the market was closer than the model (missed by 14.5 against 19.6).",
-    "Biggest player misses: Marcel Reed 71 passing yards against 178 projected; Javin Gordon 78 rushing yards against 31 projected; TK Norman 0 receiving yards against 42 projected."
+    "TK Norman (WR, TA&M): 0 receiving yards against 42 projected. (previous game 45, season average 28, a season low).",
+    "Marcel Reed (QB, TA&M): 0 rushing yards against 25 projected. Usage fell: 0 carries against 9.5 projected. (previous game 8, season average 22.9).",
+    "Isaiah Horton (WR, TA&M): 5 receiving yards against 44 projected. (previous game 78, season average 43.6, a season low).",
+    "Jamarion Morrow (RB, TA&M): 3 rushing yards against 24 projected. Usage fell: 2 carries against 6.3 projected. (previous game 8, season average 25.7, a season low).",
+    "Why the total went under 43.5: TENN 13 drives, 1 TD, 5 FGs, 5 punts (1.7 points a drive); TA&M 12 drives, 1 TD, 2 turnovers, 1 turnover on downs, 1 missed FG, 7 punts (0.6 points a drive). By quarter: TENN 3-3-3-13 / TA&M 0-7-0-0.",
+    "The cover was settled by TENN's 3-point score in quarter 3 (1:21), making it 9-7."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Projected but didn't play: Carsyn Baker (RB). Check how late that was known.",
+    "Possibility: TENN came off a good week: beat UK 34-6 and covered by 22. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed TENN's previous game by 18.6 (better than it expected): two misses in a row could mean its rating for TENN is behind.",
+    "Possibility: The road team crossed time zones (TA&M Chicago vs TENN New York).",
+    "Possibility: TENN's defensive playmakers: TJ Metcalf 1 INT; Dejuan Lane 1 INT.",
+    "Possibility: TA&M's defensive playmakers: Daymion Sanford 1 sack; Sam M'Pemba 1 sack."
    ]
   },
   "2026_11_DUKE_MIA": {
@@ -114,18 +159,30 @@
     "total": "W"
    },
    "right": [
-    "The total lean, over 55 (model 55.2), won: 61 points."
+    "The total lean, over 55 (model 55.2), won: 61 points.",
+    "Beat their projections: Darian Mensah 382 (256 projected); Nate Sheppard 131 (93 projected); Nate Sheppard 93 (25 projected).",
+    "Why the total went over 55: DUKE 9 drives, 2 TDs, 1 FG, 1 turnover, 4 punts (2.8 points a drive); MIA 11 drives, 5 TDs, 3 FGs, 2 punts (3.3 points a drive). By quarter: DUKE 0-10-7-8 / MIA 0-13-9-14. It went over at Q4 0:21. 8 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
     "The side lean, MIA −14 (model MIA by 19.9), lost: MIA by 11. The model was 5.9 points off the market here, one of its bigger gaps.",
     "On the margin the market was closer than the model (missed by 3 against 8.9).",
-    "Biggest player misses: Cooper Barkate 134 receiving yards against 63 projected; Javian Mallory 79 receiving yards against 9 projected; Nate Sheppard 93 receiving yards against 25 projected."
+    "Jared Richardson (WR, DUKE): -1 receiving yards against 36 projected. (previous game 8, season average 29.2, a season low).",
+    "Chris Wheatley-Humphrey (RB, MIA): 0 rushing yards against 34 projected. Usage fell: 0 carries against 6.6 projected. (previous game 12, season average 38.7, a season low).",
+    "Brody Keefe (WR, DUKE): 0 receiving yards against 27 projected. (previous game 11, season average 24, a season low).",
+    "Somourian Wingo (WR, MIA): 0 receiving yards against 27 projected. (previous game 2, season average 18, a season low).",
+    "The cover was settled by DUKE's 8-point score in quarter 4 (0:21), making it 25-36 — a late swing."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Projected but didn't play: Jayvian Tanelus (RB), Jayden Moore (WR). Check how late that was known.",
+    "Possibility: DUKE came off a good week: beat NCSU 41-3 and covered by 34. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed DUKE's previous game by 35.8 (better than it expected): two misses in a row could mean its rating for DUKE is behind.",
+    "Possibility: Cooper Barkate (WR, MIA) faced DUKE, his team in 2025: each side knows the other's habits.",
+    "Possibility: Darian Mensah (QB, MIA) faced DUKE, his team in 2025: each side knows the other's habits.",
+    "Possibility: DUKE played without regulars: Patrick Smith-Young (S). The board's projections may not have known.",
+    "Possibility: DUKE leaned on players who usually play little: Evan Smith (CB, 11 tackles, usually 1.8)."
    ]
   },
   "2026_11_USC_IU": {
@@ -137,19 +194,30 @@
    },
    "right": [
     "The side lean, IU −9 (model IU by 10.1), won: IU by 14.",
-    "On the margin the model was closer than the market (missed by 3.9 against 5)."
+    "On the margin the model was closer than the market (missed by 3.9 against 5).",
+    "Beat their projections: Jayden Maiava 311 (218 projected); Trent Mosley 130 (70 projected); Khobie Martin 82 (32 projected).",
+    "The cover was settled by IU's 7-point score in quarter 4 (3:30), making it 13-27 — a late swing."
    ],
    "wrong": [
     "The total lean, over 51.5 (model 55.5), lost: 40 points.",
     "On the total the market was closer than the model (missed by 11.5 against 15.5).",
-    "Biggest player misses: Grant Wilson 305 passing yards against 0 projected; Trent Mosley 130 receiving yards against 70 projected; Khobie Martin 82 rushing yards against 32 projected."
+    "Tanook Hines (WR, USC): 14 receiving yards against 44 projected. (previous game 0, season average 29.9).",
+    "Zacharyus Williams (WR, USC): 14 receiving yards against 33 projected. (previous game 15, season average 38.2, a season low).",
+    "King Miller (RB, USC): 47 rushing yards against 66 projected. (previous game 78, season average 75.7).",
+    "Why the total went under 51.5: USC 11 drives, 1 TD, 2 FGs, 3 turnovers, 2 missed FGs, 3 punts (1.2 points a drive); IU 12 drives, 3 TDs, 2 FGs, 1 turnover, 1 missed FG, 3 punts (2.2 points a drive). By quarter: USC 3-7-3-0 / IU 7-3-10-7."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Josh Hoover. Worth checking how late his status was known.",
-    "Brock Schott (TE, IU) had 40 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Josh Hoover (QB). Check how late that was known.",
+    "Brock Schott (TE, IU) had 40 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: USC came off a good week: beat OSU 30-18 and covered by 18.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed USC's previous game by 14.2 (better than it expected): two misses in a row could mean its rating for USC is behind.",
+    "Possibility: USC was coming off a bye.",
+    "Possibility: The model also missed IU's previous game by 19.9 (worse than it expected): two misses in a row could mean its rating for IU is behind.",
+    "Possibility: IU was coming off a bye.",
+    "Possibility: The road team crossed time zones (IU Indianapolis vs USC Los Angeles)."
    ]
   },
   "2026_11_MICH_ORE": {
@@ -161,18 +229,30 @@
    },
    "right": [
     "The side lean, ORE −9.5 (model ORE by 13.8), won: ORE by 24.",
-    "On the margin the model was closer than the market (missed by 10.2 against 14.5)."
+    "On the margin the model was closer than the market (missed by 10.2 against 14.5).",
+    "Beat their projections: Dylan Raiola 341 (204 projected); Dierre Hill Jr. 98 (51 projected); Dakorien Moore 101 (58 projected).",
+    "The cover was settled by ORE's 7-point score in quarter 2 (0:06), making it 7-21."
    ],
    "wrong": [
     "The total lean, over 40 (model 44.9), lost: 38 points.",
     "On the total the market was closer than the model (missed by 2 against 6.9).",
-    "Biggest player misses: Dylan Raiola 341 passing yards against 204 projected; Tommy Carr 45 passing yards against 174 projected; Jeremiah McClellan 105 receiving yards against 40 projected."
+    "JJ Buchanan (WR, MICH): 0 receiving yards against 57 projected. (previous game 35, season average 70.8, a season low).",
+    "Salesi Moa (WR, MICH): 0 receiving yards against 24 projected. (previous game 14, season average 11.6, a season low).",
+    "Matayo Uiagalelei (WR, ORE): 0 receiving yards against 23 projected. (previous game 30, season average 3.3, a season low).",
+    "Jalen Lott (WR, ORE): 4 receiving yards against 31 projected. (previous game 21, season average 27.8, a season low).",
+    "Why the total went under 40: MICH 13 drives, 1 TD, 2 turnovers, 3 turnovers on downs, 5 punts (0.5 points a drive); ORE 12 drives, 4 TDs, 1 FG, 1 turnover on downs, 1 missed FG, 5 punts (2.6 points a drive). By quarter: MICH 0-7-0-0 / ORE 14-7-0-10. 3 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Hudson Lewis. Worth checking how late his status was known."
+    "Projected but didn't play: Hudson Lewis (WR), Tradarian Ball (RB), Travis Johnson (WR), Hogan Hansen (TE). Check how late that was known.",
+    "Possibility: MICH came off a bad week: lost to MSU 6-15 and missed the cover by 23.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed MICH's previous game by 25.8 (worse than it expected): two misses in a row could mean its rating for MICH is behind.",
+    "Possibility: ORE came off a good week: beat OSU 41-28 and covered by 20.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed ORE's previous game by 15.4 (better than it expected): two misses in a row could mean its rating for ORE is behind.",
+    "Possibility: The road team crossed time zones (ORE Los Angeles vs MICH Detroit).",
+    "Possibility: MICH's defensive playmakers: Dom Nichols 1 sack; Chris Bracy 1 sack."
    ]
   },
   "2026_11_ILL_UCLA": {
@@ -183,18 +263,30 @@
     "total": "L"
    },
    "right": [
-    "The side lean, ILL +10.5 (model UCLA by 5.6), won: UCLA by 8."
+    "The side lean, ILL +10.5 (model UCLA by 5.6), won: UCLA by 8.",
+    "Beat their projections: Aidan Mizell 176 (43 projected).",
+    "The cover was settled by ILL's 7-point score in quarter 4 (7:14), making it 14-19 — a late swing."
    ],
    "wrong": [
     "The total lean, over 49 (model 51.2), lost: 36 points.",
     "On the total the market was closer than the model (missed by 13 against 15.2).",
-    "Biggest player misses: Aidan Mizell 176 receiving yards against 43 projected; Collin Dixon 36 receiving yards against 75 projected; Anthony Woods 16 rushing yards against 54 projected."
+    "Ty Robinson (WR, ILL): -1 receiving yards against 22 projected. (previous game 9, season average 24.7, a season low).",
+    "Anthony Woods (RB, UCLA): 16 rushing yards against 54 projected. Usage fell: 6 carries against 10.4 projected. (previous game 29, season average 58.2, a season low).",
+    "Brayden Trimble (WR, ILL): 9 receiving yards against 27 projected. (previous game 5, season average 22.6).",
+    "Collin Dixon (WR, ILL): 36 receiving yards against 75 projected. (previous game 129, season average 100.6, a season low).",
+    "Why the total went under 49: ILL 12 drives, 2 TDs, 3 turnovers, 1 turnover on downs, 4 punts (1.2 points a drive); UCLA 12 drives, 2 TDs, 2 FGs, 1 turnover, 1 turnover on downs, 5 punts (1.8 points a drive). By quarter: ILL 0-0-7-7 / UCLA 7-3-2-10."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Brian Rowe Jr., Leland Smith. Worth checking how late their status was known."
+    "Projected but didn't play: Brian Rowe Jr. (WR), Leland Smith (WR), Jalen Saint Paul (WR), Javari Barnett (RB). Check how late that was known.",
+    "Possibility: ILL came off a good week: beat NEB 24-13 and covered by 15.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed ILL's previous game by 15 (better than it expected): two misses in a row could mean its rating for ILL is behind.",
+    "Possibility: The road team crossed time zones (UCLA Los Angeles vs ILL Chicago).",
+    "Possibility: ILL leaned on players who usually play little: Daniel Brown (LB, 7 tackles, usually 1.8).",
+    "Possibility: ILL's defensive playmakers: Juice Clarke 1 INT, 1 pass breakup; Ismael Kante 1 sack.",
+    "Possibility: UCLA's defensive playmakers: Derrick Barksdale 1 INT, 1 pass breakup; Scooter Jackson 1 INT, 1 pass breakup; S.Jackson 1 INT."
    ]
   },
   "2026_11_BAY_BYU": {
@@ -206,19 +298,28 @@
    },
    "right": [
     "The side lean, BYU −8.5 (model BYU by 10.6), won: BYU by 21.",
-    "On the margin the model was closer than the market (missed by 10.4 against 12.5)."
+    "On the margin the model was closer than the market (missed by 10.4 against 12.5).",
+    "The cover was settled by BYU's 7-point score in quarter 1 (0:10), making it 0-14."
    ],
    "wrong": [
     "The total lean, over 49.5 (model 53.5), lost: 35 points.",
     "On the total the market was closer than the model (missed by 14.5 against 18.5).",
-    "Biggest player misses: Bear Bachmeier 104 passing yards against 214 projected; Legend Glasker 3 receiving yards against 62 projected; Louis Brown IV 0 receiving yards against 42 projected."
+    "Louis Brown IV (WR, BAY): 0 receiving yards against 42 projected. (previous game 17, season average 40.2, a season low).",
+    "Michael Turner (RB, BAY): 0 rushing yards against 25 projected. Usage fell: 0 carries against 6.6 projected; his team trailed by 9+ on 87% of its plays. (previous game 11, season average 26.6).",
+    "Tony Livingston (TE, BAY): 0 receiving yards against 22 projected. (previous game 49, season average 22.6, a season low).",
+    "Legend Glasker (WR, BYU): 3 receiving yards against 62 projected. His team led by 9+ on 71% of its plays, so less need to throw. (previous game 118, season average 78.1, a season low).",
+    "Why the total went under 49.5: BAY 11 drives, 1 TD, 1 turnover, 1 turnover on downs, 6 punts (0.6 points a drive); BYU 10 drives, 4 TDs, 1 missed FG, 5 punts (2.8 points a drive). By quarter: BAY 0-0-0-7 / BYU 14-7-0-7. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
     "With even luck the margin would have been BYU by 23.9 (actual BYU by 21)."
    ],
    "improve": [
-    "Preston Rex (RB, BYU) had 53 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Preston Rex (RB, BYU) had 53 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (BYU Denver vs BAY Chicago).",
+    "Possibility: BAY's defensive playmakers: Traevon Mitchell 1 sack.",
+    "Possibility: BYU played without regulars: Isaiah Glasker (LB). The board's projections may not have known.",
+    "Possibility: BYU's defensive playmakers: Bodie Schoonover 2 sacks; Tommy Prassas 1 INT, 1 pass breakup; Viliami Po'uha 1 sack."
    ]
   },
   "2026_11_UTAH_ARIZ": {
@@ -229,20 +330,31 @@
     "total": "W"
    },
    "right": [
-    "The total lean, over 55.5 (model 55.9), won: 79 points."
+    "The total lean, over 55.5 (model 55.9), won: 79 points.",
+    "Beat their projections: Devon Dampier 100 (64 projected); Isaiah Mizell 115 (67 projected); Giovanni Richardson 94 (47 projected).",
+    "Why the total went over 55.5: UTAH 12 drives, 4 TDs, 2 FGs, 2 turnovers, 3 punts (3.3 points a drive); ARIZ 15 drives, 6 TDs, 1 FG, 1 turnover, 1 turnover on downs, 6 punts (2.6 points a drive). By quarter: UTAH 0-17-7-16 / ARIZ 7-7-14-11. It went over at Q4 11:46."
    ],
    "wrong": [
     "The side lean, UTAH −2 (model UTAH by 3.6), lost: UTAH by 1. Chance decided it (below), so it doesn't count for or against the read.",
     "On the margin the market was closer than the model (missed by 1 against 2.6).",
-    "Biggest player misses: Daniel Bray 197 rushing yards against 25 projected; Wayshawn Parker 2 rushing yards against 84 projected; Creed Whittemore 92 receiving yards against 35 projected."
+    "Wayshawn Parker (RB, UTAH): 0 receiving yards against 26 projected. (previous game 5, season average 29.9, a season low).",
+    "Wayshawn Parker (RB, UTAH): 2 rushing yards against 84 projected. Usage fell: 1 carries against 15.4 projected. (previous game 36, season average 84.7, a season low).",
+    "Antwan Roberts Jr. (RB, ARIZ): 8 rushing yards against 35 projected. Usage fell: 3 carries against 6.7 projected. (previous game 21, season average 35.5).",
+    "Brandon Phelps (WR, ARIZ): 9 receiving yards against 34 projected. (previous game 11, season average 32.3)."
    ],
    "chance": [
     "Fumble bounces went ARIZ's way, worth about 3.1 points (UTAH 1 fumble, 1 lost; ARIZ 1 fumble, 0 lost).",
-    "With even luck the margin would have been UTAH by 4.1 (actual UTAH by 1)."
+    "With even luck the margin would have been UTAH by 4.1 (actual UTAH by 1).",
+    "The cover was settled by ARIZ's 8-point score in quarter 4 (3:13), making it 33-39 — a late swing."
    ],
    "improve": [
-    "Projected but didn't play: Noah Bennee. Worth checking how late his status was known.",
-    "Chris Hunter III (WR, ARIZ) had 119 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Noah Bennee (TE), Larry Simmons (WR). Check how late that was known.",
+    "Chris Hunter III (WR, ARIZ) had 119 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (ARIZ Phoenix vs UTAH Denver).",
+    "Possibility: Chase Kennedy (LB, ARIZ) faced UTAH, his team in 2023: each side knows the other's habits.",
+    "Possibility: UTAH's defensive playmakers: Cyrus Polu 2 sacks, 1 pass breakup; Sione Motuapuaka 1 sack; Kash Dillon 1 sack.",
+    "Possibility: ARIZ played without regulars: Dwight Bootle II (CB), Malcolm Hartzog Jr. (S). The board's projections may not have known.",
+    "Possibility: ARIZ's defensive playmakers: J.Cole 1 sack, 1 INT; B.Pegan 1 INT; Everett Roussaw Jr. 1 sack."
    ]
   },
   "2026_11_LOU_UNC": {
@@ -256,18 +368,30 @@
     "The total lean, under 58 (model 57.3), won: 30 points. Chance decided it (below), so it doesn't count for or against the read."
    ],
    "wrong": [
-    "The side lean, LOU −3.5 (model LOU by 4), lost: LOU by 2. Chance decided it (below), so it doesn't count for or against the read."
+    "The side lean, LOU −3.5 (model LOU by 4), lost: LOU by 2. Chance decided it (below), so it doesn't count for or against the read.",
+    "Trech Kekahuna (WR, UNC): 0 receiving yards against 38 projected. (previous game 29, season average 27.6, a season low).",
+    "Jaylen McGill (RB, UNC): 8 rushing yards against 30 projected. Usage fell: 3 carries against 7.4 projected. (previous game 15, season average 29).",
+    "Tre Richardson (WR, LOU): 23 receiving yards against 70 projected. (previous game 52, season average 76.1).",
+    "Lincoln Kienholz (QB, LOU): 14 rushing yards against 42 projected. 1.8 yards per carry against 4.5 expected. (previous game 81, season average 43.8)."
    ],
    "chance": [
     "Billy Edwards Jr. got hurt and left in quarter 3 (9:14); he threw 55% of the team's passes. Nothing before kickoff could price that in.",
     "Fumble bounces went LOU's way, worth about 3.1 points (LOU 1 fumble, 0 lost; UNC 1 fumble, 1 lost).",
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
-    "With even luck the margin would have been UNC by 2.5 (actual LOU by 2)."
+    "With even luck the margin would have been UNC by 2.5 (actual LOU by 2).",
+    "Why the total went under 58: LOU 11 drives, 1 TD, 3 FGs, 1 missed FG, 5 punts (1.4 points a drive); UNC 11 drives, 2 TDs, 2 turnovers, 1 turnover on downs, 1 missed FG, 4 punts (1.3 points a drive). By quarter: LOU 3-10-0-3 / UNC 7-0-0-7.",
+    "The cover was settled by UNC's 7-point score in quarter 4 (3:43), making it 16-14 — a late swing."
    ],
    "improve": [
-    "Billy Edwards Jr.'s line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: Marquise Davis, Braxton Jennings. Worth checking how late their status was known.",
-    "Travis Burgess (QB, UNC) had 94 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Marquise Davis (RB), Braxton Jennings (RB). Check how late that was known.",
+    "Billy Edwards Jr.'s line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Travis Burgess (QB, UNC) had 94 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (UNC New York vs LOU Louisville).",
+    "Possibility: Tayon Holloway (DB, LOU) faced UNC, his team in 2023: each side knows the other's habits.",
+    "Possibility: Tyler Thompson (DL, LOU) faced UNC, his team in 2023-2025: each side knows the other's habits.",
+    "Possibility: LOU played without regulars: Kalib Perry (LB). The board's projections may not have known.",
+    "Possibility: LOU's defensive playmakers: Koen Entringer 2 sacks, 1 pass breakup; Jabari Mack 1 INT; Clev Lubin 1 sack.",
+    "Possibility: UNC played without regulars: Coleman Bryson (DB). The board's projections may not have known."
    ]
   },
   "2026_11_WAKE_SMU": {
@@ -281,16 +405,25 @@
     "The side lean, WAKE +2.5 (model WAKE by 2.3), won: WAKE by 42.",
     "The total lean, under 60 (model 59), won: 56 points.",
     "On the margin the model was closer than the market (missed by 39.7 against 44.5).",
-    "Projections that held: Kevin Jennings 209 passing yards (projected 237)."
+    "Beat their projections: Ty Clark III 77 (40 projected); Randy Pittman Jr. 76 (26 projected).",
+    "Why the total went under 60: WAKE 12 drives, 6 TDs, 1 turnover, 1 turnover on downs, 2 punts (4.1 points a drive); SMU 12 drives, 2 TDs, 3 turnovers, 2 turnovers on downs, 4 punts (0.6 points a drive). By quarter: WAKE 14-28-0-7 / SMU 0-0-7-0. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
-    "Biggest player misses: Randy Pittman Jr. 76 receiving yards against 26 projected; Steele Pizzella 48 passing yards against 0 projected; Yannick Smith 19 receiving yards against 59 projected."
+    "Drayden Dickmann (WR, WAKE): -1 receiving yards against 29 projected. His team led by 9+ on 81% of its plays, so less need to throw. (previous game 89, season average 22.9, a season low).",
+    "Dramekco Green (RB, SMU): 2 rushing yards against 27 projected. Usage fell: 1 carries against 8.2 projected; his team trailed by 9+ on 77% of its plays. (previous game 39, season average 25).",
+    "Jalen Cooper (WR, SMU): 11 receiving yards against 42 projected. (previous game 98, season average 54.1).",
+    "Dominick Barry (TE, WAKE): 6 receiving yards against 23 projected. His team led by 9+ on 81% of its plays, so less need to throw. (previous game 5, season average 13.4)."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Possibility: WAKE came off a good week: beat UVA 51-7 and covered by 30.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed WAKE's previous game by 32.9 (better than it expected): two misses in a row could mean its rating for WAKE is behind.",
+    "Possibility: WAKE was coming off a bye.",
+    "Possibility: SMU came off a good week: beat VT 51-28 and covered by 17. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed SMU's previous game by 15.2 (better than it expected): two misses in a row could mean its rating for SMU is behind.",
+    "Possibility: The road team crossed time zones (SMU Chicago vs WAKE New York)."
    ]
   },
   "2026_11_NU_OSU": {
@@ -301,19 +434,30 @@
     "total": "W"
    },
    "right": [
-    "The total lean, over 45.5 (model 49.1), won: 47 points."
+    "The total lean, over 45.5 (model 49.1), won: 47 points.",
+    "Beat their projections: Luke Dehnicke 88 (51 projected); Alex Honig 49 (26 projected).",
+    "Why the total went over 45.5: NU 10 drives, 2 TDs, 2 FGs, 1 turnover on downs, 5 punts (1.9 points a drive); OSU 10 drives, 4 TDs, 2 turnovers, 3 punts (2.8 points a drive). By quarter: NU 3-3-7-6 / OSU 0-14-7-7. It went over at Q4 0:00."
    ],
    "wrong": [
     "The side lean, OSU −14 (model OSU by 17.9), lost: OSU by 9.",
     "On the margin the market was closer than the model (missed by 5 against 8.9).",
-    "Biggest player misses: Griffin Wilde 30 receiving yards against 77 projected; Devin McCuin 8 receiving yards against 51 projected; Nicco Marchiol -15 rushing yards against 24 projected."
+    "Nicco Marchiol (QB, NU): -15 rushing yards against 24 projected. -1.5 yards per carry against 2.3 expected. (previous game 52, season average 24.7, a season low).",
+    "Hayden Eligon II (WR, NU): 0 receiving yards against 36 projected. (previous game 33, season average 16, a season low).",
+    "Chris Henry Jr. (WR, OSU): 0 receiving yards against 34 projected. (previous game 31, season average 40.4, a season low).",
+    "Devin McCuin (WR, OSU): 8 receiving yards against 51 projected. (previous game 84, season average 46.1).",
+    "The cover was settled by NU's 6-point score in quarter 4 (0:00), making it 19-28 — a late swing."
    ],
    "chance": [
     "Fumble bounces went NU's way, worth about 3.1 points (NU 1 fumble, 0 lost; OSU 1 fumble, 1 lost).",
     "With even luck the margin would have been OSU by 12.1 (actual OSU by 9)."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Possibility: OSU came off a bad week: lost to ORE 28-41 and missed the cover by 20.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed OSU's previous game by 15.4 (worse than it expected): two misses in a row could mean its rating for OSU is behind.",
+    "Possibility: The road team crossed time zones (OSU New York vs NU Chicago).",
+    "Possibility: NU played without regulars: Aidan Chiles (QB). The board's projections may not have known.",
+    "Possibility: NU leaned on players who usually play little: Jack Sadowsky V (LB, 9 tackles, usually 1.5), Mason Mayne (DL, 6 tackles, usually 1.5).",
+    "Possibility: NU's defensive playmakers: Braden Turner 1 INT; Jack Sadowsky V 1 sack; Jamaal Johnson 1 forced fumble."
    ]
   },
   "2026_11_ORST_BOIS": {
@@ -325,12 +469,18 @@
    },
    "right": [
     "The side lean, ORST +16 (model BOIS by 8.9), won: BOIS by 5.",
-    "On the margin the model was closer than the market (missed by 3.9 against 11)."
+    "On the margin the model was closer than the market (missed by 3.9 against 11).",
+    "Beat their projections: Maalik Murphy 396 (261 projected); Rasean Jones 230 (77 projected); Eric Olsen 67 (47 projected).",
+    "The cover was settled by ORST's 7-point score in quarter 2 (0:43), making it 20-29."
    ],
    "wrong": [
     "The total lean, under 66 (model 61.5), lost: 87 points.",
     "On the total the market was closer than the model (missed by 21 against 25.5).",
-    "Biggest player misses: Maddux Madsen 371 passing yards against 0 projected; Rasean Jones 230 receiving yards against 77 projected; Maalik Murphy 396 passing yards against 261 projected."
+    "Aaron Butler (WR, ORST): 0 receiving yards against 38 projected. (previous game 26, season average 28.8, a season low).",
+    "Cam Bates (WR, BOIS): 0 receiving yards against 30 projected. (previous game 29, season average 16.8, a season low).",
+    "AJ Newberry (RB, ORST): 0 receiving yards against 23 projected. (previous game 4, season average 33.7, a season low).",
+    "AJ Newberry (RB, ORST): 11 rushing yards against 51 projected. Usage fell: 3 carries against 8.9 projected; his team trailed by 9+ on 52% of its plays. (previous game 41, season average 56.2).",
+    "Why the total went over 66: ORST 13 drives, 8 TDs, 1 missed FG, 2 punts (3.1 points a drive); BOIS 9 drives, 4 TDs, 1 FG, 1 turnover, 2 punts (5.1 points a drive). By quarter: ORST 7-13-7-14 / BOIS 15-17-0-14. It went over at Q4 10:37."
    ],
    "chance": [
     "Defensive or return touchdowns: BOIS 1. They put 7 points on the total and moved the margin about 7.",
@@ -338,8 +488,14 @@
     "With even luck the margin would have been ORST by 3.4 (actual BOIS by 5)."
    ],
    "improve": [
-    "Projected but didn't play: Max Cutforth. Worth checking how late his status was known.",
-    "Adonis McDaniel (WR, ORST) had 92 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Max Cutforth (QB), Harry Stewart III (RB), Juelz Goff (RB), Malachi Durant (WR). Check how late that was known.",
+    "Adonis McDaniel (WR, ORST) had 92 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: ORST came off a bad week: lost to TXST 21-42 and missed the cover by 25.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed ORST's previous game by 23 (worse than it expected): two misses in a row could mean its rating for ORST is behind.",
+    "Possibility: The road team crossed time zones (BOIS Boise vs ORST Los Angeles).",
+    "Possibility: ORST played without regulars: Braden Atkinson (QB). The board's projections may not have known.",
+    "Possibility: ORST's defensive playmakers: Aiden Sullivan 1 sack, 1 forced fumble; Drake Vickers 2 pass breakups.",
+    "Possibility: BOIS played without regulars: Juelz Goff (RB). The board's projections may not have known."
    ]
   },
   "2026_11_MIZ_UGA": {
@@ -352,17 +508,28 @@
    "right": [
     "The side lean, UGA −16.5 (model UGA by 17), won: UGA by 27.",
     "The total lean, over 48 (model 50.9), won: 69 points.",
-    "On the total the model was closer than the market (missed by 18.1 against 21)."
+    "On the total the model was closer than the market (missed by 18.1 against 21).",
+    "Beat their projections: Craig Dandridge 85 (36 projected).",
+    "Why the total went over 48: MIZ 13 drives, 3 TDs, 1 turnover, 1 missed FG, 7 punts (1.6 points a drive); UGA 12 drives, 6 TDs, 2 FGs, 3 punts (4 points a drive). By quarter: MIZ 0-7-7-7 / UGA 21-10-10-7. It went over at Q3 0:45. 14 points came with one team up 17+ in the fourth quarter.",
+    "The cover was settled by UGA's 7-point score in quarter 1 (2:03), making it 0-21."
    ],
    "wrong": [
-    "Biggest player misses: Craig Dandridge 85 receiving yards against 36 projected; London Humphreys 0 receiving yards against 31 projected; Caleb Goodie Sr. 0 receiving yards against 28 projected."
+    "London Humphreys (WR, UGA): 0 receiving yards against 31 projected. His team led by 9+ on 90% of its plays, so less need to throw. (previous game 16, season average 22.7, a season low).",
+    "Caleb Goodie Sr. (WR, MIZ): 0 receiving yards against 28 projected. (previous game 4, season average 10.9, a season low).",
+    "Sacovie White-Helton (WR, UGA): 0 receiving yards against 25 projected. His team led by 9+ on 90% of its plays, so less need to throw. (previous game 0, season average 19.3, a season low).",
+    "Shaun Terry II (WR, MIZ): 0 receiving yards against 23 projected. (previous game 9, season average 21, a season low)."
    ],
    "chance": [
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
     "With even luck the margin would have been UGA by 24.1 (actual UGA by 27)."
    ],
    "improve": [
-    "Isiah Canion (WR, UGA) had 71 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Isiah Canion (WR, UGA) had 71 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: UGA came off a good week: beat MISS 42-7 and covered by 31.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed UGA's previous game by 35.5 (better than it expected): two misses in a row could mean its rating for UGA is behind.",
+    "Possibility: The road team crossed time zones (UGA New York vs MIZ Chicago).",
+    "Possibility: MIZ's defensive playmakers: Robert Woodyard Jr. 1 pass breakup, 1 forced fumble; Nicholas Rodriguez 1 sack.",
+    "Possibility: UGA's defensive playmakers: Raylen Wilson 1 INT; Ellis Robinson IV 1 pass breakup, 1 forced fumble; Khalil Barnes 2 pass breakups."
    ]
   },
   "2026_11_FLA_UK": {
@@ -374,19 +541,30 @@
    },
    "right": [
     "The side lean, FLA +3 (model FLA by 5.5), won: FLA by 7.",
-    "On the margin the model was closer than the market (missed by 1.5 against 10)."
+    "On the margin the model was closer than the market (missed by 1.5 against 10).",
+    "Beat their projections: DJ Miller 80 (54 projected).",
+    "The cover was settled by FLA's 3-point score in quarter 3 (3:16), making it 13-14."
    ],
    "wrong": [
     "The total lean, over 53 (model 55.2), lost: 35 points.",
     "On the total the market was closer than the model (missed by 18 against 20.2).",
-    "Biggest player misses: Aaron Philo 102 rushing yards against 16 projected; CJ Baxter 21 rushing yards against 63 projected; Dallas Wilson 18 receiving yards against 56 projected."
+    "Jovantae Barnes (RB, UK): 6 rushing yards against 43 projected. Usage fell: 2 carries against 8.7 projected. (previous game 48, season average 38.9).",
+    "Eric Singleton Jr. (WR, FLA): 8 receiving yards against 43 projected. (previous game 19, season average 22.4).",
+    "Dallas Wilson (WR, FLA): 18 receiving yards against 56 projected. (previous game 48, season average 51.7).",
+    "CJ Baxter (RB, UK): 21 rushing yards against 63 projected. Usage fell: 8 carries against 12.5 projected. (previous game 54, season average 67.6).",
+    "Why the total went under 53: FLA 10 drives, 2 TDs, 1 FG, 1 turnover on downs, 5 punts (2.1 points a drive); UK 10 drives, 2 TDs, 1 turnover, 2 turnovers on downs, 3 punts (1.4 points a drive). By quarter: FLA 0-2-11-8 / UK 7-0-7-0."
    ],
    "chance": [
     "Fumble bounces went FLA's way, worth about 3.1 points (FLA 1 fumble, 0 lost; UK 1 fumble, 1 lost).",
     "With even luck the margin would have been FLA by 3.9 (actual FLA by 7)."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Possibility: FLA came off a bad week: lost to OU 7-23 and missed the cover by 20.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed FLA's previous game by 18 (worse than it expected): two misses in a row could mean its rating for FLA is behind.",
+    "Possibility: UK came off a bad week: lost to TENN 6-34 and missed the cover by 22. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed UK's previous game by 18.6 (worse than it expected): two misses in a row could mean its rating for UK is behind.",
+    "Possibility: Cam Dooley (S, FLA) faced UK, his team in 2024-2025: each side knows the other's habits.",
+    "Possibility: Jordan Castell (DB, UK) faced FLA, his team in 2023-2025: each side knows the other's habits."
    ]
   },
   "2026_11_WMU_AKR": {
@@ -397,20 +575,31 @@
     "total": "L"
    },
    "right": [
-    "Projections that held: Broc Lowry 149 passing yards (projected 169)."
+    "Beat their projections: Cole Cabana 107 (34 projected); Baylin Brooks 78 (38 projected); Marcel Williams 85 (32 projected)."
    ],
    "wrong": [
     "The side lean, AKR +15.5 (model WMU by 10.8), lost: WMU by 28.",
     "The total lean, under 51 (model 48.9), lost: 56 points.",
     "On the margin the market was closer than the model (missed by 12.5 against 17.2).",
     "On the total the market was closer than the model (missed by 5 against 7.1).",
-    "Biggest player misses: Cole Cabana 107 rushing yards against 34 projected; Marcel Williams 85 receiving yards against 32 projected; Cibastian Broughton -19 rushing yards against 32 projected."
+    "Cibastian Broughton (QB, AKR): -19 rushing yards against 32 projected. -2.4 yards per carry against 3 expected; his team trailed by 9+ on 70% of its plays. (previous game 20, season average 38.8, a season low).",
+    "Broc Lowry (QB, WMU): -4 rushing yards against 40 projected. Usage fell: 4 carries against 11.3 projected. (previous game 4, season average 28.8, a season low).",
+    "Kyan Mason (WR, AKR): 10 receiving yards against 56 projected. (previous game 71, season average 45).",
+    "Aveion Chenault (WR, WMU): 26 receiving yards against 62 projected. His team led by 9+ on 50% of its plays, so less need to throw. (previous game 109, season average 67.5).",
+    "Why the total went over 51: WMU 9 drives, 6 TDs, 2 turnovers on downs (4.7 points a drive); AKR 11 drives, 2 TDs, 2 turnovers on downs, 6 punts (1.3 points a drive). By quarter: WMU 7-14-7-14 / AKR 0-7-0-7. It went over at Q4 6:53. 21 points came with one team up 17+ in the fourth quarter.",
+    "The cover was settled by WMU's 7-point score in quarter 3 (5:04), making it 28-7."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Mason Reynolds (QB, WMU) had 99 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Mason Reynolds (QB, WMU) had 99 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: WMU was coming off a bye.",
+    "Possibility: The road team crossed time zones (AKR New York vs WMU Detroit).",
+    "Possibility: WMU played without regulars: Austin Alexander (DE), Justyce Betts (LB), Lolo Mataele (RB). The board's projections may not have known.",
+    "Possibility: WMU's defensive playmakers: Joshua Franklin 1 sack; Scoop Gardner Jr. 1 sack; Austin Alexander 2 pass breakups.",
+    "Possibility: AKR played without regulars: Brayden Roggow (QB). The board's projections may not have known.",
+    "Possibility: AKR's defensive playmakers: Cyrus Durham 1 sack."
    ]
   },
   "2026_11_KENT_BGSU": {
@@ -423,18 +612,30 @@
    "right": [
     "The side lean, BGSU −4 (model BGSU by 9.9), won: BGSU by 5.",
     "The total lean, over 42 (model 44.9), won: 61 points.",
-    "On the total the model was closer than the market (missed by 16.1 against 19)."
+    "On the total the model was closer than the market (missed by 16.1 against 19).",
+    "Beat their projections: Dru DeShields 332 (189 projected); Wayne Harris 143 (69 projected); Nakai Amachree 110 (37 projected).",
+    "Why the total went over 42: KENT 14 drives, 4 TDs, 2 turnovers, 1 turnover on downs, 6 punts (2 points a drive); BGSU 14 drives, 4 TDs, 2 FGs, 7 punts (2.4 points a drive). By quarter: KENT 7-7-0-14 / BGSU 7-10-10-6. It went over at Q4 6:37.",
+    "The cover was settled by BGSU's 6-point score in quarter 4 (1:51), making it 28-33 — a late swing."
    ],
    "wrong": [
     "On the margin the market was closer than the model (missed by 1 against 4.9).",
-    "Biggest player misses: Dru DeShields 332 passing yards against 189 projected; Wayne Harris 143 receiving yards against 69 projected; Da'Realyst Clark 107 receiving yards against 33 projected."
+    "Kal-El Pascal (WR, BGSU): 0 receiving yards against 20 projected. (previous game 15, season average 1.7, a season low).",
+    "Jakorion Caffey (RB, KENT): 4 rushing yards against 22 projected. Usage fell: 1 carries against 5.6 projected. (previous game 13, season average 12.4).",
+    "Brandon White (RB, KENT): 18 rushing yards against 49 projected. 1.8 yards per carry against 4.4 expected. (previous game 33, season average 29.8).",
+    "Brendyn Smith (WR, KENT): 19 receiving yards against 37 projected. (previous game 39, season average 29.2)."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Jay Kastantin, Austyn Dendy. Worth checking how late their status was known.",
-    "Austin Novosad (QB, BGSU) had 205 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Jay Kastantin (QB), Austyn Dendy (RB), Winn Sharp (WR), Jay Jay Etheridge (WR). Check how late that was known.",
+    "Austin Novosad (QB, BGSU) had 205 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: KENT came off a bad week: lost to SAC 10-31 and missed the cover by 28. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed KENT's previous game by 22.6 (worse than it expected): two misses in a row could mean its rating for KENT is behind.",
+    "Possibility: KENT was coming off a bye.",
+    "Possibility: BGSU was coming off a bye.",
+    "Possibility: KENT leaned on players who usually play little: Jaihien Roy (DL, 6 tackles, usually 2.0).",
+    "Possibility: KENT's defensive playmakers: Darian Blachewicz 1 sack; Josue Cordoba 1 sack; Jaihien Roy 1 sack."
    ]
   },
   "2026_11_OHIO_M-OH": {
@@ -446,23 +647,32 @@
    },
    "right": [
     "The total lean, over 47.5 (model 48.7), won: 51 points. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the total the model was closer than the market (missed by 2.3 against 3.5)."
+    "On the total the model was closer than the market (missed by 2.3 against 3.5).",
+    "Beat their projections: Nick Poulos 68 (37 projected); D'Shawntae Jones 115 (43 projected)."
    ],
    "wrong": [
     "The side lean, OHIO −1 (model OHIO by 3.1), lost: M-OH by 17. Chance decided it (below), so it doesn't count for or against the read.",
     "On the margin the market was closer than the model (missed by 18 against 20.1).",
-    "Biggest player misses: D'Shawntae Jones 115 rushing yards against 43 projected; Dom Dorwart 5 receiving yards against 62 projected; Levi Davis 36 passing yards against 0 projected."
+    "Caleb Heavner (QB, M-OH): -9 rushing yards against 30 projected. Usage fell: 1 carries against 10.3 projected; his team trailed by 9+ on 43% of its plays. (previous game -5, season average 26.5, a season low).",
+    "Scoop Smith (WR, M-OH): -4 receiving yards against 23 projected. (previous game 0, season average 21, a season low).",
+    "Dom Dorwart (WR, OHIO): 5 receiving yards against 62 projected. (previous game 108, season average 49.7, a season low).",
+    "Caleb Heavner (QB, M-OH): 39 passing yards against 147 projected. Usage fell: 8 attempts against 25.2 projected. (previous game 154, season average 96.1)."
    ],
    "chance": [
     "Caleb Heavner left in quarter 2 (5:35); he threw 35% of the team's passes. Nothing before kickoff could price that in.",
     "Defensive or return touchdowns: M-OH 1. They put 7 points on the total and moved the margin about 7.",
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
-    "With even luck the margin would have been M-OH by 7.1 (actual M-OH by 17)."
+    "With even luck the margin would have been M-OH by 7.1 (actual M-OH by 17).",
+    "Why the total went over 47.5: OHIO 15 drives, 3 TDs, 1 FG, 1 turnover, 9 punts (1.1 points a drive); M-OH 14 drives, 3 TDs, 2 FGs, 8 punts (2.4 points a drive). By quarter: OHIO 7-10-0-0 / M-OH 0-7-7-20. It went over at Q4 1:25.",
+    "The cover was settled by M-OH's 3-point score in quarter 4 (14:16), making it 17-17 — a late swing."
    ],
    "improve": [
-    "Caleb Heavner's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: Victor Rosa, Carl Jenkins. Worth checking how late their status was known.",
-    "Drew Bellisari (QB, M-OH) had 163 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Victor Rosa (RB), Lazaro Rogers (RB), Carl Jenkins (WR). Check how late that was known.",
+    "Caleb Heavner's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Drew Bellisari (QB, M-OH) had 163 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: OHIO played without regulars: Victor Rosa (RB). The board's projections may not have known.",
+    "Possibility: OHIO's defensive playmakers: Michael Molnar 1 sack; Jack Fries 2 pass breakups.",
+    "Possibility: M-OH's defensive playmakers: Amariyun Knighten 1 INT, 2 pass breakups; Grant Lyons 2 sacks; Brach Rice 1 sack."
    ]
   },
   "2026_11_MASS_TOL": {
@@ -474,21 +684,31 @@
    },
    "right": [
     "The side lean, TOL −14 (model TOL by 18.6), won: TOL by 24. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the margin the model was closer than the market (missed by 5.4 against 10)."
+    "On the margin the model was closer than the market (missed by 5.4 against 10).",
+    "Beat their projections: Connor Walendzak 117 (62 projected); Adjatay Dabbs 144 (60 projected)."
    ],
    "wrong": [
     "The total lean, over 52 (model 52.1), lost: 24 points. Chance decided it (below), so it doesn't count for or against the read.",
-    "Biggest player misses: Adjatay Dabbs 144 receiving yards against 60 projected; Connor Walendzak 117 rushing yards against 62 projected; Bryson Hammer 4 receiving yards against 44 projected."
+    "William Watson III (QB, MASS): -9 rushing yards against 26 projected. Usage fell: 1 carries against 7.6 projected; his team trailed by 9+ on 80% of its plays. (previous game 40, season average 31.1, a season low).",
+    "Terrell Crosby Jr. (WR, TOL): 0 receiving yards against 32 projected. His team led by 9+ on 64% of its plays, so less need to throw. (previous game 7, season average 28.6, a season low).",
+    "Daryl Barnett Jr. (WR, TOL): 0 receiving yards against 30 projected. His team led by 9+ on 64% of its plays, so less need to throw. (previous game 9, season average 27.7, a season low).",
+    "Elijah Faulkner (RB, MASS): 3 rushing yards against 39 projected. Usage fell: 2 carries against 11.3 projected; his team trailed by 9+ on 80% of its plays. (previous game 24, season average 44.4, a season low)."
    ],
    "chance": [
     "William Watson III left in quarter 1 (7:29); he threw 15% of the team's passes. Nothing before kickoff could price that in.",
     "Defensive or return touchdowns: TOL 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been TOL by 15.5 (actual TOL by 24)."
+    "With even luck the margin would have been TOL by 15.5 (actual TOL by 24).",
+    "Why the total went under 52: MASS 12 drives, 1 TD, 3 turnovers on downs, 8 punts (0 points a drive); TOL 12 drives, 2 TDs, 1 FG, 2 turnovers on downs, 5 punts (2 points a drive). By quarter: MASS 0-0-0-0 / TOL 7-17-0-0.",
+    "The cover was settled by TOL's 7-point score in quarter 2 (10:32), making it 0-17."
    ],
    "improve": [
-    "William Watson III's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: T.Y. Harding, Joseph Griffin Jr.. Worth checking how late their status was known.",
-    "Logan Inagawa (QB, MASS) had 139 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: T.Y. Harding (WR), Joseph Griffin Jr. (WR), Sam Lee (TE), Anthony Simpson (WR). Check how late that was known.",
+    "William Watson III's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Logan Inagawa (QB, MASS) had 139 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: TOL came off a bad week: beat SAC 20-17 and missed the cover by 22.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed TOL's previous game by 20.1 (worse than it expected): two misses in a row could mean its rating for TOL is behind.",
+    "Possibility: MASS's defensive playmakers: William DePaepe 1 sack; Andrew DePaepe 1 sack.",
+    "Possibility: TOL's defensive playmakers: Andrew Zock 2 sacks; Nicholas Thompson 1 INT, 1 pass breakup; Caden Camese 1 sack."
    ]
   },
   "2026_11_BUFF_BALL": {
@@ -498,12 +718,19 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Messiah Burch 209 (95 projected); TJ Horton 92 (47 projected); Terrance Shelton Jr. 92 (46 projected)."
+   ],
    "wrong": [
     "The side lean, BALL +1 (model BUFF by 0.4), lost: BUFF by 21.",
     "The total lean, over 52.5 (model 56.1), lost: 35 points.",
     "On the total the market was closer than the model (missed by 17.5 against 21.1).",
-    "Biggest player misses: Jason Wright 48 passing yards against 208 projected; Messiah Burch 209 rushing yards against 95 projected; Donovan Hamilton 104 receiving yards against 46 projected."
+    "Jaylen Andrews (WR, BUFF): -1 receiving yards against 32 projected. (previous game 41, season average 23.5, a season low).",
+    "Jabari Smith (WR, BALL): 0 receiving yards against 35 projected. (previous game 0, season average 35.3, a season low).",
+    "Isaiah Thacker (WR, BALL): 0 receiving yards against 32 projected. (previous game -1, season average 30.9).",
+    "Patrick Clacks III (WR, BUFF): 0 receiving yards against 29 projected. (previous game 28, season average 18.7).",
+    "Why the total went under 52.5: BUFF 12 drives, 4 TDs, 6 punts (2.3 points a drive); BALL 11 drives, 1 TD, 3 turnovers on downs, 3 missed FGs, 4 punts (0.6 points a drive). By quarter: BUFF 0-7-8-13 / BALL 7-0-0-0.",
+    "The cover was settled by BUFF's 7-point score in quarter 3 (3:10), making it 14-7."
    ],
    "chance": [
     "Defensive or return touchdowns: BALL 1. They put 7 points on the total and moved the margin about 7.",
@@ -511,7 +738,10 @@
     "With even luck the margin would have been BUFF by 23.7 (actual BUFF by 21)."
    ],
    "improve": [
-    "Projected but didn't play: Jalen Bonds, Nino Hill. Worth checking how late their status was known."
+    "Projected but didn't play: Jalen Bonds (RB), Nino Hill (RB), Jasaiah Gathings (WR). Check how late that was known.",
+    "Possibility: The road team crossed time zones (BALL Indianapolis vs BUFF New York).",
+    "Possibility: BALL played without regulars: Jalen Bonds (RB). The board's projections may not have known.",
+    "Possibility: BALL's defensive playmakers: Jared Badie 2 sacks; S.Feeney 1 sack; Mikeah Webster 1 sack."
    ]
   },
   "2026_11_SAC_CMU": {
@@ -523,18 +753,30 @@
    },
    "right": [
     "The side lean, CMU −17 (model CMU by 18.3), won: CMU by 21.",
-    "On the margin the model was closer than the market (missed by 2.7 against 4)."
+    "On the margin the model was closer than the market (missed by 2.7 against 4).",
+    "Beat their projections: Nick Woodford 119 (47 projected); Jayden Clerveaux 100 (47 projected); Brock Townsend 58 (26 projected).",
+    "The cover was settled by CMU's 7-point score in quarter 4 (1:05), making it 7-28 — a late swing."
    ],
    "wrong": [
     "The total lean, over 42.5 (model 43.6), lost: 35 points.",
     "On the total the market was closer than the model (missed by 7.5 against 8.6).",
-    "Biggest player misses: Brian Salazar Jr. 103 passing yards against 0 projected; Nick Woodford 119 rushing yards against 47 projected; Jayden Clerveaux 100 rushing yards against 47 projected."
+    "Justin Ruffin Jr. (WR, CMU): 0 receiving yards against 30 projected. (previous game 51, season average 14.9, a season low).",
+    "Cincere Rhaney (RB, SAC): 0 rushing yards against 24 projected. Usage fell: 0 carries against 5.4 projected; his team trailed by 9+ on 44% of its plays. (previous game 7, season average 22.3, a season low).",
+    "Kenyon Shabazz (WR, SAC): 0 receiving yards against 22 projected. (previous game 6, season average 14.2, a season low).",
+    "Matt Coleman (WR, SAC): 7 receiving yards against 47 projected. (previous game 46, season average 53.8).",
+    "Why the total went under 42.5: SAC 10 drives, 1 TD, 1 turnover, 1 turnover on downs, 5 punts (0.7 points a drive); CMU 9 drives, 4 TDs, 1 turnover, 1 turnover on downs, 1 missed FG, 2 punts (3.1 points a drive). By quarter: SAC 0-7-0-0 / CMU 7-7-7-7."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Jackson Sharman, Langston Lewis. Worth checking how late their status was known."
+    "Projected but didn't play: Jackson Sharman (QB), Langston Lewis (WR), Angel Flores (QB), Jaden Allen (TE). Check how late that was known.",
+    "Possibility: SAC came off a good week: lost to TOL 17-20 and covered by 22.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed SAC's previous game by 20.1 (better than it expected): two misses in a row could mean its rating for SAC is behind.",
+    "Possibility: CMU came off a good week: beat EMU 35-7 and covered by 25. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed CMU's previous game by 21.2 (better than it expected): two misses in a row could mean its rating for CMU is behind.",
+    "Possibility: The road team crossed time zones (CMU Detroit vs SAC Los Angeles).",
+    "Possibility: SAC's defensive playmakers: Boogsie Silvera 1 pass breakup, 1 forced fumble; Jamel Howard Jr. 1 sack."
    ]
   },
   "2026_11_MEM_USF": {
@@ -546,18 +788,29 @@
    },
    "right": [
     "The total lean, over 50.5 (model 53.1), won: 93 points.",
-    "On the total the model was closer than the market (missed by 39.9 against 42.5)."
+    "On the total the model was closer than the market (missed by 39.9 against 42.5).",
+    "Beat their projections: Marcus Stokes 73 (30 projected); Luke Kromenhoek 271 (156 projected); Luke Kromenhoek 146 (26 projected).",
+    "Why the total went over 50.5: MEM 14 drives, 7 TDs, 1 FG, 1 turnover on downs, 1 missed FG, 4 punts (3.7 points a drive); USF 15 drives, 5 TDs, 2 FGs, 1 turnover, 3 turnovers on downs, 2 punts (2.7 points a drive). By quarter: MEM 21-7-10-14 / USF 0-17-21-3. It went over at Q3 9:55."
    ],
    "wrong": [
     "The side lean, USF +4.5 (model MEM by 4), lost: MEM by 11.",
-    "Biggest player misses: Luke Kromenhoek 146 rushing yards against 26 projected; Jemyri Davis 161 receiving yards against 50 projected; Jason Collins Jr. 108 rushing yards against 37 projected."
+    "Hunter Tipton (TE, MEM): 14 receiving yards against 45 projected. His team led by 9+ on 41% of its plays, so less need to throw. (previous game 86, season average 55).",
+    "Jermane Hayes (WR, MEM): 16 receiving yards against 50 projected. His team led by 9+ on 41% of its plays, so less need to throw. (previous game 86, season average 50.2).",
+    "Stonka Burnside (WR, MEM): 30 receiving yards against 56 projected. His team led by 9+ on 41% of its plays, so less need to throw. (previous game 51, season average 56.6).",
+    "The cover was settled by MEM's 7-point score in quarter 4 (0:44), making it 52-41 — a late swing."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: D.J. Crowther. Worth checking how late his status was known.",
-    "Jordan Thompson (RB, MEM) had 51 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: D.J. Crowther (RB), Wyatt Sullivan (TE). Check how late that was known.",
+    "Jordan Thompson (RB, MEM) had 51 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: MEM came off a good week: beat ARMY 49-22 and covered by 21. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed MEM's previous game by 19.2 (better than it expected): two misses in a row could mean its rating for MEM is behind.",
+    "Possibility: MEM was coming off a bye.",
+    "Possibility: The road team crossed time zones (USF New York vs MEM Chicago).",
+    "Possibility: MEM's defensive playmakers: J'Mond Tapp 3 sacks; Elijah Kinsler 2 sacks, 1 pass breakup; Kadan Spratling 1 sack, 1 pass breakup.",
+    "Possibility: USF played without regulars: D.J. Crowther (RB). The board's projections may not have known."
    ]
   },
   "2026_11_UL_ULM": {
@@ -569,21 +822,33 @@
    },
    "right": [
     "The total lean, over 47.5 (model 52.4), won: 63 points. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the total the model was closer than the market (missed by 10.6 against 15.5)."
+    "On the total the model was closer than the market (missed by 10.6 against 15.5).",
+    "Beat their projections: JJ Garner 104 (62 projected); Steven Blanco 113 (46 projected); Bryson Roland 111 (26 projected)."
    ],
    "wrong": [
     "The side lean, ULM +10 (model UL by 8.3), lost: UL by 21. Chance decided it (below), so it doesn't count for or against the read.",
     "On the margin the market was closer than the model (missed by 11 against 12.7).",
-    "Biggest player misses: Lunch Winfield 65 passing yards against 174 projected; Aidan Armenta 70 passing yards against 178 projected; Bryson Roland 111 rushing yards against 26 projected."
+    "KeDarius Wade (WR, UL): 0 receiving yards against 35 projected. (previous game 21, season average 33.3, a season low).",
+    "Trenton Chaney (WR, UL): 0 receiving yards against 33 projected. (previous game 46, season average 35.7, a season low).",
+    "LT Robinson (WR, ULM): 0 receiving yards against 25 projected. (previous game 8, season average 23, a season low).",
+    "Parker Fulghum (WR, ULM): 3 receiving yards against 32 projected. (previous game 5, season average 25)."
    ],
    "chance": [
     "Austin Carlisle left in quarter 3 (4:52); he threw 50% of the team's passes. Nothing before kickoff could price that in.",
     "Defensive or return touchdowns: UL 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been UL by 14 (actual UL by 21)."
+    "With even luck the margin would have been UL by 14 (actual UL by 21).",
+    "Why the total went over 47.5: UL 9 drives, 5 TDs, 4 punts (4.7 points a drive); ULM 11 drives, 4 TDs, 2 turnovers, 1 turnover on downs, 3 punts (1.9 points a drive). By quarter: UL 7-7-14-14 / ULM 7-7-0-7. It went over at Q4 11:32. 7 points came with one team up 17+ in the fourth quarter.",
+    "The cover was settled by UL's 7-point score in quarter 3 (2:36), making it 28-14."
    ],
    "improve": [
-    "Austin Carlisle's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: Zach Palmer-Smith, Anthony Reagan Jr.. Worth checking how late their status was known."
+    "Projected but didn't play: Zach Palmer-Smith (RB), Anthony Reagan Jr. (RB), Derrick Jameson (RB). Check how late that was known.",
+    "Austin Carlisle's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Possibility: ULM came off a good week: beat ARST 19-17 and covered by 16.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed ULM's previous game by 15 (better than it expected): two misses in a row could mean its rating for ULM is behind.",
+    "Possibility: UL played without regulars: Anthony Reagan Jr. (RB). The board's projections may not have known.",
+    "Possibility: UL's defensive playmakers: Maxie Baudoin IV 1 sack, 1 pass breakup; Kody Jackson 1 INT; Collin Jacob 1 forced fumble.",
+    "Possibility: ULM played without regulars: Kevontay Wells (DL), Taijh Overton (S), Zach Palmer-Smith (RB). The board's projections may not have known.",
+    "Possibility: ULM leaned on players who usually play little: Jabari Tiller (DB, 9 tackles, usually 2.0)."
    ]
   },
   "2026_11_FSU_PITT": {
@@ -594,19 +859,30 @@
     "total": "L"
    },
    "right": [
-    "The side lean, FSU +3 (model PITT by 2), won: FSU by 6."
+    "The side lean, FSU +3 (model PITT by 2), won: FSU by 6.",
+    "Beat their projections: Jasen Lopez 72 (32 projected)."
    ],
    "wrong": [
     "The total lean, over 52.5 (model 56), lost: 26 points.",
     "On the total the market was closer than the model (missed by 26.5 against 30).",
-    "Biggest player misses: Damon Ferguson Jr. 32 rushing yards against 90 projected; Micahi Danzy 24 receiving yards against 69 projected; La'Vell Wright 7 rushing yards against 47 projected."
+    "Demetrice McCray (WR, PITT): 0 receiving yards against 28 projected. (previous game 0, season average 24.2, a season low).",
+    "Justin Cook (RB, PITT): 0 rushing yards against 21 projected. Usage fell: 0 carries against 4 projected. (previous game 15, season average 19, a season low).",
+    "La'Vell Wright (RB, PITT): 7 rushing yards against 47 projected. Usage fell: 7 carries against 10.7 projected. (previous game 52, season average 38.1).",
+    "Carson Kent (TE, PITT): 6 receiving yards against 38 projected. (previous game 41, season average 35.2).",
+    "Why the total went under 52.5: FSU 12 drives, 1 TD, 3 FGs, 1 turnover, 6 punts (1.3 points a drive); PITT 12 drives, 1 TD, 1 FG, 1 turnover, 3 turnovers on downs, 5 punts (0.8 points a drive). By quarter: FSU 3-3-7-3 / PITT 0-7-3-0."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Holden Geriner, Bryce Yates. Worth checking how late their status was known.",
-    "Corey Dailey (QB, PITT) had 215 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Holden Geriner (QB), Bryce Yates (WR), Dylan Wester (WR). Check how late that was known.",
+    "Corey Dailey (QB, PITT) had 215 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: PITT came off a good week: beat GT 34-11 and covered by 15.5. A letdown or bounce-back is possible.",
+    "Possibility: PITT was coming off a bye.",
+    "Possibility: DeMarco Ward (LB, PITT) faced FSU, his team in 2024: each side knows the other's habits.",
+    "Possibility: FSU played without regulars: Quintrevion Wisner (RB), Ousmane Kromah (RB). The board's projections may not have known.",
+    "Possibility: FSU's defensive playmakers: Rylan Kennedy 1 INT; Charles Lester III 3 pass breakups; M.Desir 1 sack.",
+    "Possibility: PITT's defensive playmakers: Raion Strader 1 sack, 1 pass breakup; Jeremiah Warren 1 sack; Braylan Lovelace 1 forced fumble."
    ]
   },
   "2026_11_HOU_COLO": {
@@ -617,21 +893,30 @@
     "total": "L"
    },
    "right": [
-    "Projections that held: Isaac Wilson 217 passing yards (projected 240)."
+    "Beat their projections: Makhi Hughes 106 (72 projected); Patrick Overmyer 116 (49 projected); Richard Young 99 (44 projected)."
    ],
    "wrong": [
     "The side lean, HOU −7.5 (model HOU by 10.3), lost: COLO by 10.",
     "The total lean, under 52.5 (model 50.6), lost: 74 points.",
     "On the margin the market was closer than the model (missed by 17.5 against 20.3).",
     "On the total the market was closer than the model (missed by 21.5 against 23.4).",
-    "Biggest player misses: Patrick Overmyer 116 receiving yards against 49 projected; Richard Young 99 rushing yards against 44 projected; DeKalon Taylor 67 rushing yards against 14 projected."
+    "Quanell Farrakhan Jr. (WR, COLO): 9 receiving yards against 39 projected. (previous game 36, season average 40.7).",
+    "Koby Young (WR, HOU): 17 receiving yards against 45 projected. (previous game 13, season average 40).",
+    "Trent Walker (WR, HOU): 38 receiving yards against 61 projected. (previous game 57, season average 48.8).",
+    "Why the total went over 52.5: HOU 14 drives, 5 TDs, 2 FGs, 2 turnovers, 1 turnover on downs, 3 punts (2.3 points a drive); COLO 10 drives, 5 TDs, 1 turnover, 1 turnover on downs, 2 punts (4.2 points a drive). By quarter: HOU 3-17-0-12 / COLO 0-21-14-7. It went over at Q3 5:26.",
+    "The cover was settled by COLO's 7-point score in quarter 2 (1:49), making it 20-14."
    ],
    "chance": [
     "Fumble bounces went COLO's way, worth about 3.1 points (HOU 1 fumble, 1 lost; COLO 1 fumble, 0 lost).",
     "With even luck the margin would have been COLO by 6.9 (actual COLO by 10)."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Possibility: The road team crossed time zones (COLO Denver vs HOU Chicago).",
+    "Possibility: HOU played without regulars: Brandon Mack II (LB), Carmycah Glass (LB). The board's projections may not have known.",
+    "Possibility: HOU leaned on players who usually play little: Myles Rowser (DB, 7 tackles, usually 2.0).",
+    "Possibility: HOU's defensive playmakers: J.White 1 INT.",
+    "Possibility: COLO played without regulars: Naeten Mitchell (DB). The board's projections may not have known.",
+    "Possibility: COLO's defensive playmakers: Boo Carter 1 INT; R.Fontenette 1 sack."
    ]
   },
   "2026_11_ALA_VAN": {
@@ -641,18 +926,30 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Daniel Hill 89 (42 projected)."
+   ],
    "wrong": [
     "The side lean, VAN +14.5 (model ALA by 9.9), lost: ALA by 15.",
     "The total lean, over 48.5 (model 49), lost: 27 points.",
     "On the margin the market was closer than the model (missed by 0.5 against 5.1).",
-    "Biggest player misses: Keelon Russell 217 passing yards against 0 projected; Daniel Hill 89 rushing yards against 42 projected; Trae'shawn Brown 4 rushing yards against 49 projected."
+    "Jared Curtis (QB, VAN): -18 rushing yards against 22 projected. -2 yards per carry against 2 expected; his team trailed by 9+ on 62% of its plays. (previous game 22, season average 21.5, a season low).",
+    "Cederian Morgan (WR, ALA): 0 receiving yards against 22 projected. (previous game 25, season average 15.3, a season low).",
+    "Martel Hight (WR, VAN): 0 receiving yards against 21 projected. (previous game 3, season average 0.4, a season low).",
+    "Trae'shawn Brown (RB, ALA): 4 rushing yards against 49 projected. Usage fell: 4 carries against 10.9 projected. (previous game 35, season average 39.9, a season low).",
+    "Why the total went under 48.5: ALA 13 drives, 3 TDs, 2 turnovers, 1 turnover on downs, 5 punts (1.6 points a drive); VAN 13 drives, 2 FGs, 3 turnovers on downs, 1 missed FG, 6 punts (0.5 points a drive). By quarter: ALA 0-7-14-0 / VAN 0-3-3-0.",
+    "The cover was settled by ALA's 7-point score in quarter 3 (7:13), making it 21-6."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Austin Mack. Worth checking how late his status was known."
+    "Projected but didn't play: Austin Mack (QB). Check how late that was known.",
+    "Possibility: ALA came off a good week: beat LSU 31-13 and covered by 23.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed ALA's previous game by 24.3 (better than it expected): two misses in a row could mean its rating for ALA is behind.",
+    "Possibility: Cole Adams (WR, VAN) faced ALA, his team in 2023-2025: each side knows the other's habits.",
+    "Possibility: ALA's defensive playmakers: Yhonzae Pierre 1 sack; Fatutoa Henry 1 sack; Justin Hill 1 sack.",
+    "Possibility: VAN's defensive playmakers: Dontae Carter 1 INT; Mason Lewis 1 sack; Bryan Longwell 1 sack."
    ]
   },
   "2026_11_BC_ND": {
@@ -666,17 +963,29 @@
     "The side lean, ND −29 (model ND by 37.9), won: ND by 34. Chance decided it (below), so it doesn't count for or against the read.",
     "The total lean, under 51.5 (model 50.2), won: 48 points.",
     "On the margin the model was closer than the market (missed by 3.9 against 5).",
-    "On the total the model was closer than the market (missed by 2.2 against 3.5)."
+    "On the total the model was closer than the market (missed by 2.2 against 3.5).",
+    "Beat their projections: Jonaz Walton 141 (72 projected); Micah Gilbert 86 (49 projected).",
+    "Why the total went under 51.5: BC 12 drives, 2 TDs, 1 turnover, 3 turnovers on downs, 6 punts (0.6 points a drive); ND 11 drives, 4 TDs, 2 FGs, 1 turnover, 1 turnover on downs, 2 punts (3.7 points a drive). By quarter: BC 0-0-7-0 / ND 7-24-7-3. 3 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
-    "Biggest player misses: Mason McKenzie 51 passing yards against 167 projected; Jonaz Walton 141 rushing yards against 72 projected; Micah Gilbert 86 receiving yards against 49 projected."
+    "Johnathan Montague Jr. (WR, BC): 0 receiving yards against 28 projected. (previous game 22, season average 30.1, a season low).",
+    "Nedrick Boldin Jr. (WR, BC): 0 receiving yards against 23 projected. (previous game 49, season average 15.6, a season low).",
+    "Landon Wright (WR, BC): 0 receiving yards against 21 projected. (previous game 1, season average 29.9).",
+    "Mason McKenzie (QB, BC): 10 rushing yards against 62 projected. 0.7 yards per carry against 4.2 expected; his team trailed by 9+ on 75% of its plays. (previous game 38, season average 75.1)."
    ],
    "chance": [
     "Defensive or return touchdowns: ND 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been ND by 27 (actual ND by 34)."
+    "With even luck the margin would have been ND by 27 (actual ND by 34).",
+    "The cover was settled by ND's 7-point score in quarter 3 (10:24), making it 7-38."
    ],
    "improve": [
-    "Projected but didn't play: Evan Dickens, Jaedn Skeete. Worth checking how late their status was known."
+    "Projected but didn't play: Evan Dickens (RB), Jaedn Skeete (WR), Mylan Graham (WR), Kaelan Chudzinski (TE). Check how late that was known.",
+    "Possibility: A non-conference game.",
+    "Possibility: The road team crossed time zones (ND Indianapolis vs BC New York).",
+    "Possibility: Bodie Kahoun (LB, BC) faced ND, his team in 2024-2025: each side knows the other's habits.",
+    "Possibility: BC leaned on players who usually play little: Kemori Dixon (LB, 8 tackles, usually 1.5).",
+    "Possibility: BC's defensive playmakers: K.Price 1 INT; KP Price 1 sack.",
+    "Possibility: ND played without regulars: Drayk Bowen (LB). The board's projections may not have known."
    ]
   },
   "2026_11_MINN_PSU": {
@@ -688,17 +997,28 @@
    },
    "right": [
     "The total lean, over 42 (model 45.7), won: 56 points.",
-    "On the total the model was closer than the market (missed by 10.3 against 14)."
+    "On the total the model was closer than the market (missed by 10.3 against 14).",
+    "Beat their projections: Carson Hansen 126 (64 projected); Cam Wallace 82 (44 projected).",
+    "Why the total went over 42: MINN 12 drives, 2 TDs, 1 turnover, 1 turnover on downs, 6 punts (1.2 points a drive); PSU 11 drives, 6 TDs, 5 punts (3.8 points a drive). By quarter: MINN 0-0-14-0 / PSU 14-14-7-7. It went over at Q3 1:40. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
     "The side lean, MINN +12 (model PSU by 11), lost: PSU by 28.",
-    "Biggest player misses: Rocco Becht 84 passing yards against 205 projected; Chase Sowell 0 receiving yards against 73 projected; Darius Taylor 85 receiving yards against 20 projected."
+    "Chase Sowell (WR, PSU): 0 receiving yards against 73 projected. His team led by 9+ on 84% of its plays, so less need to throw. (previous game 125, season average 79.4, a season low).",
+    "Zay Robinson (WR, PSU): 0 receiving yards against 25 projected. His team led by 9+ on 84% of its plays, so less need to throw. (previous game 30, season average 17.7, a season low).",
+    "Jalen Smith (WR, MINN): 9 receiving yards against 43 projected. (previous game 85, season average 43.5, a season low).",
+    "Brett Eskildsen (WR, PSU): 9 receiving yards against 43 projected. His team led by 9+ on 84% of its plays, so less need to throw. (previous game 35, season average 31).",
+    "The cover was settled by PSU's 7-point score in quarter 1 (5:15), making it 0-14."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Alex Manske (QB, PSU) had 42 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Roman Voss (TE). Check how late that was known.",
+    "Alex Manske (QB, PSU) had 42 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (PSU New York vs MINN Chicago).",
+    "Possibility: MINN played without regulars: John Nestor (DB). The board's projections may not have known.",
+    "Possibility: MINN's defensive playmakers: Joey Gerlach 1 sack, 1 pass breakup; Maverick Baranowski 1 sack; Karter Menz 1 sack.",
+    "Possibility: PSU's defensive playmakers: Ibn McDaniels 1 sack, 1 pass breakup; Tony Rojas 1 sack; Alexander McPherson 1 sack."
    ]
   },
   "2026_11_SC_ARK": {
@@ -708,21 +1028,32 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Cam Settles 64 (42 projected); Jabree Coleman 77 (39 projected); Sutton Smith 60 (36 projected)."
+   ],
    "wrong": [
     "The side lean, SC −7 (model SC by 8.5), lost: ARK by 28.",
     "The total lean, over 51.5 (model 57), lost: 40 points. The model was 5.5 points off the market here, one of its bigger gaps.",
     "On the margin the market was closer than the model (missed by 35 against 36.5).",
     "On the total the market was closer than the model (missed by 11.5 against 17).",
-    "Biggest player misses: Jabree Coleman 77 rushing yards against 39 projected; KJ Jackson 46 rushing yards against 17 projected; Braylen Russell 3 rushing yards against 29 projected."
+    "Ty Lockwood (TE, ARK): 0 receiving yards against 24 projected. His team led by 9+ on 51% of its plays, so less need to throw. (previous game 43, season average 22.5, a season low).",
+    "Lex Cyrus (WR, SC): 0 receiving yards against 22 projected. (previous game 5, season average 18.2, a season low).",
+    "Braylen Russell (RB, ARK): 3 rushing yards against 29 projected. Usage fell: 4 carries against 7.8 projected. (previous game 27, season average 25.8).",
+    "Ismael Cisse (WR, ARK): 5 receiving yards against 28 projected. His team led by 9+ on 51% of its plays, so less need to throw. (previous game 12, season average 14.4).",
+    "Why the total went under 51.5: SC 13 drives, 2 TDs, 3 turnovers, 2 turnovers on downs, 1 missed FG, 3 punts (0.5 points a drive); ARK 11 drives, 3 TDs, 2 FGs, 1 missed FG, 5 punts (3.1 points a drive). By quarter: SC 0-0-6-0 / ARK 0-17-7-10. 10 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Defensive or return touchdowns: ARK 1. They put 7 points on the total and moved the margin about 7.",
     "With even luck the margin would have been ARK by 22.5 (actual ARK by 28)."
    ],
    "improve": [
-    "Projected but didn't play: LaNorris Sellers, LaNorris Sellers. Worth checking how late their status was known.",
-    "Cutter Woods (QB, SC) had 259 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: LaNorris Sellers (QB), Matt Fuller (RB), Nyck Harbor (WR), CJ Brown (WR). Check how late that was known.",
+    "Cutter Woods (QB, SC) had 259 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (ARK Chicago vs SC New York).",
+    "Possibility: Isaiah Augustave (RB, SC) faced ARK, his team in 2023: each side knows the other's habits.",
+    "Possibility: SC played without regulars: LaNorris Sellers (QB), Matt Fuller (RB). The board's projections may not have known.",
+    "Possibility: SC's defensive playmakers: Justin Okoronkwo 1 sack; Vicari Swain 2 pass breakups.",
+    "Possibility: ARK's defensive playmakers: Joker Johnson 2 INT, 1 forced fumble; Ben Bogle 1 INT, 2 pass breakups."
    ]
   },
   "2026_11_CIN_ISU": {
@@ -734,19 +1065,31 @@
    },
    "right": [
     "The side lean, ISU −2.5 (model ISU by 4.7), won: ISU by 28.",
-    "On the margin the model was closer than the market (missed by 23.3 against 25.5)."
+    "On the margin the model was closer than the market (missed by 23.3 against 25.5).",
+    "Beat their projections: Aiden Flora 216 (144 projected); Cole Tabb 165 (87 projected); Jamal Polite Jr. 68 (46 projected).",
+    "The cover was settled by ISU's 7-point score in quarter 1 (7:47), making it 7-14."
    ],
    "wrong": [
     "The total lean, over 58 (model 61.2), lost: 54 points.",
     "On the total the market was closer than the model (missed by 4 against 7.2).",
-    "Biggest player misses: JC French IV 97 passing yards against 230 projected; Cole Tabb 165 rushing yards against 87 projected; Aiden Flora 216 rushing yards against 144 projected."
+    "Zylan Perry (RB, CIN): 0 rushing yards against 37 projected. Usage fell: 0 carries against 7.2 projected; his team trailed by 9+ on 82% of its plays. (previous game 12, season average 22.5, a season low).",
+    "Isaiah Johnson (WR, CIN): 0 receiving yards against 37 projected. (previous game 5, season average 29.3).",
+    "Malcolm Watkins (WR, ISU): 0 receiving yards against 22 projected. His team led by 9+ on 75% of its plays, so less need to throw. (previous game 8, season average 10.5, a season low).",
+    "Malachi Henry (WR, CIN): 1 receiving yards against 50 projected. (previous game 65, season average 44.3).",
+    "Why the total went under 58: CIN 12 drives, 2 TDs, 2 turnovers, 4 turnovers on downs, 3 punts (1.1 points a drive); ISU 12 drives, 5 TDs, 2 FGs, 1 turnover, 2 missed FGs, 2 punts (3.4 points a drive). By quarter: CIN 7-6-0-0 / ISU 21-10-0-10. 10 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Fumble bounces went ISU's way, worth about 3.1 points (CIN 2 fumbles, 2 lost; ISU 0 fumbles, 0 lost).",
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Projected but didn't play: Tyler Fortenberry (TE). Check how late that was known.",
+    "Possibility: The road team crossed time zones (ISU Chicago vs CIN New York).",
+    "Possibility: CIN played without regulars: JV Gibson (WR). The board's projections may not have known.",
+    "Possibility: CIN's defensive playmakers: Kenny Worthy 1 INT; Jonathan Thompson 1 sack; Jasper Beeler 1 sack.",
+    "Possibility: ISU played without regulars: Carson Willich (LB). The board's projections may not have known.",
+    "Possibility: ISU leaned on players who usually play little: Isaac Terrell (DE, 8 tackles, usually 1.5).",
+    "Possibility: ISU's defensive playmakers: Jace Gilbert 2 sacks; Max Baloun 1 sack; Zaimir Hawk 1 sack."
    ]
   },
   "2026_11_WIS_MD": {
@@ -760,17 +1103,28 @@
     "The side lean, MD +8.5 (model WIS by 4.2), won: MD by 3.",
     "The total lean, over 41 (model 45.1), won: 45 points.",
     "On the margin the model was closer than the market (missed by 7.2 against 11.5).",
-    "On the total the model was closer than the market (missed by 0.1 against 4)."
+    "On the total the model was closer than the market (missed by 0.1 against 4).",
+    "Why the total went over 41: WIS 14 drives, 2 TDs, 2 FGs, 3 turnovers, 5 punts (1.5 points a drive); MD 13 drives, 3 TDs, 1 FG, 1 turnover, 1 missed FG, 7 punts (1.9 points a drive). By quarter: WIS 7-3-3-8 / MD 0-7-7-10. It went over at Q4 2:11.",
+    "The cover was settled by MD's 7-point score in quarter 2 (3:16), making it 10-7."
    ],
    "wrong": [
-    "Biggest player misses: Ryan Hopkins 77 passing yards against 220 projected; Preston Howard 77 receiving yards against 20 projected; Abu Sama III 20 rushing yards against 60 projected."
+    "Colton Joseph (QB, WIS): 0 rushing yards against 34 projected. Usage fell: 0 carries against 7.8 projected. (previous game 6, season average 46.4, a season low).",
+    "Shamar Rigby (WR, WIS): 0 receiving yards against 33 projected. (previous game 71, season average 20.5, a season low).",
+    "Bryan Jackson II (RB, WIS): 1 rushing yards against 35 projected. Usage fell: 4 carries against 7.9 projected. (previous game 32, season average 25.8, a season low).",
+    "Dorian Fleming (TE, MD): 3 receiving yards against 28 projected. (previous game 4, season average 24.1, a season low)."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Malik Washington. Worth checking how late his status was known.",
-    "Cardell Williams (QB, MD) had 200 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Malik Washington (QB). Check how late that was known.",
+    "Cardell Williams (QB, MD) had 200 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (MD New York vs WIS Chicago).",
+    "Possibility: WIS played without regulars: Sebastian Cheeks (LB). The board's projections may not have known.",
+    "Possibility: WIS leaned on players who usually play little: Matthew Traynor (S, 6 tackles, usually 1.2), Donovan Dunmore (CB, 7 tackles, usually 2.0).",
+    "Possibility: WIS's defensive playmakers: Mason Posa 1 sack.",
+    "Possibility: MD played without regulars: Malik Washington (QB). The board's projections may not have known.",
+    "Possibility: MD's defensive playmakers: Jamare Glasker 1 sack, 2 pass breakups; Nahsir Taylor 1 sack, 1 pass breakup; Trey Reddick 1 sack, 1 pass breakup."
    ]
   },
   "2026_11_JMU_CONN": {
@@ -782,12 +1136,17 @@
    },
    "right": [
     "The total lean, over 56.5 (model 59.6), won: 68 points.",
-    "On the total the model was closer than the market (missed by 8.4 against 11.5)."
+    "On the total the model was closer than the market (missed by 8.4 against 11.5).",
+    "Beat their projections: Kalieb Osborne 88 (39 projected); JC Evans 49 (25 projected); Cyncir Bowers 123 (63 projected).",
+    "Why the total went over 56.5: JMU 10 drives, 3 TDs, 1 FG, 1 turnover, 1 turnover on downs, 4 punts (2.2 points a drive); CONN 11 drives, 6 TDs, 2 FGs, 1 missed FG, 1 punt (4.2 points a drive). By quarter: JMU 6-7-0-9 / CONN 10-10-6-20. It went over at Q4 3:53. 19 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
     "The side lean, JMU −4.5 (model JMU by 8.3), lost: CONN by 24.",
     "On the margin the market was closer than the model (missed by 28.5 against 32.3).",
-    "Biggest player misses: Shamar Porter 135 receiving yards against 37 projected; Cyncir Bowers 123 rushing yards against 63 projected; Kalieb Osborne 88 rushing yards against 39 projected."
+    "Michael Scott (WR, JMU): -1 receiving yards against 41 projected. (previous game 61, season average 41.7, a season low).",
+    "Ryder Treadway (WR, CONN): 0 receiving yards against 44 projected. (previous game 82, season average 37.4, a season low).",
+    "Xavier Watson (TE, CONN): 2 receiving yards against 24 projected. (previous game 35, season average 19.1).",
+    "Jeremiah Harrison (WR, JMU): 5 receiving yards against 35 projected. (previous game 7, season average 26.3)."
    ],
    "chance": [
     "Defensive or return touchdowns: CONN 1. They put 7 points on the total and moved the margin about 7.",
@@ -795,7 +1154,13 @@
     "With even luck the margin would have been CONN by 19.9 (actual CONN by 24)."
    ],
    "improve": [
-    "Projected but didn't play: George Pettaway. Worth checking how late his status was known."
+    "Projected but didn't play: George Pettaway (RB), Nick Herman (RB), Miles Halbert (WR). Check how late that was known.",
+    "Possibility: JMU came off a good week: beat USM 54-23 and covered by 17. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed JMU's previous game by 16.9 (better than it expected): two misses in a row could mean its rating for JMU is behind.",
+    "Possibility: A non-conference game.",
+    "Possibility: JMU played without regulars: George Pettaway (RB). The board's projections may not have known.",
+    "Possibility: JMU's defensive playmakers: Danny Royster 1 sack; Nakian Jackson 1 sack; LaRon Dues 1 sack.",
+    "Possibility: CONN's defensive playmakers: Joshua Mickens 1 sack, 1 pass breakup; J.Price 1 INT; H.Pegg 1 INT."
    ]
   },
   "2026_11_UAB_TEM": {
@@ -806,18 +1171,29 @@
     "total": "L"
    },
    "right": [
-    "The side lean, UAB +2.5 (model TEM by 2.4), won: UAB by 26."
+    "The side lean, UAB +2.5 (model TEM by 2.4), won: UAB by 26.",
+    "Beat their projections: Rod Robinson II 202 (60 projected); Ja'Vin Simpkins 54 (31 projected).",
+    "The cover was settled by UAB's 7-point score in quarter 1 (2:54), making it 7-7."
    ],
    "wrong": [
     "The total lean, over 48 (model 52), lost: 46 points.",
     "On the total the market was closer than the model (missed by 2 against 6).",
-    "Biggest player misses: Rod Robinson II 202 rushing yards against 60 projected; Ajani Sheppard 85 passing yards against 172 projected; Colin Chase 14 receiving yards against 58 projected."
+    "EJ Reid (WR, UAB): 4 receiving yards against 46 projected. (previous game 57, season average 26.2, a season low).",
+    "Samuel Brown V (RB, TEM): 11 rushing yards against 54 projected. Usage fell: 5 carries against 10.8 projected; his team trailed by 9+ on 40% of its plays. (previous game 22, season average 57).",
+    "Colin Chase (WR, TEM): 14 receiving yards against 58 projected. (previous game 51, season average 42.3).",
+    "CJ Smith (WR, UAB): 13 receiving yards against 48 projected. (previous game 34, season average 48.6).",
+    "Why the total went under 48: UAB 14 drives, 4 TDs, 2 FGs, 1 turnover, 1 missed FG, 4 punts (2.6 points a drive); TEM 13 drives, 1 TD, 1 FG, 1 turnover, 2 turnovers on downs, 7 punts (0.8 points a drive). By quarter: UAB 7-6-7-16 / TEM 7-3-0-0. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Scott Isacks (TE, UAB) had 80 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Scott Isacks (TE, UAB) had 80 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (TEM New York vs UAB Chicago).",
+    "Possibility: Darrell Sweeting (DB, UAB) faced TEM, his team in 2024: each side knows the other's habits.",
+    "Possibility: UAB's defensive playmakers: D.Gulley 1 sack; Marlin Dean 1 sack.",
+    "Possibility: TEM played without regulars: Jayvant Brown (LB), Saboor Karriem (S), Jaxon Smolik (QB). The board's projections may not have known.",
+    "Possibility: TEM's defensive playmakers: Adrian Laing 1 INT, 1 pass breakup; Curly Ordonez 1 sack, 1 pass breakup; Lamar Fairfax 1 sack."
    ]
   },
   "2026_11_ASU_UCF": {
@@ -827,20 +1203,30 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Josh Derry 137 (76 projected); Landen Chambers 54 (29 projected)."
+   ],
    "wrong": [
     "The side lean, UCF −3.5 (model UCF by 7.5), lost: ASU by 13.",
     "The total lean, over 46.5 (model 49.7), lost: 39 points.",
     "On the margin the market was closer than the model (missed by 16.5 against 20.5).",
     "On the total the market was closer than the model (missed by 7.5 against 10.7).",
-    "Biggest player misses: Josh Derry 137 receiving yards against 76 projected; Alonza Barnett III -23 rushing yards against 26 projected; Omarion Miller 34 receiving yards against 72 projected."
+    "Alonza Barnett III (QB, UCF): -23 rushing yards against 26 projected. -2.9 yards per carry against 2.4 expected; his team trailed by 9+ on 69% of its plays. (previous game 36, season average 8.8, a season low).",
+    "Dylan Wade (TE, UCF): 0 receiving yards against 28 projected. (previous game 8, season average 11.9, a season low).",
+    "Chase Hinshaw (WR, UCF): 0 receiving yards against 22 projected. (previous game 20, season average 10, a season low).",
+    "Duane Thomas Jr. (WR, UCF): 17 receiving yards against 37 projected. (previous game 13, season average 19).",
+    "Why the total went under 46.5: ASU 11 drives, 2 TDs, 4 FGs, 4 punts (2.4 points a drive); UCF 11 drives, 2 TDs, 1 turnover, 2 turnovers on downs, 1 missed FG, 4 punts (1.2 points a drive). By quarter: ASU 0-16-0-10 / UCF 0-7-0-6. 6 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
     "With even luck the margin would have been ASU by 10.1 (actual ASU by 13)."
    ],
    "improve": [
-    "Anthony Miller (TE, ASU) had 45 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Anthony Miller (TE, ASU) had 45 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (UCF New York vs ASU Phoenix).",
+    "Possibility: ASU's defensive playmakers: Jalen Thompson 1 sack, 1 pass breakup; C.J. Fite 1 sack; Martell Hughes 1 sack.",
+    "Possibility: UCF played without regulars: Horace Lockett (DT), Jahleel Culbreath (LB), Jeffson Lafontant (DT), Keyone Jenkins (QB). The board's projections may not have known.",
+    "Possibility: UCF's defensive playmakers: Antione Jackson 3 pass breakups."
    ]
   },
   "2026_11_KU_WVU": {
@@ -853,17 +1239,27 @@
    "right": [
     "The side lean, KU +1.5 (model WVU by 0.7), won: KU by 23.",
     "The total lean, under 68.5 (model 63.1), won: 51 points.",
-    "On the total the model was closer than the market (missed by 12.1 against 17.5)."
+    "On the total the model was closer than the market (missed by 12.1 against 17.5).",
+    "Beat their projections: Isaiah Marshall 164 (67 projected); Khijohnn Cummings-Coleman 56 (30 projected).",
+    "Why the total went under 68.5: KU 13 drives, 5 TDs, 1 FG, 1 turnover, 4 punts (2.9 points a drive); WVU 12 drives, 2 TDs, 1 turnover, 2 turnovers on downs, 7 punts (1.2 points a drive). By quarter: KU 17-13-0-7 / WVU 7-0-0-7. 14 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
-    "Biggest player misses: Cam Cook 12 rushing yards against 124 projected; Isaiah Marshall 164 rushing yards against 67 projected; Dylan Edwards 14 rushing yards against 80 projected."
+    "Amari Latimer (RB, WVU): 0 rushing yards against 32 projected. Usage fell: 1 carries against 8 projected; his team trailed by 9+ on 97% of its plays. (previous game 36, season average 26.8, a season low).",
+    "Nahzae Cox (WR, KU): 5 receiving yards against 61 projected. His team led by 9+ on 74% of its plays, so less need to throw. (previous game 42, season average 49.6).",
+    "Cam Cook (RB, WVU): 12 rushing yards against 124 projected. Usage fell: 9 carries against 23.6 projected; his team trailed by 9+ on 97% of its plays. (previous game 149, season average 119.1, a season low).",
+    "Dylan Edwards (RB, KU): 14 rushing yards against 80 projected. Usage fell: 3 carries against 17.9 projected. (previous game 22, season average 66.2, a season low)."
    ],
    "chance": [
     "Fumble bounces went WVU's way, worth about 3.1 points (KU 0 fumbles, 0 lost; WVU 2 fumbles, 0 lost).",
     "With even luck the margin would have been KU by 26.1 (actual KU by 23)."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Possibility: The model also missed WVU's previous game by 18.2 (better than it expected): two misses in a row could mean its rating for WVU is behind.",
+    "Possibility: The road team crossed time zones (WVU New York vs KU Chicago).",
+    "Possibility: Trey Lathan (LB, KU) faced WVU, his team in 2023-2024: each side knows the other's habits.",
+    "Possibility: KU's defensive playmakers: T.Lathan 1 INT; Leroy Harris III 1 sack; Kevin Oatis 1 sack.",
+    "Possibility: WVU played without regulars: David Afogho (EDGE). The board's projections may not have known.",
+    "Possibility: WVU leaned on players who usually play little: ChaMarryus Bomar (CB, 9 tackles, usually 1.0)."
    ]
   },
   "2026_11_KSU_TCU": {
@@ -875,20 +1271,32 @@
    },
    "right": [
     "The side lean, KSU +14 (model TCU by 9.4), won: TCU by 10.",
-    "On the margin the model was closer than the market (missed by 0.6 against 4)."
+    "On the margin the model was closer than the market (missed by 0.6 against 4).",
+    "Beat their projections: Jaron Tibbs 115 (60 projected); Garrett Oakley 60 (36 projected).",
+    "The cover was settled by KSU's 7-point score in quarter 3 (0:48), making it 10-17."
    ],
    "wrong": [
     "The total lean, over 44.5 (model 48.8), lost: 30 points.",
     "On the total the market was closer than the model (missed by 14.5 against 18.8).",
-    "Biggest player misses: Dillon Duff 244 passing yards against 0 projected; Jaron Tibbs 115 receiving yards against 60 projected; Josh Manning 2 receiving yards against 49 projected."
+    "Jaden Craig (QB, TCU): -4 rushing yards against 25 projected. Usage fell: 7 carries against 10.9 projected. (previous game 12, season average 13.4).",
+    "Josh Manning (WR, KSU): 2 receiving yards against 49 projected. (previous game 7, season average 37.1).",
+    "Jeremy Scott (WR, TCU): 3 receiving yards against 35 projected. His team led by 9+ on 64% of its plays, so less need to throw. (previous game 2, season average 29.3).",
+    "Amante Martin (RB, TCU): 9 rushing yards against 30 projected. Usage fell: 1 carries against 6.8 projected. (previous game 35, season average 16.8).",
+    "Why the total went under 44.5: KSU 11 drives, 1 TD, 1 FG, 2 turnovers, 6 punts (0.9 points a drive); TCU 11 drives, 2 TDs, 2 FGs, 6 punts (1.8 points a drive). By quarter: KSU 0-0-10-0 / TCU 7-3-7-3."
    ],
    "chance": [
     "Fumble bounces went TCU's way, worth about 3.1 points (KSU 2 fumbles, 2 lost; TCU 0 fumbles, 0 lost).",
     "With even luck the margin would have been TCU by 6.9 (actual TCU by 10)."
    ],
    "improve": [
-    "Projected but didn't play: Blake Barnett. Worth checking how late his status was known.",
-    "Jeremy Payne (RB, TCU) had 55 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Blake Barnett (QB). Check how late that was known.",
+    "Jeremy Payne (RB, TCU) had 55 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: KSU came off a bad week: lost to OKST 28-66 and missed the cover by 31. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed KSU's previous game by 33.4 (worse than it expected): two misses in a row could mean its rating for KSU is behind.",
+    "Possibility: KSU played without regulars: Blake Barnett (QB). The board's projections may not have known.",
+    "Possibility: KSU leaned on players who usually play little: Ben Osueke (CB, 6 tackles, usually 1.0).",
+    "Possibility: KSU's defensive playmakers: Kamari Burns 2 sacks; Jayden Bryant 1 sack; Darien Whitaker Jr. 1 sack.",
+    "Possibility: TCU played without regulars: Jon Denman (RB). The board's projections may not have known."
    ]
   },
   "2026_11_STAN_VT": {
@@ -900,18 +1308,29 @@
    },
    "right": [
     "The side lean, STAN +17 (model VT by 15.8), won: STAN by 18.",
-    "On the margin the model was closer than the market (missed by 33.8 against 35)."
+    "On the margin the model was closer than the market (missed by 33.8 against 35).",
+    "Beat their projections: Micah Ford 149 (92 projected); Marlion Jackson 62 (36 projected); Benji Blackburn 63 (31 projected)."
    ],
    "wrong": [
     "The total lean, under 58 (model 55.8), lost: 62 points.",
     "On the total the market was closer than the model (missed by 4 against 6.2).",
-    "Biggest player misses: Micah Ford 149 rushing yards against 92 projected; Davion Brown 81 receiving yards against 30 projected; Marcellous Hawkins Jr. 5 rushing yards against 52 projected."
+    "Jordan Onovughe (WR, STAN): 0 receiving yards against 32 projected. His team led by 9+ on 65% of its plays, so less need to throw. (previous game 43, season average 22.3, a season low).",
+    "Liam Thorpe (WR, STAN): 0 receiving yards against 21 projected. His team led by 9+ on 65% of its plays, so less need to throw. (previous game 0, season average 11.2, a season low).",
+    "Micah Ford (RB, STAN): 1 receiving yards against 28 projected. His team led by 9+ on 65% of its plays, so less need to throw. (previous game 48, season average 24.9, a season low).",
+    "Ayden Greene (WR, VT): 4 receiving yards against 47 projected. (previous game 49, season average 42.9, a season low).",
+    "Why the total went over 58: STAN 13 drives, 4 TDs, 4 FGs, 1 turnover on downs, 4 punts (3.1 points a drive); VT 12 drives, 3 TDs, 3 turnovers, 2 turnovers on downs, 2 punts (1.8 points a drive). By quarter: STAN 7-17-3-13 / VT 0-7-7-8. It went over at Q4 6:14. 8 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Aiden Black. Worth checking how late his status was known."
+    "Projected but didn't play: Aiden Black (TE). Check how late that was known.",
+    "Possibility: STAN was coming off a bye.",
+    "Possibility: VT came off a bad week: lost to SMU 28-51 and missed the cover by 17. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed VT's previous game by 15.2 (worse than it expected): two misses in a row could mean its rating for VT is behind.",
+    "Possibility: The road team crossed time zones (VT New York vs STAN Los Angeles).",
+    "Possibility: STAN's defensive playmakers: Charlie Eckhardt 1 sack, 1 INT, 1 forced fumble; Drew Cunningham 1 sack, 1 pass breakup; C.Eckhardt 1 INT.",
+    "Possibility: VT leaned on players who usually play little: Isaiah Brown-Murray (CB, 7 tackles, usually 1.5)."
    ]
   },
   "2026_11_AUB_MSST": {
@@ -921,23 +1340,33 @@
     "spread": "chance",
     "total": "chance"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Keshaun Singleton 103 (62 projected)."
+   ],
    "wrong": [
     "The side lean, MSST +2.5 (model AUB by 1.3), lost: AUB by 32. Chance decided it (below), so it doesn't count for or against the read.",
     "The total lean, over 51 (model 58.3), lost: 50 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the margin the market was closer than the model (missed by 29.5 against 30.7).",
     "On the total the market was closer than the model (missed by 1 against 8.3).",
-    "Biggest player misses: Parker Puckett 68 passing yards against 0 projected; Fluff Bothwell 36 rushing yards against 82 projected; Keshaun Singleton 103 receiving yards against 62 projected."
+    "Zion Ragins (WR, MSST): 2 receiving yards against 35 projected. (previous game 21, season average 26.1, a season low).",
+    "Marquis Johnson (WR, MSST): 9 receiving yards against 50 projected. (previous game 56, season average 41.8).",
+    "Fluff Bothwell (RB, MSST): 36 rushing yards against 82 projected. Usage fell: 12 carries against 18.4 projected; his team trailed by 9+ on 65% of its plays. (previous game 50, season average 76.6).",
+    "Byrum Brown (QB, AUB): 39 rushing yards against 74 projected. 2.6 yards per carry against 3.9 expected. (previous game 122, season average 67.4)."
    ],
    "chance": [
     "AJ Swann left in quarter 2 (6:57); he threw 43% of the team's passes. Nothing before kickoff could price that in.",
     "Fumble bounces went AUB's way, worth about 6.2 points (AUB 1 fumble, 0 lost; MSST 5 fumbles, 4 lost).",
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
-    "With even luck the margin would have been AUB by 24.4 (actual AUB by 32)."
+    "With even luck the margin would have been AUB by 24.4 (actual AUB by 32).",
+    "Why the total went under 51: AUB 16 drives, 5 TDs, 2 FGs, 1 turnover, 1 missed FG, 5 punts (2.6 points a drive); MSST 15 drives, 1 TD, 4 turnovers, 3 turnovers on downs, 1 missed FG, 6 punts (0.6 points a drive). By quarter: AUB 10-17-14-0 / MSST 0-7-0-2. 2 points came with one team up 17+ in the fourth quarter."
    ],
    "improve": [
-    "AJ Swann's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: Christian Neptune, Brian Williams Jr.. Worth checking how late their status was known."
+    "Projected but didn't play: Christian Neptune (WR), Brian Williams Jr. (WR). Check how late that was known.",
+    "AJ Swann's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Possibility: AUB played without regulars: Bryce Deas (LB). The board's projections may not have known.",
+    "Possibility: AUB leaned on players who usually play little: Michael Matthews-Canty (LB, 8 tackles, usually 2.0).",
+    "Possibility: AUB's defensive playmakers: Walter Mathis Jr. 2 sacks; Darrion Smith 1 sack, 1 pass breakup; D.Smith 1 sack.",
+    "Possibility: MSST's defensive playmakers: Jaray Bledsoe 1 sack, 1 pass breakup; Will Whitson 1 sack, 1 pass breakup; Fatt Forrest 1 INT."
    ]
   },
   "2026_11_SYR_NCSU": {
@@ -950,20 +1379,31 @@
    "right": [
     "The total lean, over 54.5 (model 56.8), won: 65 points.",
     "On the total the model was closer than the market (missed by 8.2 against 10.5).",
-    "Projections that held: Steve Angeli 272 passing yards (projected 244)."
+    "Beat their projections: CJ Bailey 56 (21 projected); Jayden Scott 127 (60 projected); Calvin Russell III 137 (62 projected).",
+    "Why the total went over 54.5: SYR 13 drives, 3 TDs, 3 FGs, 6 punts (2.6 points a drive); NCSU 12 drives, 5 TDs, 1 turnover, 5 punts (2.6 points a drive). By quarter: SYR 3-3-7-21 / NCSU 0-7-21-3. It went over at Q4 5:16."
    ],
    "wrong": [
     "The side lean, NCSU +2.5 (model SYR by 0.8), lost: SYR by 3. Chance decided it (below), so it doesn't count for or against the read.",
     "On the margin the market was closer than the model (missed by 0.5 against 2.2).",
-    "Biggest player misses: Calvin Russell III 137 receiving yards against 62 projected; Jayden Scott 127 rushing yards against 60 projected; CJ Bailey 56 rushing yards against 21 projected."
+    "Preston Douglas (TE, NCSU): 0 receiving yards against 31 projected. (previous game 5, season average 38, a season low).",
+    "Victor Snow (WR, NCSU): 10 receiving yards against 41 projected. (previous game 17, season average 21.3).",
+    "Ju'Juan Johnson (RB, SYR): 8 rushing yards against 25 projected. Usage fell: 1 carries against 6 projected. (previous game 11, season average 22.9, a season low).",
+    "Justus Ross-Simmons (WR, SYR): 16 receiving yards against 41 projected. (previous game 84, season average 31.8)."
    ],
    "chance": [
     "Defensive or return touchdowns: SYR 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been NCSU by 5.5 (actual SYR by 3)."
+    "With even luck the margin would have been NCSU by 5.5 (actual SYR by 3).",
+    "The cover was settled by SYR's 8-point score in quarter 4 (0:48), making it 34-31 — a late swing."
    ],
    "improve": [
-    "Projected but didn't play: Darius Johnson, Amiri Acker. Worth checking how late their status was known.",
-    "Davion Dozier (WR, NCSU) had 69 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Darius Johnson (WR), Amiri Acker (WR). Check how late that was known.",
+    "Davion Dozier (WR, NCSU) had 69 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: NCSU came off a bad week: lost to DUKE 3-41 and missed the cover by 34. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed NCSU's previous game by 35.8 (worse than it expected): two misses in a row could mean its rating for NCSU is behind.",
+    "Possibility: SYR's defensive playmakers: Tunmise Adeleye 1 INT; Jartavius Flounoy 1 sack; Davien Kerr 1 sack.",
+    "Possibility: NCSU played without regulars: Popo Aguirre (LB), Ronnie Royal III (S). The board's projections may not have known.",
+    "Possibility: NCSU leaned on players who usually play little: Jordan Moreta (LB, 10 tackles, usually 2.0).",
+    "Possibility: NCSU's defensive playmakers: Isaiah Shirley 1 sack."
    ]
   },
   "2026_11_GT_CLEM": {
@@ -975,21 +1415,30 @@
    },
    "right": [
     "The side lean, GT +15.5 (model CLEM by 11.8), won: GT by 14. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the margin the model was closer than the market (missed by 25.8 against 29.5)."
+    "On the margin the model was closer than the market (missed by 25.8 against 29.5).",
+    "Beat their projections: Justice Haynes 116 (75 projected); Juju Preston 56 (21 projected); Chris Corbo 54 (23 projected)."
    ],
    "wrong": [
     "The total lean, over 47.5 (model 51.5), lost: 26 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the total the market was closer than the model (missed by 21.5 against 25.5).",
-    "Biggest player misses: Grady Adamson 87 rushing yards against 12 projected; T.J. Moore 7 receiving yards against 58 projected; Dalen Penson 10 receiving yards against 56 projected."
+    "Chris Johnson Jr. (RB, CLEM): -6 rushing yards against 28 projected. Usage fell: 1 carries against 5.7 projected; his team trailed by 9+ on 69% of its plays. (previous game 8, season average 16, a season low).",
+    "Isaiah Fuhrmann (WR, GT): 0 receiving yards against 30 projected. His team led by 9+ on 64% of its plays, so less need to throw. (previous game 37, season average 15.8, a season low).",
+    "Tait Reynolds (QB, CLEM): 3 passing yards against 184 projected. Usage fell: 1 attempts against 29.2 projected. (previous game 161, season average 160.9, a season low).",
+    "T.J. Moore (WR, CLEM): 7 receiving yards against 58 projected. (previous game 63, season average 40.9, a season low)."
    ],
    "chance": [
     "Tait Reynolds left in quarter 1 (14:50); he threw 3% of the team's passes. Nothing before kickoff could price that in.",
     "Fumble bounces went CLEM's way, worth about 9.3 points (GT 1 fumble, 1 lost; CLEM 5 fumbles, 0 lost).",
-    "With even luck the margin would have been GT by 23.3 (actual GT by 14)."
+    "With even luck the margin would have been GT by 23.3 (actual GT by 14).",
+    "Why the total went under 47.5: GT 14 drives, 2 TDs, 2 FGs, 2 turnovers, 1 missed FG, 5 punts (1.4 points a drive); CLEM 14 drives, 2 FGs, 2 turnovers, 1 turnover on downs, 1 missed FG, 7 punts (0.4 points a drive). By quarter: GT 7-6-7-0 / CLEM 0-3-3-0."
    ],
    "improve": [
-    "Tait Reynolds's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Christopher Vizzina (QB, CLEM) had 145 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Tait Reynolds's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Christopher Vizzina (QB, CLEM) had 145 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: GT played without regulars: Kevin Roche Jr. (TE). The board's projections may not have known.",
+    "Possibility: GT's defensive playmakers: Cayman Spaulding 1 sack, 1 pass breakup, 1 forced fumble; K.Jones 1 INT; Andre Fuller Jr. 1 sack.",
+    "Possibility: CLEM played without regulars: Tyler Brown (WR), Gideon Davidson (RB). The board's projections may not have known.",
+    "Possibility: CLEM's defensive playmakers: C.Myrick 1 INT; Corey Myrick 2 pass breakups."
    ]
   },
   "2026_11_NEB_RUTG": {
@@ -1001,18 +1450,31 @@
    },
    "right": [
     "The side lean, NEB −16 (model NEB by 17.4), won: NEB by 31. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the margin the model was closer than the market (missed by 13.6 against 15)."
+    "On the margin the model was closer than the market (missed by 13.6 against 15).",
+    "Beat their projections: Jamal Rule 103 (74 projected)."
    ],
    "wrong": [
     "The total lean, over 51.5 (model 54.9), lost: 31 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the total the market was closer than the model (missed by 20.5 against 23.9).",
-    "Biggest player misses: AJ Surace 24 passing yards against 163 projected; Kwazi Gilmer 0 receiving yards against 74 projected; Antwan Raymond 21 rushing yards against 77 projected."
+    "Nyziah Hunter (WR, NEB): -5 receiving yards against 44 projected. His team led by 9+ on 53% of its plays, so less need to throw. (previous game 32, season average 22.8, a season low).",
+    "Kwazi Gilmer (WR, NEB): 0 receiving yards against 74 projected. His team led by 9+ on 53% of its plays, so less need to throw. (previous game 58, season average 67, a season low).",
+    "Jourdin Houston (WR, RUTG): 0 receiving yards against 46 projected. (previous game 0, season average 33, a season low).",
+    "Quinn Clark (WR, NEB): 0 receiving yards against 29 projected. His team led by 9+ on 53% of its plays, so less need to throw. (previous game 20, season average 9.2, a season low)."
    ],
    "chance": [
-    "Sean Ashenfelder got hurt and left in quarter 2 (8:03); he threw 33% of the team's passes. Nothing before kickoff could price that in."
+    "Sean Ashenfelder got hurt and left in quarter 2 (8:03); he threw 33% of the team's passes. Nothing before kickoff could price that in.",
+    "Why the total went under 51.5: NEB 11 drives, 4 TDs, 1 FG, 2 turnovers on downs, 2 punts (2.8 points a drive); RUTG 11 drives, 2 turnovers, 1 turnover on downs, 7 punts (0 points a drive). By quarter: NEB 7-7-7-10 / RUTG 0-0-0-0. 10 points came with one team up 17+ in the fourth quarter.",
+    "The cover was settled by NEB's 7-point score in quarter 3 (9:10), making it 21-0."
    ],
    "improve": [
-    "Sean Ashenfelder's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss."
+    "Projected but didn't play: Elias Coke (WR). Check how late that was known.",
+    "Sean Ashenfelder's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Possibility: NEB came off a bad week: lost to ILL 13-24 and missed the cover by 15.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed NEB's previous game by 15 (worse than it expected): two misses in a row could mean its rating for NEB is behind.",
+    "Possibility: The road team crossed time zones (RUTG New York vs NEB Chicago).",
+    "Possibility: NEB played without regulars: Owen Chambliss (LB), Dwayne McDougle III (DB). The board's projections may not have known.",
+    "Possibility: NEB's defensive playmakers: Caleb Benning 1 INT; Jeremiah Charles 1 INT; Jordan Ochoa 1 sack.",
+    "Possibility: RUTG played without regulars: Chris Joines (DB). The board's projections may not have known."
    ]
   },
   "2026_11_ECU_CLT": {
@@ -1022,13 +1484,19 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Derrick Eley 96 (53 projected)."
+   ],
    "wrong": [
     "The side lean, ECU −10.5 (model ECU by 14.8), lost: ECU by 1.",
     "The total lean, over 46 (model 50), lost: 33 points.",
     "On the margin the market was closer than the model (missed by 9.5 against 13.8).",
     "On the total the market was closer than the model (missed by 13 against 17).",
-    "Biggest player misses: Landon Sides 0 receiving yards against 63 projected; Conner Harrell -31 rushing yards against 17 projected; Derrick Eley 96 receiving yards against 53 projected."
+    "Brody Dawyot (TE, CLT): -3 receiving yards against 25 projected. (previous game 14, season average 24.4, a season low).",
+    "Landon Sides (WR, ECU): 0 receiving yards against 63 projected. (previous game 126, season average 59.7, a season low).",
+    "Khamani Alexander (RB, CLT): 4 rushing yards against 41 projected. Usage fell: 5 carries against 9.5 projected. (previous game 40, season average 36.8, a season low).",
+    "Jaylen Hampton (WR, CLT): 22 receiving yards against 44 projected. (previous game 23, season average 40.1).",
+    "Why the total went under 46: ECU 13 drives, 2 TDs, 1 FG, 3 turnovers, 2 turnovers on downs, 1 missed FG, 3 punts (1.3 points a drive); CLT 14 drives, 1 TD, 3 FGs, 2 turnovers, 2 turnovers on downs, 6 punts (1.1 points a drive). By quarter: ECU 0-7-7-3 / CLT 3-13-0-0."
    ],
    "chance": [
     "Fumble bounces went ECU's way, worth about 4.6 points (ECU 3 fumbles, 0 lost; CLT 0 fumbles, 0 lost).",
@@ -1036,7 +1504,11 @@
     "With even luck the margin would have been CLT by 2.2 (actual ECU by 1)."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Projected but didn't play: D'Mariun Perteet (RB). Check how late that was known.",
+    "Possibility: ECU played without regulars: Mitch Griffis (QB), TJ Engleman Jr. (RB). The board's projections may not have known.",
+    "Possibility: ECU leaned on players who usually play little: Kieran Davis (DL, 6 tackles, usually 2.0).",
+    "Possibility: ECU's defensive playmakers: Jordan Miles 1 INT; DJ Johnson Jr. 1 INT; Kevon Merrell Jr. 1 sack.",
+    "Possibility: CLT's defensive playmakers: Jonathan Patterson 1 INT, 2 pass breakups; D.Womack 1 INT; Gavin Willis 1 pass breakup, 1 forced fumble."
    ]
   },
   "2026_11_ARST_CCU": {
@@ -1049,18 +1521,30 @@
    "right": [
     "The side lean, CCU −1.5 (model CCU by 4.9), won: CCU by 7. Chance decided it (below), so it doesn't count for or against the read.",
     "The total lean, under 54 (model 53), won: 49 points.",
-    "On the margin the model was closer than the market (missed by 2.1 against 5.5)."
+    "On the margin the model was closer than the market (missed by 2.1 against 5.5).",
+    "Beat their projections: Colton Hinton 81 (35 projected); Jabari Bush 45 (21 projected).",
+    "Why the total went under 54: ARST 14 drives, 4 TDs, 3 turnovers, 1 turnover on downs, 6 punts (1.5 points a drive); CCU 12 drives, 3 TDs, 1 turnover, 8 punts (2.3 points a drive). By quarter: ARST 7-7-0-7 / CCU 7-7-7-7."
    ],
    "wrong": [
-    "Biggest player misses: Dominic Lee-Knicely 10 rushing yards against 65 projected; Colton Hinton 81 receiving yards against 35 projected; Chauncy Cobb 23 receiving yards against 63 projected."
+    "Jaden Allen-Hendrix (RB, CCU): 0 rushing yards against 28 projected. Usage fell: 1 carries against 6.2 projected. (previous game 24, season average 19.1, a season low).",
+    "Dominic Lee-Knicely (RB, CCU): 10 rushing yards against 65 projected. Usage fell: 7 carries against 12.6 projected. (previous game 14, season average 55.3).",
+    "Clayton Coppock Jr. (WR, CCU): 7 receiving yards against 41 projected. (previous game 48, season average 49.8, a season low).",
+    "Karmello English (WR, CCU): 7 receiving yards against 40 projected. (previous game 57, season average 36.6)."
    ],
    "chance": [
     "Fumble bounces went CCU's way, worth about 3.1 points (ARST 3 fumbles, 3 lost; CCU 1 fumble, 1 lost).",
     "Defensive or return touchdowns: CCU 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been ARST by 3.1 (actual CCU by 7)."
+    "With even luck the margin would have been ARST by 3.1 (actual CCU by 7).",
+    "The cover was settled by CCU's 7-point score in quarter 3 (2:49), making it 14-21."
    ],
    "improve": [
-    "Projected but didn't play: Nana Burris, Jevon Edwards. Worth checking how late their status was known."
+    "Projected but didn't play: Jevon Edwards (RB), Nana Burris (WR). Check how late that was known.",
+    "Possibility: ARST came off a bad week: lost to ULM 17-19 and missed the cover by 16.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed ARST's previous game by 15 (worse than it expected): two misses in a row could mean its rating for ARST is behind.",
+    "Possibility: CCU came off a bad week: lost to ODU 8-21 and missed the cover by 19.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed CCU's previous game by 19 (worse than it expected): two misses in a row could mean its rating for CCU is behind.",
+    "Possibility: The road team crossed time zones (CCU New York vs ARST Chicago).",
+    "Possibility: ARST's defensive playmakers: Tre Stevens 1 pass breakup, 1 forced fumble; Tony Carter 1 sack; Brandon Greil 1 forced fumble."
    ]
   },
   "2026_11_TULN_RICE": {
@@ -1074,17 +1558,28 @@
     "The side lean, TULN +3.5 (model RICE by 0.7), won: TULN by 3.",
     "The total lean, under 49.5 (model 48), won: 37 points.",
     "On the margin the model was closer than the market (missed by 3.7 against 6.5).",
-    "On the total the model was closer than the market (missed by 11 against 12.5)."
+    "On the total the model was closer than the market (missed by 11 against 12.5).",
+    "Beat their projections: Maurice Turner 90 (55 projected).",
+    "Why the total went under 49.5: TULN 9 drives, 3 TDs, 2 FGs, 1 turnover on downs, 2 punts (2.2 points a drive); RICE 8 drives, 1 TD, 1 FG, 1 turnover, 1 turnover on downs, 3 punts (2.1 points a drive). By quarter: TULN 3-3-7-7 / RICE 3-14-0-0.",
+    "The cover was settled by TULN's 7-point score in quarter 4 (9:50), making it 20-17 — a late swing."
    ],
    "wrong": [
-    "Biggest player misses: Gael Ochoa 32 passing yards against 143 projected; Johnnie Daniels 0 rushing yards against 47 projected; Jacurri Brown 5 rushing yards against 48 projected."
+    "Johnnie Daniels (RB, TULN): 0 rushing yards against 47 projected. Usage fell: 0 carries against 7.5 projected. (previous game 49, season average 60.2, a season low).",
+    "Jaylin Lucas (RB, TULN): 1 rushing yards against 35 projected. Usage fell: 3 carries against 5.8 projected. (previous game 17, season average 34.4).",
+    "Jacurri Brown (QB, RICE): 5 rushing yards against 48 projected. Usage fell: 2 carries against 8.4 projected. (previous game 17, season average 85.6, a season low).",
+    "Gael Ochoa (QB, RICE): 32 passing yards against 143 projected. 2.5 yards per attempt against 10.1 expected. (previous game 172, season average 66.4)."
    ],
    "chance": [
     "Defensive or return touchdowns: RICE 1. They put 7 points on the total and moved the margin about 7.",
     "With even luck the margin would have been TULN by 10 (actual TULN by 3)."
    ],
    "improve": [
-    "Projected but didn't play: Braylen Walker, Preston Zinter. Worth checking how late their status was known."
+    "Projected but didn't play: Braylen Walker (WR), Preston Zinter (TE), Payton Matthews (WR), Will Swartz (TE). Check how late that was known.",
+    "Possibility: TULN came off a bad week: lost to TLSA 10-60 and missed the cover by 47. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed TULN's previous game by 48.6 (worse than it expected): two misses in a row could mean its rating for TULN is behind.",
+    "Possibility: RICE came off a bad week: lost to UNT 23-52 and missed the cover by 14.5. A letdown or bounce-back is possible.",
+    "Possibility: TULN's defensive playmakers: Jah'rie Garner 1 sack; Ed Smith IV 1 sack; Joshua Moore 1 forced fumble.",
+    "Possibility: RICE's defensive playmakers: Jamir Benjamin 1 INT, 1 pass breakup; Koa Akui 1 INT; AJ Brown 2 pass breakups."
    ]
   },
   "2026_11_KENN_SHSU": {
@@ -1094,12 +1589,19 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Davis Bryson 56 (36 projected); Alton McCaskill 53 (29 projected)."
+   ],
    "wrong": [
     "The side lean, SHSU +9 (model KENN by 8.1), lost: KENN by 19.",
     "The total lean, over 44.5 (model 50.2), lost: 33 points. The model was 5.7 points off the market here, one of its bigger gaps.",
     "On the total the market was closer than the model (missed by 11.5 against 17.2).",
-    "Biggest player misses: Landon Varnes 181 passing yards against 0 projected; Landyn Locke 71 passing yards against 199 projected; Javon Rogers 0 receiving yards against 40 projected."
+    "Javon Rogers (WR, KENN): 0 receiving yards against 40 projected. His team led by 9+ on 60% of its plays, so less need to throw. (previous game 4, season average 44.6, a season low).",
+    "Darrick Bledsoe III (WR, SHSU): 0 receiving yards against 24 projected. (previous game 0, season average 13.1, a season low).",
+    "Tim Burns Jr. (WR, SHSU): 11 receiving yards against 49 projected. (previous game 36, season average 47.6).",
+    "Grady O'Neill (WR, SHSU): 13 receiving yards against 52 projected. (previous game 61, season average 45.4).",
+    "Why the total went under 44.5: KENN 11 drives, 2 TDs, 1 FG, 1 missed FG, 7 punts (2.4 points a drive); SHSU 12 drives, 2 TDs, 1 FG, 1 missed FG, 7 punts (0.6 points a drive). By quarter: KENN 10-7-9-0 / SHSU 0-7-0-0.",
+    "The cover was settled by KENN's 7-point score in quarter 2 (10:33), making it 17-7."
    ],
    "chance": [
     "Defensive or return touchdowns: KENN 1. They put 7 points on the total and moved the margin about 7.",
@@ -1107,7 +1609,13 @@
     "With even luck the margin would have been KENN by 11.9 (actual KENN by 19)."
    ],
    "improve": [
-    "Projected but didn't play: Rickie Collins, Rickie Collins. Worth checking how late their status was known."
+    "Projected but didn't play: Rickie Collins (QB), Kyan Berry-Johnson (WR). Check how late that was known.",
+    "Possibility: SHSU came off a bad week: lost to JVST 14-47 and missed the cover by 16.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed SHSU's previous game by 14.2 (worse than it expected): two misses in a row could mean its rating for SHSU is behind.",
+    "Possibility: The road team crossed time zones (SHSU Chicago vs KENN New York).",
+    "Possibility: KENN played without regulars: Rickie Collins (QB). The board's projections may not have known.",
+    "Possibility: KENN's defensive playmakers: Cam Miller 1 INT; Jeremy Greaves Jr. 1 sack; Jaiden Grimes 1 sack.",
+    "Possibility: SHSU's defensive playmakers: Ca'lub Holloway 1 sack; J.Alexander-Felton 1 sack; Tyler Bailey 2 pass breakups."
    ]
   },
   "2026_11_NMSU_MOST": {
@@ -1119,21 +1627,30 @@
    },
    "right": [
     "The side lean, MOST −1.5 (model MOST by 4.8), won: MOST by 6. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the margin the model was closer than the market (missed by 1.2 against 4.5)."
+    "On the margin the model was closer than the market (missed by 1.2 against 4.5).",
+    "Beat their projections: TJ Washington Jr. 107 (39 projected)."
    ],
    "wrong": [
     "The total lean, over 49.5 (model 51.9), lost: 48 points.",
     "On the total the market was closer than the model (missed by 1.5 against 3.9).",
-    "Biggest player misses: Trey Hedden 110 passing yards against 225 projected; TJ Washington Jr. 107 rushing yards against 39 projected; Jmariyae Robinson 10 receiving yards against 73 projected."
+    "Myles Libman (WR, NMSU): 0 receiving yards against 28 projected. (previous game 28, season average 15.8, a season low).",
+    "TJ Pride (WR, NMSU): 0 receiving yards against 25 projected. (previous game 39, season average 13.8, a season low).",
+    "Jmariyae Robinson (WR, MOST): 10 receiving yards against 73 projected. (previous game 93, season average 61.4, a season low).",
+    "Trey Hedden (QB, NMSU): 110 passing yards against 225 projected. 3.9 yards per attempt against 7.4 expected. (previous game 256, season average 193.7).",
+    "Why the total went under 49.5: NMSU 15 drives, 5 TDs, 1 turnover, 1 missed FG, 8 punts (1.4 points a drive); MOST 13 drives, 2 TDs, 1 turnover, 2 turnovers on downs, 7 punts (2.1 points a drive). By quarter: NMSU 0-7-7-7-0 / MOST 0-14-0-7-6."
    ],
    "chance": [
     "NMSU played the better game play for play (success rate 38% to 38%, EPA per play −0.16 to −0.25) and still lost.",
     "Defensive or return touchdowns: MOST 2. They put 14 points on the total and moved the margin about 14.",
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
-    "With even luck the margin would have been NMSU by 10.9 (actual MOST by 6)."
+    "With even luck the margin would have been NMSU by 10.9 (actual MOST by 6).",
+    "The cover was settled by MOST's 6-point score in quarter 5 (0:00), making it 21-27 — a late swing."
    ],
    "improve": [
-    "Projected but didn't play: TK King, Josiah Thomas. Worth checking how late their status was known."
+    "Projected but didn't play: TK King (WR), Josiah Thomas (TE), Lyndon Ravare (WR), Makai Cope (WR). Check how late that was known.",
+    "Possibility: The road team crossed time zones (MOST Chicago vs NMSU Denver).",
+    "Possibility: NMSU's defensive playmakers: De'Marcus Peters 1 INT, 1 pass breakup.",
+    "Possibility: MOST's defensive playmakers: Joel Boamah 1 INT, 2 pass breakups, 1 forced fumble; Dylan Brooks 1 INT, 1 pass breakup; Gilles Tchio 1 sack, 1 pass breakup."
    ]
   },
   "2026_11_FIU_DEL": {
@@ -1146,16 +1663,24 @@
    "right": [
     "The side lean, DEL −4 (model DEL by 7.3), won: DEL by 8.",
     "The total lean, under 54.5 (model 53.5), won: 40 points.",
-    "On the margin the model was closer than the market (missed by 0.7 against 4)."
+    "On the margin the model was closer than the market (missed by 0.7 against 4).",
+    "Beat their projections: JJ Kohl 313 (217 projected); Maguire Anderson 122 (51 projected).",
+    "Why the total went under 54.5: FIU 8 drives, 2 TDs, 1 FG, 2 turnovers, 2 turnovers on downs, 1 missed FG (2 points a drive); DEL 9 drives, 3 TDs, 1 FG, 1 turnover, 1 turnover on downs, 1 punt (2.7 points a drive). By quarter: FIU 7-0-0-9 / DEL 7-0-3-14.",
+    "The cover was settled by DEL's 7-point score in quarter 4 (3:49), making it 16-24 — a late swing."
    ],
    "wrong": [
-    "Biggest player misses: Maguire Anderson 122 receiving yards against 51 projected; Nick Minicucci 69 rushing yards against 12 projected; Jo Silver 22 rushing yards against 58 projected."
+    "Jojo Stone (WR, FIU): 0 receiving yards against 29 projected. (previous game 1, season average 22.1, a season low).",
+    "Kaderris Roberts (RB, DEL): 3 rushing yards against 26 projected. Usage fell: 3 carries against 6.1 projected. (previous game 14, season average 20.3, a season low).",
+    "Da'Wain Lofton (WR, DEL): 6 receiving yards against 42 projected. (previous game 78, season average 44.1).",
+    "Tyson Carter (WR, FIU): 8 receiving yards against 37 projected. (previous game 72, season average 32.1)."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+    "Possibility: FIU played without regulars: Demetrius Hill (DB), Wesley Miller (DB). The board's projections may not have known.",
+    "Possibility: FIU's defensive playmakers: Nathan Jennings 1 sack; DeeJay Holmes Jr. 1 forced fumble.",
+    "Possibility: DEL's defensive playmakers: J.Corbin 1 INT; Kevin Moore 1 INT; George Mullins 2 pass breakups."
    ]
   },
   "2026_11_CAL_UVA": {
@@ -1167,12 +1692,18 @@
    },
    "right": [
     "The side lean, UVA −11 (model UVA by 12.2), won: UVA by 29.",
-    "On the margin the model was closer than the market (missed by 16.8 against 18)."
+    "On the margin the model was closer than the market (missed by 16.8 against 18).",
+    "Beat their projections: Beau Pribula 67 (26 projected).",
+    "The cover was settled by UVA's 3-point score in quarter 3 (8:02), making it 7-19."
    ],
    "wrong": [
     "The total lean, over 46.5 (model 49.5), lost: 43 points.",
     "On the total the market was closer than the model (missed by 3.5 against 6.5).",
-    "Biggest player misses: Eli Holstein 77 passing yards against 0 projected; Jekail Middlebrook 27 rushing yards against 77 projected; Chase Hendricks 32 receiving yards against 74 projected."
+    "Ashten Emory (RB, CAL): -2 rushing yards against 38 projected. Usage fell: 1 carries against 10.1 projected; his team trailed by 9+ on 80% of its plays. (previous game 6, season average 26.4, a season low).",
+    "Tyree Sams (WR, CAL): 0 receiving yards against 29 projected. (previous game -4, season average 16.4).",
+    "Dakota Twitty (TE, UVA): 0 receiving yards against 23 projected. His team led by 9+ on 57% of its plays, so less need to throw. (previous game 24, season average 18.1, a season low).",
+    "Adam Mohammed (RB, CAL): 2 receiving yards against 21 projected. (previous game 8, season average 35.2, a season low).",
+    "Why the total went under 46.5: CAL 11 drives, 3 TDs, 1 turnover, 7 punts (0.6 points a drive); UVA 10 drives, 2 TDs, 3 FGs, 3 punts (3.6 points a drive). By quarter: CAL 0-7-0-0 / UVA 6-10-10-10. 10 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Fumble bounces went UVA's way, worth about 3.1 points (CAL 0 fumbles, 0 lost; UVA 2 fumbles, 0 lost).",
@@ -1180,8 +1711,14 @@
     "With even luck the margin would have been UVA by 11.9 (actual UVA by 29)."
    ],
    "improve": [
-    "Projected but didn't play: Ian Strong. Worth checking how late his status was known.",
-    "Mark Hamper (WR, CAL) had 66 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Ian Strong (WR), Kyion Grayes (WR), Ty'Lyric Coleman (WR), Trevor Rogers (WR). Check how late that was known.",
+    "Mark Hamper (WR, CAL) had 66 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: CAL was coming off a bye.",
+    "Possibility: UVA came off a bad week: lost to WAKE 7-51 and missed the cover by 30.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed UVA's previous game by 32.9 (worse than it expected): two misses in a row could mean its rating for UVA is behind.",
+    "Possibility: UVA was coming off a bye.",
+    "Possibility: The road team crossed time zones (UVA New York vs CAL Los Angeles).",
+    "Possibility: CAL's defensive playmakers: Solomon Williams 1 forced fumble."
    ]
   },
   "2026_11_FAU_TLSA": {
@@ -1194,17 +1731,28 @@
    "right": [
     "The side lean, TLSA −6.5 (model TLSA by 7.1), won: TLSA by 17.",
     "The total lean, under 73 (model 68.6), won: 59 points.",
-    "On the total the model was closer than the market (missed by 9.6 against 14)."
+    "On the total the model was closer than the market (missed by 9.6 against 14).",
+    "Beat their projections: Damari Alston 92 (66 projected); Trequan Jones 88 (55 projected); Javon Ross 163 (46 projected).",
+    "Why the total went under 73: FAU 17 drives, 3 TDs, 1 turnover, 7 turnovers on downs, 6 punts (1.2 points a drive); TLSA 15 drives, 5 TDs, 1 FG, 3 turnovers, 6 punts (2.5 points a drive). By quarter: FAU 0-14-0-7 / TLSA 7-14-10-7. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "wrong": [
-    "Biggest player misses: Javon Ross 163 receiving yards against 46 projected; Easton Messer 50 receiving yards against 107 projected; Leonard Farrow 14 rushing yards against 62 projected."
+    "Leonard Farrow (RB, FAU): 14 rushing yards against 62 projected. 1.6 yards per carry against 5.5 expected; his team trailed by 9+ on 67% of its plays. (previous game 126, season average 53.2).",
+    "Dominique Henry (WR, FAU): 19 receiving yards against 60 projected. (previous game 25, season average 51.7).",
+    "Ethan Ervin (RB, FAU): 21 rushing yards against 50 projected. 2.3 yards per carry against 4.6 expected; his team trailed by 9+ on 67% of its plays. (previous game 92, season average 51.2).",
+    "Easton Messer (WR, FAU): 50 receiving yards against 107 projected. (previous game 85, season average 108.4)."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Seth Davis, David Wells Jr.. Worth checking how late their status was known.",
-    "Tucker Holloway (WR, FAU) had 48 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Seth Davis (RB), David Wells Jr. (WR). Check how late that was known.",
+    "Tucker Holloway (WR, FAU) had 48 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: FAU came off a good week: beat UTSA 60-29 and covered by 38. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed FAU's previous game by 37.6 (better than it expected): two misses in a row could mean its rating for FAU is behind.",
+    "Possibility: TLSA came off a good week: beat TULN 60-10 and covered by 47. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed TLSA's previous game by 48.6 (better than it expected): two misses in a row could mean its rating for TLSA is behind.",
+    "Possibility: The road team crossed time zones (TLSA Chicago vs FAU New York).",
+    "Possibility: FAU's defensive playmakers: Tyson Rooks 1 INT; JK Johnson 1 INT; Derrick Rogers 1 sack."
    ]
   },
   "2026_11_NEV_NIU": {
@@ -1214,20 +1762,32 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Herschel Turner 153 (65 projected); La'Don Bryant 68 (42 projected)."
+   ],
    "wrong": [
     "The side lean, NIU +6.5 (model NEV by 4.9), lost: NEV by 21.",
     "The total lean, over 47.5 (model 50.4), lost: 35 points.",
     "On the margin the market was closer than the model (missed by 14.5 against 16.1).",
     "On the total the market was closer than the model (missed by 12.5 against 15.4).",
-    "Biggest player misses: Herschel Turner 153 rushing yards against 65 projected; AJ Bianco 90 rushing yards against 11 projected; Gary Givens III 0 receiving yards against 49 projected."
+    "Gary Givens III (WR, NEV): 0 receiving yards against 49 projected. His team led by 9+ on 70% of its plays, so less need to throw; facing NIU, his team in 2025. (previous game 3, season average 34.2, a season low).",
+    "Marshaun Brown (WR, NEV): 9 receiving yards against 43 projected. His team led by 9+ on 70% of its plays, so less need to throw. (previous game 56, season average 31.9).",
+    "George Dimopoulos (WR, NIU): 10 receiving yards against 40 projected. (previous game 18, season average 32.4).",
+    "Dominic Kelley (RB, NEV): 20 rushing yards against 66 projected. 2 yards per carry against 4.8 expected. (previous game -4, season average 64.9).",
+    "Why the total went under 47.5: NEV 13 drives, 4 TDs, 1 turnover, 3 turnovers on downs, 3 punts (2.1 points a drive); NIU 11 drives, 1 TD, 3 turnovers, 1 turnover on downs, 6 punts (0.6 points a drive). By quarter: NEV 7-14-7-0 / NIU 0-0-0-7. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Elijah Porter, Damien Morgan. Worth checking how late their status was known.",
-    "Trace Estes (TE, NEV) had 73 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Elijah Porter (RB), Damien Morgan (WR), Donnie Cheers (WR), Afy Ibekwe (WR). Check how late that was known.",
+    "Trace Estes (TE, NEV) had 73 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: NEV came off a bad week: lost to UNM 3-31 and missed the cover by 17.5. A letdown or bounce-back is possible.",
+    "Possibility: The road team crossed time zones (NIU Chicago vs NEV Los Angeles).",
+    "Possibility: Gary Givens III (WR, NEV) faced NIU, his team in 2025: each side knows the other's habits.",
+    "Possibility: NEV's defensive playmakers: David Paine Jr. 2 sacks; Tanner Vaughan 1 sack, 2 pass breakups; EJ Smith 2 pass breakups, 1 forced fumble.",
+    "Possibility: NIU played without regulars: Avery Jones (DB), Jashawn Nelson (LB), Elijah Porter (RB). The board's projections may not have known.",
+    "Possibility: NIU's defensive playmakers: Kole Sneed 1 sack, 1 pass breakup; L.Lindo 1 INT."
    ]
   },
   "2026_11_GASO_GAST": {
@@ -1238,18 +1798,30 @@
     "total": "L"
    },
    "right": [
-    "The side lean, GASO −5 (model GASO by 5.6), won: GASO by 17."
+    "The side lean, GASO −5 (model GASO by 5.6), won: GASO by 17.",
+    "Beat their projections: Lanear McCrary Jr. 86 (60 projected); Alex Taylor 92 (62 projected); David Mbadinga 63 (30 projected).",
+    "The cover was settled by GASO's 7-point score in quarter 2 (0:25), making it 24-14."
    ],
    "wrong": [
     "The total lean, over 55.5 (model 56.5), lost: 51 points.",
-    "Biggest player misses: Ayden Pereira 75 passing yards against 177 projected; Taeo Todd 77 rushing yards against 16 projected; Rodshaun Dorsey 4 receiving yards against 53 projected."
+    "Rodshaun Dorsey (WR, GAST): 4 receiving yards against 53 projected. (previous game 17, season average 52.9, a season low).",
+    "Tyrese Woodgett (RB, GASO): 5 rushing yards against 42 projected. Usage fell: 4 carries against 8.7 projected. (previous game 41, season average 43.4, a season low).",
+    "Kyle Washington (WR, GAST): 6 receiving yards against 28 projected. (previous game 15, season average 16.1).",
+    "Ayden Pereira (QB, GAST): 75 passing yards against 177 projected. Usage fell: 19 attempts against 27.8 projected. (previous game 115, season average 72.2).",
+    "Why the total went under 55.5: GASO 12 drives, 4 TDs, 2 FGs, 2 turnovers, 3 punts (2.8 points a drive); GAST 13 drives, 2 TDs, 1 FG, 1 turnover on downs, 2 missed FGs, 6 punts (1.3 points a drive). By quarter: GASO 7-17-3-7 / GAST 14-0-3-0."
    ],
    "chance": [
     "Fumble bounces went GAST's way, worth about 4.6 points (GASO 1 fumble, 1 lost; GAST 2 fumbles, 0 lost).",
     "Missed field goals from 45 yards or closer cost about 2.8 points of margin."
    ],
    "improve": [
-    "Projected but didn't play: Dennis Murray Jr., Jeremiah Ware. Worth checking how late their status was known."
+    "Projected but didn't play: Dennis Murray Jr. (RB), Terrance Gibbs (RB), Jeremiah Ware (WR), Taylor Bradshaw (WR). Check how late that was known.",
+    "Possibility: GASO came off a good week: beat MRSH 49-13 and covered by 29. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed GASO's previous game by 23.7 (better than it expected): two misses in a row could mean its rating for GASO is behind.",
+    "Possibility: GAST came off a good week: beat APP 39-23 and covered by 22.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed GAST's previous game by 22.1 (better than it expected): two misses in a row could mean its rating for GAST is behind.",
+    "Possibility: GASO's defensive playmakers: Eli Anders 1 sack; Festus Davies 1 sack; Jakyri Jones 1 sack.",
+    "Possibility: GAST played without regulars: Keenan Nelson (S), Dennis Murray Jr. (RB). The board's projections may not have known."
    ]
   },
   "2026_11_JVST_WKU": {
@@ -1263,16 +1835,27 @@
     "The side lean, WKU +7.5 (model JVST by 4.5), won: WKU by 10.",
     "The total lean, over 53.5 (model 56.3), won: 58 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the margin the model was closer than the market (missed by 14.5 against 17.5).",
-    "On the total the model was closer than the market (missed by 1.7 against 4.5)."
+    "On the total the model was closer than the market (missed by 1.7 against 4.5).",
+    "Beat their projections: Zion Taylor 52 (21 projected)."
    ],
    "wrong": [
-    "Biggest player misses: Rodney Tisdale Jr. 120 passing yards against 0 projected; Brock Glenn 82 passing yards against 178 projected; Caden Creel 17 rushing yards against 99 projected."
+    "Ronnel Johnson (WR, JVST): 0 receiving yards against 36 projected. (previous game 23, season average 23.1, a season low).",
+    "Darius Cannon (WR, JVST): 5 receiving yards against 42 projected. (previous game 74, season average 27.8).",
+    "Moussa Barry (WR, WKU): 5 receiving yards against 38 projected. (previous game 21, season average 24.8).",
+    "Justus Savage (RB, JVST): 4 rushing yards against 25 projected. Usage fell: 3 carries against 4.4 projected. (previous game 3, season average 25)."
    ],
    "chance": [
-    "Defensive or return touchdowns: JVST 1 and WKU 1. They put 14 points on the total."
+    "Defensive or return touchdowns: JVST 1 and WKU 1. They put 14 points on the total.",
+    "Why the total went over 53.5: JVST 11 drives, 2 TDs, 1 FG, 2 turnovers, 2 turnovers on downs, 4 punts (2.2 points a drive); WKU 14 drives, 6 TDs, 2 turnovers, 1 turnover on downs, 1 missed FG, 4 punts (2.4 points a drive). By quarter: JVST 10-14-0-0 / WKU 14-7-0-13. It went over at Q4 0:00."
    ],
    "improve": [
-    "Projected but didn't play: Jacob Cornejo. Worth checking how late his status was known."
+    "Projected but didn't play: Jacob Cornejo (RB). Check how late that was known.",
+    "Possibility: JVST came off a good week: beat SHSU 47-14 and covered by 16.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed JVST's previous game by 14.2 (better than it expected): two misses in a row could mean its rating for JVST is behind.",
+    "Possibility: JVST leaned on players who usually play little: Tre'Quon Fegans (CB, 7 tackles, usually 1.5), Myles Butler (LB, 8 tackles, usually 2.0).",
+    "Possibility: JVST's defensive playmakers: C.Nix 1 INT; Javan Allison 1 sack; Jawaun Campbell 1 sack.",
+    "Possibility: WKU played without regulars: Dave Herard (DB). The board's projections may not have known.",
+    "Possibility: WKU's defensive playmakers: Latrevion Thompson 2 sacks; Jaylen Lewis 1 INT, 1 pass breakup; Zeiqui Lawton 1 sack."
    ]
   },
   "2026_11_MTSU_LIB": {
@@ -1286,16 +1869,26 @@
     "The side lean, MTSU +21.5 (model LIB by 19.1), won: LIB by 5.",
     "The total lean, under 53.5 (model 51), won: 51 points.",
     "On the margin the model was closer than the market (missed by 14.1 against 16.5).",
-    "On the total the model was closer than the market (missed by 0 against 2.5)."
+    "On the total the model was closer than the market (missed by 0 against 2.5).",
+    "Beat their projections: Deshawn Purdie 45 (22 projected); Kam Davis 126 (81 projected); Cam'ron Lacy 97 (56 projected).",
+    "Why the total went under 53.5: MTSU 10 drives, 3 TDs, 1 FG, 1 turnover, 4 punts (2.3 points a drive); LIB 10 drives, 4 TDs, 1 turnover, 3 turnovers on downs, 1 punt (2.8 points a drive). By quarter: MTSU 0-10-7-6 / LIB 7-7-7-7."
    ],
    "wrong": [
-    "Biggest player misses: Deshawn Purdie 64 passing yards against 203 projected; Jaylon Coleman 84 rushing yards against 33 projected; Kam Davis 126 rushing yards against 81 projected."
+    "Jamari Person (WR, LIB): 0 receiving yards against 37 projected. (previous game 40, season average 32.6, a season low).",
+    "Rashawn Cunningham (WR, LIB): 0 receiving yards against 29 projected. (previous game 51, season average 9.4, a season low).",
+    "Koraun Perdue (TE, MTSU): 0 receiving yards against 25 projected. (previous game 10, season average 23, a season low).",
+    "Darius Copeland (WR, LIB): 7 receiving yards against 27 projected. (previous game 53, season average 24.7)."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Peyton Jones, Terrence Brown. Worth checking how late their status was known."
+    "Projected but didn't play: Terrence Brown (RB), Peyton Jones (RB), Jon Monteiro (WR), Bryce Randolph (WR). Check how late that was known.",
+    "Possibility: The road team crossed time zones (LIB New York vs MTSU Chicago).",
+    "Possibility: MTSU played without regulars: Terrence Brown (RB). The board's projections may not have known.",
+    "Possibility: MTSU's defensive playmakers: Reggie Johnson 1 sack.",
+    "Possibility: LIB played without regulars: Deuce Spurlock (LB), Peyton Jones (RB). The board's projections may not have known.",
+    "Possibility: LIB's defensive playmakers: Micah Pollard 1 sack, 1 pass breakup; Brenton Williams 1 sack; Ashton Whitner 1 forced fumble."
    ]
   },
   "2026_11_FRES_TXST": {
@@ -1305,19 +1898,32 @@
     "spread": "L",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Brad Jackson 355 (206 projected); Chris Dawn Jr. 99 (68 projected); Beau Sparks 115 (57 projected)."
+   ],
    "wrong": [
     "The side lean, TXST −10.5 (model TXST by 11), lost: TXST by 2.",
     "The total lean, under 60.5 (model 57.8), lost: 72 points.",
     "On the total the market was closer than the model (missed by 11.5 against 14.2).",
-    "Biggest player misses: Brad Jackson 355 passing yards against 206 projected; Beau Sparks 115 receiving yards against 57 projected; Zechariah Sample 95 receiving yards against 43 projected."
+    "Jaylen Jenkins (RB, TXST): 0 rushing yards against 27 projected. Usage fell: 0 carries against 5.9 projected. (previous game -1, season average 24.4).",
+    "Kylen Evans (WR, TXST): 5 receiving yards against 32 projected. (previous game 0, season average 30.6).",
+    "Rayshon Luke (RB, FRES): 19 rushing yards against 46 projected. 2.1 yards per carry against 4.7 expected; his team trailed by 9+ on 54% of its plays. (previous game -3, season average 46.8).",
+    "Bryson Donelson (RB, FRES): 24 rushing yards against 51 projected. 2.4 yards per carry against 4.4 expected; his team trailed by 9+ on 54% of its plays. (previous game 15, season average 46.9).",
+    "Why the total went over 60.5: FRES 10 drives, 6 TDs, 1 turnover, 1 missed FG, 2 punts (3.5 points a drive); TXST 11 drives, 5 TDs, 1 FG, 2 turnovers, 2 punts (3.4 points a drive). By quarter: FRES 7-14-7-7 / TXST 21-7-3-6. It went over at Q4 10:33.",
+    "The cover was settled by FRES's 7-point score in quarter 2 (1:49), making it 21-28."
    ],
    "chance": [
     "Defensive or return touchdowns: FRES 1. They put 7 points on the total and moved the margin about 7.",
     "With even luck the margin would have been TXST by 9 (actual TXST by 2)."
    ],
    "improve": [
-    "Projected but didn't play: Jahlil McClain. Worth checking how late his status was known."
+    "Projected but didn't play: Jahlil McClain (WR), Julius Gillick (RB). Check how late that was known.",
+    "Possibility: TXST came off a good week: beat ORST 42-21 and covered by 25.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed TXST's previous game by 23 (better than it expected): two misses in a row could mean its rating for TXST is behind.",
+    "Possibility: The road team crossed time zones (TXST Chicago vs FRES Los Angeles).",
+    "Possibility: FRES's defensive playmakers: K'vion Thunderbird 1 sack.",
+    "Possibility: TXST played without regulars: Javante Mackey (LB). The board's projections may not have known.",
+    "Possibility: TXST's defensive playmakers: Michael Patterson III 1 INT."
    ]
   },
   "2026_11_WASH_MSU": {
@@ -1329,21 +1935,33 @@
    },
    "right": [
     "The side lean, WASH −2.5 (model WASH by 7.3), won: WASH by 7. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the margin the model was closer than the market (missed by 0.3 against 4.5)."
+    "On the margin the model was closer than the market (missed by 0.3 against 4.5).",
+    "Beat their projections: Chris Lawson 124 (73 projected); Brandon Tullis 82 (32 projected); Fredrick Moore 66 (38 projected)."
    ],
    "wrong": [
     "The total lean, over 44.5 (model 48.9), lost: 35 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the total the market was closer than the model (missed by 9.5 against 13.9).",
-    "Biggest player misses: Chris Lawson 124 receiving yards against 73 projected; Brandon Tullis 82 rushing yards against 32 projected; Brian Bonner Jr. -1 rushing yards against 45 projected."
+    "Kenneth Williams (RB, MSU): -1 rushing yards against 28 projected. Usage fell: 1 carries against 7.5 projected. (previous game 41, season average 11.7, a season low).",
+    "Brian Bonner Jr. (RB, WASH): -1 rushing yards against 45 projected. Usage fell: 1 carries against 10.4 projected. (previous game 9, season average 39.8, a season low).",
+    "Samson Gash (WR, MSU): 0 receiving yards against 21 projected. (previous game 16, season average 8.3, a season low).",
+    "Dezmen Roebuck (WR, WASH): 26 receiving yards against 65 projected. (previous game 30, season average 59.9)."
    ],
    "chance": [
     "Alessio Milivojevic left in quarter 2 (7:52); he threw 33% of the team's passes. Nothing before kickoff could price that in.",
-    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
+    "Why the total went under 44.5: WASH 10 drives, 3 TDs, 1 missed FG, 5 punts (2.1 points a drive); MSU 11 drives, 2 TDs, 2 turnovers, 1 missed FG, 5 punts (1.3 points a drive). By quarter: WASH 7-7-0-7 / MSU 7-7-0-0.",
+    "The cover was settled by WASH's 7-point score in quarter 4 (2:24), making it 21-14 — a late swing."
    ],
    "improve": [
-    "Alessio Milivojevic's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: Baron Naone. Worth checking how late his status was known.",
-    "Cam Fancher (QB, MSU) had 134 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Baron Naone (TE), Trez Davis (WR). Check how late that was known.",
+    "Alessio Milivojevic's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Cam Fancher (QB, MSU) had 134 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: MSU came off a good week: beat MICH 15-6 and covered by 23.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed MSU's previous game by 25.8 (better than it expected): two misses in a row could mean its rating for MSU is behind.",
+    "Possibility: The road team crossed time zones (MSU Detroit vs WASH Los Angeles).",
+    "Possibility: WASH played without regulars: Trey Cooley (RB). The board's projections may not have known.",
+    "Possibility: WASH's defensive playmakers: J.Manu 1 INT; Dylan Robinson 1 pass breakup, 1 forced fumble; Xe'ree Alexander 1 pass breakup, 1 forced fumble.",
+    "Possibility: MSU played without regulars: Devin Vaught (S), Jaziun Patterson (RB). The board's projections may not have known."
    ]
   },
   "2026_11_USM_LT": {
@@ -1357,18 +1975,29 @@
     "The side lean, LT −17.5 (model LT by 19.8), won: LT by 32.",
     "The total lean, over 56 (model 56.1), won: 94 points.",
     "On the margin the model was closer than the market (missed by 12.2 against 14.5).",
-    "Projections that held: Blake Baker 236 passing yards (projected 211)."
+    "Beat their projections: Mario Sanders 119 (69 projected); Jamarice Wilder 83 (50 projected); Eli Finley 104 (52 projected).",
+    "Why the total went over 56: USM 19 drives, 6 TDs, 1 FG, 3 turnovers, 1 turnover on downs, 6 punts (1.7 points a drive); LT 14 drives, 7 TDs, 7 punts (4.5 points a drive). By quarter: USM 3-7-7-15 / LT 21-21-7-14. It went over at Q3 10:21. 29 points came with one team up 17+ in the fourth quarter.",
+    "The cover was settled by LT's 7-point score in quarter 2 (10:31), making it 10-28."
    ],
    "wrong": [
-    "Biggest player misses: Trey Kukuk 65 passing yards against 0 projected; Rayshun Hurt 88 rushing yards against 32 projected; Andrew Burnette 9 rushing yards against 62 projected."
+    "Kaden Saunders (WR, USM): 0 receiving yards against 47 projected. (previous game 122, season average 47.6, a season low).",
+    "AJ Little (WR, USM): 0 receiving yards against 34 projected. (previous game 4, season average 39.3, a season low).",
+    "Sergio Snider (RB, LT): 2 rushing yards against 22 projected. Usage fell: 2 carries against 5.3 projected. (previous game 20, season average 12.9, a season low).",
+    "Andrew Burnette (RB, LT): 9 rushing yards against 62 projected. Usage fell: 3 carries against 13.5 projected. (previous game 20, season average 42.8, a season low)."
    ],
    "chance": [
     "Defensive or return touchdowns: USM 1 and LT 2. They put 21 points on the total and moved the margin about 7.",
     "With even luck the margin would have been LT by 23.5 (actual LT by 32)."
    ],
    "improve": [
-    "Projected but didn't play: Luke Watkins. Worth checking how late his status was known.",
-    "Jay Wilkerson (WR, LT) had 61 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Luke Watkins (WR), MJ Johnson (WR). Check how late that was known.",
+    "Jay Wilkerson (WR, LT) had 61 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: USM came off a bad week: lost to JMU 23-54 and missed the cover by 17. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed USM's previous game by 16.9 (worse than it expected): two misses in a row could mean its rating for USM is behind.",
+    "Possibility: LT came off a good week: beat TROY 41-17 and covered by 17. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed LT's previous game by 18.2 (better than it expected): two misses in a row could mean its rating for LT is behind.",
+    "Possibility: USM's defensive playmakers: MaLik Caswell 1 INT; J.Lewis 1 sack; Wesley Edison 2 pass breakups.",
+    "Possibility: LT's defensive playmakers: Alonzo Jackson Jr. 2 sacks; K.Fields 1 INT; Jadon Mayfield 1 INT."
    ]
   },
   "2026_11_APP_MRSH": {
@@ -1380,19 +2009,31 @@
    },
    "right": [
     "The side lean, APP +1 (model APP by 3.4), won: APP by 4. Chance decided it (below), so it doesn't count for or against the read.",
-    "On the margin the model was closer than the market (missed by 0.6 against 5)."
+    "On the margin the model was closer than the market (missed by 0.6 against 5).",
+    "Beat their projections: Jaquari Lewis 137 (63 projected); Jo'Shon Barbie 108 (48 projected); Carlos Del Rio-Wilson 66 (22 projected)."
    ],
    "wrong": [
     "The total lean, over 54.5 (model 56), lost: 36 points. Chance decided it (below), so it doesn't count for or against the read.",
     "On the total the market was closer than the model (missed by 18.5 against 20).",
-    "Biggest player misses: Carlos Del Rio-Wilson 106 passing yards against 0 projected; Jaquari Lewis 137 rushing yards against 63 projected; Jo'Shon Barbie 108 rushing yards against 48 projected."
+    "Xayvion Turner-Bradshaw (WR, MRSH): 0 receiving yards against 36 projected. (previous game 25, season average 44.1, a season low).",
+    "Toby Payne (TE, MRSH): 3 receiving yards against 38 projected. (previous game 0, season average 29.9).",
+    "TJ Lester (RB, MRSH): 5 rushing yards against 33 projected. Usage fell: 3 carries against 6.6 projected. (previous game 31, season average 26.7).",
+    "Darrin Fugitt (TE, APP): 6 receiving yards against 34 projected. (previous game 7, season average 36.7, a season low)."
    ],
    "chance": [
-    "Khalil Wilkins left in quarter 1 (9:03); he threw 14% of the team's passes. Nothing before kickoff could price that in."
+    "Khalil Wilkins left in quarter 1 (9:03); he threw 14% of the team's passes. Nothing before kickoff could price that in.",
+    "Why the total went under 54.5: APP 11 drives, 2 TDs, 2 FGs, 3 turnovers, 3 punts (1.8 points a drive); MRSH 10 drives, 1 TD, 3 FGs, 2 turnovers, 3 turnovers on downs, 1 punt (1.6 points a drive). By quarter: APP 3-3-7-7 / MRSH 3-10-3-0.",
+    "The cover was settled by APP's 7-point score in quarter 4 (12:55), making it 20-16 — a late swing."
    ],
    "improve": [
-    "Khalil Wilkins's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Projected but didn't play: Zion Turner. Worth checking how late his status was known."
+    "Projected but didn't play: Zion Turner (QB), Jamel Howse (TE), Jalyn Abercrombie (WR). Check how late that was known.",
+    "Khalil Wilkins's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Possibility: APP came off a bad week: lost to GAST 23-39 and missed the cover by 22.5. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed APP's previous game by 22.1 (worse than it expected): two misses in a row could mean its rating for APP is behind.",
+    "Possibility: MRSH came off a bad week: lost to GASO 13-49 and missed the cover by 29. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed MRSH's previous game by 23.7 (worse than it expected): two misses in a row could mean its rating for MRSH is behind.",
+    "Possibility: APP played without regulars: Alex Mitchell (LB). The board's projections may not have known.",
+    "Possibility: APP leaned on players who usually play little: Jehchys Brown (DL, 6 tackles, usually 1.5)."
    ]
   },
   "2026_11_SJSU_AFA": {
@@ -1403,20 +2044,31 @@
     "total": "chance"
    },
    "right": [
-    "The total lean, under 50.5 (model 50.2), won: 27 points. Chance decided it (below), so it doesn't count for or against the read."
+    "The total lean, under 50.5 (model 50.2), won: 27 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "Beat their projections: Evan Medders 146 (80 projected); Owen Allen 103 (61 projected); Kemper Hodges 117 (46 projected)."
    ],
    "wrong": [
     "The side lean, SJSU +14 (model AFA by 13.9), lost: AFA by 21. Chance decided it (below), so it doesn't count for or against the read.",
-    "Biggest player misses: Luke Weaver 138 passing yards against 0 projected; Evan Medders 0 passing yards against 88 projected; Kemper Hodges 117 rushing yards against 46 projected."
+    "Evan Medders (QB, AFA): 0 passing yards against 88 projected. Usage fell: 3 attempts against 10.2 projected; his team led by 9+ on 49% of its plays, so less need to throw. (previous game 84, season average 25.1, a season low).",
+    "Anthony Ivey (WR, SJSU): 0 receiving yards against 46 projected. (previous game 49, season average 32.8, a season low).",
+    "Dominique McKenzie (WR, SJSU): 0 receiving yards against 35 projected. (previous game 71, season average 22.6, a season low).",
+    "Simon Kibbee (TE, AFA): 0 receiving yards against 31 projected. His team led by 9+ on 49% of its plays, so less need to throw. (previous game 31, season average 23.7, a season low)."
    ],
    "chance": [
     "Daniel Rolovich left in quarter 2 (8:52); he threw 17% of the team's passes. Nothing before kickoff could price that in.",
     "Fumble bounces went SJSU's way, worth about 3.1 points (SJSU 1 fumble, 0 lost; AFA 1 fumble, 1 lost).",
-    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
+    "Why the total went under 50.5: SJSU 10 drives, 1 FG, 1 turnover on downs, 1 missed FG, 7 punts (0.3 points a drive); AFA 11 drives, 3 TDs, 1 FG, 1 turnover, 1 turnover on downs, 3 punts (2.2 points a drive). By quarter: SJSU 0-0-3-0 / AFA 0-17-0-7.",
+    "The cover was settled by AFA's 7-point score in quarter 4 (6:17), making it 3-24 — a late swing."
    ],
    "improve": [
-    "Daniel Rolovich's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
-    "Jase Nix (WR, SJSU) had 46 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Matt Long (WR), Adam Hrynciw (WR). Check how late that was known.",
+    "Daniel Rolovich's line and his receivers' count in this week's misses; an early exit isn't a projection miss.",
+    "Jase Nix (WR, SJSU) had 46 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (AFA Denver vs SJSU Los Angeles).",
+    "Possibility: SJSU leaned on players who usually play little: Dejon Roney (DL, 7 tackles, usually 2.0).",
+    "Possibility: SJSU's defensive playmakers: Dylan Lee 1 sack.",
+    "Possibility: AFA's defensive playmakers: Andrew Tillett 1 sack."
    ]
   },
   "2026_11_TROY_USA": {
@@ -1428,17 +2080,28 @@
    },
    "right": [
     "The side lean, USA −3 (model USA by 5.1), won: USA by 13.",
-    "On the margin the model was closer than the market (missed by 7.9 against 10)."
+    "On the margin the model was closer than the market (missed by 7.9 against 10).",
+    "Beat their projections: Trae'von Dunbar 153 (38 projected); Goose Crowder 58 (21 projected)."
    ],
    "wrong": [
     "The total lean, over 56 (model 56.6), lost: 41 points.",
-    "Biggest player misses: Goose Crowder 231 passing yards against 0 projected; Trae'von Dunbar 153 rushing yards against 38 projected; Keenan Phillips 4 rushing yards against 66 projected."
+    "Anthony Eager (WR, USA): 0 receiving yards against 59 projected. His team led by 9+ on 50% of its plays, so less need to throw. (previous game 38, season average 54.2, a season low).",
+    "Keenan Phillips (RB, USA): 4 rushing yards against 66 projected. Usage fell: 2 carries against 13.6 projected. (previous game 19, season average 66.1, a season low).",
+    "Jace Petty (WR, TROY): 4 receiving yards against 31 projected. (previous game 10, season average 24.3, a season low).",
+    "TK Keyes (WR, TROY): 9 receiving yards against 41 projected. (previous game 37, season average 45.6).",
+    "Why the total went under 56: TROY 11 drives, 2 TDs, 3 turnovers on downs, 5 punts (1.3 points a drive); USA 11 drives, 3 TDs, 2 FGs, 5 punts (2.5 points a drive). By quarter: TROY 0-7-0-7 / USA 14-3-10-0. 7 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Tucker Kilcrease, Jaheim Merriweather. Worth checking how late their status was known."
+    "Projected but didn't play: Tucker Kilcrease (QB), Jaheim Merriweather (RB), Jeremiah Jones-Thomas (WR), Rod Gibbs (TE). Check how late that was known.",
+    "Possibility: TROY came off a bad week: lost to LT 17-41 and missed the cover by 17. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed TROY's previous game by 18.2 (worse than it expected): two misses in a row could mean its rating for TROY is behind.",
+    "Possibility: TROY played without regulars: Tucker Kilcrease (QB), Jaheim Merriweather (RB). The board's projections may not have known.",
+    "Possibility: TROY's defensive playmakers: Jordan Turner 3 pass breakups; Justin Powe 2 pass breakups.",
+    "Possibility: USA played without regulars: Jared Hollins (QB). The board's projections may not have known.",
+    "Possibility: USA's defensive playmakers: Dallas Young 1 sack; Jordan Williams 1 sack; Emmanuel Waller 1 sack."
    ]
   },
   "2026_11_PUR_IOWA": {
@@ -1450,19 +2113,28 @@
    },
    "right": [
     "The side lean, IOWA −18.5 (model IOWA by 20.8), won: IOWA by 21.",
-    "On the margin the model was closer than the market (missed by 0.2 against 2.5)."
+    "On the margin the model was closer than the market (missed by 0.2 against 2.5).",
+    "Beat their projections: L.J. Phillips Jr. 123 (52 projected); Asaad Waseem 93 (53 projected); Xavier Williams 55 (32 projected).",
+    "The cover was settled by IOWA's 7-point score in quarter 3 (11:07), making it 7-28."
    ],
    "wrong": [
     "The total lean, over 48 (model 52.3), lost: 35 points.",
     "On the total the market was closer than the model (missed by 13 against 17.3).",
-    "Biggest player misses: L.J. Phillips Jr. 123 rushing yards against 52 projected; Braeden Jackson 61 receiving yards against 10 projected; Asaad Waseem 93 receiving yards against 53 projected."
+    "Chauncey Magwood (WR, PUR): 0 receiving yards against 35 projected. (previous game 0, season average 24.6, a season low).",
+    "George Burhenn (TE, PUR): 3 receiving yards against 20 projected. (previous game 15, season average 19, a season low).",
+    "De'Nylon Morrissette (WR, PUR): 8 receiving yards against 32 projected. (previous game 40, season average 20.6).",
+    "Tra'Mar Harris (WR, PUR): 14 receiving yards against 30 projected. (previous game 76, season average 32.3).",
+    "Why the total went under 48: PUR 9 drives, 1 TD, 1 turnover, 2 turnovers on downs, 1 missed FG, 3 punts (0.8 points a drive); IOWA 9 drives, 4 TDs, 3 missed FGs, 1 punt (3.1 points a drive). By quarter: PUR 0-7-0-0 / IOWA 7-14-7-0."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Kamari Moulton, Brandon Kinsey. Worth checking how late their status was known.",
-    "Evans Chuba (QB, PUR) had 44 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Kamari Moulton (RB), Brandon Kinsey (WR), Nathan McNeil (RB), Addison Ostrenga (TE). Check how late that was known.",
+    "Evans Chuba (QB, PUR) had 44 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The road team crossed time zones (IOWA Chicago vs PUR Indianapolis).",
+    "Possibility: PUR's defensive playmakers: Breeon Ishmail 1 sack; Keyshawn Burgos 1 sack.",
+    "Possibility: IOWA's defensive playmakers: Z.Lutmer 1 INT."
    ]
   },
   "2026_11_UNLV_UNM": {
@@ -1474,20 +2146,30 @@
    },
    "right": [
     "The side lean, UNLV +19.5 (model UNM by 14.4), won: UNLV by 4.",
-    "On the margin the model was closer than the market (missed by 18.4 against 23.5)."
+    "On the margin the model was closer than the market (missed by 18.4 against 23.5).",
+    "Beat their projections: Jackson Arnold 98 (47 projected); Kayden McGee 64 (39 projected); DJ Darling 65 (31 projected)."
    ],
    "wrong": [
     "The total lean, over 46.5 (model 49.9), lost: 38 points.",
     "On the total the market was closer than the model (missed by 8.5 against 11.9).",
-    "Biggest player misses: Toa Fa'avae 40 passing yards against 143 projected; Jackson Arnold 98 rushing yards against 47 projected; Jai'Den Thomas 21 rushing yards against 70 projected."
+    "Taz Reddicks (WR, UNLV): 0 receiving yards against 33 projected. (previous game 41, season average 43.9, a season low).",
+    "Tavian McNair (WR, UNLV): 0 receiving yards against 30 projected. (previous game 51, season average 21.7, a season low).",
+    "Jai'Den Thomas (RB, UNLV): 0 receiving yards against 20 projected. (previous game 0, season average 19.3).",
+    "Bailen George (WR, UNM): 8 receiving yards against 37 projected. (previous game 44, season average 38.2).",
+    "Why the total went under 46.5: UNLV 13 drives, 3 TDs, 2 turnovers, 1 turnover on downs, 6 punts (1.6 points a drive); UNM 12 drives, 2 TDs, 1 FG, 1 turnover, 2 turnovers on downs, 6 punts (1.4 points a drive). By quarter: UNLV 0-7-0-14 / UNM 7-7-3-0."
    ],
    "chance": [
     "Fumble bounces went UNM's way, worth about 3.1 points (UNLV 1 fumble, 1 lost; UNM 1 fumble, 0 lost).",
     "With even luck the margin would have been UNLV by 7.1 (actual UNLV by 4)."
    ],
    "improve": [
-    "Projected but didn't play: Cameron Mathews. Worth checking how late his status was known.",
-    "Vincent Carner (WR, UNLV) had 58 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Cameron Mathews (RB), Massiah Mingo (WR), Zhaiel Smith (WR). Check how late that was known.",
+    "Vincent Carner (WR, UNLV) had 58 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: The model also missed UNLV's previous game by 16.1 (worse than it expected): two misses in a row could mean its rating for UNLV is behind.",
+    "Possibility: UNM came off a good week: beat NEV 31-3 and covered by 17.5. A letdown or bounce-back is possible.",
+    "Possibility: The road team crossed time zones (UNM Denver vs UNLV Los Angeles).",
+    "Possibility: UNLV's defensive playmakers: T.Nkuba 1 INT; Cam Santee 1 sack; Andre Porter 1 sack.",
+    "Possibility: UNM's defensive playmakers: Frankie Edwards III 1 INT; Jahmir Torres 3 pass breakups; Darren Agu 1 sack."
    ]
   },
   "2026_11_UNT_UTSA": {
@@ -1499,19 +2181,30 @@
    },
    "right": [
     "The total lean, under 76 (model 71.5), won: 51 points.",
-    "On the total the model was closer than the market (missed by 20.5 against 25)."
+    "On the total the model was closer than the market (missed by 20.5 against 25).",
+    "Beat their projections: A'Marion Peterson 179 (48 projected); Baron Tipton 63 (35 projected).",
+    "Why the total went under 76: UNT 13 drives, 3 TDs, 1 FG, 1 turnover, 2 turnovers on downs, 4 punts (1.2 points a drive); UTSA 13 drives, 4 TDs, 1 turnover, 8 punts (2.7 points a drive). By quarter: UNT 0-3-7-6 / UTSA 7-14-0-14."
    ],
    "wrong": [
     "The side lean, UNT −3 (model UNT by 3.1), lost: UTSA by 19.",
-    "Biggest player misses: Tayven Jackson 125 passing yards against 294 projected; Owen McCown 85 passing yards against 248 projected; A'Marion Peterson 179 rushing yards against 48 projected."
+    "Kyle Koch (WR, UNT): 4 receiving yards against 48 projected. (previous game 78, season average 54, a season low).",
+    "Jahiem White (RB, UNT): 3 receiving yards against 34 projected. (previous game 31, season average 34.2, a season low).",
+    "Jahiem White (RB, UNT): 32 rushing yards against 151 projected. Usage fell: 13 carries against 21.3 projected; his team trailed by 9+ on 64% of its plays. (previous game 139, season average 131.3, a season low).",
+    "Mekhi Anderson (WR, UTSA): 15 receiving yards against 56 projected. His team led by 9+ on 57% of its plays, so less need to throw. (previous game 117, season average 48.2)."
    ],
    "chance": [
     "Defensive or return touchdowns: UTSA 1. They put 7 points on the total and moved the margin about 7.",
     "With even luck the margin would have been UTSA by 12 (actual UTSA by 19)."
    ],
    "improve": [
-    "Projected but didn't play: DJ Allen Jr.. Worth checking how late his status was known.",
-    "Chris Jimerson Jr. (QB, UNT) had 103 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: DJ Allen Jr. (WR), James Madison II (WR). Check how late that was known.",
+    "Chris Jimerson Jr. (QB, UNT) had 103 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: UNT came off a good week: beat RICE 52-23 and covered by 14.5. A letdown or bounce-back is possible.",
+    "Possibility: UTSA came off a bad week: lost to FAU 29-60 and missed the cover by 38. A letdown or bounce-back is possible.",
+    "Possibility: The model also missed UTSA's previous game by 37.6 (worse than it expected): two misses in a row could mean its rating for UTSA is behind.",
+    "Possibility: Brandon Young Jr. (TE, UTSA) faced UNT, his team in 2024-2025: each side knows the other's habits.",
+    "Possibility: UNT's defensive playmakers: Aaron Alexander 2 sacks; Brenden Reese 1 INT; Davion Rhodes 1 sack.",
+    "Possibility: UTSA played without regulars: DJ Allen Jr. (WR). The board's projections may not have known."
    ]
   },
   "2026_11_USU_SDSU": {
@@ -1523,19 +2216,31 @@
    },
    "right": [
     "The side lean, SDSU +3 (model SDSU by 1.4), won: SDSU by 17.",
-    "On the margin the model was closer than the market (missed by 15.6 against 20)."
+    "On the margin the model was closer than the market (missed by 15.6 against 20).",
+    "Beat their projections: Javion Kinnard 113 (67 projected); Nathan Acevedo 92 (33 projected).",
+    "The cover was settled by SDSU's 7-point score in quarter 2 (1:25), making it 7-10."
    ],
    "wrong": [
     "The total lean, over 44 (model 48.2), lost: 43 points.",
     "On the total the market was closer than the model (missed by 1 against 5.2).",
-    "Biggest player misses: Nathan Acevedo 92 receiving yards against 33 projected; Javion Kinnard 113 rushing yards against 67 projected; McCae Hillstead -3 rushing yards against 40 projected."
+    "McCae Hillstead (QB, USU): -3 rushing yards against 40 projected. Usage was there (12 carries, 9.1 projected) but the yards weren't; -0.2 yards per carry against 4.4 expected; his team trailed by 9+ on 48% of its plays. (previous game 56, season average 47, a season low).",
+    "Bert Emanuel Jr. (WR, SDSU): 0 receiving yards against 32 projected. (previous game 47, season average 23.8, a season low).",
+    "Sesi Vailahi (RB, USU): 5 rushing yards against 27 projected. Usage fell: 2 carries against 6.5 projected; his team trailed by 9+ on 48% of its plays. (previous game 39, season average 25).",
+    "Jordan Napier (WR, SDSU): 16 receiving yards against 38 projected. (previous game 10, season average 20.1).",
+    "Why the total went under 44: USU 12 drives, 2 TDs, 2 turnovers on downs, 8 punts (1.1 points a drive); SDSU 13 drives, 3 TDs, 3 FGs, 1 turnover, 4 punts (2.3 points a drive). By quarter: USU 7-0-0-6 / SDSU 3-7-10-10. 6 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Defensive or return touchdowns: USU 1. They put 7 points on the total and moved the margin about 7.",
     "With even luck the margin would have been SDSU by 25.5 (actual SDSU by 17)."
    ],
    "improve": [
-    "Projected but didn't play: Javen Jacobs, Eli Wood. Worth checking how late their status was known."
+    "Projected but didn't play: Javen Jacobs (RB), Eli Wood (WR), Grady Brosterhous (QB). Check how late that was known.",
+    "Possibility: SDSU was coming off a bye.",
+    "Possibility: The road team crossed time zones (SDSU Los Angeles vs USU Denver).",
+    "Possibility: USU played without regulars: Javen Jacobs (RB). The board's projections may not have known.",
+    "Possibility: USU's defensive playmakers: D'Angelo Mayes 1 INT, 1 pass breakup.",
+    "Possibility: SDSU played without regulars: Josh Hunter (S), Gavriel Lightfoot (DL), Jelani McLaughlin (S). The board's projections may not have known.",
+    "Possibility: SDSU's defensive playmakers: Josiah Cox 1 sack, 1 pass breakup; Sione Hala 1 sack; Djibril Rahman 1 sack."
    ]
   },
   "2026_11_WYO_UTEP": {
@@ -1547,17 +2252,29 @@
    },
    "right": [
     "The side lean, WYO −7 (model WYO by 7.7), won: WYO by 12.",
-    "The total lean, over 40.5 (model 46.9), won: 42 points."
+    "The total lean, over 40.5 (model 46.9), won: 42 points.",
+    "Beat their projections: Raymond Moore III 164 (59 projected); Landon Sims 289 (180 projected); Kyle Frendt 113 (30 projected).",
+    "Why the total went over 40.5: WYO 12 drives, 3 TDs, 2 FGs, 3 turnovers, 3 punts (2.2 points a drive); UTEP 12 drives, 2 TDs, 1 FG, 2 turnovers, 1 turnover on downs, 1 missed FG, 4 punts (1.2 points a drive). By quarter: WYO 14-10-0-3 / UTEP 6-0-3-6. It went over at Q4 6:40.",
+    "The cover was settled by WYO's 7-point score in quarter 1 (1:26), making it 14-6."
    ],
    "wrong": [
     "On the total the market was closer than the model (missed by 1.5 against 4.9).",
-    "Biggest player misses: Landon Sims 289 passing yards against 180 projected; Raymond Moore III 164 rushing yards against 59 projected; Kyle Frendt 113 receiving yards against 30 projected."
+    "Carver Cheeks (WR, UTEP): 6 receiving yards against 39 projected. (previous game 46, season average 29.1, a season low).",
+    "Jeremiah Nash (WR, UTEP): 5 receiving yards against 25 projected. (previous game 3, season average 12.1).",
+    "Jaden Smith (WR, UTEP): 11 receiving yards against 42 projected. (previous game 29, season average 33.7).",
+    "Eric Richardson (WR, WYO): 10 receiving yards against 32 projected. His team led by 9+ on 55% of its plays, so less need to throw. (previous game 7, season average 20.1)."
    ],
    "chance": [
     "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
    ],
    "improve": [
-    "Projected but didn't play: Tyler Hughes, Tavorus Jones. Worth checking how late their status was known."
+    "Projected but didn't play: Tyler Hughes (QB), Tavorus Jones (RB), Nico Hamilton (RB), Ke'Lyn Washom (WR). Check how late that was known.",
+    "Possibility: The model also missed WYO's previous game by 16.1 (better than it expected): two misses in a row could mean its rating for WYO is behind.",
+    "Possibility: WYO played without regulars: Desman Hearns (S), Tyler Hughes (QB). The board's projections may not have known.",
+    "Possibility: WYO's defensive playmakers: Jayden Williams 1 sack; Jack Dunkley 1 sack; Therman Williams 2 pass breakups.",
+    "Possibility: UTEP played without regulars: Tavorus Jones (RB), EJ Colson Jr. (QB). The board's projections may not have known.",
+    "Possibility: UTEP leaned on players who usually play little: Shakaun Bowser (DL, 7 tackles, usually 2.0), Justin Lee (LB, 7 tackles, usually 2.0).",
+    "Possibility: UTEP's defensive playmakers: Leander Parrish 1 sack; Justin Content 2 pass breakups; Kode Lowe 1 forced fumble."
    ]
   },
   "2026_11_CSU_WSU": {
@@ -1569,19 +2286,30 @@
    },
    "right": [
     "The side lean, WSU −7.5 (model WSU by 14.3), won: WSU by 66.",
-    "On the margin the model was closer than the market (missed by 51.7 against 58.5)."
+    "On the margin the model was closer than the market (missed by 51.7 against 58.5).",
+    "Beat their projections: Kirby Vorhees 197 (53 projected); Tommy Maher 76 (47 projected); Maxwell Woods 108 (34 projected).",
+    "The cover was settled by WSU's 7-point score in quarter 1 (0:55), making it 0-14."
    ],
    "wrong": [
     "The total lean, under 64.5 (model 62.4), lost: 80 points.",
     "On the total the market was closer than the model (missed by 15.5 against 17.6).",
-    "Biggest player misses: Owen Eshelman 135 passing yards against 293 projected; Kirby Vorhees 197 rushing yards against 53 projected; Maxwell Woods 108 rushing yards against 34 projected."
+    "Terrence Smith Jr. (WR, CSU): 0 receiving yards against 34 projected. (previous game 18, season average 43.6, a season low).",
+    "Troy Foster (WR, CSU): 0 receiving yards against 28 projected. (previous game 32, season average 16, a season low).",
+    "Daniel Blood (WR, WSU): 2 receiving yards against 67 projected. His team led by 9+ on 84% of its plays, so less need to throw. (previous game 105, season average 46, a season low).",
+    "Mel Brown (RB, CSU): 1 rushing yards against 40 projected. Usage fell: 2 carries against 6.1 projected; his team trailed by 9+ on 70% of its plays. (previous game 2, season average 57, a season low).",
+    "Why the total went over 64.5: CSU 11 drives, 1 TD, 2 turnovers, 3 turnovers on downs, 5 punts (0.6 points a drive); WSU 12 drives, 10 TDs, 1 FG (6.1 points a drive). By quarter: CSU 0-7-0-0 / WSU 14-24-21-14. It went over at Q3 3:48. 14 points came with one team up 17+ in the fourth quarter."
    ],
    "chance": [
     "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
    ],
    "improve": [
-    "Projected but didn't play: Jackson Harper. Worth checking how late his status was known.",
-    "Julian Dugger (QB, WSU) had 65 yards and wasn't on the board's projections. A role the board didn't see coming."
+    "Projected but didn't play: Jackson Harper (WR), Caleb Northcroft (WR), Lavon Brown (WR). Check how late that was known.",
+    "Julian Dugger (QB, WSU) had 65 yards and wasn't on the board's projections: a role it didn't see coming.",
+    "Possibility: WSU was coming off a bye.",
+    "Possibility: The road team crossed time zones (WSU Los Angeles vs CSU Denver).",
+    "Possibility: CSU played without regulars: Jack Moran (DL). The board's projections may not have known.",
+    "Possibility: CSU leaned on players who usually play little: Jaylen King (LB, 6 tackles, usually 1.2).",
+    "Possibility: WSU's defensive playmakers: Jaylen Thomas 1 INT; Michael Hughes 1 sack; Jalil Tucker 1 sack."
    ]
   },
   "2026_11_NDSU_HAW": {
@@ -1591,21 +2319,33 @@
     "spread": "chance",
     "total": "L"
    },
-   "right": [],
+   "right": [
+    "Beat their projections: Kainoa Carvalho 63 (40 projected)."
+   ],
    "wrong": [
     "The side lean, HAW +7.5 (model NDSU by 6.4), lost: NDSU by 8. Chance decided it (below), so it doesn't count for or against the read.",
     "The total lean, over 39.5 (model 44.4), lost: 34 points.",
     "On the margin the market was closer than the model (missed by 0.5 against 1.6).",
     "On the total the market was closer than the model (missed by 5.5 against 10.4).",
-    "Biggest player misses: Jackson Williams 8 receiving yards against 60 projected; Myles Mitchell 16 rushing yards against 57 projected; Chris Kiel 0 receiving yards against 31 projected."
+    "Chris Kiel (WR, NDSU): 0 receiving yards against 31 projected. (previous game 24, season average 25.2, a season low).",
+    "Jackson Williams (WR, NDSU): 8 receiving yards against 60 projected. (previous game 111, season average 68.2, a season low).",
+    "Myles Mitchell (RB, NDSU): 16 rushing yards against 57 projected. Usage fell: 5 carries against 12.6 projected. (previous game 10, season average 49.8).",
+    "Nathan Hayes (QB, NDSU): 97 passing yards against 183 projected. 4.8 yards per attempt against 7.2 expected. (previous game 240, season average 190, a season low).",
+    "Why the total went under 39.5: NDSU 12 drives, 2 TDs, 1 turnover on downs, 7 punts (1.8 points a drive); HAW 12 drives, 2 TDs, 2 FGs, 1 turnover, 2 turnovers on downs, 5 punts (1.1 points a drive). By quarter: NDSU 7-0-0-14 / HAW 0-7-6-0."
    ],
    "chance": [
     "Fumble bounces went HAW's way, worth about 3.1 points (NDSU 0 fumbles, 0 lost; HAW 2 fumbles, 0 lost).",
     "Defensive or return touchdowns: NDSU 1. They put 7 points on the total and moved the margin about 7.",
-    "With even luck the margin would have been NDSU by 4.1 (actual NDSU by 8)."
+    "With even luck the margin would have been NDSU by 4.1 (actual NDSU by 8).",
+    "The cover was settled by NDSU's 7-point score in quarter 4 (6:27), making it 21-13 — a late swing."
    ],
    "improve": [
-    "Projected but didn't play: Reis Kessel, Audric Harris. Worth checking how late their status was known."
+    "Projected but didn't play: Reis Kessel (TE), Audric Harris (WR). Check how late that was known.",
+    "Possibility: NDSU was coming off a bye.",
+    "Possibility: The road team crossed time zones (HAW Honolulu vs NDSU Chicago).",
+    "Possibility: Wind 25 mph.",
+    "Possibility: NDSU played without regulars: Reis Kessel (TE). The board's projections may not have known.",
+    "Possibility: NDSU's defensive playmakers: Matthew Stenbroten 2 sacks, 1 pass breakup, 1 forced fumble; Logan Larson 1 sack, 1 INT, 1 pass breakup; Keenan Wilson 2 sacks."
    ]
   }
  }
