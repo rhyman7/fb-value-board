@@ -119,9 +119,28 @@ def clustered(d, game):
 CFB_PARAMS = Path(__file__).resolve().parent.parent / "data" / "cfb" / "prop_params.json"
 
 
+def role_change_fits(model: P.PropModel, df: pd.DataFrame) -> P.PropModel:
+    """The college fits that carry the role-change term (rolechange.APPLIED["cfb"], Nov 17, 2026),
+    refitted on FIT_FROM-FIT_TO, each started from its fit without the term."""
+    from nflmodel import rolechange
+    d = rolechange.add(df, rolechange.CATCH["cfb"])
+    model.refit_role_change(d[(d.season >= FIT_FROM) & (d.season <= FIT_TO)], rolechange.APPLIED["cfb"])
+    model.meta["role_change"] = {"keys": [f"{s}|{g}" for s, g in rolechange.APPLIED["cfb"]], "fit_seasons": [FIT_FROM, FIT_TO],
+                                 "note": "FEATURES.md 'Prop spread that widens after a role change'; provisional, January recheck"}
+    return model
+
+
 def main():
     save = "--save" in sys.argv
     pproj, pinfo, games = projections_2017()
+    if "--role-change" in sys.argv:       # only the role-change fits, into the saved college file; the rest kept
+        m = role_change_fits(P.PropModel.load(CFB_PARAMS), prep(pproj))
+        m.save(CFB_PARAMS)
+        from nflmodel import rolechange
+        for k in rolechange.APPLIED["cfb"]:
+            f = m.counts.get(k) or m.yards.get(k)
+            print(k, f)
+        return
     df = prep(pproj)
     fits = {}
     for since in (FIT_FROM, 2021):
@@ -174,7 +193,8 @@ def main():
             saved = P.PropModel.load()
             out = P.PropModel(saved.family)
             out.counts, out.yards, out.iso = dict(fits["widths_2017"].counts), dict(fits["widths_2017"].yards), dict(saved.iso)
-            out.meta = dict(saved.meta) | {"college_widths": {"fit_seasons": [FIT_FROM, FIT_TO], "written": "2026-11-04",
+            out = role_change_fits(out, df)       # keep the role-change term on its fits (Nov 17, 2026)
+            out.meta = dict(saved.meta) | dict(out.meta) | {"college_widths": {"fit_seasons": [FIT_FROM, FIT_TO], "written": "2026-11-04",
                                                               "note": "widths fitted on the college walk-forward; correction and the rest from data/prop_params.json"}}
             prev = P.PropModel.load(CFB_PARAMS) if CFB_PARAMS.exists() else None
             if prev is not None and prev.shift:      # the college QB rushing shift (Nov 13, 2026) is kept across refits

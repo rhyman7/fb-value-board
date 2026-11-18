@@ -150,9 +150,17 @@ def _sig(x):
     return 1 / (1 + np.exp(-np.clip(x, -50, 50)))
 
 
+def _share_u(role):
+    """role is the usage share (rows,) or, where props.role adds the role change, (rows, 2): share
+    and u (nflmodel/rolechange.py). A 1-D role means u = 0."""
+    r = np.asarray(role, float)
+    return (r[:, 0], r[:, 1]) if r.ndim == 2 else (r, 0.0)
+
+
 @dataclass
 class CountFit:
-    """alpha = exp(a + b log(mu) + c role); exit chance q at fraction f of the usual volume."""
+    """alpha = exp(a + b log(mu) + c role + d u); exit chance q at fraction f of the usual volume.
+    d is the role-change term (Nov 17, 2026; 0 except where it was applied, rolechange.py)."""
     a: float = -20.0
     b: float = 0.0
     c: float = 0.0
@@ -160,11 +168,13 @@ class CountFit:
     f: float = 0.3
     family: str = "nb"
     n: int = 0
+    d: float = 0.0
 
     def alpha(self, mu, role):
         if self.family == "poisson":
             return np.zeros_like(np.asarray(mu, float))
-        return np.exp(np.clip(self.a + self.b * np.log(np.maximum(mu, 0.05)) + self.c * np.asarray(role, float), -20, 5))
+        share, u = _share_u(role)
+        return np.exp(np.clip(self.a + self.b * np.log(np.maximum(mu, 0.05)) + self.c * share + self.d * u, -20, 5))
 
     def pmf(self, mu, role, kmax):
         return count_pmf(mu, self.alpha(mu, role), self.q, self.f, kmax)
@@ -173,19 +183,27 @@ class CountFit:
         return count_loglik(y, mu, self.alpha(mu, role), self.q, self.f)
 
 
-def fit_count(y, mu, role, family: str = "nb", exit_mix: bool = True) -> CountFit:
+def fit_count(y, mu, role, family: str = "nb", exit_mix: bool = True, role_change: bool = False,
+              start: CountFit | None = None) -> CountFit:
+    """role_change: also fit d (role needs its u column); start: begin at these parameters with d = 0
+    (the role-change fits start from the fit without it, so they can only match or beat it in sample)."""
     y, mu, role = (np.asarray(v, float) for v in (y, mu, role))
     mu = np.maximum(mu, 0.02)
+    rc = role_change and family == "nb"
 
     def unpack(th):
         a, b, c = (th[0], th[1], th[2]) if family == "nb" else (-20.0, 0.0, 0.0)
+        d = th[3] if rc else 0.0
         q, f = (_sig(th[-2]) * 0.3, _sig(th[-1])) if exit_mix else (0.0, 0.3)
-        return CountFit(a, b, c, q, f, family, len(y))
+        return CountFit(a, b, c, q, f, family, len(y), d)
 
     def nll(th):
         return -unpack(th).loglik(y, mu, role).mean()
 
-    th0 = ([np.log(0.1), -0.5, 0.0] if family == "nb" else []) + ([-2.0, -1.0] if exit_mix else [])
+    th0 = ([np.log(0.1), -0.5, 0.0] if family == "nb" else []) + ([0.0] if rc else []) + ([-2.0, -1.0] if exit_mix else [])
+    if start is not None and family == "nb" and exit_mix:
+        lg = lambda p: float(np.log(np.clip(p, 1e-9, 1 - 1e-9) / (1 - np.clip(p, 1e-9, 1 - 1e-9))))
+        th0 = [start.a, start.b, start.c] + ([0.0] if rc else []) + [lg(start.q / 0.3), lg(start.f)]
     if not th0:
         return CountFit(family="poisson", n=len(y))
     res = optimize.minimize(nll, np.array(th0, float), method="Nelder-Mead",
@@ -195,26 +213,34 @@ def fit_count(y, mu, role, family: str = "nb", exit_mix: bool = True) -> CountFi
 
 @dataclass
 class YardsFit:
-    """Compound: per-play gamma shape k1 = exp(a + b log(volume) + c role)."""
+    """Compound: per-play gamma shape k1 = exp(a + b log(volume) + c role + e u); e is the
+    role-change term (Nov 17, 2026; 0 except where it was applied, rolechange.py)."""
     a: float = 0.0
     b: float = 0.0
     c: float = 0.0
     n: int = 0
+    e: float = 0.0
 
     def k1(self, vol_mu, role):
-        return np.exp(np.clip(self.a + self.b * np.log(np.maximum(vol_mu, 0.05)) + self.c * np.asarray(role, float), -6, 6))
+        share, u = _share_u(role)
+        return np.exp(np.clip(self.a + self.b * np.log(np.maximum(vol_mu, 0.05)) + self.c * share + self.e * u, -6, 6))
 
 
-def fit_yards(y, vol_pmf, ypp, vol_mu, role) -> YardsFit:
+def fit_yards(y, vol_pmf, ypp, vol_mu, role, role_change: bool = False, start: YardsFit | None = None) -> YardsFit:
+    """role_change: also fit e (900 iterations for the extra parameter, as tested); start: as fit_count."""
     y, ypp, vol_mu, role = (np.asarray(v, float) for v in (y, ypp, vol_mu, role))
 
-    def nll(th):
-        fit = YardsFit(*th)
-        return -compound_loglik(y, vol_pmf, ypp, fit.k1(vol_mu, role)).mean()
+    def unpack(th):
+        return YardsFit(th[0], th[1], th[2], len(y), th[3] if role_change else 0.0)
 
-    res = optimize.minimize(nll, np.array([0.0, 0.0, 0.0]), method="Nelder-Mead",
-                            options={"maxiter": 600, "xatol": 1e-3, "fatol": 1e-6})
-    return YardsFit(*res.x, n=len(y))
+    def nll(th):
+        return -compound_loglik(y, vol_pmf, ypp, unpack(th).k1(vol_mu, role)).mean()
+
+    th0 = [0.0, 0.0, 0.0] if start is None else [start.a, start.b, start.c]
+    th0 += [0.0] if role_change else []
+    res = optimize.minimize(nll, np.array(th0, float), method="Nelder-Mead",
+                            options={"maxiter": 900 if role_change else 600, "xatol": 1e-3, "fatol": 1e-6})
+    return unpack(res.x)
 
 
 @dataclass

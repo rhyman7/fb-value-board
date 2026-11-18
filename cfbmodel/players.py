@@ -549,6 +549,9 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
     p = proj[proj["game_id"].isin(game_keys) & (proj["active"] == 1)].copy()
     if p.empty:
         return {"players": [], "teams": []}
+    # the role change (nflmodel/rolechange.py, Nov 17, 2026): catches stand in for targets
+    from nflmodel.players import _with_role_change
+    p = _with_role_change(p, table, "receptions")
     p["name"] = p["player_id"].map(info["name"]).fillna(p["player_id"].astype(str))
     des = des if des is not None and len(des) else None
     des_out = DES.outs(des, abbr) if des is not None else None
@@ -625,6 +628,7 @@ def board(proj: pd.DataFrame, table: pd.DataFrame, info: pd.DataFrame, game_keys
                     "rec_share_hist": r3(r.rec_share_raw), "car_share_hist": r3(r.car_share_raw),
                     "ypr": r2(r.ypr), "ypc": r2(r.ypc), "ypa": r2(r.ypa), "comp": r3(r.comp),
                     "def_ypc": r3(r.def_ypc), "def_ypa": r3(r.def_ypa), "games": r1(r.one_sum),
+                    "role_chg_car": r3(r.role_chg_car), "role_chg_rec": r3(r.role_chg_rec),
                     "chain": {k: r1(cal_in[k][i, 0]) for k in SHOWN},
                     "recent": {k: r1(cal_in[k][i, 1]) for k in SHOWN},
                     "dvp": {st: r3(getattr(r, f"dvpf_{st}")) for _, st in DVP_PAIRS if f"dvpf_{st}" in a and pd.notna(getattr(r, f"dvpf_{st}"))}},

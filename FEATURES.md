@@ -2702,3 +2702,18 @@ lines and rungs instead.
 
 Not applied; nothing on the boards changed. A version for college rushing alone (where the log-likelihood,
 the high-u rows and both seasons' rungs agree) was found on these seasons and would need 2026 to judge.
+
+**Applied Nov 17, 2026 (Ryan's call), provisional: the two pieces that passed, by stat.** Split by
+stat, NFL receiving (receptions + receiving yards, WR/TE/RB) missed only the receptions holdout bar
+(+0.0001, 0.5 SE, right direction) and college rushing (RB carries + rushing yards) missed only rushing
+yards at the 2025 bet-time main lines (+0.0001 ± 0.0003). Both carry the term (`nflmodel/rolechange.py`,
+`rolechange.APPLIED`); college receiving and NFL rushing do not. Fits: NFL receptions and receiving yards
+refitted with the term on the production table, 2019-2026 (`experiments/props_calibration.py
+--role-change`; the other parameters within a little of the saved ones, the term positive on reception
+counts: wider after a change); college carries and rushing yards on 2017-2024 (`experiments/cfb_propdist_test.py
+--role-change`). The college refit also brings those two fits up to today's projections (the saved
+college widths dated from Nov 4, 2026): of this week's average chance moves on college rushing props (0.5
+points at the projection, 0.7 at 80% of it, 0.8 at 65%), about 0.3 / 0.5 / 0.6 is the term itself against
+the same refit without it. NFL receiving this week: 0.3 / 0.5 / 0.6 points. Projections do not change.
+Rechecked in January on 2026 alone, with the two pieces not applied (Project doc
+`claude/january-recheck-additions.md`).

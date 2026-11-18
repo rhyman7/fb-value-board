@@ -292,11 +292,32 @@ def run_sim(proj):
     print(rep["all_pairs_with_a_fitted_rho"], rep["three_leg_stack"], sep="\n")
 
 
+def run_role_change(proj):
+    """Refit only the fits that carry the role-change term (rolechange.APPLIED["nfl"]) on seasons
+    FIT_FROM on, each started from its fit without the term; every other parameter is kept."""
+    from nflmodel import rolechange
+    saved = P.PropModel.load()
+    d = rolechange.add(proj, rolechange.CATCH["nfl"])
+    saved.refit_role_change(d[d.season >= FIT_FROM], rolechange.APPLIED["nfl"])
+    saved.meta["role_change"] = {"keys": [f"{s}|{g}" for s, g in rolechange.APPLIED["nfl"]], "fitted_from": FIT_FROM,
+                                 "fitted_through": int(proj[proj.played.astype(bool)].season.max()),
+                                 "written": __import__("datetime").date.today().isoformat(),
+                                 "note": "FEATURES.md 'Prop spread that widens after a role change'; provisional, January recheck"}
+    saved.save()
+    for k in rolechange.APPLIED["nfl"]:
+        f = saved.counts.get(k) or saved.yards.get(k)
+        print(k, {x: round(float(getattr(f, x)), 3) for x in ("a", "b", "c", "d", "e") if hasattr(f, x)})
+
+
 def run_production(proj):
     """Refit the production widths on seasons FIT_FROM on, keeping the saved correction
-    (fitted on the tuning seasons) and the same-game correlations."""
+    (fitted on the tuning seasons) and the same-game correlations. The role-change fits
+    (rolechange.APPLIED) are refitted with their term."""
+    from nflmodel import rolechange
     saved = P.PropModel.load()
     prod = P.PropModel(FAMILY).fit(with_kneels(proj[proj.season >= FIT_FROM]))
+    rc = rolechange.add(proj, rolechange.CATCH["nfl"])
+    prod.refit_role_change(rc[rc.season >= FIT_FROM], rolechange.APPLIED["nfl"])
     prod.iso = saved.iso if saved is not None else {}
     meta = dict(saved.meta) if saved is not None else {}
     meta.update({"fitted_through": int(proj[proj.played.astype(bool)].season.max()), "fitted_from": FIT_FROM})
@@ -311,10 +332,13 @@ def main():
     ap.add_argument("--sim", action="store_true", help="only refit and score the same-game correlations")
     ap.add_argument("--proj", type=Path, default=None)
     ap.add_argument("--production", action="store_true", help="only refit the production widths (seasons FIT_FROM on)")
+    ap.add_argument("--role-change", action="store_true", help="only refit the fits with the role-change term (rolechange.APPLIED)")
     args = ap.parse_args()
     proj = load_proj(args.proj)
     if args.production:
         return run_production(proj)
+    if args.role_change:
+        return run_role_change(proj)
     if args.select:
         return run_select(proj)
     if args.sim:
