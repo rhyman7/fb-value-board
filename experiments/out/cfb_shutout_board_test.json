@@ -128,7 +128,7 @@
      "se": 0.001167,
      "z": -14.21
     },
-    "2026 weeks 1-11 (seen)": {
+    "2026 all weeks so far": {
      "n": 1711,
      "happened": 0.3846,
      "model_now": 0.5,
@@ -140,6 +140,9 @@
      "typical_now_avg": 16.9,
      "typical_new_avg": 9.2,
      "reach_new_typical": 0.547
+    },
+    "2026 weeks 12+ (unseen on Nov 18)": {
+     "n": 0
     },
     "by_projected_receptions_holdout": {
      "(0.0, 1.5]": {
@@ -297,7 +300,7 @@
      "se": 0.000466,
      "z": -12.24
     },
-    "2026 weeks 1-11 (seen)": {
+    "2026 all weeks so far": {
      "n": 4680,
      "happened": 0.4205,
      "model_now": 0.5,
@@ -309,6 +312,9 @@
      "typical_now_avg": 31.9,
      "typical_new_avg": 25.5,
      "reach_new_typical": 0.5141
+    },
+    "2026 weeks 12+ (unseen on Nov 18)": {
+     "n": 0
     },
     "by_projected_receptions_holdout": {
      "(0.0, 1.5]": {
