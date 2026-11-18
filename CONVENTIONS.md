@@ -809,7 +809,11 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
   fewer, a TE 15 or fewer, a back's rushing 15 or fewer and a back's receiving under 10 are left
   off the page and not counted; a quarterback's projection under 10 yards is listed but not
   scored. The scorecard counts the rest for players who played their usual game: met = actual
-  at or above the projection. **Left early is never
+  at or above the projection. Each row also carries **Typical** (`md`, `reviewplayers.typical`):
+  the model's own 50/50 yardage for the player from the prop distribution (`props.PropModel`,
+  today's fitted widths) at the frozen projection; each scorecard tile shows the share who
+  reached it, where about 50% means the spread is right. The Met / Short tag stays on the
+  projection. **Left early is never
   counted against the model** and has its own labelled scorecard: a quarterback who threw under
   60% of his team's passes; NFL, a regular (25%+ of snaps) under half his usual snap share (the
   floors' rule); college, touches under 40% of his usual with none after halftime (an estimate,
