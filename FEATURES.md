@@ -2908,7 +2908,7 @@ chain rebuilt. Rows: on the field, a shut-out scores 0. B was chosen on tuning f
   (actual 1%) and 25% at 1-1.5 (actual 31%).
 - Not done from the plan's reported list: the share reaching Typical before and after.
 
-## College: a shut-out chance in the receiving prices and Typical (Nov 18, 2026): no
+## College: a shut-out chance in the receiving prices and Typical (Nov 18, 2026): corrected; tight ends no, wide receivers a trade-off
 
 Follow-up to the entry above (Ryan's pick). The projection stays as it is; the odds become
 `over = (1 - p0) x the model's over`. p0 by position from projected receptions (P1), or with PFF
@@ -2916,21 +2916,29 @@ route share, snap share and his own earlier shut-out rate added (P2). Rule writt
 Project doc `claude/plan-cfb-shutout-pricing-test-2026-11-18.md`. Script
 `experiments/cfb_shutout_pricing_test.py`, output `experiments/out/cfb_shutout_pricing_test.json`.
 
-Tuning 2018-19, Brier at each player's own Typical line, candidate minus current (se):
+**Correction (same day).** The first run of this test, and the entry first written here (#333),
+were wrong. The "at his own Typical line" measure for bet-time projections included players who
+appeared without being expected. The board never lists them, and 96% of them clear the Typical
+the table gives them, so bet-time looked calibrated (50.5% for tight ends) when it is not. The
+claim that "the prices already hold the shut-out chance" came from that error and is withdrawn.
+Rows now need `active == 1`; the whole test was rerun and these are the rerun's numbers.
 
-| | P1 game-day | P1 bet-time | P2 game-day | P2 bet-time |
-|---|---|---|---|---|
-| TE | +0.0027 (0.0018) | **+0.0176 (0.0020)** | +0.0020 (0.0018) | **+0.0143 (0.0020)** |
-| WR | -0.0002 (0.0006) | **+0.0054 (0.0006)** | -0.0004 (0.0006) | **+0.0042 (0.0007)** |
+Reaching Typical, expected players who took the field, bet-time, shut-outs counted, by season
+2017 to 2026 (11 weeks): tight ends over 15 projected yards 37, 38, 40, 41, 35, 40, 40, 38, 41, 39%;
+wide receivers over 20: 44, 43, 43, 45, 42, 44% and the same since. Every season; 2026 is not
+a cold run. 27-33% of those tight ends and 16-17% of the receivers record nothing.
 
-- Neither version is better on both tuning measures for either position, so nothing went to the
-  holdout or the lines. Not kept.
-- Why: the prices already hold it. The college widths (`experiments/cfb_propdist_test.py`) are
-  fitted on every expected player in a played game, with a zero for anyone who recorded nothing,
-  so the chance of a blank is already inside the distribution. With shut-outs counted, bet-time
-  players reached Typical 50.5% (TE) and 49.1% (WR) in 2018-19. Adding p0 counts it twice.
-- So the bias found in the entry above is in the projection (the average), not in the odds or
-  Typical. It also explains why rebuilding the projections with zeros (version B there) did not
-  help at the lines: the widths were fitted around the old, higher projections.
-- Open question: 2026 on the Weekly Review shows tight ends at 44% with shut-outs counted, well
-  under these tuning seasons. Not explained by this test.
+Brier at each player's own Typical line, candidate minus current (se):
+
+| | Tuning game-day | Tuning bet-time | Holdout game-day | Holdout bet-time | DK/FD lines 2024 gd / bt, 2025 gd / bt |
+|---|---|---|---|---|---|
+| TE, P1 | **+0.0027 (0.0018) worse** | -0.0154 (0.0020) | not read | not read | not read |
+| TE, P2 | **+0.0020 (0.0018) worse** | -0.0170 (0.0021) | not read | not read | not read |
+| WR, P2 (chosen) | -0.0004 (0.0006) | -0.0079 (0.0007) | **+0.0003 (0.0004) worse** | -0.0071 (0.0004) | -0.0001, -0.0010, **+0.0016, +0.0009** (se about 0.001) |
+
+- Tight ends: a large gain at bet-time, but worse on the game-day table, so by the rule nothing
+  went to the holdout. Wide receivers: a trade-off (bet-time much better, game-day flat, the
+  lines split by year). Nothing applied.
+- The game-day table knows who suited up, so it holds players the board never showed; the board
+  is a bet-time product. A cleaner test would judge only what the board lists.
+- At real lines the effect is small either way: players with a line average a 7% shut-out chance.
