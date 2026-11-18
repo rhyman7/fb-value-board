@@ -11,8 +11,17 @@ projection is listed; one under COUNT_MIN yards (rushing, usually) is listed but
   left     left the game early: not counted against the model, shown on its own scorecard
   dnp      NFL: projected, no offensive snaps. Not counted. (No stat line but on the field
            counts as a real zero.)
-  nostat   college: no box-score line and no target, so it can't be told whether he played.
-           Not counted, and labelled. (A target without a catch counts as a real zero.)
+  nostat   college: no box-score line and no target, so the public data can't tell whether he
+           played. Not counted in the main scorecard, and labelled. (A target without a catch
+           counts as a real zero.)
+
+College players with no stats recorded, counted properly (Nov 18, 2026, Ryan's ask): when the
+private PFF data is there (cfbmodel/pff_data.py), its offensive snap counts say which of them were
+on the field. One who played his usual snaps is a real zero; one under half his usual snaps is
+"limited" (the NFL's left-early rule) and one with no snaps sat. **Only totals are written**
+(card["shutout"]: the scorecard with the real zeros added, and the three counts): PFF's rows are
+licensed, so no player's row says which he was (PUBLISH_PLAYER below; Ryan's call). Without the
+data the page is as before.
 
 Left early (Ryan's ask: these should not count against the model):
   * a starting quarterback who threw under 60% of his team's passes (the review's qb_exits);
@@ -45,6 +54,50 @@ def on_page(pos: str, stat: str, proj: float) -> bool:
         return proj > 15 if stat == "rush_yds" else proj >= 10
     return True
 SNAP_CUT, TOUCH_CUT = 0.5, 0.4
+# College no-stat players: write each player's own status from PFF's snap counts (True), or only the
+# week's totals (False). PFF's data is licensed and this repo is public: False until Ryan says so.
+PUBLISH_PLAYER = False
+GAP_SHARE = 0.4
+
+
+def _pkey(name: str) -> str:
+    import unicodedata
+    s = unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z]", "", re.sub(r"\b(jr|sr|ii|iii|iv|v)\b\.?", "", s))
+
+
+def pff_snaps(season: int, week: int) -> dict | None:
+    """College: name key -> (offensive snaps this week, median of his earlier weeks this season or
+    None). Names shared by two players that week are left out. None when the PFF data isn't there."""
+    try:
+        from cfbmodel import pff_data
+        if not pff_data.available():
+            return None
+        o = pff_data.load("offense_summary", [season], weeks=range(0, week + 1))
+    except Exception as exc:  # noqa: BLE001
+        print(f"  snap counts for no-stat players skipped ({type(exc).__name__}: {exc})")
+        return None
+    if o.empty or "snap_counts_total" not in o or not (o["week"] == week).any():
+        return None
+    o = o.assign(k=o["player"].map(_pkey), id=o["player_id"].astype(str))
+    cur = o[o["week"] == week]
+    dup = set(cur.loc[cur["k"].duplicated(keep=False), "k"])
+    pre = o[o["week"] < week].groupby("id")["snap_counts_total"].agg(["median", "count"])
+    out = {}
+    for r in cur[~cur["k"].isin(dup)].itertuples():
+        m = pre.loc[r.id] if r.id in pre.index else None
+        out[r.k] = (float(r.snap_counts_total), float(m["median"]) if m is not None and m["count"] >= 2 else None)
+    return out
+
+
+def on_field(snaps: dict | None, name: str) -> str | None:
+    """'zero' (played his usual snaps: a real zero), 'limited' (under half his usual), 'sat' (no snaps), or None (no data)."""
+    if snaps is None:
+        return None
+    x = snaps.get(_pkey(name))
+    if not x or x[0] <= 0:
+        return "sat"
+    return "limited" if x[1] is not None and x[0] < SNAP_CUT * x[1] else "zero"
 
 
 def _short(name: str) -> str:
@@ -114,6 +167,8 @@ def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
         sn["gsis"] = sn["pfr_player_id"].map(src.pfr2gsis)
         gsis_snaps = {k: v for k, v in sn.dropna(subset=["gsis"]).groupby("gsis")}
     rows, ids = [], {}
+    snaps = pff_snaps(src.season, week) if lg == "cfb" else None
+    field = {}          # row index -> 'zero' | 'limited' | 'sat', for no-stat college players (never written per player unless PUBLISH_PLAYER)
     for g in facts["games"]:
         gid = g["id"]
         key = gid if lg == "nfl" else int(A["games"][gid].get("game_id") or 0)
@@ -166,11 +221,41 @@ def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
                     continue
                 av = float((x or {}).get(st, 0.0) or 0.0)   # x == {} : played, nothing recorded
                 ids[len(rows)] = str(pl["id"])
+                if status == "nostat" and snaps is not None:
+                    field[len(rows)] = on_field(snaps, pl["name"])
                 rows.append({"n": pl["name"], "p": pl["pos"], "t": pl["team"], "o": g["home"] if pl["team"] == g["away"] else g["away"],
                              "g": g["slug"], "s": st, "pj": round(float(pj), 1), "a": av, "st": status,
                              "c": bool(pj >= COUNT_MIN), **({"note": note} if note else {}),
                              **({"md": med[(str(pl["id"]), gid, st)]} if (str(pl["id"]), gid, st) in med else {})})
-    out = {"league": lg, "season": facts["season"], "week": week, "count_min": COUNT_MIN, "card": scorecard(rows), "rows": rows}
+    shut = None
+    if field:
+        # a team whose no-stat rows are 40%+ of its scored rows is a gap in the box score, not shut-outs: leave it unknown
+        tg = {}
+        for i, r in enumerate(rows):
+            if r["c"]:
+                k = (r["g"], r["t"])
+                tg.setdefault(k, [0, 0])
+                tg[k][0] += 1
+                tg[k][1] += r["st"] == "nostat"
+        field = {i: f_ for i, f_ in field.items() if tg.get((rows[i]["g"], rows[i]["t"]), [1, 0])[1] < GAP_SHARE * tg.get((rows[i]["g"], rows[i]["t"]), [1, 0])[0]}
+        if PUBLISH_PLAYER:
+            for i, f_ in field.items():
+                rows[i]["st"] = {"zero": "played", "limited": "left", "sat": "dnp"}[f_]
+                note = {"zero": "on the field, no stats", "limited": "under half his usual snaps, no stats"}.get(f_)
+                rows[i].pop("note", None)
+                if note:
+                    rows[i]["note"] = note
+        else:
+            zeros = [rows[i] for i, f_ in field.items() if f_ == "zero" and rows[i]["c"]]
+            counted = [r for r in rows if r["st"] == "played" and r["c"]] + zeros
+            n_ = lambda k: len({(rows[i]["n"], rows[i]["t"]) for i, f_ in field.items() if f_ == k and rows[i]["c"]})  # noqa: E731
+            shut = {"all": _tally(counted), "by_pos": {p_: _tally([r for r in counted if r["p"] == p_]) for p_ in ("QB", "RB", "WR", "TE")},
+                    "zero": n_("zero"), "limited": n_("limited"), "sat": n_("sat")}
+            shut["unknown"] = len({(r["n"], r["t"]) for r in rows if r["st"] == "nostat" and r["c"]}) - shut["zero"] - shut["limited"] - shut["sat"]
+    card = scorecard(rows)
+    if shut:
+        card["shutout"] = shut
+    out = {"league": lg, "season": facts["season"], "week": week, "count_min": COUNT_MIN, "card": card, "rows": rows}
     best = best_matchups(rows, (getattr(src, "best", None) or {}).get(str(week)), ids)
     if best:
         out["best"] = best

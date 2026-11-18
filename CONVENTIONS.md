@@ -830,7 +830,18 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
   floors' rule); college, touches under 40% of his usual with none after halftime (an estimate,
   labelled). NFL players with no offensive snaps are "Didn't play"; on the field with no stats
   is a real zero. College players with no box-score line are "No stats recorded" (no public
-  snap counts, so unknown) and not counted.
+  snap counts, so unknown) and not counted in the main scorecard.
+  **Shut-outs counted (college, Nov 18, 2026, Ryan's ask).** When the private PFF data is there
+  (`PFF_DATA_DIR`, `.pff-data/` or `../pff-data`), `reviewplayers.pff_snaps` reads that week's
+  offensive snap counts and each no-stat player is one of: **shut out** (played, at least half
+  his usual snaps: a real zero), **limited** (under half the median of his earlier weeks, two
+  weeks minimum: not counted, like left early), **sat** (no snaps), or **unknown** (a name two
+  players share that week, or a team whose no-stat rows are 40%+ of its scored rows, which is a
+  box-score gap; most of week 1). The page shows a second scorecard with the shut-outs added as
+  zeros (`card.shutout`) and the four counts. **Only totals are written**: PFF's rows are
+  licensed and this repo is public, so no player's row says which he was
+  (`reviewplayers.PUBLISH_PLAYER = False`; changing it is Ryan's call). Without the PFF data the
+  page is as before, with no second scorecard, so a review built without it loses that block.
 - **Best Matchups page** (Nov 18, 2026, Ryan's ask): `#nfl-best`, `#nfl-best-10`, linked right of
   Players. The Players page filtered to the players on that week's Best Overall Matchups list in
   the dashboards' record (`data/best_overall.json` in rhyman7/nfl and rhyman7/cfb, read from

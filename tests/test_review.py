@@ -108,3 +108,14 @@ def test_best_matchups_marks_only_listed_players_on_their_stat():
     assert (b["card"]["all"]["n"], b["card"]["all"]["met"]) == (3, 2)
     assert b["card"]["beat_avg"] == {"n": 2, "beat": 1} and all(x["found"] for x in b["picks"])
     assert P.best_matchups(rows, None, ids) is None
+
+
+def test_college_no_stat_players_sorted_by_snaps():
+    from nflmodel import reviewplayers as P
+    snaps = {P._pkey("Joe Smith Jr."): (40.0, 45.0), P._pkey("Al Low"): (8.0, 40.0), P._pkey("New Guy"): (30.0, None)}
+    assert P.on_field(snaps, "Joe Smith") == "zero"        # his usual snaps, nothing recorded: a real zero
+    assert P.on_field(snaps, "Al Low") == "limited"        # under half his usual
+    assert P.on_field(snaps, "New Guy") == "zero"          # no earlier weeks to compare
+    assert P.on_field(snaps, "Not Listed") == "sat"
+    assert P.on_field(None, "Joe Smith") is None           # no private data: unknown, as before
+    assert P.PUBLISH_PLAYER is False                       # licensed data: totals only

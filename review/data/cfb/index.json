@@ -140,6 +140,59 @@
     "dnp": {
      "n": 783,
      "players": 647
+    },
+    "shutout": {
+     "all": {
+      "n": 606,
+      "met": 302,
+      "short": 304,
+      "typ_n": 606,
+      "typ_met": 393,
+      "avg_miss": 8.9,
+      "avg_abs": 28.3
+     },
+     "by_pos": {
+      "QB": {
+       "n": 96,
+       "met": 48,
+       "short": 48,
+       "typ_n": 96,
+       "typ_met": 51,
+       "avg_miss": 10.2,
+       "avg_abs": 44.2
+      },
+      "RB": {
+       "n": 260,
+       "met": 115,
+       "short": 145,
+       "typ_n": 260,
+       "typ_met": 163,
+       "avg_miss": 6.0,
+       "avg_abs": 22.7
+      },
+      "WR": {
+       "n": 199,
+       "met": 112,
+       "short": 87,
+       "typ_n": 199,
+       "typ_met": 144,
+       "avg_miss": 13.5,
+       "avg_abs": 31.3
+      },
+      "TE": {
+       "n": 51,
+       "met": 27,
+       "short": 24,
+       "typ_n": 51,
+       "typ_met": 35,
+       "avg_miss": 3.0,
+       "avg_abs": 15.2
+      }
+     },
+     "zero": 10,
+     "limited": 0,
+     "sat": 26,
+     "unknown": 611
     }
    },
    "best": null,
@@ -306,6 +359,59 @@
     "dnp": {
      "n": 179,
      "players": 166
+    },
+    "shutout": {
+     "all": {
+      "n": 1107,
+      "met": 386,
+      "short": 721,
+      "typ_n": 1107,
+      "typ_met": 515,
+      "avg_miss": -3.8,
+      "avg_abs": 25.3
+     },
+     "by_pos": {
+      "QB": {
+       "n": 175,
+       "met": 79,
+       "short": 96,
+       "typ_n": 175,
+       "typ_met": 89,
+       "avg_miss": -3.0,
+       "avg_abs": 39.0
+      },
+      "RB": {
+       "n": 391,
+       "met": 114,
+       "short": 277,
+       "typ_n": 391,
+       "typ_met": 173,
+       "avg_miss": -5.5,
+       "avg_abs": 20.9
+      },
+      "WR": {
+       "n": 395,
+       "met": 153,
+       "short": 242,
+       "typ_n": 395,
+       "typ_met": 192,
+       "avg_miss": -2.3,
+       "avg_abs": 25.9
+      },
+      "TE": {
+       "n": 146,
+       "met": 40,
+       "short": 106,
+       "typ_n": 146,
+       "typ_met": 61,
+       "avg_miss": -4.1,
+       "avg_abs": 19.2
+      }
+     },
+     "zero": 60,
+     "limited": 3,
+     "sat": 103,
+     "unknown": 0
     }
    },
    "best": null,
@@ -472,6 +578,59 @@
     "dnp": {
      "n": 212,
      "players": 199
+    },
+    "shutout": {
+     "all": {
+      "n": 1255,
+      "met": 490,
+      "short": 765,
+      "typ_n": 1255,
+      "typ_met": 628,
+      "avg_miss": -0.9,
+      "avg_abs": 27.3
+     },
+     "by_pos": {
+      "QB": {
+       "n": 204,
+       "met": 104,
+       "short": 100,
+       "typ_n": 204,
+       "typ_met": 110,
+       "avg_miss": 0.4,
+       "avg_abs": 44.7
+      },
+      "RB": {
+       "n": 434,
+       "met": 166,
+       "short": 268,
+       "typ_n": 434,
+       "typ_met": 216,
+       "avg_miss": 0.4,
+       "avg_abs": 23.7
+      },
+      "WR": {
+       "n": 449,
+       "met": 167,
+       "short": 282,
+       "typ_n": 449,
+       "typ_met": 220,
+       "avg_miss": -1.4,
+       "avg_abs": 26.5
+      },
+      "TE": {
+       "n": 168,
+       "met": 53,
+       "short": 115,
+       "typ_n": 168,
+       "typ_met": 82,
+       "avg_miss": -4.5,
+       "avg_abs": 17.6
+      }
+     },
+     "zero": 45,
+     "limited": 25,
+     "sat": 112,
+     "unknown": 17
     }
    },
    "best": null,
@@ -638,6 +797,59 @@
     "dnp": {
      "n": 169,
      "players": 159
+    },
+    "shutout": {
+     "all": {
+      "n": 1287,
+      "met": 478,
+      "short": 809,
+      "typ_n": 1287,
+      "typ_met": 651,
+      "avg_miss": -0.4,
+      "avg_abs": 25.4
+     },
+     "by_pos": {
+      "QB": {
+       "n": 207,
+       "met": 91,
+       "short": 116,
+       "typ_n": 207,
+       "typ_met": 109,
+       "avg_miss": 2.8,
+       "avg_abs": 40.1
+      },
+      "RB": {
+       "n": 450,
+       "met": 161,
+       "short": 289,
+       "typ_n": 450,
+       "typ_met": 229,
+       "avg_miss": 0.1,
+       "avg_abs": 22.5
+      },
+      "WR": {
+       "n": 463,
+       "met": 176,
+       "short": 287,
+       "typ_n": 463,
+       "typ_met": 235,
+       "avg_miss": -1.1,
+       "avg_abs": 24.2
+      },
+      "TE": {
+       "n": 167,
+       "met": 50,
+       "short": 117,
+       "typ_n": 167,
+       "typ_met": 78,
+       "avg_miss": -3.8,
+       "avg_abs": 17.8
+      }
+     },
+     "zero": 35,
+     "limited": 21,
+     "sat": 88,
+     "unknown": 15
     }
    },
    "best": null,
@@ -804,6 +1016,59 @@
     "dnp": {
      "n": 160,
      "players": 144
+    },
+    "shutout": {
+     "all": {
+      "n": 1237,
+      "met": 456,
+      "short": 781,
+      "typ_n": 1237,
+      "typ_met": 621,
+      "avg_miss": -2.0,
+      "avg_abs": 26.5
+     },
+     "by_pos": {
+      "QB": {
+       "n": 205,
+       "met": 95,
+       "short": 110,
+       "typ_n": 205,
+       "typ_met": 102,
+       "avg_miss": -1.3,
+       "avg_abs": 45.8
+      },
+      "RB": {
+       "n": 418,
+       "met": 147,
+       "short": 271,
+       "typ_n": 418,
+       "typ_met": 220,
+       "avg_miss": -0.5,
+       "avg_abs": 23.0
+      },
+      "WR": {
+       "n": 444,
+       "met": 166,
+       "short": 278,
+       "typ_n": 444,
+       "typ_met": 225,
+       "avg_miss": -2.2,
+       "avg_abs": 25.0
+      },
+      "TE": {
+       "n": 170,
+       "met": 48,
+       "short": 122,
+       "typ_n": 170,
+       "typ_met": 74,
+       "avg_miss": -5.9,
+       "avg_abs": 15.3
+      }
+     },
+     "zero": 47,
+     "limited": 24,
+     "sat": 73,
+     "unknown": 0
     }
    },
    "best": null,
@@ -970,6 +1235,59 @@
     "dnp": {
      "n": 159,
      "players": 145
+    },
+    "shutout": {
+     "all": {
+      "n": 1270,
+      "met": 482,
+      "short": 788,
+      "typ_n": 1270,
+      "typ_met": 625,
+      "avg_miss": -2.7,
+      "avg_abs": 26.6
+     },
+     "by_pos": {
+      "QB": {
+       "n": 202,
+       "met": 90,
+       "short": 112,
+       "typ_n": 202,
+       "typ_met": 95,
+       "avg_miss": -6.8,
+       "avg_abs": 46.1
+      },
+      "RB": {
+       "n": 441,
+       "met": 160,
+       "short": 281,
+       "typ_n": 441,
+       "typ_met": 221,
+       "avg_miss": -0.2,
+       "avg_abs": 22.3
+      },
+      "WR": {
+       "n": 461,
+       "met": 176,
+       "short": 285,
+       "typ_n": 461,
+       "typ_met": 228,
+       "avg_miss": -3.3,
+       "avg_abs": 25.3
+      },
+      "TE": {
+       "n": 166,
+       "met": 56,
+       "short": 110,
+       "typ_n": 166,
+       "typ_met": 81,
+       "avg_miss": -2.9,
+       "avg_abs": 17.8
+      }
+     },
+     "zero": 41,
+     "limited": 22,
+     "sat": 79,
+     "unknown": 3
     }
    },
    "best": null,
@@ -1136,6 +1454,59 @@
     "dnp": {
      "n": 169,
      "players": 147
+    },
+    "shutout": {
+     "all": {
+      "n": 1240,
+      "met": 497,
+      "short": 743,
+      "typ_n": 1240,
+      "typ_met": 652,
+      "avg_miss": 0.1,
+      "avg_abs": 26.2
+     },
+     "by_pos": {
+      "QB": {
+       "n": 192,
+       "met": 107,
+       "short": 85,
+       "typ_n": 192,
+       "typ_met": 116,
+       "avg_miss": 7.0,
+       "avg_abs": 45.4
+      },
+      "RB": {
+       "n": 422,
+       "met": 162,
+       "short": 260,
+       "typ_n": 422,
+       "typ_met": 233,
+       "avg_miss": 0.0,
+       "avg_abs": 22.4
+      },
+      "WR": {
+       "n": 450,
+       "met": 174,
+       "short": 276,
+       "typ_n": 450,
+       "typ_met": 224,
+       "avg_miss": -0.9,
+       "avg_abs": 25.4
+      },
+      "TE": {
+       "n": 176,
+       "met": 54,
+       "short": 122,
+       "typ_n": 176,
+       "typ_met": 79,
+       "avg_miss": -5.1,
+       "avg_abs": 16.0
+      }
+     },
+     "zero": 28,
+     "limited": 17,
+     "sat": 98,
+     "unknown": 4
     }
    },
    "best": null,
@@ -1302,6 +1673,59 @@
     "dnp": {
      "n": 169,
      "players": 157
+    },
+    "shutout": {
+     "all": {
+      "n": 1093,
+      "met": 397,
+      "short": 696,
+      "typ_n": 1093,
+      "typ_met": 516,
+      "avg_miss": -3.2,
+      "avg_abs": 27.5
+     },
+     "by_pos": {
+      "QB": {
+       "n": 177,
+       "met": 83,
+       "short": 94,
+       "typ_n": 177,
+       "typ_met": 93,
+       "avg_miss": 1.3,
+       "avg_abs": 42.8
+      },
+      "RB": {
+       "n": 382,
+       "met": 132,
+       "short": 250,
+       "typ_n": 382,
+       "typ_met": 177,
+       "avg_miss": -3.7,
+       "avg_abs": 23.8
+      },
+      "WR": {
+       "n": 394,
+       "met": 140,
+       "short": 254,
+       "typ_n": 394,
+       "typ_met": 191,
+       "avg_miss": -3.2,
+       "avg_abs": 27.6
+      },
+      "TE": {
+       "n": 140,
+       "met": 42,
+       "short": 98,
+       "typ_n": 140,
+       "typ_met": 55,
+       "avg_miss": -7.4,
+       "avg_abs": 17.7
+      }
+     },
+     "zero": 36,
+     "limited": 19,
+     "sat": 100,
+     "unknown": 2
     }
    },
    "best": {
@@ -1563,6 +1987,59 @@
     "dnp": {
      "n": 185,
      "players": 166
+    },
+    "shutout": {
+     "all": {
+      "n": 1111,
+      "met": 387,
+      "short": 724,
+      "typ_n": 1111,
+      "typ_met": 492,
+      "avg_miss": -4.9,
+      "avg_abs": 26.7
+     },
+     "by_pos": {
+      "QB": {
+       "n": 167,
+       "met": 79,
+       "short": 88,
+       "typ_n": 167,
+       "typ_met": 88,
+       "avg_miss": -2.2,
+       "avg_abs": 47.0
+      },
+      "RB": {
+       "n": 400,
+       "met": 129,
+       "short": 271,
+       "typ_n": 400,
+       "typ_met": 177,
+       "avg_miss": -4.7,
+       "avg_abs": 20.8
+      },
+      "WR": {
+       "n": 411,
+       "met": 143,
+       "short": 268,
+       "typ_n": 411,
+       "typ_met": 179,
+       "avg_miss": -5.0,
+       "avg_abs": 26.8
+      },
+      "TE": {
+       "n": 133,
+       "met": 36,
+       "short": 97,
+       "typ_n": 133,
+       "typ_met": 48,
+       "avg_miss": -8.6,
+       "avg_abs": 18.6
+      }
+     },
+     "zero": 43,
+     "limited": 19,
+     "sat": 95,
+     "unknown": 9
     }
    },
    "best": {
@@ -1824,6 +2301,59 @@
     "dnp": {
      "n": 211,
      "players": 198
+    },
+    "shutout": {
+     "all": {
+      "n": 1228,
+      "met": 463,
+      "short": 765,
+      "typ_n": 1228,
+      "typ_met": 587,
+      "avg_miss": -1.8,
+      "avg_abs": 27.1
+     },
+     "by_pos": {
+      "QB": {
+       "n": 209,
+       "met": 95,
+       "short": 114,
+       "typ_n": 209,
+       "typ_met": 105,
+       "avg_miss": 0.3,
+       "avg_abs": 42.4
+      },
+      "RB": {
+       "n": 392,
+       "met": 149,
+       "short": 243,
+       "typ_n": 392,
+       "typ_met": 204,
+       "avg_miss": -0.8,
+       "avg_abs": 23.9
+      },
+      "WR": {
+       "n": 461,
+       "met": 175,
+       "short": 286,
+       "typ_n": 461,
+       "typ_met": 210,
+       "avg_miss": -2.5,
+       "avg_abs": 26.0
+      },
+      "TE": {
+       "n": 166,
+       "met": 44,
+       "short": 122,
+       "typ_n": 166,
+       "typ_met": 68,
+       "avg_miss": -5.0,
+       "avg_abs": 18.4
+      }
+     },
+     "zero": 47,
+     "limited": 27,
+     "sat": 107,
+     "unknown": 17
     }
    },
    "best": {
@@ -2085,6 +2615,59 @@
     "dnp": {
      "n": 222,
      "players": 202
+    },
+    "shutout": {
+     "all": {
+      "n": 1332,
+      "met": 440,
+      "short": 892,
+      "typ_n": 1332,
+      "typ_met": 541,
+      "avg_miss": -7.4,
+      "avg_abs": 28.4
+     },
+     "by_pos": {
+      "QB": {
+       "n": 217,
+       "met": 80,
+       "short": 137,
+       "typ_n": 217,
+       "typ_met": 87,
+       "avg_miss": -15.5,
+       "avg_abs": 48.8
+      },
+      "RB": {
+       "n": 429,
+       "met": 171,
+       "short": 258,
+       "typ_n": 429,
+       "typ_met": 209,
+       "avg_miss": 0.1,
+       "avg_abs": 25.0
+      },
+      "WR": {
+       "n": 502,
+       "met": 137,
+       "short": 365,
+       "typ_n": 502,
+       "typ_met": 170,
+       "avg_miss": -11.1,
+       "avg_abs": 26.6
+      },
+      "TE": {
+       "n": 184,
+       "met": 52,
+       "short": 132,
+       "typ_n": 184,
+       "typ_met": 75,
+       "avg_miss": -5.3,
+       "avg_abs": 17.1
+      }
+     },
+     "zero": 60,
+     "limited": 24,
+     "sat": 106,
+     "unknown": 12
     }
    },
    "best": {
