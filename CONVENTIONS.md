@@ -774,6 +774,17 @@ boards in detail; this file is the rules.
   without the button still prints the board list.
 - **Favicon:** the RH monogram, as `favicon.ico`, `favicon-192.png` and `apple-touch-icon.png` at the repo root (the same three files in rhyman7/nfl, rhyman7/cfb, rhyman7.github.io and rhyman7/fb-value-board). Every page links all three in `<head>`, right after the viewport meta; a new page gets the same three lines. The boards are one and two folders below the root, so the template links `../favicon.ico` and so on, and `site/make_cfb_template.py` changes those to `../../` for the college board.
 
+## Typical (Nov 18, 2026)
+
+- **Typical** is the model's own 50/50 yardage for a player this week: the line at which the
+  prop distribution gives an even chance of over and under at his projection
+  (`nflmodel/typical.py`; both pipelines attach `p["typical"]` right after the floors). It is
+  labelled "Typical" everywhere (Ryan's choice) and shown above the floor: the Players tab, the
+  player's detail card and each game's matchup tables on both boards. The dashboards' feed carries
+  it as `t`, and the matchup pages and report PDFs in rhyman7/nfl and rhyman7/cfb print it beside
+  the board's projection. **Display only**: nothing reads it back.
+- The Weekly Review's Players page scores it (about half of players should reach it).
+
 ## Weekly Review (`review/`, Nov 17, 2026)
 
 Every finished game looked back on: what went right, what went wrong, what was chance, and what
