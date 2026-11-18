@@ -160,6 +160,7 @@ td.closer { color: var(--good); font-weight: 700; }
 .tiles.two { grid-template-columns: repeat(2, minmax(0,1fr)); }
 .tile .of { font-size: 1rem; font-weight: 600; color: var(--text-dim); font-stretch: 80%; }
 .tile .bar { height: 6px; border-radius: 3px; background: var(--neg-bg); margin: 8px 0 6px; overflow: hidden; } .tile .bar i { display: block; height: 100%; background: var(--good); }
+.tile .typ { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); font-size: .8125rem; color: var(--text); }
 .tile.luck { border-color: rgba(251,191,36,.45); } .tile.luck .tag { color: var(--luck); }
 .filters { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-bottom: 12px; }
 .fg { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -560,7 +561,7 @@ function playerRows() {
     (PV.show === "all" || (PV.show === "counted" && x.st === "played" && x.c) || (PV.show === "left" && x.st === "left") ||
      (PV.show === "out" && (x.st === "dnp" || x.st === "nostat")) || (PV.show === "small" && x.st === "played" && !x.c)) &&
     (!q || x.n.toLowerCase().includes(q) || x.t.toLowerCase().includes(q) || x.o.toLowerCase().includes(q)));
-  const key = { diff: x => x.a - x.pj, pct: x => (x.a - x.pj) / x.pj, proj: x => x.pj, act: x => x.a, name: x => x.n, team: x => x.t, pos: x => x.p, stat: x => x.s }[PV.sort];
+  const key = { diff: x => x.a - x.pj, pct: x => (x.a - x.pj) / x.pj, proj: x => x.pj, typ: x => x.md ?? -1, act: x => x.a, name: x => x.n, team: x => x.t, pos: x => x.p, stat: x => x.s }[PV.sort];
   r.sort((a, b) => { const x = key(a), y = key(b); return (x < y ? -1 : x > y ? 1 : 0) * PV.dir; });
   return r;
 }
@@ -572,9 +573,9 @@ function playerTable() {
   const th = (k, lbl, cls = "") => `<th class="srt ${cls}${PV.sort === k ? " on" : ""}" data-sort="${k}" tabindex="0" role="button">${lbl}${PV.sort === k ? (PV.dir > 0 ? " ▲" : " ▼") : ""}</th>`;
   const body = r.map(x => { const d = x.a - x.pj;
     return `<tr><td><a href="${href(PV.lg, PV.w, x.g)}">${esc(x.n)}</a>${x.note ? `<div class="dim sm2">${esc(x.note)}</div>` : ""}</td><td>${x.p}</td><td>${esc(x.t)} <span class="dim">v ${esc(x.o)}</span></td><td class="dim">${PSTAT[x.s]}</td>
-      <td>${f1(x.pj)}</td><td>${Math.round(x.a)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(d, 0)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(100 * d / x.pj, 0)}%</td><td>${res(x)}</td></tr>`; }).join("");
+      <td>${f1(x.pj)}</td><td class="${x.md != null && x.a >= x.md ? "pos" : "dim"}">${x.md != null ? f1(x.md) : "–"}</td><td>${Math.round(x.a)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(d, 0)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(100 * d / x.pj, 0)}%</td><td>${res(x)}</td></tr>`; }).join("");
   return `<p class="note" style="margin:0 0 8px">${r.length} projection${r.length === 1 ? "" : "s"} shown. Click a column to sort; click a player for his game's review.</p>
-    <div class="scroll"><table class="ptab"><tr>${th("name", "Player", "l")}${th("pos", "Pos", "l")}${th("team", "Team", "l")}${th("stat", "Stat", "l")}${th("proj", "Proj")}${th("act", "Actual")}${th("diff", "Diff")}${th("pct", "%")}<th>Result</th></tr>${body}</table></div>`;
+    <div class="scroll"><table class="ptab"><tr>${th("name", "Player", "l")}${th("pos", "Pos", "l")}${th("team", "Team", "l")}${th("stat", "Stat", "l")}${th("proj", "Proj")}${th("typ", "Typical")}${th("act", "Actual")}${th("diff", "Diff")}${th("pct", "%")}<th>Result</th></tr>${body}</table></div>`;
 }
 function playerFilters() {
   const b = (grp, v, lbl) => `<button type="button" class="fb${PV[grp] === v ? " on" : ""}" data-${grp}="${v}" aria-pressed="${PV[grp] === v}">${lbl}</button>`;
@@ -593,9 +594,9 @@ async function playersPage(lg, w) {
   if (PV.lg !== lg || PV.w !== w) Object.assign(PV, { lg, w, pos: "All", show: "counted", q: "", sort: "diff", dir: 1 });
   PV.data = d;
   const c = d.card, a = c.all;
-  const tile = (tag, t, sm) => `<div class="tile"><div class="tag">${tag}</div><div class="big">${t.met} <span class="of">of ${t.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${t.n ? 100 * t.met / t.n : 0}%"></i></div><div class="sm">${pctOf(t.met, t.n)} met or beat · ${t.short} short${sm ? " · " + sm : ""}</div></div>`;
+  const tile = (tag, t, sm) => `<div class="tile"><div class="tag">${tag}</div><div class="big">${t.met} <span class="of">of ${t.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${t.n ? 100 * t.met / t.n : 0}%"></i></div><div class="sm">${pctOf(t.met, t.n)} met or beat · ${t.short} short${sm ? " · " + sm : ""}</div>${t.typ_n ? `<div class="typ" title="Share who reached the model's 50/50 number for them. About 50% means the model's spread is right."><b>${pctOf(t.typ_met, t.typ_n)}</b> reached their typical game <span class="dim">(target 50%)</span></div>` : ""}</div>`;
   const season = i.weeks.filter(x => x.players).reduce((s, x) => ({ met: s.met + x.players.all.met, n: s.n + x.players.all.n, left: s.left + x.players.left.players }), { met: 0, n: 0, left: 0 });
-  const byWeek = i.weeks.filter(x => x.players).map(x => `<tr><td><a href="${href(lg, "players", x.week)}">Week ${x.week}</a></td><td>${x.players.all.met}</td><td>${x.players.all.short}</td><td>${pctOf(x.players.all.met, x.players.all.n)}</td>${["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(x.players.by_stat[s].met, x.players.by_stat[s].n)}</td>`).join("")}<td>${sgn(x.players.all.avg_miss)}</td><td>${x.players.left.players}</td><td>${x.players.dnp.players}</td></tr>`).join("");
+  const byWeek = i.weeks.filter(x => x.players).map(x => `<tr><td><a href="${href(lg, "players", x.week)}">Week ${x.week}</a></td><td>${x.players.all.met}</td><td>${x.players.all.short}</td><td>${pctOf(x.players.all.met, x.players.all.n)}</td><td>${x.players.all.typ_n ? pctOf(x.players.all.typ_met, x.players.all.typ_n) : "–"}</td>${["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(x.players.by_stat[s].met, x.players.by_stat[s].n)}</td>`).join("")}<td>${sgn(x.players.all.avg_miss)}</td><td>${x.players.left.players}</td><td>${x.players.dnp.players}</td></tr>`).join("");
   return weekStrip(lg, i, w, "players") + `<div class="page"><div class="crumb"><a href="#">Weekly Review</a> / <a href="#${lg}">${LEAGUES[lg].name}</a> / <a href="${href(lg, w)}">Week ${w}</a></div>
   <h2 class="pg">Week ${w} players</h2>
   <p class="lede">Every projection the board froze at kickoff against what the player did: quarterbacks' passing and rushing yards, backs' rushing and receiving, receivers' and tight ends' receiving. Met means the actual was at or above the projection.</p>
@@ -607,9 +608,9 @@ async function playersPage(lg, w) {
    <div class="tile luck"><div class="tag">Left early</div><div class="big">${c.left.players} <span class="of">player${c.left.players === 1 ? "" : "s"}</span></div><div class="sm">${c.left.n} projections: ${c.left.met} met, ${c.left.short} short${c.left.avg_miss != null ? ", average miss " + sgn(c.left.avg_miss) + " yds" : ""}. ${lg === "nfl" ? "A regular who played under half his usual snaps, or a quarterback who left." : "An estimate: touches under 40% of his usual with none after halftime, or a quarterback who left."}</div></div>
    <div class="tile"><div class="tag">${lg === "nfl" ? "Didn't play" : "No stats recorded"}</div><div class="big">${c.dnp.players} <span class="of">player${c.dnp.players === 1 ? "" : "s"}</span></div><div class="sm">${lg === "nfl" ? "Projected, no offensive snaps. A player on the field with no stats counts as a real zero." : "No box-score line. College has no public snap counts, so it can't be told whether he played or was shut out."}</div></div>
   </div>
-  <p class="note" style="margin:-4px 0 18px">Left off this page and not counted: receivers projected 20 yards or fewer, tight ends 15 or fewer, backs' rushing 15 or fewer and backs' receiving under 10. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
+  <p class="note" style="margin:-4px 0 18px">Left off this page and not counted: receivers projected 20 yards or fewer, tight ends 15 or fewer, backs' rushing 15 or fewer and backs' receiving under 10. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. <b>Typical</b> is the model's own 50/50 number for the player (green when he reached it): if the model's spread is right, about half reach it, so a share well off 50% is a real miss. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
   <section class="card"><h3>Projections and results</h3><div id="pfilters">${playerFilters()}</div><div id="ptable">${playerTable()}</div></section>
-  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Pass</th><th>Rush</th><th>Rec</th><th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
+  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Typical %</th><th>Pass</th><th>Rush</th><th>Rec</th><th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
 }
 document.addEventListener("click", ev => {
   const f = ev.target.closest(".fb"), s = ev.target.closest(".srt");

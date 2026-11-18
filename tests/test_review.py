@@ -86,3 +86,10 @@ def test_players_page_minimums():
     assert not on_page("RB", "rush_yds", 15) and on_page("RB", "rush_yds", 15.1)
     assert not on_page("RB", "rec_yds", 9.9) and on_page("RB", "rec_yds", 10)
     assert on_page("QB", "rush_yds", 4)
+
+
+def test_players_typical_share():
+    from nflmodel import reviewplayers as P
+    r = lambda a, md: {"n": "x", "t": "T", "p": "WR", "s": "rec_yds", "pj": 50, "a": a, "st": "played", "c": True, "md": md}
+    c = P.scorecard([r(45, 44), r(40, 44), r(60, 44), {**r(10, None)}])
+    assert (c["all"]["typ_n"], c["all"]["typ_met"]) == (3, 2) and c["all"]["met"] == 1

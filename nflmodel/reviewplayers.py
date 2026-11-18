@@ -93,8 +93,53 @@ def _left_cfb(src, pl, week, p, game_id) -> dict | None:
     return {"why": "touches", "note": f"{int(now)} touch{'' if int(now) == 1 else 'es'}, usually {med:g}; {last} (estimate)"}
 
 
+def typical(league: str, A: dict) -> dict:
+    """(player id, game, stat) -> the model's 50/50 yardage for him: the line at which the board's
+    own prop distribution (props.PropModel, the fitted widths in data/prop_params.json or
+    data/cfb/prop_params.json) gives an even chance of over and under, at the projection frozen at
+    kickoff. A projection is an average and sits above this, because yardage has a long upside
+    tail. Uses the widths as fitted today, not as they stood that week. {} if the model can't load."""
+    try:
+        from nflmodel import parlays as PL, propmarket as PM, props as P
+        players = [dict(p) for ps in (A.get("players") or {}).values() for p in ps]
+        payload = {"players": {"players": players}}
+        if league == "cfb":
+            from nflmodel import cfbpropboard
+            payload = cfbpropboard.with_target_share(payload)
+        df = PM.board_players(payload)
+        model = P.PropModel.load(PL.prop_params_path(league))
+        if model is None or df.empty:
+            return {}
+        out = {}
+        for stat in ("pass_yds", "rush_yds", "rec_yds"):
+            for grp in P.SPECS[stat].groups:
+                if (stat, grp) not in model.yards:
+                    continue
+                d = df[df["group"] == grp].reset_index(drop=True)
+                for c in P.SPECS[stat].proj + P.SPECS[P.SPECS[stat].vol].proj:
+                    if c not in d:
+                        d[c] = 0.0
+                    d[c] = pd.to_numeric(d[c], errors="coerce").fillna(0.0)
+                d = d[d[P.SPECS[stat].proj[0]] >= 1].reset_index(drop=True)
+                if d.empty:
+                    continue
+                mu = P.mean(d, stat)
+                L = np.floor(mu[:, None] * np.linspace(0.05, 1.7, 67)[None, :]) + 0.5
+                over, push, under = model.probs(d, stat, grp, L)
+                dec = over / np.maximum(over + under, 1e-9)
+                for i in range(len(d)):
+                    # dec falls as the line rises: the line where it crosses a half
+                    md = float(np.interp(0.5, dec[i][::-1], L[i][::-1]))
+                    out[(str(d.at[i, "player_id"]), d.at[i, "game_id"], stat)] = round(md, 1)
+        return out
+    except Exception as exc:  # noqa: BLE001
+        print(f"  typical-game numbers skipped ({type(exc).__name__}: {exc})")
+        return {}
+
+
 def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
     lg = src.league
+    med = typical(lg, A)
     gsis_snaps = {}
     if lg == "nfl":
         sn = src.snaps[src.snaps["season"] == src.season].copy()
@@ -154,14 +199,16 @@ def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
                 av = float((x or {}).get(st, 0.0) or 0.0)   # x == {} : played, nothing recorded
                 rows.append({"n": pl["name"], "p": pl["pos"], "t": pl["team"], "o": g["home"] if pl["team"] == g["away"] else g["away"],
                              "g": g["slug"], "s": st, "pj": round(float(pj), 1), "a": av, "st": status,
-                             "c": bool(pj >= COUNT_MIN), **({"note": note} if note else {})})
+                             "c": bool(pj >= COUNT_MIN), **({"note": note} if note else {}),
+                             **({"md": med[(str(pl["id"]), gid, st)]} if (str(pl["id"]), gid, st) in med else {})})
     return {"league": lg, "season": facts["season"], "week": week, "count_min": COUNT_MIN, "card": scorecard(rows), "rows": rows}
 
 
 def _tally(rs) -> dict:
     n = len(rs)
     met = sum(r["a"] >= r["pj"] for r in rs)
-    return {"n": n, "met": met, "short": n - met,
+    tm = [r for r in rs if r.get("md") is not None]
+    return {"n": n, "met": met, "short": n - met, "typ_n": len(tm), "typ_met": sum(r["a"] >= r["md"] for r in tm),
             "avg_miss": round(sum(r["a"] - r["pj"] for r in rs) / n, 1) if n else None,
             "avg_abs": round(sum(abs(r["a"] - r["pj"]) for r in rs) / n, 1) if n else None}
 
