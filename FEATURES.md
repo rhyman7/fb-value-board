@@ -2643,3 +2643,32 @@ Raw model average miss, margin / total, tuning 2015-18 (1,068 games) then holdou
 - Reading: with the Nov 5 and Nov 11 results, three framings of PFF unit strength (value missing,
   a two-linemen flag, matchup gaps) add nothing to the game model at bet time. What remains open
   is game-day absences, which `data/ol_watch/` records from Nov 13, 2026.
+
+## College: a nudge from each team's recent misses against the model (Nov 18, 2026): no
+
+Lead: the Weekly Review's PIT @ CIN read asked whether the model runs behind on some teams. A
+check of every team (Project doc `claude/team-rating-bias-check-2026-11-18.md`) found nothing in
+the NFL and, in college, team averages wider than luck with about a tenth of a team's last-four
+average miss showing up in its next game (0.10 ± 0.03 on 2017-19, fitted on those same games).
+Ryan said yes to a pre-set test. `experiments/cfb_recent_miss_test.py`, rule in its docstring;
+plan `claude/plan-cfb-recent-miss-test-2026-11-18.md`.
+
+The change: model margin + b × (home team's recent average miss − away's), model total + b ×
+(home's recent average total miss + away's), b for each season fitted on the walk-forward
+seasons before it. Raw model average miss, margin / total, tuning 2017-19 (2,203 games):
+
+| Version | Tuning | Change (± paired SE) |
+|---|---|---|
+| Current model | 12.345 / 13.468 | |
+| A last four games (three minimum) | 12.350 / 13.479 | +0.005 ± 0.020 / +0.011 ± 0.013 |
+| B season to date, shrunk | 12.336 / 13.482 | −0.009 ± 0.025 / +0.014 ± 0.015 |
+| C last four, each miss capped at ±21 | 12.340 / 13.481 | −0.005 ± 0.018 / +0.013 ± 0.017 |
+
+- No version is better on both tuning measures (totals are worse in all three), so nothing is
+  carried to the holdout and nothing is kept. The holdout seasons were not read.
+- Reading: the carry-over is real but small, and once the coefficient has to come from earlier
+  seasons instead of the same games, the gain on margins is inside the noise and totals lose.
+  The ratings already move with each game; what is left over is too little to use.
+- The closing line already holds it in both leagues: a team's recent misses against the model do
+  not predict its next cover (NFL −0.01 ± 0.04, college 0.00 ± 0.03).
+- No props check: nothing passed, so no prop number can move.
