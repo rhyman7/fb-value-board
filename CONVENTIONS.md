@@ -802,6 +802,17 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
   didn't play) and `former_team`. NFL sources: nflverse schedule, snap counts, injuries, weekly
   stats and rosters; college: `data/cfb/cache` (games, player_games, player_info). Facts files are
   written compact (no indentation) to keep them small.
+- **Players page** (`nflmodel/reviewplayers.py`, Nov 18, 2026, Ryan's ask): `#nfl-players`,
+  `#nfl-players-10`, linked right of Season patterns. `review/data/<league>/<season>_w<week>.players.json`
+  (written by the same `nflmodel.review` run) has one row per player and stat with the frozen
+  projection, the actual and a status. The scorecard counts projections of 10+ yards for players
+  who played their usual game: met = actual at or above the projection. **Left early is never
+  counted against the model** and has its own labelled scorecard: a quarterback who threw under
+  60% of his team's passes; NFL, a regular (25%+ of snaps) under half his usual snap share (the
+  floors' rule); college, touches under 40% of his usual with none after halftime (an estimate,
+  labelled). NFL players with no offensive snaps are "Didn't play"; on the field with no stats
+  is a real zero. College players with no box-score line are "No stats recorded" (no public
+  snap counts, so unknown) and not counted.
 - **Chance ledger values** are fitted on 2023-25 by `experiments/review_chance_fit.py` into
   `data/review_chance.json` (points each item moved the margin past the closing line: fumble
   bounces, non-offensive TDs, missed field goals from 45 yards or closer). Refit with the script,

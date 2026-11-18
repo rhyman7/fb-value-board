@@ -355,12 +355,14 @@ def write_index(league: str) -> dict:
     d = OUT / league
     weeks = []
     for f in sorted(d.glob("*_w*.json")):
-        if f.name.endswith(".reads.json"):
+        if f.name.endswith((".reads.json", ".players.json")):
             continue
         x = json.loads(f.read_text())
         reads = f.with_name(f.stem + ".reads.json")
         r = json.loads(reads.read_text()) if reads.exists() else {}
         rg = r.get("games", {})
+        pf = f.with_name(f.stem + ".players.json")
+        card = json.loads(pf.read_text())["card"] if pf.exists() else None
         verdicts = {k: {v: 0 for v in ("W", "L", "chance", "push")} for k in ("spread", "total")}
         for v in rg.values():
             for k, res in (v.get("verdict") or {}).items():
@@ -369,7 +371,7 @@ def write_index(league: str) -> dict:
         real = sorted((g for g in x["games"] if (rg.get(g["id"], {}).get("verdict") or {}).get("spread") != "chance"),
                       key=lambda g: -abs(g["err"]["model_margin"]))[:3]
         weeks.append({"file": f.name, "season": x["season"], "week": x["week"], "summary": x["summary"],
-                      "reads": r.get("by", "none"), "read_games": len(rg), "verdicts": verdicts,
+                      "reads": r.get("by", "none"), "read_games": len(rg), "verdicts": verdicts, "players": card,
                       "real_misses": [{"slug": g["slug"], "away": g["away"], "home": g["home"],
                                        "miss": g["err"]["model_margin"], "mkt": g["err"]["market_margin"]} for g in real]})
     idx = {"league": league, "weeks": weeks}
@@ -407,6 +409,9 @@ def run(league: str, season: int, weeks: list[int], pbp_path: Path | None = None
             print(f"  {league} {season} week {w}: no graded games")
             continue
         f = _nan_free(reviewctx.add(f, league, season, w, p[p["week"] == w], src))
+        from nflmodel import reviewplayers
+        pl = _nan_free(reviewplayers.build(src, src.archives[w], f, w, p[p["week"] == w]))
+        (OUT / league / f"{season}_w{w:02d}.players.json").write_text(json.dumps(pl, separators=(",", ":"), allow_nan=False))
         path = OUT / league / f"{season}_w{w:02d}.json"
         path.write_text(json.dumps(f, separators=(",", ":"), allow_nan=False, default=lambda o: o.item() if hasattr(o, "item") else str(o)))
         miss = sum(1 for g in f["games"] if g["box"] is None)

@@ -66,3 +66,14 @@ def test_drive_kinds_and_short_reason():
     s = D.why_short(m)
     assert "Usage fell: 7 carries against 13 projected" in s
     assert "trailed by 9+" in s and "season low" in s
+
+
+def test_players_scorecard_leaves_out_early_exits():
+    from nflmodel import reviewplayers as P
+    row = lambda st, pj, a, c=True, s="rec_yds", p="WR": {"n": f"{st}{pj}", "t": "AWY", "p": p, "s": s, "pj": pj, "a": a, "st": st, "c": c}
+    rows = [row("played", 50, 60), row("played", 50, 50), row("played", 50, 10), row("played", 6, 0, c=False),
+            row("left", 80, 5), row("dnp", 40, 0), row("nostat", 30, 0)]
+    c = P.scorecard(rows)
+    assert (c["all"]["n"], c["all"]["met"], c["all"]["short"]) == (3, 2, 1)      # met = at or above
+    assert c["left"]["players"] == 1 and c["left"]["short"] == 1
+    assert c["dnp"]["players"] == 2

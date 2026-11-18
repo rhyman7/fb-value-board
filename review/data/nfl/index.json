@@ -50,6 +50,80 @@
      "push": 0
     }
    },
+   "players": {
+    "all": {
+     "n": 19,
+     "met": 13,
+     "short": 6,
+     "avg_miss": 16.2,
+     "avg_abs": 23.1
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 2,
+      "met": 2,
+      "short": 0,
+      "avg_miss": 75.8,
+      "avg_abs": 75.8
+     },
+     "rush_yds": {
+      "n": 6,
+      "met": 3,
+      "short": 3,
+      "avg_miss": -5.4,
+      "avg_abs": 10.5
+     },
+     "rec_yds": {
+      "n": 11,
+      "met": 8,
+      "short": 3,
+      "avg_miss": 17.2,
+      "avg_abs": 20.4
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 4,
+      "met": 3,
+      "short": 1,
+      "avg_miss": 32.1,
+      "avg_abs": 46.6
+     },
+     "RB": {
+      "n": 7,
+      "met": 4,
+      "short": 3,
+      "avg_miss": 3.8,
+      "avg_abs": 9.7
+     },
+     "WR": {
+      "n": 6,
+      "met": 4,
+      "short": 2,
+      "avg_miss": 15.3,
+      "avg_abs": 20.5
+     },
+     "TE": {
+      "n": 2,
+      "met": 2,
+      "short": 0,
+      "avg_miss": 30.4,
+      "avg_abs": 30.4
+     }
+    },
+    "left": {
+     "n": 1,
+     "met": 0,
+     "short": 1,
+     "avg_miss": -17.5,
+     "avg_abs": 17.5,
+     "players": 1
+    },
+    "dnp": {
+     "n": 0,
+     "players": 0
+    }
+   },
    "real_misses": [
     {
      "slug": "ten-ind",
@@ -121,6 +195,80 @@
      "L": 7,
      "chance": 0,
      "push": 0
+    }
+   },
+   "players": {
+    "all": {
+     "n": 275,
+     "met": 120,
+     "short": 155,
+     "avg_miss": 3.3,
+     "avg_abs": 24.7
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 28,
+      "met": 16,
+      "short": 12,
+      "avg_miss": 3.5,
+      "avg_abs": 53.1
+     },
+     "rush_yds": {
+      "n": 71,
+      "met": 35,
+      "short": 36,
+      "avg_miss": 8.6,
+      "avg_abs": 24.3
+     },
+     "rec_yds": {
+      "n": 176,
+      "met": 69,
+      "short": 107,
+      "avg_miss": 1.1,
+      "avg_abs": 20.3
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 46,
+      "met": 24,
+      "short": 22,
+      "avg_miss": 2.6,
+      "avg_abs": 36.2
+     },
+     "RB": {
+      "n": 87,
+      "met": 44,
+      "short": 43,
+      "avg_miss": 9.0,
+      "avg_abs": 23.8
+     },
+     "WR": {
+      "n": 97,
+      "met": 30,
+      "short": 67,
+      "avg_miss": -1.2,
+      "avg_abs": 22.5
+     },
+     "TE": {
+      "n": 45,
+      "met": 22,
+      "short": 23,
+      "avg_miss": 2.7,
+      "avg_abs": 19.5
+     }
+    },
+    "left": {
+     "n": 14,
+     "met": 1,
+     "short": 13,
+     "avg_miss": -15.8,
+     "avg_abs": 16.5,
+     "players": 11
+    },
+    "dnp": {
+     "n": 17,
+     "players": 15
     }
    },
    "real_misses": [
@@ -196,6 +344,80 @@
      "push": 0
     }
    },
+   "players": {
+    "all": {
+     "n": 264,
+     "met": 113,
+     "short": 151,
+     "avg_miss": 3.7,
+     "avg_abs": 26.2
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 26,
+      "met": 13,
+      "short": 13,
+      "avg_miss": 1.5,
+      "avg_abs": 62.5
+     },
+     "rush_yds": {
+      "n": 66,
+      "met": 29,
+      "short": 37,
+      "avg_miss": 6.1,
+      "avg_abs": 23.9
+     },
+     "rec_yds": {
+      "n": 172,
+      "met": 71,
+      "short": 101,
+      "avg_miss": 3.0,
+      "avg_abs": 21.6
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 42,
+      "met": 17,
+      "short": 25,
+      "avg_miss": -1.5,
+      "avg_abs": 43.6
+     },
+     "RB": {
+      "n": 89,
+      "met": 41,
+      "short": 48,
+      "avg_miss": 7.2,
+      "avg_abs": 23.0
+     },
+     "WR": {
+      "n": 91,
+      "met": 34,
+      "short": 57,
+      "avg_miss": 0.3,
+      "avg_abs": 24.0
+     },
+     "TE": {
+      "n": 42,
+      "met": 21,
+      "short": 21,
+      "avg_miss": 8.6,
+      "avg_abs": 20.5
+     }
+    },
+    "left": {
+     "n": 19,
+     "met": 0,
+     "short": 19,
+     "avg_miss": -31.8,
+     "avg_abs": 31.8,
+     "players": 13
+    },
+    "dnp": {
+     "n": 16,
+     "players": 15
+    }
+   },
    "real_misses": [
     {
      "slug": "ind-jax",
@@ -269,6 +491,80 @@
      "push": 0
     }
    },
+   "players": {
+    "all": {
+     "n": 271,
+     "met": 124,
+     "short": 147,
+     "avg_miss": 2.1,
+     "avg_abs": 22.8
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 30,
+      "met": 15,
+      "short": 15,
+      "avg_miss": 1.9,
+      "avg_abs": 55.8
+     },
+     "rush_yds": {
+      "n": 69,
+      "met": 31,
+      "short": 38,
+      "avg_miss": -0.2,
+      "avg_abs": 17.0
+     },
+     "rec_yds": {
+      "n": 172,
+      "met": 78,
+      "short": 94,
+      "avg_miss": 3.0,
+      "avg_abs": 19.3
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 49,
+      "met": 21,
+      "short": 28,
+      "avg_miss": -0.3,
+      "avg_abs": 40.2
+     },
+     "RB": {
+      "n": 84,
+      "met": 40,
+      "short": 44,
+      "avg_miss": 0.7,
+      "avg_abs": 16.6
+     },
+     "WR": {
+      "n": 89,
+      "met": 43,
+      "short": 46,
+      "avg_miss": 6.1,
+      "avg_abs": 23.9
+     },
+     "TE": {
+      "n": 49,
+      "met": 20,
+      "short": 29,
+      "avg_miss": -0.5,
+      "avg_abs": 13.7
+     }
+    },
+    "left": {
+     "n": 10,
+     "met": 1,
+     "short": 9,
+     "avg_miss": -20.5,
+     "avg_abs": 20.5,
+     "players": 8
+    },
+    "dnp": {
+     "n": 14,
+     "players": 14
+    }
+   },
    "real_misses": [
     {
      "slug": "gb-ne",
@@ -340,6 +636,80 @@
      "L": 5,
      "chance": 5,
      "push": 0
+    }
+   },
+   "players": {
+    "all": {
+     "n": 268,
+     "met": 117,
+     "short": 151,
+     "avg_miss": 4.3,
+     "avg_abs": 26.0
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 26,
+      "met": 15,
+      "short": 11,
+      "avg_miss": 20.6,
+      "avg_abs": 66.0
+     },
+     "rush_yds": {
+      "n": 78,
+      "met": 32,
+      "short": 46,
+      "avg_miss": -0.5,
+      "avg_abs": 18.1
+     },
+     "rec_yds": {
+      "n": 164,
+      "met": 70,
+      "short": 94,
+      "avg_miss": 4.0,
+      "avg_abs": 23.4
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 47,
+      "met": 26,
+      "short": 21,
+      "avg_miss": 12.8,
+      "avg_abs": 41.7
+     },
+     "RB": {
+      "n": 97,
+      "met": 41,
+      "short": 56,
+      "avg_miss": 3.0,
+      "avg_abs": 20.6
+     },
+     "WR": {
+      "n": 84,
+      "met": 40,
+      "short": 44,
+      "avg_miss": 5.0,
+      "avg_abs": 26.7
+     },
+     "TE": {
+      "n": 40,
+      "met": 10,
+      "short": 30,
+      "avg_miss": -4.2,
+      "avg_abs": 19.1
+     }
+    },
+    "left": {
+     "n": 17,
+     "met": 1,
+     "short": 16,
+     "avg_miss": -34.2,
+     "avg_abs": 35.5,
+     "players": 15
+    },
+    "dnp": {
+     "n": 2,
+     "players": 2
     }
    },
    "real_misses": [
