@@ -3114,3 +3114,58 @@ The module reproduces the test's 2026 game-day candidate to 0.002 yards. On the 
 (147 WR/TE, before defense-vs-position) it moves a projection 1.5 yards on average, 3.9 at the
 90th percentile, from −3.9 to +6.9. Typical, prop chances and Parlays legs follow the projection.
 January recheck: Project doc `claude/january-recheck-additions.md`.
+
+## NFL floor rungs: where the model loses to the books (Nov 18, 2026): a diagnosis, no leads, nothing changed
+
+Plan written before the run: Project doc `claude/plan-floor-rung-diagnosis-2026-11-18.md`. Script
+`experiments/floor_rung_diagnosis.py`, output `experiments/out/floor_rung_diagnosis.json`. Rungs the
+books read at 65-95% (`parlays.RUNG_CAL`), over only. 2025: 14,298 rungs in 272 games, pricing
+snapshot, bet-time projections. Check: the 2026 live log, 1,964 graded rungs in 43 games; the log
+starts in week 8, so the check is weeks 8-10, not the 1-10 the plan named.
+
+**The gap is about two-thirds calibration, one-third sorting.** 2025 Brier 0.1678 model, 0.1619 books
+(+0.0059 ± 0.0013). Calibration miss 0.0040 model against 0.0000 books; sorting 0.0045 against 0.0063.
+The model reads these rungs too low: it says 75.1%, 78.6% cleared, the books said 78.7% (2026: 72.8%,
+79.3%, 78.6%). Rushing is the worst (70.3% said, 77.8% cleared), receiving next (75.3%, 78.9%);
+passing is slightly high (80.4%, 78.8%). Re-reading the model's rung chance (isotonic, fitted on
+2025 weeks 1-9) removes about half the gap out of sample: +0.0078 to +0.0045 ± 0.0013 on 2025 weeks
+10-18, +0.0084 to +0.0034 ± 0.0022 on 2026. The rest is the books sorting rungs better.
+
+**When they disagree, the books are right.**
+
+| | Rungs (2025) | Model said | Books said | Cleared | 2026: model / books / cleared |
+|---|---|---|---|---|---|
+| Model 5+ points above | 1,539 | 80.7% | 72.9% | 74.7% | 82.8 / 74.2 / 73.5 (102) |
+| Within 5 | 7,642 | 79.0% | 79.2% | 79.7% | 77.8 / 78.6 / 80.3 (920) |
+| Model 5+ below | 5,117 | 67.6% | 79.6% | 78.0% | 66.8 / 79.0 / 79.0 (942) |
+
+Betting the rungs the model calls 5+ points safer, at the better DK/FD price: −5.9% ± 2.4% a leg
+on 2025 (1,308 bets; price closing line value +1.1% ± 0.2%), −8.3% ± 7.7% on 2026 (102). Every
+floor rung: −6.8% ± 0.9% and −6.1% ± 2.4%. Three average legs with a 25% boost: about −4% (model's
+picks) and −8% (any), legs treated as independent.
+
+**The ten cuts: no cell met the lead bar.** Model minus books, 2025 (2026 in brackets):
+passing +0.0003 (−0.0055 ± 0.011), receiving +0.0067 (+0.0121), rushing +0.0091 (+0.0151); QB −0.0003,
+RB +0.0105, WR +0.0069, TE +0.0067; projection low / middle / high third +0.0131 / +0.0032 / +0.0014;
+rung under 50% of the main line +0.0087, 50-70% +0.0055, 70-90% +0.0008; books' reading 65-75% +0.0051,
+75-85% +0.0056, 85-95% +0.0074; listed on the injury report +0.0037, not listed +0.0060; role changed
++0.0165, steady +0.0037; favourite by 7+ +0.0047, within 7 +0.0058, underdog by 7+ +0.0083; total above
+44.5 +0.0051, at or below +0.0072; weeks 1-6 +0.0045, 7-12 +0.0068, 13-18 +0.0064. Quarterbacks were
+the one cell to meet the 2025 bar (model level with the books); on 2026 their rungs cleared 73.9%
+against the books' 77.4%, so not a lead. The model is level with the books on passing rungs and on
+rungs within 30% of the main line, and behind everywhere else.
+
+**Seen along the way, about the books' reading and not the model (outside the plan's lead rule; the
+returns below were added after seeing the cuts):**
+
+| Cell | 2025 cleared v books said | Return a leg | 2026 weeks 8-10 | Return a leg |
+|---|---|---|---|---|
+| Team projected to lose by 7+ | 73.3% v 78.4% (1,499) | −13.1% ± 2.8% | 69.0% v 77.9% (216) | −18.2% ± 7.4% |
+| Team projected to win by 7+ | 80.5% v 78.8% (2,195) | −4.6% ± 2.3% | 81.6% v 78.4% (299) | −3.4% ± 5.0% |
+| Role changed (`rolechange` 0.10+) | 84.5% v 79.3% (2,470) | −0.1% ± 1.5% | 81.8% v 79.5% (324) | −4.0% ± 4.0% |
+| Role steady | 77.3% v 78.5% (11,828) | −8.0% ± 1.1% | 78.8% v 78.4% (1,640) | −6.5% ± 2.7% |
+
+Margin and total here are the model's game projection, not the market's. On 2026 the role-change
+gap held for receiving rungs (88.9% v 79.2%, 126) and not for rushing (77.3% v 79.7%, 198). None of
+these is profitable; the underdog cell is a rung to avoid, the role-change cell the nearest to
+break-even. Each would need its own pre-set test on week 11 on before it means anything.
