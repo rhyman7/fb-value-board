@@ -88,9 +88,9 @@ def why_short(m: dict) -> str:
         ratio = v["act"] / v["proj"]
         word = VOL[v["kind"]]
         if ratio < 0.7:
-            bits.append(f"usage fell: {v['act']} {word} against {_f(v['proj'])} projected")
+            bits.append(f"usage fell: {_f(v['act'])} {word} against {_f(v['proj'])} projected")
         elif ratio > 1.1:
-            bits.append(f"usage was there ({v['act']} {word}, {_f(v['proj'])} projected) but the yards weren't")
+            bits.append(f"usage was there ({_f(v['act'])} {word}, {_f(v['proj'])} projected) but the yards weren't")
         per = m.get("per") or {}
         if per.get("act") is not None and ratio >= 0.7 and per["act"] < 0.7 * per["proj"]:
             bits.append(f"{_f(per['act'])} yards per {UNIT[v['kind']]} against {_f(per['proj'])} expected")

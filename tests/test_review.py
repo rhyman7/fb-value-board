@@ -64,5 +64,5 @@ def test_drive_kinds_and_short_reason():
          "volume": {"kind": "carries", "proj": 13.0, "act": 7.0}, "script": {"trailing9": 0.95, "leading9": 0.0},
          "prev": {"week": 9, "val": 143}, "season_avg": 88.0, "season_low": 15.0}
     s = D.why_short(m)
-    assert "usage fell: 7.0 carries" in s or "usage fell: 7 carries" in s
+    assert "Usage fell: 7 carries against 13 projected" in s
     assert "trailed by 9+" in s and "season low" in s
