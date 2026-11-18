@@ -129,6 +129,8 @@ boards in detail; this file is the rules.
   be played freezes its fit here before those weeks are scored (first: the NFL floor-rung
   re-reading, `rung_recalibration_map.json`, Nov 18, 2026, fitted on data through 2026 week 10
   and scored on weeks 11-13; Project doc `claude/plan-rung-recalibration-test-2026-11-18.md`).
+  Second: the main-line curve for floor rungs, `market_ladder_shape.json` (Nov 18, 2026, fitted on
+  2025 only, scored on 2026 weeks 8-13; `claude/plan-market-ladder-test-2026-11-18.md`).
   Never edit or refit a frozen file; the script refuses to overwrite one. Only coefficients go
   here, never PFF rows. The boards do not read these files.
 - The **Wind history** Action (`wind-history.yml`, by hand only) runs
