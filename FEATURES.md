@@ -2826,3 +2826,33 @@ Versions A T=0, B T=0.25, C T=0.50; A was chosen on tuning for all three stats.
 - Fitted b in the holdout: passing 0.43-0.57, rushing 0.24-0.28, receiving 0.28-0.36. Share of
   player-games touched by version A: 29% passing, 40% rushing, 40% receiving.
 - Nothing in the model, boards or Best Overall list changed.
+
+## NFL: an in-season drift correction for the player projections (Nov 18, 2026): not applied
+
+Lead: the Weekly Review's Players page showed NFL players reaching Typical 55% of the time in
+2026 (reminder item 1, "projections running low"). A look across seasons first: 2019-25 the
+projections are centred (receivers, tight ends and backs within about 1 yard, 48-52% reaching
+Typical; quarterbacks who started 3 to 6 yards high), and 2026 is the odd one (wide receivers
++2.9 yards, 54%). So the test was whether a season's running miss should nudge the rest of that
+season. Rule written before the run: Project doc `claude/plan-nfl-season-drift-test-2026-11-18.md`.
+Script `experiments/nfl_season_drift_test.py`, output `experiments/out/nfl_season_drift_test.json`.
+
+`new = proj x (1 + k x r)`, r = the position group's running (actual - projected) / projected that
+season from earlier weeks. A: k fitted on earlier seasons. B: k = 0.5. C: as A, r from the last 4
+weeks only.
+
+| Stat | Chosen on tuning | Tuning RMSE gd / bt | Holdout RMSE gd / bt | Brier closing / snapshot |
+|---|---|---|---|---|
+| Passing | C | -0.087 (0.027) / -0.048 (0.013) | -0.271 (0.096) / -0.238 (0.092) | **+0.0009 (0.0008) / +0.0013 (0.0008) worse** |
+| Rushing | none | A, B, C each worse on one tuning table | not read | not read |
+| Receiving | C | -0.015 (0.007) / -0.015 (0.010) | **+0.007 (0.004) / +0.007 (0.005) worse** | **+0.0002 (0.0001) / +0.0004 (0.0001) worse** |
+
+- Passing is a genuine trade-off: yardage error 0.3% better on the holdout (about 2.7 standard
+  errors), the calls at the DraftKings/FanDuel lines worse by 1.2 to 1.6. Recommendation: do not
+  apply; the gain is small and the props check goes the wrong way.
+- Receiving: the tuning gain did not hold up; worse on the holdout and at the lines. Rushing:
+  nothing to carry forward.
+- What it would be doing now (r through week 10, 2026): WR +6.3%, RB receiving +1.8%, TE -1.3%,
+  QB +1.0%, RB rushing +0.2%. With receiving k near 0.2 that is about +1% on wide receivers.
+- Reading: this season's wide-receiver gap is real so far (about 2.5 standard errors) but past
+  seasons say a gap like it does not carry forward reliably. Nothing changed.
