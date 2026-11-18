@@ -2907,3 +2907,30 @@ chain rebuilt. Rows: on the field, a shut-out scores 0. B was chosen on tuning f
 - A's curve is too flat: it predicts a 9% shut-out chance for tight ends projected for 4+ catches
   (actual 1%) and 25% at 1-1.5 (actual 31%).
 - Not done from the plan's reported list: the share reaching Typical before and after.
+
+## College: a shut-out chance in the receiving prices and Typical (Nov 18, 2026): no
+
+Follow-up to the entry above (Ryan's pick). The projection stays as it is; the odds become
+`over = (1 - p0) x the model's over`. p0 by position from projected receptions (P1), or with PFF
+route share, snap share and his own earlier shut-out rate added (P2). Rule written before the run:
+Project doc `claude/plan-cfb-shutout-pricing-test-2026-11-18.md`. Script
+`experiments/cfb_shutout_pricing_test.py`, output `experiments/out/cfb_shutout_pricing_test.json`.
+
+Tuning 2018-19, Brier at each player's own Typical line, candidate minus current (se):
+
+| | P1 game-day | P1 bet-time | P2 game-day | P2 bet-time |
+|---|---|---|---|---|
+| TE | +0.0027 (0.0018) | **+0.0176 (0.0020)** | +0.0020 (0.0018) | **+0.0143 (0.0020)** |
+| WR | -0.0002 (0.0006) | **+0.0054 (0.0006)** | -0.0004 (0.0006) | **+0.0042 (0.0007)** |
+
+- Neither version is better on both tuning measures for either position, so nothing went to the
+  holdout or the lines. Not kept.
+- Why: the prices already hold it. The college widths (`experiments/cfb_propdist_test.py`) are
+  fitted on every expected player in a played game, with a zero for anyone who recorded nothing,
+  so the chance of a blank is already inside the distribution. With shut-outs counted, bet-time
+  players reached Typical 50.5% (TE) and 49.1% (WR) in 2018-19. Adding p0 counts it twice.
+- So the bias found in the entry above is in the projection (the average), not in the odds or
+  Typical. It also explains why rebuilding the projections with zeros (version B there) did not
+  help at the lines: the widths were fitted around the old, higher projections.
+- Open question: 2026 on the Weekly Review shows tight ends at 44% with shut-outs counted, well
+  under these tuning seasons. Not explained by this test.
