@@ -2644,6 +2644,67 @@ Raw model average miss, margin / total, tuning 2015-18 (1,068 games) then holdou
   a two-linemen flag, matchup gaps) add nothing to the game model at bet time. What remains open
   is game-day absences, which `data/ol_watch/` records from Nov 13, 2026.
 
+## NFL: pulling back projections that sit well above a player's season average (Nov 18, 2026): a trade-off, not applied
+
+Lead: the Weekly Review's Best Matchups page (2026 weeks 7-10) showed listed NFL players reaching
+their typical game less often than similar unlisted players. Rule written before the run: Project doc
+`claude/plan-nfl-lift-shrink-test-2026-11-18.md`. Script `experiments/nfl_lift_shrink_test.py`,
+output `experiments/out/nfl_lift_shrink_test.json`.
+
+The change tested, after the final projection: `new = proj - b * max(0, proj - (1+T) * season
+average)`, players with 3+ earlier games this season, b per stat fitted on earlier seasons only.
+Versions A T=0, B T=0.25, C T=0.50; A was chosen on tuning for all three stats.
+
+| Stat | Tuning RMSE game-day | Tuning RMSE bet-time | Holdout RMSE game-day | Holdout RMSE bet-time | Brier, closing lines | Brier, pricing snapshot |
+|---|---|---|---|---|---|---|
+| Passing | -0.141 (se 0.086) | -0.228 (0.100) | -0.125 (0.105) | -0.142 (0.117) | **+0.0034 (0.0012) worse** | **+0.0031 (0.0012) worse** |
+| Rushing | -0.023 (0.028) | -0.038 (0.035) | -0.063 (0.027) | -0.093 (0.031) | **+0.0006 (0.0003) worse** | +0.0003 (0.0004) worse |
+| Receiving | -0.068 (0.014) | -0.048 (0.012) | -0.009 (0.011) | -0.021 (0.010) | **+0.0011 (0.0002) worse** | **+0.0009 (0.0003) worse** |
+
+(Negative = candidate better. Tuning 2014-18, holdout 2019-25, Brier at 2023-25 DK/FD main lines.)
+
+- Mixed on every stat: yardage error a hair better (0.1% to 0.3%), the calls at the books' lines
+  worse on all six prop measures, most by 2.5 to 5 standard errors. Under the rule that is a
+  trade-off for Ryan, not a keep. Recommendation: do not apply; the board is used for the calls at
+  the lines, and those get worse.
+- The lead is real on average but small: players projected 25%+ above their season average finished
+  under the projection by 2.4 yards rushing (se 0.6, n 2,146) and 1.6 receiving (se 0.3, n 5,801) in
+  the holdout, and 18 passing (se 9, n 75). The fitted pull-back over-corrects (after it they run
+  1.1 to 1.3 yards over), and b drifts down across seasons.
+- Fitted b in the holdout: passing 0.43-0.57, rushing 0.24-0.28, receiving 0.28-0.36. Share of
+  player-games touched by version A: 29% passing, 40% rushing, 40% receiving.
+- Nothing in the model, boards or Best Overall list changed.
+
+## NFL: an in-season drift correction for the player projections (Nov 18, 2026): not applied
+
+Lead: the Weekly Review's Players page showed NFL players reaching Typical 55% of the time in
+2026 (reminder item 1, "projections running low"). A look across seasons first: 2019-25 the
+projections are centred (receivers, tight ends and backs within about 1 yard, 48-52% reaching
+Typical; quarterbacks who started 3 to 6 yards high), and 2026 is the odd one (wide receivers
++2.9 yards, 54%). So the test was whether a season's running miss should nudge the rest of that
+season. Rule written before the run: Project doc `claude/plan-nfl-season-drift-test-2026-11-18.md`.
+Script `experiments/nfl_season_drift_test.py`, output `experiments/out/nfl_season_drift_test.json`.
+
+`new = proj x (1 + k x r)`, r = the position group's running (actual - projected) / projected that
+season from earlier weeks. A: k fitted on earlier seasons. B: k = 0.5. C: as A, r from the last 4
+weeks only.
+
+| Stat | Chosen on tuning | Tuning RMSE gd / bt | Holdout RMSE gd / bt | Brier closing / snapshot |
+|---|---|---|---|---|
+| Passing | C | -0.087 (0.027) / -0.048 (0.013) | -0.271 (0.096) / -0.238 (0.092) | **+0.0009 (0.0008) / +0.0013 (0.0008) worse** |
+| Rushing | none | A, B, C each worse on one tuning table | not read | not read |
+| Receiving | C | -0.015 (0.007) / -0.015 (0.010) | **+0.007 (0.004) / +0.007 (0.005) worse** | **+0.0002 (0.0001) / +0.0004 (0.0001) worse** |
+
+- Passing is a genuine trade-off: yardage error 0.3% better on the holdout (about 2.7 standard
+  errors), the calls at the DraftKings/FanDuel lines worse by 1.2 to 1.6. Recommendation: do not
+  apply; the gain is small and the props check goes the wrong way.
+- Receiving: the tuning gain did not hold up; worse on the holdout and at the lines. Rushing:
+  nothing to carry forward.
+- What it would be doing now (r through week 10, 2026): WR +6.3%, RB receiving +1.8%, TE -1.3%,
+  QB +1.0%, RB rushing +0.2%. With receiving k near 0.2 that is about +1% on wide receivers.
+- Reading: this season's wide-receiver gap is real so far (about 2.5 standard errors) but past
+  seasons say a gap like it does not carry forward reliably. Nothing changed.
+
 ## College: a nudge from each team's recent misses against the model (Nov 18, 2026): no
 
 Lead: the Weekly Review's PIT @ CIN read asked whether the model runs behind on some teams. A
@@ -2795,64 +2856,3 @@ points at the projection, 0.7 at 80% of it, 0.8 at 65%), about 0.3 / 0.5 / 0.6 i
 the same refit without it. NFL receiving this week: 0.3 / 0.5 / 0.6 points. Projections do not change.
 Rechecked in January on 2026 alone, with the two pieces not applied (Project doc
 `claude/january-recheck-additions.md`).
-
-## NFL: pulling back projections that sit well above a player's season average (Nov 18, 2026): a trade-off, not applied
-
-Lead: the Weekly Review's Best Matchups page (2026 weeks 7-10) showed listed NFL players reaching
-their typical game less often than similar unlisted players. Rule written before the run: Project doc
-`claude/plan-nfl-lift-shrink-test-2026-11-18.md`. Script `experiments/nfl_lift_shrink_test.py`,
-output `experiments/out/nfl_lift_shrink_test.json`.
-
-The change tested, after the final projection: `new = proj - b * max(0, proj - (1+T) * season
-average)`, players with 3+ earlier games this season, b per stat fitted on earlier seasons only.
-Versions A T=0, B T=0.25, C T=0.50; A was chosen on tuning for all three stats.
-
-| Stat | Tuning RMSE game-day | Tuning RMSE bet-time | Holdout RMSE game-day | Holdout RMSE bet-time | Brier, closing lines | Brier, pricing snapshot |
-|---|---|---|---|---|---|---|
-| Passing | -0.141 (se 0.086) | -0.228 (0.100) | -0.125 (0.105) | -0.142 (0.117) | **+0.0034 (0.0012) worse** | **+0.0031 (0.0012) worse** |
-| Rushing | -0.023 (0.028) | -0.038 (0.035) | -0.063 (0.027) | -0.093 (0.031) | **+0.0006 (0.0003) worse** | +0.0003 (0.0004) worse |
-| Receiving | -0.068 (0.014) | -0.048 (0.012) | -0.009 (0.011) | -0.021 (0.010) | **+0.0011 (0.0002) worse** | **+0.0009 (0.0003) worse** |
-
-(Negative = candidate better. Tuning 2014-18, holdout 2019-25, Brier at 2023-25 DK/FD main lines.)
-
-- Mixed on every stat: yardage error a hair better (0.1% to 0.3%), the calls at the books' lines
-  worse on all six prop measures, most by 2.5 to 5 standard errors. Under the rule that is a
-  trade-off for Ryan, not a keep. Recommendation: do not apply; the board is used for the calls at
-  the lines, and those get worse.
-- The lead is real on average but small: players projected 25%+ above their season average finished
-  under the projection by 2.4 yards rushing (se 0.6, n 2,146) and 1.6 receiving (se 0.3, n 5,801) in
-  the holdout, and 18 passing (se 9, n 75). The fitted pull-back over-corrects (after it they run
-  1.1 to 1.3 yards over), and b drifts down across seasons.
-- Fitted b in the holdout: passing 0.43-0.57, rushing 0.24-0.28, receiving 0.28-0.36. Share of
-  player-games touched by version A: 29% passing, 40% rushing, 40% receiving.
-- Nothing in the model, boards or Best Overall list changed.
-
-## NFL: an in-season drift correction for the player projections (Nov 18, 2026): not applied
-
-Lead: the Weekly Review's Players page showed NFL players reaching Typical 55% of the time in
-2026 (reminder item 1, "projections running low"). A look across seasons first: 2019-25 the
-projections are centred (receivers, tight ends and backs within about 1 yard, 48-52% reaching
-Typical; quarterbacks who started 3 to 6 yards high), and 2026 is the odd one (wide receivers
-+2.9 yards, 54%). So the test was whether a season's running miss should nudge the rest of that
-season. Rule written before the run: Project doc `claude/plan-nfl-season-drift-test-2026-11-18.md`.
-Script `experiments/nfl_season_drift_test.py`, output `experiments/out/nfl_season_drift_test.json`.
-
-`new = proj x (1 + k x r)`, r = the position group's running (actual - projected) / projected that
-season from earlier weeks. A: k fitted on earlier seasons. B: k = 0.5. C: as A, r from the last 4
-weeks only.
-
-| Stat | Chosen on tuning | Tuning RMSE gd / bt | Holdout RMSE gd / bt | Brier closing / snapshot |
-|---|---|---|---|---|
-| Passing | C | -0.087 (0.027) / -0.048 (0.013) | -0.271 (0.096) / -0.238 (0.092) | **+0.0009 (0.0008) / +0.0013 (0.0008) worse** |
-| Rushing | none | A, B, C each worse on one tuning table | not read | not read |
-| Receiving | C | -0.015 (0.007) / -0.015 (0.010) | **+0.007 (0.004) / +0.007 (0.005) worse** | **+0.0002 (0.0001) / +0.0004 (0.0001) worse** |
-
-- Passing is a genuine trade-off: yardage error 0.3% better on the holdout (about 2.7 standard
-  errors), the calls at the DraftKings/FanDuel lines worse by 1.2 to 1.6. Recommendation: do not
-  apply; the gain is small and the props check goes the wrong way.
-- Receiving: the tuning gain did not hold up; worse on the holdout and at the lines. Rushing:
-  nothing to carry forward.
-- What it would be doing now (r through week 10, 2026): WR +6.3%, RB receiving +1.8%, TE -1.3%,
-  QB +1.0%, RB rushing +0.2%. With receiving k near 0.2 that is about +1% on wide receivers.
-- Reading: this season's wide-receiver gap is real so far (about 2.5 standard errors) but past
-  seasons say a gap like it does not carry forward reliably. Nothing changed.
