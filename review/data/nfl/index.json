@@ -1,0 +1,370 @@
+{
+ "league": "nfl",
+ "weeks": [
+  {
+   "file": "2026_w06.json",
+   "season": 2026,
+   "week": 6,
+   "summary": {
+    "games": 12,
+    "graded_of": 12,
+    "lean_spread": [
+     2,
+     10,
+     0
+    ],
+    "lean_total": [
+     4,
+     8,
+     0
+    ],
+    "model_closer_margin": 2,
+    "model_closer_total": 4,
+    "mae": {
+     "model_margin": 8.38,
+     "market_margin": 6.58,
+     "model_total": 10.31,
+     "market_total": 9.33
+    },
+    "chance_games": 2,
+    "bets": [
+     0,
+     2,
+     0
+    ],
+    "units": -2.0
+   },
+   "reads": "draft",
+   "read_games": 12,
+   "verdicts": {
+    "spread": {
+     "W": 2,
+     "L": 8,
+     "chance": 2,
+     "push": 0
+    },
+    "total": {
+     "W": 4,
+     "L": 7,
+     "chance": 1,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "ten-ind",
+     "away": "TEN",
+     "home": "IND",
+     "miss": -14.9,
+     "mkt": -12.5
+    },
+    {
+     "slug": "ari-la",
+     "away": "ARI",
+     "home": "LA",
+     "miss": -14.1,
+     "mkt": -14.5
+    },
+    {
+     "slug": "car-phi",
+     "away": "CAR",
+     "home": "PHI",
+     "miss": -11.7,
+     "mkt": -8.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w07.json",
+   "season": 2026,
+   "week": 7,
+   "summary": {
+    "games": 14,
+    "graded_of": 14,
+    "lean_spread": [
+     4,
+     10,
+     0
+    ],
+    "lean_total": [
+     7,
+     7,
+     0
+    ],
+    "model_closer_margin": 4,
+    "model_closer_total": 7,
+    "mae": {
+     "model_margin": 10.64,
+     "market_margin": 10.07,
+     "model_total": 10.14,
+     "market_total": 10.5
+    },
+    "chance_games": 1,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "draft",
+   "read_games": 14,
+   "verdicts": {
+    "spread": {
+     "W": 4,
+     "L": 10,
+     "chance": 0,
+     "push": 0
+    },
+    "total": {
+     "W": 7,
+     "L": 7,
+     "chance": 0,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "tb-car",
+     "away": "TB",
+     "home": "CAR",
+     "miss": -33.8,
+     "mkt": -33.0
+    },
+    {
+     "slug": "cin-bal",
+     "away": "CIN",
+     "home": "BAL",
+     "miss": -20.9,
+     "mkt": -19.0
+    },
+    {
+     "slug": "nyg-hou",
+     "away": "NYG",
+     "home": "HOU",
+     "miss": -18.4,
+     "mkt": -16.5
+    }
+   ]
+  },
+  {
+   "file": "2026_w08.json",
+   "season": 2026,
+   "week": 8,
+   "summary": {
+    "games": 14,
+    "graded_of": 14,
+    "lean_spread": [
+     8,
+     6,
+     0
+    ],
+    "lean_total": [
+     6,
+     8,
+     0
+    ],
+    "model_closer_margin": 8,
+    "model_closer_total": 6,
+    "mae": {
+     "model_margin": 10.62,
+     "market_margin": 10.86,
+     "model_total": 11.41,
+     "market_total": 11.07
+    },
+    "chance_games": 5,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "draft",
+   "read_games": 14,
+   "verdicts": {
+    "spread": {
+     "W": 6,
+     "L": 5,
+     "chance": 3,
+     "push": 0
+    },
+    "total": {
+     "W": 4,
+     "L": 7,
+     "chance": 3,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "ind-jax",
+     "away": "IND",
+     "home": "JAX",
+     "miss": 25.6,
+     "mkt": 24.5
+    },
+    {
+     "slug": "chi-sea",
+     "away": "CHI",
+     "home": "SEA",
+     "miss": -21.7,
+     "mkt": -20.5
+    },
+    {
+     "slug": "cle-pit",
+     "away": "CLE",
+     "home": "PIT",
+     "miss": 14.0,
+     "mkt": 17.5
+    }
+   ]
+  },
+  {
+   "file": "2026_w09.json",
+   "season": 2026,
+   "week": 9,
+   "summary": {
+    "games": 15,
+    "graded_of": 15,
+    "lean_spread": [
+     7,
+     8,
+     0
+    ],
+    "lean_total": [
+     7,
+     8,
+     0
+    ],
+    "model_closer_margin": 6,
+    "model_closer_total": 5,
+    "mae": {
+     "model_margin": 8.97,
+     "market_margin": 8.53,
+     "model_total": 10.66,
+     "market_total": 10.1
+    },
+    "chance_games": 3,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "draft",
+   "read_games": 15,
+   "verdicts": {
+    "spread": {
+     "W": 6,
+     "L": 6,
+     "chance": 3,
+     "push": 0
+    },
+    "total": {
+     "W": 6,
+     "L": 6,
+     "chance": 3,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "gb-ne",
+     "away": "GB",
+     "home": "NE",
+     "miss": -19.3,
+     "mkt": -21.0
+    },
+    {
+     "slug": "hou-lac",
+     "away": "HOU",
+     "home": "LAC",
+     "miss": -18.6,
+     "mkt": -16.5
+    },
+    {
+     "slug": "buf-min",
+     "away": "BUF",
+     "home": "MIN",
+     "miss": -14.2,
+     "mkt": -14.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w10.json",
+   "season": 2026,
+   "week": 10,
+   "summary": {
+    "games": 14,
+    "graded_of": 14,
+    "lean_spread": [
+     9,
+     5,
+     0
+    ],
+    "lean_total": [
+     7,
+     7,
+     0
+    ],
+    "model_closer_margin": 7,
+    "model_closer_total": 6,
+    "mae": {
+     "model_margin": 10.15,
+     "market_margin": 10.29,
+     "model_total": 8.48,
+     "market_total": 8.39
+    },
+    "chance_games": 6,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "mixed",
+   "read_games": 14,
+   "verdicts": {
+    "spread": {
+     "W": 7,
+     "L": 3,
+     "chance": 2,
+     "push": 0
+    },
+    "total": {
+     "W": 4,
+     "L": 6,
+     "chance": 4,
+     "push": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "min-gb",
+     "away": "MIN",
+     "home": "GB",
+     "miss": -19.8,
+     "mkt": -23.0
+    },
+    {
+     "slug": "la-ari",
+     "away": "LA",
+     "home": "ARI",
+     "miss": -18.3,
+     "mkt": -17.5
+    },
+    {
+     "slug": "kc-atl",
+     "away": "KC",
+     "home": "ATL",
+     "miss": -17.3,
+     "mkt": -18.5
+    }
+   ]
+  }
+ ]
+}

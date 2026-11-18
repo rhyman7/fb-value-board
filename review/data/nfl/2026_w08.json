@@ -1,0 +1,3115 @@
+{
+ "league": "nfl",
+ "season": 2026,
+ "week": 8,
+ "summary": {
+  "games": 14,
+  "graded_of": 14,
+  "lean_spread": [
+   8,
+   6,
+   0
+  ],
+  "lean_total": [
+   6,
+   8,
+   0
+  ],
+  "model_closer_margin": 8,
+  "model_closer_total": 6,
+  "mae": {
+   "model_margin": 10.62,
+   "market_margin": 10.86,
+   "model_total": 11.41,
+   "market_total": 11.07
+  },
+  "chance_games": 5,
+  "bets": [
+   0,
+   0,
+   0
+  ],
+  "units": 0
+ },
+ "colors": {
+  "DAL": [
+   "#002244",
+   "#B0B7BC"
+  ],
+  "ARI": [
+   "#97233F",
+   "#000000"
+  ],
+  "TB": [
+   "#A71930",
+   "#322F2B"
+  ],
+  "ATL": [
+   "#A71930",
+   "#000000"
+  ],
+  "BUF": [
+   "#00338D",
+   "#C60C30"
+  ],
+  "BAL": [
+   "#241773",
+   "#9E7C0C"
+  ],
+  "PIT": [
+   "#000000",
+   "#FFB612"
+  ],
+  "CLE": [
+   "#FF3C00",
+   "#311D00"
+  ],
+  "JAX": [
+   "#006778",
+   "#000000"
+  ],
+  "IND": [
+   "#002C5F",
+   "#A5ACAF"
+  ],
+  "NYJ": [
+   "#003F2D",
+   "#000000"
+  ],
+  "LV": [
+   "#000000",
+   "#A5ACAF"
+  ],
+  "CIN": [
+   "#FB4F14",
+   "#000000"
+  ],
+  "TEN": [
+   "#4495D2",
+   "#D50A0A"
+  ],
+  "LA": [
+   "#003594",
+   "#FFD100"
+  ],
+  "LAC": [
+   "#007BC7",
+   "#FFC20E"
+  ],
+  "DEN": [
+   "#002244",
+   "#FB4F14"
+  ],
+  "KC": [
+   "#E31837",
+   "#FFB612"
+  ],
+  "MIA": [
+   "#008E97",
+   "#F58220"
+  ],
+  "NE": [
+   "#002244",
+   "#C60C30"
+  ],
+  "WAS": [
+   "#5A1414",
+   "#FFB612"
+  ],
+  "PHI": [
+   "#004C54",
+   "#A5ACAF"
+  ],
+  "GB": [
+   "#203731",
+   "#FFB612"
+  ],
+  "CAR": [
+   "#0085CA",
+   "#000000"
+  ],
+  "DET": [
+   "#0076B6",
+   "#B0B7BC"
+  ],
+  "MIN": [
+   "#4F2683",
+   "#FFC62F"
+  ],
+  "SEA": [
+   "#002244",
+   "#69BE28"
+  ],
+  "CHI": [
+   "#0B162A",
+   "#E64100"
+  ]
+ },
+ "games": [
+  {
+   "id": "2026_08_ARI_DAL",
+   "slug": "ari-dal",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "ARI",
+   "home": "DAL",
+   "away_name": "Arizona Cardinals",
+   "home_name": "Dallas Cowboys",
+   "away_qb": "Jacoby Brissett",
+   "home_qb": "Dak Prescott",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    33.0,
+    30.0
+   ],
+   "margin": -3.0,
+   "total": 63.0,
+   "market": {
+    "spread": 7.5,
+    "total": 54.5
+   },
+   "board": {
+    "margin": 7.99,
+    "total": 54.53,
+    "home_win": 0.7643
+   },
+   "model": {
+    "margin": 9.25,
+    "total": 55.11,
+    "home_win": 0.7969
+   },
+   "err": {
+    "model_margin": -12.2,
+    "market_margin": -10.5,
+    "board_margin": -11.0,
+    "model_total": 7.9,
+    "market_total": 8.5,
+    "board_total": 8.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.8,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.6,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "DAL": {
+     "game_id": "2026_08_ARI_DAL",
+     "team": "DAL",
+     "plays": 73,
+     "epa_play": -0.019,
+     "success": 0.411,
+     "explosive": 2,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 3,
+     "rz": 6,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "ARI": {
+     "game_id": "2026_08_ARI_DAL",
+     "team": "ARI",
+     "plays": 78,
+     "epa_play": 0.117,
+     "success": 0.41,
+     "explosive": 7,
+     "ints": 1,
+     "fumbles": 2,
+     "fum_lost": 1,
+     "rz_td": 3,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": {
+      "qb": "J.Brissett",
+      "share": 0.56,
+      "qtr": 3,
+      "time": "04:21",
+      "why": "left the game"
+     }
+    }
+   },
+   "chance": {
+    "fumble_bounces": 1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": [
+     {
+      "qb": "J.Brissett",
+      "share": 0.56,
+      "qtr": 3,
+      "time": "04:21",
+      "why": "left the game"
+     }
+    ]
+   },
+   "neutral_margin": -4.6,
+   "why": [],
+   "players": [
+    {
+     "name": "Jacoby Brissett",
+     "pos": "QB",
+     "team": "ARI",
+     "stat": "pass_yds",
+     "proj": 251.9,
+     "act": 119.0,
+     "miss": -132.9,
+     "played": true
+    },
+    {
+     "name": "Tyler Allgeier",
+     "pos": "RB",
+     "team": "ARI",
+     "stat": "rush_yds",
+     "proj": 18.7,
+     "act": 147.0,
+     "miss": 128.3,
+     "played": true
+    },
+    {
+     "name": "Dak Prescott",
+     "pos": "QB",
+     "team": "DAL",
+     "stat": "pass_yds",
+     "proj": 275.4,
+     "act": 195.0,
+     "miss": -80.4,
+     "played": true
+    },
+    {
+     "name": "Michael Wilson",
+     "pos": "WR",
+     "team": "ARI",
+     "stat": "rec_yds",
+     "proj": 63.3,
+     "act": 111.0,
+     "miss": 47.7,
+     "played": true
+    },
+    {
+     "name": "CeeDee Lamb",
+     "pos": "WR",
+     "team": "DAL",
+     "stat": "rec_yds",
+     "proj": 92.2,
+     "act": 58.0,
+     "miss": -34.2,
+     "played": true
+    },
+    {
+     "name": "Tyler Allgeier",
+     "pos": "RB",
+     "team": "ARI",
+     "stat": "rec_yds",
+     "proj": 11.6,
+     "act": 44.0,
+     "miss": 32.4,
+     "played": true
+    },
+    {
+     "name": "Jeremiyah Love",
+     "pos": "RB",
+     "team": "ARI",
+     "stat": "rush_yds",
+     "proj": 51.4,
+     "act": 23.0,
+     "miss": -28.4,
+     "played": true
+    },
+    {
+     "name": "Javonte Williams",
+     "pos": "RB",
+     "team": "DAL",
+     "stat": "rush_yds",
+     "proj": 80.7,
+     "act": 56.0,
+     "miss": -24.7,
+     "played": true
+    },
+    {
+     "name": "Jake Ferguson",
+     "pos": "TE",
+     "team": "DAL",
+     "stat": "rec_yds",
+     "proj": 23.5,
+     "act": 0.0,
+     "miss": -23.5,
+     "played": false
+    },
+    {
+     "name": "Bam Knight",
+     "pos": "RB",
+     "team": "ARI",
+     "stat": "rush_yds",
+     "proj": 28.1,
+     "act": 8.0,
+     "miss": -20.1,
+     "played": true
+    }
+   ],
+   "unprojected": [
+    {
+     "name": "Gardner Minshew",
+     "pos": "QB",
+     "team": "ARI",
+     "yds": 188.0,
+     "line": {
+      "pass_yds": 188.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_08_ATL_TB",
+   "slug": "atl-tb",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "ATL",
+   "home": "TB",
+   "away_name": "Atlanta Falcons",
+   "home_name": "Tampa Bay Buccaneers",
+   "away_qb": "Michael Penix Jr.",
+   "home_qb": "Baker Mayfield",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    0.0,
+    16.0
+   ],
+   "margin": 16.0,
+   "total": 16.0,
+   "market": {
+    "spread": 2.5,
+    "total": 43.0
+   },
+   "board": {
+    "margin": 2.68,
+    "total": 43.09,
+    "home_win": 0.5599
+   },
+   "model": {
+    "margin": 3.13,
+    "total": 44.89,
+    "home_win": 0.5755
+   },
+   "err": {
+    "model_margin": 12.9,
+    "market_margin": 13.5,
+    "board_margin": 13.3,
+    "model_total": -28.9,
+    "market_total": -27.0,
+    "board_total": -27.1
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 0.6,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 1.9,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "TB": {
+     "game_id": "2026_08_ATL_TB",
+     "team": "TB",
+     "plays": 59,
+     "epa_play": -0.166,
+     "success": 0.341,
+     "explosive": 9,
+     "ints": 0,
+     "fumbles": 2,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "ATL": {
+     "game_id": "2026_08_ATL_TB",
+     "team": "ATL",
+     "plays": 53,
+     "epa_play": -0.409,
+     "success": 0.311,
+     "explosive": 2,
+     "ints": 4,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 0,
+     "rz": 1,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 3,
+     "fourth": 6,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 14.4,
+   "why": [],
+   "players": [
+    {
+     "name": "Baker Mayfield",
+     "pos": "QB",
+     "team": "TB",
+     "stat": "pass_yds",
+     "proj": 189.6,
+     "act": 0.0,
+     "miss": -189.6,
+     "played": true
+    },
+    {
+     "name": "Kenny Gainwell",
+     "pos": "RB",
+     "team": "TB",
+     "stat": "rush_yds",
+     "proj": 12.7,
+     "act": 140.0,
+     "miss": 127.3,
+     "played": true
+    },
+    {
+     "name": "Bucky Irving",
+     "pos": "RB",
+     "team": "TB",
+     "stat": "rush_yds",
+     "proj": 63.4,
+     "act": 170.0,
+     "miss": 106.6,
+     "played": true
+    },
+    {
+     "name": "Michael Penix Jr.",
+     "pos": "QB",
+     "team": "ATL",
+     "stat": "pass_yds",
+     "proj": 210.7,
+     "act": 125.0,
+     "miss": -85.7,
+     "played": true
+    },
+    {
+     "name": "Jahan Dotson",
+     "pos": "WR",
+     "team": "ATL",
+     "stat": "rec_yds",
+     "proj": 26.7,
+     "act": 95.0,
+     "miss": 68.3,
+     "played": true
+    },
+    {
+     "name": "Drake London",
+     "pos": "WR",
+     "team": "ATL",
+     "stat": "rec_yds",
+     "proj": 65.9,
+     "act": 8.0,
+     "miss": -57.9,
+     "played": true
+    },
+    {
+     "name": "Chris Godwin Jr.",
+     "pos": "WR",
+     "team": "TB",
+     "stat": "rec_yds",
+     "proj": 44.5,
+     "act": 0.0,
+     "miss": -44.5,
+     "played": true
+    },
+    {
+     "name": "Bijan Robinson",
+     "pos": "RB",
+     "team": "ATL",
+     "stat": "rec_yds",
+     "proj": 30.6,
+     "act": 0.0,
+     "miss": -30.6,
+     "played": true
+    },
+    {
+     "name": "Cade Otton",
+     "pos": "TE",
+     "team": "TB",
+     "stat": "rec_yds",
+     "proj": 30.3,
+     "act": 0.0,
+     "miss": -30.3,
+     "played": false
+    },
+    {
+     "name": "Kyle Pitts",
+     "pos": "TE",
+     "team": "ATL",
+     "stat": "rec_yds",
+     "proj": 34.4,
+     "act": 6.0,
+     "miss": -28.4,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_BAL_BUF",
+   "slug": "bal-buf",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "BAL",
+   "home": "BUF",
+   "away_name": "Baltimore Ravens",
+   "home_name": "Buffalo Bills",
+   "away_qb": "Lamar Jackson",
+   "home_qb": "Josh Allen",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    10.0,
+    36.0
+   ],
+   "margin": 26.0,
+   "total": 46.0,
+   "market": {
+    "spread": 3.5,
+    "total": 54.5
+   },
+   "board": {
+    "margin": 4.14,
+    "total": 54.4,
+    "home_win": 0.6432
+   },
+   "model": {
+    "margin": 5.76,
+    "total": 52.45,
+    "home_win": 0.6948
+   },
+   "err": {
+    "model_margin": 20.2,
+    "market_margin": 22.5,
+    "board_margin": 21.9,
+    "model_total": -6.5,
+    "market_total": -8.5,
+    "board_total": -8.4
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 2.3,
+     "result": "W"
+    },
+    "total": {
+     "side": "under",
+     "gap": -2.0,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "BUF": {
+     "game_id": "2026_08_BAL_BUF",
+     "team": "BUF",
+     "plays": 80,
+     "epa_play": -0.081,
+     "success": 0.47,
+     "explosive": 6,
+     "ints": 1,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 3,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 4,
+     "fourth": 6,
+     "qb_exit": null
+    },
+    "BAL": {
+     "game_id": "2026_08_BAL_BUF",
+     "team": "BAL",
+     "plays": 50,
+     "epa_play": -0.354,
+     "success": 0.289,
+     "explosive": 2,
+     "ints": 1,
+     "fumbles": 2,
+     "fum_lost": 2,
+     "rz_td": 1,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 1,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": {
+      "qb": "L.Jackson",
+      "share": 0.03,
+      "qtr": 1,
+      "time": "10:04",
+      "why": "injured"
+     }
+    }
+   },
+   "chance": {
+    "fumble_bounces": 1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 1.4,
+    "total": 3.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": [
+     {
+      "qb": "L.Jackson",
+      "share": 0.03,
+      "qtr": 1,
+      "time": "10:04",
+      "why": "injured"
+     }
+    ]
+   },
+   "neutral_margin": 23.0,
+   "why": [],
+   "players": [
+    {
+     "name": "Lamar Jackson",
+     "pos": "QB",
+     "team": "BAL",
+     "stat": "pass_yds",
+     "proj": 222.7,
+     "act": 0.0,
+     "miss": -222.7,
+     "played": true
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "team": "BAL",
+     "stat": "rec_yds",
+     "proj": 71.5,
+     "act": 0.0,
+     "miss": -71.5,
+     "played": true
+    },
+    {
+     "name": "Josh Allen",
+     "pos": "QB",
+     "team": "BUF",
+     "stat": "pass_yds",
+     "proj": 233.6,
+     "act": 289.0,
+     "miss": 55.4,
+     "played": true
+    },
+    {
+     "name": "Dalton Kincaid",
+     "pos": "TE",
+     "team": "BUF",
+     "stat": "rec_yds",
+     "proj": 34.6,
+     "act": 86.0,
+     "miss": 51.4,
+     "played": true
+    },
+    {
+     "name": "Keon Coleman",
+     "pos": "WR",
+     "team": "BUF",
+     "stat": "rec_yds",
+     "proj": 46.3,
+     "act": 4.0,
+     "miss": -42.3,
+     "played": true
+    },
+    {
+     "name": "DJ Moore",
+     "pos": "WR",
+     "team": "BUF",
+     "stat": "rec_yds",
+     "proj": 41.2,
+     "act": 82.0,
+     "miss": 40.8,
+     "played": true
+    },
+    {
+     "name": "Lamar Jackson",
+     "pos": "QB",
+     "team": "BAL",
+     "stat": "rush_yds",
+     "proj": 22.0,
+     "act": 0.0,
+     "miss": -22.0,
+     "played": true
+    },
+    {
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "team": "BAL",
+     "stat": "rush_yds",
+     "proj": 74.9,
+     "act": 53.0,
+     "miss": -21.9,
+     "played": true
+    },
+    {
+     "name": "Khalil Shakir",
+     "pos": "WR",
+     "team": "BUF",
+     "stat": "rec_yds",
+     "proj": 43.8,
+     "act": 64.0,
+     "miss": 20.2,
+     "played": true
+    },
+    {
+     "name": "Ja'Kobi Lane",
+     "pos": "WR",
+     "team": "BAL",
+     "stat": "rec_yds",
+     "proj": 29.7,
+     "act": 13.0,
+     "miss": -16.7,
+     "played": true
+    }
+   ],
+   "unprojected": [
+    {
+     "name": "Joe Fagnano",
+     "pos": "QB",
+     "team": "BAL",
+     "yds": 95.0,
+     "line": {
+      "pass_yds": 91.0,
+      "rush_yds": 4.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_08_CLE_PIT",
+   "slug": "cle-pit",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "CLE",
+   "home": "PIT",
+   "away_name": "Cleveland Browns",
+   "home_name": "Pittsburgh Steelers",
+   "away_qb": "Deshaun Watson",
+   "home_qb": "Aaron Rodgers",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    6.0,
+    27.0
+   ],
+   "margin": 21.0,
+   "total": 33.0,
+   "market": {
+    "spread": 3.5,
+    "total": 38.5
+   },
+   "board": {
+    "margin": 4.48,
+    "total": 38.57,
+    "home_win": 0.6841
+   },
+   "model": {
+    "margin": 7.0,
+    "total": 39.97,
+    "home_win": 0.7578
+   },
+   "err": {
+    "model_margin": 14.0,
+    "market_margin": 17.5,
+    "board_margin": 16.5,
+    "model_total": -7.0,
+    "market_total": -5.5,
+    "board_total": -5.6
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 3.5,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 1.5,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "PIT": {
+     "game_id": "2026_08_CLE_PIT",
+     "team": "PIT",
+     "plays": 58,
+     "epa_play": 0.286,
+     "success": 0.512,
+     "explosive": 9,
+     "ints": 1,
+     "fumbles": 2,
+     "fum_lost": 0,
+     "rz_td": 3,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "CLE": {
+     "game_id": "2026_08_CLE_PIT",
+     "team": "CLE",
+     "plays": 69,
+     "epa_play": -0.304,
+     "success": 0.382,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 2,
+     "fum_lost": 2,
+     "rz_td": 0,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 2,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 6.5,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 6.5,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 14.5,
+   "why": [],
+   "players": [
+    {
+     "name": "Harold Fannin Jr.",
+     "pos": "TE",
+     "team": "CLE",
+     "stat": "rec_yds",
+     "proj": 34.9,
+     "act": 154.0,
+     "miss": 119.1,
+     "played": true
+    },
+    {
+     "name": "Deshaun Watson",
+     "pos": "QB",
+     "team": "CLE",
+     "stat": "pass_yds",
+     "proj": 206.9,
+     "act": 324.0,
+     "miss": 117.1,
+     "played": true
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "team": "PIT",
+     "stat": "rush_yds",
+     "proj": 63.7,
+     "act": 143.0,
+     "miss": 79.3,
+     "played": true
+    },
+    {
+     "name": "Darnell Washington",
+     "pos": "TE",
+     "team": "PIT",
+     "stat": "rec_yds",
+     "proj": 21.6,
+     "act": 94.0,
+     "miss": 72.4,
+     "played": true
+    },
+    {
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "team": "PIT",
+     "stat": "rec_yds",
+     "proj": 57.8,
+     "act": 4.0,
+     "miss": -53.8,
+     "played": true
+    },
+    {
+     "name": "Dylan Sampson",
+     "pos": "RB",
+     "team": "CLE",
+     "stat": "rec_yds",
+     "proj": 15.1,
+     "act": 62.0,
+     "miss": 46.9,
+     "played": true
+    },
+    {
+     "name": "Aaron Rodgers",
+     "pos": "QB",
+     "team": "PIT",
+     "stat": "pass_yds",
+     "proj": 211.8,
+     "act": 172.0,
+     "miss": -39.8,
+     "played": true
+    },
+    {
+     "name": "Jerry Jeudy",
+     "pos": "WR",
+     "team": "CLE",
+     "stat": "rec_yds",
+     "proj": 24.8,
+     "act": 0.0,
+     "miss": -24.8,
+     "played": true
+    },
+    {
+     "name": "Rico Dowdle",
+     "pos": "RB",
+     "team": "PIT",
+     "stat": "rush_yds",
+     "proj": 32.8,
+     "act": 56.0,
+     "miss": 23.2,
+     "played": true
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "team": "PIT",
+     "stat": "rec_yds",
+     "proj": 22.2,
+     "act": 0.0,
+     "miss": -22.2,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_IND_JAX",
+   "slug": "ind-jax",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "IND",
+   "home": "JAX",
+   "away_name": "Indianapolis Colts",
+   "home_name": "Jacksonville Jaguars",
+   "away_qb": "Daniel Jones",
+   "home_qb": "Trevor Lawrence",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    7.0,
+    42.0
+   ],
+   "margin": 35.0,
+   "total": 49.0,
+   "market": {
+    "spread": 10.5,
+    "total": 46.5
+   },
+   "board": {
+    "margin": 10.2,
+    "total": 46.49,
+    "home_win": 0.8107
+   },
+   "model": {
+    "margin": 9.44,
+    "total": 46.35,
+    "home_win": 0.7921
+   },
+   "err": {
+    "model_margin": 25.6,
+    "market_margin": 24.5,
+    "board_margin": 24.8,
+    "model_total": 2.6,
+    "market_total": 2.5,
+    "board_total": 2.5
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -1.1,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -0.1,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "JAX": {
+     "game_id": "2026_08_IND_JAX",
+     "team": "JAX",
+     "plays": 54,
+     "epa_play": 0.409,
+     "success": 0.516,
+     "explosive": 6,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 1,
+     "rz": 1,
+     "nonoff_td": 1,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "IND": {
+     "game_id": "2026_08_IND_JAX",
+     "team": "IND",
+     "plays": 59,
+     "epa_play": -0.422,
+     "success": 0.357,
+     "explosive": 4,
+     "ints": 2,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 1,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 3,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 6.3,
+    "short_fg_misses": 0.0,
+    "total": 6.3,
+    "total_pts_nonoff": 7,
+    "qb_exits": []
+   },
+   "neutral_margin": 28.7,
+   "why": [],
+   "players": [
+    {
+     "name": "Daniel Jones",
+     "pos": "QB",
+     "team": "IND",
+     "stat": "pass_yds",
+     "proj": 204.9,
+     "act": 144.0,
+     "miss": -60.9,
+     "played": true
+    },
+    {
+     "name": "Parker Washington",
+     "pos": "WR",
+     "team": "JAX",
+     "stat": "rec_yds",
+     "proj": 64.2,
+     "act": 16.0,
+     "miss": -48.2,
+     "played": true
+    },
+    {
+     "name": "Bhayshul Tuten",
+     "pos": "RB",
+     "team": "JAX",
+     "stat": "rec_yds",
+     "proj": 14.9,
+     "act": 55.0,
+     "miss": 40.1,
+     "played": true
+    },
+    {
+     "name": "Bhayshul Tuten",
+     "pos": "RB",
+     "team": "JAX",
+     "stat": "rush_yds",
+     "proj": 64.0,
+     "act": 104.0,
+     "miss": 40.0,
+     "played": true
+    },
+    {
+     "name": "Keenan Allen",
+     "pos": "WR",
+     "team": "IND",
+     "stat": "rec_yds",
+     "proj": 37.7,
+     "act": 67.0,
+     "miss": 29.3,
+     "played": true
+    },
+    {
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "team": "IND",
+     "stat": "rush_yds",
+     "proj": 49.8,
+     "act": 23.0,
+     "miss": -26.8,
+     "played": true
+    },
+    {
+     "name": "Josh Downs",
+     "pos": "WR",
+     "team": "IND",
+     "stat": "rec_yds",
+     "proj": 49.7,
+     "act": 23.0,
+     "miss": -26.7,
+     "played": true
+    },
+    {
+     "name": "Trevor Lawrence",
+     "pos": "QB",
+     "team": "JAX",
+     "stat": "pass_yds",
+     "proj": 232.1,
+     "act": 210.0,
+     "miss": -22.1,
+     "played": true
+    },
+    {
+     "name": "Tyler Warren",
+     "pos": "TE",
+     "team": "IND",
+     "stat": "rec_yds",
+     "proj": 37.5,
+     "act": 18.0,
+     "miss": -19.5,
+     "played": true
+    },
+    {
+     "name": "Josh Cameron",
+     "pos": "WR",
+     "team": "JAX",
+     "stat": "rec_yds",
+     "proj": 18.8,
+     "act": 0.0,
+     "miss": -18.8,
+     "played": true
+    }
+   ],
+   "unprojected": [
+    {
+     "name": "DJ Giddens",
+     "pos": "RB",
+     "team": "IND",
+     "yds": 43.0,
+     "line": {
+      "rush_yds": 43.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_08_LV_NYJ",
+   "slug": "lv-nyj",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "LV",
+   "home": "NYJ",
+   "away_name": "Las Vegas Raiders",
+   "home_name": "New York Jets",
+   "away_qb": "Kirk Cousins",
+   "home_qb": "Geno Smith",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    38.0,
+    33.0
+   ],
+   "margin": -5.0,
+   "total": 71.0,
+   "market": {
+    "spread": 1.0,
+    "total": 46.5
+   },
+   "board": {
+    "margin": 0.96,
+    "total": 46.49,
+    "home_win": 0.5422
+   },
+   "model": {
+    "margin": 0.86,
+    "total": 46.32,
+    "home_win": 0.5386
+   },
+   "err": {
+    "model_margin": -5.9,
+    "market_margin": -6.0,
+    "board_margin": -6.0,
+    "model_total": 24.7,
+    "market_total": 24.5,
+    "board_total": 24.5
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -0.1,
+     "result": "W"
+    },
+    "total": {
+     "side": "under",
+     "gap": -0.2,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "NYJ": {
+     "game_id": "2026_08_LV_NYJ",
+     "team": "NYJ",
+     "plays": 64,
+     "epa_play": 0.182,
+     "success": 0.516,
+     "explosive": 9,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 6,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "LV": {
+     "game_id": "2026_08_LV_NYJ",
+     "team": "LV",
+     "plays": 61,
+     "epa_play": 0.228,
+     "success": 0.525,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 4,
+     "rz": 4,
+     "nonoff_td": 1,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": -6.3,
+    "short_fg_misses": 0.0,
+    "total": -6.3,
+    "total_pts_nonoff": 7,
+    "qb_exits": []
+   },
+   "neutral_margin": 1.3,
+   "why": [],
+   "players": [
+    {
+     "name": "Adonai Mitchell",
+     "pos": "WR",
+     "team": "NYJ",
+     "stat": "rec_yds",
+     "proj": 28.4,
+     "act": 142.0,
+     "miss": 113.6,
+     "played": true
+    },
+    {
+     "name": "Braelon Allen",
+     "pos": "RB",
+     "team": "NYJ",
+     "stat": "rush_yds",
+     "proj": 69.8,
+     "act": 147.0,
+     "miss": 77.2,
+     "played": true
+    },
+    {
+     "name": "Geno Smith",
+     "pos": "QB",
+     "team": "NYJ",
+     "stat": "pass_yds",
+     "proj": 224.6,
+     "act": 290.0,
+     "miss": 65.4,
+     "played": true
+    },
+    {
+     "name": "Ashton Jeanty",
+     "pos": "RB",
+     "team": "LV",
+     "stat": "rush_yds",
+     "proj": 64.4,
+     "act": 9.0,
+     "miss": -55.4,
+     "played": true
+    },
+    {
+     "name": "Mike Washington Jr.",
+     "pos": "RB",
+     "team": "LV",
+     "stat": "rush_yds",
+     "proj": 28.5,
+     "act": 83.0,
+     "miss": 54.5,
+     "played": true
+    },
+    {
+     "name": "Breece Hall",
+     "pos": "RB",
+     "team": "NYJ",
+     "stat": "rush_yds",
+     "proj": 54.3,
+     "act": 0.0,
+     "miss": -54.3,
+     "played": false
+    },
+    {
+     "name": "Tre Tucker",
+     "pos": "WR",
+     "team": "LV",
+     "stat": "rec_yds",
+     "proj": 51.2,
+     "act": 0.0,
+     "miss": -51.2,
+     "played": true
+    },
+    {
+     "name": "Omar Cooper Jr.",
+     "pos": "WR",
+     "team": "NYJ",
+     "stat": "rec_yds",
+     "proj": 38.9,
+     "act": 0.0,
+     "miss": -38.9,
+     "played": false
+    },
+    {
+     "name": "Ashton Jeanty",
+     "pos": "RB",
+     "team": "LV",
+     "stat": "rec_yds",
+     "proj": 27.7,
+     "act": 64.0,
+     "miss": 36.3,
+     "played": true
+    },
+    {
+     "name": "Brock Bowers",
+     "pos": "TE",
+     "team": "LV",
+     "stat": "rec_yds",
+     "proj": 56.7,
+     "act": 92.0,
+     "miss": 35.3,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_TEN_CIN",
+   "slug": "ten-cin",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "TEN",
+   "home": "CIN",
+   "away_name": "Tennessee Titans",
+   "home_name": "Cincinnati Bengals",
+   "away_qb": "Cam Ward",
+   "home_qb": "Joe Burrow",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    36.0,
+    43.0
+   ],
+   "margin": 7.0,
+   "total": 79.0,
+   "market": {
+    "spread": 13.0,
+    "total": 46.0
+   },
+   "board": {
+    "margin": 13.31,
+    "total": 46.04,
+    "home_win": 0.8902
+   },
+   "model": {
+    "margin": 14.12,
+    "total": 46.72,
+    "home_win": 0.9028
+   },
+   "err": {
+    "model_margin": -7.1,
+    "market_margin": -6.0,
+    "board_margin": -6.3,
+    "model_total": 32.3,
+    "market_total": 33.0,
+    "board_total": 33.0
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.1,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.7,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "CIN": {
+     "game_id": "2026_08_TEN_CIN",
+     "team": "CIN",
+     "plays": 74,
+     "epa_play": 0.161,
+     "success": 0.581,
+     "explosive": 7,
+     "ints": 3,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 4,
+     "rz": 7,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "TEN": {
+     "game_id": "2026_08_TEN_CIN",
+     "team": "TEN",
+     "plays": 77,
+     "epa_play": 0.111,
+     "success": 0.506,
+     "explosive": 8,
+     "ints": 0,
+     "fumbles": 4,
+     "fum_lost": 2,
+     "rz_td": 3,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": -1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": -1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 8.6,
+   "why": [],
+   "players": [
+    {
+     "name": "Joe Burrow",
+     "pos": "QB",
+     "team": "CIN",
+     "stat": "pass_yds",
+     "proj": 272.4,
+     "act": 462.0,
+     "miss": 189.6,
+     "played": true
+    },
+    {
+     "name": "Cam Ward",
+     "pos": "QB",
+     "team": "TEN",
+     "stat": "pass_yds",
+     "proj": 198.5,
+     "act": 304.0,
+     "miss": 105.5,
+     "played": true
+    },
+    {
+     "name": "Tee Higgins",
+     "pos": "WR",
+     "team": "CIN",
+     "stat": "rec_yds",
+     "proj": 68.1,
+     "act": 155.0,
+     "miss": 86.9,
+     "played": true
+    },
+    {
+     "name": "Chimere Dike",
+     "pos": "WR",
+     "team": "TEN",
+     "stat": "rec_yds",
+     "proj": 11.9,
+     "act": 71.0,
+     "miss": 59.1,
+     "played": true
+    },
+    {
+     "name": "Gunnar Helm",
+     "pos": "TE",
+     "team": "TEN",
+     "stat": "rec_yds",
+     "proj": 18.2,
+     "act": 76.0,
+     "miss": 57.8,
+     "played": true
+    },
+    {
+     "name": "Ja'Marr Chase",
+     "pos": "WR",
+     "team": "CIN",
+     "stat": "rec_yds",
+     "proj": 87.6,
+     "act": 141.0,
+     "miss": 53.4,
+     "played": true
+    },
+    {
+     "name": "Mike Gesicki",
+     "pos": "TE",
+     "team": "CIN",
+     "stat": "rec_yds",
+     "proj": 23.1,
+     "act": 76.0,
+     "miss": 52.9,
+     "played": true
+    },
+    {
+     "name": "Tony Pollard",
+     "pos": "RB",
+     "team": "TEN",
+     "stat": "rush_yds",
+     "proj": 67.2,
+     "act": 117.0,
+     "miss": 49.8,
+     "played": true
+    },
+    {
+     "name": "Cam Ward",
+     "pos": "QB",
+     "team": "TEN",
+     "stat": "rush_yds",
+     "proj": 12.4,
+     "act": 41.0,
+     "miss": 28.6,
+     "played": true
+    },
+    {
+     "name": "Samaje Perine",
+     "pos": "RB",
+     "team": "CIN",
+     "stat": "rush_yds",
+     "proj": 35.6,
+     "act": 10.0,
+     "miss": -25.6,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_LAC_LA",
+   "slug": "lac-la",
+   "date": "Sun Nov 1",
+   "time": "16:05",
+   "away": "LAC",
+   "home": "LA",
+   "away_name": "Los Angeles Chargers",
+   "home_name": "Los Angeles Rams",
+   "away_qb": "Justin Herbert",
+   "home_qb": "Matthew Stafford",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    9.0,
+    24.0
+   ],
+   "margin": 15.0,
+   "total": 33.0,
+   "market": {
+    "spread": 6.5,
+    "total": 46.0
+   },
+   "board": {
+    "margin": 6.95,
+    "total": 46.1,
+    "home_win": 0.7524
+   },
+   "model": {
+    "margin": 8.09,
+    "total": 48.02,
+    "home_win": 0.7829
+   },
+   "err": {
+    "model_margin": 6.9,
+    "market_margin": 8.5,
+    "board_margin": 8.1,
+    "model_total": -15.0,
+    "market_total": -13.0,
+    "board_total": -13.1
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.6,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 2.0,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "LA": {
+     "game_id": "2026_08_LAC_LA",
+     "team": "LA",
+     "plays": 54,
+     "epa_play": 0.004,
+     "success": 0.514,
+     "explosive": 3,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "LAC": {
+     "game_id": "2026_08_LAC_LA",
+     "team": "LAC",
+     "plays": 60,
+     "epa_play": -0.277,
+     "success": 0.3,
+     "explosive": 5,
+     "ints": 2,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 0,
+     "rz": 1,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 15.0,
+   "why": [],
+   "players": [
+    {
+     "name": "Matthew Stafford",
+     "pos": "QB",
+     "team": "LA",
+     "stat": "pass_yds",
+     "proj": 263.8,
+     "act": 157.0,
+     "miss": -106.8,
+     "played": true
+    },
+    {
+     "name": "Ladd McConkey",
+     "pos": "WR",
+     "team": "LAC",
+     "stat": "rec_yds",
+     "proj": 30.3,
+     "act": 86.0,
+     "miss": 55.7,
+     "played": true
+    },
+    {
+     "name": "Justin Herbert",
+     "pos": "QB",
+     "team": "LAC",
+     "stat": "pass_yds",
+     "proj": 204.0,
+     "act": 257.0,
+     "miss": 53.0,
+     "played": true
+    },
+    {
+     "name": "Colby Parkinson",
+     "pos": "TE",
+     "team": "LA",
+     "stat": "rec_yds",
+     "proj": 30.5,
+     "act": 0.0,
+     "miss": -30.5,
+     "played": false
+    },
+    {
+     "name": "Oronde Gadsden II",
+     "pos": "TE",
+     "team": "LAC",
+     "stat": "rec_yds",
+     "proj": 23.5,
+     "act": 52.0,
+     "miss": 28.5,
+     "played": true
+    },
+    {
+     "name": "Omarion Hampton",
+     "pos": "RB",
+     "team": "LAC",
+     "stat": "rush_yds",
+     "proj": 46.2,
+     "act": 20.0,
+     "miss": -26.2,
+     "played": true
+    },
+    {
+     "name": "Blake Corum",
+     "pos": "RB",
+     "team": "LA",
+     "stat": "rush_yds",
+     "proj": 50.7,
+     "act": 73.0,
+     "miss": 22.3,
+     "played": true
+    },
+    {
+     "name": "Konata Mumpfield",
+     "pos": "WR",
+     "team": "LA",
+     "stat": "rec_yds",
+     "proj": 21.6,
+     "act": 0.0,
+     "miss": -21.6,
+     "played": true
+    },
+    {
+     "name": "Kyren Williams",
+     "pos": "RB",
+     "team": "LA",
+     "stat": "rec_yds",
+     "proj": 21.8,
+     "act": 3.0,
+     "miss": -18.8,
+     "played": true
+    },
+    {
+     "name": "Tyler Higbee",
+     "pos": "TE",
+     "team": "LA",
+     "stat": "rec_yds",
+     "proj": 32.0,
+     "act": 14.0,
+     "miss": -18.0,
+     "played": true
+    }
+   ],
+   "unprojected": [
+    {
+     "name": "Tutu Atwell",
+     "pos": "WR",
+     "team": "LA",
+     "yds": 52.0,
+     "line": {
+      "rec_yds": 52.0,
+      "receptions": 2.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_08_KC_DEN",
+   "slug": "kc-den",
+   "date": "Sun Nov 1",
+   "time": "16:25",
+   "away": "KC",
+   "home": "DEN",
+   "away_name": "Kansas City Chiefs",
+   "home_name": "Denver Broncos",
+   "away_qb": "Patrick Mahomes",
+   "home_qb": "Bo Nix",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    24.0,
+    28.0
+   ],
+   "margin": 4.0,
+   "total": 52.0,
+   "market": {
+    "spread": -1.0,
+    "total": 41.5
+   },
+   "board": {
+    "margin": -0.49,
+    "total": 41.57,
+    "home_win": 0.5177
+   },
+   "model": {
+    "margin": 0.81,
+    "total": 42.92,
+    "home_win": 0.5628
+   },
+   "err": {
+    "model_margin": 3.2,
+    "market_margin": 5.0,
+    "board_margin": 4.5,
+    "model_total": 9.1,
+    "market_total": 10.5,
+    "board_total": 10.4
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.8,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 1.4,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "DEN": {
+     "game_id": "2026_08_KC_DEN",
+     "team": "DEN",
+     "plays": 61,
+     "epa_play": 0.137,
+     "success": 0.443,
+     "explosive": 5,
+     "ints": 0,
+     "fumbles": 2,
+     "fum_lost": 0,
+     "rz_td": 3,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 2,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "KC": {
+     "game_id": "2026_08_KC_DEN",
+     "team": "KC",
+     "plays": 68,
+     "epa_play": 0.133,
+     "success": 0.515,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 2.4,
+   "why": [],
+   "players": [
+    {
+     "name": "Emmett Johnson",
+     "pos": "RB",
+     "team": "KC",
+     "stat": "rec_yds",
+     "proj": 12.0,
+     "act": 128.0,
+     "miss": 116.0,
+     "played": true
+    },
+    {
+     "name": "Patrick Mahomes",
+     "pos": "QB",
+     "team": "KC",
+     "stat": "pass_yds",
+     "proj": 215.7,
+     "act": 321.0,
+     "miss": 105.3,
+     "played": true
+    },
+    {
+     "name": "Jonah Coleman",
+     "pos": "RB",
+     "team": "DEN",
+     "stat": "rec_yds",
+     "proj": 13.4,
+     "act": 63.0,
+     "miss": 49.6,
+     "played": true
+    },
+    {
+     "name": "Xavier Worthy",
+     "pos": "WR",
+     "team": "KC",
+     "stat": "rec_yds",
+     "proj": 47.8,
+     "act": 13.0,
+     "miss": -34.8,
+     "played": true
+    },
+    {
+     "name": "Bo Nix",
+     "pos": "QB",
+     "team": "DEN",
+     "stat": "pass_yds",
+     "proj": 192.0,
+     "act": 222.0,
+     "miss": 30.0,
+     "played": true
+    },
+    {
+     "name": "J.K. Dobbins",
+     "pos": "RB",
+     "team": "DEN",
+     "stat": "rush_yds",
+     "proj": 36.7,
+     "act": 13.0,
+     "miss": -23.7,
+     "played": true
+    },
+    {
+     "name": "Evan Engram",
+     "pos": "TE",
+     "team": "DEN",
+     "stat": "rec_yds",
+     "proj": 23.4,
+     "act": 0.0,
+     "miss": -23.4,
+     "played": true
+    },
+    {
+     "name": "Travis Kelce",
+     "pos": "TE",
+     "team": "KC",
+     "stat": "rec_yds",
+     "proj": 44.2,
+     "act": 67.0,
+     "miss": 22.8,
+     "played": true
+    },
+    {
+     "name": "Troy Franklin",
+     "pos": "WR",
+     "team": "DEN",
+     "stat": "rec_yds",
+     "proj": 22.4,
+     "act": 3.0,
+     "miss": -19.4,
+     "played": true
+    },
+    {
+     "name": "Courtland Sutton",
+     "pos": "WR",
+     "team": "DEN",
+     "stat": "rec_yds",
+     "proj": 34.4,
+     "act": 53.0,
+     "miss": 18.6,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_NE_MIA",
+   "slug": "ne-mia",
+   "date": "Sun Nov 1",
+   "time": "16:25",
+   "away": "NE",
+   "home": "MIA",
+   "away_name": "New England Patriots",
+   "home_name": "Miami Dolphins",
+   "away_qb": "Drake Maye",
+   "home_qb": "Malik Willis",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    24.0,
+    19.0
+   ],
+   "margin": -5.0,
+   "total": 43.0,
+   "market": {
+    "spread": -6.5,
+    "total": 41.5
+   },
+   "board": {
+    "margin": -5.99,
+    "total": 41.6,
+    "home_win": 0.2433
+   },
+   "model": {
+    "margin": -4.67,
+    "total": 43.49,
+    "home_win": 0.2807
+   },
+   "err": {
+    "model_margin": -0.3,
+    "market_margin": 1.5,
+    "board_margin": 1.0,
+    "model_total": -0.5,
+    "market_total": 1.5,
+    "board_total": 1.4
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.8,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 2.0,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "MIA": {
+     "game_id": "2026_08_NE_MIA",
+     "team": "MIA",
+     "plays": 65,
+     "epa_play": -0.023,
+     "success": 0.431,
+     "explosive": 3,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 1,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "NE": {
+     "game_id": "2026_08_NE_MIA",
+     "team": "NE",
+     "plays": 57,
+     "epa_play": 0.113,
+     "success": 0.519,
+     "explosive": 5,
+     "ints": 0,
+     "fumbles": 3,
+     "fum_lost": 1,
+     "rz_td": 1,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 1,
+     "fourth_conv": 2,
+     "fourth": 2,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": -1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": -1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -3.4,
+   "why": [],
+   "players": [
+    {
+     "name": "Drake Maye",
+     "pos": "QB",
+     "team": "NE",
+     "stat": "pass_yds",
+     "proj": 240.3,
+     "act": 199.0,
+     "miss": -41.3,
+     "played": true
+    },
+    {
+     "name": "DeMario Douglas",
+     "pos": "WR",
+     "team": "NE",
+     "stat": "rec_yds",
+     "proj": 35.5,
+     "act": 76.0,
+     "miss": 40.5,
+     "played": true
+    },
+    {
+     "name": "Kevin Coleman Jr.",
+     "pos": "WR",
+     "team": "MIA",
+     "stat": "rec_yds",
+     "proj": 11.6,
+     "act": 46.0,
+     "miss": 34.4,
+     "played": true
+    },
+    {
+     "name": "Rhamondre Stevenson",
+     "pos": "RB",
+     "team": "NE",
+     "stat": "rush_yds",
+     "proj": 53.1,
+     "act": 82.0,
+     "miss": 28.9,
+     "played": true
+    },
+    {
+     "name": "Malik Willis",
+     "pos": "QB",
+     "team": "MIA",
+     "stat": "pass_yds",
+     "proj": 185.5,
+     "act": 211.0,
+     "miss": 25.5,
+     "played": true
+    },
+    {
+     "name": "Kyle Williams",
+     "pos": "WR",
+     "team": "NE",
+     "stat": "rec_yds",
+     "proj": 17.6,
+     "act": 43.0,
+     "miss": 25.4,
+     "played": true
+    },
+    {
+     "name": "Drake Maye",
+     "pos": "QB",
+     "team": "NE",
+     "stat": "rush_yds",
+     "proj": 32.0,
+     "act": 7.0,
+     "miss": -25.0,
+     "played": true
+    },
+    {
+     "name": "Malik Willis",
+     "pos": "QB",
+     "team": "MIA",
+     "stat": "rush_yds",
+     "proj": 26.2,
+     "act": 2.0,
+     "miss": -24.2,
+     "played": true
+    },
+    {
+     "name": "Eli Raridon",
+     "pos": "TE",
+     "team": "NE",
+     "stat": "rec_yds",
+     "proj": 23.9,
+     "act": 5.0,
+     "miss": -18.9,
+     "played": true
+    },
+    {
+     "name": "Rhamondre Stevenson",
+     "pos": "RB",
+     "team": "NE",
+     "stat": "rec_yds",
+     "proj": 23.0,
+     "act": 8.0,
+     "miss": -15.0,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_PHI_WAS",
+   "slug": "phi-was",
+   "date": "Sun Nov 1",
+   "time": "20:20",
+   "away": "PHI",
+   "home": "WAS",
+   "away_name": "Philadelphia Eagles",
+   "home_name": "Washington Commanders",
+   "away_qb": "Tanner McKee",
+   "home_qb": "Jayden Daniels",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    10.0,
+    27.0
+   ],
+   "margin": 17.0,
+   "total": 37.0,
+   "market": {
+    "spread": 6.0,
+    "total": 40.5
+   },
+   "board": {
+    "margin": 5.59,
+    "total": 40.63,
+    "home_win": 0.6879
+   },
+   "model": {
+    "margin": 4.55,
+    "total": 43.11,
+    "home_win": 0.6549
+   },
+   "err": {
+    "model_margin": 12.4,
+    "market_margin": 11.0,
+    "board_margin": 11.4,
+    "model_total": -6.1,
+    "market_total": -3.5,
+    "board_total": -3.6
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -1.5,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 2.6,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "WAS": {
+     "game_id": "2026_08_PHI_WAS",
+     "team": "WAS",
+     "plays": 60,
+     "epa_play": -0.045,
+     "success": 0.375,
+     "explosive": 7,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 2,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "PHI": {
+     "game_id": "2026_08_PHI_WAS",
+     "team": "PHI",
+     "plays": 69,
+     "epa_play": -0.114,
+     "success": 0.383,
+     "explosive": 3,
+     "ints": 1,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 1,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 1,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 1.4,
+    "total": 1.4,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 15.6,
+   "why": [],
+   "players": [
+    {
+     "name": "Treylon Burks",
+     "pos": "WR",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 23.2,
+     "act": 81.0,
+     "miss": 57.8,
+     "played": true
+    },
+    {
+     "name": "Elijah Mitchell",
+     "pos": "RB",
+     "team": "PHI",
+     "stat": "rush_yds",
+     "proj": 8.4,
+     "act": 34.0,
+     "miss": 25.6,
+     "played": true
+    },
+    {
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "team": "PHI",
+     "stat": "rush_yds",
+     "proj": 54.1,
+     "act": 30.0,
+     "miss": -24.1,
+     "played": true
+    },
+    {
+     "name": "Jaydon Blue",
+     "pos": "RB",
+     "team": "PHI",
+     "stat": "rush_yds",
+     "proj": 22.9,
+     "act": 0.0,
+     "miss": -22.9,
+     "played": true
+    },
+    {
+     "name": "Tanner McKee",
+     "pos": "QB",
+     "team": "PHI",
+     "stat": "rush_yds",
+     "proj": 3.9,
+     "act": 25.0,
+     "miss": 21.1,
+     "played": true
+    },
+    {
+     "name": "Austin Ekeler",
+     "pos": "RB",
+     "team": "WAS",
+     "stat": "rush_yds",
+     "proj": 15.3,
+     "act": 36.0,
+     "miss": 20.7,
+     "played": true
+    },
+    {
+     "name": "Antonio Williams",
+     "pos": "WR",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 35.7,
+     "act": 54.0,
+     "miss": 18.3,
+     "played": true
+    },
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "team": "WAS",
+     "stat": "rush_yds",
+     "proj": 40.6,
+     "act": 23.0,
+     "miss": -17.6,
+     "played": true
+    },
+    {
+     "name": "Dyami Brown",
+     "pos": "WR",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 15.7,
+     "act": 0.0,
+     "miss": -15.7,
+     "played": false
+    },
+    {
+     "name": "Saquon Barkley",
+     "pos": "RB",
+     "team": "PHI",
+     "stat": "rec_yds",
+     "proj": 8.4,
+     "act": 24.0,
+     "miss": 15.6,
+     "played": true
+    }
+   ],
+   "unprojected": [
+    {
+     "name": "Eli Stowers",
+     "pos": "TE",
+     "team": "PHI",
+     "yds": 53.0,
+     "line": {
+      "rec_yds": 53.0,
+      "receptions": 3.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_08_CAR_GB",
+   "slug": "car-gb",
+   "date": "Thu Oct 29",
+   "time": "20:15",
+   "away": "CAR",
+   "home": "GB",
+   "away_name": "Carolina Panthers",
+   "home_name": "Green Bay Packers",
+   "away_qb": "Bryce Young",
+   "home_qb": "Jordan Love",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    19.0,
+    27.0
+   ],
+   "margin": 8.0,
+   "total": 46.0,
+   "market": {
+    "spread": 3.5,
+    "total": 46.5
+   },
+   "board": {
+    "margin": 3.58,
+    "total": 46.52,
+    "home_win": 0.6251
+   },
+   "model": {
+    "margin": 3.78,
+    "total": 46.89,
+    "home_win": 0.6317
+   },
+   "err": {
+    "model_margin": 4.2,
+    "market_margin": 4.5,
+    "board_margin": 4.4,
+    "model_total": -0.9,
+    "market_total": -0.5,
+    "board_total": -0.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 0.3,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.4,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "GB": {
+     "game_id": "2026_08_CAR_GB",
+     "team": "GB",
+     "plays": 69,
+     "epa_play": 0.122,
+     "success": 0.476,
+     "explosive": 4,
+     "ints": 1,
+     "fumbles": 3,
+     "fum_lost": 2,
+     "rz_td": 3,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "CAR": {
+     "game_id": "2026_08_CAR_GB",
+     "team": "CAR",
+     "plays": 72,
+     "epa_play": -0.129,
+     "success": 0.343,
+     "explosive": 2,
+     "ints": 1,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 1,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 2,
+     "fourth": 4,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 8.0,
+   "why": [],
+   "players": [
+    {
+     "name": "Christian Watson",
+     "pos": "WR",
+     "team": "GB",
+     "stat": "rec_yds",
+     "proj": 59.3,
+     "act": 113.0,
+     "miss": 53.7,
+     "played": true
+    },
+    {
+     "name": "Jordan Love",
+     "pos": "QB",
+     "team": "GB",
+     "stat": "pass_yds",
+     "proj": 237.2,
+     "act": 288.0,
+     "miss": 50.8,
+     "played": true
+    },
+    {
+     "name": "Matthew Golden",
+     "pos": "WR",
+     "team": "GB",
+     "stat": "rec_yds",
+     "proj": 55.2,
+     "act": 79.0,
+     "miss": 23.8,
+     "played": true
+    },
+    {
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "team": "CAR",
+     "stat": "rec_yds",
+     "proj": 15.2,
+     "act": 38.0,
+     "miss": 22.8,
+     "played": true
+    },
+    {
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "team": "CAR",
+     "stat": "rush_yds",
+     "proj": 58.3,
+     "act": 81.0,
+     "miss": 22.7,
+     "played": true
+    },
+    {
+     "name": "Bryce Young",
+     "pos": "QB",
+     "team": "CAR",
+     "stat": "pass_yds",
+     "proj": 229.3,
+     "act": 209.0,
+     "miss": -20.3,
+     "played": true
+    },
+    {
+     "name": "MarShawn Lloyd",
+     "pos": "RB",
+     "team": "GB",
+     "stat": "rush_yds",
+     "proj": 25.4,
+     "act": 7.0,
+     "miss": -18.4,
+     "played": true
+    },
+    {
+     "name": "Kaleb Johnson",
+     "pos": "RB",
+     "team": "GB",
+     "stat": "rush_yds",
+     "proj": 17.1,
+     "act": 0.0,
+     "miss": -17.1,
+     "played": false
+    },
+    {
+     "name": "Darren Waller",
+     "pos": "TE",
+     "team": "CAR",
+     "stat": "rec_yds",
+     "proj": 26.9,
+     "act": 11.0,
+     "miss": -15.9,
+     "played": true
+    },
+    {
+     "name": "Tucker Kraft",
+     "pos": "TE",
+     "team": "GB",
+     "stat": "rec_yds",
+     "proj": 37.3,
+     "act": 53.0,
+     "miss": 15.7,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_MIN_DET",
+   "slug": "min-det",
+   "date": "Sun Nov 1",
+   "time": "13:00",
+   "away": "MIN",
+   "home": "DET",
+   "away_name": "Minnesota Vikings",
+   "home_name": "Detroit Lions",
+   "away_qb": "Kyler Murray",
+   "home_qb": "Jared Goff",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    15.0,
+    19.0
+   ],
+   "margin": 4.0,
+   "total": 34.0,
+   "market": {
+    "spread": 3.5,
+    "total": 46.0
+   },
+   "board": {
+    "margin": 3.04,
+    "total": 46.09,
+    "home_win": 0.6188
+   },
+   "model": {
+    "margin": 1.85,
+    "total": 47.75,
+    "home_win": 0.5787
+   },
+   "err": {
+    "model_margin": 2.1,
+    "market_margin": 0.5,
+    "board_margin": 1.0,
+    "model_total": -13.8,
+    "market_total": -12.0,
+    "board_total": -12.1
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -1.6,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 1.8,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "DET": {
+     "game_id": "2026_08_MIN_DET",
+     "team": "DET",
+     "plays": 70,
+     "epa_play": -0.03,
+     "success": 0.486,
+     "explosive": 7,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "MIN": {
+     "game_id": "2026_08_MIN_DET",
+     "team": "MIN",
+     "plays": 52,
+     "epa_play": -0.053,
+     "success": 0.462,
+     "explosive": 4,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 4.0,
+   "why": [],
+   "players": [
+    {
+     "name": "Jared Goff",
+     "pos": "QB",
+     "team": "DET",
+     "stat": "pass_yds",
+     "proj": 256.9,
+     "act": 176.0,
+     "miss": -80.9,
+     "played": true
+    },
+    {
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "team": "DET",
+     "stat": "rush_yds",
+     "proj": 79.1,
+     "act": 153.0,
+     "miss": 73.9,
+     "played": true
+    },
+    {
+     "name": "Sione Vaki",
+     "pos": "RB",
+     "team": "DET",
+     "stat": "rush_yds",
+     "proj": 7.5,
+     "act": 65.0,
+     "miss": 57.5,
+     "played": true
+    },
+    {
+     "name": "Justin Jefferson",
+     "pos": "WR",
+     "team": "MIN",
+     "stat": "rec_yds",
+     "proj": 72.0,
+     "act": 33.0,
+     "miss": -39.0,
+     "played": true
+    },
+    {
+     "name": "Amon-Ra St. Brown",
+     "pos": "WR",
+     "team": "DET",
+     "stat": "rec_yds",
+     "proj": 83.5,
+     "act": 46.0,
+     "miss": -37.5,
+     "played": true
+    },
+    {
+     "name": "Jordan Mason",
+     "pos": "RB",
+     "team": "MIN",
+     "stat": "rush_yds",
+     "proj": 47.7,
+     "act": 20.0,
+     "miss": -27.7,
+     "played": true
+    },
+    {
+     "name": "Jordan Addison",
+     "pos": "WR",
+     "team": "MIN",
+     "stat": "rec_yds",
+     "proj": 42.5,
+     "act": 66.0,
+     "miss": 23.5,
+     "played": true
+    },
+    {
+     "name": "Isaac TeSlaa",
+     "pos": "WR",
+     "team": "DET",
+     "stat": "rec_yds",
+     "proj": 23.2,
+     "act": 0.0,
+     "miss": -23.2,
+     "played": false
+    },
+    {
+     "name": "Jahmyr Gibbs",
+     "pos": "RB",
+     "team": "DET",
+     "stat": "rec_yds",
+     "proj": 35.5,
+     "act": 15.0,
+     "miss": -20.5,
+     "played": true
+    },
+    {
+     "name": "Jameson Williams",
+     "pos": "WR",
+     "team": "DET",
+     "stat": "rec_yds",
+     "proj": 49.5,
+     "act": 70.0,
+     "miss": 20.5,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  },
+  {
+   "id": "2026_08_CHI_SEA",
+   "slug": "chi-sea",
+   "date": "Mon Nov 2",
+   "time": "20:15",
+   "away": "CHI",
+   "home": "SEA",
+   "away_name": "Chicago Bears",
+   "home_name": "Seattle Seahawks",
+   "away_qb": "Caleb Williams",
+   "home_qb": "Sam Darnold",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    34.0,
+    17.0
+   ],
+   "margin": -17.0,
+   "total": 51.0,
+   "market": {
+    "spread": 3.5,
+    "total": 46.5
+   },
+   "board": {
+    "margin": 3.85,
+    "total": 46.51,
+    "home_win": 0.6265
+   },
+   "model": {
+    "margin": 4.74,
+    "total": 46.64,
+    "home_win": 0.6556
+   },
+   "err": {
+    "model_margin": -21.7,
+    "market_margin": -20.5,
+    "board_margin": -20.9,
+    "model_total": 4.4,
+    "market_total": 4.5,
+    "board_total": 4.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.2,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.1,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "SEA": {
+     "game_id": "2026_08_CHI_SEA",
+     "team": "SEA",
+     "plays": 63,
+     "epa_play": -0.093,
+     "success": 0.314,
+     "explosive": 3,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 1,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "CHI": {
+     "game_id": "2026_08_CHI_SEA",
+     "team": "CHI",
+     "plays": 69,
+     "epa_play": 0.133,
+     "success": 0.5,
+     "explosive": 5,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 4,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": -1.4,
+    "total": 0.2,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -17.2,
+   "why": [],
+   "players": [
+    {
+     "name": "Sam Darnold",
+     "pos": "QB",
+     "team": "SEA",
+     "stat": "pass_yds",
+     "proj": 245.2,
+     "act": 188.0,
+     "miss": -57.2,
+     "played": true
+    },
+    {
+     "name": "Emanuel Wilson",
+     "pos": "RB",
+     "team": "SEA",
+     "stat": "rush_yds",
+     "proj": 43.6,
+     "act": 0.0,
+     "miss": -43.6,
+     "played": false
+    },
+    {
+     "name": "Rome Odunze",
+     "pos": "WR",
+     "team": "CHI",
+     "stat": "rec_yds",
+     "proj": 44.9,
+     "act": 87.0,
+     "miss": 42.1,
+     "played": true
+    },
+    {
+     "name": "Jaxon Smith-Njigba",
+     "pos": "WR",
+     "team": "SEA",
+     "stat": "rec_yds",
+     "proj": 85.4,
+     "act": 118.0,
+     "miss": 32.6,
+     "played": true
+    },
+    {
+     "name": "Cooper Kupp",
+     "pos": "WR",
+     "team": "SEA",
+     "stat": "rec_yds",
+     "proj": 34.3,
+     "act": 7.0,
+     "miss": -27.3,
+     "played": true
+    },
+    {
+     "name": "Caleb Williams",
+     "pos": "QB",
+     "team": "CHI",
+     "stat": "rush_yds",
+     "proj": 21.4,
+     "act": 2.0,
+     "miss": -19.4,
+     "played": true
+    },
+    {
+     "name": "Caleb Williams",
+     "pos": "QB",
+     "team": "CHI",
+     "stat": "pass_yds",
+     "proj": 227.7,
+     "act": 247.0,
+     "miss": 19.3,
+     "played": true
+    },
+    {
+     "name": "Colston Loveland",
+     "pos": "TE",
+     "team": "CHI",
+     "stat": "rec_yds",
+     "proj": 47.5,
+     "act": 65.0,
+     "miss": 17.5,
+     "played": true
+    },
+    {
+     "name": "Zach Charbonnet",
+     "pos": "RB",
+     "team": "SEA",
+     "stat": "rush_yds",
+     "proj": 39.4,
+     "act": 23.0,
+     "miss": -16.4,
+     "played": true
+    },
+    {
+     "name": "Kalif Raymond",
+     "pos": "WR",
+     "team": "CHI",
+     "stat": "rec_yds",
+     "proj": 26.7,
+     "act": 14.0,
+     "miss": -12.7,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  }
+ ]
+}
