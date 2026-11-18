@@ -77,3 +77,12 @@ def test_players_scorecard_leaves_out_early_exits():
     assert (c["all"]["n"], c["all"]["met"], c["all"]["short"]) == (3, 2, 1)      # met = at or above
     assert c["left"]["players"] == 1 and c["left"]["short"] == 1
     assert c["dnp"]["players"] == 2
+
+
+def test_players_page_minimums():
+    from nflmodel.reviewplayers import on_page
+    assert not on_page("WR", "rec_yds", 20) and on_page("WR", "rec_yds", 20.1)
+    assert not on_page("TE", "rec_yds", 15) and on_page("TE", "rec_yds", 15.1)
+    assert not on_page("RB", "rush_yds", 15) and on_page("RB", "rush_yds", 15.1)
+    assert not on_page("RB", "rec_yds", 9.9) and on_page("RB", "rec_yds", 10)
+    assert on_page("QB", "rush_yds", 4)
