@@ -3059,3 +3059,47 @@ ratings had been rejected; that was wrong: they were applied to the margin model
 Reported, "fade the lucky team": against the closing spread 2015-25, the luckiest fifth of
 team-games went 583-599 (49.3%), the unluckiest fifth 583-599 (49.3%), everyone else 1787-1755
 (50.5%). Nothing to bet.
+
+## NFL: receivers whose WOPR is high for their projection (Nov 18, 2026): 14 of 15, a trade-off, not applied
+
+Follow-up to the WOPR side table above, Ryan's yes. Rule written before the run: Project doc
+`claude/plan-wopr-standing-test-2026-11-18.md`. Script `experiments/wopr_standing_test.py`, output
+`experiments/out/wopr_standing_test.json`. **The 2019-25 holdout had already been read for this
+idea** (the side table), so 2026 weeks 1-10 are the unseen check.
+
+After the final receiving-yards projection, WR and TE: `new = proj × (1 + b × z)`. z is how far his
+WOPR sits above or below the usual WOPR for his projection (a line fitted by position on earlier
+seasons, in spreads, held to ±2.5); b is one number fitted on earlier seasons (0.09-0.10 in 2016-18,
+falling to 0.05 game-day / 0.06 bet-time by 2026). Version A (10+ projected yards) was chosen on
+tuning over B (25+). It moves a projection 2.1 yards on average, 5.3 at the 90th percentile.
+WR/TE who played, projected 10+ yards; candidate minus current (paired se):
+
+| Measure | Game-day | Bet-time |
+|---|---|---|
+| RMSE, tuning 2014-18 (30.87 / 30.95) | −0.074 (0.034) | −0.100 (0.035) |
+| Brier at own Typical line, tuning | −0.0004 (0.0003) | −0.0006 (0.0003) |
+| RMSE, holdout 2019-25 (29.23 / 29.30) | −0.021 (0.026), **0.8 se** | −0.052 (0.029), 1.8 se |
+| Brier at own Typical line, holdout | −0.0002 (0.0002) | −0.0005 (0.0002) |
+| DK/FD main lines 2023-25 (close / pricing snapshot) | **+0.00003 (0.00037)** | −0.0007 (0.0006) |
+| Floor rungs 65-95%, 2025, pricing snapshot | | −0.0003 (0.0005) |
+| RMSE, 2026 weeks 1-10 (30.01 / 30.13) | −0.058 (0.069) | −0.141 (0.074), 1.9 se |
+| Brier at own Typical line, 2026 weeks 1-10 | −0.0004 (0.0005) | −0.0006 (0.0006) |
+
+Better on 14 of 15. The miss is the closing lines with game-day projections (flat), and the
+game-day holdout RMSE gain is under 1 standard error, so it is not kept by the rule: a trade-off
+for Ryan. Every bet-time measure is better, and all four 2026 measures are. The books still read
+the rungs far better than the model (0.1581 against 0.1646 after the change).
+
+The side table again, with the real Typical line (WR/TE projected 25+ yards, thirds by WOPR within
+the same projection band), high third minus low third:
+
+| | Actual minus projected | Reached Typical | Cleared 60% of projection |
+|---|---|---|---|
+| Game-day 2014-18 | +8.4 ± 1.0 yards | +8.5 ± 1.4 pts (56.5% v 47.9%) | +7.2 ± 1.4 |
+| Bet-time 2014-18 | +9.2 ± 1.0 | +8.9 ± 1.4 (56.7% v 47.8%) | +8.7 ± 1.4 |
+| Game-day 2019-25 (the lead) | +3.7 ± 0.7 | +3.5 ± 1.1 (54.1% v 50.6%) | +4.0 ± 1.0 |
+| Bet-time 2019-25 | +4.2 ± 0.7 | +4.6 ± 1.1 (54.1% v 49.5%) | +4.6 ± 1.0 |
+| Bet-time 2026 weeks 1-10 | +5.8 ± 2.7 | +2.2 ± 4.0 (51.9% v 49.7%) | +5.0 ± 3.8 |
+
+The gap shows in every period and has narrowed since 2019. Typical's Brier was scored on 2015 on
+(the prop model has too little history to fit before then). **Not applied.**

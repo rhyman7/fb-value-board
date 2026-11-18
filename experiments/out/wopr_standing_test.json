@@ -1,0 +1,411 @@
+{
+ "tuning": {
+  "A": {
+   "RMSE gameday": {
+    "n": 14610,
+    "now": 30.8749,
+    "candidate": 30.8008,
+    "diff": -0.07406,
+    "se": 0.03381
+   },
+   "RMSE bettime": {
+    "n": 14514,
+    "now": 30.9476,
+    "candidate": 30.8474,
+    "diff": -0.10025,
+    "se": 0.03488
+   },
+   "Typical Brier gameday": {
+    "n": 11609,
+    "now": 0.25,
+    "candidate": 0.24955,
+    "diff": -0.000447,
+    "se": 0.00032,
+    "reached_typical": 0.5184
+   },
+   "Typical Brier bettime": {
+    "n": 11581,
+    "now": 0.24994,
+    "candidate": 0.2493,
+    "diff": -0.000634,
+    "se": 0.00033,
+    "reached_typical": 0.5181
+   }
+  },
+  "B": {
+   "RMSE gameday": {
+    "n": 14610,
+    "now": 30.8749,
+    "candidate": 30.8069,
+    "diff": -0.06796,
+    "se": 0.03364
+   },
+   "RMSE bettime": {
+    "n": 14514,
+    "now": 30.9476,
+    "candidate": 30.8572,
+    "diff": -0.09045,
+    "se": 0.03448
+   },
+   "Typical Brier gameday": {
+    "n": 11609,
+    "now": 0.25,
+    "candidate": 0.24954,
+    "diff": -0.000459,
+    "se": 0.00031,
+    "reached_typical": 0.5184
+   },
+   "Typical Brier bettime": {
+    "n": 11581,
+    "now": 0.24994,
+    "candidate": 0.24939,
+    "diff": -0.000546,
+    "se": 0.000319,
+    "reached_typical": 0.5181
+   }
+  }
+ },
+ "b_by_season": {
+  "A": {
+   "gameday": {
+    "2015": 0.0,
+    "2016": 0.0914,
+    "2017": 0.0937,
+    "2018": 0.087,
+    "2019": 0.0741,
+    "2020": 0.0705,
+    "2021": 0.0663,
+    "2022": 0.0634,
+    "2023": 0.0595,
+    "2024": 0.0584,
+    "2025": 0.0562,
+    "2026": 0.0523
+   },
+   "bettime": {
+    "2015": 0.0,
+    "2016": 0.1019,
+    "2017": 0.1018,
+    "2018": 0.0947,
+    "2019": 0.0845,
+    "2020": 0.081,
+    "2021": 0.0766,
+    "2022": 0.0744,
+    "2023": 0.0692,
+    "2024": 0.0692,
+    "2025": 0.067,
+    "2026": 0.063
+   }
+  },
+  "B": {
+   "gameday": {
+    "2015": 0.0,
+    "2016": 0.0905,
+    "2017": 0.0943,
+    "2018": 0.0859,
+    "2019": 0.0732,
+    "2020": 0.0698,
+    "2021": 0.0656,
+    "2022": 0.0633,
+    "2023": 0.0593,
+    "2024": 0.0583,
+    "2025": 0.0561,
+    "2026": 0.0521
+   },
+   "bettime": {
+    "2015": 0.0,
+    "2016": 0.1018,
+    "2017": 0.1016,
+    "2018": 0.0928,
+    "2019": 0.0833,
+    "2020": 0.0798,
+    "2021": 0.0751,
+    "2022": 0.0732,
+    "2023": 0.0677,
+    "2024": 0.0679,
+    "2025": 0.0657,
+    "2026": 0.0613
+   }
+  }
+ },
+ "better_on_all_four_tuning": [
+  "A",
+  "B"
+ ],
+ "chosen": "A",
+ "holdout": {
+  "RMSE gameday": {
+   "n": 21290,
+   "now": 29.2269,
+   "candidate": 29.206,
+   "diff": -0.0209,
+   "se": 0.0257
+  },
+  "RMSE bettime": {
+   "n": 21284,
+   "now": 29.3025,
+   "candidate": 29.2501,
+   "diff": -0.05235,
+   "se": 0.02861
+  },
+  "Typical Brier gameday": {
+   "n": 21290,
+   "now": 0.24997,
+   "candidate": 0.24979,
+   "diff": -0.000184,
+   "se": 0.000198,
+   "reached_typical": 0.5137
+  },
+  "Typical Brier bettime": {
+   "n": 21284,
+   "now": 0.24977,
+   "candidate": 0.24922,
+   "diff": -0.000548,
+   "se": 0.000213,
+   "reached_typical": 0.511
+  }
+ },
+ "lines": {
+  "main lines, close, game-day": {
+   "n": 13828,
+   "now": 0.25793,
+   "candidate": 0.25796,
+   "books": 0.24993,
+   "diff": 2.5e-05,
+   "se": 0.000367
+  },
+  "main lines, pricing snapshot, bet-time": {
+   "n": 8001,
+   "now": 0.25695,
+   "candidate": 0.25621,
+   "books": 0.24993,
+   "diff": -0.000737,
+   "se": 0.00058
+  },
+  "floor rungs 65-95%, pricing snapshot, bet-time": {
+   "n": 6498,
+   "now": 0.1649,
+   "candidate": 0.16462,
+   "books": 0.15809,
+   "diff": -0.00028,
+   "se": 0.000489,
+   "cleared": 0.7918
+  }
+ },
+ "2026 weeks 1-10": {
+  "RMSE gameday": {
+   "n": 1553,
+   "now": 30.0068,
+   "candidate": 29.9483,
+   "diff": -0.05842,
+   "se": 0.06929
+  },
+  "RMSE bettime": {
+   "n": 1561,
+   "now": 30.1284,
+   "candidate": 29.9875,
+   "diff": -0.14095,
+   "se": 0.07411
+  },
+  "Typical Brier gameday": {
+   "n": 1553,
+   "now": 0.25071,
+   "candidate": 0.25031,
+   "diff": -0.000392,
+   "se": 0.000504,
+   "reached_typical": 0.5248
+  },
+  "Typical Brier bettime": {
+   "n": 1561,
+   "now": 0.25049,
+   "candidate": 0.24986,
+   "diff": -0.000635,
+   "se": 0.000583,
+   "reached_typical": 0.5234
+  }
+ },
+ "better_on": "14 of 15",
+ "kept": false,
+ "verdict": "Mixed: a trade-off for Ryan, not kept by the rule.",
+ "projection_move_bettime_2019_25": {
+  "mean_abs_yards": 2.06,
+  "p90": 5.26,
+  "max": 23.63
+ },
+ "reported_thirds": {
+  "game-day 2014-18": {
+   "low": {
+    "n": 2389,
+    "avg_proj": 46.3,
+    "avg_actual": 43.1,
+    "reached_typical": 0.4793,
+    "cleared_60pct": 0.6195
+   },
+   "mid": {
+    "n": 2380,
+    "avg_proj": 46.9,
+    "avg_actual": 47.0,
+    "reached_typical": 0.5282,
+    "cleared_60pct": 0.6584
+   },
+   "high": {
+    "n": 2380,
+    "avg_proj": 47.4,
+    "avg_actual": 52.7,
+    "reached_typical": 0.5647,
+    "cleared_60pct": 0.6912
+   },
+   "high minus low, typical": {
+    "diff": 0.0854,
+    "se": 0.0144
+   },
+   "high minus low, 60pct": {
+    "diff": 0.0717,
+    "se": 0.0137
+   },
+   "high minus low, actual minus projected": {
+    "diff": 8.41,
+    "se": 1.03
+   }
+  },
+  "bet-time 2014-18": {
+   "low": {
+    "n": 2380,
+    "avg_proj": 46.5,
+    "avg_actual": 42.8,
+    "reached_typical": 0.4777,
+    "cleared_60pct": 0.6076
+   },
+   "mid": {
+    "n": 2373,
+    "avg_proj": 47.0,
+    "avg_actual": 47.1,
+    "reached_typical": 0.5238,
+    "cleared_60pct": 0.6608
+   },
+   "high": {
+    "n": 2380,
+    "avg_proj": 47.5,
+    "avg_actual": 52.9,
+    "reached_typical": 0.5668,
+    "cleared_60pct": 0.6941
+   },
+   "high minus low, typical": {
+    "diff": 0.0891,
+    "se": 0.0144
+   },
+   "high minus low, 60pct": {
+    "diff": 0.0866,
+    "se": 0.0138
+   },
+   "high minus low, actual minus projected": {
+    "diff": 9.15,
+    "se": 1.04
+   }
+  },
+  "game-day 2019-25": {
+   "low": {
+    "n": 4267,
+    "avg_proj": 46.8,
+    "avg_actual": 45.2,
+    "reached_typical": 0.506,
+    "cleared_60pct": 0.6438
+   },
+   "mid": {
+    "n": 4260,
+    "avg_proj": 47.2,
+    "avg_actual": 47.7,
+    "reached_typical": 0.5211,
+    "cleared_60pct": 0.6761
+   },
+   "high": {
+    "n": 4260,
+    "avg_proj": 47.8,
+    "avg_actual": 49.9,
+    "reached_typical": 0.5413,
+    "cleared_60pct": 0.6833
+   },
+   "high minus low, typical": {
+    "diff": 0.0353,
+    "se": 0.0108
+   },
+   "high minus low, 60pct": {
+    "diff": 0.0396,
+    "se": 0.0102
+   },
+   "high minus low, actual minus projected": {
+    "diff": 3.67,
+    "se": 0.74
+   }
+  },
+  "bet-time 2019-25": {
+   "low": {
+    "n": 4260,
+    "avg_proj": 46.6,
+    "avg_actual": 44.8,
+    "reached_typical": 0.4948,
+    "cleared_60pct": 0.6364
+   },
+   "mid": {
+    "n": 4250,
+    "avg_proj": 47.2,
+    "avg_actual": 47.7,
+    "reached_typical": 0.5174,
+    "cleared_60pct": 0.6664
+   },
+   "high": {
+    "n": 4257,
+    "avg_proj": 47.8,
+    "avg_actual": 50.1,
+    "reached_typical": 0.5408,
+    "cleared_60pct": 0.6826
+   },
+   "high minus low, typical": {
+    "diff": 0.0459,
+    "se": 0.0108
+   },
+   "high minus low, 60pct": {
+    "diff": 0.0463,
+    "se": 0.0103
+   },
+   "high minus low, actual minus projected": {
+    "diff": 4.18,
+    "se": 0.74
+   }
+  },
+  "bet-time 2026 weeks 1-10": {
+   "low": {
+    "n": 320,
+    "avg_proj": 44.4,
+    "avg_actual": 42.4,
+    "reached_typical": 0.4969,
+    "cleared_60pct": 0.6281
+   },
+   "mid": {
+    "n": 315,
+    "avg_proj": 45.6,
+    "avg_actual": 47.9,
+    "reached_typical": 0.5524,
+    "cleared_60pct": 0.6825
+   },
+   "high": {
+    "n": 320,
+    "avg_proj": 46.1,
+    "avg_actual": 49.9,
+    "reached_typical": 0.5188,
+    "cleared_60pct": 0.6781
+   },
+   "high minus low, typical": {
+    "diff": 0.0219,
+    "se": 0.0396
+   },
+   "high minus low, 60pct": {
+    "diff": 0.05,
+    "se": 0.0376
+   },
+   "high minus low, actual minus projected": {
+    "diff": 5.83,
+    "se": 2.67
+   }
+  }
+ }
+}

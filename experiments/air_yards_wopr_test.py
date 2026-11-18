@@ -229,7 +229,7 @@ def _models(base, cand, season):
     return out
 
 
-def brier(base, cand, kind, stats) -> dict:
+def brier(base, cand, kind, stats, groups=None) -> dict:
     import props_real_lines as RL
     got = {"now": [], "cand": []}
     for season in (2023, 2024, 2025):
@@ -238,7 +238,8 @@ def brier(base, cand, kind, stats) -> dict:
             continue
         for k, t, m in zip(("now", "cand"), (base, cand), _models(base, cand, season)):
             x = RL.priced(t, m, snaps, season)
-            got[k].append(x[x["stat"].isin(stats)])
+            x = x[x["stat"].isin(stats)]
+            got[k].append(x if groups is None else x[x["group"].isin(groups)])
     key = ["game_id", "nname", "market", "line", "book"]
     b0 = pd.concat(got["now"], ignore_index=True)
     x = pd.concat(got["cand"], ignore_index=True).merge(
@@ -253,7 +254,7 @@ def brier(base, cand, kind, stats) -> dict:
             "se": round(float(cl.std(ddof=1) * np.sqrt(len(cl)) / len(x)), 6)}
 
 
-def floor_rungs(base, cand) -> dict:
+def floor_rungs(base, cand, groups=None) -> dict:
     """Brier on the alternate receiving-yards rungs the books read at 65-95% (pricing snapshot, bet-time)."""
     from nfl_pff_prop_inputs_test import rungs
     key = ["game_id", "player_id", "stat", "line", "book"]
@@ -265,7 +266,7 @@ def floor_rungs(base, cand) -> dict:
         for k, t, m in zip(("now", "cand"), (base, cand), _models(base, cand, season)):
             r = rungs(t, m, snaps, season, "player_reception_yds_alternate")
             if not r.empty:
-                got[k].append(r)
+                got[k].append(r if groups is None else r[r["group"].isin(groups)])
     a = pd.concat(got["now"], ignore_index=True)
     b = pd.concat(got["cand"], ignore_index=True)
     a, b = a[a["y"] != a["line"]].drop_duplicates(key), b[b["y"] != b["line"]].drop_duplicates(key)
