@@ -126,6 +126,11 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             say(f"  every-game floors for {floors.attach_nfl(player_board, season, pg, pinfo, games, pproj, C.CACHE)} players")
         except Exception as exc:
             print(f"  every-game floors skipped ({exc})")
+        try:                                      # Typical, the model's 50/50 yardage (typical.py): display only
+            from . import typical
+            say(f"  typical numbers for {typical.attach(player_board, 'nfl')} players")
+        except Exception as exc:
+            print(f"  typical numbers skipped ({exc})")
         if with_backtest:
             say("Backtesting player projections ...")
             pall = pall if pall is not None else players.walk_forward(ptable, first_test=C.FIRST_TEST_SEASON)

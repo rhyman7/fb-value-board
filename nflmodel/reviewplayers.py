@@ -94,44 +94,12 @@ def _left_cfb(src, pl, week, p, game_id) -> dict | None:
 
 
 def typical(league: str, A: dict) -> dict:
-    """(player id, game, stat) -> the model's 50/50 yardage for him: the line at which the board's
-    own prop distribution (props.PropModel, the fitted widths in data/prop_params.json or
-    data/cfb/prop_params.json) gives an even chance of over and under, at the projection frozen at
-    kickoff. A projection is an average and sits above this, because yardage has a long upside
-    tail. Uses the widths as fitted today, not as they stood that week. {} if the model can't load."""
+    """(player id, game, stat) -> the model's 50/50 yardage (nflmodel/typical.py) at the projection
+    frozen at kickoff, priced as if he plays. Uses the widths as fitted today. {} if it can't load."""
     try:
-        from nflmodel import parlays as PL, propmarket as PM, props as P
+        from nflmodel import typical as T
         players = [dict(p) for ps in (A.get("players") or {}).values() for p in ps]
-        payload = {"players": {"players": players}}
-        if league == "cfb":
-            from nflmodel import cfbpropboard
-            payload = cfbpropboard.with_target_share(payload)
-        df = PM.board_players(payload)
-        model = P.PropModel.load(PL.prop_params_path(league))
-        if model is None or df.empty:
-            return {}
-        out = {}
-        for stat in ("pass_yds", "rush_yds", "rec_yds"):
-            for grp in P.SPECS[stat].groups:
-                if (stat, grp) not in model.yards:
-                    continue
-                d = df[df["group"] == grp].reset_index(drop=True)
-                for c in P.SPECS[stat].proj + P.SPECS[P.SPECS[stat].vol].proj:
-                    if c not in d:
-                        d[c] = 0.0
-                    d[c] = pd.to_numeric(d[c], errors="coerce").fillna(0.0)
-                d = d[d[P.SPECS[stat].proj[0]] >= 1].reset_index(drop=True)
-                if d.empty:
-                    continue
-                mu = P.mean(d, stat)
-                L = np.floor(mu[:, None] * np.linspace(0.05, 1.7, 67)[None, :]) + 0.5
-                over, push, under = model.probs(d, stat, grp, L)
-                dec = over / np.maximum(over + under, 1e-9)
-                for i in range(len(d)):
-                    # dec falls as the line rises: the line where it crosses a half
-                    md = float(np.interp(0.5, dec[i][::-1], L[i][::-1]))
-                    out[(str(d.at[i, "player_id"]), d.at[i, "game_id"], stat)] = round(md, 1)
-        return out
+        return T.medians(league, players, given_plays=True)
     except Exception as exc:  # noqa: BLE001
         print(f"  typical-game numbers skipped ({type(exc).__name__}: {exc})")
         return {}
