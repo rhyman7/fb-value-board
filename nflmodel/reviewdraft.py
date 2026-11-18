@@ -176,7 +176,13 @@ def possibilities(g: dict, league: str) -> list[str]:
             out.append(f"{t} came off a {pv['label']}: {'beat' if pv['margin'] > 0 else 'lost to'} {pv['opp']} {pv['score']} "
                        f"and {'covered' if pv['cover'] > 0 else 'missed the cover'} by {_f(abs(pv['cover']))}. A letdown or bounce-back is possible.")
         if pv and abs(pv.get("model_miss") or 0) >= 14:
-            out.append(f"The model also missed {t}'s previous game by {_f(abs(pv['model_miss']))} ({'better' if pv['model_miss'] > 0 else 'worse'} than it expected): two misses in a row could mean its rating for {t} is behind.")
+            # Nov 18, 2026 check (Project doc claude/team-rating-bias-check-2026-11-18.md): on the tuning seasons a
+            # team's recent misses did not carry into its next NFL game (0.03 +/- 0.04 per point) and carried
+            # about a tenth in college (0.10 +/- 0.03), with the closing line already holding it in both.
+            tail = ("In the NFL a run of misses has not carried into the next game, so read this as noise unless something changed (a quarterback, injuries)."
+                    if league == "nfl" else
+                    "In college about a tenth of a team's recent average miss has carried into its next game, and the line already has it.")
+            out.append(f"The model also missed {t}'s previous game by {_f(abs(pv['model_miss']))} ({'better' if pv['model_miss'] > 0 else 'worse'} than it expected). {tail}")
         if x.get("after_bye"):
             out.append(f"{t} was coming off a bye.")
         if x.get("rest") is not None and x["rest"] <= 5:
