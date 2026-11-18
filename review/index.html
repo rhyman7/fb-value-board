@@ -167,7 +167,7 @@ td.closer { color: var(--good); font-weight: 700; }
 .fb { font: inherit; font-size: .8125rem; font-weight: 600; min-height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); cursor: pointer; }
 .fb:hover { color: var(--text); } .fb.on { background: var(--accent); color: var(--bg); border-color: var(--accent); }
 #pq { font: inherit; font-size: .875rem; min-height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid var(--border); background: var(--bg); color: var(--text); min-width: 180px; }
-th.srt { cursor: pointer; white-space: nowrap; user-select: none; } th.srt:hover, th.srt.on { color: var(--text); } th.l, .ptab td:nth-child(-n+4) { text-align: left; }
+th.srt { cursor: pointer; white-space: nowrap; user-select: none; } th.srt:hover, th.srt.on { color: var(--text); } th.l, .ptab td:nth-child(-n+4) { text-align: left; } .ptab.bmt td:nth-child(5) { text-align: left; } .ptab.bmt td:first-child { min-width: 0; white-space: nowrap; } .ptab.bmt td:nth-child(2) { white-space: normal; min-width: 150px; }
 .ptab td { white-space: nowrap; } .ptab td:first-child { white-space: normal; min-width: 150px; } .ptab .sm2 { white-space: normal; }
 @media (max-width: 860px) { .tiles.two { grid-template-columns: minmax(0,1fr); } .topnav { flex-wrap: wrap; } .weeknav { flex-basis: 100%; min-height: 36px; } .wk-label { margin-left: 0; } }
 
@@ -277,7 +277,7 @@ async function week(lg, w) {
 
 /* ---------- pieces ---------- */
 function weekStrip(lg, i, sel, mode) {
-  const wk = w => mode === "players" ? href(lg, "players", w) : href(lg, w);
+  const wk = w => mode ? href(lg, mode, w) : href(lg, w);
   const done = new Set(i.weeks.map(w => w.week));
   const last = i.weeks.length ? i.weeks[i.weeks.length - 1].week : 0;
   const top = lg === "nfl" ? 18 : 15;
@@ -289,9 +289,10 @@ function weekStrip(lg, i, sel, mode) {
     else ws += `<span class="wk next" title="Week ${w}: not played yet">${w}</span>`;
   }
   return `<header class="topbar"><h1><a href="#">Weekly Review</a></h1>
-    <nav class="topnav" aria-label="Sections"><a href="#nfl"${lg === "nfl" && sel !== "patterns" && mode !== "players" ? ' class="on"' : ""}>NFL</a><a href="#cfb"${lg === "cfb" && sel !== "patterns" && mode !== "players" ? ' class="on"' : ""}>CFB</a>
+    <nav class="topnav" aria-label="Sections"><a href="#nfl"${lg === "nfl" && sel !== "patterns" && !mode ? ' class="on"' : ""}>NFL</a><a href="#cfb"${lg === "cfb" && sel !== "patterns" && !mode ? ' class="on"' : ""}>CFB</a>
     <a href="${href(lg, "patterns")}"${sel === "patterns" ? ' class="on"' : ""}>Season patterns</a>
     <a href="${href(lg, "players")}"${mode === "players" ? ' class="on"' : ""}>Players</a>
+    <a href="${href(lg, "best")}"${mode === "best" ? ' class="on"' : ""}>Best Matchups</a>
     <div class="weeknav" role="navigation" aria-label="Weeks"><span class="wk-label">Week</span>${ws}</div></nav></header>`;
 }
 function verdictOf(reads, g) { return ((reads.games[g.id] || {}).verdict) || Object.fromEntries(Object.entries(g.leans).map(([k, v]) => [k, v.result])); }
@@ -552,16 +553,16 @@ async function patterns(lg) {
 
 
 /* ---------- Players: every projection against what the player did ---------- */
-const PV = { lg: null, w: null, data: null, pos: "All", show: "counted", q: "", sort: "diff", dir: 1 };
+const PV = { lg: null, w: null, best: false, data: null, pos: "All", show: "counted", q: "", sort: "diff", dir: 1 };
 const PSTAT = { pass_yds: "Pass yds", rush_yds: "Rush yds", rec_yds: "Rec yds" };
 const pctOf = (a, b) => b ? Math.round(100 * a / b) + "%" : "–";
 function playerRows() {
   const d = PV.data, q = PV.q.trim().toLowerCase();
-  let r = d.rows.filter(x => (PV.pos === "All" || x.p === PV.pos) &&
+  let r = d.rows.filter(x => (!PV.best || x.bm != null) && (PV.pos === "All" || x.p === PV.pos) &&
     (PV.show === "all" || (PV.show === "counted" && x.st === "played" && x.c) || (PV.show === "left" && x.st === "left") ||
      (PV.show === "out" && (x.st === "dnp" || x.st === "nostat")) || (PV.show === "small" && x.st === "played" && !x.c)) &&
     (!q || x.n.toLowerCase().includes(q) || x.t.toLowerCase().includes(q) || x.o.toLowerCase().includes(q)));
-  const key = { diff: x => x.a - x.pj, pct: x => (x.a - x.pj) / x.pj, proj: x => x.pj, typ: x => x.md ?? -1, act: x => x.a, name: x => x.n, team: x => x.t, pos: x => x.p, stat: x => x.s }[PV.sort];
+  const key = { rk: x => x.bm ?? 999, diff: x => x.a - x.pj, pct: x => (x.a - x.pj) / x.pj, proj: x => x.pj, typ: x => x.md ?? -1, act: x => x.a, name: x => x.n, team: x => x.t, pos: x => x.p, stat: x => x.s }[PV.sort];
   r.sort((a, b) => { const x = key(a), y = key(b); return (x < y ? -1 : x > y ? 1 : 0) * PV.dir; });
   return r;
 }
@@ -572,37 +573,41 @@ function playerTable() {
     : !x.c ? `<span class="chip">Under ${PV.data.count_min} yds, not scored</span>` : x.a >= x.pj ? `<span class="chip w">Met</span>` : `<span class="chip l">Short</span>`;
   const th = (k, lbl, cls = "") => `<th class="srt ${cls}${PV.sort === k ? " on" : ""}" data-sort="${k}" tabindex="0" role="button">${lbl}${PV.sort === k ? (PV.dir > 0 ? " ▲" : " ▼") : ""}</th>`;
   const body = r.map(x => { const d = x.a - x.pj;
-    return `<tr><td><a href="${href(PV.lg, PV.w, x.g)}">${esc(x.n)}</a>${x.note ? `<div class="dim sm2">${esc(x.note)}</div>` : ""}</td><td>${x.p}</td><td>${esc(x.t)} <span class="dim">v ${esc(x.o)}</span></td><td class="dim">${PSTAT[x.s]}</td>
+    return `<tr>${PV.best ? `<td class="dim">${x.bm ?? ""}</td>` : ""}<td><a href="${href(PV.lg, PV.w, x.g)}">${esc(x.n)}</a>${x.note ? `<div class="dim sm2">${esc(x.note)}</div>` : ""}</td><td>${x.p}</td><td>${esc(x.t)} <span class="dim">v ${esc(x.o)}</span></td><td class="dim">${PSTAT[x.s]}</td>
       <td>${f1(x.pj)}</td><td class="${x.md != null && x.a >= x.md ? "pos" : "dim"}">${x.md != null ? f1(x.md) : "–"}</td><td>${Math.round(x.a)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(d, 0)}</td><td class="${d >= 0 ? "pos" : "neg"}">${sgn(100 * d / x.pj, 0)}%</td><td>${res(x)}</td></tr>`; }).join("");
   return `<p class="note" style="margin:0 0 8px">${r.length} projection${r.length === 1 ? "" : "s"} shown. Click a column to sort; click a player for his game's review.</p>
-    <div class="scroll"><table class="ptab"><tr>${th("name", "Player", "l")}${th("pos", "Pos", "l")}${th("team", "Team", "l")}${th("stat", "Stat", "l")}${th("proj", "Proj")}${th("typ", "Typical")}${th("act", "Actual")}${th("diff", "Diff")}${th("pct", "%")}<th>Result</th></tr>${body}</table></div>`;
+    <div class="scroll"><table class="ptab${PV.best ? " bmt" : ""}"><tr>${PV.best ? th("rk", "List #", "l") : ""}${th("name", "Player", "l")}${th("pos", "Pos", "l")}${th("team", "Team", "l")}${th("stat", "Stat", "l")}${th("proj", "Proj")}${th("typ", "Typical")}${th("act", "Actual")}${th("diff", "Diff")}${th("pct", "%")}<th>Result</th></tr>${body}</table></div>`;
 }
 function playerFilters() {
   const b = (grp, v, lbl) => `<button type="button" class="fb${PV[grp] === v ? " on" : ""}" data-${grp}="${v}" aria-pressed="${PV[grp] === v}">${lbl}</button>`;
-  const c = PV.data.card;
+  const c = PV.best ? PV.data.best.card : PV.data.card;
   return `<div class="filters"><div class="fg">${["All", "QB", "RB", "WR", "TE"].map(p => b("pos", p, p)).join("")}</div>
-    <div class="fg">${b("show", "counted", "Scored")}${b("show", "left", `Left early (${c.left.players})`)}${b("show", "out", `${PV.lg === "nfl" ? "Didn't play" : "No stats recorded"} (${c.dnp.players})`)}${b("show", "small", "QB rushing under 10")}${b("show", "all", "Everything")}</div>
+    <div class="fg">${b("show", "counted", "Scored")}${b("show", "left", `Left early (${c.left.players})`)}${b("show", "out", `${PV.lg === "nfl" ? "Didn't play" : "No stats recorded"} (${c.dnp.players})`)}${PV.best ? "" : b("show", "small", "QB rushing under 10")}${b("show", "all", "Everything")}</div>
     <input type="search" id="pq" placeholder="Player or team" value="${esc(PV.q)}" aria-label="Search players or teams"></div>`;
 }
-async function playersPage(lg, w) {
+async function playersPage(lg, w, best) {
+  const mode = best ? "best" : "players", pk = x => best ? x.best : x.players;
   document.body.className = "";
   const i = await idx(lg);
-  if (!w) w = i.weeks.length ? i.weeks[i.weeks.length - 1].week : null;
+  if (!w) { const have = i.weeks.filter(x => pk(x)); w = have.length ? have[have.length - 1].week : null; }
   const e = i.weeks.find(x => x.week === w);
   const d = e && await get(`data/${lg}/${e.file.replace(".json", ".players.json")}`);
-  if (!d) return weekStrip(lg, i, w, "players") + `<div class="page"><p class="lede">No player results for week ${w ?? ""} yet.</p></div>`;
-  if (PV.lg !== lg || PV.w !== w) Object.assign(PV, { lg, w, pos: "All", show: "counted", q: "", sort: "diff", dir: 1 });
+  if (!d || (best && !d.best)) return weekStrip(lg, i, w, mode) + `<div class="page"><h2 class="pg">Week ${w ?? ""} ${best ? "best matchups" : "players"}</h2><p class="lede">${best ? `No Best Overall Matchups list is on record for week ${w ?? ""}. The record starts in week ${(i.weeks.find(x => x.best) || {}).week ?? "–"}.` : `No player results for week ${w ?? ""} yet.`}</p></div>`;
+  if (PV.lg !== lg || PV.w !== w || PV.best !== !!best) Object.assign(PV, { lg, w, best: !!best, pos: "All", show: "counted", q: "", sort: best ? "rk" : "diff", dir: 1 });
   PV.data = d;
-  const c = d.card, a = c.all;
-  const tile = (tag, t, sm) => `<div class="tile"><div class="tag">${tag}</div><div class="big">${t.met} <span class="of">of ${t.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${t.n ? 100 * t.met / t.n : 0}%"></i></div><div class="sm">${pctOf(t.met, t.n)} met or beat · ${t.short} short${sm ? " · " + sm : ""}</div>${t.typ_n ? `<div class="typ" title="Share who reached the model's 50/50 number for them. About 50% means the model's spread is right."><b>${pctOf(t.typ_met, t.typ_n)}</b> reached their typical game <span class="dim">(target 50%)</span></div>` : ""}</div>`;
-  const season = i.weeks.filter(x => x.players).reduce((s, x) => ({ met: s.met + x.players.all.met, n: s.n + x.players.all.n, left: s.left + x.players.left.players }), { met: 0, n: 0, left: 0 });
-  const byWeek = i.weeks.filter(x => x.players).map(x => `<tr><td><a href="${href(lg, "players", x.week)}">Week ${x.week}</a></td><td>${x.players.all.met}</td><td>${x.players.all.short}</td><td>${pctOf(x.players.all.met, x.players.all.n)}</td><td>${x.players.all.typ_n ? pctOf(x.players.all.typ_met, x.players.all.typ_n) : "–"}</td>${["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(x.players.by_stat[s].met, x.players.by_stat[s].n)}</td>`).join("")}<td>${sgn(x.players.all.avg_miss)}</td><td>${x.players.left.players}</td><td>${x.players.dnp.players}</td></tr>`).join("");
-  return weekStrip(lg, i, w, "players") + `<div class="page"><div class="crumb"><a href="#">Weekly Review</a> / <a href="#${lg}">${LEAGUES[lg].name}</a> / <a href="${href(lg, w)}">Week ${w}</a></div>
-  <h2 class="pg">Week ${w} players</h2>
-  <p class="lede">Every projection the board froze at kickoff against what the player did: quarterbacks' passing and rushing yards, backs' rushing and receiving, receivers' and tight ends' receiving. Met means the actual was at or above the projection.</p>
+  const c = best ? d.best.card : d.card, a = c.all;
+  const tile = (tag, t, sm) => best && !t.n ? "" : `<div class="tile"><div class="tag">${tag}</div><div class="big">${t.met} <span class="of">of ${t.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${t.n ? 100 * t.met / t.n : 0}%"></i></div><div class="sm">${pctOf(t.met, t.n)} met or beat · ${t.short} short${sm ? " · " + sm : ""}</div>${t.typ_n ? `<div class="typ" title="Share who reached the model's 50/50 number for them. About 50% means the model's spread is right."><b>${pctOf(t.typ_met, t.typ_n)}</b> reached their typical game <span class="dim">(target 50%)</span></div>` : ""}</div>`;
+  const season = i.weeks.filter(pk).reduce((s, x) => ({ met: s.met + pk(x).all.met, n: s.n + pk(x).all.n, tm: s.tm + pk(x).all.typ_met, tn: s.tn + pk(x).all.typ_n, b: s.b + ((pk(x).beat_avg || {}).beat || 0), bn: s.bn + ((pk(x).beat_avg || {}).n || 0) }), { met: 0, n: 0, tm: 0, tn: 0, b: 0, bn: 0 });
+  const byWeek = i.weeks.filter(pk).map(x => { const P = pk(x); return `<tr><td><a href="${href(lg, mode, x.week)}">Week ${x.week}</a></td><td>${P.all.met}</td><td>${P.all.short}</td><td>${pctOf(P.all.met, P.all.n)}</td><td>${P.all.typ_n ? pctOf(P.all.typ_met, P.all.typ_n) : "–"}</td>${best ? `<td>${P.beat_avg ? P.beat_avg.beat + " of " + P.beat_avg.n : "–"}</td>` : ["pass_yds", "rush_yds", "rec_yds"].map(s => `<td>${pctOf(P.by_stat[s].met, P.by_stat[s].n)}</td>`).join("")}<td>${sgn(P.all.avg_miss)}</td><td>${P.left.players}</td><td>${P.dnp.players}</td></tr>`; }).join("");
+  const ba = c.beat_avg;
+  return weekStrip(lg, i, w, mode) + `<div class="page"><div class="crumb"><a href="#">Weekly Review</a> / <a href="#${lg}">${LEAGUES[lg].name}</a> / <a href="${href(lg, w)}">Week ${w}</a></div>
+  <h2 class="pg">Week ${w} ${best ? "best matchups" : "players"}</h2>
+  <p class="lede">${best ? `Only the players on the matchup report's Best Overall Matchups list that week (each team's pick as the list stood at its kickoff, ${d.best.picks.length} in all), scored the same way as the Players page: a quarterback's passing yards, a back's rushing and receiving, a receiver's or tight end's receiving. Two players can share a list number, because the list is redrawn as games finish.` : "Every projection the board froze at kickoff against what the player did: quarterbacks' passing and rushing yards, backs' rushing and receiving, receivers' and tight ends' receiving."} Met means the actual was at or above the projection.</p>
   <div class="tag" style="margin-bottom:8px">Scorecard: players who played their usual game</div>
   <div class="tiles">${tile("All projections", a, "average miss " + sgn(a.avg_miss) + " yds")}${["pass_yds", "rush_yds", "rec_yds"].map(s => tile(PSTAT[s], c.by_stat[s], "avg " + sgn(c.by_stat[s].avg_miss))).join("")}</div>
   <div class="tiles">${["QB", "RB", "WR", "TE"].map(p => tile(p, c.by_pos[p], "avg " + sgn(c.by_pos[p].avg_miss))).join("")}</div>
+  ${best && ba ? `<div class="tiles two"><div class="tile"><div class="tag">Beat his season average</div><div class="big">${ba.beat} <span class="of">of ${ba.n}</span></div><div class="bar" aria-hidden="true"><i style="width:${ba.n ? 100 * ba.beat / ba.n : 0}%"></i></div><div class="sm">${pctOf(ba.beat, ba.n)}. The list's own test, from the report's record: his main yardage stat against his per-game average going in (a back's rushing and receiving together). Other regulars do it about 41% of the time.</div></div>
+   <div class="tile"><div class="tag">Season so far</div><div class="big">${season.met} <span class="of">of ${season.n} met</span></div><div class="sm">${pctOf(season.met, season.n)} met the projection · ${pctOf(season.tm, season.tn)} reached their typical game · ${season.b} of ${season.bn} beat their average (${pctOf(season.b, season.bn)})</div></div></div>` : ""}
   <div class="tag" style="margin:6px 0 8px">Not counted against the model</div>
   <div class="tiles two">
    <div class="tile luck"><div class="tag">Left early</div><div class="big">${c.left.players} <span class="of">player${c.left.players === 1 ? "" : "s"}</span></div><div class="sm">${c.left.n} projections: ${c.left.met} met, ${c.left.short} short${c.left.avg_miss != null ? ", average miss " + sgn(c.left.avg_miss) + " yds" : ""}. ${lg === "nfl" ? "A regular who played under half his usual snaps, or a quarterback who left." : "An estimate: touches under 40% of his usual with none after halftime, or a quarterback who left."}</div></div>
@@ -610,7 +615,7 @@ async function playersPage(lg, w) {
   </div>
   <p class="note" style="margin:-4px 0 18px">Left off this page and not counted: receivers projected 20 yards or fewer, tight ends 15 or fewer, backs' rushing 15 or fewer and backs' receiving under 10. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. <b>Typical</b> is the model's own 50/50 number for the player (green when he reached it): if the model's spread is right, about half reach it, so a share well off 50% is a real miss. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
   <section class="card"><h3>Projections and results</h3><div id="pfilters">${playerFilters()}</div><div id="ptable">${playerTable()}</div></section>
-  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Typical %</th><th>Pass</th><th>Rush</th><th>Rec</th><th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
+  <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Typical %</th>${best ? "<th>Beat his average</th>" : "<th>Pass</th><th>Rush</th><th>Rec</th>"}<th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
 }
 document.addEventListener("click", ev => {
   const f = ev.target.closest(".fb"), s = ev.target.closest(".srt");
@@ -629,6 +634,7 @@ async function route() {
     if (!lg) html = await landing();
     else if (h[1] === "patterns") html = await patterns(lg);
     else if (h[1] === "players") html = await playersPage(lg, h[2] ? +h[2] : null);
+    else if (h[1] === "best") html = await playersPage(lg, h[2] ? +h[2] : null, true);
     else if (h[1] && h[2]) html = await gamePage(lg, +h[1], h.slice(2).join("-"));
     else if (h[1]) html = await weekPage(lg, +h[1]);
     else {

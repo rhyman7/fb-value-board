@@ -113,7 +113,7 @@ def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
         sn = src.snaps[src.snaps["season"] == src.season].copy()
         sn["gsis"] = sn["pfr_player_id"].map(src.pfr2gsis)
         gsis_snaps = {k: v for k, v in sn.dropna(subset=["gsis"]).groupby("gsis")}
-    rows = []
+    rows, ids = [], {}
     for g in facts["games"]:
         gid = g["id"]
         key = gid if lg == "nfl" else int(A["games"][gid].get("game_id") or 0)
@@ -165,11 +165,16 @@ def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
                 if pj is None or pj < 1 or not on_page(pl["pos"], st, float(pj)):
                     continue
                 av = float((x or {}).get(st, 0.0) or 0.0)   # x == {} : played, nothing recorded
+                ids[len(rows)] = str(pl["id"])
                 rows.append({"n": pl["name"], "p": pl["pos"], "t": pl["team"], "o": g["home"] if pl["team"] == g["away"] else g["away"],
                              "g": g["slug"], "s": st, "pj": round(float(pj), 1), "a": av, "st": status,
                              "c": bool(pj >= COUNT_MIN), **({"note": note} if note else {}),
                              **({"md": med[(str(pl["id"]), gid, st)]} if (str(pl["id"]), gid, st) in med else {})})
-    return {"league": lg, "season": facts["season"], "week": week, "count_min": COUNT_MIN, "card": scorecard(rows), "rows": rows}
+    out = {"league": lg, "season": facts["season"], "week": week, "count_min": COUNT_MIN, "card": scorecard(rows), "rows": rows}
+    best = best_matchups(rows, (getattr(src, "best", None) or {}).get(str(week)), ids)
+    if best:
+        out["best"] = best
+    return out
 
 
 def _tally(rs) -> dict:
@@ -190,3 +195,38 @@ def scorecard(rows: list[dict]) -> dict:
             "by_pos": {p: _tally([r for r in counted if r["p"] == p]) for p in ("QB", "RB", "WR", "TE")},
             "left": {**_tally(left), "players": len({(r["n"], r["t"]) for r in left})},
             "dnp": {"n": len(dnp), "players": len({(r["n"], r["t"]) for r in dnp})}}
+
+
+# --------------------------------------------------------------------------
+# Best Matchups: the report's Best Overall Matchups list, scored the same way
+# --------------------------------------------------------------------------
+
+BEST_STATS = {"pass": ("pass_yds",), "scrim": ("rush_yds", "rec_yds"), "rec": ("rec_yds",)}
+
+
+def best_matchups(rows: list[dict], wk: dict | None, ids: dict) -> dict | None:
+    """Mark the rows of players on that week's Best Overall Matchups list (the dashboards'
+    data/best_overall.json: each team's pick as the list stood at its kickoff) with `bm`, his
+    rank on the list, on his list stat (QB passing; a back's rushing and receiving; WR/TE
+    receiving). Returns the list with the record's own grade (against his average going in)
+    and the scorecard of the marked rows, or None when the week has no record."""
+    picks = (wk or {}).get("picks") or {}
+    if not picks:
+        return None
+    by = {}
+    for i, r in enumerate(rows):
+        by.setdefault((ids.get(i), r["t"]), []).append(r)
+    out, listed = [], []
+    for team, k in sorted(picks.items(), key=lambda kv: kv[1].get("rk") or 999):
+        pid = str(k.get("log") or "").split("|")[-1]
+        mine = [r for r in by.get((pid, team), []) if r["s"] in BEST_STATS.get(k.get("kind"), ())]
+        for r in mine:
+            r["bm"] = k.get("rk")
+        listed += mine
+        out.append({"rk": k.get("rk"), "n": k.get("name"), "p": k.get("pos"), "t": team, "o": k.get("opp"), "kind": k.get("kind"),
+                    "avg": k.get("avg"), "proj": k.get("proj"), "y": k.get("y"), "res": k.get("res"), "v": k.get("v"),
+                    "found": bool(mine)})
+    graded = [x for x in out if x["res"] in ("beat", "miss")]
+    card = scorecard(listed)
+    card["beat_avg"] = {"n": len(graded), "beat": sum(x["res"] == "beat" for x in graded)}
+    return {"picks": out, "card": card}
