@@ -2669,7 +2669,7 @@ Brier at the DK/FD main lines (receiving and rushing yards, WR/TE/RB): 2024 **wo
 −0.0001). Floor rungs: 2024 −0.0002 ± 0.0002, 2025 −0.0006 ± 0.0002 (3.4 SE; gap to the books +0.0064
 → +0.0058).
 
-**NFL (9 of 11 better in direction; not kept)**
+**NFL (10 of 11 better in direction, receptions under the 1 SE bar; not kept)**
 
 | Measure | Tuning 2014-18 | Holdout 2019 on |
 |---|---|---|
