@@ -1,0 +1,1354 @@
+{
+ "by": "draft",
+ "week_by": "draft",
+ "week_notes": [
+  "Side leans 30-28, total leans 25-33.",
+  "Average miss on the margin: model 11.9, market 11.48; on the total: model 12.85, market 12.25. The market beat the model on margins this week.",
+  "Biggest margin misses: SDSU @ ORST (47.3), BUFF @ TOL (38.9), SC @ FLA (30.8), MINN @ PUR (30.8).",
+  "Chance played a big part in 20 of 58 games.",
+  "Staked bets: 16-12, +2.55 units."
+ ],
+ "games": {
+  "2026_06_USM_TROY": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final TROY by 21, 89 points; the model had TROY by 7, the market TROY by 9.5.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, USM +9.5 (model TROY by 7), lost: TROY by 21.",
+    "The total lean, under 51.5 (model 50.5), lost: 89 points.",
+    "On the margin the market was closer than the model (missed by 11.5 against 14).",
+    "Biggest player misses: Goose Crowder 145 rushing yards against 20 projected; Kaden Saunders 138 receiving yards against 21 projected; Jordan Lovett 142 rushing yards against 38 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_JVST_KENN": {
+   "by": "draft",
+   "headline": "The side came down to chance: fumble bounces and return scores flipped it.",
+   "verdict": {
+    "spread": "chance",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, KENN +3 (model JVST by 1.1), won: JVST by 1. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, over 49 (model 54.9), won: 53 points.",
+    "On the margin the model was closer than the market (missed by 0.1 against 2).",
+    "On the total the model was closer than the market (missed by 1.9 against 4)."
+   ],
+   "wrong": [
+    "Biggest player misses: Brayden Munroe 159 receiving yards against 42 projected; Caden Creel 311 passing yards against 199 projected; Rickie Collins 293 passing yards against 187 projected."
+   ],
+   "chance": [
+    "KENN played the better game play for play (success rate 38% to 44%, EPA per play +0.08 to +0.02) and still lost.",
+    "Fumble bounces went KENN's way, worth about 3.1 points (JVST 1 fumble, 1 lost; KENN 1 fumble, 0 lost).",
+    "With even luck the margin would have been JVST by 4.1 (actual JVST by 1)."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_NMSU_FIU": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final FIU by 19, 25 points; the model had FIU by 5, the market FIU by 7.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, NMSU +7 (model FIU by 5), lost: FIU by 19.",
+    "The total lean, over 47 (model 50.5), lost: 25 points.",
+    "On the margin the market was closer than the model (missed by 12 against 14).",
+    "On the total the market was closer than the model (missed by 22 against 25.5).",
+    "Biggest player misses: JJ Kohl 115 passing yards against 235 projected; Adam Damante 104 passing yards against 214 projected; TK King 0 receiving yards against 54 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Tyson Carter, Myles Libman. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_SHSU_LIB": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final LIB by 32, 38 points; the model had LIB by 14, the market LIB by 13.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, LIB −13.5 (model LIB by 14), won: LIB by 32.",
+    "The total lean, under 53 (model 52.8), won: 38 points."
+   ],
+   "wrong": [
+    "Biggest player misses: Jaylon Coleman 92 rushing yards against 24 projected; Deshawn Purdie 57 rushing yards against 10 projected; Chris Reed 18 receiving yards against 48 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_MOST_WKU": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final WKU by 21, 47 points; the model had WKU by 2.2, the market MOST by 1.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, WKU +1.5 (model WKU by 2.2), won: WKU by 21.",
+    "The total lean, under 57 (model 55.2), won: 47 points.",
+    "On the margin the model was closer than the market (missed by 18.8 against 22.5).",
+    "On the total the model was closer than the market (missed by 8.2 against 10)."
+   ],
+   "wrong": [
+    "Biggest player misses: Brock Glenn 231 passing yards against 0 projected; Skyler Locklear 89 passing yards against 214 projected; Ajay Allen 105 rushing yards against 46 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Rodney Tisdale Jr.. Worth checking how late his status was known.",
+    "Henry Belin IV (QB, MOST) had 111 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_USF_UTSA": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final UTSA by 7, 55 points; the model had USF by 1.3, the market UTSA by 5.5.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 49.5 (model 58.2), won: 55 points.",
+    "On the total the model was closer than the market (missed by 3.2 against 5.5)."
+   ],
+   "wrong": [
+    "The side lean, USF +5.5 (model USF by 1.3), lost: UTSA by 7. The model was 6.8 points off the market here, one of its bigger gaps.",
+    "On the margin the market was closer than the model (missed by 1.5 against 8.3).",
+    "Biggest player misses: A'Marion Peterson 92 rushing yards against 33 projected; DJ Allen Jr. 0 receiving yards against 45 projected; Owen McCown 52 rushing yards against 10 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_USA_ARST": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final USA by 7, 105 points; the model had USA by 0.3, the market ARST by 3.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, USA +3 (model USA by 0.3), won: USA by 7.",
+    "On the margin the model was closer than the market (missed by 6.7 against 10)."
+   ],
+   "wrong": [
+    "The total lean, under 60.5 (model 57), lost: 105 points.",
+    "On the total the market was closer than the model (missed by 44.5 against 48).",
+    "Biggest player misses: Trey Owens 418 passing yards against 230 projected; Jared Hollins 76 passing yards against 236 projected; Hunter Summers 145 receiving yards against 50 projected."
+   ],
+   "chance": [
+    "ARST played the better game play for play (success rate 63% to 51%, EPA per play +0.42 to +0.36) and still lost.",
+    "Defensive or return touchdowns: USA 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been even (actual USA by 7)."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_FSU_LOU": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final LOU by 24, 64 points; the model had LOU by 4, the market LOU by 4.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, FSU +4.5 (model LOU by 4), lost: LOU by 24.",
+    "The total lean, under 60.5 (model 58.5), lost: 64 points.",
+    "On the total the market was closer than the model (missed by 3.5 against 5.5).",
+    "Biggest player misses: Isaac Brown 235 rushing yards against 70 projected; Tre Richardson 0 receiving yards against 83 projected; Duce Robinson 14 receiving yards against 60 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Keyjuan Brown, Jackson Voth. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_IOWA_WASH": {
+   "by": "draft",
+   "headline": "Demond Williams Jr. left in quarter 2, and that shaped the result more than anything the model or market could see.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, IOWA +3 (model IOWA by 4.7), won: IOWA by 17. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, over 41 (model 41.6), won: 65 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the margin the model was closer than the market (missed by 12.3 against 20)."
+   ],
+   "wrong": [],
+   "chance": [
+    "Demond Williams Jr. got hurt and left in quarter 2 (2:07); he threw 26% of the team's passes. Nothing before kickoff could price that in."
+   ],
+   "improve": [
+    "Demond Williams Jr.'s line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
+    "Projected but didn't play: Hank Brown. Worth checking how late his status was known.",
+    "Jeremy Hecklinski (QB, IOWA) had 202 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_WSU_USU": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final USU by 1, 33 points; the model had WSU by 5.3, the market USU by 4.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, WSU +4 (model WSU by 5.3), won: USU by 1."
+   ],
+   "wrong": [
+    "The total lean, over 44 (model 47.2), lost: 33 points.",
+    "On the margin the market was closer than the model (missed by 3 against 6.3).",
+    "On the total the market was closer than the model (missed by 11 against 14.2).",
+    "Biggest player misses: Leo Pulalasi 60 rushing yards against 15 projected; Kirby Vorhees 16 rushing yards against 55 projected; Maxwell Woods 1 rushing yard against 38 projected."
+   ],
+   "chance": [
+    "WSU played the better game play for play (success rate 34% to 31%, EPA per play −0.14 to −0.19) and still lost.",
+    "Fumble bounces went USU's way, worth about 3.1 points (WSU 2 fumbles, 2 lost; USU 0 fumbles, 0 lost).",
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_WYO_SJSU": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final WYO by 3, 29 points; the model had SJSU by 4.7, the market SJSU by 4.5.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Projections that held: Luke Weaver 251 passing yards (projected 231)."
+   ],
+   "wrong": [
+    "The side lean, SJSU −4.5 (model SJSU by 4.7), lost: WYO by 3.",
+    "The total lean, over 43 (model 45.4), lost: 29 points.",
+    "On the total the market was closer than the model (missed by 14 against 16.4).",
+    "Biggest player misses: Anthony Ivey 1 receiving yard against 62 projected; Tyler Hughes 92 rushing yards against 36 projected; Carson Clark 91 receiving yards against 60 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Deion DeBlanc, Tyler Siddons. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_ISU_BYU": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final BYU by 14, 34 points; the model had BYU by 10.2, the market BYU by 11.5.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, ISU +11.5 (model BYU by 10.2), lost: BYU by 14.",
+    "The total lean, over 46.5 (model 49.6), lost: 34 points.",
+    "On the margin the market was closer than the model (missed by 2.5 against 3.8).",
+    "On the total the market was closer than the model (missed by 12.5 against 15.6).",
+    "Biggest player misses: Bear Bachmeier 329 passing yards against 188 projected; Cody Jackson 0 receiving yards against 63 projected; Roger Saleapaga II 72 receiving yards against 16 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: LJ Martin, Dominic Overby. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_TA&M_MIZ": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final MIZ by 21, 33 points; the model had TA&M by 2.1, the market MIZ by 4.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, TA&M +4.5 (model TA&M by 2.1), lost: MIZ by 21. The model was 6.6 points off the market here, one of its bigger gaps.",
+    "The total lean, over 50.5 (model 51.3), lost: 33 points.",
+    "On the margin the market was closer than the model (missed by 16.5 against 23.1).",
+    "Biggest player misses: Jamal Roberts 222 rushing yards against 113 projected; Donovan Olugbode 0 receiving yards against 64 projected; Marcel Reed -18 rushing yards against 30 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_ARIZ_WVU": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final ARIZ by 21, 83 points; the model had ARIZ by 8.5, the market ARIZ by 3.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, ARIZ −3.5 (model ARIZ by 8.5), won: ARIZ by 21.",
+    "On the margin the model was closer than the market (missed by 12.5 against 17.5)."
+   ],
+   "wrong": [
+    "The total lean, under 61.5 (model 61.3), lost: 83 points.",
+    "Biggest player misses: Isaiah Mizell 183 receiving yards against 35 projected; Prince Strachan 121 receiving yards against 29 projected; Brandon Phelps 88 receiving yards against 24 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: ARIZ 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been ARIZ by 12.5 (actual ARIZ by 21)."
+   ],
+   "improve": [
+    "Projected but didn't play: Tre Spivey, Giovanni Richardson. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_UCF_OKST": {
+   "by": "draft",
+   "headline": "The side came down to chance: fumble bounces and return scores flipped it.",
+   "verdict": {
+    "spread": "chance",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, UCF +10.5 (model OKST by 2.7), lost: OKST by 14. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, under 53.5 (model 52), lost: 70 points.",
+    "On the margin the market was closer than the model (missed by 3.5 against 11.3).",
+    "On the total the market was closer than the model (missed by 16.5 against 18).",
+    "Biggest player misses: Caden Piening 60 receiving yards against 20 projected; Justin Bowick 98 receiving yards against 62 projected; Josh Derry 84 receiving yards against 49 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: OKST 1. They put 7 points on the total and moved the margin about 7.",
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
+    "With even luck the margin would have been OKST by 7.1 (actual OKST by 14)."
+   ],
+   "improve": [
+    "Projected but didn't play: Jonathan Bibbs. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_UNC_PITT": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final UNC by 4, 38 points; the model had PITT by 6.7, the market PITT by 3.5.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, under 47.5 (model 47.2), won: 38 points."
+   ],
+   "wrong": [
+    "The side lean, PITT −3.5 (model PITT by 6.7), lost: UNC by 4.",
+    "On the margin the market was closer than the model (missed by 7.5 against 10.7).",
+    "Biggest player misses: Shamar Easter 75 receiving yards against 22 projected; Bryce Yates 5 receiving yards against 41 projected; Censere Lee 6 receiving yards against 40 projected."
+   ],
+   "chance": [
+    "Fumble bounces went UNC's way, worth about 3.1 points (UNC 1 fumble, 0 lost; PITT 1 fumble, 1 lost).",
+    "With even luck the margin would have been UNC by 0.9 (actual UNC by 4)."
+   ],
+   "improve": [
+    "Projected but didn't play: Mason Heintschel. Worth checking how late his status was known.",
+    "Holden Geriner (QB, PITT) had 218 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_WAKE_NCSU": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final WAKE by 24, 52 points; the model had WAKE by 1.2, the market WAKE by 3.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, NCSU +3.5 (model WAKE by 1.2), lost: WAKE by 24.",
+    "The total lean, over 56.5 (model 59.1), lost: 52 points.",
+    "On the margin the market was closer than the model (missed by 20.5 against 22.8).",
+    "On the total the market was closer than the model (missed by 4.5 against 7.1).",
+    "Biggest player misses: Jack Foley 156 receiving yards against 49 projected; Dylan McCoy 5 rushing yards against 42 projected; Chance Robinson 53 receiving yards against 16 projected."
+   ],
+   "chance": [
+    "Fumble bounces went WAKE's way, worth about 3.1 points (WAKE 1 fumble, 0 lost; NCSU 1 fumble, 1 lost).",
+    "With even luck the margin would have been WAKE by 20.9 (actual WAKE by 24)."
+   ],
+   "improve": [
+    "Projected but didn't play: Jayden Scott, Joshisa Trader. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_IU_NEB": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final IU by 3, 37 points; the model had IU by 13.2, the market IU by 9.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, IU −9 (model IU by 13.2), lost: IU by 3.",
+    "The total lean, over 48.5 (model 53.6), lost: 37 points. The model was 5.1 points off the market here, one of its bigger gaps.",
+    "On the margin the market was closer than the model (missed by 6 against 10.2).",
+    "On the total the market was closer than the model (missed by 11.5 against 16.6).",
+    "Biggest player misses: Nick Marsh 187 receiving yards against 64 projected; Turbo Richard 10 rushing yards against 101 projected; Lee Beebe Jr. 31 rushing yards against 98 projected."
+   ],
+   "chance": [
+    "Fumble bounces went NEB's way, worth about 3.1 points (IU 0 fumbles, 0 lost; NEB 2 fumbles, 0 lost).",
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Shazz Preston. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_TULN_ARMY": {
+   "by": "draft",
+   "headline": "K.Semonza left in quarter 1, and that shaped the result more than anything the model or market could see.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, TULN +5.5 (model ARMY by 1.3), won: ARMY by 3. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, under 48.5 (model 48.4), won: 37 points. Chance decided it (below), so it doesn't count for or against the read."
+   ],
+   "wrong": [
+    "Biggest player misses: Cale Hellums 223 rushing yards against 81 projected; Bryson Luter -1 rushing yards against 33 projected; Jaylin Lucas 5 rushing yards against 37 projected."
+   ],
+   "chance": [
+    "K.Semonza left in quarter 1 (12:53); he threw 7% of the team's passes. Nothing before kickoff could price that in."
+   ],
+   "improve": [
+    "K.Semonza's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
+    "Projected but didn't play: Maurice Turner. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_SAC_BGSU": {
+   "by": "draft",
+   "headline": "The total came down to chance: defensive and return touchdowns flipped it.",
+   "verdict": {
+    "spread": "L",
+    "total": "chance"
+   },
+   "right": [
+    "The total lean, over 43.5 (model 44), won: 48 points. Chance decided it (below), so it doesn't count for or against the read."
+   ],
+   "wrong": [
+    "The side lean, SAC +9.5 (model BGSU by 3.1), lost: BGSU by 28. The model was 6.4 points off the market here, one of its bigger gaps.",
+    "On the margin the market was closer than the model (missed by 18.5 against 24.9).",
+    "Biggest player misses: Jeremiah Scoby 70 receiving yards against 29 projected; Jay Kastantin 50 rushing yards against 11 projected; Raiden Brown 0 receiving yards against 39 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: BGSU 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been BGSU by 19.5 (actual BGSU by 28)."
+   ],
+   "improve": [
+    "Projected but didn't play: Jordan Williams. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_BALL_NU": {
+   "by": "draft",
+   "headline": "The total came down to chance: defensive and return touchdowns flipped it.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, BALL +35 (model NU by 28.9), won: NU by 31.",
+    "On the margin the model was closer than the market (missed by 2.1 against 4).",
+    "Projections that held: Keldric Luster 209 passing yards (projected 190)."
+   ],
+   "wrong": [
+    "The total lean, under 53.5 (model 52), lost: 59 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the total the market was closer than the model (missed by 5.5 against 7).",
+    "Biggest player misses: Griffin Wilde 144 receiving yards against 65 projected; Tyler Mizzell 51 passing yards against 0 projected; TJ Horton 10 rushing yards against 47 projected."
+   ],
+   "chance": [
+    "Fumble bounces went NU's way, worth about 3.1 points (BALL 0 fumbles, 0 lost; NU 2 fumbles, 0 lost).",
+    "Defensive or return touchdowns: NU 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been NU by 20.9 (actual NU by 31)."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_SC_FLA": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final SC by 19, 57 points; the model had FLA by 11.8, the market FLA by 10.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, FLA −10.5 (model FLA by 11.8), lost: SC by 19.",
+    "The total lean, over 59.5 (model 59.9), lost: 57 points.",
+    "On the margin the market was closer than the model (missed by 29.5 against 30.8).",
+    "Biggest player misses: Bailey Stockton 127 receiving yards against 30 projected; LaNorris Sellers 20 rushing yards against 61 projected; Tramell Jones Jr. 40 passing yards against 0 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Brady Hunt. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_RICE_ECU": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final ECU by 16, 40 points; the model had ECU by 14.5, the market ECU by 10.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, ECU −10 (model ECU by 14.5), won: ECU by 16.",
+    "On the margin the model was closer than the market (missed by 1.5 against 6)."
+   ],
+   "wrong": [
+    "The total lean, over 46.5 (model 49.3), lost: 40 points.",
+    "On the total the market was closer than the model (missed by 6.5 against 9.3).",
+    "Biggest player misses: Jacurri Brown 21 passing yards against 121 projected; TJ Engleman Jr. 136 rushing yards against 55 projected; Tyvonn Byars 111 rushing yards against 40 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: D'Andre Hardeman Jr.. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_ODU_APP": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final ODU by 7, 13 points; the model had APP by 3.1, the market APP by 9.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, ODU +9 (model APP by 3.1), won: ODU by 7.",
+    "On the margin the model was closer than the market (missed by 10.1 against 16)."
+   ],
+   "wrong": [
+    "The total lean, over 45.5 (model 47.6), lost: 13 points.",
+    "On the total the market was closer than the model (missed by 32.5 against 34.6).",
+    "Biggest player misses: Malachi Singleton 72 passing yards against 257 projected; Sam Pickett III 7 receiving yards against 66 projected; Nate Branch -5 receiving yards against 51 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 2.8 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Sam Mbake, JJ Harrell. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_M-OH_MASS": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final M-OH by 1, 39 points; the model had M-OH by 4.3, the market M-OH by 6.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, MASS +6 (model M-OH by 4.3), won: M-OH by 1.",
+    "On the margin the model was closer than the market (missed by 3.3 against 5)."
+   ],
+   "wrong": [
+    "The total lean, over 44.5 (model 46.4), lost: 39 points.",
+    "On the total the market was closer than the model (missed by 5.5 against 7.4).",
+    "Biggest player misses: Caleb Heavner 95 passing yards against 202 projected; Lynel Billups-Williams 0 receiving yards against 49 projected; Damarion Witten 4 receiving yards against 48 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: William Watson III, William Watson III. Worth checking how late their status was known.",
+    "Aedan McCarthy (QB, MASS) had 168 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_TEX_OU": {
+   "by": "draft",
+   "headline": "The side came down to chance: fumble bounces and return scores flipped it.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, OU +7.5 (model TEX by 5.2), won: OU by 3. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, over 41 (model 43.4), won: 51 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the margin the model was closer than the market (missed by 8.2 against 10.5).",
+    "On the total the model was closer than the market (missed by 7.6 against 10)."
+   ],
+   "wrong": [
+    "Biggest player misses: Cam Coleman 110 receiving yards against 50 projected; Lloyd Avant 72 rushing yards against 33 projected; Raleek Brown 22 rushing yards against 56 projected."
+   ],
+   "chance": [
+    "TEX played the better game play for play (success rate 36% to 45%, EPA per play −0.09 to −0.21) and still lost.",
+    "Defensive or return touchdowns: OU 2. They put 14 points on the total and moved the margin about 14.",
+    "With even luck the margin would have been TEX by 12.5 (actual OU by 3)."
+   ],
+   "improve": [
+    "Projected but didn't play: Mackenzie Alleyne, Parker Livingstone. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_MISS_VAN": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final MISS by 35, 69 points; the model had MISS by 7.2, the market MISS by 9. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 54.5 (model 58.9), won: 69 points.",
+    "On the total the model was closer than the market (missed by 10.1 against 14.5)."
+   ],
+   "wrong": [
+    "The side lean, VAN +9 (model MISS by 7.2), lost: MISS by 35.",
+    "On the margin the market was closer than the model (missed by 26 against 27.8).",
+    "Biggest player misses: Jared Curtis 222 passing yards against 0 projected; Blaze Berlowitz 18 passing yards against 206 projected; Makhi Frazier 73 rushing yards against 32 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: MISS 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been MISS by 29.5 (actual MISS by 35)."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_HOU_KSU": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final HOU by 19, 51 points; the model had KSU by 0.5, the market KSU by 2.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, HOU +2.5 (model KSU by 0.5), won: HOU by 19.",
+    "On the margin the model was closer than the market (missed by 19.5 against 21.5)."
+   ],
+   "wrong": [
+    "The total lean, over 55 (model 58.2), lost: 51 points.",
+    "On the total the market was closer than the model (missed by 4 against 7.2).",
+    "Biggest player misses: Joe Jackson 6 rushing yards against 69 projected; Derrick Salley Jr. 0 receiving yards against 62 projected; Amare Thomas 31 receiving yards against 68 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_DUKE_GT": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final GT by 3, 53 points; the model had DUKE by 3, the market DUKE by 4.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, GT +4.5 (model DUKE by 3), won: GT by 3.",
+    "The total lean, over 45.5 (model 57), won: 53 points.",
+    "On the margin the model was closer than the market (missed by 6 against 7.5).",
+    "On the total the model was closer than the market (missed by 4 against 7.5)."
+   ],
+   "wrong": [
+    "Biggest player misses: Nate Sheppard 91 receiving yards against 19 projected; Trelain Maddox 81 rushing yards against 23 projected; Jordan Allen 99 receiving yards against 42 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Jayvian Tanelus. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_STAN_ND": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final ND by 51, 65 points; the model had ND by 41.6, the market ND by 40.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, ND −40 (model ND by 41.6), won: ND by 51.",
+    "On the margin the model was closer than the market (missed by 9.4 against 11)."
+   ],
+   "wrong": [
+    "The total lean, under 55.5 (model 54.6), lost: 65 points.",
+    "Biggest player misses: Jonaz Walton 181 rushing yards against 57 projected; Aneyas Williams 70 receiving yards against 10 projected; Jordan Faison 16 receiving yards against 56 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Liam Thorpe. Worth checking how late his status was known.",
+    "Noah Grubbs (QB, ND) had 56 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_VT_CAL": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final CAL by 5, 45 points; the model had VT by 11.9, the market VT by 10.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, VT −10.5 (model VT by 11.9), lost: CAL by 5.",
+    "The total lean, over 52.5 (model 53.8), lost: 45 points.",
+    "On the margin the market was closer than the model (missed by 15.5 against 16.9).",
+    "On the total the market was closer than the model (missed by 7.5 against 8.8).",
+    "Biggest player misses: Ian Strong 97 receiving yards against 53 projected; Chase Hendricks 94 receiving yards against 60 projected; Kyion Grayes -2 receiving yards against 30 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Mark Hamper, Cooper Perry. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_ILL_MSU": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final ILL by 1, 75 points; the model had ILL by 2.2, the market ILL by 2.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, MSU +2.5 (model ILL by 2.2), won: ILL by 1.",
+    "The total lean, over 48.5 (model 52.4), won: 75 points.",
+    "On the total the model was closer than the market (missed by 22.6 against 26.5)."
+   ],
+   "wrong": [
+    "Biggest player misses: Jaziun Patterson 93 rushing yards against 41 projected; Hudson Clement 105 receiving yards against 55 projected; Marvis Parrish 2 rushing yards against 32 projected."
+   ],
+   "chance": [
+    "MSU played the better game play for play (success rate 53% to 46%, EPA per play +0.39 to +0.13) and still lost."
+   ],
+   "improve": [
+    "Projected but didn't play: Ca'Lil Valentine, Brandon Tullis. Worth checking how late their status was known.",
+    "Michael Clayton II (QB, ILL) had 88 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_UCLA_ORE": {
+   "by": "draft",
+   "headline": "Dylan Raiola left in quarter 3, and that shaped the result more than anything the model or market could see.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The total lean, under 58 (model 57.8), won: 32 points. Chance decided it (below), so it doesn't count for or against the read."
+   ],
+   "wrong": [
+    "The side lean, ORE −10.5 (model ORE by 16), lost: UCLA by 2. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the margin the market was closer than the model (missed by 12.5 against 18).",
+    "Biggest player misses: Jamari Johnson 13 receiving yards against 56 projected; Messiah Hampton 14 receiving yards against 53 projected; Kendre Harrison 2 receiving yards against 37 projected."
+   ],
+   "chance": [
+    "Dylan Raiola left in quarter 3 (1:26); he threw 56% of the team's passes. Nothing before kickoff could price that in.",
+    "Fumble bounces went UCLA's way, worth about 6.2 points (UCLA 1 fumble, 1 lost; ORE 5 fumbles, 5 lost).",
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
+    "With even luck the margin would have been ORE by 2.8 (actual UCLA by 2)."
+   ],
+   "improve": [
+    "Dylan Raiola's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
+    "Projected but didn't play: Troy Leigber. Worth checking how late his status was known.",
+    "Brock Thomas (QB, ORE) had 151 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_CLT_UNT": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final UNT by 40, 60 points; the model had UNT by 28, the market UNT by 28.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 58.5 (model 62.6), won: 60 points."
+   ],
+   "wrong": [
+    "The side lean, CLT +28 (model UNT by 28), lost: UNT by 40.",
+    "On the total the market was closer than the model (missed by 1.5 against 2.6).",
+    "Biggest player misses: Conner Harrell 218 passing yards against 0 projected; Justin Stevenson 122 receiving yards against 49 projected; Baron Tipton 93 receiving yards against 23 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Cole Gonzales, Corri Milliner. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_TLSA_NAVY": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final NAVY by 8, 60 points; the model had NAVY by 1.2, the market NAVY by 3.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 47.5 (model 49.3), won: 60 points.",
+    "On the total the model was closer than the market (missed by 10.7 against 12.5)."
+   ],
+   "wrong": [
+    "The side lean, TLSA +3 (model NAVY by 1.2), lost: NAVY by 8.",
+    "On the margin the market was closer than the model (missed by 5 against 6.8).",
+    "Biggest player misses: Jackson Gutierrez 232 rushing yards against 53 projected; Javon Ross 90 receiving yards against 30 projected; David Wells Jr. 74 receiving yards against 34 projected."
+   ],
+   "chance": [
+    "Fumble bounces went TLSA's way, worth about 4.6 points (TLSA 0 fumbles, 0 lost; NAVY 3 fumbles, 3 lost).",
+    "With even luck the margin would have been NAVY by 12.6 (actual NAVY by 8)."
+   ],
+   "improve": [
+    "Projected but didn't play: Braxton Woodson, Luke Hutchison. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_EMU_AKR": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final EMU by 2, 48 points; the model had AKR by 0.2, the market EMU by 5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, AKR +5 (model AKR by 0.2), won: EMU by 2.",
+    "The total lean, under 51.5 (model 51.3), won: 48 points.",
+    "Projections that held: Brayden Roggow 229 passing yards (projected 205)."
+   ],
+   "wrong": [
+    "Biggest player misses: Joshua Long 114 receiving yards against 34 projected; Amareon Blue 6 rushing yards against 58 projected; Joey Mattord 73 rushing yards against 32 projected."
+   ],
+   "chance": [
+    "AKR played the better game play for play (success rate 48% to 47%, EPA per play +0.18 to +0.08) and still lost."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_BUFF_TOL": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final BUFF by 15, 31 points; the model had TOL by 23.9, the market TOL by 19. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, under 55 (model 54.5), won: 31 points."
+   ],
+   "wrong": [
+    "The side lean, TOL −19 (model TOL by 23.9), lost: BUFF by 15.",
+    "On the margin the market was closer than the model (missed by 34 against 38.9).",
+    "Biggest player misses: Messiah Burch 137 rushing yards against 53 projected; Chance Morrow 17 receiving yards against 81 projected; Bryson Hammer 0 receiving yards against 53 projected."
+   ],
+   "chance": [
+    "TOL played the better game play for play (success rate 39% to 38%, EPA per play −0.00 to −0.07) and still lost."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_CMU_OHIO": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final OHIO by 17, 45 points; the model had OHIO by 5.9, the market OHIO by 2.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, OHIO −2.5 (model OHIO by 5.9), won: OHIO by 17.",
+    "On the margin the model was closer than the market (missed by 11.1 against 14.5)."
+   ],
+   "wrong": [
+    "The total lean, over 46 (model 46.3), lost: 45 points.",
+    "Biggest player misses: Nick Poulos 158 passing yards against 0 projected; Angel Flores 27 rushing yards against 70 projected; Braylen Naves 56 receiving yards against 13 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Matt Vezza, Matt Vezza. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_KENT_WMU": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final WMU by 31, 45 points; the model had WMU by 19.9, the market WMU by 14.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, WMU −14 (model WMU by 19.9), won: WMU by 31.",
+    "The total lean, over 43.5 (model 47.5), won: 45 points.",
+    "On the margin the model was closer than the market (missed by 11.1 against 17)."
+   ],
+   "wrong": [
+    "Biggest player misses: Wayne Harris 164 receiving yards against 41 projected; Broc Lowry 257 passing yards against 159 projected; Adam Parks 55 receiving yards against 15 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_CONN_TEM": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final CONN by 14, 54 points; the model had TEM by 5, the market TEM by 4. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, TEM −4 (model TEM by 5), lost: CONN by 14.",
+    "The total lean, over 55.5 (model 59.3), lost: 54 points.",
+    "On the total the market was closer than the model (missed by 1.5 against 5.3).",
+    "Biggest player misses: Trey Cornist 114 rushing yards against 30 projected; JoJo Bermudez 96 receiving yards against 35 projected; Peter Clarke 88 receiving yards against 33 projected."
+   ],
+   "chance": [
+    "Fumble bounces went CONN's way, worth about 4.6 points (CONN 1 fumble, 0 lost; TEM 2 fumbles, 2 lost).",
+    "With even luck the margin would have been CONN by 9.4 (actual CONN by 14)."
+   ],
+   "improve": [
+    "Projected but didn't play: Javon Brown, Xavier Watson. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_TENN_ARK": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final TENN by 7, 41 points; the model had TENN by 9.9, the market TENN by 13.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, ARK +13.5 (model TENN by 9.9), won: TENN by 7.",
+    "On the margin the model was closer than the market (missed by 2.9 against 6.5)."
+   ],
+   "wrong": [
+    "The total lean, over 51.5 (model 55.8), lost: 41 points.",
+    "On the total the market was closer than the model (missed by 10.5 against 14.8).",
+    "Biggest player misses: DaSaahn Brame 87 receiving yards against 25 projected; Radarious Jackson 0 receiving yards against 31 projected; Jamari Hawkins 0 receiving yards against 30 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Faizon Brandon, Justin Baker. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_MD_OSU": {
+   "by": "draft",
+   "headline": "The side came down to chance: fumble bounces and return scores flipped it.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, OSU −31.5 (model OSU by 31.9), lost: OSU by 29. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, under 56.5 (model 55), lost: 61 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the total the market was closer than the model (missed by 4.5 against 6).",
+    "Biggest player misses: Malik Washington 64 passing yards against 236 projected; Chris Durr Jr. 15 receiving yards against 82 projected; Na'eem Abdul-Rahim Gladding 3 receiving yards against 53 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: MD 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been OSU by 36 (actual OSU by 29)."
+   ],
+   "improve": [
+    "Projected but didn't play: Devin McCuin, Brandon Inniss. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_SDSU_ORST": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final ORST by 52, 80 points; the model had ORST by 4.7, the market ORST by 14.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 52.5 (model 52.8), won: 80 points."
+   ],
+   "wrong": [
+    "The side lean, SDSU +14.5 (model ORST by 4.7), lost: ORST by 52. The model was 9.8 points off the market here, one of its bigger gaps.",
+    "On the margin the market was closer than the model (missed by 37.5 against 47.3).",
+    "Biggest player misses: Jesse Legree 191 receiving yards against 94 projected; Jayden Denegal 78 passing yards against 168 projected; Josiah Lucas 10 rushing yards against 72 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: SDSU 1. They put 7 points on the total and moved the margin about 7.",
+    "With even luck the margin would have been ORST by 57.5 (actual ORST by 52)."
+   ],
+   "improve": [
+    "Maalik Murphy (QB, ORST) had 51 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_LSU_UK": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final UK by 1, 69 points; the model had LSU by 13.6, the market LSU by 9. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 50.5 (model 54.3), won: 69 points.",
+    "On the total the model was closer than the market (missed by 14.7 against 18.5)."
+   ],
+   "wrong": [
+    "The side lean, LSU −9 (model LSU by 13.6), lost: UK by 1.",
+    "On the margin the market was closer than the model (missed by 10 against 14.6).",
+    "Biggest player misses: Dilin Jones 84 receiving yards against 12 projected; CJ Baxter 123 rushing yards against 60 projected; Jason Patterson 6 rushing yards against 50 projected."
+   ],
+   "chance": [
+    "LSU played the better game play for play (success rate 50% to 52%, EPA per play +0.23 to +0.16) and still lost.",
+    "Defensive or return touchdowns: UK 1. They put 7 points on the total and moved the margin about 7.",
+    "Missed field goals from 45 yards or closer cost about 2.8 points of margin.",
+    "With even luck the margin would have been LSU by 4.7 (actual UK by 1)."
+   ],
+   "improve": [
+    "Projected but didn't play: Corey Barber Jr., Jayce Brown. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_UAB_MEM": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final MEM by 25, 51 points; the model had MEM by 16.9, the market MEM by 15.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, MEM −15.5 (model MEM by 16.9), won: MEM by 25.",
+    "On the margin the model was closer than the market (missed by 8.1 against 9.5)."
+   ],
+   "wrong": [
+    "The total lean, over 55.5 (model 56.9), lost: 51 points.",
+    "On the total the market was closer than the model (missed by 4.5 against 5.9).",
+    "Biggest player misses: Jaylin Carter 132 rushing yards against 74 projected; Hunter Tipton 0 receiving yards against 51 projected; Jermane Hayes 3 receiving yards against 47 projected."
+   ],
+   "chance": [
+    "Fumble bounces went MEM's way, worth about 4.6 points (UAB 2 fumbles, 2 lost; MEM 1 fumble, 0 lost).",
+    "With even luck the margin would have been MEM by 20.4 (actual MEM by 25)."
+   ],
+   "improve": [
+    "Projected but didn't play: Jordan Thompson. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_NEV_UTEP": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final NEV by 17, 43 points; the model had NEV by 1.7, the market NEV by 10. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, UTEP +10 (model NEV by 1.7), lost: NEV by 17. The model was 8.3 points off the market here, one of its bigger gaps.",
+    "The total lean, over 48.5 (model 52.5), lost: 43 points.",
+    "On the margin the market was closer than the model (missed by 7 against 15.3).",
+    "On the total the market was closer than the model (missed by 5.5 against 9.5).",
+    "Biggest player misses: Herschel Turner 192 rushing yards against 59 projected; Raymond Moore III 132 passing yards against 0 projected; Carter Jones 82 passing yards against 195 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: EJ Colson Jr.. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_NDSU_UNLV": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final UNLV by 6, 20 points; the model had NDSU by 1.2, the market NDSU by 2.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, UNLV +2.5 (model NDSU by 1.2), won: UNLV by 6.",
+    "On the margin the model was closer than the market (missed by 7.2 against 8.5)."
+   ],
+   "wrong": [
+    "The total lean, over 47.5 (model 49.4), lost: 20 points.",
+    "On the total the market was closer than the model (missed by 27.5 against 29.4).",
+    "Biggest player misses: Jackson Arnold 77 passing yards against 192 projected; DJ Scott 8 rushing yards against 61 projected; Jackson Williams 16 receiving yards against 61 projected."
+   ],
+   "chance": [
+    "Defensive or return touchdowns: UNLV 1. They put 7 points on the total and moved the margin about 7.",
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
+    "With even luck the margin would have been UNLV by 0.4 (actual UNLV by 6)."
+   ],
+   "improve": [
+    "Projected but didn't play: Vincent Carner. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_CCU_MRSH": {
+   "by": "draft",
+   "headline": "Carlos Del Rio-Wilson left in quarter 2, and that shaped the result more than anything the model or market could see.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, CCU +4.5 (model CCU by 1.6), won: CCU by 6. Chance decided it (below), so it doesn't count for or against the read.",
+    "The total lean, under 58 (model 56), won: 48 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the margin the model was closer than the market (missed by 4.4 against 10.5).",
+    "On the total the model was closer than the market (missed by 8 against 10)."
+   ],
+   "wrong": [
+    "Biggest player misses: Zion Turner 219 passing yards against 0 projected; Deuce Bailey 73 passing yards against 248 projected; Dominic Lee-Knicely 169 rushing yards against 40 projected."
+   ],
+   "chance": [
+    "MRSH played the better game play for play (success rate 47% to 34%, EPA per play +0.01 to −0.12) and still lost.",
+    "Carlos Del Rio-Wilson left in quarter 2 (14:20); he threw 15% of the team's passes. Nothing before kickoff could price that in.",
+    "Fumble bounces went CCU's way, worth about 3.1 points (CCU 0 fumbles, 0 lost; MRSH 2 fumbles, 2 lost).",
+    "With even luck the margin would have been CCU by 2.9 (actual CCU by 6)."
+   ],
+   "improve": [
+    "Carlos Del Rio-Wilson's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
+    "Projected but didn't play: Clayton Coppock Jr., Jevon Edwards. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_UGA_ALA": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final UGA by 3, 37 points; the model had UGA by 1.5, the market ALA by 2.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, UGA +2.5 (model UGA by 1.5), won: UGA by 3.",
+    "On the margin the model was closer than the market (missed by 1.5 against 5.5)."
+   ],
+   "wrong": [
+    "The total lean, over 52 (model 54.4), lost: 37 points.",
+    "On the total the market was closer than the model (missed by 15 against 17.4).",
+    "Biggest player misses: Dwight Phillips Jr. 120 rushing yards against 26 projected; Trae'shawn Brown 90 rushing yards against 37 projected; Bo Walker 69 rushing yards against 25 projected."
+   ],
+   "chance": [
+    "Fumble bounces went UGA's way, worth about 4.6 points (UGA 2 fumbles, 0 lost; ALA 1 fumble, 1 lost).",
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin.",
+    "With even luck the margin would have been ALA by 0.2 (actual UGA by 3)."
+   ],
+   "improve": [
+    "Projected but didn't play: Nate Frazier, Noah Rogers. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_SYR_UVA": {
+   "by": "draft",
+   "headline": "Both leans won on the merits. Final UVA by 3, 53 points; the model had UVA by 13.4, the market UVA by 14.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, SYR +14 (model UVA by 13.4), won: UVA by 3.",
+    "The total lean, over 49.5 (model 50.9), won: 53 points.",
+    "On the total the model was closer than the market (missed by 2.1 against 3.5)."
+   ],
+   "wrong": [
+    "Biggest player misses: Malachi Nelson 217 passing yards against 0 projected; Daunte Bacheyie 97 receiving yards against 25 projected; Tylik Hill 118 rushing yards against 55 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Amari Odom. Worth checking how late his status was known.",
+    "Danny Lauter (QB, SYR) had 43 yards and wasn't on the board's projections. A role the board didn't see coming."
+   ]
+  },
+  "2026_06_USC_PSU": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final USC by 8, 54 points; the model had USC by 0.8, the market even.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, USC pick'em (model USC by 0.8), won: USC by 8."
+   ],
+   "wrong": [
+    "The total lean, over 54.5 (model 58.4), lost: 54 points.",
+    "On the total the market was closer than the model (missed by 0.5 against 4.4).",
+    "Biggest player misses: Trent Mosley 111 receiving yards against 61 projected; Tanook Hines 82 receiving yards against 45 projected; Chase Sowell 95 receiving yards against 60 projected."
+   ],
+   "chance": [
+    "Fumble bounces went USC's way, worth about 4.6 points (USC 2 fumbles, 0 lost; PSU 1 fumble, 1 lost).",
+    "With even luck the margin would have been USC by 3.4 (actual USC by 8)."
+   ],
+   "improve": [
+    "Projected but didn't play: Quinton Martin Jr.. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_AFA_NIU": {
+   "by": "draft",
+   "headline": "Evan Medders left in quarter 2, and that shaped the result more than anything the model or market could see.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, AFA −7 (model AFA by 7.2), won: AFA by 21. Chance decided it (below), so it doesn't count for or against the read."
+   ],
+   "wrong": [
+    "The total lean, over 48.5 (model 52.6), lost: 35 points. Chance decided it (below), so it doesn't count for or against the read.",
+    "On the total the market was closer than the model (missed by 13.5 against 17.6).",
+    "Biggest player misses: Owen Allen 100 rushing yards against 50 projected; Cam Thompson 7 receiving yards against 38 projected; Taron Dickens 33 rushing yards against 4 projected."
+   ],
+   "chance": [
+    "Evan Medders left in quarter 2 (13:06); he threw 50% of the team's passes. Nothing before kickoff could price that in."
+   ],
+   "improve": [
+    "Evan Medders's line and his receivers' are counted in this week's projection misses; an early exit isn't a projection miss.",
+    "Projected but didn't play: Liam Szarka, Liam Szarka. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_UL_LT": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final LT by 1, 63 points; the model had LT by 7.1, the market LT by 3.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 48.5 (model 52), won: 63 points.",
+    "On the total the model was closer than the market (missed by 11 against 14.5)."
+   ],
+   "wrong": [
+    "The side lean, LT −3 (model LT by 7.1), lost: LT by 1.",
+    "On the margin the market was closer than the model (missed by 2 against 6.1).",
+    "Biggest player misses: Blake Baker 319 passing yards against 0 projected; Talyn Shettron 102 receiving yards against 35 projected; KeDarius Wade 88 receiving yards against 22 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Trey Kukuk, Trey Kukuk. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_KU_UTAH": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final UTAH by 17, 65 points; the model had UTAH by 15.8, the market UTAH by 16.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 49.5 (model 55.3), won: 65 points.",
+    "On the total the model was closer than the market (missed by 9.7 against 15.5)."
+   ],
+   "wrong": [
+    "The side lean, KU +16 (model UTAH by 15.8), lost: UTAH by 17.",
+    "Biggest player misses: Isaiah Marshall 333 passing yards against 186 projected; Cam Pickett 134 receiving yards against 40 projected; Wayshawn Parker 171 rushing yards against 91 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Chase Jenkins, Khijohnn Cummings-Coleman. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_MINN_PUR": {
+   "by": "draft",
+   "headline": "Split: the total lean won and the side lost. Final PUR by 28, 54 points; the model had MINN by 2.8, the market MINN by 2.5. Neither number was close.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The total lean, over 49 (model 52.4), won: 54 points.",
+    "On the total the model was closer than the market (missed by 1.6 against 5)."
+   ],
+   "wrong": [
+    "The side lean, MINN −2.5 (model MINN by 2.8), lost: PUR by 28.",
+    "Biggest player misses: Fame Ijeboi 195 rushing yards against 61 projected; Ryan Browne 81 rushing yards against 6 projected; TJ Thomas 12 rushing yards against 66 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Nothing specific to fix from this game. One game isn't evidence; it goes into the season patterns."
+   ]
+  },
+  "2026_06_JMU_GASO": {
+   "by": "draft",
+   "headline": "Both leans lost, and the luck was close to even, so these were real misses. Final JMU by 3, 51 points; the model had JMU by 13.6, the market JMU by 7.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [],
+   "wrong": [
+    "The side lean, JMU −7 (model JMU by 13.6), lost: JMU by 3. The model was 6.6 points off the market here, one of its bigger gaps.",
+    "The total lean, over 51.5 (model 55.5), lost: 51 points.",
+    "On the margin the market was closer than the model (missed by 4 against 10.6).",
+    "On the total the market was closer than the model (missed by 0.5 against 4.5).",
+    "Biggest player misses: Max Johnson 343 passing yards against 225 projected; Cole Keller 108 receiving yards against 28 projected; George Pettaway 151 rushing yards against 83 projected."
+   ],
+   "chance": [
+    "GASO played the better game play for play (success rate 48% to 46%, EPA per play +0.15 to +0.09) and still lost.",
+    "Fumble bounces went JMU's way, worth about 3.1 points (JMU 1 fumble, 0 lost; GASO 1 fumble, 1 lost).",
+    "With even luck the margin would have been GASO by 0.1 (actual JMU by 3)."
+   ],
+   "improve": [
+    "Projected but didn't play: Corey Scott. Worth checking how late his status was known."
+   ]
+  },
+  "2026_06_HAW_ASU": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final ASU by 18, 42 points; the model had ASU by 15.6, the market ASU by 21.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, HAW +21 (model ASU by 15.6), won: ASU by 18."
+   ],
+   "wrong": [
+    "The total lean, over 51.5 (model 54.1), lost: 42 points.",
+    "On the total the market was closer than the model (missed by 9.5 against 12.1).",
+    "Biggest player misses: Cardae Mack 154 rushing yards against 22 projected; Kainoa Carvalho 86 receiving yards against 47 projected; Tama Uiliata 10 receiving yards against 46 projected."
+   ],
+   "chance": [
+    "Missed field goals from 45 yards or closer cost about 1.4 points of margin."
+   ],
+   "improve": [
+    "Projected but didn't play: Jason Brown Jr., Cory Butler Jr.. Worth checking how late their status was known."
+   ]
+  },
+  "2026_06_BOIS_FRES": {
+   "by": "draft",
+   "headline": "Split: the side lean won and the total lost. Final BOIS by 7, 69 points; the model had BOIS by 7.2, the market BOIS by 9.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, FRES +9 (model BOIS by 7.2), won: BOIS by 7.",
+    "On the margin the model was closer than the market (missed by 0.2 against 2)."
+   ],
+   "wrong": [
+    "The total lean, under 48.5 (model 47.8), lost: 69 points.",
+    "Biggest player misses: Sire Gaines 120 rushing yards against 61 projected; Khristian Martin 59 passing yards against 0 projected; Ezekiel Avit 96 receiving yards against 40 projected."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no defensive or return touchdowns, and the fumble bounces were close to even. The result mostly reflects how the teams played."
+   ],
+   "improve": [
+    "Projected but didn't play: Rasean Jones, Rayshon Luke. Worth checking how late their status was known."
+   ]
+  }
+ }
+}

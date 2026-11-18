@@ -1,0 +1,2081 @@
+{
+ "league": "nfl",
+ "season": 2026,
+ "week": 6,
+ "summary": {
+  "games": 12,
+  "graded_of": 12,
+  "lean_spread": [
+   2,
+   10,
+   0
+  ],
+  "lean_total": [
+   4,
+   8,
+   0
+  ],
+  "model_closer_margin": 2,
+  "model_closer_total": 4,
+  "mae": {
+   "model_margin": 8.38,
+   "market_margin": 6.58,
+   "model_total": 10.31,
+   "market_total": 9.33
+  },
+  "chance_games": 2,
+  "bets": [
+   0,
+   2,
+   0
+  ],
+  "units": -2.0
+ },
+ "colors": {
+  "CLE": [
+   "#FF3C00",
+   "#311D00"
+  ],
+  "BAL": [
+   "#241773",
+   "#9E7C0C"
+  ],
+  "PHI": [
+   "#004C54",
+   "#A5ACAF"
+  ],
+  "CAR": [
+   "#0085CA",
+   "#000000"
+  ],
+  "ATL": [
+   "#A71930",
+   "#000000"
+  ],
+  "CHI": [
+   "#0B162A",
+   "#E64100"
+  ],
+  "NYG": [
+   "#0B2265",
+   "#A71930"
+  ],
+  "NO": [
+   "#D3BC8D",
+   "#000000"
+  ],
+  "NE": [
+   "#002244",
+   "#C60C30"
+  ],
+  "NYJ": [
+   "#003F2D",
+   "#000000"
+  ],
+  "TB": [
+   "#A71930",
+   "#322F2B"
+  ],
+  "PIT": [
+   "#000000",
+   "#FFB612"
+  ],
+  "IND": [
+   "#002C5F",
+   "#A5ACAF"
+  ],
+  "TEN": [
+   "#4495D2",
+   "#D50A0A"
+  ],
+  "LA": [
+   "#003594",
+   "#FFD100"
+  ],
+  "ARI": [
+   "#97233F",
+   "#000000"
+  ],
+  "LV": [
+   "#000000",
+   "#A5ACAF"
+  ],
+  "BUF": [
+   "#00338D",
+   "#C60C30"
+  ],
+  "KC": [
+   "#E31837",
+   "#FFB612"
+  ],
+  "LAC": [
+   "#007BC7",
+   "#FFC20E"
+  ],
+  "GB": [
+   "#203731",
+   "#FFB612"
+  ],
+  "DAL": [
+   "#002244",
+   "#B0B7BC"
+  ],
+  "SF": [
+   "#AA0000",
+   "#B3995D"
+  ],
+  "WAS": [
+   "#5A1414",
+   "#FFB612"
+  ]
+ },
+ "games": [
+  {
+   "id": "2026_06_BAL_CLE",
+   "slug": "bal-cle",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "BAL",
+   "home": "CLE",
+   "away_name": "Baltimore Ravens",
+   "home_name": "Cleveland Browns",
+   "away_qb": "Lamar Jackson",
+   "home_qb": "Deshaun Watson",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    10.0,
+    13.0
+   ],
+   "margin": 3.0,
+   "total": 23.0,
+   "market": {
+    "spread": -3.0,
+    "total": 39.5
+   },
+   "board": {
+    "margin": -3.69,
+    "total": 39.57,
+    "home_win": 0.3678
+   },
+   "model": {
+    "margin": -7.57,
+    "total": 44.06,
+    "home_win": 0.2492
+   },
+   "err": {
+    "model_margin": 10.6,
+    "market_margin": 6.0,
+    "board_margin": 6.7,
+    "model_total": -21.1,
+    "market_total": -16.5,
+    "board_total": -16.6
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -4.6,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 4.6,
+     "result": "L"
+    }
+   },
+   "bets": [
+    {
+     "pick": "BAL -3",
+     "odds": -118,
+     "ev": 0.0038,
+     "result": "L",
+     "units": -1.0,
+     "clv": null
+    }
+   ],
+   "box": {
+    "CLE": {
+     "game_id": "2026_06_BAL_CLE",
+     "team": "CLE",
+     "plays": 63,
+     "epa_play": -0.09,
+     "success": 0.429,
+     "explosive": 1,
+     "ints": 0,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 1,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "BAL": {
+     "game_id": "2026_06_BAL_CLE",
+     "team": "BAL",
+     "plays": 57,
+     "epa_play": -0.079,
+     "success": 0.333,
+     "explosive": 3,
+     "ints": 0,
+     "fumbles": 2,
+     "fum_lost": 1,
+     "rz_td": 1,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 3.0,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Tyler Huntley",
+     "pos": "QB",
+     "team": "BAL",
+     "yds": 193.0,
+     "line": {
+      "pass_yds": 165.0,
+      "rush_yds": 28.0
+     }
+    },
+    {
+     "name": "Deshaun Watson",
+     "pos": "QB",
+     "team": "CLE",
+     "yds": 193.0,
+     "line": {
+      "pass_yds": 164.0,
+      "rush_yds": 29.0
+     }
+    },
+    {
+     "name": "Jerry Jeudy",
+     "pos": "WR",
+     "team": "CLE",
+     "yds": 69.0,
+     "line": {
+      "rec_yds": 69.0,
+      "receptions": 4.0
+     }
+    },
+    {
+     "name": "Zay Flowers",
+     "pos": "WR",
+     "team": "BAL",
+     "yds": 67.0,
+     "line": {
+      "rush_yds": 1.0,
+      "rec_yds": 66.0,
+      "receptions": 6.0
+     }
+    },
+    {
+     "name": "Derrick Henry",
+     "pos": "RB",
+     "team": "BAL",
+     "yds": 60.0,
+     "line": {
+      "rush_yds": 58.0,
+      "rec_yds": 2.0,
+      "receptions": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_CAR_PHI",
+   "slug": "car-phi",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "CAR",
+   "home": "PHI",
+   "away_name": "Carolina Panthers",
+   "home_name": "Philadelphia Eagles",
+   "away_qb": "Bryce Young",
+   "home_qb": "Tanner McKee",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    25.0,
+    14.0
+   ],
+   "margin": -11.0,
+   "total": 39.0,
+   "market": {
+    "spread": -3.0,
+    "total": 39.5
+   },
+   "board": {
+    "margin": -2.45,
+    "total": 39.51,
+    "home_win": 0.4191
+   },
+   "model": {
+    "margin": 0.66,
+    "total": 40.22,
+    "home_win": 0.5269
+   },
+   "err": {
+    "model_margin": -11.7,
+    "market_margin": -8.0,
+    "board_margin": -8.6,
+    "model_total": -1.2,
+    "market_total": -0.5,
+    "board_total": -0.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 3.7,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.7,
+     "result": "L"
+    }
+   },
+   "bets": [
+    {
+     "pick": "PHI ML",
+     "odds": 140,
+     "ev": 0.0059,
+     "result": "L",
+     "units": -1.0,
+     "clv": null
+    }
+   ],
+   "box": {
+    "PHI": {
+     "game_id": "2026_06_CAR_PHI",
+     "team": "PHI",
+     "plays": 64,
+     "epa_play": -0.081,
+     "success": 0.391,
+     "explosive": 0,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "CAR": {
+     "game_id": "2026_06_CAR_PHI",
+     "team": "CAR",
+     "plays": 77,
+     "epa_play": 0.054,
+     "success": 0.414,
+     "explosive": 5,
+     "ints": 0,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 3,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -12.6,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Bryce Young",
+     "pos": "QB",
+     "team": "CAR",
+     "yds": 289.0,
+     "line": {
+      "pass_yds": 281.0,
+      "rush_yds": 8.0
+     }
+    },
+    {
+     "name": "Tanner McKee",
+     "pos": "QB",
+     "team": "PHI",
+     "yds": 215.0,
+     "line": {
+      "pass_yds": 215.0
+     }
+    },
+    {
+     "name": "Chuba Hubbard",
+     "pos": "RB",
+     "team": "CAR",
+     "yds": 121.0,
+     "line": {
+      "rush_yds": 120.0,
+      "rec_yds": 1.0,
+      "receptions": 1.0
+     }
+    },
+    {
+     "name": "Jalen Coker",
+     "pos": "WR",
+     "team": "CAR",
+     "yds": 97.0,
+     "line": {
+      "rec_yds": 97.0,
+      "receptions": 6.0
+     }
+    },
+    {
+     "name": "Tetairoa McMillan",
+     "pos": "WR",
+     "team": "CAR",
+     "yds": 86.0,
+     "line": {
+      "rec_yds": 86.0,
+      "receptions": 6.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_CHI_ATL",
+   "slug": "chi-atl",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "CHI",
+   "home": "ATL",
+   "away_name": "Chicago Bears",
+   "home_name": "Atlanta Falcons",
+   "away_qb": "Caleb Williams",
+   "home_qb": "Michael Penix Jr.",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    31.0,
+    23.0
+   ],
+   "margin": -8.0,
+   "total": 54.0,
+   "market": {
+    "spread": -1.5,
+    "total": 52.5
+   },
+   "board": {
+    "margin": -1.28,
+    "total": 52.43,
+    "home_win": 0.4861
+   },
+   "model": {
+    "margin": -0.02,
+    "total": 47.46,
+    "home_win": 0.5299
+   },
+   "err": {
+    "model_margin": -8.0,
+    "market_margin": -6.5,
+    "board_margin": -6.7,
+    "model_total": 6.5,
+    "market_total": 1.5,
+    "board_total": 1.6
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.5,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -5.0,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "ATL": {
+     "game_id": "2026_06_CHI_ATL",
+     "team": "ATL",
+     "plays": 55,
+     "epa_play": -0.246,
+     "success": 0.333,
+     "explosive": 6,
+     "ints": 0,
+     "fumbles": 3,
+     "fum_lost": 2,
+     "rz_td": 3,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 3,
+     "qb_exit": null
+    },
+    "CHI": {
+     "game_id": "2026_06_CHI_ATL",
+     "team": "CHI",
+     "plays": 76,
+     "epa_play": 0.149,
+     "success": 0.525,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 3,
+     "fum_lost": 2,
+     "rz_td": 4,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -8.0,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Caleb Williams",
+     "pos": "QB",
+     "team": "CHI",
+     "yds": 309.0,
+     "line": {
+      "pass_yds": 305.0,
+      "rush_yds": 4.0
+     }
+    },
+    {
+     "name": "Michael Penix Jr.",
+     "pos": "QB",
+     "team": "ATL",
+     "yds": 226.0,
+     "line": {
+      "pass_yds": 225.0,
+      "rush_yds": 1.0
+     }
+    },
+    {
+     "name": "Luther Burden III",
+     "pos": "WR",
+     "team": "CHI",
+     "yds": 95.0,
+     "line": {
+      "rec_yds": 95.0,
+      "receptions": 8.0
+     }
+    },
+    {
+     "name": "Jahan Dotson",
+     "pos": "WR",
+     "team": "ATL",
+     "yds": 87.0,
+     "line": {
+      "rec_yds": 87.0,
+      "receptions": 3.0
+     }
+    },
+    {
+     "name": "Roschon Johnson",
+     "pos": "RB",
+     "team": "CHI",
+     "yds": 73.0,
+     "line": {
+      "rush_yds": 51.0,
+      "rec_yds": 22.0,
+      "receptions": 2.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_NO_NYG",
+   "slug": "no-nyg",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "NO",
+   "home": "NYG",
+   "away_name": "New Orleans Saints",
+   "home_name": "New York Giants",
+   "away_qb": "Tyler Shough",
+   "home_qb": "Jameis Winston",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    34.0,
+    27.0
+   ],
+   "margin": -7.0,
+   "total": 61.0,
+   "market": {
+    "spread": -1.5,
+    "total": 46.5
+   },
+   "board": {
+    "margin": -1.02,
+    "total": 46.46,
+    "home_win": 0.5211
+   },
+   "model": {
+    "margin": 1.69,
+    "total": 43.5,
+    "home_win": 0.6141
+   },
+   "err": {
+    "model_margin": -8.7,
+    "market_margin": -5.5,
+    "board_margin": -6.0,
+    "model_total": 17.5,
+    "market_total": 14.5,
+    "board_total": 14.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 3.2,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -3.0,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "NYG": {
+     "game_id": "2026_06_NO_NYG",
+     "team": "NYG",
+     "plays": 72,
+     "epa_play": -0.053,
+     "success": 0.407,
+     "explosive": 8,
+     "ints": 3,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 2,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "NO": {
+     "game_id": "2026_06_NO_NYG",
+     "team": "NO",
+     "plays": 71,
+     "epa_play": 0.097,
+     "success": 0.404,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 3,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -7.0,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "J.J. McCarthy",
+     "pos": "QB",
+     "team": "NYG",
+     "yds": 269.0,
+     "line": {
+      "pass_yds": 243.0,
+      "rush_yds": 26.0
+     }
+    },
+    {
+     "name": "Tyler Shough",
+     "pos": "QB",
+     "team": "NO",
+     "yds": 177.0,
+     "line": {
+      "pass_yds": 144.0,
+      "rush_yds": 33.0
+     }
+    },
+    {
+     "name": "Malik Nabers",
+     "pos": "WR",
+     "team": "NYG",
+     "yds": 165.0,
+     "line": {
+      "rec_yds": 165.0,
+      "receptions": 12.0
+     }
+    },
+    {
+     "name": "Jameis Winston",
+     "pos": "QB",
+     "team": "NYG",
+     "yds": 157.0,
+     "line": {
+      "pass_yds": 152.0,
+      "rush_yds": 5.0
+     }
+    },
+    {
+     "name": "Isaiah Likely",
+     "pos": "TE",
+     "team": "NYG",
+     "yds": 99.0,
+     "line": {
+      "rec_yds": 99.0,
+      "receptions": 6.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_NYJ_NE",
+   "slug": "nyj-ne",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "NYJ",
+   "home": "NE",
+   "away_name": "New York Jets",
+   "home_name": "New England Patriots",
+   "away_qb": "Geno Smith",
+   "home_qb": "Drake Maye",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    19.0,
+    26.0
+   ],
+   "margin": 7.0,
+   "total": 45.0,
+   "market": {
+    "spread": 7.5,
+    "total": 43.5
+   },
+   "board": {
+    "margin": 7.78,
+    "total": 43.49,
+    "home_win": 0.7586
+   },
+   "model": {
+    "margin": 9.38,
+    "total": 42.6,
+    "home_win": 0.7999
+   },
+   "err": {
+    "model_margin": -2.4,
+    "market_margin": -0.5,
+    "board_margin": -0.8,
+    "model_total": 2.4,
+    "market_total": 1.5,
+    "board_total": 1.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 1.9,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -0.9,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "NE": {
+     "game_id": "2026_06_NYJ_NE",
+     "team": "NE",
+     "plays": 67,
+     "epa_play": 0.044,
+     "success": 0.439,
+     "explosive": 5,
+     "ints": 0,
+     "fumbles": 3,
+     "fum_lost": 2,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "NYJ": {
+     "game_id": "2026_06_NYJ_NE",
+     "team": "NYJ",
+     "plays": 61,
+     "epa_play": -0.057,
+     "success": 0.483,
+     "explosive": 3,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 0,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 2,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": -1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": -1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 8.6,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Drake Maye",
+     "pos": "QB",
+     "team": "NE",
+     "yds": 260.0,
+     "line": {
+      "pass_yds": 235.0,
+      "rush_yds": 25.0
+     }
+    },
+    {
+     "name": "Geno Smith",
+     "pos": "QB",
+     "team": "NYJ",
+     "yds": 252.0,
+     "line": {
+      "pass_yds": 252.0
+     }
+    },
+    {
+     "name": "Braelon Allen",
+     "pos": "RB",
+     "team": "NYJ",
+     "yds": 104.0,
+     "line": {
+      "rush_yds": 78.0,
+      "rec_yds": 26.0,
+      "receptions": 2.0
+     }
+    },
+    {
+     "name": "Omar Cooper Jr.",
+     "pos": "WR",
+     "team": "NYJ",
+     "yds": 103.0,
+     "line": {
+      "rec_yds": 103.0,
+      "receptions": 6.0
+     }
+    },
+    {
+     "name": "DeMario Douglas",
+     "pos": "WR",
+     "team": "NE",
+     "yds": 86.0,
+     "line": {
+      "rec_yds": 86.0,
+      "receptions": 7.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_PIT_TB",
+   "slug": "pit-tb",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "PIT",
+   "home": "TB",
+   "away_name": "Pittsburgh Steelers",
+   "home_name": "Tampa Bay Buccaneers",
+   "away_qb": "Aaron Rodgers",
+   "home_qb": "Jalon Daniels",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    26.0,
+    19.0
+   ],
+   "margin": -7.0,
+   "total": 45.0,
+   "market": {
+    "spread": -2.5,
+    "total": 38.5
+   },
+   "board": {
+    "margin": -2.04,
+    "total": 38.54,
+    "home_win": 0.4523
+   },
+   "model": {
+    "margin": 0.53,
+    "total": 41.1,
+    "home_win": 0.5418
+   },
+   "err": {
+    "model_margin": -7.5,
+    "market_margin": -4.5,
+    "board_margin": -5.0,
+    "model_total": 3.9,
+    "market_total": 6.5,
+    "board_total": 6.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 3.0,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 2.6,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "TB": {
+     "game_id": "2026_06_PIT_TB",
+     "team": "TB",
+     "plays": 74,
+     "epa_play": -0.208,
+     "success": 0.311,
+     "explosive": 4,
+     "ints": 2,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 2,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "PIT": {
+     "game_id": "2026_06_PIT_TB",
+     "team": "PIT",
+     "plays": 76,
+     "epa_play": -0.123,
+     "success": 0.395,
+     "explosive": 3,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -7.0,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Aaron Rodgers",
+     "pos": "QB",
+     "team": "PIT",
+     "yds": 253.0,
+     "line": {
+      "pass_yds": 253.0
+     }
+    },
+    {
+     "name": "Jalon Daniels",
+     "pos": "QB",
+     "team": "TB",
+     "yds": 200.0,
+     "line": {
+      "pass_yds": 164.0,
+      "rush_yds": 39.0,
+      "rec_yds": -3.0,
+      "receptions": 1.0
+     }
+    },
+    {
+     "name": "DK Metcalf",
+     "pos": "WR",
+     "team": "PIT",
+     "yds": 93.0,
+     "line": {
+      "rec_yds": 93.0,
+      "receptions": 11.0
+     }
+    },
+    {
+     "name": "Germie Bernard",
+     "pos": "WR",
+     "team": "PIT",
+     "yds": 87.0,
+     "line": {
+      "rec_yds": 87.0,
+      "receptions": 11.0
+     }
+    },
+    {
+     "name": "Jaylen Warren",
+     "pos": "RB",
+     "team": "PIT",
+     "yds": 78.0,
+     "line": {
+      "rush_yds": 50.0,
+      "rec_yds": 28.0,
+      "receptions": 2.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_TEN_IND",
+   "slug": "ten-ind",
+   "date": "Sun Oct 18",
+   "time": "13:00",
+   "away": "TEN",
+   "home": "IND",
+   "away_name": "Tennessee Titans",
+   "home_name": "Indianapolis Colts",
+   "away_qb": "Cam Ward",
+   "home_qb": "Daniel Jones",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    26.0,
+    20.0
+   ],
+   "margin": -6.0,
+   "total": 46.0,
+   "market": {
+    "spread": 6.5,
+    "total": 44.5
+   },
+   "board": {
+    "margin": 6.86,
+    "total": 44.48,
+    "home_win": 0.7324
+   },
+   "model": {
+    "margin": 8.86,
+    "total": 42.96,
+    "home_win": 0.7868
+   },
+   "err": {
+    "model_margin": -14.9,
+    "market_margin": -12.5,
+    "board_margin": -12.9,
+    "model_total": 3.0,
+    "market_total": 1.5,
+    "board_total": 1.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 2.4,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -1.5,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "IND": {
+     "game_id": "2026_06_TEN_IND",
+     "team": "IND",
+     "plays": 82,
+     "epa_play": -0.072,
+     "success": 0.415,
+     "explosive": 5,
+     "ints": 2,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 3,
+     "qb_exit": null
+    },
+    "TEN": {
+     "game_id": "2026_06_TEN_IND",
+     "team": "TEN",
+     "plays": 45,
+     "epa_play": -0.079,
+     "success": 0.422,
+     "explosive": 1,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 2,
+     "nonoff_td": 1,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": -1.6,
+    "return_def_tds": -6.3,
+    "short_fg_misses": 0.0,
+    "total": -7.9,
+    "total_pts_nonoff": 7,
+    "qb_exits": []
+   },
+   "neutral_margin": 1.9,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Daniel Jones",
+     "pos": "QB",
+     "team": "IND",
+     "yds": 299.0,
+     "line": {
+      "pass_yds": 269.0,
+      "rush_yds": 30.0
+     }
+    },
+    {
+     "name": "Jonathan Taylor",
+     "pos": "RB",
+     "team": "IND",
+     "yds": 151.0,
+     "line": {
+      "rush_yds": 94.0,
+      "rec_yds": 57.0,
+      "receptions": 2.0
+     }
+    },
+    {
+     "name": "Cam Ward",
+     "pos": "QB",
+     "team": "TEN",
+     "yds": 110.0,
+     "line": {
+      "pass_yds": 102.0,
+      "rush_yds": 8.0
+     }
+    },
+    {
+     "name": "Keenan Allen",
+     "pos": "WR",
+     "team": "IND",
+     "yds": 82.0,
+     "line": {
+      "rec_yds": 82.0,
+      "receptions": 8.0
+     }
+    },
+    {
+     "name": "Tony Pollard",
+     "pos": "RB",
+     "team": "TEN",
+     "yds": 76.0,
+     "line": {
+      "rush_yds": 76.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_ARI_LA",
+   "slug": "ari-la",
+   "date": "Sun Oct 18",
+   "time": "16:05",
+   "away": "ARI",
+   "home": "LA",
+   "away_name": "Arizona Cardinals",
+   "home_name": "Los Angeles Rams",
+   "away_qb": "Jacoby Brissett",
+   "home_qb": "Matthew Stafford",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    18.0,
+    16.0
+   ],
+   "margin": -2.0,
+   "total": 34.0,
+   "market": {
+    "spread": 12.5,
+    "total": 51.5
+   },
+   "board": {
+    "margin": 12.43,
+    "total": 51.5,
+    "home_win": 0.8511
+   },
+   "model": {
+    "margin": 12.07,
+    "total": 51.81,
+    "home_win": 0.8436
+   },
+   "err": {
+    "model_margin": -14.1,
+    "market_margin": -14.5,
+    "board_margin": -14.4,
+    "model_total": -17.8,
+    "market_total": -17.5,
+    "board_total": -17.5
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -0.4,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.3,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "LA": {
+     "game_id": "2026_06_ARI_LA",
+     "team": "LA",
+     "plays": 58,
+     "epa_play": -0.082,
+     "success": 0.483,
+     "explosive": 3,
+     "ints": 0,
+     "fumbles": 2,
+     "fum_lost": 1,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "ARI": {
+     "game_id": "2026_06_ARI_LA",
+     "team": "ARI",
+     "plays": 72,
+     "epa_play": -0.041,
+     "success": 0.472,
+     "explosive": 4,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 0,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -2.0,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Matthew Stafford",
+     "pos": "QB",
+     "team": "LA",
+     "yds": 222.0,
+     "line": {
+      "pass_yds": 222.0
+     }
+    },
+    {
+     "name": "Jacoby Brissett",
+     "pos": "QB",
+     "team": "ARI",
+     "yds": 220.0,
+     "line": {
+      "pass_yds": 218.0,
+      "rush_yds": 2.0
+     }
+    },
+    {
+     "name": "Bam Knight",
+     "pos": "RB",
+     "team": "ARI",
+     "yds": 98.0,
+     "line": {
+      "rush_yds": 80.0,
+      "rec_yds": 18.0,
+      "receptions": 2.0
+     }
+    },
+    {
+     "name": "Puka Nacua",
+     "pos": "WR",
+     "team": "LA",
+     "yds": 80.0,
+     "line": {
+      "rec_yds": 80.0,
+      "receptions": 6.0
+     }
+    },
+    {
+     "name": "Kyren Williams",
+     "pos": "RB",
+     "team": "LA",
+     "yds": 67.0,
+     "line": {
+      "rush_yds": 50.0,
+      "rec_yds": 17.0,
+      "receptions": 3.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_BUF_LV",
+   "slug": "buf-lv",
+   "date": "Sun Oct 18",
+   "time": "16:25",
+   "away": "BUF",
+   "home": "LV",
+   "away_name": "Buffalo Bills",
+   "home_name": "Las Vegas Raiders",
+   "away_qb": "Josh Allen",
+   "home_qb": "Kirk Cousins",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    33.0,
+    30.0
+   ],
+   "margin": -3.0,
+   "total": 63.0,
+   "market": {
+    "spread": -5.5,
+    "total": 53.5
+   },
+   "board": {
+    "margin": -5.61,
+    "total": 53.5,
+    "home_win": 0.316
+   },
+   "model": {
+    "margin": -6.24,
+    "total": 53.64,
+    "home_win": 0.2967
+   },
+   "err": {
+    "model_margin": 3.2,
+    "market_margin": 2.5,
+    "board_margin": 2.6,
+    "model_total": 9.4,
+    "market_total": 9.5,
+    "board_total": 9.5
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -0.7,
+     "result": "L"
+    },
+    "total": {
+     "side": "over",
+     "gap": 0.1,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "LV": {
+     "game_id": "2026_06_BUF_LV",
+     "team": "LV",
+     "plays": 66,
+     "epa_play": 0.042,
+     "success": 0.429,
+     "explosive": 6,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 0,
+     "qb_exit": null
+    },
+    "BUF": {
+     "game_id": "2026_06_BUF_LV",
+     "team": "BUF",
+     "plays": 65,
+     "epa_play": 0.132,
+     "success": 0.492,
+     "explosive": 5,
+     "ints": 0,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 3,
+     "rz": 5,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 0.0,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 0.0,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": -3.0,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Kirk Cousins",
+     "pos": "QB",
+     "team": "LV",
+     "yds": 313.0,
+     "line": {
+      "pass_yds": 313.0
+     }
+    },
+    {
+     "name": "Josh Allen",
+     "pos": "QB",
+     "team": "BUF",
+     "yds": 259.0,
+     "line": {
+      "pass_yds": 255.0,
+      "rush_yds": 4.0
+     }
+    },
+    {
+     "name": "James Cook",
+     "pos": "RB",
+     "team": "BUF",
+     "yds": 153.0,
+     "line": {
+      "rush_yds": 95.0,
+      "rec_yds": 58.0,
+      "receptions": 3.0
+     }
+    },
+    {
+     "name": "Tre Tucker",
+     "pos": "WR",
+     "team": "LV",
+     "yds": 97.0,
+     "line": {
+      "rec_yds": 97.0,
+      "receptions": 5.0
+     }
+    },
+    {
+     "name": "Michael Mayer",
+     "pos": "TE",
+     "team": "LV",
+     "yds": 95.0,
+     "line": {
+      "rec_yds": 95.0,
+      "receptions": 7.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_LAC_KC",
+   "slug": "lac-kc",
+   "date": "Sun Oct 18",
+   "time": "16:25",
+   "away": "LAC",
+   "home": "KC",
+   "away_name": "Los Angeles Chargers",
+   "home_name": "Kansas City Chiefs",
+   "away_qb": "Justin Herbert",
+   "home_qb": "Patrick Mahomes",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    6.0,
+    22.0
+   ],
+   "margin": 16.0,
+   "total": 28.0,
+   "market": {
+    "spread": 7.5,
+    "total": 41.5
+   },
+   "board": {
+    "margin": 7.84,
+    "total": 41.54,
+    "home_win": 0.7803
+   },
+   "model": {
+    "margin": 9.73,
+    "total": 44.08,
+    "home_win": 0.8262
+   },
+   "err": {
+    "model_margin": 6.3,
+    "market_margin": 8.5,
+    "board_margin": 8.2,
+    "model_total": -16.1,
+    "market_total": -13.5,
+    "board_total": -13.5
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 2.2,
+     "result": "W"
+    },
+    "total": {
+     "side": "over",
+     "gap": 2.6,
+     "result": "L"
+    }
+   },
+   "bets": [],
+   "box": {
+    "KC": {
+     "game_id": "2026_06_LAC_KC",
+     "team": "KC",
+     "plays": 59,
+     "epa_play": 0.09,
+     "success": 0.543,
+     "explosive": 7,
+     "ints": 1,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 1,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "LAC": {
+     "game_id": "2026_06_LAC_KC",
+     "team": "LAC",
+     "plays": 68,
+     "epa_play": -0.256,
+     "success": 0.286,
+     "explosive": 1,
+     "ints": 1,
+     "fumbles": 2,
+     "fum_lost": 2,
+     "rz_td": 0,
+     "rz": 3,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 0,
+     "fourth": 3,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": 4.9,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": 4.9,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 11.1,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Patrick Mahomes",
+     "pos": "QB",
+     "team": "KC",
+     "yds": 291.0,
+     "line": {
+      "pass_yds": 272.0,
+      "rush_yds": 19.0
+     }
+    },
+    {
+     "name": "Justin Herbert",
+     "pos": "QB",
+     "team": "LAC",
+     "yds": 230.0,
+     "line": {
+      "pass_yds": 204.0,
+      "rush_yds": 26.0
+     }
+    },
+    {
+     "name": "Kenneth Walker III",
+     "pos": "RB",
+     "team": "KC",
+     "yds": 139.0,
+     "line": {
+      "rush_yds": 128.0,
+      "rec_yds": 11.0,
+      "receptions": 2.0
+     }
+    },
+    {
+     "name": "Xavier Worthy",
+     "pos": "WR",
+     "team": "KC",
+     "yds": 73.0,
+     "line": {
+      "rec_yds": 73.0,
+      "receptions": 7.0
+     }
+    },
+    {
+     "name": "Quentin Johnston",
+     "pos": "WR",
+     "team": "LAC",
+     "yds": 57.0,
+     "line": {
+      "rec_yds": 57.0,
+      "receptions": 1.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_DAL_GB",
+   "slug": "dal-gb",
+   "date": "Sun Oct 18",
+   "time": "20:20",
+   "away": "DAL",
+   "home": "GB",
+   "away_name": "Dallas Cowboys",
+   "home_name": "Green Bay Packers",
+   "away_qb": "Dak Prescott",
+   "home_qb": "Jordan Love",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    13.0,
+    23.0
+   ],
+   "margin": 10.0,
+   "total": 36.0,
+   "market": {
+    "spread": 1.5,
+    "total": 53.5
+   },
+   "board": {
+    "margin": 1.44,
+    "total": 53.47,
+    "home_win": 0.5087
+   },
+   "model": {
+    "margin": 1.09,
+    "total": 51.14,
+    "home_win": 0.4967
+   },
+   "err": {
+    "model_margin": 8.9,
+    "market_margin": 8.5,
+    "board_margin": 8.6,
+    "model_total": -15.1,
+    "market_total": -17.5,
+    "board_total": -17.5
+   },
+   "leans": {
+    "spread": {
+     "side": "away",
+     "gap": -0.4,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -2.4,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "GB": {
+     "game_id": "2026_06_DAL_GB",
+     "team": "GB",
+     "plays": 73,
+     "epa_play": 0.08,
+     "success": 0.41,
+     "explosive": 6,
+     "ints": 1,
+     "fumbles": 0,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 1,
+     "qb_exit": null
+    },
+    "DAL": {
+     "game_id": "2026_06_DAL_GB",
+     "team": "DAL",
+     "plays": 78,
+     "epa_play": -0.189,
+     "success": 0.385,
+     "explosive": 1,
+     "ints": 2,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 2,
+     "fourth": 4,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": -1.6,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": -1.6,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 11.6,
+   "why": [],
+   "players": [],
+   "unprojected": [
+    {
+     "name": "Jordan Love",
+     "pos": "QB",
+     "team": "GB",
+     "yds": 290.0,
+     "line": {
+      "pass_yds": 276.0,
+      "rush_yds": 14.0
+     }
+    },
+    {
+     "name": "Dak Prescott",
+     "pos": "QB",
+     "team": "DAL",
+     "yds": 265.0,
+     "line": {
+      "pass_yds": 258.0,
+      "rush_yds": 7.0
+     }
+    },
+    {
+     "name": "Matthew Golden",
+     "pos": "WR",
+     "team": "GB",
+     "yds": 104.0,
+     "line": {
+      "rec_yds": 104.0,
+      "receptions": 6.0
+     }
+    },
+    {
+     "name": "George Pickens",
+     "pos": "WR",
+     "team": "DAL",
+     "yds": 73.0,
+     "line": {
+      "rec_yds": 73.0,
+      "receptions": 6.0
+     }
+    },
+    {
+     "name": "CeeDee Lamb",
+     "pos": "WR",
+     "team": "DAL",
+     "yds": 70.0,
+     "line": {
+      "rec_yds": 70.0,
+      "receptions": 9.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "2026_06_WAS_SF",
+   "slug": "was-sf",
+   "date": "Mon Oct 19",
+   "time": "20:15",
+   "away": "WAS",
+   "home": "SF",
+   "away_name": "Washington Commanders",
+   "home_name": "San Francisco 49ers",
+   "away_qb": "Jayden Daniels",
+   "home_qb": "Brock Purdy",
+   "neutral": false,
+   "backfilled": false,
+   "score": [
+    17.0,
+    23.0
+   ],
+   "margin": 6.0,
+   "total": 40.0,
+   "market": {
+    "spread": 7.5,
+    "total": 51.5
+   },
+   "board": {
+    "margin": 7.95,
+    "total": 51.41,
+    "home_win": 0.7779
+   },
+   "model": {
+    "margin": 10.24,
+    "total": 49.73,
+    "home_win": 0.8327
+   },
+   "err": {
+    "model_margin": -4.2,
+    "market_margin": -1.5,
+    "board_margin": -2.0,
+    "model_total": -9.7,
+    "market_total": -11.5,
+    "board_total": -11.4
+   },
+   "leans": {
+    "spread": {
+     "side": "home",
+     "gap": 2.7,
+     "result": "L"
+    },
+    "total": {
+     "side": "under",
+     "gap": -1.8,
+     "result": "W"
+    }
+   },
+   "bets": [],
+   "box": {
+    "SF": {
+     "game_id": "2026_06_WAS_SF",
+     "team": "SF",
+     "plays": 62,
+     "epa_play": 0.172,
+     "success": 0.508,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 1,
+     "rz_td": 3,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 2,
+     "fourth": 2,
+     "qb_exit": null
+    },
+    "WAS": {
+     "game_id": "2026_06_WAS_SF",
+     "team": "WAS",
+     "plays": 64,
+     "epa_play": -0.056,
+     "success": 0.466,
+     "explosive": 4,
+     "ints": 0,
+     "fumbles": 1,
+     "fum_lost": 0,
+     "rz_td": 2,
+     "rz": 4,
+     "nonoff_td": 0,
+     "fg_miss_short": 0,
+     "fourth_conv": 1,
+     "fourth": 4,
+     "qb_exit": null
+    }
+   },
+   "chance": {
+    "fumble_bounces": -3.2,
+    "return_def_tds": 0.0,
+    "short_fg_misses": 0.0,
+    "total": -3.2,
+    "total_pts_nonoff": 0,
+    "qb_exits": []
+   },
+   "neutral_margin": 9.2,
+   "why": [],
+   "players": [
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "team": "WAS",
+     "stat": "pass_yds",
+     "proj": 184.4,
+     "act": 300.0,
+     "miss": 115.6,
+     "played": true
+    },
+    {
+     "name": "Treylon Burks",
+     "pos": "WR",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 20.4,
+     "act": 66.0,
+     "miss": 45.6,
+     "played": true
+    },
+    {
+     "name": "Chig Okonkwo",
+     "pos": "TE",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 26.0,
+     "act": 69.0,
+     "miss": 43.0,
+     "played": true
+    },
+    {
+     "name": "Brock Purdy",
+     "pos": "QB",
+     "team": "SF",
+     "stat": "pass_yds",
+     "proj": 228.0,
+     "act": 264.0,
+     "miss": 36.0,
+     "played": true
+    },
+    {
+     "name": "Mike Evans",
+     "pos": "WR",
+     "team": "SF",
+     "stat": "rec_yds",
+     "proj": 62.6,
+     "act": 94.0,
+     "miss": 31.4,
+     "played": true
+    },
+    {
+     "name": "Jayden Daniels",
+     "pos": "QB",
+     "team": "WAS",
+     "stat": "rush_yds",
+     "proj": 40.1,
+     "act": 11.0,
+     "miss": -29.1,
+     "played": true
+    },
+    {
+     "name": "Antonio Williams",
+     "pos": "WR",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 25.1,
+     "act": 50.0,
+     "miss": 24.9,
+     "played": true
+    },
+    {
+     "name": "Rachaad White",
+     "pos": "RB",
+     "team": "WAS",
+     "stat": "rec_yds",
+     "proj": 10.6,
+     "act": 30.0,
+     "miss": 19.4,
+     "played": true
+    },
+    {
+     "name": "Christian McCaffrey",
+     "pos": "RB",
+     "team": "SF",
+     "stat": "rec_yds",
+     "proj": 34.4,
+     "act": 53.0,
+     "miss": 18.6,
+     "played": true
+    },
+    {
+     "name": "George Kittle",
+     "pos": "TE",
+     "team": "SF",
+     "stat": "rec_yds",
+     "proj": 51.1,
+     "act": 69.0,
+     "miss": 17.9,
+     "played": true
+    }
+   ],
+   "unprojected": []
+  }
+ ]
+}
