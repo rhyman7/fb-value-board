@@ -2942,3 +2942,33 @@ Brier at each player's own Typical line, candidate minus current (se):
 - The game-day table knows who suited up, so it holds players the board never showed; the board
   is a bet-time product. A cleaner test would judge only what the board lists.
 - At real lines the effect is small either way: players with a line average a 7% shut-out chance.
+
+## College: the shut-out chance judged on the board's own players (Nov 18, 2026): tight ends kept (provisional, not yet applied), wide receivers a trade-off
+
+Ryan's pick after the corrected entry above. Rule written before the run: Project doc
+`claude/plan-cfb-shutout-board-test-2026-11-18.md`. Script `experiments/cfb_shutout_board_test.py`,
+output `experiments/out/cfb_shutout_board_test.json` (scores only). **The yardstick was chosen after
+seeing the day's earlier results**, so a keep here is weaker than usual: judged again on 2026
+weeks 12+ and in January.
+
+`over = (1 - p0) x the model's over`; p0 fitted on expected players only (P2: projected receptions,
+PFF route share, snap share, his own earlier shut-out rate; chosen on tuning for both positions).
+Scored: bet-time projections, expected players who took the field, TE over 15 projected yards,
+WR over 20. Brier, candidate minus current (se):
+
+| | Own Typical line, tuning 2018-19 | Own Typical line, holdout 2021-25 | DK/FD lines 2024 | DK/FD lines 2025 | Verdict |
+|---|---|---|---|---|---|
+| TE | -0.0186 (0.0031) | -0.0171 (0.0016), 10.9 se | -0.0028 (0.0039), 253 lines | -0.0008 (0.0039), 288 lines | **Kept, provisional** |
+| WR | -0.0081 (0.0010) | -0.0070 (0.0006), 11.3 se | -0.0010 (0.0012), 1,295 lines | **+0.0019 (0.0012) worse**, 1,452 lines | Trade-off |
+
+- Tight ends, holdout: 38.7% reached the current Typical (the model says 50%); the candidate
+  says 35.5%. Typical drops from 18.9 to 11.3 yards on average, and 53% reach the new one.
+  The fix also holds away from the middle (reported): at 60% of Typical the model says 62.8%,
+  51.4% happened, candidate 45.3%; at 150% the model says 37.4%, 26.3% happened, candidate 26.0%.
+- Predicted against actual shut-out rate for tight ends by projected catches: up to 1.5: 56% / 65%;
+  1.5-2: 43% / 44%; 2-3: 23% / 22%; 3-4: 9% / 8%; 4+: 4% / 2%.
+- The two real-line gains for tight ends are each well under 1 standard error; the rule only asks
+  that they not be worse.
+- 2026 weeks 1-11 (already seen): tight ends -0.0179 (0.0040), wide receivers -0.0096 (0.0016).
+- **Not applied.** Applying it changes college tight-end odds and Typical on the board, Props and
+  Parlays pages: plan and before/after sample to Ryan first.

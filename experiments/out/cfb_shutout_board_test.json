@@ -1,0 +1,343 @@
+{
+ "plan": "claude/plan-cfb-shutout-board-test-2026-11-18.md",
+ "positions": {
+  "TE": {
+   "tuning": {
+    "P1": {
+     "n": 3343,
+     "happened": 0.3907,
+     "model_now": 0.5,
+     "candidate": 0.3358,
+     "diff": -0.016586,
+     "se": 0.002935,
+     "z": -5.65,
+     "shut_out_rate": 0.3207,
+     "typical_now_avg": 17.9,
+     "typical_new_avg": 9.0,
+     "reach_new_typical": 0.5519
+    },
+    "P2": {
+     "n": 3343,
+     "happened": 0.3907,
+     "model_now": 0.5,
+     "candidate": 0.3351,
+     "diff": -0.018579,
+     "se": 0.003063,
+     "z": -6.06,
+     "shut_out_rate": 0.3207,
+     "typical_now_avg": 17.9,
+     "typical_new_avg": 9.5,
+     "reach_new_typical": 0.545
+    }
+   },
+   "chosen": "P2",
+   "holdout": {
+    "n": 10073,
+    "happened": 0.3866,
+    "model_now": 0.5,
+    "candidate": 0.3553,
+    "diff": -0.01709,
+    "se": 0.00157,
+    "z": -10.89,
+    "shut_out_rate": 0.2892,
+    "typical_now_avg": 18.9,
+    "typical_new_avg": 11.3,
+    "reach_new_typical": 0.5337
+   },
+   "lines": {
+    "2024": {
+     "props": 253,
+     "shut_outs_with_a_line": 19,
+     "avg_p0": 0.0944,
+     "now": 0.24109,
+     "candidate": 0.23831,
+     "diff": -0.002775,
+     "se": 0.003854,
+     "books": 0.25025,
+     "thin": false
+    },
+    "2025": {
+     "props": 288,
+     "shut_outs_with_a_line": 23,
+     "avg_p0": 0.1186,
+     "now": 0.25038,
+     "candidate": 0.24954,
+     "diff": -0.000849,
+     "se": 0.003946,
+     "books": 0.25,
+     "thin": false
+    }
+   },
+   "verdict": "KEPT (provisional)",
+   "reported": {
+    "other_version": {
+     "version": "P1",
+     "holdout": {
+      "n": 10073,
+      "happened": 0.3866,
+      "model_now": 0.5,
+      "candidate": 0.3528,
+      "diff": -0.01478,
+      "se": 0.001556,
+      "z": -9.5,
+      "shut_out_rate": 0.2892,
+      "typical_now_avg": 18.9,
+      "typical_new_avg": 10.7,
+      "reach_new_typical": 0.5428
+     },
+     "lines": {
+      "2024": {
+       "props": 253,
+       "shut_outs_with_a_line": 19,
+       "avg_p0": 0.1239,
+       "now": 0.24109,
+       "candidate": 0.23929,
+       "diff": -0.001798,
+       "se": 0.004706,
+       "books": 0.25025,
+       "thin": false
+      },
+      "2025": {
+       "props": 288,
+       "shut_outs_with_a_line": 23,
+       "avg_p0": 0.1365,
+       "now": 0.25038,
+       "candidate": 0.24987,
+       "diff": -0.000514,
+       "se": 0.004461,
+       "books": 0.25,
+       "thin": false
+      }
+     }
+    },
+    "holdout at 60% of Typical": {
+     "n": 10073,
+     "happened": 0.5142,
+     "model_now": 0.628,
+     "candidate": 0.4532,
+     "diff": -0.01464,
+     "se": 0.001949,
+     "z": -7.51
+    },
+    "holdout at 150% of Typical": {
+     "n": 10073,
+     "happened": 0.2631,
+     "model_now": 0.3744,
+     "candidate": 0.2596,
+     "diff": -0.016573,
+     "se": 0.001167,
+     "z": -14.21
+    },
+    "2026 weeks 1-11 (seen)": {
+     "n": 1711,
+     "happened": 0.3846,
+     "model_now": 0.5,
+     "candidate": 0.3459,
+     "diff": -0.017934,
+     "se": 0.00404,
+     "z": -4.44,
+     "shut_out_rate": 0.3109,
+     "typical_now_avg": 16.9,
+     "typical_new_avg": 9.2,
+     "reach_new_typical": 0.547
+    },
+    "by_projected_receptions_holdout": {
+     "(0.0, 1.5]": {
+      "n": 347,
+      "actual": 0.6513,
+      "predicted": 0.5593
+     },
+     "(1.5, 2.0]": {
+      "n": 3683,
+      "actual": 0.4407,
+      "predicted": 0.4339
+     },
+     "(2.0, 3.0]": {
+      "n": 4375,
+      "actual": 0.2194,
+      "predicted": 0.2268
+     },
+     "(3.0, 4.0]": {
+      "n": 1278,
+      "actual": 0.0767,
+      "predicted": 0.0905
+     },
+     "(4.0, 99.0]": {
+      "n": 390,
+      "actual": 0.0154,
+      "predicted": 0.039
+     }
+    }
+   }
+  },
+  "WR": {
+   "tuning": {
+    "P1": {
+     "n": 12251,
+     "happened": 0.4286,
+     "model_now": 0.5,
+     "candidate": 0.4213,
+     "diff": -0.007375,
+     "se": 0.000902,
+     "z": -8.18,
+     "shut_out_rate": 0.1646,
+     "typical_now_avg": 34.2,
+     "typical_new_avg": 27.7,
+     "reach_new_typical": 0.5154
+    },
+    "P2": {
+     "n": 12251,
+     "happened": 0.4286,
+     "model_now": 0.5,
+     "candidate": 0.4185,
+     "diff": -0.008075,
+     "se": 0.000993,
+     "z": -8.13,
+     "shut_out_rate": 0.1646,
+     "typical_now_avg": 34.2,
+     "typical_new_avg": 27.7,
+     "reach_new_typical": 0.5169
+    }
+   },
+   "chosen": "P2",
+   "holdout": {
+    "n": 29520,
+    "happened": 0.4317,
+    "model_now": 0.5,
+    "candidate": 0.4195,
+    "diff": -0.006982,
+    "se": 0.000619,
+    "z": -11.28,
+    "shut_out_rate": 0.1634,
+    "typical_now_avg": 34.2,
+    "typical_new_avg": 28.0,
+    "reach_new_typical": 0.5199
+   },
+   "lines": {
+    "2024": {
+     "props": 1295,
+     "shut_outs_with_a_line": 62,
+     "avg_p0": 0.0663,
+     "now": 0.25493,
+     "candidate": 0.2539,
+     "diff": -0.001029,
+     "se": 0.001187,
+     "books": 0.25001,
+     "thin": false
+    },
+    "2025": {
+     "props": 1452,
+     "shut_outs_with_a_line": 64,
+     "avg_p0": 0.0714,
+     "now": 0.25484,
+     "candidate": 0.25669,
+     "diff": 0.001857,
+     "se": 0.001167,
+     "books": 0.24995,
+     "thin": false
+    }
+   },
+   "verdict": "Trade-off: mixed across the 4 measures",
+   "reported": {
+    "other_version": {
+     "version": "P1",
+     "holdout": {
+      "n": 29520,
+      "happened": 0.4317,
+      "model_now": 0.5,
+      "candidate": 0.4207,
+      "diff": -0.006223,
+      "se": 0.000582,
+      "z": -10.69,
+      "shut_out_rate": 0.1634,
+      "typical_now_avg": 34.2,
+      "typical_new_avg": 27.9,
+      "reach_new_typical": 0.5195
+     },
+     "lines": {
+      "2024": {
+       "props": 1295,
+       "shut_outs_with_a_line": 62,
+       "avg_p0": 0.0815,
+       "now": 0.25493,
+       "candidate": 0.25437,
+       "diff": -0.000559,
+       "se": 0.001356,
+       "books": 0.25001,
+       "thin": false
+      },
+      "2025": {
+       "props": 1452,
+       "shut_outs_with_a_line": 64,
+       "avg_p0": 0.0824,
+       "now": 0.25484,
+       "candidate": 0.25714,
+       "diff": 0.002305,
+       "se": 0.001313,
+       "books": 0.24995,
+       "thin": false
+      }
+     }
+    },
+    "holdout at 60% of Typical": {
+     "n": 29520,
+     "happened": 0.5903,
+     "model_now": 0.653,
+     "candidate": 0.5533,
+     "diff": -0.006142,
+     "se": 0.000768,
+     "z": -8.0
+    },
+    "holdout at 150% of Typical": {
+     "n": 29520,
+     "happened": 0.2766,
+     "model_now": 0.3437,
+     "candidate": 0.2828,
+     "diff": -0.005698,
+     "se": 0.000466,
+     "z": -12.24
+    },
+    "2026 weeks 1-11 (seen)": {
+     "n": 4680,
+     "happened": 0.4205,
+     "model_now": 0.5,
+     "candidate": 0.4142,
+     "diff": -0.009606,
+     "se": 0.001568,
+     "z": -6.13,
+     "shut_out_rate": 0.1808,
+     "typical_now_avg": 31.9,
+     "typical_new_avg": 25.5,
+     "reach_new_typical": 0.5141
+    },
+    "by_projected_receptions_holdout": {
+     "(0.0, 1.5]": {
+      "n": 62,
+      "actual": 0.3387,
+      "predicted": 0.4992
+     },
+     "(1.5, 2.0]": {
+      "n": 3120,
+      "actual": 0.425,
+      "predicted": 0.3977
+     },
+     "(2.0, 3.0]": {
+      "n": 11312,
+      "actual": 0.2311,
+      "predicted": 0.2189
+     },
+     "(3.0, 4.0]": {
+      "n": 8018,
+      "actual": 0.0881,
+      "predicted": 0.0929
+     },
+     "(4.0, 99.0]": {
+      "n": 7008,
+      "actual": 0.0225,
+      "predicted": 0.0368
+     }
+    }
+   }
+  }
+ }
+}
