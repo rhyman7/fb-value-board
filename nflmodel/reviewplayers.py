@@ -4,7 +4,10 @@ Writes `review/data/<league>/<season>_w<week>.players.json`: one row per player 
 (QB passing and rushing yards; RB rushing and receiving; WR and TE receiving) with the board's
 projection frozen at kickoff, the actual, and a status:
 
-  played   counts on the scorecard when the projection was COUNT_MIN yards or more
+  played   counts on the scorecard
+Left off the page and not counted (Ryan, Nov 18, 2026): a WR projected 20 yards or fewer, a TE
+15 or fewer, a back's rushing 15 or fewer, a back's receiving under 10. Quarterbacks: every
+projection is listed; one under COUNT_MIN yards (rushing, usually) is listed but not scored.
   left     left the game early: not counted against the model, shown on its own scorecard
   dnp      NFL: projected, no offensive snaps. Not counted. (No stat line but on the field
            counts as a real zero.)
@@ -30,7 +33,17 @@ import numpy as np
 import pandas as pd
 
 STATS = {"QB": ["pass_yds", "rush_yds"], "RB": ["rush_yds", "rec_yds"], "WR": ["rec_yds"], "TE": ["rec_yds"]}
-COUNT_MIN = 10.0       # a projection under this many yards is listed but not scored
+COUNT_MIN = 10.0       # quarterbacks: a projection under this many yards is listed but not scored
+# Ryan's minimums (Nov 18, 2026): projections at or under these are left off the page and not counted
+# (a back's receiving yards: under 10). Quarterbacks are unchanged.
+def on_page(pos: str, stat: str, proj: float) -> bool:
+    if pos == "WR":
+        return proj > 20
+    if pos == "TE":
+        return proj > 15
+    if pos == "RB":
+        return proj > 15 if stat == "rush_yds" else proj >= 10
+    return True
 SNAP_CUT, TOUCH_CUT = 0.5, 0.4
 
 
@@ -136,7 +149,7 @@ def build(src, A: dict, facts: dict, week: int, pbp_week: pd.DataFrame) -> dict:
                     status, note = ("nostat" if left["why"] == "none" else "left"), left["note"]
             for st in stats:
                 pj = (pl.get("proj") or {}).get(st)
-                if pj is None or pj < 1:
+                if pj is None or pj < 1 or not on_page(pl["pos"], st, float(pj)):
                     continue
                 av = float((x or {}).get(st, 0.0) or 0.0)   # x == {} : played, nothing recorded
                 rows.append({"n": pl["name"], "p": pl["pos"], "t": pl["team"], "o": g["home"] if pl["team"] == g["away"] else g["away"],

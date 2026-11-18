@@ -805,8 +805,11 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
 - **Players page** (`nflmodel/reviewplayers.py`, Nov 18, 2026, Ryan's ask): `#nfl-players`,
   `#nfl-players-10`, linked right of Season patterns. `review/data/<league>/<season>_w<week>.players.json`
   (written by the same `nflmodel.review` run) has one row per player and stat with the frozen
-  projection, the actual and a status. The scorecard counts projections of 10+ yards for players
-  who played their usual game: met = actual at or above the projection. **Left early is never
+  projection, the actual and a status. Ryan's minimums (Nov 18, 2026, `reviewplayers.on_page`): a WR projected 20 yards or
+  fewer, a TE 15 or fewer, a back's rushing 15 or fewer and a back's receiving under 10 are left
+  off the page and not counted; a quarterback's projection under 10 yards is listed but not
+  scored. The scorecard counts the rest for players who played their usual game: met = actual
+  at or above the projection. **Left early is never
   counted against the model** and has its own labelled scorecard: a quarterback who threw under
   60% of his team's passes; NFL, a regular (25%+ of snaps) under half his usual snap share (the
   floors' rule); college, touches under 40% of his usual with none after halftime (an estimate,

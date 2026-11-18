@@ -580,7 +580,7 @@ function playerFilters() {
   const b = (grp, v, lbl) => `<button type="button" class="fb${PV[grp] === v ? " on" : ""}" data-${grp}="${v}" aria-pressed="${PV[grp] === v}">${lbl}</button>`;
   const c = PV.data.card;
   return `<div class="filters"><div class="fg">${["All", "QB", "RB", "WR", "TE"].map(p => b("pos", p, p)).join("")}</div>
-    <div class="fg">${b("show", "counted", "Scored")}${b("show", "left", `Left early (${c.left.players})`)}${b("show", "out", `${PV.lg === "nfl" ? "Didn't play" : "No stats recorded"} (${c.dnp.players})`)}${b("show", "small", "Small projections")}${b("show", "all", "Everything")}</div>
+    <div class="fg">${b("show", "counted", "Scored")}${b("show", "left", `Left early (${c.left.players})`)}${b("show", "out", `${PV.lg === "nfl" ? "Didn't play" : "No stats recorded"} (${c.dnp.players})`)}${b("show", "small", "QB rushing under 10")}${b("show", "all", "Everything")}</div>
     <input type="search" id="pq" placeholder="Player or team" value="${esc(PV.q)}" aria-label="Search players or teams"></div>`;
 }
 async function playersPage(lg, w) {
@@ -607,7 +607,7 @@ async function playersPage(lg, w) {
    <div class="tile luck"><div class="tag">Left early</div><div class="big">${c.left.players} <span class="of">player${c.left.players === 1 ? "" : "s"}</span></div><div class="sm">${c.left.n} projections: ${c.left.met} met, ${c.left.short} short${c.left.avg_miss != null ? ", average miss " + sgn(c.left.avg_miss) + " yds" : ""}. ${lg === "nfl" ? "A regular who played under half his usual snaps, or a quarterback who left." : "An estimate: touches under 40% of his usual with none after halftime, or a quarterback who left."}</div></div>
    <div class="tile"><div class="tag">${lg === "nfl" ? "Didn't play" : "No stats recorded"}</div><div class="big">${c.dnp.players} <span class="of">player${c.dnp.players === 1 ? "" : "s"}</span></div><div class="sm">${lg === "nfl" ? "Projected, no offensive snaps. A player on the field with no stats counts as a real zero." : "No box-score line. College has no public snap counts, so it can't be told whether he played or was shut out."}</div></div>
   </div>
-  <p class="note" style="margin:-4px 0 18px">Scored: projections of ${d.count_min} yards or more. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
+  <p class="note" style="margin:-4px 0 18px">Left off this page and not counted: receivers projected 20 yards or fewer, tight ends 15 or fewer, backs' rushing 15 or fewer and backs' receiving under 10. A projection is an average, and yardage has a long upside tail, so a fair one is met a bit less than half the time. Season so far: ${season.met} of ${season.n} met (${pctOf(season.met, season.n)}).</p>
   <section class="card"><h3>Projections and results</h3><div id="pfilters">${playerFilters()}</div><div id="ptable">${playerTable()}</div></section>
   <section class="card"><h3>Week by week</h3><div class="scroll"><table><tr><th>Week</th><th>Met</th><th>Short</th><th>Met %</th><th>Pass</th><th>Rush</th><th>Rec</th><th>Avg miss</th><th>Left early</th><th>${lg === "nfl" ? "Didn't play" : "No stats"}</th></tr>${byWeek}</table></div></section></div>`;
 }
