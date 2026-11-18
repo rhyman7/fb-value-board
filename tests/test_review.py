@@ -93,3 +93,18 @@ def test_players_typical_share():
     r = lambda a, md: {"n": "x", "t": "T", "p": "WR", "s": "rec_yds", "pj": 50, "a": a, "st": "played", "c": True, "md": md}
     c = P.scorecard([r(45, 44), r(40, 44), r(60, 44), {**r(10, None)}])
     assert (c["all"]["typ_n"], c["all"]["typ_met"]) == (3, 2) and c["all"]["met"] == 1
+
+
+def test_best_matchups_marks_only_listed_players_on_their_stat():
+    from nflmodel import reviewplayers as P
+    row = lambda n, t, p, s, pj, a: {"n": n, "t": t, "p": p, "s": s, "pj": pj, "a": a, "st": "played", "c": True}
+    rows = [row("A Back", "AAA", "RB", "rush_yds", 60, 70), row("A Back", "AAA", "RB", "rec_yds", 15, 5),
+            row("A Passer", "AAA", "QB", "pass_yds", 250, 200), row("B Wideout", "BBB", "WR", "rec_yds", 70, 80)]
+    ids = {0: "1", 1: "1", 2: "2", 3: "3"}
+    wk = {"picks": {"AAA": {"rk": 1, "name": "A Back", "pos": "RB", "log": "AAA|1", "kind": "scrim", "res": "beat"},
+                    "BBB": {"rk": 2, "name": "B Wideout", "pos": "WR", "log": "BBB|3", "kind": "rec", "res": "miss"}}}
+    b = P.best_matchups(rows, wk, ids)
+    assert [r.get("bm") for r in rows] == [1, 1, None, 2]
+    assert (b["card"]["all"]["n"], b["card"]["all"]["met"]) == (3, 2)
+    assert b["card"]["beat_avg"] == {"n": 2, "beat": 1} and all(x["found"] for x in b["picks"])
+    assert P.best_matchups(rows, None, ids) is None

@@ -362,7 +362,8 @@ def write_index(league: str) -> dict:
         r = json.loads(reads.read_text()) if reads.exists() else {}
         rg = r.get("games", {})
         pf = f.with_name(f.stem + ".players.json")
-        card = json.loads(pf.read_text())["card"] if pf.exists() else None
+        pj = json.loads(pf.read_text()) if pf.exists() else {}
+        card, best = pj.get("card"), (pj.get("best") or {}).get("card")
         verdicts = {k: {v: 0 for v in ("W", "L", "chance", "push")} for k in ("spread", "total")}
         for v in rg.values():
             for k, res in (v.get("verdict") or {}).items():
@@ -371,7 +372,7 @@ def write_index(league: str) -> dict:
         real = sorted((g for g in x["games"] if (rg.get(g["id"], {}).get("verdict") or {}).get("spread") != "chance"),
                       key=lambda g: -abs(g["err"]["model_margin"]))[:3]
         weeks.append({"file": f.name, "season": x["season"], "week": x["week"], "summary": x["summary"],
-                      "reads": r.get("by", "none"), "read_games": len(rg), "verdicts": verdicts, "players": card,
+                      "reads": r.get("by", "none"), "read_games": len(rg), "verdicts": verdicts, "players": card, "best": best,
                       "real_misses": [{"slug": g["slug"], "away": g["away"], "home": g["home"],
                                        "miss": g["err"]["model_margin"], "mkt": g["err"]["market_margin"]} for g in real]})
     idx = {"league": league, "weeks": weeks}

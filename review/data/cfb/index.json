@@ -142,6 +142,7 @@
      "players": 647
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "wku-nev",
@@ -307,6 +308,7 @@
      "players": 166
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "sac-fres",
@@ -472,6 +474,7 @@
      "players": 199
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "uk-ta&m",
@@ -637,6 +640,7 @@
      "players": 159
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "ucla-md",
@@ -802,6 +806,7 @@
      "players": 144
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "bay-asu",
@@ -967,6 +972,7 @@
      "players": 145
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "sdsu-orst",
@@ -1132,6 +1138,7 @@
      "players": 147
     }
    },
+   "best": null,
    "real_misses": [
     {
      "slug": "ohio-sac",
@@ -1295,6 +1302,102 @@
     "dnp": {
      "n": 169,
      "players": 157
+    }
+   },
+   "best": {
+    "all": {
+     "n": 48,
+     "met": 17,
+     "short": 31,
+     "typ_n": 48,
+     "typ_met": 20,
+     "avg_miss": -2.5,
+     "avg_abs": 29.9
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 2,
+      "met": 1,
+      "short": 1,
+      "typ_n": 2,
+      "typ_met": 1,
+      "avg_miss": -10.9,
+      "avg_abs": 12.3
+     },
+     "rush_yds": {
+      "n": 21,
+      "met": 9,
+      "short": 12,
+      "typ_n": 21,
+      "typ_met": 9,
+      "avg_miss": 8.5,
+      "avg_abs": 44.3
+     },
+     "rec_yds": {
+      "n": 25,
+      "met": 7,
+      "short": 18,
+      "typ_n": 25,
+      "typ_met": 10,
+      "avg_miss": -11.0,
+      "avg_abs": 19.3
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 2,
+      "met": 1,
+      "short": 1,
+      "typ_n": 2,
+      "typ_met": 1,
+      "avg_miss": -10.9,
+      "avg_abs": 12.3
+     },
+     "RB": {
+      "n": 34,
+      "met": 12,
+      "short": 22,
+      "typ_n": 34,
+      "typ_met": 15,
+      "avg_miss": 3.0,
+      "avg_abs": 32.4
+     },
+     "WR": {
+      "n": 7,
+      "met": 2,
+      "short": 5,
+      "typ_n": 7,
+      "typ_met": 2,
+      "avg_miss": -18.5,
+      "avg_abs": 26.1
+     },
+     "TE": {
+      "n": 5,
+      "met": 2,
+      "short": 3,
+      "typ_n": 5,
+      "typ_met": 2,
+      "avg_miss": -14.1,
+      "avg_abs": 25.7
+     }
+    },
+    "left": {
+     "n": 2,
+     "met": 0,
+     "short": 2,
+     "typ_n": 2,
+     "typ_met": 0,
+     "avg_miss": -123.9,
+     "avg_abs": 123.9,
+     "players": 2
+    },
+    "dnp": {
+     "n": 3,
+     "players": 3
+    },
+    "beat_avg": {
+     "n": 37,
+     "beat": 17
     }
    },
    "real_misses": [
@@ -1462,6 +1565,102 @@
      "players": 166
     }
    },
+   "best": {
+    "all": {
+     "n": 39,
+     "met": 19,
+     "short": 20,
+     "typ_n": 39,
+     "typ_met": 21,
+     "avg_miss": -3.7,
+     "avg_abs": 23.9
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 1,
+      "met": 0,
+      "short": 1,
+      "typ_n": 1,
+      "typ_met": 0,
+      "avg_miss": -53.5,
+      "avg_abs": 53.5
+     },
+     "rush_yds": {
+      "n": 15,
+      "met": 7,
+      "short": 8,
+      "typ_n": 15,
+      "typ_met": 7,
+      "avg_miss": -11.5,
+      "avg_abs": 30.6
+     },
+     "rec_yds": {
+      "n": 23,
+      "met": 12,
+      "short": 11,
+      "typ_n": 23,
+      "typ_met": 14,
+      "avg_miss": 3.5,
+      "avg_abs": 18.1
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 1,
+      "met": 0,
+      "short": 1,
+      "typ_n": 1,
+      "typ_met": 0,
+      "avg_miss": -53.5,
+      "avg_abs": 53.5
+     },
+     "RB": {
+      "n": 28,
+      "met": 13,
+      "short": 15,
+      "typ_n": 28,
+      "typ_met": 15,
+      "avg_miss": -7.1,
+      "avg_abs": 23.0
+     },
+     "WR": {
+      "n": 5,
+      "met": 3,
+      "short": 2,
+      "typ_n": 5,
+      "typ_met": 3,
+      "avg_miss": 12.4,
+      "avg_abs": 17.3
+     },
+     "TE": {
+      "n": 5,
+      "met": 3,
+      "short": 2,
+      "typ_n": 5,
+      "typ_met": 3,
+      "avg_miss": 9.3,
+      "avg_abs": 29.5
+     }
+    },
+    "left": {
+     "n": 0,
+     "met": 0,
+     "short": 0,
+     "typ_n": 0,
+     "typ_met": 0,
+     "avg_miss": null,
+     "avg_abs": null,
+     "players": 0
+    },
+    "dnp": {
+     "n": 1,
+     "players": 1
+    },
+    "beat_avg": {
+     "n": 26,
+     "beat": 15
+    }
+   },
    "real_misses": [
     {
      "slug": "bc-duke",
@@ -1627,6 +1826,102 @@
      "players": 198
     }
    },
+   "best": {
+    "all": {
+     "n": 40,
+     "met": 9,
+     "short": 31,
+     "typ_n": 40,
+     "typ_met": 16,
+     "avg_miss": -17.2,
+     "avg_abs": 25.9
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 2,
+      "met": 0,
+      "short": 2,
+      "typ_n": 2,
+      "typ_met": 0,
+      "avg_miss": -50.8,
+      "avg_abs": 50.8
+     },
+     "rush_yds": {
+      "n": 17,
+      "met": 5,
+      "short": 12,
+      "typ_n": 17,
+      "typ_met": 5,
+      "avg_miss": -22.6,
+      "avg_abs": 33.8
+     },
+     "rec_yds": {
+      "n": 21,
+      "met": 4,
+      "short": 17,
+      "typ_n": 21,
+      "typ_met": 11,
+      "avg_miss": -9.7,
+      "avg_abs": 17.1
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 2,
+      "met": 0,
+      "short": 2,
+      "typ_n": 2,
+      "typ_met": 0,
+      "avg_miss": -50.8,
+      "avg_abs": 50.8
+     },
+     "RB": {
+      "n": 28,
+      "met": 7,
+      "short": 21,
+      "typ_n": 28,
+      "typ_met": 12,
+      "avg_miss": -15.8,
+      "avg_abs": 24.7
+     },
+     "WR": {
+      "n": 4,
+      "met": 1,
+      "short": 3,
+      "typ_n": 4,
+      "typ_met": 1,
+      "avg_miss": -12.1,
+      "avg_abs": 19.2
+     },
+     "TE": {
+      "n": 6,
+      "met": 1,
+      "short": 5,
+      "typ_n": 6,
+      "typ_met": 3,
+      "avg_miss": -16.3,
+      "avg_abs": 27.6
+     }
+    },
+    "left": {
+     "n": 0,
+     "met": 0,
+     "short": 0,
+     "typ_n": 0,
+     "typ_met": 0,
+     "avg_miss": null,
+     "avg_abs": null,
+     "players": 0
+    },
+    "dnp": {
+     "n": 1,
+     "players": 1
+    },
+    "beat_avg": {
+     "n": 27,
+     "beat": 11
+    }
+   },
    "real_misses": [
     {
      "slug": "tlsa-tuln",
@@ -1790,6 +2085,102 @@
     "dnp": {
      "n": 222,
      "players": 202
+    }
+   },
+   "best": {
+    "all": {
+     "n": 40,
+     "met": 16,
+     "short": 24,
+     "typ_n": 40,
+     "typ_met": 18,
+     "avg_miss": -9.2,
+     "avg_abs": 34.3
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 1,
+      "met": 0,
+      "short": 1,
+      "typ_n": 1,
+      "typ_met": 0,
+      "avg_miss": -121.9,
+      "avg_abs": 121.9
+     },
+     "rush_yds": {
+      "n": 17,
+      "met": 7,
+      "short": 10,
+      "typ_n": 17,
+      "typ_met": 8,
+      "avg_miss": -7.4,
+      "avg_abs": 34.5
+     },
+     "rec_yds": {
+      "n": 22,
+      "met": 9,
+      "short": 13,
+      "typ_n": 22,
+      "typ_met": 10,
+      "avg_miss": -5.4,
+      "avg_abs": 30.1
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 1,
+      "met": 0,
+      "short": 1,
+      "typ_n": 1,
+      "typ_met": 0,
+      "avg_miss": -121.9,
+      "avg_abs": 121.9
+     },
+     "RB": {
+      "n": 28,
+      "met": 12,
+      "short": 16,
+      "typ_n": 28,
+      "typ_met": 13,
+      "avg_miss": -5.1,
+      "avg_abs": 29.9
+     },
+     "WR": {
+      "n": 9,
+      "met": 3,
+      "short": 6,
+      "typ_n": 9,
+      "typ_met": 4,
+      "avg_miss": -10.3,
+      "avg_abs": 42.9
+     },
+     "TE": {
+      "n": 2,
+      "met": 1,
+      "short": 1,
+      "typ_n": 2,
+      "typ_met": 1,
+      "avg_miss": -5.4,
+      "avg_abs": 13.3
+     }
+    },
+    "left": {
+     "n": 0,
+     "met": 0,
+     "short": 0,
+     "typ_n": 0,
+     "typ_met": 0,
+     "avg_miss": null,
+     "avg_abs": null,
+     "players": 0
+    },
+    "dnp": {
+     "n": 2,
+     "players": 1
+    },
+    "beat_avg": {
+     "n": 29,
+     "beat": 14
     }
    },
    "real_misses": [

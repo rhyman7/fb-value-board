@@ -831,6 +831,15 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
   labelled). NFL players with no offensive snaps are "Didn't play"; on the field with no stats
   is a real zero. College players with no box-score line are "No stats recorded" (no public
   snap counts, so unknown) and not counted.
+- **Best Matchups page** (Nov 18, 2026, Ryan's ask): `#nfl-best`, `#nfl-best-10`, linked right of
+  Players. The Players page filtered to the players on that week's Best Overall Matchups list in
+  the dashboards' record (`data/best_overall.json` in rhyman7/nfl and rhyman7/cfb, read from
+  raw.githubusercontent.com by `reviewctx.Sources`, or `--local best=FILE`): each team's pick as
+  the list stood at its kickoff, on his list stat (QB passing; a back's rushing and receiving;
+  WR/TE receiving). `reviewplayers.best_matchups` marks the rows (`bm`, his list number) and writes
+  `best` (the picks and their scorecard, plus the record's own "beat his average" grade) into the
+  week's `.players.json`; the index carries each week's `best` scorecard. Weeks without a record
+  (before NFL week 7, college week 8) say so.
 - **Chance ledger values** are fitted on 2023-25 by `experiments/review_chance_fit.py` into
   `data/review_chance.json` (points each item moved the margin past the closing line: fumble
   bounces, non-offensive TDs, missed field goals from 45 yards or closer). Refit with the script,

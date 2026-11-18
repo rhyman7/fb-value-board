@@ -40,6 +40,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 NFLV = "https://github.com/nflverse/nflverse-data/releases/download/"
 CFB_CACHE = ROOT / "data" / "cfb" / "cache"
+BEST_URL = "https://raw.githubusercontent.com/rhyman7/{r}/main/data/best_overall.json"
 GOOD_BAD = {"nfl": 10, "cfb": 14}     # a cover by this many points or more was a good / bad week
 STAT_VOL = {"pass_yds": "pass_att", "rush_yds": "carries", "rec_yds": "targets"}
 STAT_NAME = {"pass_yds": "passing yards", "rush_yds": "rushing yards", "rec_yds": "receiving yards"}
@@ -70,6 +71,14 @@ class Sources:
         L = lambda key, url, kind="parquet": (pd.read_parquet(local[key]) if str(local[key]).endswith(".parquet")
                                              else pd.read_csv(local[key], low_memory=False)) if key in local else _get(url, kind)
         self.archives = self._archives()
+        # the dashboards' Best Overall Matchups record (rhyman7/nfl and rhyman7/cfb, data/best_overall.json)
+        try:
+            b = json.loads(Path(local["best"]).read_text()) if "best" in local else json.loads(
+                urllib.request.urlopen(urllib.request.Request(BEST_URL.format(r=league), headers={"User-Agent": "fb-review"}), timeout=60).read())
+            self.best = b.get("weeks", {}) if b.get("season") == season else {}
+        except Exception as exc:  # noqa: BLE001
+            print(f"  Best Overall record not read ({type(exc).__name__}: {exc})")
+            self.best = {}
         if league == "nfl":
             self.sched = L("games", NFLV + "schedules/games.csv", "csv")
             self.sched = self.sched[self.sched["season"] == season]
