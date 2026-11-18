@@ -52,3 +52,17 @@ def test_qb_exit_marks_both_leans_chance():
     a = side(qb_exit={"qb": "A.Starter", "share": 0.2, "qtr": 1, "time": "10:00", "why": "injured"})
     v = D.verdicts(game(-5, 40, a=a))
     assert v == {"spread": "chance", "total": "chance"}
+
+
+def test_drive_kinds_and_short_reason():
+    from nflmodel import reviewctx as C
+    assert C._drive_kind("Touchdown") == "TD"
+    assert C._drive_kind("Missed field goal") == "Missed FG"
+    assert C._drive_kind("Turnover on downs") == "Downs"
+    assert C._drive_kind("INT") == "Turnover"
+    m = {"name": "A Back", "pos": "RB", "team": "AWY", "stat": "rush_yds", "proj": 65.0, "act": 15.0,
+         "volume": {"kind": "carries", "proj": 13.0, "act": 7.0}, "script": {"trailing9": 0.95, "leading9": 0.0},
+         "prev": {"week": 9, "val": 143}, "season_avg": 88.0, "season_low": 15.0}
+    s = D.why_short(m)
+    assert "usage fell: 7.0 carries" in s or "usage fell: 7 carries" in s
+    assert "trailed by 9+" in s and "season low" in s
