@@ -1,0 +1,112 @@
+{
+ "written": "2026-11-18T16:36-05:00",
+ "plan": "claude/plan-market-ladder-test-2026-11-18.md",
+ "fit_rows_2025": 14262,
+ "fit_games_2025": 272,
+ "rungs_without_a_main_line_dropped_2025": 36,
+ "tuning_crossfit_2025": {
+  "A": {
+   "rungs": 14262,
+   "games": 272,
+   "brier_curve": 0.16313,
+   "brier_books": 0.1619,
+   "gain": -0.00123,
+   "se": 0.00036,
+   "curve_says": 0.7871,
+   "books_say": 0.7868,
+   "cleared": 0.7857,
+   "money_flagged": {
+    "bets": 41,
+    "games": 24,
+    "cleared": 0.5366,
+    "avg_decimal_price": 1.2555,
+    "return_per_dollar": -0.3233,
+    "se": 0.1642,
+    "price_clv": {
+     "n": 39,
+     "mean": 0.0126,
+     "se": 0.0062
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.6943,
+     "boost_25pct": -0.6565
+    }
+   }
+  },
+  "B": {
+   "rungs": 14262,
+   "games": 272,
+   "brier_curve": 0.16404,
+   "brier_books": 0.1619,
+   "gain": -0.00214,
+   "se": 0.00058,
+   "curve_says": 0.8081,
+   "books_say": 0.7868,
+   "cleared": 0.7857,
+   "money_flagged": {
+    "bets": 464,
+    "games": 175,
+    "cleared": 0.7737,
+    "avg_decimal_price": 1.2264,
+    "return_per_dollar": -0.0572,
+    "se": 0.0298,
+    "price_clv": {
+     "n": 460,
+     "mean": 0.0068,
+     "se": 0.0024
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.1456,
+     "boost_25pct": -0.0478
+    }
+   }
+  },
+  "C": {
+   "rungs": 14262,
+   "games": 272,
+   "brier_curve": 0.16294,
+   "brier_books": 0.1619,
+   "gain": -0.00104,
+   "se": 0.00035,
+   "curve_says": 0.7862,
+   "books_say": 0.7868,
+   "cleared": 0.7857,
+   "money_flagged": {
+    "bets": 45,
+    "games": 26,
+    "cleared": 0.6222,
+    "avg_decimal_price": 1.1943,
+    "return_per_dollar": -0.2679,
+    "se": 0.1211,
+    "price_clv": {
+     "n": 44,
+     "mean": 0.013,
+     "se": 0.0063
+    },
+    "three_leg_parlay_from_average_leg": {
+     "no_boost": -0.5896,
+     "boost_25pct": -0.5473
+    }
+   }
+  }
+ },
+ "chosen": "C",
+ "shape": {
+  "version": "C",
+  "params": {
+   "pass_yds": {
+    "k": 127.115923,
+    "b": -1.094024
+   },
+   "rush_yds": {
+    "k": 1.520869,
+    "b": -0.203251
+   },
+   "rec_yds": {
+    "k": 4.301776,
+    "b": -0.447828
+   }
+  }
+ },
+ "price_decision_goes_to_holdout": false
+}
