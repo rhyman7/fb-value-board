@@ -2689,5 +2689,6 @@ expected to play who never appeared (zeros), and every projection came out lower
 measures worse). The chain's calibration trains only on players who appeared, so the step was changed to
 match before any line was scored; rule and measures untouched.
 
-Left for Ryan as a trade-off: apply on the strength of the holdout and the role-change slice, accepting
-the tuning seasons; or leave it and recheck with the full 2026 season in January.
+Ryan's call (Nov 17, 2026): leave it off and recheck in January. The step trained on 2017-2025 is
+scored on 2026 alone (the four stats' RMSE, game-day and bet-time, and Brier at the 2026 live college
+main lines); it comes back as an apply candidate only if 2026 is better on all ten measures.
