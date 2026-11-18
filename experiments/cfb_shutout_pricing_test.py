@@ -83,7 +83,10 @@ def fit_p0(cur: pd.DataFrame, version: str) -> tuple[np.ndarray, dict]:
 def typical(cur: pd.DataFrame, g: str) -> pd.Series:
     """The current model's 50/50 receiving-yards line for each row of group g over the minimum."""
     model = P.PropModel.load(X.PARAMS)
-    idx = cur.index[(cur["group"] == g) & (cur["rec_yds_proj"] > MIN[g]) & (cur["took"] == 1)]
+    # active == 1: at bet-time the board only lists (and prices) players it expects. The first run left this
+    # out, which let in players who appeared unexpectedly (96% of them clear a Typical the board never showed)
+    # and made the bet-time measure look calibrated when it was not. Fixed and the whole test rerun.
+    idx = cur.index[(cur["group"] == g) & (cur["rec_yds_proj"] > MIN[g]) & (cur["took"] == 1) & (cur["active"] == 1)]
     out = pd.Series(np.nan, index=cur.index)
     for i in range(0, len(idx), 5000):
         ix = idx[i:i + 5000]
