@@ -2643,3 +2643,51 @@ Raw model average miss, margin / total, tuning 2015-18 (1,068 games) then holdou
 - Reading: with the Nov 5 and Nov 11 results, three framings of PFF unit strength (value missing,
   a two-linemen flag, matchup gaps) add nothing to the game model at bet time. What remains open
   is game-day absences, which `data/ol_watch/` records from Nov 13, 2026.
+
+## A boosted-trees step for the college player projections (Nov 17, 2026): a trade-off, not kept
+
+`python experiments/cfb_boosted_props_test.py` (rule in the script and the Project doc
+`claude/plan-cfb-boosted-props-test-2026-11-17.md`, written before the run; private PFF data, scores only;
+results in `experiments/out/cfb_boosted_props_test.json`). One candidate: the NFL's boosted last step
+(`nflmodel/players_ml._model()`, settings unchanged) after the college chain, for RB carries and rushing
+yards and WR/RB receptions and receiving yards, walk-forward by season. Inputs: the chain's projection
+and parts, shares, team volume, game context, defense, PFF route/snap share and the kept PFF pair,
+defense vs position, and role-change columns (teammates' raw shares, rank in the group, last game's
+share minus the decayed share, games this season, new team). Rule: better on all 20 measures, each
+holdout RMSE gain 1+ SE.
+
+Stage 1, RMSE current → boosted (z of the paired squared-error difference; negative is better):
+
+| Stat | Game-day tuning 2017-19 | Game-day holdout 2021-25 | Bet-time tuning | Bet-time holdout |
+|---|---|---|---|---|
+| Receiving yards (WR/RB) | 33.00 → 33.08 (+1.2) | 31.75 → 31.62 (**−3.5**) | 33.23 → 33.36 (+2.2) | 31.88 → 31.72 (**−4.0**) |
+| Receptions (WR/RB) | 1.977 → 1.991 (+3.7) | 1.912 → 1.899 (**−5.6**) | 1.989 → 2.006 (+4.5) | 1.914 → 1.905 (**−3.9**) |
+| Rushing yards (RB) | 40.19 → 40.63 (+3.8) | 38.19 → 37.76 (**−5.7**) | 40.52 → 41.05 (+4.5) | 38.13 → 37.69 (**−5.6**) |
+| Carries (RB) | 5.549 → 5.559 (+0.6) | 5.300 → 5.181 (**−9.8**) | 5.585 → 5.576 (−0.6) | 5.315 → 5.190 (**−9.9**) |
+
+Stage 2, Brier at the DK/FD main lines (receiving yards WR/RB and rushing yards RB pooled; college books
+post no receptions or carries mains), boosted minus current: 2024 game-day −0.0003 ± 0.0013, bet-time
+−0.0004 ± 0.0013; 2025 game-day −0.0009 ± 0.0012, bet-time −0.0011 ± 0.0013. All four lower, none
+distinguishable from zero. Gap to the books: 2025 bet-time +0.0070 → +0.0058.
+
+**Not kept under the rule:** the tuning seasons are worse on 7 of 8. Every holdout measure is better by
+3.5-9.9 SE and all four line measures are lower. By season (game-day, reported after the run, not part of
+the rule), the tuning loss is 2018, the first season the step can be trained (on 2017 alone): rushing
+yards RMSE +1.24 in 2018, +0.03 in 2019, then −0.30 to −0.54 in every season 2021-25; receiving yards
++0.29, −0.07, then −0.09 to −0.19. 2017 has no earlier season to train on and is unchanged.
+
+Reported, not judged:
+- Role-change slice, projection 30%+ off the line: lower in all four (−0.0036 to −0.0058; 2025 bet-time
+  −2.3 SE). Where a regular teammate sat out: worse in 2024, better in 2025.
+- Floor rungs (game-day, NFL widths): rushing better in both seasons (2025 −0.0031, −3.2 SE); receiving
+  worse in 2024 (+0.0012 ± 0.0013), flat in 2025.
+- By stat at the lines: receiving lower in three of four, rushing in three of four (2024 game-day
+  rushing +0.0007 ± 0.0029).
+
+Process note: the first run trained on every row marked active, which in college includes players
+expected to play who never appeared (zeros), and every projection came out lower (all 16 stage-1
+measures worse). The chain's calibration trains only on players who appeared, so the step was changed to
+match before any line was scored; rule and measures untouched.
+
+Left for Ryan as a trade-off: apply on the strength of the holdout and the role-change slice, accepting
+the tuning seasons; or leave it and recheck with the full 2026 season in January.

@@ -1,0 +1,516 @@
+{
+ "plan": "claude/plan-cfb-boosted-props-test-2026-11-17.md",
+ "settings": "nflmodel.players_ml._model() as of Nov 17, 2026, unchanged",
+ "features": [
+  "{s}_p",
+  "{s}_proj",
+  "{s}_recent",
+  "dvpf_{s}",
+  "car_share",
+  "rec_share",
+  "car_share_raw",
+  "rec_share_raw",
+  "proj_team_att",
+  "proj_team_car",
+  "team_comp_rate",
+  "imp_pts",
+  "margin",
+  "proj_total",
+  "wind",
+  "home",
+  "def_ypc",
+  "def_ypa",
+  "def_comp",
+  "one_sum",
+  "n_games",
+  "ypr",
+  "ypc",
+  "route_share",
+  "snap_share",
+  "pff_yprr",
+  "pff_opp_cov",
+  "mate_car_tot",
+  "mate_rec_tot",
+  "mate_car_max",
+  "mate_rec_max",
+  "rank_car",
+  "rank_rec",
+  "last_car",
+  "last_rec",
+  "jump_car",
+  "jump_rec",
+  "games_season",
+  "new_team"
+ ],
+ "stage1": {
+  "rec_yds game-day judged": {
+   "tuning 2017-19": {
+    "n": 21450,
+    "rmse_current": 33.003421015767884,
+    "rmse_new": 33.07648222022138,
+    "mse_diff": 4.82787732059189,
+    "se": 3.990445169946126,
+    "z": 1.2098593302203098
+   },
+   "holdout 2021-25": {
+    "n": 35754,
+    "rmse_current": 31.75175388926217,
+    "rmse_new": 31.619980169013257,
+    "mse_diff": -8.35072915548381,
+    "se": 2.36357982711597,
+    "z": -3.5330853054679072
+   }
+  },
+  "receptions game-day judged": {
+   "tuning 2017-19": {
+    "n": 21312,
+    "rmse_current": 1.9770663229317533,
+    "rmse_new": 1.9911045674030008,
+    "mse_diff": 0.05570615306220685,
+    "se": 0.014926966321533806,
+    "z": 3.7319138974571504
+   },
+   "holdout 2021-25": {
+    "n": 36152,
+    "rmse_current": 1.9122684243694377,
+    "rmse_new": 1.8991403376193032,
+    "mse_diff": -0.050036504867610555,
+    "se": 0.008898788728515832,
+    "z": -5.622844456040457
+   }
+  },
+  "rush_yds game-day judged": {
+   "tuning 2017-19": {
+    "n": 11224,
+    "rmse_current": 40.18456260037299,
+    "rmse_new": 40.626055837716656,
+    "mse_diff": 35.677341545975565,
+    "se": 9.382597111709043,
+    "z": 3.802501708343835
+   },
+   "holdout 2021-25": {
+    "n": 18229,
+    "rmse_current": 38.19253194822698,
+    "rmse_new": 37.76267268551746,
+    "mse_diff": -32.650048262812355,
+    "se": 5.713557885163646,
+    "z": -5.714486300662936
+   }
+  },
+  "carries game-day judged": {
+   "tuning 2017-19": {
+    "n": 11683,
+    "rmse_current": 5.549070477279584,
+    "rmse_new": 5.559010946389207,
+    "mse_diff": 0.11041954025915265,
+    "se": 0.18183447533839642,
+    "z": 0.6072530528309353
+   },
+   "holdout 2021-25": {
+    "n": 19448,
+    "rmse_current": 5.299707708047949,
+    "rmse_new": 5.180748979236713,
+    "mse_diff": -1.2467418048805876,
+    "se": 0.12743310743191263,
+    "z": -9.783499986820305
+   }
+  },
+  "rec_yds bet-time judged": {
+   "tuning 2017-19": {
+    "n": 20975,
+    "rmse_current": 33.22454978418636,
+    "rmse_new": 33.36166979543624,
+    "mse_diff": 9.130303177845493,
+    "se": 4.141298525325357,
+    "z": 2.2046957305808275
+   },
+   "holdout 2021-25": {
+    "n": 35044,
+    "rmse_current": 31.876517343979987,
+    "rmse_new": 31.72069250131465,
+    "mse_diff": -9.910025218097353,
+    "se": 2.4748675821964303,
+    "z": -4.004264829919613
+   }
+  },
+  "receptions bet-time judged": {
+   "tuning 2017-19": {
+    "n": 21017,
+    "rmse_current": 1.9891324700459858,
+    "rmse_new": 2.006494320898591,
+    "mse_diff": 0.06937147640705352,
+    "se": 0.01543854135200314,
+    "z": 4.493395770064289
+   },
+   "holdout 2021-25": {
+    "n": 36030,
+    "rmse_current": 1.9137942129900485,
+    "rmse_new": 1.9047267586330126,
+    "mse_diff": -0.03462426462157617,
+    "se": 0.008825034370701623,
+    "z": -3.923414138365946
+   }
+  },
+  "rush_yds bet-time judged": {
+   "tuning 2017-19": {
+    "n": 11135,
+    "rmse_current": 40.520651468245894,
+    "rmse_new": 41.045338547743825,
+    "mse_diff": 42.79662108784703,
+    "se": 9.471013247259402,
+    "z": 4.518695093181393
+   },
+   "holdout 2021-25": {
+    "n": 18351,
+    "rmse_current": 38.12514046161101,
+    "rmse_new": 37.68569054046574,
+    "mse_diff": -33.31506370581989,
+    "se": 5.959169074079542,
+    "z": -5.590555208565846
+   }
+  },
+  "carries bet-time judged": {
+   "tuning 2017-19": {
+    "n": 11741,
+    "rmse_current": 5.585034864714138,
+    "rmse_new": 5.575856304586523,
+    "mse_diff": -0.10244091067518989,
+    "se": 0.17791755011020513,
+    "z": -0.5757774351756545
+   },
+   "holdout 2021-25": {
+    "n": 19503,
+    "rmse_current": 5.315389466896347,
+    "rmse_new": 5.1901043250403,
+    "mse_diff": -1.3161822799906042,
+    "se": 0.13350097602283745,
+    "z": -9.858971216550884
+   }
+  }
+ },
+ "stage2": {
+  "judged": {
+   "2024 game-day pooled": {
+    "props": 2309,
+    "games": 402,
+    "brier_current": 0.25371,
+    "brier_new": 0.25343,
+    "new_minus_current": -0.00028,
+    "se": 0.001276,
+    "z": -0.22,
+    "current_minus_books": 0.00367,
+    "new_minus_books": 0.00339,
+    "books_se": 0.00207
+   },
+   "2024 bet-time pooled": {
+    "props": 2248,
+    "games": 401,
+    "brier_current": 0.25296,
+    "brier_new": 0.25252,
+    "new_minus_current": -0.000437,
+    "se": 0.001321,
+    "z": -0.33,
+    "current_minus_books": 0.00292,
+    "new_minus_books": 0.00249,
+    "books_se": 0.00209
+   },
+   "2025 game-day pooled": {
+    "props": 2445,
+    "games": 392,
+    "brier_current": 0.25519,
+    "brier_new": 0.25434,
+    "new_minus_current": -0.000851,
+    "se": 0.001206,
+    "z": -0.71,
+    "current_minus_books": 0.00524,
+    "new_minus_books": 0.00439,
+    "books_se": 0.0021
+   },
+   "2025 bet-time pooled": {
+    "props": 2376,
+    "games": 391,
+    "brier_current": 0.25691,
+    "brier_new": 0.25579,
+    "new_minus_current": -0.001123,
+    "se": 0.001283,
+    "z": -0.88,
+    "current_minus_books": 0.00696,
+    "new_minus_books": 0.00584,
+    "books_se": 0.00204
+   }
+  },
+  "reported": {
+   "2024 game-day rec_yds": {
+    "props": 1527,
+    "games": 395,
+    "brier_current": 0.2529,
+    "brier_new": 0.25209,
+    "new_minus_current": -0.000805,
+    "se": 0.001304,
+    "z": -0.62,
+    "current_minus_books": 0.00286,
+    "new_minus_books": 0.00206,
+    "books_se": 0.00254
+   },
+   "2024 game-day rush_yds": {
+    "props": 782,
+    "games": 378,
+    "brier_current": 0.25529,
+    "brier_new": 0.25604,
+    "new_minus_current": 0.000744,
+    "se": 0.002891,
+    "z": 0.26,
+    "current_minus_books": 0.00526,
+    "new_minus_books": 0.006,
+    "books_se": 0.00384
+   },
+   "2024 game-day role slice: projection 30%+ off the line": {
+    "props": 558,
+    "games": 277,
+    "brier_current": 0.26414,
+    "brier_new": 0.259,
+    "new_minus_current": -0.005146,
+    "se": 0.002678,
+    "z": -1.92,
+    "current_minus_books": 0.01416,
+    "new_minus_books": 0.00901,
+    "books_se": 0.00513
+   },
+   "2024 game-day role slice: a regular teammate sat out": {
+    "props": 360,
+    "games": 158,
+    "brier_current": 0.25762,
+    "brier_new": 0.25863,
+    "new_minus_current": 0.001005,
+    "se": 0.002963,
+    "z": 0.34,
+    "current_minus_books": 0.00767,
+    "new_minus_books": 0.00867,
+    "books_se": 0.00592
+   },
+   "2024 bet-time rec_yds": {
+    "props": 1478,
+    "games": 394,
+    "brier_current": 0.25234,
+    "brier_new": 0.25161,
+    "new_minus_current": -0.000726,
+    "se": 0.001384,
+    "z": -0.52,
+    "current_minus_books": 0.0023,
+    "new_minus_books": 0.00158,
+    "books_se": 0.00248
+   },
+   "2024 bet-time rush_yds": {
+    "props": 770,
+    "games": 377,
+    "brier_current": 0.25415,
+    "brier_new": 0.25426,
+    "new_minus_current": 0.000118,
+    "se": 0.003074,
+    "z": 0.04,
+    "current_minus_books": 0.00411,
+    "new_minus_books": 0.00423,
+    "books_se": 0.00393
+   },
+   "2024 bet-time role slice: projection 30%+ off the line": {
+    "props": 518,
+    "games": 262,
+    "brier_current": 0.26288,
+    "brier_new": 0.25929,
+    "new_minus_current": -0.003585,
+    "se": 0.002841,
+    "z": -1.26,
+    "current_minus_books": 0.01292,
+    "new_minus_books": 0.00934,
+    "books_se": 0.00514
+   },
+   "2024 bet-time role slice: a regular teammate sat out": {
+    "props": 334,
+    "games": 155,
+    "brier_current": 0.25834,
+    "brier_new": 0.26036,
+    "new_minus_current": 0.002018,
+    "se": 0.003154,
+    "z": 0.64,
+    "current_minus_books": 0.00839,
+    "new_minus_books": 0.0104,
+    "books_se": 0.00576
+   },
+   "2024 floor rungs rec_yds (game-day)": {
+    "rungs": 1932,
+    "games": 462,
+    "cleared": 0.732919,
+    "books_reading": 0.764913,
+    "current_mean": 0.750508,
+    "new_mean": 0.755331,
+    "brier_books": 0.190007,
+    "brier_current": 0.190964,
+    "brier_new": 0.192128,
+    "new_minus_current": 0.001164,
+    "se": 0.001302,
+    "z": 0.894524,
+    "current_minus_books": 0.000957,
+    "current_books_se": 0.002681,
+    "new_minus_books": 0.002121,
+    "new_books_se": 0.002395
+   },
+   "2024 floor rungs rush_yds (game-day)": {
+    "rungs": 2239,
+    "games": 480,
+    "cleared": 0.76552,
+    "books_reading": 0.78536,
+    "current_mean": 0.728027,
+    "new_mean": 0.738753,
+    "brier_books": 0.176308,
+    "brier_current": 0.181139,
+    "brier_new": 0.178904,
+    "new_minus_current": -0.002235,
+    "se": 0.001828,
+    "z": -1.222625,
+    "current_minus_books": 0.00483,
+    "current_books_se": 0.003921,
+    "new_minus_books": 0.002596,
+    "new_books_se": 0.003514
+   },
+   "2025 game-day rec_yds": {
+    "props": 1648,
+    "games": 388,
+    "brier_current": 0.25481,
+    "brier_new": 0.25505,
+    "new_minus_current": 0.000243,
+    "se": 0.001202,
+    "z": 0.2,
+    "current_minus_books": 0.00487,
+    "new_minus_books": 0.00511,
+    "books_se": 0.00246
+   },
+   "2025 game-day rush_yds": {
+    "props": 797,
+    "games": 377,
+    "brier_current": 0.25599,
+    "brier_new": 0.25288,
+    "new_minus_current": -0.003111,
+    "se": 0.002648,
+    "z": -1.17,
+    "current_minus_books": 0.00602,
+    "new_minus_books": 0.00291,
+    "books_se": 0.0039
+   },
+   "2025 game-day role slice: projection 30%+ off the line": {
+    "props": 557,
+    "games": 284,
+    "brier_current": 0.26558,
+    "brier_new": 0.2611,
+    "new_minus_current": -0.004474,
+    "se": 0.002551,
+    "z": -1.75,
+    "current_minus_books": 0.01568,
+    "new_minus_books": 0.0112,
+    "books_se": 0.00429
+   },
+   "2025 game-day role slice: a regular teammate sat out": {
+    "props": 338,
+    "games": 151,
+    "brier_current": 0.26073,
+    "brier_new": 0.25902,
+    "new_minus_current": -0.001704,
+    "se": 0.002613,
+    "z": -0.65,
+    "current_minus_books": 0.01073,
+    "new_minus_books": 0.00902,
+    "books_se": 0.00609
+   },
+   "2025 bet-time rec_yds": {
+    "props": 1595,
+    "games": 388,
+    "brier_current": 0.2555,
+    "brier_new": 0.25491,
+    "new_minus_current": -0.000585,
+    "se": 0.001259,
+    "z": -0.46,
+    "current_minus_books": 0.00556,
+    "new_minus_books": 0.00498,
+    "books_se": 0.00233
+   },
+   "2025 bet-time rush_yds": {
+    "props": 781,
+    "games": 376,
+    "brier_current": 0.2598,
+    "brier_new": 0.25757,
+    "new_minus_current": -0.002223,
+    "se": 0.002839,
+    "z": -0.78,
+    "current_minus_books": 0.00983,
+    "new_minus_books": 0.00761,
+    "books_se": 0.00405
+   },
+   "2025 bet-time role slice: projection 30%+ off the line": {
+    "props": 553,
+    "games": 293,
+    "brier_current": 0.26456,
+    "brier_new": 0.25873,
+    "new_minus_current": -0.005826,
+    "se": 0.002526,
+    "z": -2.31,
+    "current_minus_books": 0.01466,
+    "new_minus_books": 0.00883,
+    "books_se": 0.00441
+   },
+   "2025 bet-time role slice: a regular teammate sat out": {
+    "props": 321,
+    "games": 149,
+    "brier_current": 0.2651,
+    "brier_new": 0.26156,
+    "new_minus_current": -0.003533,
+    "se": 0.002715,
+    "z": -1.3,
+    "current_minus_books": 0.0151,
+    "new_minus_books": 0.01156,
+    "books_se": 0.00579
+   },
+   "2025 floor rungs rec_yds (game-day)": {
+    "rungs": 6719,
+    "games": 397,
+    "cleared": 0.781515,
+    "books_reading": 0.784125,
+    "current_mean": 0.793675,
+    "new_mean": 0.792059,
+    "brier_books": 0.166771,
+    "brier_current": 0.168625,
+    "brier_new": 0.168356,
+    "new_minus_current": -0.000269,
+    "se": 0.000502,
+    "z": -0.535862,
+    "current_minus_books": 0.001854,
+    "current_books_se": 0.001048,
+    "new_minus_books": 0.001586,
+    "new_books_se": 0.001078
+   },
+   "2025 floor rungs rush_yds (game-day)": {
+    "rungs": 4118,
+    "games": 394,
+    "cleared": 0.791404,
+    "books_reading": 0.79426,
+    "current_mean": 0.784827,
+    "new_mean": 0.792035,
+    "brier_books": 0.158013,
+    "brier_current": 0.165727,
+    "brier_new": 0.162632,
+    "new_minus_current": -0.003096,
+    "se": 0.000963,
+    "z": -3.215555,
+    "current_minus_books": 0.007714,
+    "current_books_se": 0.002268,
+    "new_minus_books": 0.004618,
+    "new_books_se": 0.00202
+   }
+  }
+ },
+ "measures": {
+  "stage1": 16,
+  "stage2": 4
+ },
+ "kept": false,
+ "stage1_pass": false,
+ "stage2_pass": true
+}
