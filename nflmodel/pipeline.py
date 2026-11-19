@@ -299,7 +299,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     try:                                          # every forecast shown before kickoff (nflmodel/forecastlog.py); data/ only, not shown
         from . import forecastlog
         n_fc = forecastlog.record(out["slate"]["games"], "nfl", season, out["meta"].get("generated"),
-                                  forecastlog.qb_status(out["slate"]["games"], rep, names))
+                                  forecastlog.qb_status(out["slate"]["games"], rep, names),
+                                  inputs=forecastlog.frame_inputs(out["slate"]["games"], frame,
+                                                                  model.MARGIN_FEATS + model.TOTAL_FEATS + ["home_qb_delta", "away_qb_delta"]))
         say(f"  forecast log: {n_fc} rows")
     except Exception as exc:
         print(f"  forecast log skipped ({exc})")

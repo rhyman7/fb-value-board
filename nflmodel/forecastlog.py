@@ -25,6 +25,16 @@ Columns
                      scripts/forecast_log_backfill.py; those rows know a quarterback's status
                      only where the board carried a qb_flag, i.e. Questionable after a limited
                      or no practice, from Nov 9, 2026)
+
+Inputs (from Nov 19, 2026): data/forecast_log/<league>_<season>_inputs.csv, one row per game-model input
+for every forecast row written, in long form (at, game_id, input, value) so a change to the model's
+feature list never breaks the file. The inputs are the raw values the game model used at that build:
+every margin and total feature (quarterback gap, offensive line and skill starters out, falling snap
+shares, coverage defenders out, wind ...) and each side's quarterback delta. Why: the backtest knows the
+actual starters and game-day inactives, the board knows less before kickoff, and only a record of what
+the board knew lets a test fit and score the model on bet-time information (Project doc
+claude/plan-bettime-information-tests-2026-11-19.md). Same rules: append-only, never shown, a failure
+never stops a build.
 """
 from __future__ import annotations
 
@@ -50,6 +60,30 @@ PRACTICE_TEXT = {"limited Friday": 1, "did not practice Friday": 2}      # qshad
 
 def path(league: str, season: int, root: Path = DIR) -> Path:
     return root / f"{league}_{int(season)}.csv"
+
+
+def inputs_path(league: str, season: int, root: Path = DIR) -> Path:
+    return root / f"{league}_{int(season)}_inputs.csv"
+
+
+INPUT_COLS = ["at", "game_id", "input", "value"]
+
+
+def frame_inputs(slate_games: list[dict], frame: pd.DataFrame, cols: list[str], slate_key: str = "id") -> dict:
+    """{slate id: {input: value}} for the slate's games, from the game frame the model priced them
+    from (frame keyed by game_id; slate_key is the slate field holding that id: "id" on the NFL board,
+    "game_id", the ESPN id, on the college board)."""
+    have = [c for c in dict.fromkeys(cols) if c in frame]
+    f = frame.drop_duplicates("game_id", keep="last")
+    f = f.set_index(f["game_id"].astype(str))[have]
+    out = {}
+    for g in slate_games:
+        k = g.get(slate_key)
+        if k is None or str(k) not in f.index:
+            continue
+        row = f.loc[str(k)]
+        out[str(g.get("id"))] = {c: (None if pd.isna(row[c]) else round(float(row[c]), 4)) for c in have}
+    return out
 
 
 def _key(name) -> str:
@@ -152,9 +186,10 @@ def read(league: str, season: int, root: Path = DIR) -> pd.DataFrame:
 
 
 def record(slate_games: list[dict], league: str, season: int, generated=None, status: dict | None = None,
-           root: Path = DIR, source: str = "live", kickoffs: dict | None = None) -> int:
+           root: Path = DIR, source: str = "live", kickoffs: dict | None = None, inputs: dict | None = None) -> int:
     """Append a row for every game whose forecast, line, weight, quarterback or status changed.
-    generated: the board's build time ("2026-11-11 21:10 UTC"); now if missing. Returns rows written."""
+    generated: the board's build time ("2026-11-11 21:10 UTC"); now if missing. Returns rows written.
+    inputs: frame_inputs(); for each row written, its game's inputs go to inputs_path()."""
     at = pd.Timestamp(str(generated).replace(" UTC", "")) if generated else pd.Timestamp(dt.datetime.now(dt.timezone.utc))
     at = at.tz_localize("UTC") if at.tzinfo is None else at.tz_convert("UTC")
     log = read(league, season, root)
@@ -167,4 +202,9 @@ def record(slate_games: list[dict], league: str, season: int, generated=None, st
         for c in ("early", *NUM[8:]):                                    # whole numbers, blank when unknown
             df[c] = pd.to_numeric(df[c], errors="coerce").astype("Int64")
         df.to_csv(p, mode="a", header=not p.exists(), index=False)
+        long = [{"at": r["at"], "game_id": r["game_id"], "input": k, "value": v}
+                for r in new for k, v in (inputs or {}).get(r["game_id"], {}).items()]
+        if long:
+            ip = inputs_path(league, season, root)
+            pd.DataFrame(long, columns=INPUT_COLS).to_csv(ip, mode="a", header=not ip.exists(), index=False)
     return len(new)

@@ -111,6 +111,14 @@ boards in detail; this file is the rules.
   (`scripts/forecast_log_backfill.py`, one-off; NFL from Oct 7, college from Oct 19) and carry no
   quarterback status. `qb_flag` is deliberately not in the archive's game keys: a past week's page
   would start showing the tag.
+  **Inputs (from Nov 19, 2026):** with each row written, the raw game-model inputs the build priced that
+  game from (every margin and total feature plus each side's quarterback delta) go to
+  `data/forecast_log/<league>_<season>_inputs.csv` in long form (`at, game_id, input, value`; joined to the
+  forecast row on `at` and `game_id`), so a feature-list change never breaks the file. Same rules:
+  append-only, never shown, a failure never stops a build. It is the record of what the board knew at
+  bet time, for fitting and scoring the game model on bet-time information (Project doc
+  `claude/plan-bettime-information-tests-2026-11-19.md`); the backtest's own inputs know the actual
+  starters and game-day inactives.
 - The **Player props** and **Prop price backfill** Actions (`props.yml`, `props-backfill.yml`)
   also commit straight to `main`, only under `data/props/` (the prop log, results, snapshots,
   credit usage and past prices) and, for Player props, `docs/props/` (the board's Props files). They share the `board-commits` group too. The backfill runs
