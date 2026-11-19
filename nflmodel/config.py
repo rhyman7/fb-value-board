@@ -49,6 +49,10 @@ TOTAL_WEIGHT_CAP = 0.05     # ceiling on the model's weight for totals. Totals t
 BLEND_LOOKBACK = 8          # seasons of history used to measure how much to trust the model
                             # over the market (its edge has shrunk, so old seasons mislead)
 
+# Current-line games (not early lines, not the final week) priced at the weight the model earns with
+# Friday information (nflmodel/bettime.py; Nov 19, 2026, Ryan's call, provisional, January recheck).
+# False prices them at the game-day weight (w_margin) as before.
+FRIDAY_WEIGHT = True
 EARLY_DAYS = 4              # a game this many days away (or more) is priced as an early line,
                             # using the weight the model has earned against opening spreads
 

@@ -110,8 +110,11 @@ def override_keys(ov: pd.DataFrame | None) -> dict:
 
 
 def _season(season: int, sched: pd.DataFrame, extra_out: dict | None = None,
-            core_log: list | None = None) -> pd.DataFrame:
+            core_log: list | None = None, bettime: bool = False) -> pd.DataFrame:
     """sched: the nflverse games table (regular season used), for each team's game list.
+    bettime: build played games by the upcoming-game rule, i.e. what was known by Friday: the final
+    injury report's Out/Doubtful and the previous week's longer-term lists, no game-day inactives
+    (nflmodel/bettime.py, Nov 19, 2026; the Nov 11 T1 test's patch).
     extra_out: override_keys() of the hand overrides; applied to games the team has not
     played, offensive line only. core_log: if a list, gets one row per core offensive
     lineman of each team's next unplayed game (CORE_COLS)."""
@@ -169,7 +172,7 @@ def _season(season: int, sched: pd.DataFrame, extra_out: dict | None = None,
             prior = [w for w in have if w < wk]
             forced = extra_out.get((team, gid), set()) if wk not in have else set()
             # roster status for this week, or the latest earlier week for an upcoming game
-            rw = [w for w in roster_weeks.get(team, []) if w <= wk]
+            rw = [w for w in roster_weeks.get(team, []) if (w < wk if bettime else w <= wk)]
             rweek = rw[-1] if rw else None
             exact = rweek == wk
             for grp, (pos, k, col) in GROUPS.items():

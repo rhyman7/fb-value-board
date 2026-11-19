@@ -937,6 +937,22 @@ What this changes: nothing on the board. No tier is restricted or extended. The 
 watching, long-rest opener bets and wind unders in weeks 10-14, are named here so the live
 ledger can be read for them after the 2026 and 2027 seasons without re-searching.
 
+## Bet-time information: the Friday weight (Nov 19, 2026): a trade-off, applied provisionally (Ryan's call)
+
+Every past NFL game rebuilt three ways (Project doc `claude/bettime-information-results-2026-11-19.md`): game day
+(the backtest), Friday (last week's quarterback unless the Friday report has him Out/Doubtful or a starter is
+coming back; the report's Out/Doubtful, no game-day inactives) and Monday (last week's quarterback, roster lists
+only). The board's model applied to each, weight earned since 2019: against the close 0.22 ± 0.11 game day,
+0.14 ± 0.10 Friday, 0.07 ± 0.09 Monday; against the opener 0.47, 0.39 and 0.20 ± 0.11 (the board's opener
+weight is 0.21). The model's edge at the current line is mostly knowing who plays.
+
+Pre-set test W (`claude/plan-nfl-friday-weight-2026-11-19.md`): the same model on Friday inputs, weighted by the
+Friday weight instead of the game-day one. Average miss 2014-18 -0.003 ± 0.004, 2019-25 -0.013 ± 0.007 (2.0 SE),
+RMS miss better in both, side win rate identical (a weight between 0 and 1 cannot change the side, a measure the
+rule should not have used); 2026 to date +0.018 ± 0.022 on 150 games. Player projections: neutral. Applied for
+current-line games (`nflmodel/bettime.py`, `config.FRIDAY_WEIGHT`); 0.156 for 2026 (game-day 0.290). Fitting the
+model itself on Friday or Monday inputs was also tested and not kept (a trade-off and a mixed result).
+
 ## What to try next
 
 - **Opening lines for totals.** The model's sides do best against openers;

@@ -714,6 +714,20 @@ boards in detail; this file is the rules.
     `flags_on` is false and nothing is flagged. Display only: it never feeds the model, the bets,
     the Bet sheet or the Parlays page.
   Never edit past weeks by hand; the files are rebuilt from the logs.
+- **NFL Friday weight for current-line games** (Nov 19, 2026, provisional, Ryan's call on a trade-off;
+  FEATURES.md "Bet-time information"; Project docs `claude/bettime-information-results-2026-11-19.md`,
+  `claude/plan-nfl-friday-weight-2026-11-19.md`, `claude/nfl-friday-weight-test-results-2026-11-19.md`):
+  `nflmodel/bettime.py`. With `config.FRIDAY_WEIGHT = True`, NFL games priced at the current line (not early
+  lines, not the final week) use `w_margin` = the weight the board's model earns on a Friday reconstruction
+  of the previous 8 seasons (last week's quarterback unless the Friday report or a returning starter says
+  otherwise; `injuries._season(bettime=True)`, no game-day inactives). The model, its fit, early lines,
+  totals and the college board are unchanged; the player projections are built before this step and keep
+  the game-day weight, as with early lines. Measured on Update board runs with the backtest, and whenever
+  `data.json` has none for the season; carried in `meta.blend.friday` otherwise. The reconstruction is
+  cached per past season in `data/cache/bettime_qb_<season>.csv` and `injury_groups_bt_<season>.csv` (the
+  first build of a new season downloads that season's injury reports and rosters once, about a minute).
+  A failure keeps the game-day weight. Rechecked in January on the forecast log's logged inputs (Project doc
+  `claude/january-recheck-additions.md`); `FRIDAY_WEIGHT = False` puts the board back as it was.
 - **College market-residual margin** (Nov 19, 2026, provisional, Ryan's call on an 11-of-12 trade-off;
   CFB_FEATURES.md "Market-residual margin"; Project docs `claude/plan-fresh-eyes-structure-tests-2026-11-19.md`,
   `claude/fresh-eyes-structure-test-results-2026-11-19.md`): `cfbmodel/model.market_residual`. With

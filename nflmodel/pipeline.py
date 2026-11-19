@@ -51,6 +51,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
     base = model.build_frame(games, engine, injuries=inj)
     frame, info = model.walk_forward(base)
     wf_input = base                               # the frame the game model is fitted on (shadow.py refits it)
+    role_t = None                                 # the role table, for the Friday weight (bettime.py)
 
     prev_path = C.DOCS / "data.json"
     prev = json.loads(prev_path.read_text()) if prev_path.exists() else {}
@@ -68,7 +69,8 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             R = roles.load_all(games, refresh_current=refresh, verbose=False)
             rows = players.player_rows(players.team_games(frame, pg), pg, avail, pinfo)
             rows = overrides.apply_out(rows, ov) if ov is not None else rows
-            wf_input = game_roles.attach(base, game_roles.team_features(rows, R, avail))
+            role_t = game_roles.team_features(rows, R, avail)
+            wf_input = game_roles.attach(base, role_t)
             frame, info = model.walk_forward(wf_input)
         except Exception as exc:
             print(f"  role signals skipped ({exc}); game model runs without them")
@@ -209,6 +211,26 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         e &= ~frame["final_week"].fillna(False).astype(bool)   # the final week stays at the market (config.FINAL_WEEK_MARKET)
     frame.loc[e, "w_margin"] = w_early
     frame.loc[e, "proj_margin"] = frame.loc[e, "spread_line"] + w_early * (frame.loc[e, "model_margin"] - frame.loc[e, "spread_line"])
+    # ---- current-line games: the weight the model earns with Friday information (bettime.py, config.FRIDAY_WEIGHT)
+    friday = None
+    if C.FRIDAY_WEIGHT:
+        fprev = ((prev.get("meta") or {}).get("blend") or {}).get("friday")
+        friday = fprev if (fprev and fprev.get("season") == season and not with_backtest) else None
+        if friday is None:
+            try:
+                from . import bettime
+                friday = {**bettime.friday_weight(games, engine, wf_input, season, roles=role_t), "season": season}
+                say(f"  Friday weight {friday['weight']:.3f} (game-day {info[season]['w_margin']:.3f}), seasons {friday['seasons']}")
+            except Exception as exc:  # noqa: BLE001
+                print(f"  Friday weight skipped ({exc}); current-line games keep the game-day weight")
+                friday = fprev if fprev and fprev.get("season") == season else None
+    if friday is not None:
+        c = (~frame.played) & ~frame["early"] & frame.spread_line.notna()
+        if C.FINAL_WEEK_MARKET and "final_week" in frame:
+            c &= ~frame["final_week"].fillna(False).astype(bool)
+        wf_ = float(friday["weight"])
+        frame.loc[c, "w_margin"] = wf_
+        frame.loc[c, "proj_margin"] = frame.loc[c, "spread_line"] + wf_ * (frame.loc[c, "model_margin"] - frame.loc[c, "spread_line"])
 
     out = {
         "meta": {
@@ -220,7 +242,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
             "haircut": haircut, "haircut_on": bool(C.EDGE_HAIRCUT), "haircut_factor": h_factor,
             "colors": {k: list(v) for k, v in C.TEAM_COLORS.items()},
             "blend": {"margin": info[season]["w_margin"], "total": info[season]["w_total"], "lookback": C.BLEND_LOOKBACK,
-                      "early": round(w_early, 3), "early_days": C.EARLY_DAYS},
+                      "early": round(w_early, 3), "early_days": C.EARLY_DAYS, "friday": friday},
             "coefs": {"margin": info[season]["margin_coefs"], "total": info[season]["total_coefs"]},
             "sources": ["nflverse play-by-play", "nflverse games file (schedule, results, closing lines)", "nfelo games file (opening lines)",
                         "The Odds API (DraftKings and FanDuel player props)"],
