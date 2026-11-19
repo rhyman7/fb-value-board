@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-19T20:24Z",
+ "fetched": "2026-11-19T23:23Z",
  "today": "2026-11-19",
  "teams": {
   "Arizona": {
@@ -3002,6 +3002,88 @@
     }
    ]
   },
+  "Rice": {
+   "conf": "American",
+   "abbr": "RICE",
+   "report": "Game Day",
+   "published": "2026-11-19",
+   "posted": "16:30:00",
+   "game_date": "2026-11-19",
+   "game_time": "18:30:00",
+   "opponent": "Temple",
+   "players": [
+    {
+     "name": "Lucas Scheerhorn",
+     "pos": "QB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tariq Watson",
+     "pos": "CB",
+     "number": "4",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Ben Grice",
+     "pos": "SL",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Quinton Jackson",
+     "pos": "RB",
+     "number": "10",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jamir Benjamin",
+     "pos": "CB",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chibby Nwajuaku",
+     "pos": "DL",
+     "number": "16",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Michael Amey III",
+     "pos": "S",
+     "number": "27",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jai Jacobs-Ford",
+     "pos": "SL",
+     "number": "29",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ian Bothwell",
+     "pos": "OL",
+     "number": "77",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Colten Cole",
+     "pos": "TE",
+     "number": "82",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
   "Rutgers": {
    "conf": "Big Ten",
    "abbr": "RUTG",
@@ -3478,6 +3560,151 @@
      "pos": "DT",
      "number": "95",
      "status": "Probable",
+     "season_out": false
+    }
+   ]
+  },
+  "Temple": {
+   "conf": "American",
+   "abbr": "TEM",
+   "report": "Game Day",
+   "published": "2026-11-19",
+   "posted": "16:30:00",
+   "game_date": "2026-11-19",
+   "game_time": "18:30:00",
+   "opponent": "Rice",
+   "players": [
+    {
+     "name": "Peter Clarke",
+     "pos": "TE",
+     "number": "0",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Sam Brown V",
+     "pos": "RB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Denzel Chavis",
+     "pos": "CB",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ajani Sheppard",
+     "pos": "QB",
+     "number": "13",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Pooh Lawton",
+     "pos": "S",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "JoJo Bermudez",
+     "pos": "WR",
+     "number": "17",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jett White",
+     "pos": "CB",
+     "number": "20",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Devontae Ward-Grant",
+     "pos": "CB",
+     "number": "27",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jayvant Brown",
+     "pos": "LB",
+     "number": "30",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Brandon Enarusai",
+     "pos": "DL",
+     "number": "34",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Reggie Jones",
+     "pos": "LB",
+     "number": "53",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kevin Terry",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kechan Miller",
+     "pos": "DL",
+     "number": "71",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luke Watson",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kenedy Uzoma",
+     "pos": "WR",
+     "number": "83",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Rameir Hardy",
+     "pos": "WR",
+     "number": "85",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Kaegan Chambers",
+     "pos": "WR",
+     "number": "87",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zander Baptiste",
+     "pos": "WR",
+     "number": "89",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Troy Cunningham",
+     "pos": "DL",
+     "number": "95",
+     "status": "Questionable",
      "season_out": false
     }
    ]
