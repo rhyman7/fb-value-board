@@ -58,3 +58,20 @@ def test_quarterback_status(tmp_path):
     # the backfill reads status from the board's qb_flag
     g = game("g3", qb_flag=[{"team": "HHH", "name": "H Passer", "practice": "limited Friday", "started": 0.54}])
     assert F.status_from_flags([g]) == {("g3", "home"): (1, 1)}
+
+
+def test_inputs_logged_with_each_row(tmp_path):
+    """The game-model inputs go to <league>_<season>_inputs.csv in long form, one set per row written."""
+    import pandas as pd
+    from nflmodel import forecastlog as FL
+    g = {"id": "2026_12_AAA_BBB", "game_id": 401, "week": 12, "kickoff": "2099-01-01T18:00Z", "away": "AAA", "home": "BBB",
+         "market": {"spread": 3.0, "total": 44.5}, "model": {"margin": 4.0, "total": 45.0}, "proj": {"margin": 3.3, "total": 44.5},
+         "weight": 0.3, "early": False, "away_qb": {"name": "A"}, "home_qb": {"name": "B"}}
+    frame = pd.DataFrame({"game_id": [401], "d_qb": [0.05], "d_chg_ol": [-0.2], "other": [9.0]})
+    inp = FL.frame_inputs([g], frame, ["d_qb", "d_chg_ol", "missing"], slate_key="game_id")
+    assert inp == {"2026_12_AAA_BBB": {"d_qb": 0.05, "d_chg_ol": -0.2}}
+    assert FL.record([g], "cfb", 2026, "2026-11-19 20:00 UTC", root=tmp_path, inputs=inp) == 1
+    assert FL.record([g], "cfb", 2026, "2026-11-19 21:00 UTC", root=tmp_path, inputs=inp) == 0   # nothing changed: no rows
+    x = pd.read_csv(FL.inputs_path("cfb", 2026, tmp_path))
+    assert list(x.columns) == FL.INPUT_COLS and len(x) == 2 and set(x.input) == {"d_qb", "d_chg_ol"}
+    assert (x["at"] == "2026-11-19 20:00").all()

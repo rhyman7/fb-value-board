@@ -230,7 +230,9 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         out["best_record"] = prev.get("best_record")
     try:                                          # every forecast shown before kickoff (nflmodel/forecastlog.py); data/ only, not shown
         from nflmodel import forecastlog
-        say(f"  forecast log: {forecastlog.record(slate['games'], 'cfb', season, out['meta'].get('generated'))} rows")
+        inp = forecastlog.frame_inputs(slate["games"], frame, model.MARGIN_FEATS + model.TOTAL_FEATS + ["home_qb_delta", "away_qb_delta"],
+                                       slate_key="game_id")
+        say(f"  forecast log: {forecastlog.record(slate['games'], 'cfb', season, out['meta'].get('generated'), inputs=inp)} rows")
     except Exception as exc:
         print(f"  forecast log skipped ({exc})")
     out = _clean(out)
