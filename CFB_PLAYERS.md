@@ -102,6 +102,13 @@ Each piece removed in turn, on 2017-2019:
 - **PFF route and snap share** (Nov 4, 2026): walk-forward receiving-yards RMSE 31.435 →
   31.418 on 2017-19 (3.7 SE) and 30.179 → 30.057 on 2021+ (10.1 SE); better at the 2025
   lines and on the floor rungs too.
+- **Quarterbacks on teams projected to lose by more than 7** (Nov 19, 2026, provisional, Ryan's call on a
+  7-of-8 trade-off; `experiments/chatgpt_player_changes_test.py`, FEATURES.md "The ChatGPT review's
+  follow-ups"): passing yards come down 2.871 yards for each point of projected losing margin beyond 7
+  (`players.underdog_qb`, constants in `data/cfb/qb_underdog.json`). Starters' RMSE 88.30 → 86.47 on
+  2021-25 (8.3 SE); on the affected games the projections had run 30.6 yards high (4.3 after). The 2024
+  lines were better and the 2025 lines level. Applies from the 2026 season, after every fit; pass
+  attempts, completions and touchdowns are untouched. Rechecked in January on 2026 alone.
 - **Who plays**: built into which players are projected, so it cannot be removed on its
   own; as a game-model feature the same box-score signal added nothing (CFB_FEATURES.md).
 
