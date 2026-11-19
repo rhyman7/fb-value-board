@@ -1,0 +1,279 @@
+{
+ "chosen": "A",
+ "tuning": {
+  "A": {
+   "cuts": [
+    -0.0247,
+    0.0319
+   ],
+   "rec_yds": {
+    "props": 3044,
+    "slope": -0.134,
+    "intercept": 0.006,
+    "brier_base": 0.25004,
+    "brier_test": 0.24999,
+    "diff": -5e-05,
+    "se": 0.0001,
+    "over_rate": 0.5036,
+    "fair_over": 0.5005,
+    "money": {
+     "ret": {
+      "n": 2318,
+      "games": 244,
+      "mean": -0.0526,
+      "se": 0.0241
+     },
+     "clv_same_line": {
+      "n": 544,
+      "games": 190,
+      "mean": -0.0629,
+      "se": 0.0031
+     },
+     "overs": 824,
+     "unders": 1494,
+     "ret_overs": {
+      "n": 824,
+      "games": 124,
+      "mean": -0.0459,
+      "se": 0.042
+     },
+     "ret_unders": {
+      "n": 1494,
+      "games": 181,
+      "mean": -0.0563,
+      "se": 0.0284
+     },
+     "by_book": {
+      "draftkings": {
+       "n": 1382,
+       "games": 221,
+       "mean": -0.044,
+       "se": 0.0247
+      },
+      "fanduel": {
+       "n": 936,
+       "games": 161,
+       "mean": -0.0653,
+       "se": 0.0303
+      }
+     }
+    },
+    "unflagged_under_ret": {
+     "n": 726,
+     "games": 105,
+     "mean": -0.0793,
+     "se": 0.0381
+    },
+    "unflagged_over_ret": {
+     "n": 726,
+     "games": 105,
+     "mean": -0.0456,
+     "se": 0.0375
+    }
+   },
+   "pass_yds": {
+    "props": 702,
+    "slope": 1.51,
+    "intercept": 0.059,
+    "brier_base": 0.25028,
+    "brier_test": 0.24891,
+    "diff": -0.00137,
+    "se": 0.0016,
+    "over_rate": 0.5043,
+    "fair_over": 0.5001,
+    "money": {
+     "ret": {
+      "n": 546,
+      "games": 244,
+      "mean": 0.006,
+      "se": 0.0518
+     },
+     "clv_same_line": {
+      "n": 72,
+      "games": 58,
+      "mean": -0.0631,
+      "se": 0.004
+     },
+     "overs": 346,
+     "unders": 200,
+     "ret_overs": {
+      "n": 346,
+      "games": 181,
+      "mean": 0.0187,
+      "se": 0.0679
+     },
+     "ret_unders": {
+      "n": 200,
+      "games": 124,
+      "mean": -0.0159,
+      "se": 0.0857
+     },
+     "by_book": {
+      "draftkings": {
+       "n": 319,
+       "games": 221,
+       "mean": -0.008,
+       "se": 0.0536
+      },
+      "fanduel": {
+       "n": 227,
+       "games": 161,
+       "mean": 0.0257,
+       "se": 0.0636
+      }
+     }
+    },
+    "unflagged_under_ret": {
+     "n": 156,
+     "games": 105,
+     "mean": 0.0219,
+     "se": 0.0864
+    },
+    "unflagged_over_ret": {
+     "n": 156,
+     "games": 105,
+     "mean": -0.1459,
+     "se": 0.0864
+    }
+   },
+   "pooled_diff": -0.000297
+  },
+  "B": {
+   "cuts": [
+    -0.0265,
+    0.0281
+   ],
+   "rec_yds": {
+    "props": 2344,
+    "slope": -0.422,
+    "intercept": -0.007,
+    "brier_base": 0.25016,
+    "brier_test": 0.2501,
+    "diff": -7e-05,
+    "se": 0.0003,
+    "over_rate": 0.5115,
+    "fair_over": 0.5005,
+    "money": {
+     "ret": {
+      "n": 1801,
+      "games": 184,
+      "mean": -0.0309,
+      "se": 0.0269
+     },
+     "clv_same_line": {
+      "n": 426,
+      "games": 143,
+      "mean": -0.0636,
+      "se": 0.0038
+     },
+     "overs": 404,
+     "unders": 1397,
+     "ret_overs": {
+      "n": 404,
+      "games": 54,
+      "mean": 0.0386,
+      "se": 0.0546
+     },
+     "ret_unders": {
+      "n": 1397,
+      "games": 160,
+      "mean": -0.0511,
+      "se": 0.0305
+     },
+     "by_book": {
+      "draftkings": {
+       "n": 1056,
+       "games": 171,
+       "mean": -0.0232,
+       "se": 0.0268
+      },
+      "fanduel": {
+       "n": 745,
+       "games": 125,
+       "mean": -0.042,
+       "se": 0.0336
+      }
+     }
+    },
+    "unflagged_under_ret": {
+     "n": 543,
+     "games": 86,
+     "mean": -0.1054,
+     "se": 0.0441
+    },
+    "unflagged_over_ret": {
+     "n": 543,
+     "games": 86,
+     "mean": -0.0197,
+     "se": 0.0436
+    }
+   },
+   "pass_yds": {
+    "props": 546,
+    "slope": -3.451,
+    "intercept": 0.091,
+    "brier_base": 0.24942,
+    "brier_test": 0.25741,
+    "diff": 0.00799,
+    "se": 0.0051,
+    "over_rate": 0.5293,
+    "fair_over": 0.5001,
+    "money": {
+     "ret": {
+      "n": 422,
+      "games": 184,
+      "mean": -0.0934,
+      "se": 0.0602
+     },
+     "clv_same_line": {
+      "n": 52,
+      "games": 41,
+      "mean": -0.0608,
+      "se": 0.0049
+     },
+     "overs": 333,
+     "unders": 89,
+     "ret_overs": {
+      "n": 333,
+      "games": 160,
+      "mean": -0.0425,
+      "se": 0.0689
+     },
+     "ret_unders": {
+      "n": 89,
+      "games": 54,
+      "mean": -0.2839,
+      "se": 0.1327
+     },
+     "by_book": {
+      "draftkings": {
+       "n": 241,
+       "games": 171,
+       "mean": -0.145,
+       "se": 0.0612
+      },
+      "fanduel": {
+       "n": 181,
+       "games": 125,
+       "mean": -0.0248,
+       "se": 0.0715
+      }
+     }
+    },
+    "unflagged_under_ret": {
+     "n": 124,
+     "games": 86,
+     "mean": -0.0932,
+     "se": 0.1047
+    },
+    "unflagged_over_ret": {
+     "n": 124,
+     "games": 86,
+     "mean": -0.0331,
+     "se": 0.1048
+    }
+   },
+   "pooled_diff": 0.001453
+  }
+ }
+}

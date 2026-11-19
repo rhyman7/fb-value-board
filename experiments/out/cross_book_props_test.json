@@ -1,0 +1,588 @@
+{
+ "holdout_main_2025": {
+  "X1_flag": {
+   "bets": 79,
+   "record": "45-34",
+   "ret": {
+    "n": 79,
+    "games": 66,
+    "mean": 0.0773,
+    "se": 0.0955
+   },
+   "avg_decimal": 1.892,
+   "avg_ev_claimed": 0.0465,
+   "clv": {
+    "n": 78,
+    "games": 65,
+    "mean": -0.0025,
+    "se": 0.0081
+   },
+   "by_side": {
+    "over": {
+     "n": 27,
+     "games": 26,
+     "mean": 0.1834,
+     "se": 0.1708
+    },
+    "under": {
+     "n": 52,
+     "games": 48,
+     "mean": 0.0221,
+     "se": 0.122
+    }
+   },
+   "by_stat": {
+    "pass_yds": {
+     "n": 1,
+     "games": 1,
+     "mean": 0.8929,
+     "se": NaN
+    },
+    "rush_yds": {
+     "n": 39,
+     "games": 38,
+     "mean": 0.0614,
+     "se": 0.1475
+    },
+    "rec_yds": {
+     "n": 39,
+     "games": 34,
+     "mean": 0.0722,
+     "se": 0.1314
+    }
+   },
+   "by_book": {
+    "draftkings": {
+     "n": 78,
+     "games": 65,
+     "mean": 0.0684,
+     "se": 0.0963
+    },
+    "fanduel": {
+     "n": 1,
+     "games": 1,
+     "mean": 0.7692,
+     "se": NaN
+    }
+   },
+   "same_line": {
+    "n": 0
+   },
+   "different_line": {
+    "n": 79,
+    "games": 66,
+    "mean": 0.0773,
+    "se": 0.0955
+   },
+   "three_leg_from_average_leg": {
+    "no_boost": 0.2524,
+    "boost_25pct": 0.5193
+   }
+  },
+  "X2_flag": {
+   "bets": 135,
+   "record": "66-69",
+   "ret": {
+    "n": 135,
+    "games": 103,
+    "mean": -0.0746,
+    "se": 0.0787
+   },
+   "avg_decimal": 1.889,
+   "avg_ev_claimed": 0.0492,
+   "clv": {
+    "n": 134,
+    "games": 102,
+    "mean": -0.0203,
+    "se": 0.0062
+   },
+   "by_side": {
+    "under": {
+     "n": 121,
+     "games": 95,
+     "mean": -0.0772,
+     "se": 0.0821
+    },
+    "over": {
+     "n": 14,
+     "games": 14,
+     "mean": -0.0528,
+     "se": 0.2627
+    }
+   },
+   "by_stat": {
+    "pass_yds": {
+     "n": 1,
+     "games": 1,
+     "mean": -1.0,
+     "se": NaN
+    },
+    "rush_yds": {
+     "n": 96,
+     "games": 83,
+     "mean": -0.114,
+     "se": 0.0905
+    },
+    "rec_yds": {
+     "n": 38,
+     "games": 34,
+     "mean": 0.0492,
+     "se": 0.1378
+    }
+   },
+   "by_book": {
+    "draftkings": {
+     "n": 106,
+     "games": 85,
+     "mean": -0.034,
+     "se": 0.09
+    },
+    "fanduel": {
+     "n": 29,
+     "games": 28,
+     "mean": -0.2232,
+     "se": 0.1816
+    }
+   },
+   "same_line": {
+    "n": 2,
+    "games": 2,
+    "mean": 0.8808,
+    "se": 0.0808
+   },
+   "different_line": {
+    "n": 133,
+    "games": 101,
+    "mean": -0.089,
+    "se": 0.0792
+   },
+   "three_leg_from_average_leg": {
+    "no_boost": -0.213,
+    "boost_25pct": -0.0454
+   },
+   "also_an_X0_bet": 0
+  },
+  "X0_flag": {
+   "bets": 0
+  },
+  "pairs_flag": 3110,
+  "pairs_different_line_flag": 2100,
+  "X1_close": {
+   "bets": 144,
+   "record": "71-73",
+   "ret": {
+    "n": 144,
+    "games": 107,
+    "mean": -0.0618,
+    "se": 0.0834
+   },
+   "avg_decimal": 1.904,
+   "avg_ev_claimed": 0.0565,
+   "by_side": {
+    "over": {
+     "n": 109,
+     "games": 90,
+     "mean": -0.112,
+     "se": 0.0928
+    },
+    "under": {
+     "n": 35,
+     "games": 34,
+     "mean": 0.0946,
+     "se": 0.1574
+    }
+   },
+   "by_stat": {
+    "pass_yds": {
+     "n": 1,
+     "games": 1,
+     "mean": -1.0,
+     "se": NaN
+    },
+    "rush_yds": {
+     "n": 65,
+     "games": 58,
+     "mean": -0.0591,
+     "se": 0.118
+    },
+    "rec_yds": {
+     "n": 78,
+     "games": 63,
+     "mean": -0.0519,
+     "se": 0.1134
+    }
+   },
+   "by_book": {
+    "draftkings": {
+     "n": 74,
+     "games": 61,
+     "mean": 0.0323,
+     "se": 0.1145
+    },
+    "fanduel": {
+     "n": 70,
+     "games": 60,
+     "mean": -0.1611,
+     "se": 0.1112
+    }
+   },
+   "same_line": {
+    "n": 1,
+    "games": 1,
+    "mean": 0.9901,
+    "se": NaN
+   },
+   "different_line": {
+    "n": 143,
+    "games": 107,
+    "mean": -0.0691,
+    "se": 0.0837
+   },
+   "three_leg_from_average_leg": {
+    "no_boost": -0.1727,
+    "boost_25pct": 0.0042
+   }
+  },
+  "X2_close": {
+   "bets": 285,
+   "record": "153-132",
+   "ret": {
+    "n": 285,
+    "games": 168,
+    "mean": 0.0162,
+    "se": 0.0536
+   },
+   "avg_decimal": 1.898,
+   "avg_ev_claimed": 0.0536,
+   "by_side": {
+    "over": {
+     "n": 87,
+     "games": 71,
+     "mean": -0.0628,
+     "se": 0.1091
+    },
+    "under": {
+     "n": 198,
+     "games": 140,
+     "mean": 0.051,
+     "se": 0.0643
+    }
+   },
+   "by_stat": {
+    "pass_yds": {
+     "n": 6,
+     "games": 6,
+     "mean": 0.2619,
+     "se": 0.399
+    },
+    "rush_yds": {
+     "n": 199,
+     "games": 139,
+     "mean": 0.0458,
+     "se": 0.0646
+    },
+    "rec_yds": {
+     "n": 80,
+     "games": 65,
+     "mean": -0.0757,
+     "se": 0.1122
+    }
+   },
+   "by_book": {
+    "draftkings": {
+     "n": 161,
+     "games": 120,
+     "mean": 0.0704,
+     "se": 0.0681
+    },
+    "fanduel": {
+     "n": 124,
+     "games": 101,
+     "mean": -0.054,
+     "se": 0.0851
+    }
+   },
+   "same_line": {
+    "n": 16,
+    "games": 15,
+    "mean": 0.2884,
+    "se": 0.2418
+   },
+   "different_line": {
+    "n": 269,
+    "games": 163,
+    "mean": 0.0,
+    "se": 0.0557
+   },
+   "three_leg_from_average_leg": {
+    "no_boost": 0.0574,
+    "boost_25pct": 0.2831
+   }
+  },
+  "X0_close": {
+   "bets": 0
+  },
+  "pairs_close": 4862,
+  "pairs_different_line_close": 3284
+ },
+ "tuning_rungs_2025": {
+  "X1": {
+   "bets": 2944,
+   "record": "112-2832",
+   "ret": {
+    "n": 2944,
+    "games": 263,
+    "mean": -0.2913,
+    "se": 0.0955
+   },
+   "avg_decimal": 33.352,
+   "avg_ev_claimed": 0.8731,
+   "clv": {
+    "n": 2941,
+    "games": 263,
+    "mean": 0.9123,
+    "se": 0.02
+   },
+   "by_side": {
+    "over": {
+     "n": 2944,
+     "games": 263,
+     "mean": -0.2913,
+     "se": 0.0955
+    }
+   },
+   "by_stat": {
+    "pass_yds": {
+     "n": 486,
+     "games": 263,
+     "mean": -0.3107,
+     "se": 0.2189
+    },
+    "rush_yds": {
+     "n": 805,
+     "games": 240,
+     "mean": -0.1236,
+     "se": 0.169
+    },
+    "rec_yds": {
+     "n": 1653,
+     "games": 234,
+     "mean": -0.3672,
+     "se": 0.1151
+    }
+   },
+   "by_book": {
+    "draftkings": {
+     "n": 2489,
+     "games": 263,
+     "mean": -0.2887,
+     "se": 0.1101
+    },
+    "fanduel": {
+     "n": 455,
+     "games": 189,
+     "mean": -0.3053,
+     "se": 0.1064
+    }
+   },
+   "same_line": {
+    "n": 1,
+    "games": 1,
+    "mean": 1.06,
+    "se": NaN
+   },
+   "different_line": {
+    "n": 2943,
+    "games": 263,
+    "mean": -0.2917,
+    "se": 0.0955
+   },
+   "three_leg_from_average_leg": {
+    "no_boost": 1.0426,
+    "boost_25pct": 1.5533
+   },
+   "below_other_main": {
+    "bets": 25,
+    "record": "21-4",
+    "ret": {
+     "n": 25,
+     "games": 21,
+     "mean": 0.0866,
+     "se": 0.1095
+    },
+    "avg_decimal": 1.304,
+    "avg_ev_claimed": 0.0593,
+    "clv": {
+     "n": 25,
+     "games": 21,
+     "mean": 0.0528,
+     "se": 0.0075
+    }
+   },
+   "above_other_main": {
+    "bets": 2919,
+    "record": "91-2828",
+    "ret": {
+     "n": 2919,
+     "games": 263,
+     "mean": -0.2945,
+     "se": 0.0964
+    },
+    "avg_decimal": 33.626,
+    "avg_ev_claimed": 0.8801,
+    "clv": {
+     "n": 2916,
+     "games": 263,
+     "mean": 0.9196,
+     "se": 0.0202
+    }
+   },
+   "price_minus200_or_shorter": {
+    "bets": 22,
+    "record": "18-4",
+    "ret": {
+     "n": 22,
+     "games": 19,
+     "mean": 0.0082,
+     "se": 0.1101
+    },
+    "avg_decimal": 1.255,
+    "avg_ev_claimed": 0.0615,
+    "clv": {
+     "n": 22,
+     "games": 19,
+     "mean": 0.0537,
+     "se": 0.0083
+    }
+   }
+  },
+  "X2": {
+   "bets": 2872,
+   "record": "101-2771",
+   "ret": {
+    "n": 2872,
+    "games": 263,
+    "mean": -0.2903,
+    "se": 0.0976
+   },
+   "avg_decimal": 33.978,
+   "avg_ev_claimed": 0.8881,
+   "clv": {
+    "n": 2869,
+    "games": 263,
+    "mean": 0.9337,
+    "se": 0.0205
+   },
+   "by_side": {
+    "over": {
+     "n": 2872,
+     "games": 263,
+     "mean": -0.2903,
+     "se": 0.0976
+    }
+   },
+   "by_stat": {
+    "pass_yds": {
+     "n": 486,
+     "games": 263,
+     "mean": -0.3107,
+     "se": 0.2189
+    },
+    "rush_yds": {
+     "n": 732,
+     "games": 239,
+     "mean": -0.1002,
+     "se": 0.1809
+    },
+    "rec_yds": {
+     "n": 1654,
+     "games": 234,
+     "mean": -0.3684,
+     "se": 0.1151
+    }
+   },
+   "by_book": {
+    "draftkings": {
+     "n": 2465,
+     "games": 263,
+     "mean": -0.284,
+     "se": 0.1112
+    },
+    "fanduel": {
+     "n": 407,
+     "games": 175,
+     "mean": -0.3285,
+     "se": 0.1125
+    }
+   },
+   "same_line": {
+    "n": 0
+   },
+   "different_line": {
+    "n": 2872,
+    "games": 263,
+    "mean": -0.2903,
+    "se": 0.0976
+   },
+   "three_leg_from_average_leg": {
+    "no_boost": 0.7061,
+    "boost_25pct": 1.1326
+   },
+   "below_other_main": {
+    "bets": 20,
+    "record": "16-4",
+    "ret": {
+     "n": 20,
+     "games": 17,
+     "mean": 0.0239,
+     "se": 0.1301
+    },
+    "avg_decimal": 1.295,
+    "avg_ev_claimed": 0.0626,
+    "clv": {
+     "n": 20,
+     "games": 17,
+     "mean": 0.0578,
+     "se": 0.0083
+    }
+   },
+   "above_other_main": {
+    "bets": 2852,
+    "record": "85-2767",
+    "ret": {
+     "n": 2852,
+     "games": 263,
+     "mean": -0.2925,
+     "se": 0.0983
+    },
+    "avg_decimal": 34.207,
+    "avg_ev_claimed": 0.8938,
+    "clv": {
+     "n": 2849,
+     "games": 263,
+     "mean": 0.9399,
+     "se": 0.0207
+    }
+   },
+   "price_minus200_or_shorter": {
+    "bets": 18,
+    "record": "14-4",
+    "ret": {
+     "n": 18,
+     "games": 16,
+     "mean": -0.0358,
+     "se": 0.1321
+    },
+    "avg_decimal": 1.266,
+    "avg_ev_claimed": 0.0644,
+    "clv": {
+     "n": 18,
+     "games": 16,
+     "mean": 0.059,
+     "se": 0.009
+    }
+   }
+  },
+  "rungs_with_other_books_main": 70131
+ }
+}
