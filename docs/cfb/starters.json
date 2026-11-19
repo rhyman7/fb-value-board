@@ -2,192 +2,480 @@
  "_about": "This week's starting QB for every FBS team playing, checked on every daily run (WEEKLY_PROMPT.md step 7e). scripts/build_data.py uses it for the game header (this week and later unplayed weeks) and the EPA page, only while 'week' matches the build's current week. status: confirmed / reported (a change from the last game's starter), uncertain (open question; the listed QB is the default and the note names the alternative), no change.",
  "season": 2026,
  "week": 12,
- "checked": "2026-11-18",
+ "checked": "2026-11-19",
  "starters": {
-  "Air Force": {
-   "qb": "Kemper Hodges",
-   "status": "reported",
-   "source": "Stripes/AP, Nov 15 2026",
-   "note": "Hodges/Medders two-QB run game in 24-3 SJSU win; no update on Medders' injury; Szarka out"
+  "Rice": {
+   "qb": "Gael Ochoa",
+   "status": "no change",
+   "note": "No new QB news found"
   },
-  "Akron": {
-   "qb": "Cibastian Broughton",
+  "Temple": {
+   "qb": "Jaxon Smolik",
    "status": "confirmed",
-   "source": "VSiN, Nov 18 2026",
-   "note": "Broughton making 3rd straight start; site tag Questionable (knee) but playing"
+   "source": "prior check (named starter)",
+   "note": "Smolik starter; Sheppard (ankle) questionable"
   },
-  "Alabama": {
-   "qb": "Keelon Russell",
-   "status": "uncertain",
-   "source": "WBRC, Nov 17, 2026",
-   "note": "Russell questionable (ankle); DeBoer 'managing it', reassessing through the week; alt Austin Mack"
-  },
-  "App State": {
-   "qb": "Malachi Singleton",
-   "status": "no change",
-   "note": "Out (ankle, Oct 11) tag stale; Singleton has played since; no new news"
-  },
-  "Arizona": {
-   "qb": "Noah Fifita",
-   "status": "no change",
-   "note": "No QB injury news"
-  },
-  "Arizona State": {
-   "qb": "Jake Fette",
-   "status": "no change",
-   "note": "Fette starter; Keene (knee) injured"
-  },
-  "Arkansas": {
-   "qb": "KJ Jackson",
-   "status": "no change",
-   "note": "No 2026 QB injury news (results were 2025)"
-  },
-  "Arkansas State": {
-   "qb": "Trey Owens",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Army": {
-   "qb": "Cale Hellums",
-   "status": "no change",
-   "note": "No 2026 QB news found (search hits were 2025)"
-  },
-  "Auburn": {
-   "qb": "Byrum Brown",
-   "status": "no change",
-   "note": "No QB injury news"
-  },
-  "BYU": {
-   "qb": "Bear Bachmeier",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Ball State": {
-   "qb": "Keldric Luster",
-   "status": "no change",
-   "note": "No QB news found"
-  },
-  "Baylor": {
-   "qb": "DJ Lagway",
-   "status": "no change",
-   "note": "No new QB injury news"
-  },
-  "Boise State": {
-   "qb": "Maddux Madsen",
+  "Iowa State": {
+   "qb": "Jaylen Raynor",
    "status": "reported",
-   "source": "prior check, Nov 2026",
-   "note": "Madsen starting; 'out vs SDSU' reports are from Nov 2025 (SI); questionable tag likely stale"
+   "source": "SI/Cyclones coverage, Nov 2026",
+   "note": "Raynor starting; Moberly out"
   },
-  "Boston College": {
-   "qb": "Mason McKenzie",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Bowling Green": {
-   "qb": "Austin Novosad",
+  "UCF": {
+   "qb": "Alonza Barnett III",
    "status": "reported",
-   "source": "Predictem / SportsChatPlace, Nov 2026",
-   "note": "Novosad expected to start again in place of injured Jay Kastantin; Kastantin status not disclosed; game is Fri Nov 20"
-  },
-  "Buffalo": {
-   "qb": "Jason Wright",
-   "status": "reported",
-   "source": "VSiN, Nov 18 2026",
-   "note": "Wright named QB in preview; Holmes out (knee)"
-  },
-  "California": {
-   "qb": "Jaron-Keawe Sagapolutele",
-   "status": "no change",
-   "note": "Concussion reports found appear to be from 2025; no 2026 news"
-  },
-  "Central Michigan": {
-   "qb": "Jadyn Glasser",
-   "status": "confirmed",
-   "source": "VSiN, Nov 18 2026",
-   "note": "Glasser starting; Angel Flores out"
-  },
-  "Charlotte": {
-   "qb": "Conner Harrell",
-   "status": "no change",
-   "note": "No QB injury news"
-  },
-  "Cincinnati": {
-   "qb": "JC French IV",
-   "status": "no change",
-   "note": "No QB news found"
+   "source": "Roundtable, Nov 1 2026; UCF previews Nov 17",
+   "note": "Barnett back as starter; Keyone Jenkins (ankle) status unclear"
   },
   "Clemson": {
    "qb": "Trent Pearman",
    "status": "confirmed",
-   "source": "prior check (Swinney named starter)",
-   "note": "Vizzina out (concussion); Reynolds out for season"
-  },
-  "Coastal Carolina": {
-   "qb": "Deuce Bailey",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Colorado": {
-   "qb": "Isaac Wilson",
-   "status": "no change",
-   "note": "No new QB news"
-  },
-  "Colorado State": {
-   "qb": "Hauss Hejny",
-   "status": "reported",
-   "source": "prior check, Nov 2026",
-   "note": "Hejny playing; questionable tag (hamstring, Oct) stale"
-  },
-  "Delaware": {
-   "qb": "Nick Minicucci",
-   "status": "no change",
-   "note": "No QB news"
+   "source": "The Clemson Insider / Yahoo, Nov 17 2026",
+   "note": "Pearman named starter vs Duke; Vizzina (concussion), Reynolds out"
   },
   "Duke": {
    "qb": "Walker Eget",
    "status": "no change",
    "note": "No new QB news; Terry Walker III out"
   },
-  "East Carolina": {
-   "qb": "Emory Williams",
+  "Bowling Green": {
+   "qb": "Austin Novosad",
    "status": "reported",
-   "source": "RotoWire, Nov 16, 2026",
-   "note": "Griffis (concussion) missed Charlotte; Williams likely starts at Army"
+   "source": "RotoWire, Nov 11 2026",
+   "note": "Novosad started for injured Kastantin (undisclosed); Kastantin status for Toledo not disclosed"
   },
-  "Eastern Michigan": {
-   "qb": "Brogan McCaughey",
+  "Toledo": {
+   "qb": "John Alan Richter",
+   "status": "no change",
+   "note": "No injury news"
+  },
+  "Oregon": {
+   "qb": "Dylan Raiola",
+   "status": "confirmed",
+   "source": "prior check",
+   "note": "Raiola starter; Dante Moore out"
+  },
+  "Michigan State": {
+   "qb": "Cam Fancher",
+   "status": "uncertain",
+   "source": "RotoWire, Nov 17 2026",
+   "note": "Fancher questionable (knee/undisclosed); Milivojevic (arm) out; alt Kayd Coffman"
+  },
+  "UTEP": {
+   "qb": "Raymond Moore III",
+   "status": "no change",
+   "note": "No QB news; EJ Colson Jr. out"
+  },
+  "Air Force": {
+   "qb": "Kemper Hodges",
    "status": "reported",
-   "source": "Eastern Echo, Nov 2026 (CMU recap); WagerTalk, Nov 2026",
-   "note": "McCaughey started vs Central Michigan; Noah Kim (undisclosed) missed 2 games, questionable/uncertain to return; Jace Stuckey backup"
+   "source": "Colorado Springs Gazette, Nov 14 2026; RotoWire, Nov 18 2026",
+   "note": "Hodges started vs SJSU in two-QB rotation; Evan Medders left SJSU hurt, questionable vs UTEP; Szarka out"
+  },
+  "New Mexico": {
+   "qb": "Toa Fa'avae",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Wyoming": {
+   "qb": "Landon Sims",
+   "status": "no change",
+   "note": "No new QB news; Tyler Hughes out (forearm)"
+  },
+  "Vanderbilt": {
+   "qb": "Jared Curtis",
+   "status": "reported",
+   "source": "Yahoo Sports (Vanderbilt), Nov 16-17 2026",
+   "note": "Curtis took hit vs Alabama, missed no plays, expected to practice; Berlowitz out"
   },
   "Florida": {
    "qb": "Aaron Philo",
    "status": "reported",
-   "source": "Yahoo Sports, Nov 15 2026",
-   "note": "Philo says shoulder back to full strength after Kentucky win; site tag Questionable"
+   "source": "Yahoo Sports (Week 12 depth chart), Nov 2026",
+   "note": "Philo starter rest of season; shoulder said fine"
+  },
+  "Ole Miss": {
+   "qb": "Trinidad Chambliss",
+   "status": "no change",
+   "note": "Probable per site tag"
+  },
+  "BYU": {
+   "qb": "Bear Bachmeier",
+   "status": "no change",
+   "note": "No QB news"
+  },
+  "Kansas": {
+   "qb": "Isaiah Marshall",
+   "status": "no change",
+   "note": "No new Marshall injury news"
+  },
+  "Colorado": {
+   "qb": "Isaac Wilson",
+   "status": "no change",
+   "note": "No new QB news"
+  },
+  "Cincinnati": {
+   "qb": "JC French IV",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Syracuse": {
+   "qb": "Steve Angeli",
+   "status": "reported",
+   "note": "No new 2026 injury news found; Odom out"
+  },
+  "Boston College": {
+   "qb": "Mason McKenzie",
+   "status": "no change",
+   "note": "No QB news"
+  },
+  "Wake Forest": {
+   "qb": "Gio Lopez",
+   "status": "reported",
+   "source": "WBTV/AP, Nov 15 2026",
+   "note": "Lopez back from knee injury, played vs SMU; site tag questionable"
+  },
+  "Georgia Tech": {
+   "qb": "Alberto Mendoza",
+   "status": "uncertain",
+   "source": "RotoWire, Nov 18 2026",
+   "note": "Key: place for both; snap split likely; alt Grady Adamson"
+  },
+  "Northwestern": {
+   "qb": "Nicco Marchiol",
+   "status": "confirmed",
+   "source": "RotoWire (Big Ten availability report), Nov 18 2026",
+   "note": "Chiles out vs Minnesota, now week-to-week; Marchiol starts"
+  },
+  "Minnesota": {
+   "qb": "Drake Lindsey",
+   "status": "no change",
+   "note": "No injury news"
+  },
+  "Ohio State": {
+   "qb": "Luke Fahey",
+   "status": "confirmed",
+   "source": "Yahoo Sports, Nov 19 2026",
+   "note": "Day backs Fahey as starter; Sayin (elbow) likely out for year"
+  },
+  "Nebraska": {
+   "qb": "Anthony Colandrea",
+   "status": "no change",
+   "note": "No injury news"
+  },
+  "Wisconsin": {
+   "qb": "Colton Joseph",
+   "status": "reported",
+   "source": "RotoWire (via 247Sports), Nov 18 2026",
+   "note": "Hopkins questionable, hasn't practiced, unlikely to start; Joseph expected to start"
+  },
+  "Purdue": {
+   "qb": "Ryan Browne",
+   "status": "no change",
+   "note": "No QB injury news found"
+  },
+  "East Carolina": {
+   "qb": "Emory Williams",
+   "status": "reported",
+   "source": "RotoWire, Nov 14 2026",
+   "note": "Williams started at Charlotte; Griffis (concussion) out, likely starts at Army"
+  },
+  "Army": {
+   "qb": "Cale Hellums",
+   "status": "no change",
+   "source": "Underdog Dynasty/Yahoo Week 12 preview, Nov 2026",
+   "note": "Featured as QB in preview; no injury"
+  },
+  "Memphis": {
+   "qb": "Marcus Stokes",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Navy": {
+   "qb": "Jackson Gutierrez",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "North Texas": {
+   "qb": "Chris Jimerson Jr.",
+   "status": "confirmed",
+   "source": "prior check (Neal Brown), Nov 17 2026",
+   "note": "Named starter; Tayven Jackson out for regular season"
+  },
+  "Tulane": {
+   "qb": "Trace Johnson",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No QB injury news"
+  },
+  "North Carolina": {
+   "qb": "Billy Edwards Jr.",
+   "status": "uncertain",
+   "source": "WRAL / Tar Heel Times, Nov 18-19 2026",
+   "note": "Edwards questionable (left Louisville game after hit); no starter named; alt Travis Burgess"
+  },
+  "Virginia": {
+   "qb": "Beau Pribula",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Mississippi State": {
+   "qb": "Parker Puckett",
+   "status": "reported",
+   "source": "On3 (Colin Damms) via RotoWire, Nov 18 2026",
+   "note": "Swann out (lower leg); Puckett expected to start; Lebby hasn't named, Brodie McWhorter may also play; Taylor out"
+  },
+  "Houston": {
+   "qb": "Conner Weigman",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "West Virginia": {
+   "qb": "Michael Hawkins Jr.",
+   "status": "uncertain",
+   "source": "Heavy / Times Leader, Nov 17 2026",
+   "note": "Hawkins questionable (ankle bone bruise, per Rodriguez); alt Scotty Fox Jr."
+  },
+  "Western Kentucky": {
+   "qb": "Rodney Tisdale Jr.",
+   "status": "uncertain",
+   "source": "A Sea of Red preview, Nov 19 2026",
+   "note": "WKU rotating Tisdale and Brock Glenn; no starter named; alt Brock Glenn"
+  },
+  "Liberty": {
+   "qb": "Deshawn Purdie",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Alabama": {
+   "qb": "Keelon Russell",
+   "status": "uncertain",
+   "source": "TideIllustrated (TDAlabamaMag), Nov 19 2026",
+   "note": "Russell questionable (ankle), 'trending right direction', day by day; alt Austin Mack"
+  },
+  "Charlotte": {
+   "qb": "Conner Harrell",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No QB injury news"
+  },
+  "Tulsa": {
+   "qb": "Baylor Hayes",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Missouri State": {
+   "qb": "Henry Belin IV",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No new injury news"
+  },
+  "Jacksonville State": {
+   "qb": "Caden Creel",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Middle Tennessee": {
+   "qb": "Roman Gagliano",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Sam Houston": {
+   "qb": "Landyn Locke",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No new QB news"
+  },
+  "Iowa": {
+   "qb": "Hank Brown",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "Old shoulder tag stale; no new injury"
+  },
+  "Illinois": {
+   "qb": "Carson Boyd",
+   "status": "reported",
+   "source": "Field Level Media, Nov 17 2026",
+   "note": "Houser doubtful (broken nose surgery), Bielema 'not likely to play'; Boyd first career start; Clayton out (hand)"
+  },
+  "South Florida": {
+   "qb": "Luke Kromenhoek",
+   "status": "no change",
+   "source": "USF Oracle, Nov 18 2026",
+   "note": "Kromenhoek set to start vs FAU; Van Buren questionable, no update"
   },
   "Florida Atlantic": {
    "qb": "Caden Veltkamp",
    "status": "no change",
-   "note": "No QB injury news"
+   "source": "USF Oracle, Nov 18 2026",
+   "note": "Veltkamp named as FAU QB; no injury"
+  },
+  "UL Monroe": {
+   "qb": "Austin Carlisle",
+   "status": "no change",
+   "source": "BVM Sports, Nov 19 2026",
+   "note": "ULM splits QB duties Carlisle/Armenta"
+  },
+  "App State": {
+   "qb": "Malachi Singleton",
+   "status": "no change",
+   "source": "The Appalachian, Nov 2026 (Marshall recap)",
+   "note": "Singleton started at Marshall; Hasselbeck in package role; Out tag stale"
+  },
+  "Coastal Carolina": {
+   "qb": "Deuce Bailey",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No injury news"
+  },
+  "Louisiana": {
+   "qb": "Lunch Winfield",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No QB news"
+  },
+  "Delaware": {
+   "qb": "Nick Minicucci",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No QB news"
+  },
+  "New Mexico State": {
+   "qb": "Trey Hedden",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No QB news"
   },
   "Florida International": {
    "qb": "JJ Kohl",
    "status": "no change",
+   "source": "prior check, Nov 18 2026",
    "note": "No QB news"
+  },
+  "Kennesaw State": {
+   "qb": "Landon Varnes",
+   "status": "reported",
+   "source": "KSU Athletics recap, Nov 14 2026",
+   "note": "Varnes started vs Sam Houston; alt Rickie Collins"
+  },
+  "Auburn": {
+   "qb": "Byrum Brown",
+   "status": "no change",
+   "source": "prior check, Nov 18 2026",
+   "note": "No QB injury news"
+  },
+  "LSU": {
+   "qb": "Sam Leavitt",
+   "status": "no change",
+   "note": "No new QB news"
+  },
+  "Tennessee": {
+   "qb": "George MacIntyre",
+   "status": "reported",
+   "source": "Saturday Down South, Nov 16 2026",
+   "note": "Left Texas A&M game with knee injury; Heupel expects him available; no formal starter named; Faizon Brandon also plays"
+  },
+  "Arkansas": {
+   "qb": "KJ Jackson",
+   "status": "no change",
+   "note": "No 2026 QB injury news"
+  },
+  "Texas": {
+   "qb": "Arch Manning",
+   "status": "no change",
+   "note": "No QB news"
+  },
+  "Texas Tech": {
+   "qb": "Thomas Castellanos",
+   "status": "reported",
+   "source": "ClutchPoints, Nov 2026",
+   "note": "Minor injury scare; tests clean; probable, expected to start"
+  },
+  "Baylor": {
+   "qb": "DJ Lagway",
+   "status": "no change",
+   "note": "No new QB news"
+  },
+  "NC State": {
+   "qb": "CJ Bailey",
+   "status": "no change",
+   "note": "No QB news; Will Wilson questionable"
   },
   "Florida State": {
    "qb": "Ashton Daniels",
    "status": "no change",
-   "note": "No QB news (injuries are at RB)"
+   "note": "No QB news"
   },
-  "Fresno State": {
-   "qb": "Jayden Mandal",
+  "UCLA": {
+   "qb": "Ty Dieffenbach",
    "status": "no change",
-   "note": "No injury news"
+   "note": "Starter since Nico Iamaleava season-ending injury"
   },
-  "Georgia": {
-   "qb": "Gunner Stockton",
+  "Michigan": {
+   "qb": "Tommy Carr",
+   "status": "uncertain",
+   "source": "Yahoo Sports / Detroit News, Nov 17 2026",
+   "note": "Whittingham: open competition this week, no starter named; alt Bryce Underwood"
+  },
+  "Rutgers": {
+   "qb": "AJ Surace",
+   "status": "uncertain",
+   "source": "NJ.com via Yahoo, Nov 19 2026",
+   "note": "Surace questionable (ribs); Ashenfelder out; Lonergan doubtful; no starter named; alt Jakob Anderson"
+  },
+  "Penn State": {
+   "qb": "Rocco Becht",
+   "status": "no change",
+   "note": "No new QB news"
+  },
+  "Indiana": {
+   "qb": "Grant Wilson",
+   "status": "uncertain",
+   "source": "The Hoosier Network, Nov 15 2026",
+   "note": "Cignetti: 'we'll evaluate it this week'; Wilson started USC win; alt Josh Hoover (shoulder, now available)"
+  },
+  "Washington": {
+   "qb": "Demond Williams Jr.",
+   "status": "reported",
+   "source": "prior check",
+   "note": "Playing through rib injury (questionable tag); alt Elijah Brown"
+  },
+  "Old Dominion": {
+   "qb": "Jaxon Potter",
+   "status": "uncertain",
+   "source": "WTKR, Nov 17 2026",
+   "note": "Rahne won't commit; Henicle just back from injury; alt Quinn Henicle"
+  },
+  "UConn": {
+   "qb": "Kalieb Osborne",
+   "status": "no change",
+   "note": "No QB news"
+  },
+  "Texas A&M": {
+   "qb": "Marcel Reed",
+   "status": "no change",
+   "note": "No new QB news; Brady Hart has role"
+  },
+  "Oklahoma": {
+   "qb": "John Mateer",
+   "status": "no change",
+   "note": "No new QB news"
+  },
+  "Northern Illinois": {
+   "qb": "Taron Dickens",
+   "status": "no change",
+   "note": "No QB news"
+  },
+  "North Dakota State": {
+   "qb": "Nathan Hayes",
    "status": "no change",
    "note": "No QB news"
   },
@@ -196,120 +484,261 @@
    "status": "no change",
    "note": "Questionable tag stale from Oct injury; has played since"
   },
+  "Troy": {
+   "qb": "Goose Crowder",
+   "status": "reported",
+   "source": "prior check",
+   "note": "Returned to start vs South Alabama; probable (shoulder); alt Tucker Kilcrease"
+  },
   "Georgia State": {
    "qb": "Ayden Pereira",
    "status": "no change",
    "note": "Cameran Brown out"
   },
-  "Georgia Tech": {
-   "qb": "Alberto Mendoza",
-   "status": "uncertain",
-   "source": "SI (Yellow Jackets), Nov 17 2026",
-   "note": "Key: 'we'll use both of them', no starter named; alt Grady Adamson"
-  },
-  "Hawai'i": {
-   "qb": "Micah Alejado",
-   "status": "uncertain",
-   "source": "RotoWire, Nov 16 2026",
-   "note": "Alejado questionable after getting hurt late vs NDSU; RotoWire expects him to play at Nevada; no coach update found; alt Bjorn Jurgensen"
-  },
-  "Houston": {
-   "qb": "Conner Weigman",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Illinois": {
-   "qb": "Carson Boyd",
+  "Marshall": {
+   "qb": "Carlos Del Rio-Wilson",
    "status": "reported",
-   "source": "National Football Post (AP), Nov 17, 2026; ESPN",
-   "note": "Houser doubtful (broken nose surgery, hurt vs UCLA); Boyd likely first career start; Clayton out (hand)"
+   "source": "prior check",
+   "note": "Returned as starter Nov 14; Zion Turner alt; no new news"
   },
-  "Indiana": {
-   "qb": "Grant Wilson",
-   "status": "uncertain",
-   "source": "The Athletic via Yahoo, Nov 15",
-   "note": "Wilson 'presumably' starts again after USC win; Cignetti hasn't named starter; alt Josh Hoover"
-  },
-  "Iowa": {
-   "qb": "Hank Brown",
+  "South Alabama": {
+   "qb": "Bishop Davenport",
    "status": "no change",
-   "source": "Covers injury page (entry dated Oct 20)",
-   "note": "Out (shoulder) tag is stale from Oct 20; Brown has since played, no new injury"
+   "note": "No QB news"
   },
-  "Iowa State": {
-   "qb": "Jaylen Raynor",
+  "Southern Miss": {
+   "qb": "John White",
    "status": "reported",
-   "source": "Heartland College Sports, Nov 16 2026",
-   "note": "Raynor expected starter; Moberly out"
+   "source": "SI, 2026",
+   "note": "Starter since JMU; Ethan Hampton (hand) out"
   },
-  "Jacksonville State": {
-   "qb": "Caden Creel",
+  "Washington State": {
+   "qb": "Owen Eshelman",
    "status": "no change",
-   "note": "No injury news"
+   "note": "No QB news"
   },
-  "Kansas": {
-   "qb": "Isaiah Marshall",
+  "Texas State": {
+   "qb": "Brad Jackson",
    "status": "no change",
-   "note": "No new Marshall news; Cole Ballard out (shoulder)"
+   "note": "No QB news"
+  },
+  "Maryland": {
+   "qb": "Cardell Williams",
+   "status": "uncertain",
+   "source": "SI (Terrapins), Nov 17 2026",
+   "note": "Malik Washington (knee, questionable) keeps job if fully cleared; Williams plays either way; alt Malik Washington"
+  },
+  "USC": {
+   "qb": "Jayden Maiava",
+   "status": "no change",
+   "note": "No QB injury news"
+  },
+  "Arizona": {
+   "qb": "Noah Fifita",
+   "status": "no change",
+   "note": "No QB news"
   },
   "Kansas State": {
    "qb": "Dillon Duff",
    "status": "reported",
-   "source": "Field Level Media / prior check, Nov 2026",
-   "note": "Duff expected to start again; Barnett (questionable) could see action; Avery Johnson, Knuth out; site tag lists Duff Out (looks stale)"
+   "source": "prior check",
+   "note": "Duff expected to start; Barnett could see action; Avery Johnson, Knuth out"
   },
-  "Kennesaw State": {
-   "qb": "Landon Varnes",
+  "Virginia Tech": {
+   "qb": "Ethan Grunkemeyer",
+   "status": "no change",
+   "source": "SI Betting, Week 12 2026 preview",
+   "note": "Named as VT QB; no injury news"
+  },
+  "Miami": {
+   "qb": "Darian Mensah",
+   "status": "no change",
+   "source": "SI Betting, Week 12 2026 preview",
+   "note": "Named as Miami QB; no injury news"
+  },
+  "UNLV": {
+   "qb": "Jackson Arnold",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "San José State": {
+   "qb": "Luke Weaver",
+   "status": "confirmed",
+   "source": "RotoWire citing Mercury News, Nov 17 2026",
+   "note": "Weaver will start vs UNLV; Rolovich injury flared up at Air Force"
+  },
+  "Arkansas State": {
+   "qb": "Trey Owens",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Louisiana Tech": {
+   "qb": "Blake Baker",
+   "status": "no change",
+   "note": "Baker (leg) probable; no new news"
+  },
+  "Kentucky": {
+   "qb": "Kenny Minchey",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Missouri": {
+   "qb": "Austin Simmons",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Georgia": {
+   "qb": "Gunner Stockton",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "South Carolina": {
+   "qb": "Cutter Woods",
+   "status": "uncertain",
+   "source": "Yahoo Sports / HereColumbia, Nov 19 2026",
+   "note": "Sellers (ankle) left off Wed availability report, so may return; he was also cleared vs Arkansas but didn't play; Beamer won't discuss; alt LaNorris Sellers"
+  },
+  "Pittsburgh": {
+   "qb": "Corey Dailey",
    "status": "reported",
-   "source": "prior check (no new 2026 reporting found), Nov 18",
-   "note": "Varnes main QB last 2 games; Rickie Collins alt"
+   "source": "Field Level Media, Nov 18 2026",
+   "note": "Dailey started last week vs FSU, likely starter; Heintschel (ACL) out for season; Geriner (thigh) questionable"
+  },
+  "Louisville": {
+   "qb": "Lincoln Kienholz",
+   "status": "no change",
+   "source": "Field Level Media, Nov 18 2026",
+   "note": "Kienholz is the QB; no injury news"
+  },
+  "SMU": {
+   "qb": "Kevin Jennings",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Notre Dame": {
+   "qb": "CJ Carr",
+   "status": "no change",
+   "source": "SI Betting, Week 12 2026 preview",
+   "note": "Carr named; no injury news"
+  },
+  "Stanford": {
+   "qb": "Davis Warren",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "California": {
+   "qb": "Jaron-Keawe Sagapolutele",
+   "status": "no change",
+   "note": "Probable tag; no 2026 injury news found"
+  },
+  "Colorado State": {
+   "qb": "Hauss Hejny",
+   "status": "reported",
+   "note": "Hejny playing; questionable tag (hamstring, Oct) looks stale"
+  },
+  "Fresno State": {
+   "qb": "Jayden Mandal",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "UTSA": {
+   "qb": "Owen McCown",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "UAB": {
+   "qb": "Ryder Burton",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Utah": {
+   "qb": "Devon Dampier",
+   "status": "no change",
+   "source": "SI Betting, Week 12 2026 preview",
+   "note": "Dampier named; no injury news"
+  },
+  "TCU": {
+   "qb": "Jaden Craig",
+   "status": "no change",
+   "note": "Probable tag; no new news"
+  },
+  "San Diego State": {
+   "qb": "Stone Saunders",
+   "status": "no change",
+   "note": "Saunders starter; Denegal doubtful"
+  },
+  "Boise State": {
+   "qb": "Maddux Madsen",
+   "status": "reported",
+   "source": "KPTV/AP, Nov 15 2026",
+   "note": "Madsen (knee) returned vs Oregon State, 371 yds 4 TD; questionable tag likely stale"
+  },
+  "Oklahoma State": {
+   "qb": "Drew Mestemaker",
+   "status": "no change",
+   "note": "Questionable tag but no injury news found"
+  },
+  "Arizona State": {
+   "qb": "Jake Fette",
+   "status": "no change",
+   "note": "Fette starter; Keene (knee) injured"
+  },
+  "Utah State": {
+   "qb": "McCae Hillstead",
+   "status": "reported",
+   "note": "Hillstead projected QB; questionable tag looks stale"
+  },
+  "Oregon State": {
+   "qb": "Maalik Murphy",
+   "status": "uncertain",
+   "source": "Yahoo Sports, Nov 16 2026; RotoWire, Nov 16 2026",
+   "note": "Atkinson (right hand) doubtful, being re-evaluated; coach said Murphy not guaranteed to start; alt Braden Atkinson"
+  },
+  "Hawai'i": {
+   "qb": "Micah Alejado",
+   "status": "uncertain",
+   "source": "Hawaii Sports Radio Network, Nov 18 2026",
+   "note": "Questionable after late injury vs NDSU; previews treat him as QB, no coach update; alt Bjorn Jurgensen"
+  },
+  "Nevada": {
+   "qb": "AJ Bianco",
+   "status": "reported",
+   "source": "RotoWire, Nov 16 2026",
+   "note": "Started win at NIU, likely starts; questionable (ankle earlier); Carter Jones (arm) out"
+  },
+  "Akron": {
+   "qb": "Cibastian Broughton",
+   "status": "confirmed",
+   "source": "VSiN, Nov 18 2026",
+   "note": "Broughton making 3rd straight start; site tag Questionable (knee) but playing"
+  },
+  "Ball State": {
+   "qb": "Keldric Luster",
+   "status": "no change",
+   "note": "No QB news found"
+  },
+  "Buffalo": {
+   "qb": "Jason Wright",
+   "status": "reported",
+   "source": "VSiN, Nov 18 2026",
+   "note": "Wright named QB in preview; Holmes out (knee)"
+  },
+  "Central Michigan": {
+   "qb": "Jadyn Glasser",
+   "status": "confirmed",
+   "source": "VSiN, Nov 18 2026",
+   "note": "Glasser starting; Angel Flores out"
+  },
+  "Eastern Michigan": {
+   "qb": "Brogan McCaughey",
+   "status": "reported",
+   "source": "Eastern Echo, Nov 2026 (CMU recap); WagerTalk, Nov 2026",
+   "note": "McCaughey started vs Central Michigan; Noah Kim (undisclosed) missed 2 games, questionable/uncertain to return; Jace Stuckey backup"
   },
   "Kent State": {
    "qb": "Dru DeShields",
    "status": "no change",
    "note": "No QB news found"
-  },
-  "Kentucky": {
-   "qb": "Kenny Minchey",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "LSU": {
-   "qb": "Sam Leavitt",
-   "status": "no change",
-   "note": "No new QB injury news"
-  },
-  "Liberty": {
-   "qb": "Deshawn Purdie",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Louisiana": {
-   "qb": "Lunch Winfield",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Louisiana Tech": {
-   "qb": "Blake Baker",
-   "status": "no change",
-   "note": "Baker (leg) probable"
-  },
-  "Louisville": {
-   "qb": "Lincoln Kienholz",
-   "status": "no change",
-   "note": "No new QB news"
-  },
-  "Marshall": {
-   "qb": "Carlos Del Rio-Wilson",
-   "status": "reported",
-   "source": "prior check, Nov 17",
-   "note": "Returned as starter vs App State Nov 14; Zion Turner alt; no new news"
-  },
-  "Maryland": {
-   "qb": "Cardell Williams",
-   "status": "uncertain",
-   "source": "Baltimore Sun/Yahoo Nov 16; DMV Sports Nov 18",
-   "note": "Malik Washington (left knee, questionable) remains named starter if he clears practice; Williams starts otherwise, both may play; alt Malik Washington"
   },
   "Massachusetts": {
    "qb": "Logan Inagawa",
@@ -317,125 +746,11 @@
    "source": "VSiN / Yahoo Sports, Nov 18 2026",
    "note": "Watson III (ankle) knocked out of Toledo loss, status unclear; UMass expected to go without him; alt William Watson III"
   },
-  "Memphis": {
-   "qb": "Marcus Stokes",
-   "status": "no change",
-   "source": "Eye On Annapolis, Nov 2026",
-   "note": "Stokes featured in preview; no injury"
-  },
-  "Miami": {
-   "qb": "Darian Mensah",
-   "status": "no change",
-   "note": "No QB news"
-  },
   "Miami (OH)": {
    "qb": "Drew Bellisari",
    "status": "uncertain",
    "source": "myMotherLode/AP, Nov 2026",
    "note": "True freshman Bellisari rallied win vs Ohio in debut; no Kent State starter named; alt Caleb Heavner; McComb out"
-  },
-  "Michigan": {
-   "qb": "Tommy Carr",
-   "status": "uncertain",
-   "source": "Heavy/Yahoo, Nov 16-17",
-   "note": "Whittingham: open competition this week between Carr and Bryce Underwood; no starter named; alt Bryce Underwood"
-  },
-  "Michigan State": {
-   "qb": "Cam Fancher",
-   "status": "uncertain",
-   "source": "Yahoo Sports / AP preview, Nov 18 2026",
-   "note": "Milivojevic (left arm) out; Fancher (right knee) questionable; no starter named; alt Kayd Coffman"
-  },
-  "Middle Tennessee": {
-   "qb": "Roman Gagliano",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Minnesota": {
-   "qb": "Drake Lindsey",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Mississippi State": {
-   "qb": "AJ Swann",
-   "status": "uncertain",
-   "source": "SI / Yahoo, Nov 17, 2026",
-   "note": "Swann questionable (left foot, boot); Lebby gave no update, nonconference game so no availability report; alt Parker Puckett, then Brodie McWhorter; Taylor out"
-  },
-  "Missouri": {
-   "qb": "Austin Simmons",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Missouri State": {
-   "qb": "Henry Belin IV",
-   "status": "no change",
-   "note": "No new injury news"
-  },
-  "NC State": {
-   "qb": "CJ Bailey",
-   "status": "no change",
-   "note": "No QB news; Will Wilson out"
-  },
-  "Navy": {
-   "qb": "Jackson Gutierrez",
-   "status": "no change",
-   "source": "Eye On Annapolis, Nov 2026",
-   "note": "Gutierrez featured in preview; no injury"
-  },
-  "Nebraska": {
-   "qb": "Anthony Colandrea",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Nevada": {
-   "qb": "AJ Bianco",
-   "status": "reported",
-   "source": "RotoWire, Nov 16 2026",
-   "note": "Bianco started win at NIU, likely starts vs Hawai'i; questionable (ankle earlier); Carter Jones (arm) out"
-  },
-  "New Mexico": {
-   "qb": "Toa Fa'avae",
-   "status": "no change",
-   "note": "No QB news found"
-  },
-  "New Mexico State": {
-   "qb": "Trey Hedden",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "North Carolina": {
-   "qb": "Billy Edwards Jr.",
-   "status": "uncertain",
-   "source": "Chatham Journal, Nov 17, 2026",
-   "note": "Edwards questionable (upper body, left Louisville game); Belichick 'getting better', no starter named; alt Travis Burgess"
-  },
-  "North Dakota State": {
-   "qb": "Nathan Hayes",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "North Texas": {
-   "qb": "Chris Jimerson Jr.",
-   "status": "confirmed",
-   "source": "Dallas Sports Journal, Nov 18, 2026",
-   "note": "Neal Brown named Jimerson starter Nov 17; Tayven Jackson out for regular season"
-  },
-  "Northern Illinois": {
-   "qb": "Taron Dickens",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Northwestern": {
-   "qb": "Nicco Marchiol",
-   "status": "uncertain",
-   "source": "Yahoo Sports, Nov 16 2026",
-   "note": "Chiles (upper body) missed 2 games, availability uncertain; Marchiol starts if Chiles out; alt Aidan Chiles"
-  },
-  "Notre Dame": {
-   "qb": "CJ Carr",
-   "status": "no change",
-   "note": "No QB news"
   },
   "Ohio": {
    "qb": "Nick Poulos",
@@ -443,302 +758,10 @@
    "source": "web search, Nov 17 2026",
    "note": "No 2026 QB news found"
   },
-  "Ohio State": {
-   "qb": "Luke Fahey",
-   "status": "reported",
-   "source": "prior check",
-   "note": "Fahey won first start; Sayin (elbow) out"
-  },
-  "Oklahoma": {
-   "qb": "John Mateer",
-   "status": "no change",
-   "note": "Only earlier hand-injury news"
-  },
-  "Oklahoma State": {
-   "qb": "Drew Mestemaker",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Old Dominion": {
-   "qb": "Jaxon Potter",
-   "status": "uncertain",
-   "source": "Rotowire, Nov 15",
-   "note": "Henicle back from injury; possible continued split; no starter named; alt Quinn Henicle"
-  },
-  "Ole Miss": {
-   "qb": "Trinidad Chambliss",
-   "status": "no change",
-   "note": "No new QB news; Probable per site tag"
-  },
-  "Oregon": {
-   "qb": "Dylan Raiola",
-   "status": "confirmed",
-   "source": "AP preview (921theticket), Nov 18 2026",
-   "note": "Raiola entrenched starter; Dante Moore apparently done for season"
-  },
-  "Oregon State": {
-   "qb": "Maalik Murphy",
-   "status": "uncertain",
-   "source": "RotoWire, Nov 14 & 16 2026",
-   "note": "Murphy started vs Boise (396 yds, 3 TD) with Atkinson (hand) out; Atkinson doubtful, no starter named for Utah State; alt Braden Atkinson"
-  },
-  "Penn State": {
-   "qb": "Rocco Becht",
-   "status": "no change",
-   "note": "No new QB injury news"
-  },
-  "Pittsburgh": {
-   "qb": "Corey Dailey",
-   "status": "reported",
-   "source": "prior check, Nov 2026",
-   "note": "Dailey started last two; Heintschel out for season; Geriner (thigh) questionable"
-  },
-  "Purdue": {
-   "qb": "Ryan Browne",
-   "status": "no change",
-   "note": "No QB injury news found"
-  },
-  "Rice": {
-   "qb": "Gael Ochoa",
-   "status": "no change",
-   "note": "No QB news found"
-  },
-  "Rutgers": {
-   "qb": "AJ Surace",
-   "status": "uncertain",
-   "source": "Yahoo/NorthJersey Nov 15; 247Sports Tuesday practice report Nov 17",
-   "note": "Surace questionable (3 broken ribs); Ashenfelder hurt vs Nebraska, no update; Schiano 'we'll see'; Lonergan out; alt Sean Ashenfelder/Jakob Anderson"
-  },
-  "SMU": {
-   "qb": "Kevin Jennings",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Sam Houston": {
-   "qb": "Landyn Locke",
-   "status": "no change",
-   "note": "No new 2026 QB news found"
-  },
-  "San Diego State": {
-   "qb": "Stone Saunders",
-   "status": "no change",
-   "note": "Saunders starter; Denegal doubtful"
-  },
-  "San José State": {
-   "qb": "Luke Weaver",
-   "status": "uncertain",
-   "source": "Stars and Stripes (AP), Nov 15 2026; RotoWire Oct 22 2026",
-   "note": "Rolovich had been starter, Weaver relieved at Air Force (11/24, 138); no starter named for UNLV; Weaver questionable; alt Daniel Rolovich"
-  },
-  "South Alabama": {
-   "qb": "Bishop Davenport",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "South Carolina": {
-   "qb": "Cutter Woods",
-   "status": "uncertain",
-   "source": "ClutchPoints, Nov 15 2026",
-   "note": "Sellers (ankle) questionable, sat vs Arkansas as not physically ready; may return vs Georgia; alt LaNorris Sellers"
-  },
-  "South Florida": {
-   "qb": "Luke Kromenhoek",
-   "status": "no change",
-   "source": "USF Oracle, Nov 16, 2026",
-   "note": "Kromenhoek started vs Memphis (4th start); Van Buren questionable, no update"
-  },
-  "Southern Miss": {
-   "qb": "John White",
-   "status": "reported",
-   "source": "prior check, Nov 17",
-   "note": "Starting since JMU; Ethan Hampton (hand) out"
-  },
-  "Stanford": {
-   "qb": "Davis Warren",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Syracuse": {
-   "qb": "Steve Angeli",
-   "status": "reported",
-   "source": "prior check",
-   "note": "No new injury news found this week; site tag Questionable; Odom out"
-  },
-  "TCU": {
-   "qb": "Jaden Craig",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Temple": {
-   "qb": "Jaxon Smolik",
-   "status": "confirmed",
-   "source": "prior check (Keeler named starter)",
-   "note": "Smolik named starter; Sheppard (ankle) questionable"
-  },
-  "Tennessee": {
-   "qb": "George MacIntyre",
-   "status": "reported",
-   "source": "Rotowire/Knoxville News Nov 16; Rocky Top Insider Nov 16",
-   "note": "Left Texas A&M game with right knee injury; on track for LSU, not expected to miss time; Heupel hasn't formally named starter; Faizon Brandon also playing"
-  },
-  "Texas": {
-   "qb": "Arch Manning",
-   "status": "no change",
-   "note": "No 2026 injury news"
-  },
-  "Texas A&M": {
-   "qb": "Marcel Reed",
-   "status": "no change",
-   "note": "No new QB injury news; Brady Hart has role"
-  },
-  "Texas State": {
-   "qb": "Brad Jackson",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Texas Tech": {
-   "qb": "Thomas Castellanos",
-   "status": "reported",
-   "source": "On3 Red Raider Sports, week of Nov 16",
-   "note": "Minor injury scare; Castellanos says tests 'came back clean'; expected to start at Baylor"
-  },
-  "Toledo": {
-   "qb": "John Alan Richter",
-   "status": "no change",
-   "source": "Predictem, Nov 2026",
-   "note": "Richter named as passer; no injury news"
-  },
-  "Troy": {
-   "qb": "Goose Crowder",
-   "status": "reported",
-   "source": "prior check, Nov 17",
-   "note": "Returned to start at South Alabama; probable (shoulder); alt Tucker Kilcrease"
-  },
-  "Tulane": {
-   "qb": "Trace Johnson",
-   "status": "no change",
-   "note": "No QB injury news"
-  },
-  "Tulsa": {
-   "qb": "Baylor Hayes",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "UAB": {
-   "qb": "Ryder Burton",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "UCF": {
-   "qb": "Alonza Barnett III",
-   "status": "reported",
-   "source": "Heartland College Sports, Nov 16 2026",
-   "note": "UCF moved back to Barnett; Keyone Jenkins (ankle) status unclear; Big 12 availability report pending"
-  },
-  "UCLA": {
-   "qb": "Ty Dieffenbach",
-   "status": "no change",
-   "note": "Starter since Nico Iamaleava season-ending knee injury"
-  },
-  "UConn": {
-   "qb": "Kalieb Osborne",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "UL Monroe": {
-   "qb": "Austin Carlisle",
-   "status": "no change",
-   "note": "No new QB news found; Armenta played 4th qtr vs Louisiana"
-  },
-  "UNLV": {
-   "qb": "Jackson Arnold",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "USC": {
-   "qb": "Jayden Maiava",
-   "status": "no change",
-   "note": "No Maiava injury news"
-  },
-  "UTEP": {
-   "qb": "Raymond Moore III",
-   "status": "no change",
-   "note": "No QB news; EJ Colson Jr. out"
-  },
-  "UTSA": {
-   "qb": "Owen McCown",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Utah": {
-   "qb": "Devon Dampier",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Utah State": {
-   "qb": "McCae Hillstead",
-   "status": "reported",
-   "source": "SportsLine projections, Nov 2026",
-   "note": "Hillstead projected QB; questionable tag looks stale"
-  },
-  "Vanderbilt": {
-   "qb": "Jared Curtis",
-   "status": "reported",
-   "source": "The Tennessean via Yahoo Sports, Nov 16 2026",
-   "note": "Curtis took hit vs Alabama, 'responding well', expected to practice; Berlowitz out"
-  },
-  "Virginia": {
-   "qb": "Beau Pribula",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Virginia Tech": {
-   "qb": "Ethan Grunkemeyer",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "Wake Forest": {
-   "qb": "Gio Lopez",
-   "status": "no change",
-   "note": "No new 2026 QB injury news found"
-  },
-  "Washington": {
-   "qb": "Demond Williams Jr.",
-   "status": "reported",
-   "source": "prior check; SI Week 12 preview names Williams",
-   "note": "Questionable-tagged, playing through rib injury; alt Elijah Brown"
-  },
-  "Washington State": {
-   "qb": "Owen Eshelman",
-   "status": "no change",
-   "note": "No QB news"
-  },
-  "West Virginia": {
-   "qb": "Michael Hawkins Jr.",
-   "status": "no change",
-   "note": "No injury news"
-  },
-  "Western Kentucky": {
-   "qb": "Rodney Tisdale Jr.",
-   "status": "uncertain",
-   "source": "WKU Herald / BG Daily News, Nov 13-14, 2026",
-   "note": "Tisdale started vs Jax State (first start since Oct 1), Glenn led rally and threw winning TD; no starter named; alt Brock Glenn"
-  },
   "Western Michigan": {
    "qb": "Broc Lowry",
    "status": "no change",
    "note": "No 2026 QB news found"
-  },
-  "Wisconsin": {
-   "qb": "Ryan Hopkins",
-   "status": "uncertain",
-   "source": "SI (Badgers On SI), Nov 16-17, 2026",
-   "note": "Hopkins questionable (shoulder/back, non-throwing side) after Maryland; Fickell hopeful, no starter named; alt Colton Joseph"
-  },
-  "Wyoming": {
-   "qb": "Landon Sims",
-   "status": "no change",
-   "note": "No new QB news; Tyler Hughes out (forearm)"
   }
  }
 }
