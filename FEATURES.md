@@ -3169,3 +3169,44 @@ Margin and total here are the model's game projection, not the market's. On 2026
 gap held for receiving rungs (88.9% v 79.2%, 126) and not for rushing (77.3% v 79.7%, 198). None of
 these is profitable; the underdog cell is a rung to avoid, the role-change cell the nearest to
 break-even. Each would need its own pre-set test on week 11 on before it means anything.
+
+## The ChatGPT review's follow-ups (Nov 19, 2026): one trade-off for Ryan, nothing applied
+
+Ryan shared a ChatGPT review done on copies of the repos. Its findings were re-run here under pre-set
+rules (Project docs `claude/plan-book-self-consistency-test-2026-11-19.md`,
+`claude/plan-cross-book-props-test-2026-11-19.md`, `claude/plan-chatgpt-player-changes-test-2026-11-19.md`;
+results `claude/book-consistency-tests-results-2026-11-19.md`,
+`claude/chatgpt-player-changes-test-results-2026-11-19.md`). Its code was not seen.
+
+**College quarterbacks on teams projected to lose by more than 7: a trade-off, 7 of 8**
+(`experiments/chatgpt_player_changes_test.py`). Term: passing yards minus b x (projected losing margin
+beyond 7), b fitted on earlier seasons (2.8 to 3.6 yards a point; 2.87 for 2026). Starters, all rows:
+RMSE 92.90 to 91.45 / 92.74 to 91.32 on tuning (game-day / bet-time), 88.30 to 86.47 (8.3 se) / 87.83 to
+86.15 (7.8 se) on the holdout. On the affected rows the projections ran 30 yards high (holdout bias
+−30.6 to −4.3). Brier at DK/FD passing lines: better in 2024 (−0.0018, −0.0020) and level in 2025
+(−0.00001, **+0.00005**, each well inside 0.003 se). The same term for favourites did nothing, as the
+review found. 2026 so far, affected rows: RMSE 89.9 to 83.0. Not applied: Ryan's call.
+
+**College TE / WR pull-down above 15 / 20 yards: not kept (6 of 8 and 5 of 8).** Fitted as the average
+miss, the constant is about half a yard: the projections are not high on players who record a stat.
+The review's 2.3 to 2.5 yards and its better "average error" come from receiving yards being skewed:
+moving a forecast towards the middle outcome (5.3 to 6.0 yards lower for tight ends, 7.3 to 8.3 for
+receivers) improves the average miss and worsens RMSE by 7 to 15 se. The boards already show that
+number as Typical.
+
+**The review's blended second estimate** is a pull towards the book's line, not a projection change; the
+college main-line nudge already does this in chance terms. Not tested.
+
+**The book against itself, and one book against the other (NFL, no model):** neither is a strategy
+(`experiments/book_self_consistency_test.py`, `experiments/cross_book_props_test.py`). A quarterback's
+passing line against his receivers' lines at the same book carries no information (Brier changes inside
+1 se, passing worse on the 2025 holdout). One book's main line priced off the other's: +0.7% ± 8.5%
+(2023-24) and +7.7% ± 9.6% (2025) at the pricing snapshot with closing line value −0.8% and −0.3%; with
+the previous seasons' lean, −13.9% and −7.5%. The review's replay (+6.0%, +14.8%) was not reproduced.
+Rungs priced off the other book: −29% on 2025, almost all long shots where the curve's tail is too fat;
+the one-bet-per-player rule crowded out the low rungs (25 picks), which would need their own test.
+
+**The college zero-catch gap the review found:** 620 targeted, no-catch player-games are missing from
+the 2026 archive, all of them players the board had not projected (`cfbmodel/archive.BOX` has no
+`targets`, so `nflmodel/archive.box_actuals` never sees the target). No projection score or prop grade
+is affected. Not fixed yet.
