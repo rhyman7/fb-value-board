@@ -100,6 +100,20 @@ def build_frame(games: pd.DataFrame, engine: CFBRatingEngine, verbose: bool = Fa
     return attach_game_features(df, games, inputs.get("defenders"), inputs.get("coach"))
 
 
+def market_residual(train: pd.DataFrame, feats: list[str], season: int) -> Linear | None:
+    """The market-residual margin (config.STACK_MARGIN): ridge of (result - line) on the margin
+    inputs plus the line, no intercept (swap the teams and everything flips sign), each training
+    season weighted 0.5 ** ((season - 1 - its season) / STACK_HALF_LIFE). The adjusted spread is
+    line + prediction, so each input earns its own weight against the market instead of one weight
+    for the whole model. None with too little history (the blend weight is used then)."""
+    if len(train) < 200:
+        return None
+    w = 0.5 ** ((season - 1 - train["season"].to_numpy(float)) / C.STACK_HALF_LIFE)
+    X = train[feats + ["spread_line"]].to_numpy(float)
+    y = (train["result"] - train["spread_line"]).to_numpy(float)
+    return Linear(C.STACK_ALPHA, intercept=False).fit(X, y, w)
+
+
 def walk_forward(df: pd.DataFrame, alpha: float = ALPHA_MARGIN, alpha_total: float = ALPHA_TOTAL, margin_feats: list[str] | None = None,
                  total_feats: list[str] | None = None) -> tuple[pd.DataFrame, dict]:
     MF = MARGIN_FEATS if margin_feats is None else margin_feats
@@ -126,11 +140,18 @@ def walk_forward(df: pd.DataFrame, alpha: float = ALPHA_MARGIN, alpha_total: flo
         df.loc[test, "proj_total"] = df.loc[test, "model_total"]
         hl = test & df["spread_line"].notna()
         df.loc[hl, "proj_margin"] = df.loc[hl, "spread_line"] + wm * (df.loc[hl, "model_margin"] - df.loc[hl, "spread_line"])
+        stack = None
+        if C.STACK_MARGIN:
+            stack = market_residual(df[(df.season < s) & df.played & df["spread_line"].notna()], MF, s)
+            if stack is not None and hl.any():
+                df.loc[hl, "proj_margin"] = df.loc[hl, "spread_line"] + stack.predict(df.loc[hl, MF + ["spread_line"]].to_numpy(float))
         ht = test & df["total_line"].notna()
         df.loc[ht, "proj_total"] = df.loc[ht, "total_line"] + wt * (df.loc[ht, "model_total"] - df.loc[ht, "total_line"])
         info[int(s)] = {"margin_coefs": m.raw_coefs(MF), "total_coefs": t.raw_coefs(TF),
                         "total_intercept": round(float(t.y0 - (t.mu / t.sd) @ t.beta), 4),
                         "margin_feats": list(MF), "total_feats": list(TF),
                         "margin_c": [float(x) for x in m.beta / m.sd], "total_c": [float(x) for x in t.beta / t.sd],
-                        "w_margin": round(wm, 3), "w_total": round(wt, 3), "n_train": int(len(train))}
+                        "w_margin": round(wm, 3), "w_total": round(wt, 3), "n_train": int(len(train)),
+                        "stacked": stack is not None,
+                        "stack_coefs": stack.raw_coefs(MF + ["spread_line"]) if stack is not None else None}
     return df[df.season >= FIRST_OOS], info
