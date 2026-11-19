@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-18T23:23Z",
+ "fetched": "2026-11-19T00:23Z",
  "today": "2026-11-18",
  "teams": {
   "Akron": {
@@ -110,6 +110,142 @@
      "number": "99",
      "status": "Out",
      "season_out": false
+    }
+   ]
+  },
+  "Buffalo": {
+   "conf": "MAC",
+   "abbr": "BUFF",
+   "report": "Game Day",
+   "published": "2026-11-18",
+   "posted": "18:30:00",
+   "game_date": "2026-11-18",
+   "game_time": "19:30:00",
+   "opponent": "Central Michigan",
+   "players": [
+    {
+     "name": "Ramari Taylor",
+     "pos": "CB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Elijah Holmes",
+     "pos": "QB",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jeremiah Watkins",
+     "pos": "WR",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "DJ Mangan",
+     "pos": "LB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chase Enlow",
+     "pos": "RB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dylan Cleary",
+     "pos": "S",
+     "number": "38",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jack Garbolino",
+     "pos": "LB",
+     "number": "52",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Mason Nickel",
+     "pos": "DT",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jackson Bellamy",
+     "pos": "OL",
+     "number": "69",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Nino Francavilla",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Charlton Goodell",
+     "pos": "DT",
+     "number": "96",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Central Michigan": {
+   "conf": "MAC",
+   "abbr": "CMU",
+   "report": "Game Day",
+   "published": "2026-11-18",
+   "posted": "18:30:00",
+   "game_date": "2026-11-18",
+   "game_time": "19:30:00",
+   "opponent": "Buffalo",
+   "players": [
+    {
+     "name": "Hunter Zirkle",
+     "pos": "DL",
+     "number": "6",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Angel Flores",
+     "pos": "QB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tommy McIntosh",
+     "pos": "WR",
+     "number": "15",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "James Reinbold",
+     "pos": "DL",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joey VanWetzinga",
+     "pos": "DL",
+     "number": "95",
+     "status": "Out",
+     "season_out": true
     }
    ]
   },
