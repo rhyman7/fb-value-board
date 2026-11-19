@@ -225,6 +225,30 @@ Monday open (13-12, CLV −2.6% ± 1.4%, 32% beat the close) and 17 at the close
 the open they did not hold their value: college retail totals that look better than Pinnacle's
 early in the week mostly mean Pinnacle moves first.
 
+## Market-residual margin (Nov 19, 2026): an 11-of-12 trade-off, applied provisionally (Ryan's call)
+
+Plan written before the run (Project doc `claude/plan-fresh-eyes-structure-tests-2026-11-19.md`), results in
+`claude/fresh-eyes-structure-test-results-2026-11-19.md`; run with the PFF data. The board's two steps (ridge on
+the result, then one weight toward the model) were replaced by one ridge of **result minus closing line** on the
+margin inputs plus the line (S1), without the team ratings (S2), recency-weighted training seasons (S3), and S1
+with S3 (S4); totals the same way (T1). Rule: better on average miss, RMS miss and side win rate on 2017-19 and
+2021-25, holdout miss by 1+ SE, and better average miss on the bet-time frame (last week's QB, no injuries).
+
+| S4 (half-life 4 seasons, penalty 500) vs the board | 2017-19 | 2021-25 | 2026 (not in the rule) |
+|---|---|---|---|
+| Average miss | -0.021 | -0.024 ± 0.022 | -0.076 |
+| RMS miss | -0.041 | -0.013 | -0.128 |
+| Side win rate, every game (as the rule counts) | -0.1 pt | +1.2 pt | +3.4 pt |
+| Side win rate, same games | 53.8% vs 53.3% (1,455) | 52.9% vs 51.7% (3,732) | 51.7% vs 48.3% (625) |
+| Bet-time average miss | -0.035 | -0.024 | -0.014 |
+
+The one measure short is the 2017-19 side win rate as the rule counted it: in 2017 the board's weight was 0, so
+its projection was the line and had no side, while S4's did. On the same games S4 is better. S1 and S2 were close
+behind S4, S3 alone changed nothing, and T1 was worse on totals. College player projections with S4's margin moved
+by under 0.01 yards in every stat and period. The NFL versions of all five were within a standard error of the
+board and nothing changed there (FEATURES.md is unchanged). In the 2026 fit the quarterback inputs and returning
+production carry the weight; points, talent and the market-implied ratings get almost none.
+
 ## Not tested yet
 
 - The wind feature graded on forecasts instead of recorded wind (needs a season of the

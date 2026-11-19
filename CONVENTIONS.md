@@ -706,6 +706,17 @@ boards in detail; this file is the rules.
     `flags_on` is false and nothing is flagged. Display only: it never feeds the model, the bets,
     the Bet sheet or the Parlays page.
   Never edit past weeks by hand; the files are rebuilt from the logs.
+- **College market-residual margin** (Nov 19, 2026, provisional, Ryan's call on an 11-of-12 trade-off;
+  CFB_FEATURES.md "Market-residual margin"; Project docs `claude/plan-fresh-eyes-structure-tests-2026-11-19.md`,
+  `claude/fresh-eyes-structure-test-results-2026-11-19.md`): `cfbmodel/model.market_residual`. With
+  `cfbmodel/config.STACK_MARGIN = True` the college adjusted spread (`proj_margin`) for games priced at the
+  current line is the line plus a ridge fit of (result - line) on `MARGIN_FEATS` and the line, no intercept,
+  each training season weighted 0.5 ** (age / `STACK_HALF_LIFE` = 4), penalty `STACK_ALPHA` = 500. The raw
+  model (`model_margin`), its breakdown, totals and early lines (the opener weight, `pipeline.py`) are
+  unchanged; `w_margin` is still measured and shown for early lines and as the fallback. The page wording
+  follows `meta.blend.stacked` (`site/make_cfb_template.py`). Don't change the penalty or half-life without a
+  new pre-set test. Rechecked in January on 2026 (Project doc `claude/january-recheck-additions.md`);
+  `STACK_MARGIN = False` puts the board back as it was. NFL not changed (nothing passed there).
 - **College QB rushing chance shift** (Nov 13, 2026, provisional; FEATURES.md "Correcting the college QB
   rushing chance", `experiments/cfb_qb_rush_calibration_test.py`): `data/cfb/prop_params.json` carries
   `"chance_shift": {"rush_yds|QB": 0.30}`, a logit shift on the chance of the over that

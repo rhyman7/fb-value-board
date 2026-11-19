@@ -50,6 +50,15 @@ QB_HALF_LIFE_DROPBACKS = 1400.0
 
 TOTAL_WEIGHT_CAP = 0.05
 BLEND_LOOKBACK = 8
+# Market-residual margin (Nov 19, 2026, Ryan's call on an 11-of-12 trade-off; provisional, January
+# recheck): the adjusted spread is the line plus a ridge fit of (result - line) on the margin inputs
+# and the line itself, each training season weighted 0.5 ** (age / STACK_HALF_LIFE). Replaces the one
+# blend weight for games priced at the current line; early lines keep the opener weight. CFB_FEATURES.md
+# "Market-residual margin"; Project docs claude/plan-fresh-eyes-structure-tests-2026-11-19.md and
+# claude/fresh-eyes-structure-test-results-2026-11-19.md. False restores the blend weight.
+STACK_MARGIN = True
+STACK_ALPHA = 500.0
+STACK_HALF_LIFE = 4.0
 EARLY_DAYS = 4
 
 KELLY_FRACTION = 0.25
