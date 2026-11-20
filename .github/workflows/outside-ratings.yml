@@ -1,0 +1,49 @@
+name: Outside ratings
+
+# Outside computer predictions for college football from The Prediction Tracker's season
+# archive (every tracked system's predicted margin for every game, recorded before kickoff),
+# for the pre-set test experiments/cfb_outside_ratings_test.py (Project doc
+# claude/plan-cfb-outside-ratings-test-2026-11-20.md). Run by hand only, from main. About 15
+# requests, under a minute. Adds files under data/cfb/outside/ and nothing else: no model,
+# board or scheduled-task change, and no Odds API credits.
+
+on:
+  workflow_dispatch:
+    inputs:
+      first:
+        description: "First season to fetch"
+        default: "2015"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: board-commits
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch
+        timeout-minutes: 10
+        continue-on-error: true
+        env:
+          FIRST: ${{ inputs.first }}
+        run: python experiments/fetch_outside_ratings.py --from "${FIRST:-2015}"
+      - name: Commit
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cfb/outside
+          git diff --cached --quiet || git commit -m "Outside ratings: Prediction Tracker season files"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin HEAD:"$GITHUB_REF_NAME"

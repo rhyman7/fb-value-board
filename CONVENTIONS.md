@@ -147,6 +147,15 @@ boards in detail; this file is the rules.
   2025 only, scored on 2026 weeks 8-13; `claude/plan-market-ladder-test-2026-11-18.md`).
   Never edit or refit a frozen file; the script refuses to overwrite one. Only coefficients go
   here, never PFF rows. The boards do not read these files.
+- The **Outside ratings** Action (`outside-ratings.yml`, by hand only) runs
+  `experiments/fetch_outside_ratings.py` and commits only `data/cfb/outside/`: The Prediction
+  Tracker's college season files (`ncaa<season>.csv`, every tracked system's predicted margin per
+  game, recorded before kickoff), this week's file under `live/<date>.csv` (kept so the archive can
+  be checked for after-the-fact revisions) and `manifest.json` (source, time, sha256, columns per
+  file). The files are saved byte for byte as served; never edit them. They exist for the pre-set
+  test in the Project doc `claude/plan-cfb-outside-ratings-test-2026-11-20.md`; the boards and the
+  model do not read them. The source says its predictions are for research and informational use,
+  so nothing built on these files goes into a product that is sold until the data-rights check.
 - The **Wind history** Action (`wind-history.yml`, by hand only) runs
   `experiments/fetch_wind_history.py` and commits only `data/cache/wind_history.csv`: the
   archive wind at kickoff (speed, gusts, direction, along-field and crosswind parts) for
