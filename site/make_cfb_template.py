@@ -31,7 +31,6 @@ sub('const MANUAL_DIR = "manual";', 'const MANUAL_DIR = "../manual";')
 sub('href="../favicon', 'href="../../favicon', 2)   # icons: docs/cfb/ is one folder deeper than docs/
 sub('href="../apple-touch-icon', 'href="../../apple-touch-icon')
 sub('<i aria-hidden="true"></i>NFL Value Board</a>', '<i aria-hidden="true"></i>College Value Board</a>')
-sub('        <li><a href="cfb/" data-view="cfb">College board</a></li>\n', '        <li><a href="../" data-view="nfl">NFL board</a></li>\n')
 sub(' | NFL Value Board"; }', ' | College Value Board"; }', 2)   # game page, matchups board
 sub(' | NFL Value Board`;', ' | College Value Board`;')              # one matchup (this week or a past week)
 sub('document.title = "NFL Value Board";', 'document.title = "College Value Board";')
