@@ -101,7 +101,11 @@ def box_actuals(b: pd.DataFrame, cols: list, projected: set, pid, meta) -> dict:
         i = pid(row)
         line = {k: float(getattr(row, k)) for k in cols}
         if i not in projected:
-            if line.get("pass_att", 0) + line.get("carries", 0) + max(line.get("targets", 0), line.get("receptions", 0)) < 1:
+            # the target is read from the row itself: the college column list has no "targets", and without it
+            # a receiver who was targeted and caught nothing was left out (620 player-games in 2026, Nov 19, 2026)
+            tgt = line.get("targets", getattr(row, "targets", 0))
+            tgt = 0.0 if tgt is None or tgt != tgt else float(tgt)
+            if line.get("pass_att", 0) + line.get("carries", 0) + max(tgt, line.get("receptions", 0)) < 1:
                 continue
             m = meta(row) or {}
             name = str(m.get("name") or "").strip()
