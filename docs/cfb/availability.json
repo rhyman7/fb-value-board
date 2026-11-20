@@ -1,6 +1,87 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-20T20:23Z",
+ "fetched": "2026-11-20T21:45Z",
  "today": "2026-11-20",
- "teams": {}
+ "teams": {
+  "Iowa State": {
+   "conf": "Big 12",
+   "abbr": "ISU",
+   "report": "Game Day",
+   "published": "2026-11-20",
+   "posted": "15:30:00",
+   "game_date": "2026-11-20",
+   "game_time": "17:00:00",
+   "opponent": "UCF",
+   "players": [
+    {
+     "name": "Cody Jackson",
+     "pos": "WR",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Connor Moberly",
+     "pos": "QB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carson Willich",
+     "pos": "LB",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Malcolm Watkins",
+     "pos": "WR",
+     "number": "80",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ka'Mori Moore",
+     "pos": "DT",
+     "number": "95",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "UCF": {
+   "conf": "Big 12",
+   "abbr": "UCF",
+   "report": "Game Day",
+   "published": "2026-11-20",
+   "posted": "15:30:00",
+   "game_date": "2026-11-20",
+   "game_time": "17:00:00",
+   "opponent": "Iowa State",
+   "players": [
+    {
+     "name": "Horace Lockett",
+     "pos": "DT",
+     "number": "0",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Demari Henderson",
+     "pos": "DB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jayden Jennings",
+     "pos": "LB",
+     "number": "38",
+     "status": "Game Time Decision",
+     "season_out": false
+    }
+   ]
+  }
+ }
 }
