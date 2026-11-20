@@ -3229,3 +3229,22 @@ the one-bet-per-player rule crowded out the low rungs (25 picks), which would ne
 the 2026 archive, all of them players the board had not projected (`cfbmodel/archive.BOX` has no
 `targets`, so `nflmodel/archive.box_actuals` never sees the target). No projection score or prop grade
 is affected. Not fixed yet.
+
+## NFL: an underdog term in the yardage projections (Nov 19, 2026): passing a trade-off (4 of 6), nothing applied
+
+Leads: the college big-underdog quarterback term the same day, and the floor-rung diagnosis's cell (rungs
+on teams projected to lose by 7+ clearing under the books' prices). Rule written first (Project doc
+`claude/plan-nfl-underdog-term-test-2026-11-19.md`); `experiments/nfl_underdog_term_test.py`. Term:
+projection minus b x (projected losing margin beyond T), b fitted on earlier seasons; T = 7, 3 or 0.
+
+**Passing yards: a trade-off, better on 4 of 6, worse at the lines.** All three versions were better on
+tuning; T = 0 was chosen (about 2.9 yards a point). RMSE 87.95 to 87.55 / 89.15 to 88.33 on 2014-18
+(game-day / bet-time) and 88.30 to 86.97 (6.3 SE) / 86.24 to 85.25 (4.3 SE) on 2019-25. Underdog
+quarterbacks ran 21.6 yards high on the holdout (6.4 after). **Brier at the 2023-25 DK/FD lines was
+worse both ways: +0.0042 ± 0.0018 at the close and +0.0039 ± 0.0019 at the pricing snapshot.** The
+average over every quarterback row includes early exits and benchings; against a posted line the lower
+number called the side worse. Not applied.
+
+**Rushing and receiving yards: nothing.** No version was better on both tuning measures; the projections
+are level for underdogs (rushing +1.1 to −0.3 yards by margin, receiving +0.6 to −1.2). The rung
+diagnosis's underdog cell is therefore about the books' rung prices, not about these projections.
