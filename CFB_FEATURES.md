@@ -450,3 +450,40 @@ trend, so it may be marking teams that are coming apart (mid-season opt-outs and
 than a coverage effect. It uses who actually played, which college books and bettors mostly could
 not know before 2024's availability reports. A lead for a bet-time test on the official reports
 (`docs/cfb/availability.json`, 2026 only so far), not a change.
+
+## An early-season rule for spread bets (Nov 20, 2026): fails its first check; nothing changes
+
+Lead: Ryan's question whether leaving out weeks 1-4 improves the percentages. An after-the-fact look
+at every game's side said yes by 1.0 to 2.2 points in three periods (Project doc
+`claude/cfb-weeks-1-4-look-2026-11-20.md`); "Where the edge lives" above had the same pattern on
+2021+ flagged bets and the opposite on 2017-19. Rule written first (Project doc
+`claude/plan-cfb-early-season-rule-test-2026-11-20.md`); `experiments/cfb_early_season_rule_test.py`,
+committed before its first run (a9f0095; an import fix followed before any number was produced).
+
+Bets: today's board number (the market-residual margin) T+ points off the closing spread, and the
+bet-time raw model T+ off the opening spread (2021 on, short weeks out), at −110. T was fixed from bet
+counts alone: 2+ left only 118 tuning bets in weeks 1-4, so T = 1 for every cell.
+
+| At 1+ | Weeks 1-4 | Weeks 5+ |
+|---|---|---|
+| Close, 2017-19 | 164-125, 56.7%, +8.2% ± 5.5% | 493-416, 54.2%, +3.5% ± 3.1% |
+| Close, 2021-25 | 246-235, 51.1%, −2.3% ± 4.3% | 735-600, 55.1%, +5.0% ± 2.6% |
+| Opener, 2021-25 | 412-424, 49.3%, −5.8% ± 3.2% | 1,048-921, 53.2%, +1.6% ± 2.1% |
+| Close, 2026 so far | 27-37, 42.2%, −18.9% ± 11.5% | 82-61, 57.3%, +9.2% ± 7.7% |
+| Opener, 2026 so far | 84-87, 49.1%, −6.1% ± 7.2% | 161-151, 51.6%, −1.5% ± 5.3% |
+
+**Check 1 fails:** on 2017-19 the early weeks returned more than the rest (gap −4.7 points), so by the
+rule nothing goes further. Checks 2 to 4 hold: on 2021-25 weeks 5+ beat weeks 1-4 by 7.3 points of
+return at the close (± 5.0) and 7.4 at the opener, and 2026 so far agrees at both lines.
+
+Reported, not used. The tuning check depends on the threshold: at 2+ (+7.8% against +3.7%) and at
+0.5+ (+2.6% against −0.7%) weeks 5+ were ahead on 2017-19 too; only at the 1+ the counts rule chose
+were they behind. So 2017-19 neither confirms nor contradicts the pattern; it is too thin to say.
+Opener bets beat the close by about 0.45 points in both parts of the season, so the early-week
+losses are not for lack of line movement. Weeks 5-9 against 10+ show no steady order.
+
+Reading: every season since 2021 points the same way and one plausible cause dates from then (the
+one-time transfer rule and NIL, both 2021, make early-season rosters harder to rate from last year),
+but that is a story fitted after the fact, and the rule set beforehand says stop. College sides are
+unstaked, so nothing is lost by waiting. The honest next test is 2027's weeks 1-4, named now: flagged
+spread bets at 1+ in weeks 1-4 will return less than in weeks 5+, at the close and at the opener.
