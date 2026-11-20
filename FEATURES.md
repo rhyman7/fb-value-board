@@ -3248,3 +3248,36 @@ number called the side worse. Not applied.
 **Rushing and receiving yards: nothing.** No version was better on both tuning measures; the projections
 are level for underdogs (rushing +1.1 to −0.3 yards by margin, receiving +0.6 to −1.2). The rung
 diagnosis's underdog cell is therefore about the books' rung prices, not about these projections.
+
+## College: outside computer ratings as an input to the margin model (Nov 20, 2026): not kept; worse on the holdout
+
+Lead: public college models on GitHub that feed ESPN FPI and other ratings into their spread model.
+Rule written first (Project doc `claude/plan-cfb-outside-ratings-test-2026-11-20.md`);
+`experiments/cfb_outside_ratings_test.py`, committed before its first run (dd66a74). Data: The
+Prediction Tracker's season files, 2015-2026, fetched by the Outside ratings Action into
+`data/cfb/outside/` (data checks: `claude/cfb-outside-ratings-step0-data-checks-2026-11-20.md`).
+**Run conditionally** (Ryan's choice): the check that the source does not revise predictions after
+games could not be done before the run. A revision leak would flatter the idea, and it lost anyway.
+
+The change: one new input in the market-residual margin fit, the outside prediction minus the closing
+spread. A = the file's average of all systems; B = the 23 systems present every season (FPI, Sagarin,
+Massey and others); C = A plus a separate weight for weeks 1-4.
+
+**Tuning 2017-19 (2,206 games):** every version moved the average miss by under 0.006 points, all inside
+one standard error. A was better on 4 of 6 measures, B on 5, C on all 6 (miss 12.174 to 12.169; side of
+the closing line 53.1% to 53.4%; bet-time miss 12.169 to 12.163), so C went to the holdout.
+
+**Holdout 2021-25 (3,755 games), version C: worse on 5 of 6.** Average miss 12.087 to 12.098
+(+0.011 ± 0.007); side of the closing line 52.9% to 51.7% on 3,732; bet-time miss 12.113 to 12.127
+(+0.014 ± 0.006), bet-time side 52.4% to 51.1%. Only the RMS miss was better (15.266 to 15.262).
+Weeks 1-4, where the extra weight was aimed, were the worst part: miss +0.054 ± 0.020, side 52.0% to
+49.1%. The early-season weight flipped sign across seasons (+0.29 in the 2019 fit, −0.18 in 2026),
+which is what fitting noise looks like.
+
+**2026 so far (634 games):** miss 11.732 to 11.744 (+0.013 ± 0.014), side 51.7% to 53.0%.
+
+By the rule this is a trade-off on the count (7 of 12) and it fails where it matters: the holdout miss
+is worse by more than one standard error. Not applied. The fitted weight on the outside gap is small
+and positive (0.07 to 0.18), so the public ratings carry a little signal the line has not fully
+absorbed, but not enough to survive out of sample at this model's size. Measures: the plan's text named
+four kinds while saying twelve; the script used the stricter twelve (miss, RMS, side on both frames).
