@@ -179,6 +179,8 @@ def main():
                 r["verdict"] = ("PASSES the keep rule (provisional; one of twelve chances)" if n == 6 and one_se
                                 else "Trade-off: better on all six, a holdout gain under 1 SE" if n == 6 else f"Trade-off: better on {n} of 6")
             res[f"{sit} | {st}"] = r
+            OUT.parent.mkdir(exist_ok=True)
+            OUT.write_text(json.dumps(res, indent=1, default=str))     # saved after every cell: the run is long
             t = r["tuning"]
             print(f"{sit} | {st}: tuning game-day {t['gameday']['diff']:+.4f} ± {t['gameday']['se']:.4f}, bet-time {t['bettime']['diff']:+.4f}; "
                   f"affected {r['affected_tuning'].get('n')} rows, bias {r['affected_tuning'].get('bias_now')}; {r['verdict']}", flush=True)

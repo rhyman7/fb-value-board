@@ -487,3 +487,90 @@ one-time transfer rule and NIL, both 2021, make early-season rosters harder to r
 but that is a story fitted after the fact, and the rule set beforehand says stop. College sides are
 unstaked, so nothing is lost by waiting. The honest next test is 2027's weeks 1-4, named now: flagged
 spread bets at 1+ in weeks 1-4 will return less than in weeks 5+, at the close and at the opener.
+
+## A batch run while Ryan was away (Nov 20, 2026): the opener edge was real through 2020 and is gone since; nothing kept
+
+Plan with every rule, written before any run: Project doc `claude/plan-batch-tests-2026-11-20.md`. All
+scripts were committed (817cb1f) before any of them ran. Results doc:
+`claude/batch-tests-results-2026-11-20.md`. Nothing on the board changes.
+
+### T1. Opening spreads back to 2015 (`experiments/cfb_openers_2015_test.py`): a diagnostic
+
+The Prediction Tracker's season files (`data/cfb/outside/`) carry an opening spread for every season; the
+board's own openers start in 2021. Validation on 2021-25 (3,545 games): correlation 0.990 with the
+board's opener, average gap 0.98 points, 55% within half a point. It passes the pre-set bar (0.97,
+under 1 point) narrowly, so the two are similar openers, not the same number. On 2021-25 they grade
+alike: 2+ off the file's opener 1,043-943 (52.5%), off the board's own 1,076-959 (52.9%).
+
+The bet-time raw model 2+ points off the opener, at −110 at the opener, short weeks out:
+
+| Period | 2+ | 3+ | CLV at 2+ |
+|---|---|---|---|
+| 2017-19 | 648-489, 57.0%, +8.6% ± 2.7% | 460-334, 57.9%, +10.4% ± 3.3% | +0.79 pts |
+| 2020 | 163-125, 56.6%, +8.0% ± 5.5% | 127-94, 57.5%, +9.6% ± 6.3% | +1.81 |
+| 2021-25 | 1,043-943, 52.5%, +0.3% ± 2.1% | 730-656, 52.7%, +0.5% ± 2.5% | +0.69 |
+| 2026 so far | 182-163, 52.8%, +0.7% ± 5.1% | 132-130, 50.4%, −3.8% ± 5.9% | +1.53 |
+
+By the reading fixed beforehand, 2017-19 is above 0% at both thresholds: a second period behind the
+opener edge. **The fuller reading is that the edge was there through 2020 and has not been since 2021.**
+2017-19 are the seasons the rating settings were chosen on (against results, not openers), which
+flatters them somewhat, but 2020 is in neither set and shows the same +8%. From 2021 the line still
+moves toward the model by about as much (CLV +0.7 points) and the bets no longer win.
+
+The early weeks carry the change. At 2+ off the opener:
+
+| Period | Weeks 1-4 | Weeks 5+ |
+|---|---|---|
+| 2017-19 | 205-133, 60.7%, +15.4% ± 5.0% | 443-356, 55.4%, +5.7% ± 3.3% |
+| 2021-25 | 322-327, 49.6%, −5.2% ± 3.7% | 721-616, 53.9%, +2.9% ± 2.6% |
+| 2026 so far | 63-67, 48.5%, −7.5% ± 8.4% | 119-96, 55.3%, +5.6% ± 6.4% |
+
+Weeks 1-4 went from the best part of the season to the worst. That fits the early-season test above:
+its 2017-19 check failed because early weeks used to be good, and they have been bad every season
+since 2021. The one-time transfer rule and NIL both date from 2021; a preseason rating built on last
+year's team is worth less than it was. That is still a story fitted afterwards. Weeks 5+ are positive
+in all three periods (+5.7%, +2.9%, +5.6%), none of them far from zero on its own.
+
+### T2. A separate early-season weight (`experiments/cfb_early_weight_test.py`): fails on tuning
+
+A (separate market-residual fits for weeks 1-4 and 5+) was better on 1 of 6 tuning measures (miss
+12.174 to 12.198). B (the board's move off the line scaled by k in weeks 1-4, k learned from earlier
+seasons' early weeks) was better on 0 of 6: its k was 1.0 to 1.5 through the 2021 fit, so on 2017-19 it
+changed almost nothing. Nothing went to the holdout. Reported: k has been 0.61 to 0.72 in every fit
+since 2022, the data's own estimate that the early-week number deserves about two-thirds of its
+weight now, and on 2026's weeks 1-4 B's miss was 11.129 to 11.085 (−0.044 ± 0.025).
+
+### T3. A market weight from recent accuracy, nfelo's idea (`experiments/recent_accuracy_weight_test.py`): fails on tuning
+
+Board number + c × (raw model − line) × the two teams' recent edge over the line. On 2017-19 all three
+versions made the average miss worse (+0.002 to +0.008) and none was better on all three measures.
+The fitted c is negative in most seasons: the opposite of nfelo's direction.
+
+### T5. Does a bigger gap win more? (`experiments/gap_size_diagnostic.py`): only at 2+
+
+| Board number off the closing spread by | 2017-19 | 2021-25 | 2026 so far |
+|---|---|---|---|
+| under 0.5 | 269-240, 52.8% | 519-470, 52.5% | 119-114, 51.1% |
+| 0.5 to 1 | 224-230, 49.3% | 444-432, 50.7% | 92-89, 50.8% |
+| 1 to 2 | 382-325, 54.0% | 607-558, 52.1% | 90-77, 53.9% |
+| 2 or more | 275-216, 56.0%, +6.8% ± 4.2% | 374-277, 57.5%, +9.5% ± 3.6% | 19-21, 47.5% |
+
+The 2+ bucket stands out in both older periods; below it the gap does not rank bets (0.5 to 1 is the
+worst bucket in both). 2026 has 40 such games and they are 19-21.
+
+### T6. The board number at real closing prices, 2024-25 (`experiments/cfb_board_real_prices.py`): does not survive
+
+The side of the board's number, by its gap from Pinnacle's closing spread, bet at the better of
+DraftKings' and FanDuel's closing line:
+
+| Gap | DraftKings/FanDuel | Pinnacle | Consensus at −110 |
+|---|---|---|---|
+| any | 837-726, 53.6%, +1.8% ± 2.4% | 809-725, +2.2% ± 2.4% | 773-704, −0.1% ± 2.4% |
+| 1+ | 424-359, 54.2%, +2.9% ± 3.4% | 406-358, +2.9% ± 3.4% | 379-340, +0.6% ± 3.5% |
+| 2+ | 148-134, 52.5%, −0.3% ± 5.6% | 142-134, −0.3% ± 5.6% | 126-114, +0.2% ± 6.0% |
+
+By the reading fixed beforehand (above 0% at both 1+ and 2+), it fails at 2+: the 57% at 2+ on consensus
+lines is not there at real prices in 2024-25 (2024 was 82-60, 2025 was 66-74). Every row is within
+about one standard error of zero. Taking the better of two books' lines was worth about 2 points of
+return over the consensus line on the same sides, which is line shopping, not the model. No 2026
+backfill exists to add.
