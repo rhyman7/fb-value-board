@@ -31,11 +31,11 @@ import json
 import re
 import sys
 import time
+import urllib.error
+import urllib.request
 import urllib.robotparser
 from pathlib import Path
 from urllib.parse import urljoin
-
-import requests
 
 BASE = "https://www.thepredictiontracker.com/"
 ARCHIVE = BASE + "ncaaarchive.html"
@@ -88,24 +88,38 @@ def describe(text: str) -> dict:
 
 
 class Fetcher:
+    """Standard library only (like the repo's other fetch scripts), so the Action needs no
+    package beyond requirements.txt."""
+
     def __init__(self):
-        self.s = requests.Session()
-        self.s.headers["User-Agent"] = UA
         self.robots = urllib.robotparser.RobotFileParser()
         self.robots_ok = False
         self._last = 0.0
 
     def load_robots(self) -> None:
+        status, body = self._open(BASE + "robots.txt", 30)
+        if status == 200:
+            self.robots.parse(body.decode("latin-1").splitlines())
+            self.robots_ok = True
+        elif status in (401, 403):      # a refusal is treated as "not allowed", as robots.txt rules say
+            print(f"robots.txt answered HTTP {status}; stopping", file=sys.stderr)
+        elif status is not None and 400 <= status < 500:   # no robots.txt: nothing is disallowed
+            self.robots.parse([])
+            self.robots_ok = True
+        else:
+            print(f"robots.txt could not be read ({body.decode('latin-1', 'replace') or status}); stopping", file=sys.stderr)
+
+    @staticmethod
+    def _open(url: str, timeout: int) -> tuple[int | None, bytes]:
+        """(HTTP status, body); (None, the error text) when the site could not be reached."""
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
         try:
-            r = self.s.get(BASE + "robots.txt", timeout=30)
-            if r.status_code == 200:
-                self.robots.parse(r.text.splitlines())
-                self.robots_ok = True
-            else:                       # no robots.txt: nothing is disallowed
-                self.robots.parse([])
-                self.robots_ok = True
-        except requests.RequestException as e:
-            print(f"robots.txt could not be read ({e}); stopping", file=sys.stderr)
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                return r.status, r.read()
+        except urllib.error.HTTPError as e:
+            return e.code, b""
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            return None, str(e).encode("latin-1", "replace")
 
     def get(self, url: str) -> str | None:
         if not self.robots_ok or not self.robots.can_fetch(UA, url):
@@ -115,15 +129,14 @@ class Fetcher:
         if wait > 0:
             time.sleep(wait)
         self._last = time.time()
-        try:
-            r = self.s.get(url, timeout=60)
-        except requests.RequestException as e:
-            print(f"  failed: {url} ({e})")
+        status, body = self._open(url, 60)
+        if status is None:
+            print(f"  failed: {url} ({body.decode('latin-1', 'replace')})")
             return None
-        if r.status_code != 200:
-            print(f"  HTTP {r.status_code}: {url}")
+        if status != 200:
+            print(f"  HTTP {status}: {url}")
             return None
-        return r.content.decode("latin-1")   # one byte per character, so save() writes the same bytes back
+        return body.decode("latin-1")   # one byte per character, so save() writes the same bytes back
 
 
 def save(path: Path, text: str, url: str, manifest: dict, key: str) -> None:
