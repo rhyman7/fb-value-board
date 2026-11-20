@@ -1,26 +1,26 @@
 {
  "rule": "paper record only; read after the 2027 season; see nflmodel/olwatch.py",
  "all": {
-  "n": 4,
+  "n": 5,
   "vs_flag_total": {
-   "n": 4,
-   "mean": -7.06,
-   "se": 3.56
+   "n": 5,
+   "mean": -8.15,
+   "se": 2.96
   },
   "vs_last_total": {
-   "n": 4,
-   "mean": -6.75,
-   "se": 3.52
+   "n": 5,
+   "mean": -7.9,
+   "se": 2.96
   },
   "cover_flag": {
    "w": 0,
-   "l": 4,
+   "l": 5,
    "p": 0,
    "rate": 0.0
   },
   "cover_last": {
    "w": 0,
-   "l": 4,
+   "l": 5,
    "p": 0,
    "rate": 0.0
   }
@@ -51,56 +51,56 @@
   }
  },
  "injury report and roster only": {
-  "n": 3,
+  "n": 4,
   "vs_flag_total": {
-   "n": 3,
-   "mean": -6.42,
-   "se": 4.95
+   "n": 4,
+   "mean": -7.94,
+   "se": 3.81
   },
   "vs_last_total": {
-   "n": 3,
-   "mean": -6.42,
-   "se": 4.95
+   "n": 4,
+   "mean": -7.94,
+   "se": 3.82
   },
   "cover_flag": {
    "w": 0,
-   "l": 3,
+   "l": 4,
    "p": 0,
    "rate": 0.0
   },
   "cover_last": {
    "w": 0,
-   "l": 3,
+   "l": 4,
    "p": 0,
    "rate": 0.0
   }
  },
  "by_season": {
   "2026": {
-   "n": 4,
+   "n": 5,
    "vs_flag_total": {
-    "n": 4,
-    "mean": -7.06,
-    "se": 3.56
+    "n": 5,
+    "mean": -8.15,
+    "se": 2.96
    },
    "vs_last_total": {
-    "n": 4,
-    "mean": -6.75,
-    "se": 3.52
+    "n": 5,
+    "mean": -7.9,
+    "se": 2.96
    },
    "cover_flag": {
     "w": 0,
-    "l": 4,
+    "l": 5,
     "p": 0,
     "rate": 0.0
    },
    "cover_last": {
     "w": 0,
-    "l": 4,
+    "l": 5,
     "p": 0,
     "rate": 0.0
    }
   }
  },
- "built": "2026-11-20 02:43 UTC"
+ "built": "2026-11-20 19:08 UTC"
 }
