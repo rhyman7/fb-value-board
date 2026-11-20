@@ -88,7 +88,9 @@ boards in detail; this file is the rules.
   six *tracks*, each one kind of pick under one rule fixed for the season (college spreads at the
   opener from week 5, college totals at the opener, NFL spreads at the opener, NFL price with the
   model agreeing, Wong underdog teasers, NFL prop unders the model agrees with). **Every track
-  starts on trial**; `recommended.STATUS` is changed by hand at a season review only (100+ graded
+  starts on trial**, except one held back before its first pick: NFL prop unders (`STATUS` "held",
+  Nov 20, 2026: it publishes nothing, has no record and shows on the page as "Not started"; it
+  starts only on Ryan's word); `recommended.STATUS` is changed by hand at a season review only (100+ graded
   picks across a full season; return above zero by 1 standard error and closing line value not
   below zero for Recommended, 2 standard errors for Proven), never mid-season and never by code.
   **Don't change a rule constant, a track or `STATUS` without Ryan**; a rule change waits for the

@@ -90,7 +90,12 @@ def test_teasers_pair_two_games_at_one_book_and_grade_at_minus_120(tmp_path):
     assert res["result"] == "W" and abs(res["units"] - 0.8333) < 1e-4
 
 
-def test_prop_unders_rule_grade_and_rolling_total(tmp_path):
+def test_a_held_track_publishes_nothing(tmp_path):
+    assert R.STATUS["nfl_prop_under"] == "held" and R.record_props(2026, "b1", NOW, tmp_path, tmp_path) == 0
+
+
+def test_prop_unders_rule_grade_and_rolling_total(tmp_path, monkeypatch):
+    monkeypatch.setattr(R, "HELD", set())                                            # the rule itself, as it will run once the track starts
     props = tmp_path / "props"
     props.mkdir()
     base = {"g": "2026_12_AAA_BBB", "t": "AAA", "alt": False, "snap": "flag", "ko": "2026-11-29T18:00:00Z", "cL": None, "cfo": None, "res": None}
@@ -113,7 +118,7 @@ def test_prop_unders_rule_grade_and_rolling_total(tmp_path):
     assert R.grade_props(2026, NOW, tmp_path, props) == 2 and R.grade_props(2026, NOW, tmp_path, props) == 0
     s = R.summary("nfl", tmp_path, NOW)
     tr = {t["key"]: t for t in s["tracks"]}["nfl_prop_under"]
-    assert (tr["w"], tr["l"], tr["status"], tr["to_go"]) == (1, 1, "trial", 98)
+    assert (tr["w"], tr["l"], tr["to_go"]) == (1, 1, 98)
     assert abs(s["all"]["dollars"] - (8.77 - 10.0)) < 0.01                            # $10 at -114 wins $8.77; the other loses $10
     assert s["weeks"][0]["running"] == s["all"]["dollars"]
 
@@ -136,6 +141,6 @@ def test_page_file_is_a_script_the_page_can_read_from_disk(tmp_path):
 
 
 def test_every_track_starts_on_trial_and_the_rules_are_the_approved_ones():
-    assert set(R.STATUS.values()) == {"trial"} and len(R.TRACKS) == 6
+    assert set(R.STATUS.values()) == {"trial", "held"} and R.HELD == {"nfl_prop_under"} and len(R.TRACKS) == 6
     assert (R.OPEN_GAP, R.TOTAL_GAP, R.CFB_FROM_WEEK, R.DOG, R.MAX_TOTAL, R.TEASER_ODDS, R.NEED, R.UNIT) == (2.0, 3.0, 5, (1.5, 2.5), 49.5, -120.0, 100, 10.0)
     assert R.MY_BOOKS == ("draftkings", "fanduel")
