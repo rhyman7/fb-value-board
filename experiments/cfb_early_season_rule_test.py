@@ -71,7 +71,8 @@ def frames():
 
 
 def graded(f: pd.DataFrame, mcol: str, line: str, close_line: str | None = None) -> pd.DataFrame:
-    from nflmodel import bets as B, odds as O
+    from cfbmodel import bets as B
+    from nflmodel import odds as O
     dec = O.american_to_decimal(B.DEFAULT_PRICE)
     x = f[f.played & f[line].notna() & f[mcol].notna() & (f.fbs_game == 1)].copy()
     x["d"] = x[mcol] - x[line]
