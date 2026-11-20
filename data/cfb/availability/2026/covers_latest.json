@@ -17,9 +17,9 @@
 "updated": "2026-10-05",
 "season": true
 },
-"AFA|S. Maiava-Alaimalo": {
+"AFA|Sylas Maiava-Alaimalo": {
 "team": "AFA",
-"name": "S. Maiava-Alaimalo",
+"name": "Sylas Maiava-Alaimalo",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -62,6 +62,33 @@
 "updated": "2026-10-20",
 "season": false
 },
+"ARIZ|D. Austin": {
+"team": "ARIZ",
+"name": "D. Austin",
+"pos": "S",
+"d": "O",
+"injury": "",
+"updated": "2026-09-25",
+"season": true
+},
+"ARIZ|Tre Spivey": {
+"team": "ARIZ",
+"name": "Tre Spivey",
+"pos": "WR",
+"d": "O",
+"injury": "Ankle",
+"updated": "2026-10-04",
+"season": true
+},
+"ARK|M. Lassiter": {
+"team": "ARK",
+"name": "M. Lassiter",
+"pos": "TE",
+"d": "O",
+"injury": "Upper Body",
+"updated": "2026-08-16",
+"season": true
+},
 "ARMY|B. Mott": {
 "team": "ARMY",
 "name": "B. Mott",
@@ -89,9 +116,9 @@
 "updated": "2026-10-17",
 "season": false
 },
-"ARMY|P. Poloskey": {
+"ARMY|Parker Poloskey": {
 "team": "ARMY",
-"name": "P. Poloskey",
+"name": "Parker Poloskey",
 "pos": "TE",
 "d": "Q",
 "injury": "",
@@ -114,6 +141,24 @@
 "d": "O",
 "injury": "Knee",
 "updated": "2026-08-17",
+"season": true
+},
+"ASU|K. Anderson": {
+"team": "ASU",
+"name": "K. Anderson",
+"pos": "TE",
+"d": "O",
+"injury": "Leg",
+"updated": "2026-09-21",
+"season": true
+},
+"ASU|Z. Fiaseu": {
+"team": "ASU",
+"name": "Z. Fiaseu",
+"pos": "LB",
+"d": "O",
+"injury": "Knee",
+"updated": "2026-08-25",
 "season": true
 },
 "BGSU|A. Clay": {
@@ -143,9 +188,9 @@
 "updated": "2026-10-17",
 "season": false
 },
-"BGSU|T. Johnson": {
+"BGSU|Trey Johnson": {
 "team": "BGSU",
-"name": "T. Johnson",
+"name": "Trey Johnson",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -314,32 +359,32 @@
 "updated": "2026-10-15",
 "season": false
 },
-"DEL|Rehmann": {
+"DEL|B. Rehmann": {
 "team": "DEL",
-"name": "Rehmann",
+"name": "B. Rehmann",
 "pos": "WR",
 "d": "Q",
 "injury": "",
 "updated": "2026-10-21",
 "season": false
 },
-"DEL|Salazer": {
+"DEL|G. Spiller": {
 "team": "DEL",
-"name": "Salazer",
-"pos": "WR",
-"d": "O",
-"injury": "",
-"updated": "2026-10-13",
-"season": false
-},
-"DEL|Spiller": {
-"team": "DEL",
-"name": "Spiller",
+"name": "G. Spiller",
 "pos": "RB",
 "d": "O",
 "injury": "",
 "updated": "2026-09-13",
 "season": true
+},
+"DEL|T. Salazer": {
+"team": "DEL",
+"name": "T. Salazer",
+"pos": "WR",
+"d": "O",
+"injury": "",
+"updated": "2026-10-13",
+"season": false
 },
 "DUKE|A. Pellicciotta": {
 "team": "DUKE",
@@ -404,6 +449,15 @@
 "updated": "2026-10-21",
 "season": false
 },
+"FLA|K. Jimenez": {
+"team": "FLA",
+"name": "K. Jimenez",
+"pos": "RB",
+"d": "O",
+"injury": "",
+"updated": "2026-09-05",
+"season": true
+},
 "FRES|B. Ramirez": {
 "team": "FRES",
 "name": "B. Ramirez",
@@ -449,9 +503,9 @@
 "updated": "2026-10-15",
 "season": false
 },
-"GASO|J. Ware": {
+"GASO|Jeremiah Ware": {
 "team": "GASO",
-"name": "J. Ware",
+"name": "Jeremiah Ware",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -547,6 +601,24 @@
 "injury": "",
 "updated": "2026-10-18",
 "season": false
+},
+"HOU|John Hebert": {
+"team": "HOU",
+"name": "John Hebert",
+"pos": "RB",
+"d": "O",
+"injury": "Leg",
+"updated": "2026-10-05",
+"season": true
+},
+"ILL|B. Thurman": {
+"team": "ILL",
+"name": "B. Thurman",
+"pos": "TE",
+"d": "O",
+"injury": "Foot",
+"updated": "2026-08-13",
+"season": true
 },
 "ISU|C. Crawford": {
 "team": "ISU",
@@ -692,6 +764,42 @@
 "updated": "2026-10-15",
 "season": false
 },
+"KSU|J. Pastore": {
+"team": "KSU",
+"name": "J. Pastore",
+"pos": "OG",
+"d": "O",
+"injury": "Leg",
+"updated": "2026-08-21",
+"season": true
+},
+"KU|J. Thurman": {
+"team": "KU",
+"name": "J. Thurman",
+"pos": "RB",
+"d": "O",
+"injury": "",
+"updated": "2026-08-11",
+"season": true
+},
+"KU|K. Amachree": {
+"team": "KU",
+"name": "K. Amachree",
+"pos": "RB",
+"d": "O",
+"injury": "",
+"updated": "2026-10-02",
+"season": true
+},
+"KU|Yasin Willis": {
+"team": "KU",
+"name": "Yasin Willis",
+"pos": "RB",
+"d": "O",
+"injury": "Foot",
+"updated": "2026-09-28",
+"season": true
+},
 "LIB|B. Burklow": {
 "team": "LIB",
 "name": "B. Burklow",
@@ -728,6 +836,42 @@
 "updated": "2026-10-08",
 "season": false
 },
+"LOU|A. Watts": {
+"team": "LOU",
+"name": "A. Watts",
+"pos": "CB",
+"d": "O",
+"injury": "Knee",
+"updated": "2026-09-25",
+"season": true
+},
+"LOU|K. Hughes": {
+"team": "LOU",
+"name": "K. Hughes",
+"pos": "WR",
+"d": "O",
+"injury": "Lower Body",
+"updated": "2026-08-11",
+"season": true
+},
+"LSU|D. Spears": {
+"team": "LSU",
+"name": "D. Spears",
+"pos": "S",
+"d": "O",
+"injury": "Knee",
+"updated": "2026-09-21",
+"season": true
+},
+"LSU|P. Wright III": {
+"team": "LSU",
+"name": "P. Wright III",
+"pos": "WR",
+"d": "O",
+"injury": "",
+"updated": "2026-09-21",
+"season": true
+},
 "LT|D. Benedix": {
 "team": "LT",
 "name": "D. Benedix",
@@ -754,6 +898,24 @@
 "injury": "",
 "updated": "2026-10-17",
 "season": false
+},
+"MIA|C. Brown": {
+"team": "MIA",
+"name": "C. Brown",
+"pos": "RB",
+"d": "O",
+"injury": "Lower Body",
+"updated": "2026-09-21",
+"season": true
+},
+"MINN|R. Estrada": {
+"team": "MINN",
+"name": "R. Estrada",
+"pos": "RB",
+"d": "O",
+"injury": "Knee",
+"updated": "2026-09-07",
+"season": true
 },
 "MOST|J. Dubar": {
 "team": "MOST",
@@ -827,27 +989,18 @@
 "updated": "2026-10-21",
 "season": false
 },
-"NAVY|J. Chalmers": {
+"NAVY|Chalmers": {
 "team": "NAVY",
-"name": "J. Chalmers",
+"name": "Chalmers",
 "pos": "RB",
 "d": "O",
 "injury": "",
 "updated": "2026-10-18",
 "season": false
 },
-"NAVY|J. Norris": {
+"NAVY|Landon Walker": {
 "team": "NAVY",
-"name": "J. Norris",
-"pos": "TE",
-"d": "Q",
-"injury": "",
-"updated": "2026-10-18",
-"season": false
-},
-"NAVY|L. Walker": {
-"team": "NAVY",
-"name": "L. Walker",
+"name": "Landon Walker",
 "pos": "RB",
 "d": "O",
 "injury": "",
@@ -859,6 +1012,15 @@
 "name": "Merrick Barlow",
 "pos": "TE",
 "d": "O",
+"injury": "",
+"updated": "2026-10-18",
+"season": false
+},
+"NAVY|Norris": {
+"team": "NAVY",
+"name": "Norris",
+"pos": "TE",
+"d": "Q",
 "injury": "",
 "updated": "2026-10-18",
 "season": false
@@ -953,6 +1115,15 @@
 "updated": "2026-10-18",
 "season": false
 },
+"NEB|V. Genatone": {
+"team": "NEB",
+"name": "V. Genatone",
+"pos": "RB",
+"d": "O",
+"injury": "",
+"updated": "2026-10-19",
+"season": true
+},
 "NIU|D. Howard": {
 "team": "NIU",
 "name": "D. Howard",
@@ -998,9 +1169,9 @@
 "updated": "2026-10-08",
 "season": false
 },
-"ODU|J. Harrell": {
+"ODU|JJ Harrell": {
 "team": "ODU",
-"name": "J. Harrell",
+"name": "JJ Harrell",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -1070,50 +1241,32 @@
 "updated": "2026-10-18",
 "season": false
 },
-"RICE|B. Grice": {
-"team": "RICE",
-"name": "B. Grice",
-"pos": "WR",
-"d": "Q",
-"injury": "",
-"updated": "2026-10-17",
-"season": false
-},
-"RICE|B. Jackson Jr.": {
-"team": "RICE",
-"name": "B. Jackson Jr.",
-"pos": "WR",
-"d": "Q",
-"injury": "",
-"updated": "2026-10-17",
-"season": false
-},
-"RICE|C. Cole": {
-"team": "RICE",
-"name": "C. Cole",
-"pos": "TE",
+"PSU|M. Granville": {
+"team": "PSU",
+"name": "M. Granville",
+"pos": "DL",
 "d": "O",
 "injury": "",
-"updated": "2026-10-10",
+"updated": "2026-09-12",
 "season": true
 },
-"RICE|J. Falk": {
-"team": "RICE",
-"name": "J. Falk",
-"pos": "TE",
-"d": "Q",
+"RUTG|K. Sanders": {
+"team": "RUTG",
+"name": "K. Sanders",
+"pos": "CB",
+"d": "O",
 "injury": "",
-"updated": "2026-09-20",
-"season": false
+"updated": "2026-10-20",
+"season": true
 },
-"RICE|P. Zinter": {
-"team": "RICE",
-"name": "P. Zinter",
-"pos": "TE",
-"d": "Q",
-"injury": "Leg",
-"updated": "2026-09-20",
-"season": false
+"SC|J. Sellers": {
+"team": "SC",
+"name": "J. Sellers",
+"pos": "WR",
+"d": "O",
+"injury": "Lower Body",
+"updated": "2026-08-17",
+"season": true
 },
 "SDSU|A. Doe": {
 "team": "SDSU",
@@ -1223,21 +1376,12 @@
 "updated": "2026-10-15",
 "season": false
 },
-"SJSU|C. Hoch": {
+"SJSU|Cooper Hoch": {
 "team": "SJSU",
-"name": "C. Hoch",
+"name": "Cooper Hoch",
 "pos": "WR",
 "d": "Q",
 "injury": "Leg",
-"updated": "2026-10-18",
-"season": false
-},
-"SJSU|J. Anderson": {
-"team": "SJSU",
-"name": "J. Anderson",
-"pos": "WR",
-"d": "Q",
-"injury": "",
 "updated": "2026-10-18",
 "season": false
 },
@@ -1245,6 +1389,15 @@
 "team": "SJSU",
 "name": "Jabari Bates",
 "pos": "RB",
+"d": "Q",
+"injury": "",
+"updated": "2026-10-18",
+"season": false
+},
+"SJSU|Jordan Anderson": {
+"team": "SJSU",
+"name": "Jordan Anderson",
+"pos": "WR",
 "d": "Q",
 "injury": "",
 "updated": "2026-10-18",
@@ -1322,63 +1475,63 @@
 "updated": "2026-10-20",
 "season": false
 },
-"TEM|C. Logan": {
-"team": "TEM",
-"name": "C. Logan",
-"pos": "WR",
-"d": "Q",
-"injury": "",
-"updated": "2026-10-17",
-"season": false
-},
-"TEM|JoJo Bermudez": {
-"team": "TEM",
-"name": "JoJo Bermudez",
-"pos": "WR",
-"d": "Q",
-"injury": "",
-"updated": "2026-10-17",
-"season": false
-},
-"TEM|K. Uzoma": {
-"team": "TEM",
-"name": "K. Uzoma",
-"pos": "WR",
+"TA&M|B. Ivy": {
+"team": "TA&M",
+"name": "B. Ivy",
+"pos": "OG",
 "d": "O",
 "injury": "",
-"updated": "2026-10-17",
+"updated": "2026-10-11",
 "season": true
 },
-"TEM|R. Hardy": {
-"team": "TEM",
-"name": "R. Hardy",
-"pos": "WR",
-"d": "Q",
-"injury": "",
-"updated": "2026-10-17",
-"season": false
-},
-"TEM|R. Stocksdale": {
-"team": "TEM",
-"name": "R. Stocksdale",
+"TA&M|M. Williams": {
+"team": "TA&M",
+"name": "M. Williams",
 "pos": "WR",
 "d": "O",
-"injury": "Hamstring",
-"updated": "2026-10-17",
-"season": false
-},
-"TEM|Z. Baptiste": {
-"team": "TEM",
-"name": "Z. Baptiste",
-"pos": "WR",
-"d": "Q",
 "injury": "",
-"updated": "2026-10-17",
-"season": false
+"updated": "2026-09-06",
+"season": true
 },
-"TLSA|D. Gee Jr.": {
+"TA&M|T. Bussey": {
+"team": "TA&M",
+"name": "T. Bussey",
+"pos": "WR",
+"d": "O",
+"injury": "",
+"updated": "2026-09-21",
+"season": true
+},
+"TA&M|T. Riden Jr.": {
+"team": "TA&M",
+"name": "T. Riden Jr.",
+"pos": "RB",
+"d": "O",
+"injury": "",
+"updated": "2026-08-27",
+"season": true
+},
+"TENN|J. Harmon": {
+"team": "TENN",
+"name": "J. Harmon",
+"pos": "LB",
+"d": "O",
+"injury": "Knee",
+"updated": "2026-09-07",
+"season": true
+},
+"TENN|W. Moe Jr.": {
+"team": "TENN",
+"name": "W. Moe Jr.",
+"pos": "OG",
+"d": "O",
+"injury": "",
+"updated": "2026-09-30",
+"season": true
+},
+"TLSA|Donnell Gee Jr.": {
 "team": "TLSA",
-"name": "D. Gee Jr.",
+"name": "Donnell Gee Jr.",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -1394,9 +1547,9 @@
 "updated": "2026-10-18",
 "season": false
 },
-"TOL|C. Smith": {
+"TOL|Corey Smith": {
 "team": "TOL",
-"name": "C. Smith",
+"name": "Corey Smith",
 "pos": "RB",
 "d": "Q",
 "injury": "",
@@ -1412,9 +1565,9 @@
 "updated": "2026-10-10",
 "season": false
 },
-"TOL|R. Bond": {
+"TOL|Rico Bond": {
 "team": "TOL",
-"name": "R. Bond",
+"name": "Rico Bond",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -1455,6 +1608,15 @@
 "d": "O",
 "injury": "",
 "updated": "2026-10-03",
+"season": true
+},
+"TTU|D. Lee Jr.": {
+"team": "TTU",
+"name": "D. Lee Jr.",
+"pos": "WR",
+"d": "O",
+"injury": "Knee (torn ACL)",
+"updated": "2026-10-19",
 "season": true
 },
 "TULN|A. Parham": {
@@ -1520,30 +1682,21 @@
 "updated": "2026-10-18",
 "season": false
 },
-"UCF|Alonza Barnett III": {
-"team": "UCF",
-"name": "Alonza Barnett III",
-"pos": "QB",
-"d": "O",
-"injury": "Hamstring",
-"updated": "2026-10-20",
-"season": false
-},
-"UCF|D. Wade": {
-"team": "UCF",
-"name": "D. Wade",
-"pos": "TE",
-"d": "Q",
-"injury": "Shoulder",
-"updated": "2026-10-10",
-"season": false
-},
 "UCF|Duane Thomas Jr.": {
 "team": "UCF",
 "name": "Duane Thomas Jr.",
 "pos": "WR",
 "d": "O",
 "injury": "",
+"updated": "2026-10-10",
+"season": false
+},
+"UCF|Dylan Wade": {
+"team": "UCF",
+"name": "Dylan Wade",
+"pos": "TE",
+"d": "Q",
+"injury": "Shoulder",
 "updated": "2026-10-10",
 "season": false
 },
@@ -1556,9 +1709,27 @@
 "updated": "2026-10-10",
 "season": false
 },
-"UL|D. Smith": {
+"UCLA|M. Matthews": {
+"team": "UCLA",
+"name": "M. Matthews",
+"pos": "WR",
+"d": "O",
+"injury": "Lower-leg",
+"updated": "2026-09-21",
+"season": true
+},
+"UK|T. Mizell": {
+"team": "UK",
+"name": "T. Mizell",
+"pos": "RB",
+"d": "O",
+"injury": "",
+"updated": "2026-08-22",
+"season": true
+},
+"UL|Darrell Smith": {
 "team": "UL",
-"name": "D. Smith",
+"name": "Darrell Smith",
 "pos": "RB",
 "d": "O",
 "injury": "",
@@ -1664,9 +1835,9 @@
 "updated": "2026-09-20",
 "season": false
 },
-"UNT|C. Milliner": {
+"UNT|Corri Milliner": {
 "team": "UNT",
-"name": "C. Milliner",
+"name": "Corri Milliner",
 "pos": "WR",
 "d": "Q",
 "injury": "",
@@ -1691,9 +1862,9 @@
 "updated": "2026-10-11",
 "season": false
 },
-"UNT|V. Aderungboye": {
+"UNT|Victor Aderungboye": {
 "team": "UNT",
-"name": "V. Aderungboye",
+"name": "Victor Aderungboye",
 "pos": "TE",
 "d": "Q",
 "injury": "",
@@ -1736,6 +1907,24 @@
 "updated": "2026-10-01",
 "season": true
 },
+"USC|C. Simms": {
+"team": "USC",
+"name": "C. Simms",
+"pos": "WR",
+"d": "O",
+"injury": "Knee",
+"updated": "2026-10-02",
+"season": true
+},
+"USC|K. O'Connor": {
+"team": "USC",
+"name": "K. O'Connor",
+"pos": "OG",
+"d": "O",
+"injury": "",
+"updated": "2026-08-11",
+"season": true
+},
 "USF|A. Branch": {
 "team": "USF",
 "name": "A. Branch",
@@ -1763,9 +1952,9 @@
 "updated": "2026-10-18",
 "season": false
 },
-"USM|E. Hampton": {
+"USM|Ethan Hampton": {
 "team": "USM",
-"name": "E. Hampton",
+"name": "Ethan Hampton",
 "pos": "QB",
 "d": "O",
 "injury": "Hand",
@@ -1880,6 +2069,15 @@
 "updated": "2026-10-10",
 "season": true
 },
+"WASH|C. Christian": {
+"team": "WASH",
+"name": "C. Christian",
+"pos": "S",
+"d": "O",
+"injury": "Achilles",
+"updated": "2026-10-03",
+"season": true
+},
 "WKU|A. Boyd": {
 "team": "WKU",
 "name": "A. Boyd",
@@ -1948,7 +2146,7 @@
 "name": "T. Freeman",
 "pos": "WR",
 "d": "O",
-"injury": "Torn ACL",
+"injury": "Leg",
 "updated": "2026-09-14",
 "season": true
 },
