@@ -96,10 +96,11 @@ TRACKS = [
      "+5.4% (plus or minus 1.9%) at the close on 4,920 props in 2023-25. 2026 before this record began was against it (51-72)."),
 ]
 STATUS = {k: "trial" for k, *_ in TRACKS}      # trial | recommended | proven | paused: changed by hand at a season review only
-# Held back before its first pick (Nov 20, 2026, Ryan's call after the pre-set test in the Project doc
+# Stopped on its first day (Nov 20, 2026, Ryan's call after the pre-set test in the Project doc
 # claude/nfl-prop-unders-improvement-results-2026-11-20.md: the rule's return rests on 2025 alone and
-# no tested change improved it). A held track publishes nothing and has no record; it is listed so the
-# page says why. It starts, on trial, only when Ryan says so.
+# no tested change improved it). A held track publishes no new picks. The picks it had already
+# published stay on the record, are graded and count in the totals like any other: nothing published
+# is ever removed. It starts again, on trial, only when Ryan says so.
 STATUS["nfl_prop_under"] = "held"
 HELD = {k for k, v in STATUS.items() if v == "held"}
 NAMES = {k: n for k, _, n, *_ in TRACKS}

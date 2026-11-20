@@ -90,8 +90,21 @@ def test_teasers_pair_two_games_at_one_book_and_grade_at_minus_120(tmp_path):
     assert res["result"] == "W" and abs(res["units"] - 0.8333) < 1e-4
 
 
-def test_a_held_track_publishes_nothing(tmp_path):
-    assert R.STATUS["nfl_prop_under"] == "held" and R.record_props(2026, "b1", NOW, tmp_path, tmp_path) == 0
+def test_a_held_track_publishes_nothing_new_but_keeps_and_grades_its_picks(tmp_path, monkeypatch):
+    props = tmp_path / "props"
+    props.mkdir()
+    row = {"g": "2026_12_AAA_BBB", "t": "AAA", "alt": False, "snap": "flag", "ko": "2026-11-29T18:00:00Z", "cL": None, "cfo": None, "res": None,
+           "id": "p1", "n": "One", "pos": "WR", "s": "rec_yds", "L": 54.5, "po": 0.30, "pu": 0.70, "bk": {"fanduel": [-110, -110]}}
+    f = props / "2026_w12.json"
+    f.write_text(json.dumps({"props": [row]}))
+    monkeypatch.setattr(R, "HELD", set())
+    assert R.record_props(2026, "b1", NOW, tmp_path, props) == 1                     # published before the track was stopped
+    monkeypatch.setattr(R, "HELD", {"nfl_prop_under"})
+    f.write_text(json.dumps({"props": [{**row, "res": "loss"}, {**row, "id": "p2", "n": "Two"}]}))
+    assert R.STATUS["nfl_prop_under"] == "held" and R.record_props(2026, "b2", NOW, tmp_path, props) == 0
+    assert R.grade_props(2026, NOW, tmp_path, props) == 1
+    tr = {t["key"]: t for t in R.summary("nfl", tmp_path, NOW)["tracks"]}["nfl_prop_under"]
+    assert (tr["status"], tr["n"], tr["w"]) == ("held", 1, 1)
 
 
 def test_prop_unders_rule_grade_and_rolling_total(tmp_path, monkeypatch):
