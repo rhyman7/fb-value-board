@@ -36,3 +36,17 @@ def test_only_a_real_predictions_file_is_saved():
     assert not F.looks_like_csv("<html><body>Not found</body></html>")
     assert not F.looks_like_csv("home,road\nA,B\n")
     assert F.describe(good) == {"rows": 6, "columns": ["home", "road", "lineopen", "line", "lineavg", "linesag", "linemassey"]}
+
+
+def test_standard_library_only():
+    """The Action installs requirements.txt and nothing else (a missing package failed the first run)."""
+    import ast
+    import sys
+    src = (Path(__file__).resolve().parents[1] / "experiments" / "fetch_outside_ratings.py").read_text()
+    tops = set()
+    for node in ast.walk(ast.parse(src)):
+        if isinstance(node, ast.Import):
+            tops |= {a.name.split(".")[0] for a in node.names}
+        elif isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+            tops.add(node.module.split(".")[0])
+    assert tops - {"__future__"} <= set(sys.stdlib_module_names)
