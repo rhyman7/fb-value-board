@@ -228,6 +228,13 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
     except Exception as exc:
         print(f"  best bets record skipped ({exc})")
         out["best_record"] = prev.get("best_record")
+    try:                                          # the Recommended list (nflmodel/recommended.py): picks under fixed rules, published before kickoff
+        from nflmodel import recommended
+        kk = {g["id"]: kick[str(g["game_id"])] for g in slate["games"] if str(g["game_id"]) in kick}
+        say("  recommended: " + recommended.update_games(slate["games"], "cfb", season, kk, scores, close_by_id(close),
+                                                          lambda df: bets.curves(df, dist, "line"), built=out["meta"].get("generated")))
+    except Exception as exc:
+        print(f"  recommended list skipped ({exc})")
     try:                                          # every forecast shown before kickoff (nflmodel/forecastlog.py); data/ only, not shown
         from nflmodel import forecastlog
         inp = forecastlog.frame_inputs(slate["games"], frame, model.MARGIN_FEATS + model.TOTAL_FEATS + ["home_qb_delta", "away_qb_delta"],

@@ -252,6 +252,11 @@ def main():
             print(f"  dashboard feed: {dashfeed.write('nfl')}")
         except Exception as exc:
             print(f"  dashboard feed skipped ({exc})")
+        try:                            # the Recommended list's prop unders (nflmodel/recommended.py), from the Props section just built
+            from nflmodel import recommended
+            print(f"  recommended: {recommended.update_props(int(ix['season']))}")
+        except Exception as exc:
+            print(f"  recommended list skipped ({exc})")
         try:                            # the TD tracker carries the new anytime-TD prices
             from nflmodel import tdtracker
             print(f"  TD tracker: {tdtracker.write()}")

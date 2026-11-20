@@ -268,6 +268,16 @@ whether to bet now or wait, the record of bets of that kind, and the stake. The 
   total. Moneylines are not bets outside the price tier: they have lost at every claimed edge
   since the holdout seasons.
 
+## The Recommended list
+
+`docs/recommended/` is the public record of picks the site stands behind (`nflmodel/recommended.py`,
+from Nov 20, 2026): six tracks, each one kind of pick under a rule fixed for the season, every one
+starting on trial. A pick is published the first time its rule is met before kickoff, at the better
+of DraftKings and FanDuel, and never changed; it is graded at that price on one flat unit, with a
+rolling total at $10 a pick. Each league has a report for every week (a page and a PDF). The rules,
+the bar a track has to clear to be called Recommended, and what may be said about the record are in
+CONVENTIONS.md and the Project doc it names.
+
 ## Line movement and phone alerts
 
 The opener edge is the line moving to the model, so the **Line movement** section under the
