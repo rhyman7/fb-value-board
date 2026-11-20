@@ -43,7 +43,7 @@ boards in detail; this file is the rules.
 - **One site with the dashboards (Ryan's call, Nov 20, 2026).** The value boards, Parlays and the
   Weekly Review are sections of the Weekly Gridiron Board (rhyman7.github.io), which lists them on
   its hub page. This replaced the earlier "kept separate" rule.
-- **Site bar (Nov 20, 2026).** Every page here (the landing page, both boards, Parlays, the Weekly Review; not the manual) loads the Weekly Gridiron Board's site bar as the first
+- **Site bar (Nov 20, 2026).** Every page here (the landing page, both boards, Parlays, the Weekly Review, Recommended; not the manual) loads the Weekly Gridiron Board's site bar as the first
   thing in `<body>`: `<script src="/site-bar.js"></script>`. The script lives in
   rhyman7/rhyman7.github.io and writes the strip that links the hub, both matchup dashboards,
   both value boards, Parlays and the Weekly Review (Basketball as a side link). Change the bar
@@ -82,6 +82,36 @@ boards in detail; this file is the rules.
   with `experiments/shadow_score.py`. A shadow failure never stops the board build. A second
   spread version, pass catchers out (`shadow.MARGIN_PC`, from Oct 29, 2026), is logged the same
   way to `passcatchers_games.csv` under the same rule: don't change `MARGIN_PC` either.
+- **The Recommended list (both leagues): `data/recommended/`, `docs/recommended/`** (`nflmodel/recommended.py`,
+  Nov 20, 2026, Ryan's call; the rules as approved are in the Project doc
+  `claude/plan-recommended-list-2026-11-20.md`). The public record of picks the site stands behind:
+  six *tracks*, each one kind of pick under one rule fixed for the season (college spreads at the
+  opener from week 5, college totals at the opener, NFL spreads at the opener, NFL price with the
+  model agreeing, Wong underdog teasers, NFL prop unders the model agrees with). **Every track
+  starts on trial**; `recommended.STATUS` is changed by hand at a season review only (100+ graded
+  picks across a full season; return above zero by 1 standard error and closing line value not
+  below zero for Recommended, 2 standard errors for Proven), never mid-season and never by code.
+  **Don't change a rule constant, a track or `STATUS` without Ryan**; a rule change waits for the
+  next season and starts a new track key so the old record stays.
+  Every Update board and Update college board run (`recommended.update_games`) and every Player
+  props run (`recommended.update_props`) publishes each pick the first time its rule is met before
+  kickoff, at the better of DraftKings and FanDuel (`ledger.MY_BOOKS`), to
+  `data/recommended/<league>_picks.csv`, grades finished games into `<league>_results.csv`
+  (`ledger.grade_frame` for game lines; teasers at -120; props from the Props section's results)
+  and rewrites `docs/recommended/<league>.js`. Both CSVs are **append-only, written by the Actions
+  only**: never edit or delete a row, never backfill, and never commit rows from a local build
+  (they would be sandbox prices). A failure never stops a build. No extra Odds API calls: it reads
+  the slate and the Props files the build already made.
+  **Rolling total:** $10 (`recommended.UNIT`) on every pick; a bet that lands on two tracks counts
+  once in the totals and in each track's own record.
+  **Page:** `docs/recommended/index.html`, hand-made (not generated): the record page, and each
+  week's report per league at `#<league>/<season>/<week>` (picks added as they are published,
+  results after the games). It loads the two `.js` files as scripts so it also works from disk.
+  `scripts/build_pdf.py` (`render_recommended`, run by both Update Actions) writes each report as
+  `docs/recommended/<league>_<season>_w<WW>.pdf`: the newest two weeks every run, older weeks only
+  when missing. The Weekly Gridiron Board's site bar and hub link to the page. What the product may
+  say about the record (live figures with counts and ranges only; no "accurate" or "winning" for a
+  track that is not Proven) is in the Project doc.
 - **Wong teaser record (NFL): `data/teasers/`** (`nflmodel/teaserlog.py`, from Nov 6, 2026; the
   Project doc `claude/betting-strategies.md`, strategy 2). Every **Update board** run logs each side
   whose DraftKings, FanDuel or anchor line is in a Wong range (underdog +1.5 to +2.5, favourite -7.5 to
@@ -970,6 +1000,7 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
 
 - Titled **Weekly Value Boards**. Same layout, tokens, Archivo type and NCAA/NFL logos as
   the Weekly Gridiron Board (rhyman7.github.io); keep it styled consistently with it.
+- A second cross-link goes to the Recommended list (`docs/recommended/`, Nov 20, 2026).
 - A cross-link under the cards goes to the Weekly Review (`review/`), and each card lists
   **Weekly Review** after Past Weeks.
 - College card on the left, NFL on the right. Each card links to its board and to the seven

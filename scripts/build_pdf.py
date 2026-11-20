@@ -55,7 +55,64 @@ def render(board: str, verbose: bool = True, doc: str = "bestbets") -> Path | No
     return out
 
 
+REC = ROOT / "docs" / "recommended"
+
+
+def recommended_weeks(league: str, last: int = 2) -> list[tuple[int, int]]:
+    """The newest `last` (season, week) pairs with picks in docs/recommended/<league>.js, plus
+    any older week whose PDF is missing."""
+    import json
+    f = REC / f"{league}.js"
+    if not f.exists():
+        return []
+    try:
+        body = f.read_text().split(f"window.RECOMMENDED.{league}=", 1)[1].rstrip().rstrip(";")
+        weeks = sorted({(int(p["season"]), int(p["week"])) for p in json.loads(body).get("picks") or []})
+    except (IndexError, ValueError, KeyError):
+        return []
+    return [w for i, w in enumerate(weeks) if i >= len(weeks) - last or not (REC / recommended_pdf(league, *w)).exists()]
+
+
+def recommended_pdf(league: str, season: int, week: int) -> str:
+    return f"{league}_{season}_w{week:02d}.pdf"
+
+
+def render_recommended(league: str, verbose: bool = True) -> list[Path]:
+    """The Recommended list's weekly reports (docs/recommended/index.html#<league>/<season>/<week>)
+    as PDFs beside the page. Same promise as the cards: a failure prints why and never stops a build."""
+    page_file, out = REC / "index.html", []
+    weeks = recommended_weeks(league)
+    if not page_file.exists() or not weeks:
+        return out
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print(f"  recommended {league}: playwright is not installed; skipped")
+        return out
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch()
+            for season, week in weeks:
+                page = browser.new_page(viewport={"width": 1000, "height": 900})
+                page.goto(page_file.resolve().as_uri() + f"#{league}/{season}/{week}", wait_until="load")
+                page.wait_for_selector("html[data-ready] .doc h1", timeout=15000)
+                page.emulate_media(media="print")
+                path = REC / recommended_pdf(league, season, week)
+                page.pdf(path=str(path), format="Letter", print_background=True,
+                         margin={"top": MARGIN, "bottom": MARGIN, "left": MARGIN, "right": MARGIN})
+                page.close()
+                out.append(path)
+            browser.close()
+    except Exception as exc:
+        print(f"  recommended {league}: skipped ({type(exc).__name__}: {exc})")
+        return out
+    if verbose:
+        print(f"  recommended {league}: wrote {len(out)} weekly report PDF(s)")
+    return out
+
+
 if __name__ == "__main__":
     for b in (sys.argv[1:] or list(BOARDS)):
         for d in DOCS:
             render(b, doc=d)
+        render_recommended(b)
