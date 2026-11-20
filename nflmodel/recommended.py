@@ -96,6 +96,13 @@ TRACKS = [
      "+5.4% (plus or minus 1.9%) at the close on 4,920 props in 2023-25. 2026 before this record began was against it (51-72)."),
 ]
 STATUS = {k: "trial" for k, *_ in TRACKS}      # trial | recommended | proven | paused: changed by hand at a season review only
+# Stopped on its first day (Nov 20, 2026, Ryan's call after the pre-set test in the Project doc
+# claude/nfl-prop-unders-improvement-results-2026-11-20.md: the rule's return rests on 2025 alone and
+# no tested change improved it). A held track publishes no new picks. The picks it had already
+# published stay on the record, are graded and count in the totals like any other: nothing published
+# is ever removed. It starts again, on trial, only when Ryan says so.
+STATUS["nfl_prop_under"] = "held"
+HELD = {k for k, v in STATUS.items() if v == "held"}
 NAMES = {k: n for k, _, n, *_ in TRACKS}
 
 COLS = ["row_id", "track", "league", "at", "season", "week", "game_id", "data_id", "kickoff", "label", "market", "side",
@@ -353,6 +360,8 @@ def prop_under(p: dict) -> tuple[str, float] | None:
 def record_props(season: int, built: str | None = None, now: dt.datetime | None = None, root: Path = DIR,
                  props_dir: Path = PROPS) -> int:
     """Publish the prop unders the newest two weeks of the Props section meet now."""
+    if "nfl_prop_under" in HELD:
+        return 0
     now = now or dt.datetime.now(dt.timezone.utc)
     stamp = now.strftime("%Y-%m-%d %H:%M")
     built = built or os.environ.get("GITHUB_SHA", "")[:7] or stamp

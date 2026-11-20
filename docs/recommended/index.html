@@ -53,7 +53,7 @@ table.narrow { max-width: 860px; }
 .chip { display: inline-block; padding: 2px 9px; border-radius: 3px; font-weight: 800; font-size: 12px; letter-spacing: 0.02em; border: 1.5px solid var(--ink); }
 .chip.recommended { background: var(--flag); border-color: var(--flag); color: var(--flag-ink); }
 .chip.proven { background: var(--turf); border-color: var(--turf); color: var(--chalk); }
-.chip.paused { border-style: dashed; border-color: #68756d; color: var(--ink-2); background: var(--raised); }
+.chip.paused, .chip.held { border-style: dashed; border-color: #68756d; color: var(--ink-2); background: var(--raised); }
 .res { display: inline-block; min-width: 46px; text-align: center; padding: 1px 8px; border-radius: 3px; font-weight: 800; font-size: 12px; border: 1.5px solid var(--ink); }
 .res.W { background: var(--ink); color: #fff; }
 .res.open, .res.V { border-style: dashed; border-color: #555; color: var(--ink-2); }
@@ -114,7 +114,7 @@ body.report { background: #fff; color: #111; font-size: 14px; line-height: 1.45;
 const R = window.RECOMMENDED || {};
 const LEAGUES = [["nfl", "NFL"], ["cfb", "College"]];
 const NAME = { nfl: "NFL", cfb: "College" };
-const STATUS = { trial: "On trial", recommended: "Recommended", proven: "Proven", paused: "Paused" };
+const STATUS = { trial: "On trial", recommended: "Recommended", proven: "Proven", paused: "Paused", held: "Stopped" };
 const BOOK = { draftkings: "DraftKings", fanduel: "FanDuel" };
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const minus = (s) => String(s).replace(/-/g, "−");
@@ -172,7 +172,7 @@ function recordPage() {
 <h2 id="where-h">Where it stands</h2>
 <p class="note">${nRec ? "" : "<strong>No track has earned “Recommended” yet.</strong> Every track starts on trial. The earliest one can be promoted is after the 2027 season, once it has 100 graded picks across a full season. "}${since ? "The record began " + esc(since) + "; nothing before that is counted." : "No picks have been published yet. The first appear with the next board update."}</p>
 <div class="tiles">
-${tile("Tracks recommended", nRec + " of " + tracks.length, (tracks.length - nRec) + " on trial")}
+${tile("Tracks recommended", nRec + " of " + tracks.length, tracks.filter((t) => t.status === "trial").length + " on trial" + (tracks.some((t) => t.status === "held") ? ", " + tracks.filter((t) => t.status === "held").length + " stopped" : ""))}
 ${tile("Rolling total, $10 a pick", all.graded ? money(all.dollars) : "$0.00", all.graded + " graded " + (all.graded === 1 ? "pick" : "picks") + (all.n - all.graded ? ", " + (all.n - all.graded) + " open" : ""))}
 ${tile("Live record, all tracks", all.graded ? wl(all) : "0-0", all.win == null ? "No graded picks yet" : pct(all.win) + " of decided picks")}
 ${tile("Return at the published price", all.roi == null ? "—" : spct(all.roi), all.se == null ? "one unit a pick" : "± " + (all.se * 100).toFixed(1) + "%, one unit a pick")}
@@ -192,7 +192,7 @@ ${open.map((p) => `<tr><td class="l">${when(p.at)}</td><td class="l"><a href="${
 <p class="note">One kind of pick, one fixed rule, one record. The live record counts only picks published here before kickoff. Backtests are kept apart in the last column and never added in.</p>
 <div class="scroll"><table>
 <thead><tr><th class="l">Track</th><th class="l">Status</th><th>Live record</th><th>Win rate</th><th>$10 a pick</th><th>Return</th><th>Closing line value</th><th>Picks to 100</th><th class="l">Before going live (not part of the record)</th></tr></thead><tbody>
-${tracks.map((t) => `<tr><td class="l t"><strong>${esc(t.name)}</strong><br><span style="color:#44514a;font-size:12.5px">${esc(t.rule)}</span></td><td class="l">${chip(t.status)}</td><td>${t.w}-${t.l}${t.p ? "-" + t.p : ""}</td><td>${t.win_pct == null ? "" : pct(t.win_pct)}</td><td>${t.graded ? money(t.dollars) : ""}</td><td>${t.graded ? pm(t.roi, t.roi_se) : ""}</td><td>${t.clv == null ? "" : pm(t.clv, t.clv_se)}</td><td>${t.to_go ? t.to_go : "0, needs a full season"}</td><td class="w">${esc(minus(t.before))}</td></tr>`).join("\n")}
+${tracks.map((t) => `<tr><td class="l t"><strong>${esc(t.name)}</strong><br><span style="color:#44514a;font-size:12.5px">${esc(t.rule)}</span></td><td class="l">${chip(t.status)}</td><td>${t.w}-${t.l}${t.p ? "-" + t.p : ""}</td><td>${t.win_pct == null ? "" : pct(t.win_pct)}</td><td>${t.graded ? money(t.dollars) : ""}</td><td>${t.graded ? pm(t.roi, t.roi_se) : ""}</td><td>${t.clv == null ? "" : pm(t.clv, t.clv_se)}</td><td>${t.status === "held" ? "Stopped: no new picks" : t.to_go ? t.to_go : "0, needs a full season"}</td><td class="w">${esc(minus(t.before))}</td></tr>`).join("\n")}
 </tbody></table></div>
 </section>
 <section aria-labelledby="weeks-h">
@@ -229,6 +229,7 @@ ${every.map((p) => `<tr><td class="l">${ETD.format(utc(p.at))}</td><td class="l"
 <div><span class="k">${chip("trial")}</span><p>Published and graded in the open. Not yet a recommendation.</p></div>
 <div><span class="k">${chip("recommended")}</span><p>100+ graded picks across a full season, return above zero by at least one standard error, closing line value not below zero. Rechecked the next season.</p></div>
 <div><span class="k">${chip("proven")}</span><p>The same, with the return above zero by at least two standard errors.</p></div>
+<div><span class="k">${chip("held")}</span><p>Stopped by hand because its rule did not hold up in testing. It publishes no new picks; the ones already published stay on the record and in the totals.</p></div>
 <div><span class="k">${chip("paused")}</span><p>After 100+ picks the return or the closing line value is clearly below zero. Off the list until the next season’s review.</p></div>
 </div>
 </section>
@@ -273,9 +274,10 @@ ${tile("This week, $10 a pick", r.graded ? money(r.dollars) : "$0.00", r.graded 
 ${tile("Rolling total, " + NAME[lg], before ? money(before.running) : "$0.00", "$10 on every pick through week " + week)}
 ${tile("Season record, " + NAME[lg], D.all && D.all.graded ? D.all.w + "-" + D.all.l + (D.all.p ? "-" + D.all.p : "") : "0-0", D.all && D.all.roi != null ? pm(D.all.roi, D.all.roi_se) + " return" : "no graded picks yet")}
 </div>
-<p class="box"><strong>${tracksOf(lg).every((t) => t.status === "trial") ? "All tracks are on trial." : "Each track’s status is shown beside it."}</strong> On-trial picks are published and graded in the open, but have not yet earned “Recommended”. Prices are the better of DraftKings and FanDuel at the time shown; check the price before betting.</p>`;
+<p class="box"><strong>${tracksOf(lg).every((t) => t.status === "trial" || t.status === "held") ? "All tracks are on trial." : "Each track’s status is shown beside it."}</strong> On-trial picks are published and graded in the open, but have not yet earned “Recommended”. Prices are the better of DraftKings and FanDuel at the time shown; check the price before betting.</p>`;
   for (const t of tracksOf(lg)) {
     const rows = mine.filter((p) => p.track === t.key).sort((a, b) => a.at < b.at ? -1 : a.at > b.at ? 1 : a.kickoff < b.kickoff ? -1 : 1);
+    if (t.status === "held" && !rows.length) continue;      // a stopped track shows only in the weeks it has picks
     h += `<section>
 <div class="th"><h2>${esc(t.name)}</h2>${chip(t.status)}<span class="rec">Season so far: ${t.graded ? t.w + "-" + t.l + (t.p ? "-" + t.p : "") + ", " + money(t.dollars) : "no graded picks yet"}</span></div>
 <p class="s">${esc(minus(t.rule))}</p>`;
