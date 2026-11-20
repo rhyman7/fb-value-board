@@ -3281,3 +3281,82 @@ is worse by more than one standard error. Not applied. The fitted weight on the 
 and positive (0.07 to 0.18), so the public ratings carry a little signal the line has not fully
 absorbed, but not enough to survive out of sample at this model's size. Measures: the plan's text named
 four kinds while saying twelve; the script used the stricter twelve (miss, RMS, side on both frames).
+
+## A batch run while Ryan was away (Nov 20, 2026): nothing kept
+
+Plan with every rule, written before any run: Project doc `claude/plan-batch-tests-2026-11-20.md`; scripts
+committed (817cb1f) before any ran. The college tests are in CFB_FEATURES.md under the same heading.
+Dropped before testing: a win-total preseason prior (the free nflverse win-totals file stops at 2020, so
+the holdout would have two seasons) and a draft-position quarterback prior (test 6 above, October).
+
+### T3 and T3b. A market weight from recent accuracy, nfelo's idea: better on tuning, worse on the holdout
+
+`experiments/recent_accuracy_weight_test.py`: board number + c × (raw model − line) × the two teams'
+recent edge over the line (last 4 or 8 games; or its sign), c fitted on earlier seasons. On 2014-18 all
+three versions cut the average miss by about 0.019 (± 0.009 to 0.010) and the RMS miss, **but the rule as
+written could not be passed**: the term never moves a number across the line (0 sides changed of 1,244),
+and the rule needed a strictly better side win rate. That was a flaw in my rule. A corrected rule (miss
+and RMS better, side not worse) was written before the holdout was opened (Project doc
+`claude/plan-batch-tests-addendum-t3b-2026-11-20.md`; `experiments/nfl_recent_accuracy_followup.py`).
+
+Under it version B (last 8 games) was chosen and on 2019-25 it was **worse on both**: average miss 9.835
+to 9.841 (+0.006 ± 0.008), RMS 12.710 to 12.715, 2 sides changed of 1,749. Not kept. The fitted c was
+negative every season (−0.05 to −0.25), the opposite of nfelo's direction: a recent run of the model
+beating the line for two teams says to trust its next disagreement less, which is regression to the
+mean, and it did not hold out of sample either.
+
+### T5. Does a bigger gap win more? (`experiments/gap_size_diagnostic.py`): not on the holdout
+
+| Board number off the closing spread by | 2014-18 | 2019-25 | 2026 so far |
+|---|---|---|---|
+| under 0.5 | 175-175, 50.0% | 424-366, 53.7% | 38-41 |
+| 0.5 to 1 | 180-155, 53.7% | 248-236, 51.2% | 31-21 |
+| 1 to 2 | 198-155, 56.1% | 186-181, 50.7% | 7-7 |
+| 2 or more | 116-90, 56.3% | 58-50, 53.7% | none |
+
+On the tuning seasons the win rate climbs with the gap; on the holdout it is flat (the smallest and
+largest buckets tie at 53.7%). The gap does not rank NFL sides out of sample.
+
+### T4. Player projections in four situations (`experiments/nfl_player_situations_test.py`): nothing kept; one lead, and it is the final week, not division games
+
+Ryan's Weekly Review ideas (Nov 18), each as a term after the board's final projection, twelve cells
+(four situations by passing, rushing and receiving yards). Run-time change, no rule change: the two
+price measures (Brier at the DK/FD lines, about ten minutes a cell) were computed only for cells still
+able to pass, that is better on all four RMSE measures.
+
+| Situation | Passing yards | Rushing yards | Receiving yards |
+|---|---|---|---|
+| S1 First game back after missing one | not better on tuning (29 rows) | tuning better, holdout worse (+0.022 ± 0.013) | not better on tuning |
+| S2 Last game's miss carries over | tuning worse (+0.10 ± 0.03) | tuning better (−0.13), holdout worse (+0.020 ± 0.033) | tuning better, holdout flat (+0.0001) |
+| S3 Division game | **trade-off, 4 of 6** | not better on tuning | not better on tuning |
+| S4 Facing a former team | too few rows (13) | too few (57) | not better on tuning (157 rows) |
+
+Eleven cells stop on tuning or the holdout. Nothing is kept.
+
+**S3, passing yards.** Better on all four RMSE measures and strongly on the holdout (88.30 to 87.60
+game-day, −0.70 ± 0.16; 86.24 to 85.64 bet-time, −0.60 ± 0.16), with a steady fitted cut of about 7% of
+the projection. **Worse at the lines:** Brier +0.0022 ± 0.0014 at the DK/FD close and +0.0012 ± 0.0014
+at the pricing snapshot. Not applied.
+
+Why, looked at afterwards (exploratory): it is not a division effect. Since 2010 every final-week game
+is a division game, and that is where the miss sits.
+
+| Quarterback rows, actual minus projection | 2014-18 | 2019-25 |
+|---|---|---|
+| Division games, final week | −30.4 ± 7.5 (160) | −40.2 ± 6.3 (224) |
+| Division games, other weeks | −12.2 ± 3.1 (808) | −16.1 ± 2.6 (1,124) |
+| Non-division games | −10.1 ± 2.1 (1,632) | −13.8 ± 1.8 (2,414) |
+
+In the final week, starters rest or leave early and the projection does not know it; in every other
+week division games are within two or three yards of the rest. A flat cut on all division games fixes
+the average and mis-prices the ordinary ones, which is why it is better on RMSE and worse against the
+books, who already price the final week. The lead is a **final-week term** (or better, a "nothing to
+play for" flag). Both periods have now been seen for it, so it cannot be tested fairly on them: its
+honest test is the 2026 final week (Jan 3, 2027), named now on the January list. The general −10 to
+−14 yards on quarterback rows is the known gap between an average that includes early exits and a
+typical game (the "Typical" number).
+
+The other three situations: a player's first game back, his last game's miss and a former opponent add
+nothing the projection lacks. The fitted signs were what a fan would guess (first game back −5% for
+receivers, a small positive carry-over of last week's miss for runners), and none survived out of
+sample.

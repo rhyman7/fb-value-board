@@ -1,0 +1,645 @@
+{
+ "plan": "claude/plan-batch-tests-2026-11-20.md (T4)",
+ "S1 first game back | pass_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 2670,
+    "now": 87.9463,
+    "candidate": 87.9463,
+    "diff": 0.0,
+    "se": 0.0
+   },
+   "bettime": {
+    "n": 2563,
+    "now": 89.1526,
+    "candidate": 89.1526,
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0,
+   "2016": 0.0,
+   "2017": 0.0,
+   "2018": 0.0,
+   "2019": 0.0,
+   "2020": 0.0,
+   "2021": 0.0,
+   "2022": 0.0,
+   "2023": 0.0,
+   "2024": -0.2304,
+   "2025": -0.2192,
+   "2026": -0.2231
+  },
+  "affected_tuning": {
+   "n": 29,
+   "bias_now": -34.34,
+   "bias_new": -34.34,
+   "se": 20.87
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S1 first game back | rush_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 6027,
+    "now": 32.3134,
+    "candidate": 32.3061,
+    "diff": -0.00738,
+    "se": 0.00779
+   },
+   "bettime": {
+    "n": 5984,
+    "now": 32.5954,
+    "candidate": 32.5869,
+    "diff": -0.00854,
+    "se": 0.00969
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0,
+   "2016": 0.0,
+   "2017": -0.1344,
+   "2018": -0.1304,
+   "2019": -0.1695,
+   "2020": -0.1293,
+   "2021": -0.0283,
+   "2022": 0.0266,
+   "2023": 0.0305,
+   "2024": 0.0231,
+   "2025": 0.0176,
+   "2026": 0.0105
+  },
+  "affected_tuning": {
+   "n": 178,
+   "bias_now": -1.57,
+   "bias_new": -0.43,
+   "se": 2.38
+  },
+  "holdout": {
+   "gameday": {
+    "n": 8626,
+    "now": 30.4865,
+    "candidate": 30.5085,
+    "diff": 0.02199,
+    "se": 0.01249
+   },
+   "bettime": {
+    "n": 8617,
+    "now": 30.6815,
+    "candidate": 30.7139,
+    "diff": 0.03248,
+    "se": 0.01393
+   }
+  },
+  "affected_holdout": {
+   "n": 461,
+   "bias_now": 2.11,
+   "bias_new": 3.35,
+   "se": 1.41
+  },
+  "season_2026_affected": {
+   "n": 23,
+   "bias_now": 2.06,
+   "bias_new": 1.76,
+   "se": 5.25
+  },
+  "season_2026_all": {
+   "n": 636,
+   "now": 29.5008,
+   "candidate": 29.5002,
+   "diff": -0.00062,
+   "se": 0.00232
+  },
+  "better_on": "2 of 4 RMSE measures (Brier not computed)",
+  "verdict": "Cannot be kept: worse on a holdout RMSE measure (better on 2 of 4; Brier not computed)"
+ },
+ "S1 first game back | rec_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 18750,
+    "now": 28.918,
+    "candidate": 28.9205,
+    "diff": 0.00245,
+    "se": 0.00573
+   },
+   "bettime": {
+    "n": 18777,
+    "now": 28.9176,
+    "candidate": 28.9224,
+    "diff": 0.00474,
+    "se": 0.00552
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": -0.201,
+   "2016": -0.0372,
+   "2017": -0.087,
+   "2018": -0.0927,
+   "2019": -0.1342,
+   "2020": -0.0966,
+   "2021": -0.0393,
+   "2022": -0.0502,
+   "2023": -0.0566,
+   "2024": -0.0564,
+   "2025": -0.0438,
+   "2026": -0.0539
+  },
+  "affected_tuning": {
+   "n": 529,
+   "bias_now": -3.58,
+   "bias_new": -1.33,
+   "se": 1.17
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S2 last game's miss | pass_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 2670,
+    "now": 87.9463,
+    "candidate": 88.0483,
+    "diff": 0.102,
+    "se": 0.0335
+   },
+   "bettime": {
+    "n": 2563,
+    "now": 89.1526,
+    "candidate": 89.2593,
+    "diff": 0.10673,
+    "se": 0.036
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0468,
+   "2016": 0.0369,
+   "2017": -0.0306,
+   "2018": -0.0089,
+   "2019": 0.0108,
+   "2020": 0.003,
+   "2021": -0.0011,
+   "2022": -0.0141,
+   "2023": -0.0216,
+   "2024": -0.0299,
+   "2025": -0.0308,
+   "2026": -0.0289
+  },
+  "affected_tuning": {
+   "n": 2483,
+   "bias_now": -8.97,
+   "bias_new": -9.11,
+   "se": 1.71
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S2 last game's miss | rush_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 6027,
+    "now": 32.3134,
+    "candidate": 32.1806,
+    "diff": -0.13286,
+    "se": 0.04636
+   },
+   "bettime": {
+    "n": 5984,
+    "now": 32.5954,
+    "candidate": 32.4636,
+    "diff": -0.13178,
+    "se": 0.04135
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.178,
+   "2016": 0.1692,
+   "2017": 0.1822,
+   "2018": 0.1818,
+   "2019": 0.1679,
+   "2020": 0.1547,
+   "2021": 0.1405,
+   "2022": 0.1353,
+   "2023": 0.1239,
+   "2024": 0.1247,
+   "2025": 0.1198,
+   "2026": 0.1108
+  },
+  "affected_tuning": {
+   "n": 5536,
+   "bias_now": 1.13,
+   "bias_new": 1.09,
+   "se": 0.44
+  },
+  "holdout": {
+   "gameday": {
+    "n": 8626,
+    "now": 30.4865,
+    "candidate": 30.5069,
+    "diff": 0.02034,
+    "se": 0.03247
+   },
+   "bettime": {
+    "n": 8617,
+    "now": 30.6815,
+    "candidate": 30.7017,
+    "diff": 0.02021,
+    "se": 0.03026
+   }
+  },
+  "affected_holdout": {
+   "n": 7974,
+   "bias_now": 0.63,
+   "bias_new": 0.64,
+   "se": 0.34
+  },
+  "season_2026_affected": {
+   "n": 548,
+   "bias_now": 0.21,
+   "bias_new": 0.23,
+   "se": 1.28
+  },
+  "season_2026_all": {
+   "n": 636,
+   "now": 29.5008,
+   "candidate": 29.3977,
+   "diff": -0.1031,
+   "se": 0.09598
+  },
+  "better_on": "2 of 4 RMSE measures (Brier not computed)",
+  "verdict": "Cannot be kept: worse on a holdout RMSE measure (better on 2 of 4; Brier not computed)"
+ },
+ "S2 last game's miss | rec_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 18750,
+    "now": 28.918,
+    "candidate": 28.9048,
+    "diff": -0.01321,
+    "se": 0.00584
+   },
+   "bettime": {
+    "n": 18777,
+    "now": 28.9176,
+    "candidate": 28.9129,
+    "diff": -0.00477,
+    "se": 0.00411
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0162,
+   "2016": 0.0457,
+   "2017": 0.0543,
+   "2018": 0.0493,
+   "2019": 0.0484,
+   "2020": 0.0455,
+   "2021": 0.0371,
+   "2022": 0.0352,
+   "2023": 0.0331,
+   "2024": 0.0349,
+   "2025": 0.0351,
+   "2026": 0.0345
+  },
+  "affected_tuning": {
+   "n": 17500,
+   "bias_now": 0.41,
+   "bias_new": 0.43,
+   "se": 0.22
+  },
+  "holdout": {
+   "gameday": {
+    "n": 27041,
+    "now": 27.1727,
+    "candidate": 27.1728,
+    "diff": 9e-05,
+    "se": 0.00475
+   },
+   "bettime": {
+    "n": 27094,
+    "now": 27.2499,
+    "candidate": 27.2501,
+    "diff": 0.0002,
+    "se": 0.00351
+   }
+  },
+  "affected_holdout": {
+   "n": 25236,
+   "bias_now": 0.1,
+   "bias_new": 0.11,
+   "se": 0.17
+  },
+  "season_2026_affected": {
+   "n": 1744,
+   "bias_now": 1.21,
+   "bias_new": 1.2,
+   "se": 0.67
+  },
+  "season_2026_all": {
+   "n": 1986,
+   "now": 27.8714,
+   "candidate": 27.897,
+   "diff": 0.02557,
+   "se": 0.01487
+  },
+  "better_on": "2 of 4 RMSE measures (Brier not computed)",
+  "verdict": "Cannot be kept: worse on a holdout RMSE measure (better on 2 of 4; Brier not computed)"
+ },
+ "S3 division game | pass_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 2670,
+    "now": 87.9463,
+    "candidate": 87.7711,
+    "diff": -0.1752,
+    "se": 0.1627
+   },
+   "bettime": {
+    "n": 2563,
+    "now": 89.1526,
+    "candidate": 88.8403,
+    "diff": -0.31231,
+    "se": 0.17808
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": -0.0847,
+   "2016": -0.0431,
+   "2017": -0.0478,
+   "2018": -0.0617,
+   "2019": -0.0608,
+   "2020": -0.0638,
+   "2021": -0.0661,
+   "2022": -0.0693,
+   "2023": -0.0695,
+   "2024": -0.0708,
+   "2025": -0.0688,
+   "2026": -0.0718
+  },
+  "affected_tuning": {
+   "n": 968,
+   "bias_now": -15.19,
+   "bias_new": -3.57,
+   "se": 2.9
+  },
+  "holdout": {
+   "gameday": {
+    "n": 3920,
+    "now": 88.3027,
+    "candidate": 87.6009,
+    "diff": -0.70177,
+    "se": 0.16115
+   },
+   "bettime": {
+    "n": 3659,
+    "now": 86.2378,
+    "candidate": 85.6415,
+    "diff": -0.5963,
+    "se": 0.16407
+   }
+  },
+  "affected_holdout": {
+   "n": 1374,
+   "bias_now": -19.75,
+   "bias_new": -3.96,
+   "se": 2.39
+  },
+  "season_2026_affected": {
+   "n": 100,
+   "bias_now": -17.46,
+   "bias_new": -1.55,
+   "se": 8.72
+  },
+  "season_2026_all": {
+   "n": 302,
+   "now": 86.3869,
+   "candidate": 85.8265,
+   "diff": -0.56046,
+   "se": 0.54353
+  },
+  "brier": {
+   "closing lines, game-day": {
+    "n": 3055,
+    "now": 0.25284,
+    "candidate": 0.255,
+    "books": 0.2502,
+    "diff": 0.002159,
+    "se": 0.001417
+   },
+   "pricing snapshot, bet-time": {
+    "n": 2597,
+    "now": 0.25088,
+    "candidate": 0.2521,
+    "books": 0.25016,
+    "diff": 0.001214,
+    "se": 0.001414
+   }
+  },
+  "better_on": "4 of 6",
+  "verdict": "Trade-off: better on 4 of 6"
+ },
+ "S3 division game | rush_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 6027,
+    "now": 32.3134,
+    "candidate": 32.3228,
+    "diff": 0.00937,
+    "se": 0.00926
+   },
+   "bettime": {
+    "n": 5984,
+    "now": 32.5954,
+    "candidate": 32.5995,
+    "diff": 0.0041,
+    "se": 0.01098
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0036,
+   "2016": -0.0461,
+   "2017": -0.0171,
+   "2018": -0.0205,
+   "2019": -0.0256,
+   "2020": -0.0216,
+   "2021": 0.0021,
+   "2022": -0.0023,
+   "2023": -0.0015,
+   "2024": -0.0069,
+   "2025": -0.0024,
+   "2026": -0.0102
+  },
+  "affected_tuning": {
+   "n": 2167,
+   "bias_now": 0.7,
+   "bias_new": 1.27,
+   "se": 0.69
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S3 division game | rec_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 18750,
+    "now": 28.918,
+    "candidate": 28.925,
+    "diff": 0.00692,
+    "se": 0.00392
+   },
+   "bettime": {
+    "n": 18777,
+    "now": 28.9176,
+    "candidate": 28.9265,
+    "diff": 0.00888,
+    "se": 0.00385
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": -0.0366,
+   "2016": 0.0005,
+   "2017": -0.0024,
+   "2018": -0.0183,
+   "2019": -0.0163,
+   "2020": -0.0132,
+   "2021": -0.0124,
+   "2022": -0.0142,
+   "2023": -0.0172,
+   "2024": -0.0165,
+   "2025": -0.0117,
+   "2026": -0.0129
+  },
+  "affected_tuning": {
+   "n": 6776,
+   "bias_now": -0.11,
+   "bias_new": 0.25,
+   "se": 0.35
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S4 former team | pass_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 2670,
+    "now": 87.9463,
+    "candidate": 87.9463,
+    "diff": 0.0,
+    "se": 0.0
+   },
+   "bettime": {
+    "n": 2563,
+    "now": 89.1526,
+    "candidate": 89.1526,
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0,
+   "2016": 0.0,
+   "2017": 0.0,
+   "2018": 0.0,
+   "2019": 0.0,
+   "2020": 0.0,
+   "2021": 0.0,
+   "2022": 0.0,
+   "2023": 0.0,
+   "2024": 0.0,
+   "2025": 0.0,
+   "2026": -0.1609
+  },
+  "affected_tuning": {
+   "n": 13,
+   "bias_now": 1.04,
+   "bias_new": 1.04,
+   "se": 15.96
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S4 former team | rush_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 6027,
+    "now": 32.3134,
+    "candidate": 32.3134,
+    "diff": 0.0,
+    "se": 0.0
+   },
+   "bettime": {
+    "n": 5984,
+    "now": 32.5954,
+    "candidate": 32.5954,
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0,
+   "2016": 0.0,
+   "2017": 0.0,
+   "2018": 0.0,
+   "2019": 0.0,
+   "2020": 0.0,
+   "2021": 0.0983,
+   "2022": 0.0555,
+   "2023": 0.0366,
+   "2024": 0.0408,
+   "2025": 0.0524,
+   "2026": 0.0923
+  },
+  "affected_tuning": {
+   "n": 57,
+   "bias_now": 2.26,
+   "bias_new": 2.26,
+   "se": 3.76
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "S4 former team | rec_yds": {
+  "tuning": {
+   "gameday": {
+    "n": 18750,
+    "now": 28.918,
+    "candidate": 28.918,
+    "diff": 0.0,
+    "se": 0.0
+   },
+   "bettime": {
+    "n": 18777,
+    "now": 28.9176,
+    "candidate": 28.9176,
+    "diff": 0.0,
+    "se": 0.0
+   }
+  },
+  "b_by_season": {
+   "2014": 0.0,
+   "2015": 0.0,
+   "2016": 0.0,
+   "2017": 0.0,
+   "2018": 0.0,
+   "2019": 0.0418,
+   "2020": 0.0483,
+   "2021": 0.0199,
+   "2022": 0.024,
+   "2023": 0.0339,
+   "2024": 0.0195,
+   "2025": 0.0374,
+   "2026": 0.0337
+  },
+  "affected_tuning": {
+   "n": 157,
+   "bias_now": 1.88,
+   "bias_new": 1.88,
+   "se": 2.32
+  },
+  "verdict": "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
+ }
+}
