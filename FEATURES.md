@@ -3316,3 +3316,47 @@ mean, and it did not hold out of sample either.
 
 On the tuning seasons the win rate climbs with the gap; on the holdout it is flat (the smallest and
 largest buckets tie at 53.7%). The gap does not rank NFL sides out of sample.
+
+### T4. Player projections in four situations (`experiments/nfl_player_situations_test.py`): nothing kept; one lead, and it is the final week, not division games
+
+Ryan's Weekly Review ideas (Nov 18), each as a term after the board's final projection, twelve cells
+(four situations by passing, rushing and receiving yards). Run-time change, no rule change: the two
+price measures (Brier at the DK/FD lines, about ten minutes a cell) were computed only for cells still
+able to pass, that is better on all four RMSE measures.
+
+| Situation | Passing yards | Rushing yards | Receiving yards |
+|---|---|---|---|
+| S1 First game back after missing one | not better on tuning (29 rows) | tuning better, holdout worse (+0.022 ± 0.013) | not better on tuning |
+| S2 Last game's miss carries over | tuning worse (+0.10 ± 0.03) | tuning better (−0.13), holdout worse (+0.020 ± 0.033) | tuning better, holdout flat (+0.0001) |
+| S3 Division game | **trade-off, 4 of 6** | not better on tuning | not better on tuning |
+| S4 Facing a former team | too few rows (13) | too few (57) | not better on tuning (157 rows) |
+
+Eleven cells stop on tuning or the holdout. Nothing is kept.
+
+**S3, passing yards.** Better on all four RMSE measures and strongly on the holdout (88.30 to 87.60
+game-day, −0.70 ± 0.16; 86.24 to 85.64 bet-time, −0.60 ± 0.16), with a steady fitted cut of about 7% of
+the projection. **Worse at the lines:** Brier +0.0022 ± 0.0014 at the DK/FD close and +0.0012 ± 0.0014
+at the pricing snapshot. Not applied.
+
+Why, looked at afterwards (exploratory): it is not a division effect. Since 2010 every final-week game
+is a division game, and that is where the miss sits.
+
+| Quarterback rows, actual minus projection | 2014-18 | 2019-25 |
+|---|---|---|
+| Division games, final week | −30.4 ± 7.5 (160) | −40.2 ± 6.3 (224) |
+| Division games, other weeks | −12.2 ± 3.1 (808) | −16.1 ± 2.6 (1,124) |
+| Non-division games | −10.1 ± 2.1 (1,632) | −13.8 ± 1.8 (2,414) |
+
+In the final week, starters rest or leave early and the projection does not know it; in every other
+week division games are within two or three yards of the rest. A flat cut on all division games fixes
+the average and mis-prices the ordinary ones, which is why it is better on RMSE and worse against the
+books, who already price the final week. The lead is a **final-week term** (or better, a "nothing to
+play for" flag). Both periods have now been seen for it, so it cannot be tested fairly on them: its
+honest test is the 2026 final week (Jan 3, 2027), named now on the January list. The general −10 to
+−14 yards on quarterback rows is the known gap between an average that includes early exits and a
+typical game (the "Typical" number).
+
+The other three situations: a player's first game back, his last game's miss and a former opponent add
+nothing the projection lacks. The fitted signs were what a fan would guess (first game back −5% for
+receivers, a small positive carry-over of last week's miss for runners), and none survived out of
+sample.
