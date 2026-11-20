@@ -162,6 +162,24 @@ def main():
                 r["verdict"] = "Not better on both tuning measures: nothing carried to the holdout, nothing kept."
             else:
                 r["holdout"] = {w: L.rmse(tabs[w], cand[w][0], st, *HOLD) for w in ("gameday", "bettime")}
+                r["affected_holdout"] = affected(tabs["gameday"], cand["gameday"][0], st, *HOLD, xs["gameday"])
+                r["season_2026_affected"] = affected(tabs["gameday"], cand["gameday"][0], st, 2026, 2026, xs["gameday"])
+                r["season_2026_all"] = L.rmse(tabs["gameday"], cand["gameday"][0], st, 2026, 2026)
+                if not all(v["diff"] < 0 for v in r["holdout"].values()):
+                    # Run-time change (Nov 20, after the first run proved too slow; no rule change): the two
+                    # Brier measures take about ten minutes a cell, and a cell that is worse on a holdout
+                    # RMSE cannot be kept whatever they say. They are skipped here and the cell is reported
+                    # as a trade-off on the four RMSE measures.
+                    n4 = sum(v["diff"] < 0 for v in list(r["tuning"].values()) + list(r["holdout"].values()))
+                    r["better_on"] = f"{n4} of 4 RMSE measures (Brier not computed)"
+                    r["verdict"] = f"Cannot be kept: worse on a holdout RMSE measure (better on {n4} of 4; Brier not computed)"
+                    res[f"{sit} | {st}"] = r
+                    OUT.parent.mkdir(exist_ok=True)
+                    OUT.write_text(json.dumps(res, indent=1, default=str))
+                    h = r["holdout"]
+                    print(f"{sit} | {st}: tuning game-day {r['tuning']['gameday']['diff']:+.4f}, bet-time {r['tuning']['bettime']['diff']:+.4f}; "
+                          f"holdout game-day {h['gameday']['diff']:+.4f} ± {h['gameday']['se']:.4f}, bet-time {h['bettime']['diff']:+.4f} ± {h['bettime']['se']:.4f}; {r['verdict']}", flush=True)
+                    continue
                 frames = {}
                 for w in ("gameday", "bettime"):
                     c = T[w].copy()
@@ -169,9 +187,6 @@ def main():
                     frames[w] = c
                 r["brier"] = {"closing lines, game-day": T0.brier(T["gameday"], frames["gameday"], "close", (st,)),
                               "pricing snapshot, bet-time": T0.brier(T["bettime"], frames["bettime"], "flag", (st,))}
-                r["affected_holdout"] = affected(tabs["gameday"], cand["gameday"][0], st, *HOLD, xs["gameday"])
-                r["season_2026_affected"] = affected(tabs["gameday"], cand["gameday"][0], st, 2026, 2026, xs["gameday"])
-                r["season_2026_all"] = L.rmse(tabs["gameday"], cand["gameday"][0], st, 2026, 2026)
                 six = list(r["tuning"].values()) + list(r["holdout"].values()) + list(r["brier"].values())
                 n = sum(v["diff"] < 0 for v in six)
                 one_se = all(-v["diff"] >= v["se"] for v in r["holdout"].values())
@@ -182,6 +197,10 @@ def main():
             OUT.parent.mkdir(exist_ok=True)
             OUT.write_text(json.dumps(res, indent=1, default=str))     # saved after every cell: the run is long
             t = r["tuning"]
+            if "holdout" in r:
+                h = r["holdout"]
+                print(f"   holdout game-day {h['gameday']['diff']:+.4f} ± {h['gameday']['se']:.4f}, bet-time {h['bettime']['diff']:+.4f} ± {h['bettime']['se']:.4f}; "
+                      f"Brier {[round(v['diff'], 5) for v in r['brier'].values()]}", flush=True)
             print(f"{sit} | {st}: tuning game-day {t['gameday']['diff']:+.4f} ± {t['gameday']['se']:.4f}, bet-time {t['bettime']['diff']:+.4f}; "
                   f"affected {r['affected_tuning'].get('n')} rows, bias {r['affected_tuning'].get('bias_now')}; {r['verdict']}", flush=True)
     OUT.parent.mkdir(exist_ok=True)

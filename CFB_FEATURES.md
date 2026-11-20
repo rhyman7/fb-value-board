@@ -574,3 +574,36 @@ lines is not there at real prices in 2024-25 (2024 was 82-60, 2025 was 66-74). E
 about one standard error of zero. Taking the better of two books' lines was worth about 2 points of
 return over the consensus line on the same sides, which is line shopping, not the model. No 2026
 backfill exists to add.
+
+### T7. Opener bets at Pinnacle's Monday price, by part of season (`experiments/cfb_opener_real_price_split.py`): weeks 5+ break even, weeks 1-4 lose
+
+Added after T1 (Project doc `claude/plan-batch-tests-addendum-t7-2026-11-20.md`, written before the run).
+`experiments/pinnacle_grade.py`'s college opener bets for 2024-25, built as that script builds them
+(its own raw bet-time run, without the board's extra inputs), split by week.
+
+| Spreads, at Pinnacle's Monday line and price | Weeks 1-4 | Weeks 5+ |
+|---|---|---|
+| 2+ | 127-130, 49.4%, −4.9% ± 5.9% | 273-252, 52.0%, +0.0% ± 4.1% |
+| 3+ | 97-103, 48.5%, −6.5% ± 6.8% | 175-155, 53.0%, +1.9% ± 5.1% |
+
+By the letter of the reading fixed beforehand, weeks 5+ are above 0% at both thresholds and above weeks
+1-4 at both. In substance weeks 5+ break even at a real price and weeks 1-4 lose about 5%; neither is
+distinguishable from zero on two seasons. The direction matches every other split of 2021 on.
+
+**Totals from the same run** (not part of the reading): 2+ off Pinnacle's Monday total 389-300, 56.5%,
++7.5% ± 3.6%; 3+ 232-166, 58.3%, +11.0% ± 4.7%, alike in both parts of the season. That is the October
+regrade's totals lead again with today's code.
+
+**And then 2026** (exploratory, the board's bet-time run against the consensus opening total at −110,
+short weeks out; `/work` script, not committed):
+
+| Model off the opening total by | 2021-25 | 2026 so far |
+|---|---|---|
+| 2+ | 986-829, 54.3%, +3.7% ± 2.2% | 129-149, 46.4%, −11.3% ± 5.6% |
+| 3+ | 640-497, 56.3%, +7.4% ± 2.8% | 69-91, 43.1%, −17.2% ± 7.3% |
+
+The one college lead that had held at a real price has lost in 2026, at both thresholds and in both
+parts of the season, while the line still moved the model's way (+0.7 to +0.9 points). In 2021-25
+nearly all of it came from unders (2+: 334-222, 60.1%, against overs 652-607); in 2026 unders are 38-45.
+One bad season does not cancel five, but it is the only season the lead had not been fitted around,
+and it is the reason these stay unstaked.
