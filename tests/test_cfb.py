@@ -546,3 +546,16 @@ def test_college_closing_quotes_reach_the_ledger():
         res = pd.read_csv(path)
         if len(res) >= 50:
             assert res["clv"].notna().mean() > 0.5, f"{name}: closing line value missing on most graded rows"
+
+
+def test_underdog_qb_term_only_touches_big_underdog_quarterbacks_from_its_season():
+    import pandas as pd
+    from cfbmodel import players as PL
+    p = pd.DataFrame({"season": [2026, 2026, 2026, 2026, 2025, 2026], "group": ["QB", "QB", "QB", "WR", "QB", "QB"],
+                      "margin": [-17.0, -7.0, 12.0, -17.0, -17.0, -30.0], "pass_yds_proj": [250.0, 240.0, 260.0, 0.0, 250.0, 20.0]})
+    out = PL.underdog_qb(p.copy(), {"yards_per_point": 2.871, "margin": 7.0, "from_season": 2026})
+    assert out["dog_adj"].round(2).tolist() == [28.71, 0.0, 0.0, 0.0, 0.0, 20.0]       # 10 points beyond 7; capped at the projection
+    assert out["pass_yds_proj"].round(2).tolist() == [221.29, 240.0, 260.0, 0.0, 250.0, 0.0]
+    assert out["pass_yds_pre_dog"].tolist() == p["pass_yds_proj"].tolist()
+    none = PL.underdog_qb(p.copy(), {})
+    assert none["pass_yds_proj"].tolist() == p["pass_yds_proj"].tolist() and (none["dog_adj"] == 0).all()

@@ -34,6 +34,8 @@ Stats are official box scores, which in college count sacks as quarterback runs.
 """
 from __future__ import annotations
 
+import json
+
 import numpy as np
 import pandas as pd
 
@@ -357,6 +359,16 @@ GROUP_STATS = tuple(CALIB_GROUPS)
 # version's "expected but absent counts as 0 allowed" measured the opponents' absences in college.
 DVP_PAIRS = [("WR", "rec_yds"), ("WR", "receptions"), ("RB", "rush_yds"), ("RB", "carries"), ("QB", "pass_yds")]
 DVP_FIT_SEASONS = 4     # seasons before first_test also projected (not returned) so the matchup fit has history
+# Starting quarterbacks on teams projected to lose by more than 7 (Nov 19, 2026; from the ChatGPT review
+# Ryan shared, experiments/chatgpt_player_changes_test.py; provisional until the January recheck on the
+# full 2026 season): passing yards come down by a fixed number of yards for each point of projected losing
+# margin beyond 7. The margin already enters through team pass attempts, but only as a straight line, and
+# these projections ran 30 yards high. A 7-of-8 trade-off applied on Ryan's call: RMSE better on tuning
+# (5.0 SE) and holdout (8.3 / 7.8 SE), the 2024 lines better, the 2025 lines level (bet-time +0.00005).
+# The slope is frozen in data/cfb/qb_underdog.json (2.871, the 2017-2025 fit the test used for 2026) and
+# applies from that file's from_season on, after every fit, so no earlier season and no other fit moves.
+# Passing yards only; the term for favourites did nothing and is not applied.
+DOG_PARAMS = C.DATA / "qb_underdog.json"
 
 
 def calib_X(p: pd.DataFrame, stat: str) -> np.ndarray:
@@ -406,7 +418,7 @@ def walk_forward(table: pd.DataFrame, first_test: int = C.FIRST_TEST_SEASON, loo
         cur = _matchup(cur, out, dvp)
         out.append(cur)
     res = pd.concat(out, ignore_index=True)
-    return res[res["season"] >= first_test].reset_index(drop=True)
+    return underdog_qb(res[res["season"] >= first_test].reset_index(drop=True))
 
 
 def _matchup(cur: pd.DataFrame, earlier: list, dvp) -> pd.DataFrame:
@@ -432,6 +444,25 @@ def _matchup(cur: pd.DataFrame, earlier: list, dvp) -> pd.DataFrame:
         m = cur["group"] == g
         cur.loc[m, f"dvpf_{st}"] = np.exp(bb * cur.loc[m, f"dvp_{st}"].fillna(0.0))
     return cur
+
+
+def underdog_qb(p: pd.DataFrame, params: dict | None = None) -> pd.DataFrame:
+    """The big-underdog term on quarterback passing yards (DOG_PARAMS). pass_yds_pre_dog keeps the
+    projection before it and dog_adj the yards taken off (0 for everyone else, and for every season
+    before from_season). No file: nothing changes."""
+    if params is None:
+        params = json.loads(DOG_PARAMS.read_text()) if DOG_PARAMS.exists() else {}
+    p["pass_yds_pre_dog"] = p["pass_yds_proj"]
+    p["dog_adj"] = 0.0
+    b = float(params.get("yards_per_point") or 0.0)
+    if b <= 0 or p.empty:
+        return p
+    beyond = np.nan_to_num(np.maximum(0.0, -p["margin"].to_numpy(float) - float(params.get("margin", 7.0))))
+    on = ((p["group"] == "QB") & (p["season"] >= int(params.get("from_season", 0)))).to_numpy()
+    adj = np.minimum(np.where(on, b * beyond, 0.0), np.nan_to_num(p["pass_yds_proj"].to_numpy(float)))
+    p["dog_adj"] = adj
+    p["pass_yds_proj"] = p["pass_yds_proj"] - adj
+    return p
 
 
 def _calibrate(h: pd.DataFrame, cur: pd.DataFrame, stat: str) -> np.ndarray:

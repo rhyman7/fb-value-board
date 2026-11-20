@@ -3186,7 +3186,7 @@ gap held for receiving rungs (88.9% v 79.2%, 126) and not for rushing (77.3% v 7
 these is profitable; the underdog cell is a rung to avoid, the role-change cell the nearest to
 break-even. Each would need its own pre-set test on week 11 on before it means anything.
 
-## The ChatGPT review's follow-ups (Nov 19, 2026): one trade-off for Ryan, nothing applied
+## The ChatGPT review's follow-ups (Nov 19, 2026): the college big-underdog quarterback term applied, nothing else kept
 
 Ryan shared a ChatGPT review done on copies of the repos. Its findings were re-run here under pre-set
 rules (Project docs `claude/plan-book-self-consistency-test-2026-11-19.md`,
@@ -3201,7 +3201,10 @@ RMSE 92.90 to 91.45 / 92.74 to 91.32 on tuning (game-day / bet-time), 88.30 to 8
 86.15 (7.8 se) on the holdout. On the affected rows the projections ran 30 yards high (holdout bias
 −30.6 to −4.3). Brier at DK/FD passing lines: better in 2024 (−0.0018, −0.0020) and level in 2025
 (−0.00001, **+0.00005**, each well inside 0.003 se). The same term for favourites did nothing, as the
-review found. 2026 so far, affected rows: RMSE 89.9 to 83.0. Not applied: Ryan's call.
+review found. 2026 so far, affected rows: RMSE 89.9 to 83.0. **Applied provisionally on Ryan's call
+(Nov 19, 2026)** with the slope frozen at 2.871 from the 2026 season (`players.underdog_qb`,
+`data/cfb/qb_underdog.json`); by size of margin the term holds (2021-25 bias after it: −13.8 at 7-12 points,
+−3.9, +2.0, +17.1 and −0.3 at 27+). Rechecked in January on 2026 alone.
 
 **College TE / WR pull-down above 15 / 20 yards: not kept (6 of 8 and 5 of 8).** Fitted as the average
 miss, the constant is about half a yard: the projections are not high on players who record a stat.

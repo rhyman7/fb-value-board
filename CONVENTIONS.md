@@ -773,6 +773,14 @@ boards in detail; this file is the rules.
   Don't change the constants, the 10-yard cut-off or the clip without a new pre-set test; refit only
   at the January recheck. Receptions and running backs are untouched. `woprstanding.APPLIED = False`
   (or removing the file) puts the board back as it was.
+- **College quarterbacks on big underdogs** (Nov 19, 2026, provisional, Ryan's call on a 7-of-8 trade-off;
+  CFB_PLAYERS.md "What earns its place", `experiments/chatgpt_player_changes_test.py`): `cfbmodel/players.underdog_qb`
+  takes `yards_per_point` x (projected losing margin beyond `margin`) off a quarterback's passing yards, from
+  `from_season` on. The three constants live in `data/cfb/qb_underdog.json` (2.871, 7, 2026: the 2017-2025 fit
+  the test scored 2026 with). It runs last in `players.walk_forward`, so no fit and no earlier season sees it;
+  `pass_yds_pre_dog` and `dog_adj` keep the projection before it and the yards taken off. Don't change the
+  constants or extend it to other stats or to favourites without a new pre-set test; refit only at the January
+  recheck. Removing the file puts the board back as it was.
 - **College prop legs on the Parlays page** (`parlays.cfb_book_legs`): priced off DraftKings and
   FanDuel. From Nov 13, 2026 (Ryan's call, provisional) two-sided main lines in passing yards,
   passing TDs, rushing yards and receiving yards carry the model nudge: the books' no-vig chance
