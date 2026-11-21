@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-21T17:23Z",
+ "fetched": "2026-11-21T18:23Z",
  "today": "2026-11-21",
  "teams": {
   "Army": {
@@ -638,6 +638,151 @@
     }
    ]
   },
+  "Florida Atlantic": {
+   "conf": "American",
+   "abbr": "FAU",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "11:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "13:30:00",
+   "opponent": "South Florida",
+   "players": [
+    {
+     "name": "Damon Allen",
+     "pos": "DB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Branden Hoch",
+     "pos": "WR",
+     "number": "0",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Brooks Johnson",
+     "pos": "TE",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Damarius McGhee",
+     "pos": "DB",
+     "number": "4",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Leon Hart Jr.",
+     "pos": "LB",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "RJ Garcia II",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Easton Messer",
+     "pos": "WR",
+     "number": "8",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Gavench Marcelin",
+     "pos": "EDG",
+     "number": "11",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Char'Quez Lee",
+     "pos": "LB",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chase Hanning",
+     "pos": "WR",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kaden Shields-Dutton",
+     "pos": "RB",
+     "number": "28",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Collin Rogers",
+     "pos": "K",
+     "number": "41",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Owen Cheatham",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Aiden Jones",
+     "pos": "OL",
+     "number": "58",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Vincent Fiacable",
+     "pos": "OL",
+     "number": "62",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Peter Cannon",
+     "pos": "TE",
+     "number": "87",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marcus Vinson",
+     "pos": "TE",
+     "number": "88",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Lebron Edmond",
+     "pos": "DL",
+     "number": "91",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Blake Burris",
+     "pos": "DL",
+     "number": "98",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "Georgia Tech": {
    "conf": "ACC",
    "abbr": "GT",
@@ -820,6 +965,184 @@
      "number": "50",
      "status": "Out",
      "season_out": false
+    }
+   ]
+  },
+  "Illinois": {
+   "conf": "Big Ten",
+   "abbr": "ILL",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "11:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "13:30:00",
+   "opponent": "Iowa",
+   "players": [
+    {
+     "name": "Jayshon Platt",
+     "pos": "WR",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Katin Houser",
+     "pos": "QB",
+     "number": "4",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Ca'Lil Valentine",
+     "pos": "RB",
+     "number": "5",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Michael Clayton II",
+     "pos": "QB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jacob Eberhart",
+     "pos": "DB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Hudson Clement",
+     "pos": "WR",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Javari Barnett",
+     "pos": "RB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tywan Cox",
+     "pos": "DB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Beerman",
+     "pos": "LB",
+     "number": "33",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Robert Edmonson",
+     "pos": "LB",
+     "number": "45",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carter Smith",
+     "pos": "DL",
+     "number": "48",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kai Pritchard",
+     "pos": "OL",
+     "number": "53",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "TJ McMillen",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "Iowa": {
+   "conf": "Big Ten",
+   "abbr": "IOWA",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "11:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "13:30:00",
+   "opponent": "Illinois",
+   "players": [
+    {
+     "name": "Cody Haddad",
+     "pos": "DB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tyler Brown",
+     "pos": "DB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Burke Gautcher",
+     "pos": "LB",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brody Schaffer",
+     "pos": "WR",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carson Cooney",
+     "pos": "LB",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Xavier Styles",
+     "pos": "DB",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kyler Gerardy",
+     "pos": "DB",
+     "number": "19",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kamari Moulton",
+     "pos": "RB",
+     "number": "28",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Cannon Leonard",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": true
     }
    ]
   },
@@ -1610,6 +1933,109 @@
      "name": "Rodney Lora",
      "pos": "DL",
      "number": "94",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "South Florida": {
+   "conf": "American",
+   "abbr": "USF",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "11:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "13:30:00",
+   "opponent": "Florida Atlantic",
+   "players": [
+    {
+     "name": "Arhmad Branch",
+     "pos": "WR",
+     "number": "4",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "D.J. Crowther",
+     "pos": "RB",
+     "number": "5",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jaden Alexis",
+     "pos": "WR",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "A'Mon Lane-Ganus",
+     "pos": "S",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Jenkins",
+     "pos": "DT",
+     "number": "28",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ashton Mosley",
+     "pos": "JCK",
+     "number": "33",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Derrick \"Tre\" Nichols III",
+     "pos": "S",
+     "number": "38",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Thomas Shrader",
+     "pos": "OL",
+     "number": "67",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cash Hudson",
+     "pos": "OL",
+     "number": "72",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Michael Wooten",
+     "pos": "OL",
+     "number": "77",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Gabe Legrand",
+     "pos": "WR",
+     "number": "82",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryley Zalusky",
+     "pos": "TE",
+     "number": "89",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Iverson Garcia-Ponce",
+     "pos": "NT",
+     "number": "95",
      "status": "Out",
      "season_out": false
     }
