@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-21T21:23Z",
+ "fetched": "2026-11-21T22:23Z",
  "today": "2026-11-21",
  "teams": {
   "Arkansas": {
@@ -1701,6 +1701,74 @@
      "number": "94",
      "status": "Out",
      "season_out": true
+    }
+   ]
+  },
+  "Miami": {
+   "conf": "ACC",
+   "abbr": "MIA",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "17:00:00",
+   "game_date": "2026-11-21",
+   "game_time": "19:00:00",
+   "opponent": "Virginia Tech",
+   "players": [
+    {
+     "name": "Malachi Toney",
+     "pos": "WR",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joshua Moore",
+     "pos": "WR",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "CharMar Brown",
+     "pos": "RB",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zechariah Poyser",
+     "pos": "DB",
+     "number": "7",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Ja'Boree Antoine",
+     "pos": "DB",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Romanas \"OJ\" Frederique Jr.",
+     "pos": "DB",
+     "number": "29",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Max Buchanan",
+     "pos": "OL",
+     "number": "66",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luka Gilbert",
+     "pos": "TE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
     }
    ]
   },
@@ -3875,6 +3943,74 @@
      "name": "Devon Baxter",
      "pos": "DE",
      "number": "99",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Virginia Tech": {
+   "conf": "ACC",
+   "abbr": "VT",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "17:00:00",
+   "game_date": "2026-11-21",
+   "game_time": "19:00:00",
+   "opponent": "Miami",
+   "players": [
+    {
+     "name": "Thomas Williams",
+     "pos": "CB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "George Ballance",
+     "pos": "LB",
+     "number": "25",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marcellous Hawkins",
+     "pos": "RB",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nathaniel Wright",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Lucas Austin",
+     "pos": "OL",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Montavious Cunningham",
+     "pos": "OL",
+     "number": "66",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marlen Bright",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luke Stuewe",
+     "pos": "WR",
+     "number": "83",
      "status": "Out",
      "season_out": false
     }
