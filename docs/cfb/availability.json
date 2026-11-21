@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-21T16:23Z",
+ "fetched": "2026-11-21T17:23Z",
  "today": "2026-11-21",
  "teams": {
   "Army": {
@@ -314,6 +314,88 @@
      "name": "Gavin Neil",
      "pos": "DL",
      "number": "93",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Charlotte": {
+   "conf": "American",
+   "abbr": "CLT",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "11:00:00",
+   "game_date": "2026-11-21",
+   "game_time": "13:00:00",
+   "opponent": "Tulsa",
+   "players": [
+    {
+     "name": "Chance Williams",
+     "pos": "RB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kendal Brown",
+     "pos": "DL",
+     "number": "14",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Seth Franklin",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zayden Laing-Taylor",
+     "pos": "DB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Devon St. Clair",
+     "pos": "DB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Latrell Sellers",
+     "pos": "LB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jamarrion Solomon",
+     "pos": "DL",
+     "number": "51",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Mathias Nielsen",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Shelden Golliday",
+     "pos": "WR",
+     "number": "82",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaylen Doss",
+     "pos": "DL",
+     "number": "99",
      "status": "Out",
      "season_out": false
     }
@@ -704,6 +786,39 @@
      "pos": "DT",
      "number": "96",
      "status": "Game Time Decision",
+     "season_out": false
+    }
+   ]
+  },
+  "Houston": {
+   "conf": "Big 12",
+   "abbr": "HOU",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "10:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "12:00:00",
+   "opponent": "West Virginia",
+   "players": [
+    {
+     "name": "Conner Weigman",
+     "pos": "QB",
+     "number": "1",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Jamaal Shaw",
+     "pos": "DB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Aaron Wolford",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
      "season_out": false
     }
    ]
@@ -1720,6 +1835,130 @@
     }
    ]
   },
+  "Tulsa": {
+   "conf": "American",
+   "abbr": "TLSA",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "11:00:00",
+   "game_date": "2026-11-21",
+   "game_time": "13:00:00",
+   "opponent": "Charlotte",
+   "players": [
+    {
+     "name": "Donnell Gee Jr.",
+     "pos": "WR",
+     "number": "0",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Elijah Green",
+     "pos": "CB",
+     "number": "7",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Grayson Tempest",
+     "pos": "WR",
+     "number": "19",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Sevion Morrison",
+     "pos": "RB",
+     "number": "28",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "William Alexander",
+     "pos": "LB",
+     "number": "33",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Elijah Wilson",
+     "pos": "LB",
+     "number": "34",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "C.J. Turner",
+     "pos": "LB",
+     "number": "35",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Raymir Coney",
+     "pos": "LB",
+     "number": "43",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Ty Anderson",
+     "pos": "LB",
+     "number": "50",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Hunter Erb",
+     "pos": "OL",
+     "number": "60",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cam East",
+     "pos": "OL",
+     "number": "73",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Davis Dotson",
+     "pos": "OL",
+     "number": "78",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Chris Gacayan II",
+     "pos": "TE",
+     "number": "82",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Luke Tevis",
+     "pos": "TE",
+     "number": "86",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Xavier Green",
+     "pos": "WR",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jayden Madkins",
+     "pos": "DL",
+     "number": "90",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
   "Vanderbilt": {
    "conf": "SEC",
    "abbr": "VAN",
@@ -1968,6 +2207,53 @@
      "name": "Landon Morris",
      "pos": "TE",
      "number": "81",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "West Virginia": {
+   "conf": "Big 12",
+   "abbr": "WVU",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "10:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "12:00:00",
+   "opponent": "Houston",
+   "players": [
+    {
+     "name": "Jaden Bray",
+     "pos": "WR",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cam Ball",
+     "pos": "TE",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Emory Snyder",
+     "pos": "N/S",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Andre Devine",
+     "pos": "RB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Darius Wiley",
+     "pos": "DL",
+     "number": "91",
      "status": "Out",
      "season_out": false
     }
