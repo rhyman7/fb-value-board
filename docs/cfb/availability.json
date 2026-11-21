@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-21T19:23Z",
+ "fetched": "2026-11-21T21:23Z",
  "today": "2026-11-21",
  "teams": {
   "Arkansas": {
@@ -1577,6 +1577,81 @@
      "name": "Trenton Henderson",
      "pos": "DE",
      "number": "91",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Maryland": {
+   "conf": "Big Ten",
+   "abbr": "MD",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "15:15:00",
+   "game_date": "2026-11-21",
+   "game_time": "17:15:00",
+   "opponent": "USC",
+   "players": [
+    {
+     "name": "DeJuan Williams",
+     "pos": "RB",
+     "number": "0",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Zahir Mathis",
+     "pos": "LB",
+     "number": "9",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Josiah Teasley",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "DJ Samuels",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Harry Dalton III",
+     "pos": "RB",
+     "number": "25",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Dontay Joyner",
+     "pos": "DB",
+     "number": "29",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trevor Szymanski",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Ryan Howerton",
+     "pos": "OL",
+     "number": "71",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Javonte Williams",
+     "pos": "TE",
+     "number": "81",
      "status": "Out",
      "season_out": false
     }
@@ -3528,6 +3603,88 @@
      "number": "86",
      "status": "Out",
      "season_out": true
+    }
+   ]
+  },
+  "USC": {
+   "conf": "Big Ten",
+   "abbr": "USC",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "15:15:00",
+   "game_date": "2026-11-21",
+   "game_time": "17:15:00",
+   "opponent": "Maryland",
+   "players": [
+    {
+     "name": "Terrell Anderson",
+     "pos": "WR",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Braylan Shelby",
+     "pos": "DE",
+     "number": "10",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Corey Simms",
+     "pos": "WR",
+     "number": "10",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kendarius Reddick",
+     "pos": "S",
+     "number": "23",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Trestin Castro",
+     "pos": "S",
+     "number": "37",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Taylor \"Taybo\" Johnson",
+     "pos": "LB",
+     "number": "50",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Roman Marchetti",
+     "pos": "LB",
+     "number": "57",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "GianCarlo Rufo",
+     "pos": "LB",
+     "number": "58",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kilian O'Connor",
+     "pos": "OL",
+     "number": "67",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Hayden Treter",
+     "pos": "OL",
+     "number": "68",
+     "status": "Out",
+     "season_out": false
     }
    ]
   },
