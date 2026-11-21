@@ -12,7 +12,7 @@ game_id,team,kind,player_id,name,status,source
 2026_10_SEA_LV,SEA,starter,00-0035704,Drew Lock,,"Seahawks HC Macdonald Nov 9 via NBC Sports + Yahoo Sports Nov 9: Darnold out Week 10, Lock (oblique, 'good exam') expected to start; out rows don't change the game model's QB"
 2026_10_LAC_BAL,BAL,starter,00-0033119,Jacoby Brissett,,"nfelo qb_elos.csv, checked 2026-11-10: nfelo starts Jacoby Brissett, board had Tyler Huntley (auto, qbcheck)"
 2026_10_LA_ARI,ARI,starter,00-0041561,Carson Beck,,"azcardinals.com Nov 10 (Minshew placed on IR, torn UCL, season over; Beck makes first NFL start Sunday vs Rams) + NFL.com/NFL Network Nov 9-10"
-2026_11_ARI_KC,ARI,starter,00-0041561,Carson Beck,,"azcardinals.com Nov 10 (Minshew placed on IR, torn UCL, season over; Beck makes first NFL start Sunday vs Rams) + NFL.com/NFL Network Nov 9-10; Minshew on IR so the board's starter can't play"
+2026_11_ARI_KC,ARI,starter,00-0026300,Josh Johnson,,"azcardinals.com Nov 21 12:21 pm (updated 2:00 pm) site time: team made it official, Josh Johnson will start vs Chiefs because Carson Beck (back) will not play; replaces the Nov 10 Carson Beck starter row (auto, news)"
 2026_11_ARI_KC,ARI,out,00-0038559,Michael Wilson,Injured reserve,"azcardinals.com Nov 10: placed on IR (neck), out for the season + NFL.com news roundup Nov 9"
 2026_10_SEA_LV,LV,starter,00-0041562,Fernando Mendoza,,ESPN Nov 10 (GM Spytek officially names Mendoza starter after Cousins traded to Vikings; first start Sunday vs Seahawks) + NFL.com Nov 10 (Cousins trade)
 2026_11_LV_DEN,LV,starter,00-0041562,Fernando Mendoza,,ESPN Nov 10 (GM Spytek officially names Mendoza starter after Cousins traded to Vikings; first start Sunday vs Seahawks) + NFL.com Nov 10 (Cousins trade)
@@ -52,3 +52,5 @@ game_id,team,kind,player_id,name,status,source
 2026_11_MIN_SF,MIN,out,00-0038994,Jordan Addison,Injured reserve,"vikings.com Nov 16 2026 (O'Connell: will be placed on Injured Reserve, thumb surgery, ~4 weeks) + DK Network Nov 17 (Out, needs surgery)"
 2026_12_ATL_MIN,MIN,out,00-0038994,Jordan Addison,Injured reserve,"vikings.com Nov 16 2026 (O'Connell: will be placed on Injured Reserve, thumb surgery, ~4 weeks) + DK Network Nov 17 (Out, needs surgery)"
 2026_11_TB_DET,TB,starter,00-0041251,Jalon Daniels,,"nfelo qb_elos.csv, checked 2026-11-18: nfelo starts Jalon Daniels, board had Baker Mayfield (auto, qbcheck)"
+2026_11_ARI_KC,ARI,out,00-0041561,Carson Beck,Out,"azcardinals.com Nov 21 12:21 pm site time: officially downgraded to out by the team (back spasms); also ESPN Nov 21 3:25 pm ET and NFL.com news roundup Nov 21 (auto, news)"
+2026_11_TEN_DAL,TEN,out,00-0039032,Tyjae Spears,Injured reserve,"NFL.com news roundup Nov 21: Titans placed him on injured reserve (knee); NBC Sports Nov 21 1:44 pm ET; Yahoo Sports/ClutchPoints Nov 21 3:32 pm ET (team announced, out at least four games) (auto, news)"
