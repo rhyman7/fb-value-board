@@ -1,8 +1,125 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-20T23:23Z",
+ "fetched": "2026-11-21T00:23Z",
  "today": "2026-11-20",
  "teams": {
+  "Bowling Green": {
+   "conf": "MAC",
+   "abbr": "BGSU",
+   "report": "Game Day",
+   "published": "2026-11-20",
+   "posted": "18:30:00",
+   "game_date": "2026-11-20",
+   "game_time": "19:30:00",
+   "opponent": "Toledo",
+   "players": [
+    {
+     "name": "Austyn Dendy",
+     "pos": "RB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "JoJo Johnson",
+     "pos": "CB",
+     "number": "2",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Isaiah Dawson",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Austin Clay",
+     "pos": "WR",
+     "number": "11",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jay Kastantin",
+     "pos": "QB",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Winn Sharp",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rico Garcia",
+     "pos": "CB",
+     "number": "32",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jabari Mitchell",
+     "pos": "LB",
+     "number": "36",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jonathan Goins",
+     "pos": "LB",
+     "number": "50",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Timothy Taylor Jr.",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dayln White",
+     "pos": "DT",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ethan Kraatz",
+     "pos": "OT",
+     "number": "58",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Pete Pendergest",
+     "pos": "OL",
+     "number": "61",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Theo Andall",
+     "pos": "OL",
+     "number": "76",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trent Taylor",
+     "pos": "TE",
+     "number": "84",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
   "Clemson": {
    "conf": "ACC",
    "abbr": "CLEM",
@@ -478,6 +595,123 @@
      "name": "Dave Iuli",
      "pos": "OL",
      "number": "74",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Toledo": {
+   "conf": "MAC",
+   "abbr": "TOL",
+   "report": "Game Day",
+   "published": "2026-11-20",
+   "posted": "18:30:00",
+   "game_date": "2026-11-20",
+   "game_time": "19:30:00",
+   "opponent": "Bowling Green",
+   "players": [
+    {
+     "name": "Trenton Jones",
+     "pos": "WR",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Langston Long",
+     "pos": "DE",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kari Jackson",
+     "pos": "LB",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Corey Smith",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dane Nauman",
+     "pos": "RB",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Hayden Roy",
+     "pos": "LB",
+     "number": "30",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Emilio Duran",
+     "pos": "P",
+     "number": "36",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nathan Gersh",
+     "pos": "LB",
+     "number": "36",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cam Gwinn",
+     "pos": "DT",
+     "number": "41",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Zimmerly",
+     "pos": "OL",
+     "number": "63",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Stephen Gales",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dylan Senda",
+     "pos": "OL",
+     "number": "78",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tucker Kelleher",
+     "pos": "TE",
+     "number": "87",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jacob Newell",
+     "pos": "TE",
+     "number": "88",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Laith Shamma",
+     "pos": "DT",
+     "number": "91",
      "status": "Out",
      "season_out": false
     }
