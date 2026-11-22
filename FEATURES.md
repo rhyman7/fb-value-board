@@ -3360,3 +3360,40 @@ The other three situations: a player's first game back, his last game's miss and
 nothing the projection lacks. The fitted signs were what a fan would guess (first game back −5% for
 receivers, a small positive carry-over of last week's miss for runners), and none survived out of
 sample.
+
+## NFL: goal-line zones, tracking stats and cap-weighted injuries (Nov 22, 2026): nothing kept
+
+Ryan asked which stats were not being tracked and said to test three. Rule written before the run:
+Project doc `claude/plan-three-untracked-stats-tests-2026-11-22.md`. Scripts
+`experiments/goal_line_zones_test.py`, `experiments/tracking_stats_test.py` and
+`experiments/cap_injuries_test.py`, outputs in `experiments/out/` (scores only). Candidate minus
+current, paired standard error in brackets; negative is better. Nothing on the boards changed.
+
+**1. Finer goal-line zones in the touchdown projections: not kept, 6 of 10.** The projections already
+share touchdowns out by red-zone targets, red-zone carries and carries inside the 5. Tested: end-zone
+targets added to the receiving share (A), league touchdown rates by zone for targets and carries (B),
+and B's rushing half alone (C). On tuning 2014-18 A was better on every measure it changes (anytime-TD
+Brier −0.00022 (0.00013) game-day, −0.00016 (0.00010) bet-time; receiving-TD RMSE −0.0010 and −0.0009).
+B was better still on receiving (anytime Brier −0.00078 game-day) but its rushing half made rushing-TD
+RMSE worse (+0.0001), and C was worse on all, so the carry zones add nothing to the inside-the-5 rule.
+A on the holdout 2019-25: anytime-TD Brier **+0.00016 (0.00011)** game-day and **+0.00019 (0.00010)**
+bet-time, receiving-TD RMSE −0.0001 and −0.0002 (both under 1 SE). Against the 2025 DraftKings/FanDuel
+anytime-TD prices: **+0.00022 (0.00022)** at the close and **+0.00024 (0.00021)** at the pricing
+snapshot (books 0.1156 and 0.1105 against the board's 0.1182 and 0.1120). Reported: the weekly top-15
+list, 2019-25, 1,026 of 2,280 scored now and 1,033 with A; 2026 so far 88 of 165 either way.
+
+**2. Tracking stats (Next Gen Stats) in the player projections: not kept, nothing reached the holdout.**
+2a, RB rushing yards, tuning 2019-21: rush yards over expected (A) +0.084 (0.079) game-day and +0.045
+bet-time; with the 8-in-the-box share added (B) +0.012 game-day, −0.094 bet-time. 2b, WR/TE receiving
+yards, tuning 2017-18: separation (A) +0.015 game-day, −0.018 bet-time; with yards after catch over
+expected (B) +0.017 and +0.055. No version was better on both tuning measures. The inputs exist for
+64% of RB and 71% of WR/TE player-games (the weekly files need 10 carries or 5 targets).
+
+**3. Cap-weighted non-QB injuries in the game model: not kept, nothing reached the holdout.**
+`injuries.py`'s core players and its definition of unavailable, each player weighted by his contract's
+share of the cap (93% matched), as a change against the team's last four games. Tuning 2014-18, margin
+miss: one number (A) **+0.048 (0.024)**, offense and defense apart (B) +0.056 (0.032), A in place of
+`d_chg_ol` (C) +0.054 (0.026); total miss +0.015 (0.024) in all three. Worse on both, so the Friday
+check and the props check were not run.
+
+Test 1 and test 3 were run twice with identical output; test 2 once (about 70 minutes).

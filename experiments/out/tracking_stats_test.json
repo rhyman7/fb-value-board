@@ -1,0 +1,101 @@
+{
+ "inputs": {
+  "league_8_in_box_share_2018_21": 0.2298,
+  "league_separation_2016_18": {
+   "TE": 2.981,
+   "WR": 2.695
+  },
+  "tracking_rows_matched": {
+   "rushing": 5616,
+   "of": 5616,
+   "receiving": 13543,
+   "of_": 13543
+  },
+  "share_with_input_2019_25": {
+   "ryoe (RB)": 0.644,
+   "sep (WR/TE)": 0.705
+  },
+  "spread_2019_25": {
+   "ryoe": 0.2185,
+   "box8": 0.0288,
+   "sep": 0.058,
+   "yacoe": 0.3135
+  }
+ },
+ "2a rushing yards (RB)": {
+  "tuning": {
+   "A": {
+    "gameday": {
+     "n": 3331,
+     "now": 31.7183,
+     "candidate": 31.8023,
+     "diff": 0.08399,
+     "se": 0.07891
+    },
+    "bettime": {
+     "n": 3299,
+     "now": 32.0795,
+     "candidate": 32.1244,
+     "diff": 0.04489,
+     "se": 0.077
+    }
+   },
+   "B": {
+    "gameday": {
+     "n": 3331,
+     "now": 31.7183,
+     "candidate": 31.7301,
+     "diff": 0.01173,
+     "se": 0.09265
+    },
+    "bettime": {
+     "n": 3299,
+     "now": 32.0795,
+     "candidate": 31.9854,
+     "diff": -0.09405,
+     "se": 0.09682
+    }
+   }
+  },
+  "better_on_both_tuning_measures": [],
+  "verdict": "No version better on both tuning measures: nothing carried to the holdout, nothing kept."
+ },
+ "2b receiving yards (WR, TE)": {
+  "tuning": {
+   "A": {
+    "gameday": {
+     "n": 5536,
+     "now": 30.5236,
+     "candidate": 30.5382,
+     "diff": 0.01458,
+     "se": 0.05112
+    },
+    "bettime": {
+     "n": 5529,
+     "now": 30.5104,
+     "candidate": 30.4924,
+     "diff": -0.01797,
+     "se": 0.05173
+    }
+   },
+   "B": {
+    "gameday": {
+     "n": 5536,
+     "now": 30.5236,
+     "candidate": 30.5409,
+     "diff": 0.0173,
+     "se": 0.0525
+    },
+    "bettime": {
+     "n": 5529,
+     "now": 30.5104,
+     "candidate": 30.5658,
+     "diff": 0.05546,
+     "se": 0.05313
+    }
+   }
+  },
+  "better_on_both_tuning_measures": [],
+  "verdict": "No version better on both tuning measures: nothing carried to the holdout, nothing kept."
+ }
+}

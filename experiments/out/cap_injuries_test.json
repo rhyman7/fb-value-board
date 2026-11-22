@@ -1,0 +1,66 @@
+{
+ "inputs": {
+  "core_players_matched_to_a_contract": 0.933,
+  "team_games_with_any_cap_missing": 0.824,
+  "avg_cap_pct_missing_per_team_game": 5.64,
+  "spread_2019_25": {
+   "d_cap": 7.896,
+   "d_cap_off": 5.603,
+   "d_cap_def": 5.068,
+   "d_chg_ol": 0.162
+  },
+  "corr_d_cap_d_chg_ol_2019_25": 0.434
+ },
+ "tuning": {
+  "A (one number)": {
+   "margin": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.149,
+    "diff": 0.04806,
+    "se": 0.02418
+   },
+   "total": {
+    "n": 1335,
+    "now": 10.7186,
+    "candidate": 10.7335,
+    "diff": 0.01486,
+    "se": 0.02359
+   }
+  },
+  "B (offense and defense apart)": {
+   "margin": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.157,
+    "diff": 0.05606,
+    "se": 0.03178
+   },
+   "total": {
+    "n": 1335,
+    "now": 10.7186,
+    "candidate": 10.7335,
+    "diff": 0.01486,
+    "se": 0.02359
+   }
+  },
+  "C (A in place of d_chg_ol)": {
+   "margin": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.1545,
+    "diff": 0.05365,
+    "se": 0.0258
+   },
+   "total": {
+    "n": 1335,
+    "now": 10.7186,
+    "candidate": 10.7335,
+    "diff": 0.01486,
+    "se": 0.02359
+   }
+  }
+ },
+ "better_on_both_tuning_measures": [],
+ "verdict": "No version better on both tuning measures: nothing carried to the holdout, nothing kept."
+}
