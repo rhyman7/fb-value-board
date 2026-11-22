@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-21T23:23Z",
+ "fetched": "2026-11-22T01:23Z",
  "today": "2026-11-21",
  "teams": {
   "Arizona": {
@@ -3815,6 +3815,39 @@
     }
    ]
   },
+  "TCU": {
+   "conf": "Big 12",
+   "abbr": "TCU",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "18:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "20:00:00",
+   "opponent": "Utah",
+   "players": [
+    {
+     "name": "Jaden Craig",
+     "pos": "QB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "G'Ivori Graham",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keylan Abrams",
+     "pos": "LB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "Tennessee": {
    "conf": "SEC",
    "abbr": "TENN",
@@ -4659,6 +4692,32 @@
      "pos": "OL",
      "number": "75",
      "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Utah": {
+   "conf": "Big 12",
+   "abbr": "UTAH",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "18:30:00",
+   "game_date": "2026-11-21",
+   "game_time": "20:00:00",
+   "opponent": "TCU",
+   "players": [
+    {
+     "name": "Marcus Wimberly",
+     "pos": "S",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Logan Castor",
+     "pos": "LS",
+     "number": "65",
+     "status": "Game Time Decision",
      "season_out": false
     }
    ]
