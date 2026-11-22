@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-22T01:23Z",
+ "fetched": "2026-11-22T02:08Z",
  "today": "2026-11-21",
  "teams": {
   "Arizona": {
@@ -45,6 +45,39 @@
      "name": "Keytrin Harris",
      "pos": "DL",
      "number": "27",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Arizona State": {
+   "conf": "Big 12",
+   "abbr": "ASU",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "19:45:00",
+   "game_date": "2026-11-21",
+   "game_time": "21:15:00",
+   "opponent": "Oklahoma State",
+   "players": [
+    {
+     "name": "Omarion Miller",
+     "pos": "WR",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Wade Helton",
+     "pos": "OL",
+     "number": "64",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Harry Hassmann",
+     "pos": "WR",
+     "number": "89",
      "status": "Out",
      "season_out": false
     }
@@ -3105,6 +3138,67 @@
      "name": "Fred Hinton",
      "pos": "OL",
      "number": "72",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Oklahoma State": {
+   "conf": "Big 12",
+   "abbr": "OKST",
+   "report": "Game Day",
+   "published": "2026-11-21",
+   "posted": "19:45:00",
+   "game_date": "2026-11-21",
+   "game_time": "21:15:00",
+   "opponent": "Arizona State",
+   "players": [
+    {
+     "name": "Tate Romney",
+     "pos": "LB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Drew Mestemaker",
+     "pos": "QB",
+     "number": "17",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Dayvon Standard",
+     "pos": "WR",
+     "number": "19",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carson Kolb",
+     "pos": "TE",
+     "number": "44",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Morgan McPhaul",
+     "pos": "TE",
+     "number": "45",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Desmond Magiya",
+     "pos": "OL",
+     "number": "76",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Landon Dean",
+     "pos": "DT",
+     "number": "88",
      "status": "Out",
      "season_out": false
     }
