@@ -34,19 +34,19 @@
     ],
     "units": -7.18
    },
-   "reads": "draft",
+   "reads": "claude",
    "read_games": 51,
    "verdicts": {
     "spread": {
-     "W": 18,
-     "L": 20,
-     "chance": 11,
+     "W": 16,
+     "L": 24,
+     "chance": 9,
      "push": 2
     },
     "total": {
-     "W": 22,
-     "L": 18,
-     "chance": 11,
+     "W": 21,
+     "L": 17,
+     "chance": 13,
      "push": 0
     }
    },
@@ -2847,6 +2847,282 @@
      "home": "ARK",
      "miss": 36.5,
      "mkt": 35.0
+    }
+   ]
+  },
+  {
+   "file": "2026_w12.json",
+   "season": 2026,
+   "week": 12,
+   "summary": {
+    "games": 67,
+    "graded_of": 67,
+    "lean_spread": [
+     38,
+     26,
+     3
+    ],
+    "lean_total": [
+     39,
+     28,
+     0
+    ],
+    "model_closer_margin": 34,
+    "model_closer_total": 37,
+    "mae": {
+     "model_margin": 11.5,
+     "market_margin": 10.93,
+     "model_total": 11.03,
+     "market_total": 10.97
+    },
+    "chance_games": 24,
+    "bets": [
+     0,
+     0,
+     0
+    ],
+    "units": 0
+   },
+   "reads": "claude",
+   "read_games": 67,
+   "verdicts": {
+    "spread": {
+     "W": 31,
+     "L": 23,
+     "chance": 10,
+     "push": 3
+    },
+    "total": {
+     "W": 26,
+     "L": 26,
+     "chance": 15,
+     "push": 0
+    }
+   },
+   "players": {
+    "all": {
+     "n": 1255,
+     "met": 487,
+     "short": 768,
+     "typ_n": 1255,
+     "typ_met": 616,
+     "avg_miss": -1.8,
+     "avg_abs": 27.3
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 120,
+      "met": 56,
+      "short": 64,
+      "typ_n": 120,
+      "typ_met": 60,
+      "avg_miss": 0.6,
+      "avg_abs": 60.3
+     },
+     "rush_yds": {
+      "n": 401,
+      "met": 177,
+      "short": 224,
+      "typ_n": 401,
+      "typ_met": 205,
+      "avg_miss": 0.9,
+      "avg_abs": 27.6
+     },
+     "rec_yds": {
+      "n": 734,
+      "met": 254,
+      "short": 480,
+      "typ_n": 734,
+      "typ_met": 351,
+      "avg_miss": -3.7,
+      "avg_abs": 21.8
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 221,
+      "met": 99,
+      "short": 122,
+      "typ_n": 221,
+      "typ_met": 110,
+      "avg_miss": 0.9,
+      "avg_abs": 45.2
+     },
+     "RB": {
+      "n": 427,
+      "met": 177,
+      "short": 250,
+      "typ_n": 427,
+      "typ_met": 223,
+      "avg_miss": 0.9,
+      "avg_abs": 24.3
+     },
+     "WR": {
+      "n": 459,
+      "met": 153,
+      "short": 306,
+      "typ_n": 459,
+      "typ_met": 204,
+      "avg_miss": -5.1,
+      "avg_abs": 25.4
+     },
+     "TE": {
+      "n": 148,
+      "met": 58,
+      "short": 90,
+      "typ_n": 148,
+      "typ_met": 79,
+      "avg_miss": -3.3,
+      "avg_abs": 15.5
+     }
+    },
+    "left": {
+     "n": 39,
+     "met": 2,
+     "short": 37,
+     "typ_n": 39,
+     "typ_met": 4,
+     "avg_miss": -37.6,
+     "avg_abs": 44.6,
+     "players": 33
+    },
+    "dnp": {
+     "n": 190,
+     "players": 179
+    }
+   },
+   "best": {
+    "all": {
+     "n": 33,
+     "met": 10,
+     "short": 23,
+     "typ_n": 33,
+     "typ_met": 14,
+     "avg_miss": -2.7,
+     "avg_abs": 26.7
+    },
+    "by_stat": {
+     "pass_yds": {
+      "n": 2,
+      "met": 0,
+      "short": 2,
+      "typ_n": 2,
+      "typ_met": 0,
+      "avg_miss": -20.8,
+      "avg_abs": 20.8
+     },
+     "rush_yds": {
+      "n": 12,
+      "met": 6,
+      "short": 6,
+      "typ_n": 12,
+      "typ_met": 8,
+      "avg_miss": 9.8,
+      "avg_abs": 34.7
+     },
+     "rec_yds": {
+      "n": 19,
+      "met": 4,
+      "short": 15,
+      "typ_n": 19,
+      "typ_met": 6,
+      "avg_miss": -8.6,
+      "avg_abs": 22.2
+     }
+    },
+    "by_pos": {
+     "QB": {
+      "n": 2,
+      "met": 0,
+      "short": 2,
+      "typ_n": 2,
+      "typ_met": 0,
+      "avg_miss": -20.8,
+      "avg_abs": 20.8
+     },
+     "RB": {
+      "n": 20,
+      "met": 7,
+      "short": 13,
+      "typ_n": 20,
+      "typ_met": 11,
+      "avg_miss": 2.2,
+      "avg_abs": 25.4
+     },
+     "WR": {
+      "n": 7,
+      "met": 2,
+      "short": 5,
+      "typ_n": 7,
+      "typ_met": 2,
+      "avg_miss": -9.3,
+      "avg_abs": 33.0
+     },
+     "TE": {
+      "n": 4,
+      "met": 1,
+      "short": 3,
+      "typ_n": 4,
+      "typ_met": 1,
+      "avg_miss": -6.5,
+      "avg_abs": 24.8
+     }
+    },
+    "left": {
+     "n": 1,
+     "met": 0,
+     "short": 1,
+     "typ_n": 1,
+     "typ_met": 0,
+     "avg_miss": -59.4,
+     "avg_abs": 59.4,
+     "players": 1
+    },
+    "dnp": {
+     "n": 2,
+     "players": 1
+    },
+    "beat_avg": {
+     "n": 26,
+     "beat": 14
+    },
+    "rungs": {
+     "ou": {
+      "n": 9,
+      "hit": 5
+     },
+     "n": 7,
+     "hit": [
+      4,
+      4,
+      4,
+      4
+     ],
+     "no_alts": 2,
+     "left": 0
+    }
+   },
+   "real_misses": [
+    {
+     "slug": "gaso-troy",
+     "away": "GASO",
+     "home": "TROY",
+     "miss": -31.7,
+     "mkt": -30.0
+    },
+    {
+     "slug": "isu-ucf",
+     "away": "ISU",
+     "home": "UCF",
+     "miss": 31.6,
+     "mkt": 32.0
+    },
+    {
+     "slug": "utep-afa",
+     "away": "UTEP",
+     "home": "AFA",
+     "miss": 31.3,
+     "mkt": 27.0
     }
    ]
   }
