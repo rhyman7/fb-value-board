@@ -1,0 +1,1661 @@
+{
+ "by": "claude",
+ "week_by": "claude",
+ "week_notes": [
+  "Side leans went 38-26-3 and total leans 39-28. Taking out games that chance decided, the sides were 31-23-3 (10 to chance) and the totals 26-26 (15 to chance). These counts include MISS @ OU, a week-11 game (OU 24-17) that also sits in the week-12 archive; without it the sides were 31-22-3 and the totals 26-25.",
+  "Average miss: on the margin the model 11.5 and the market 10.93; on the total the model 11.03 and the market 10.97. The market has been closer on margins in 11 of 12 weeks (week 11 was the only exception). On totals the two were about even.",
+  "Biggest real misses: UTEP @ AFA (UTEP +22 lean, model off by 31.3), NCSU 28-10 at FSU (model and market both off by about 28.5, with FSU missing both lead backs) and SDSU winning outright at BOIS as a 20.5-point underdog, with BOIS losing 3 turnovers.",
+  "Chance decided 24 of 67 games. Garbage time settled several totals: ORE @ MSU, GASO @ TROY, PITT @ LOU, WKU @ LIB, CCU @ UL, FIU @ KENN, CLT @ TLSA and UTEP @ AFA. Six draft verdicts marked \"chance\" for a quarterback exit were moved back to the merits. In those games the team that lost its quarterback still won or covered, or the quarterback who left was a backup (TENN, EMU, SYR, SHSU, STAN, HAW).",
+  "The pattern that repeated most: about a dozen teams' starting quarterbacks were out, benched or split time, and the board didn't price it (TA&M's Reed, TCU, ILL, CLEM, MSU, HOU, UNM, KSU, WYO, MD, UNC, PITT). Running-back absences were next (FSU, PSU, APP, USF, KU, TEM). The candidate check is when the board learns of a college starter change. It is a check, not a model change.",
+  "Players: 487 of 1,255 scored projections were met (39%), and 49% reached the model's typical number. 39 players left early and aren't counted. On the Best Matchups list, 10 of 33 picks met their projection, and 5 of 9 with a ladder cleared the books' O/U."
+ ],
+ "games": {
+  "2026_12_TA&M_OU": {
+   "by": "claude",
+   "headline": "TA&M played without Marcel Reed and never reached the red zone; OU pulled away with 21 fourth-quarter points. The model's TA&M +7 and over 37 both lost on the merits.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Mario Craver beat his number (78 yards, 43 projected) even with the backup throwing."
+   ],
+   "wrong": [
+    "TA&M +7 lost: OU by 21. It was 7-7 after three quarters; OU's 8-point score at 13:13 of the fourth settled the cover.",
+    "TA&M's offense: 13 drives, 1 TD, 8 punts, 0 red-zone trips, -0.39 EPA a play. Brady Hart (not projected) threw for 131 and lost 21 rushing.",
+    "Rueben Owens II: 9 rushing yards on 6 carries (53 and 11.6 projected), his season low; Jamarion Morrow got no carries. Aaron Gregory: 2 targets, 0 yards.",
+    "Over 37 lost at 35: OU's last TD came with 22 seconds left and it still fell 2 short."
+   ],
+   "chance": [
+    "Little: fumble bounces were close to even (-1.5) and there were no return or defensive TDs. No garbage time."
+   ],
+   "improve": [
+    "Data check: the board projected Reed for 169 passing yards and he didn't play. How late was his absence known, and did the model's number price Hart?",
+    "Possibility: TA&M is on a slide (missed the cover by 14 at TENN the week before, model miss -17.8). In college only about a tenth of a run of misses carries over and the line already holds it; the QB change is the likelier story.",
+    "Candidate test: a backup-QB adjustment for college games where the starter is ruled out late."
+   ]
+  },
+  "2026_12_LSU_TENN": {
+   "by": "claude",
+   "headline": "TENN won by 14 even though Faizon Brandon left in the first quarter; LSU lost 3 fumbles and managed 0.72 points a drive. The exit worked in LSU's favour, so the LSU lean lost on the merits, not by chance.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Javin Gordon ran for 54 (31 projected) as TENN leaned on him late."
+   ],
+   "wrong": [
+    "LSU -1 lost: TENN by 14. TENN went ahead 6-10 just before half and LSU never led again; two TENN TDs in the fourth decided it.",
+    "Over 46 lost at 40: LSU had 18 drives but 1 TD, 3 turnovers (all lost fumbles), 3 turnovers on downs. The model's 52 was 12 too high.",
+    "Jackson Harris: 2 targets, 7 yards against 46 projected and an 86-yard season average. Sam Leavitt: 12 carries for -9 yards (sacks count in college rushing).",
+    "George MacIntyre came on and threw for 79 on 21 attempts (3.8 a throw); DeSean Bishop had 52 on 18 carries (4.1 a carry projected)."
+   ],
+   "chance": [
+    "Fumble bounces went TENN's way (+6.2), but take them out and TENN still wins by about 8, so LSU +1 still loses.",
+    "Brandon's exit (23% of TENN's passes) should have hurt TENN; it didn't. The draft called this chance; the facts don't support that."
+   ],
+   "improve": [
+    "Possibility: TENN's quarterback swap was known midweek (MacIntyre was the board's QB); check which one the line and the model priced.",
+    "Possibility: LSU has missed the cover in two straight (ALA by 23.5, TEX by 5.5); a coaching or QB-health story is more likely than a rating lag.",
+    "Data check: the draft marks any starting-QB exit as chance even when the winner lost its QB; worth a rule check in the draft script (not changed here)."
+   ]
+  },
+  "2026_12_VT_MIA": {
+   "by": "claude",
+   "headline": "VT led 20-14 into the fourth and lost by only 8, so MIA -21 lost badly; the under 61.5 won easily at 48.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Under 61.5 won: 48 points. VT held MIA to 14 through three quarters and both teams punted or stalled more than the model expected.",
+    "The model's lean was close to the market (24.4 vs 21), and the market missed by 13 too: the whole price was off, not just the model."
+   ],
+   "wrong": [
+    "MIA -21 lost: MIA by 8. VT scored 14 in the first 9 minutes; MIA didn't lead until 14:57 of the fourth.",
+    "MIA threw 2 INTs, both to Joshua Clarke, a VT corner who made 6 tackles against a usual 1.5. MIA's 11 drives held 2 turnovers, 2 field goals and a turnover on downs.",
+    "VT's passing game still came up short: Davion Brown 0 yards on 1 target, Marlion Jackson 9, Ayden Greene 15. Jeffrey Overton Jr. ran 14 times (14.6 projected) but for 2.7 a carry."
+   ],
+   "chance": [
+    "Not much: fumble bounces -1.5, no return TDs. The cover was never in reach for MIA."
+   ],
+   "improve": [
+    "Possibility: MIA played without TE Elija Lofton (7.7 touches a game, 44 yards projected) and LB Chase Smith (7 tackles a game). The board's player list had Lofton projected.",
+    "Possibility: VT was coming off a 35-point cover miss against STAN. A bounce-back is plausible, but in college only about a tenth of a miss carries over, and the line had it.",
+    "Candidate test: whether the model over-rates big home favourites against teams coming off a blowout loss."
+   ]
+  },
+  "2026_12_SMU_ND": {
+   "by": "claude",
+   "headline": "ND covered by half a point, 24-3, but the game finished 29 under the total: SMU never scored a TD and nobody scored in the fourth quarter.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "ND -20.5 won: ND by 21. ND's TD at 11:31 of the third made it 3-24 and that held.",
+    "CJ Carr threw for 312 (216 projected) and Jordan Faison had 109."
+   ],
+   "wrong": [
+    "Over 56 lost: 27 points. SMU's 10 drives: 0 TDs, 1 FG, 3 turnovers on downs, 0 TDs in 3 red-zone trips (0.3 points a drive).",
+    "ND moved the ball (0.19 EPA a play) but lost 2 turnovers and scored nothing after the third quarter. The yards were there; the points weren't.",
+    "Jalen Cooper: 5 yards on 3 targets (40 projected); Yannick Smith 19 on 7 targets. SMU trailed by 9+ on 66% of its plays, so the run game faded (Christian Rhodes 9 yards)."
+   ],
+   "chance": [
+    "The total miss was mostly red-zone failure and a scoreless fourth, which the model can't see. Fumble bounces were close to even (-1.5)."
+   ],
+   "improve": [
+    "Possibility: SMU came in off a 7-49 loss to WAKE (cover missed by 44.5). Two collapses in a row may point to something real (injuries, QB health) rather than a rating lag; in college only about a tenth of a miss carries over.",
+    "Possibility: ND was missing S Luke Talich and four projected skill players (Aneyas Williams, Jerome Bettis Jr., Kedren Young among them); depth may explain the empty fourth quarter.",
+    "Candidate test: whether totals with a 20+ point favourite run under once the favourite leads big (clock-killing fourth quarters)."
+   ]
+  },
+  "2026_12_TTU_BAY": {
+   "by": "claude",
+   "headline": "TTU won by 10 and covered, but a 30-point game missed the 57.5 total by 27.5: BAY's offense produced almost nothing and TTU turned it over three times.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "TTU -5.5 won: TTU by 10. TTU's TD at 6:15 of the third (14-7) settled it; the model's TTU by 12.3 was 2.3 off, the market 4.5.",
+    "Thomas Castellanos ran for 92 (53 projected)."
+   ],
+   "wrong": [
+    "Over 57.5 lost: 30 points. BAY: 13 drives, 1 TD, 7 punts, 2 turnovers on downs, a missed short FG (0.77 points a drive). TTU: 3 turnovers, 1 TD in 4 red-zone trips.",
+    "BAY's run game vanished: Caden Knighten, Dawson Pendergrass and Michael Turner had 4 carries between them (22.6 projected). DJ Lagway ran 10 times for 2 yards, sacks included.",
+    "Gavin Freeman got 13 targets and caught them for only 12 yards (75 projected, 89 season average): volume was there, efficiency wasn't."
+   ],
+   "chance": [
+    "A short missed BAY field goal (-1.4) and fumble bounces toward BAY (+3.1) roughly cancel. None of it turns 30 into 58."
+   ],
+   "improve": [
+    "Possibility: BAY was held to 7 by BYU the week before too. Two straight low-scoring games may be the defense of the opponents, or a BAY offense that has changed (play-caller, line injuries).",
+    "Possibility: TTU played without WRs Coy Eakin and Micah Hudson and TE Jett Carpenter (all projected), which may explain the three turnovers and the red-zone stalls.",
+    "Candidate test: totals where the model and market agree but both teams' recent scoring is well under their season rate."
+   ]
+  },
+  "2026_12_UTAH_TCU": {
+   "by": "claude",
+   "headline": "TCU played without Jaden Craig and UTAH won by 21; both leans (UTAH -7.5, over 46.5) won, though it was 17-17 early in the fourth.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "UTAH -7.5 won: UTAH by 21, with 21 fourth-quarter points. The cover settled at 2:59 of the fourth (31-17).",
+    "Over 46.5 won: the same score at 2:59 took it over; a final TD made it 55. The model's 50.7 was closer than the market.",
+    "Jeremy Payne ran for 108 (51 projected)."
+   ],
+   "wrong": [
+    "Wayshawn Parker: 1 carry for 1 yard (13 carries, 66 yards projected) and no targets. Payne took his work; that's a role change, not a bad game.",
+    "TCU's receivers came up short with a backup throwing: Ed Small 3 yards (55 projected), Kari Ashley 13 (55). Adam Schobel (not projected) threw for 136; Larry Simmons (not projected) had 114."
+   ],
+   "chance": [
+    "UTAH missed a short field goal and the fumble bounces leaned TCU (+2.9 in all). Both worked against the UTAH lean, which won anyway."
+   ],
+   "improve": [
+    "Data check: Craig was projected for 226 passing yards and didn't play. When was that known, and did the model's number use Schobel?",
+    "Possibility: UTAH's backfield split may have changed (Parker 1 carry after 2 rushing yards the week before). Worth watching before projecting him again."
+   ]
+  },
+  "2026_12_UCLA_MICH": {
+   "by": "claude",
+   "headline": "MICH won 18-16 in the third overtime on a two-point try; the model's MICH +3.5 won, but over 36 lost even with 14 overtime points.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "MICH +3.5 won outright. The model had MICH by 5.1 against a market UCLA by 3.5; it missed by 3.1, the market by 5.5.",
+    "Savion Hiter ran for 104 (54 projected)."
+   ],
+   "wrong": [
+    "Over 36 lost at 34: it was 10-10 after regulation, with 9 field-goal or TD drives out of 28 and 4 turnovers. The model's 42.8 was 8.8 too high.",
+    "Bryce Underwood: 13 carries for 5 yards (25.5 projected), sacks included. Wayne Knight: 30 yards on 11 carries (2.7 a carry against 4.6); Anthony Woods 4 carries.",
+    "UCLA's Aidan Mizell: 36 yards after 176 the week before; the projection (52) was close to his season average, so this was a normal dip."
+   ],
+   "chance": [
+    "Overtime added 14 points and still left the total 2 short; neither team scored a non-offensive TD. Fumble bounces -1.5. The under was earned by both defenses."
+   ],
+   "improve": [
+    "Possibility: Semaj Morgan played against his former team (MICH 2023-2025); each side knows the other's habits.",
+    "Possibility: MICH was missing WR Andrew Marsh (10.3 touches a game), DE Benny Patterson III and QB Tommy Carr; UCLA LB Jalen Woods was out. Thin offenses help explain the low total.",
+    "Possibility: UCLA came in 9-1 against the spread. A team the market keeps underrating may finally be priced right."
+   ]
+  },
+  "2026_12_OSU_NEB": {
+   "by": "claude",
+   "headline": "NEB beat OSU 31-28 as a 4-point underdog and the game went 17.5 over the market total; both model leans won, and the model's 48.5 total was much closer than the market's 41.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "NEB +4 won outright. NEB tied it 7-7 in the first quarter and never trailed again.",
+    "Over 41.5 won: OSU's TD at 6:37 of the third (21-21) took it over. Both offenses averaged 2.8+ points a drive.",
+    "Jeremiah Smith had 165 (92 projected); Anthony Colandrea ran for 63 (40)."
+   ],
+   "wrong": [
+    "Bo Jackson: 52 on 12 carries (17.1 projected); OSU trailed by 9+ on 35% of plays, so the carries went to the pass game.",
+    "Jacory Barney Jr.: 16 yards on 4 targets (50 projected); Nyziah Hunter 0 on 1 target."
+   ],
+   "chance": [
+    "Nothing big: fumble bounces +1.5 to NEB, no return TDs. A missed NEB field goal kept the total from being higher."
+   ],
+   "improve": [
+    "Possibility: NEB came in 7-2 against the spread after beating RUTG 31-0; the model was already on NEB here.",
+    "Possibility: OSU has now missed the cover two weeks running (by 5 at NU, by 7 here) despite the far better talent score (964 to 787). Look at what changed (injuries, QB Luke Fahey's form) rather than assume a rating lag."
+   ]
+  },
+  "2026_12_IOWA_ILL": {
+   "by": "claude",
+   "headline": "IOWA won by 17 at ILL, who played without Carson Boyd; the model's IOWA by 16.6 was nearly exact and both leans (IOWA -9, over 41) won.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "IOWA -9 won: IOWA by 17. It was 20-17 until IOWA's TD at 7:25 of the fourth; the model missed by 0.4, the market by 8.",
+    "Over 41 won: the same TD took it over; 51 points.",
+    "IOWA's backs ran well: Collin Dixon 142 (78 projected), L.J. Phillips Jr. 154 (70)."
+   ],
+   "wrong": [
+    "Hank Brown threw 26 times as projected but for 5.3 a throw (7.2 projected): 138 yards. DJ Vonnahme had 18 (42 projected).",
+    "Aidan Laughery: 27 yards on 10 carries (14.2 projected) for ILL."
+   ],
+   "chance": [
+    "IOWA scored a non-offensive TD (7 points). Without it IOWA wins by 10 and the total is 44: both leans still win, just barely.",
+    "IOWA missed a short field goal (+1.4 to ILL)."
+   ],
+   "improve": [
+    "Data check: Boyd (171 passing yards projected) didn't play. Did the model's number know? The model was right here anyway.",
+    "Possibility: ILL went 0 for 2 in the red zone and 0 for 3 on fourth down; a backup QB in scoring range is a plausible reason."
+   ]
+  },
+  "2026_12_UK_MIZ": {
+   "by": "claude",
+   "headline": "MIZ won by 14 and covered the 4.5, but over 49.5 lost at 42: UK reached the red zone 7 times and scored 1 TD, with 4 interceptions.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "MIZ -4.5 won: MIZ by 14. MIZ's TD at 8:28 of the second (3-14) settled it.",
+    "Austin Simmons threw for 314 (220 projected); MIZ's receivers mostly beat their numbers."
+   ],
+   "wrong": [
+    "Over 49.5 lost: UK had 1 TD in 7 red-zone trips, 2 FGs and 3 turnover drives (4 INTs thrown). Better finishing makes it a 50+ point game.",
+    "Ahmad Hardy: 3 carries, 8 yards (60 projected). His projection followed a 73.5 recent average, but his season average is 26; Jamal Roberts got 23 carries.",
+    "DJ Miller: 12 yards (60 projected) after 80 the week before; the projection may have chased that game (season average 36)."
+   ],
+   "chance": [
+    "UK's 8 garbage-time points pushed toward the over and still left it 7.5 short. Fumble bounces +1.5. The miss was red-zone finishing and interceptions, which the chance ledger doesn't count."
+   ],
+   "improve": [
+    "Possibility: Daeden Hopkins (MIZ edge) had 2 sacks, 2 breakups and a forced fumble, with 6 tackles against a usual 1.2. A defender playing far more than usual can swing a total.",
+    "Candidate test: weight a back's season average more than his last few games when the backfield is shared (Hardy here, UTAH's Parker)."
+   ]
+  },
+  "2026_12_UGA_SC": {
+   "by": "claude",
+   "headline": "UGA beat SC 34-6 and covered the 15 with 14 fourth-quarter points; both leans (SC +15, over 51.5) lost on the merits.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Nate Frazier ran for 94 (60 projected); Jaden Reddell had 85 (21)."
+   ],
+   "wrong": [
+    "SC +15 lost: UGA by 28. It was 20-6 after three; UGA's TD at 9:11 of the fourth (27-6) settled the cover.",
+    "Over 51.5 lost at 40: SC's 8 drives produced 2 FGs, 5 punts and 0 TDs in 2 red-zone trips (0.75 points a drive).",
+    "LaNorris Sellers threw only 18 times (31 projected) for 87 yards and ran for 24 (57 projected). SC trailed by 9+ on 43% of plays yet had only 8 drives: UGA kept the ball.",
+    "Nyck Harbor: 14 yards on 4 targets (52 projected)."
+   ],
+   "chance": [
+    "UGA's last TD (7 points) came in garbage time; without it UGA still covers by 6. No fumble or return swings."
+   ],
+   "improve": [
+    "Possibility: SC lost 6-34 to ARK the week before (cover missed by 35) and scored 6 again. Two near-shutouts in a row point to something in SC's offense (WR Mazeo Bennett Jr. and DE Anthony Addison were out), not a rating lag; in college only about a tenth carries over.",
+    "Candidate test: whether quarterback volume projections should fall when the opponent runs long drives (UGA had 9 drives, 3.78 points a drive)."
+   ]
+  },
+  "2026_12_MISS_OU": {
+   "by": "claude",
+   "headline": "This is not a week-12 game: it is the week-11 OU 24-17 MISS game (dated Sun Nov 15), duplicated into the week-12 archive. Both leans (MISS +3, over 49.5) lost, as they did in week 11.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Trinidad Chambliss ran for 84 (19 projected); Joshua Dye ran for 58 (8)."
+   ],
+   "wrong": [
+    "MISS +3 lost: OU by 7. Over 49.5 lost at 41. The model had MISS by 1.6 and 52.5.",
+    "Both passing games came up well short: John Mateer 111 yards (215 projected), Chambliss 127 (224). Isaiah Sategna III had 3 yards (69 projected).",
+    "Kewan Lacy (58 projected) and Makhi Frazier (35) didn't play for MISS."
+   ],
+   "chance": [
+    "No play-by-play is matched to this entry, so the chance ledger is empty. See the week-11 review for this game."
+   ],
+   "improve": [
+    "Data fix to check: the week-12 college archive (docs/cfb/archive/2026_w12.json) carries this week-11 game, so it is counted twice (week 11 and week 12). This review doesn't change the archive; it needs a look.",
+    "Until it's fixed, week 12's records include this game a second time."
+   ]
+  },
+  "2026_12_EMU_WMU": {
+   "by": "claude",
+   "headline": "WMU led 31-7 at half and won by only 7, so WMU -17 lost; over 45.5 won with 61. EMU lost Jace Stuckey at the end of the first half and still outscored WMU 20-3 after it, so the exit doesn't explain the side.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Over 45.5 won: 61 points; EMU's TD at 5:53 of the third took it over. A WMU non-offensive TD helped, but without it the total is still 54.",
+    "Amareon Blue had 160 (48 projected)."
+   ],
+   "wrong": [
+    "WMU -17 lost: WMU by 7. WMU scored 31 in the first half and 3 after; EMU's TD at 5:53 of the third (20-31) settled the cover.",
+    "WMU's receivers came up short while it sat on a lead (leading by 9+ on 34% of plays): Baylin Brooks 16 (51 projected), Egypt Nelson 16 (39). Broc Lowry threw 18 times for 106 (178 projected) but ran for 57.",
+    "EMU's Braydon Bennett: 3 carries, 2 yards (34 projected); Benson Prosper 3 yards (40)."
+   ],
+   "chance": [
+    "Stuckey's exit (36% of EMU's passes) should have hurt EMU, the side the lean was against; EMU covered anyway. The draft called this chance; the facts don't support it for either lean.",
+    "WMU's non-offensive TD was worth 7 to WMU; without it WMU wins by 0 and the lean loses by more."
+   ],
+   "improve": [
+    "Possibility: EMU came off a bye after losing 7-35 to CMU; rest plus a bad week may have mattered.",
+    "Possibility: WMU's second-half shutdown (10 drives, 3 TDs all before half) looks like a team protecting a lead. Candidate test: do big college favourites who lead by 20+ at half cover less often than the model expects?",
+    "Data check: WMU's WR Aveion Chenault (37 projected) and EMU's RB Joey Mattord (10.3 touches a game) were out."
+   ]
+  },
+  "2026_12_BALL_OHIO": {
+   "by": "claude",
+   "headline": "BALL tied it 28-28 with 2:23 left and OHIO won by 7 with a TD at 1:16; OHIO -10 lost, over 49.5 won with 63.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Over 49.5 won: BALL's 8-point score at 2:23 of the fourth took it over; 63 points. The model's 53.7 was closer than the market.",
+    "Keldric Luster threw for 257 (165 projected) and ran for 109 (36); Eli Hohlt (not projected) had 112."
+   ],
+   "wrong": [
+    "OHIO -10 lost: OHIO by 7. BALL led 20-14 at half; OHIO went up 28-20, then BALL tied it late. The model's OHIO by 15.5 missed by 8.5, the market by 3.",
+    "OHIO's defence couldn't handle Luster: BALL scored on 6 of 11 drives (2.55 points a drive).",
+    "Jalen Bonds got 3 carries (10.5 projected) at 5.0 a carry, after a 132-yard game: the work went to Luster, not a bad day."
+   ],
+   "chance": [
+    "OHIO scored a non-offensive TD. Without it OHIO's margin is 0, so the lean loses either way; it did pad the over (still 56 without it)."
+   ],
+   "improve": [
+    "Possibility: both teams came off bad weeks (BALL lost 7-28 to BUFF, OHIO lost 17-34 to M-OH); the model leaned on OHIO bouncing back and it didn't.",
+    "Data check: four projected players didn't play (Irving Brown, Jabari Smith, Jake Furtney, Mac Capen); check whose and how late.",
+    "Candidate test: a running-QB projection that reacts faster when a QB's rushing share rises (Luster 109 against 36)."
+   ]
+  },
+  "2026_12_M-OH_KENT": {
+   "by": "claude",
+   "headline": "M-OH won 20-3 and covered; the game had only 8 drives a side and no fourth-quarter points, so over 46 lost by 23.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "M-OH -9.5 won: M-OH by 17. It was 13-3 after the first quarter and M-OH's TD at 9:46 of the third made it 20-3.",
+    "D'Shawntae Jones ran for 121 (59 projected)."
+   ],
+   "wrong": [
+    "Over 46 lost: 23 points. Only 16 drives in the game; KENT scored 3 points on 8 (0.38 a drive) and M-OH missed a short FG and failed on downs once.",
+    "Dru DeShields threw 15 times for 92 (30.5 and 220 projected) and lost 6 rushing. KENT trailed by 9+ on 70% of plays and still threw little: few possessions, not game script.",
+    "M-OH's receivers each saw 1 target (Witten 0, Isom 12, Huggins 18) as M-OH ran the ball with a lead."
+   ],
+   "chance": [
+    "M-OH's short missed FG (+1.4 to KENT) and fumble bounces (-1.5) roughly cancel. Nothing here explains 23 points under."
+   ],
+   "improve": [
+    "Possibility: 38 degrees on a Tuesday night and a run-heavy leader shortened the game; pace, not efficiency, sank the over.",
+    "Possibility: CJ Young (M-OH LB) faced his former team KENT (2024-2025).",
+    "Candidate test: a pace term for midweek MAC games in cold weather (KENT-M-OH had 16 drives in total)."
+   ]
+  },
+  "2026_12_AKR_MASS": {
+   "by": "claude",
+   "headline": "AKR came back from 7-26 and won 34-33 on a late FG; AKR +3 and over 46.5 both won, the over by 20.5.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "AKR +3 won outright. AKR's TD at 2:15 of the third (31-33) and FG at 5:34 of the fourth decided it.",
+    "Over 46.5 won: it went over at 14:47 of the third; 67 points.",
+    "Elijah Faulkner had 105 (50 projected); Justin Williams-Thomas 60 (20)."
+   ],
+   "wrong": [
+    "Logan Inagawa threw 21 times for 104 (180 projected) but ran for 64 (27).",
+    "Curtis Kimmons IV: 25 yards on 9 carries (62 projected), 2.8 a carry."
+   ],
+   "chance": [
+    "AKR scored a non-offensive TD (7 points). Fumble bounces went MASS's way (+3.1). Net -3.9: take both out and AKR +3 covers by a tenth of a point. Close to chance.",
+    "Without AKR's non-offensive TD the total is 60, still over."
+   ],
+   "improve": [
+    "Possibility: MASS was missing S Zeraun Daniel and DL Justin Krueger; AKR outscored MASS 27-7 after trailing 7-26.",
+    "Possibility: both teams came off losses where they scored 14 or less, which may have pulled the total too low."
+   ]
+  },
+  "2026_12_CMU_BUFF": {
+   "by": "claude",
+   "headline": "BUFF beat CMU 40-21 as a 2.5-point favourite, scoring on 7 of 10 drives; the model's CMU lean lost, and over 46 won with 61.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Over 46 won: CMU's TD at 3:55 of the third (21-26) took it over; 61 points.",
+    "Messiah Burch had 200 (106 projected)."
+   ],
+   "wrong": [
+    "CMU +2.5 lost: BUFF by 19. BUFF's TD with 4 seconds left in the half (14-20) settled it. The model had CMU by 0.8 and missed by 19.8.",
+    "BUFF: 5 TDs, 2 FGs, a missed short FG on 10 drives (4.0 points a drive, 0.34 EPA a play). CMU: 3 turnovers (2 INTs, a lost fumble).",
+    "Jadyn Glasser: 101 passing (156 projected) at 5.3 a throw; Vaughn Blue 1 carry (6.8 projected)."
+   ],
+   "chance": [
+    "BUFF's short missed FG and the fumble bounces cancel (net +0.1). The margin was earned."
+   ],
+   "improve": [
+    "Possibility: the model also missed BUFF by 20.6 the week before (28-7 over BALL). Two big underratings in a row; in college only about a tenth carries over and the line had it, so look for what changed at BUFF (QB Jason Wright, health).",
+    "Data check: CMU's WR Langston Lewis (56 projected) and RB Nino Hill (34) didn't play."
+   ]
+  },
+  "2026_12_ISU_UCF": {
+   "by": "claude",
+   "headline": "UCF ran away with it, 48-17. The model's tiny lean to UCF -1 and its over 49.5 both cashed, but neither number saw a 31-point game.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "UCF -1 won by 30 on the merits: 6 TDs on 13 drives, 3.7 points a drive, 0.31 EPA a play against ISU's -0.22.",
+    "Over 49.5 (model 51.9) won with room: it went over early in Q4 (14:25). UCF's 10 garbage-time points only padded it; 55 without them.",
+    "Beat: Duke Watson 113 rushing (59 projected) and Josh Derry 125 receiving (81)."
+   ],
+   "wrong": [
+    "Jaylen Raynor (ISU) threw for 109 against 220 projected: 23 attempts (28 projected) and 4.7 yards an attempt (7.8). ISU trailed by 9+ on 65% of its plays, yet still threw less than expected.",
+    "Vince Benetti (TE) and Aiden Flora (RB) were held to 6 and 5 receiving yards; Benetti got 1 target a week after a 62-yard game.",
+    "UCF's own short players (Duane Thomas 4, Landen Chambers 7 on 2 carries) came from a 69% leading-by-9 script: UCF ran the clock with others."
+   ],
+   "chance": [
+    "Fumble bounces leaned UCF by 6.2 points (ISU lost 3 fumbles), but UCF's margin was far beyond any flip. ISU's 4 turnovers ended a third of its drives."
+   ],
+   "improve": [
+    "Possibility: ISU came off a 41-13 win over CIN (covered by 25.5) and UCF off a 13-26 loss (missed by 16.5). A swing back is possible, but in college only about a tenth of a run of misses carries into the next game.",
+    "Possibility: ISU played without projected WR Ty Claiborne and RB Arnold Barnes III. Check how late that was known.",
+    "Candidate data check: ISU's 4 turnovers (3 lost fumbles). Fumble rate is mostly noise; no model change suggested."
+   ]
+  },
+  "2026_12_CLEM_DUKE": {
+   "by": "claude",
+   "headline": "CLEM won a slog 20-10. The model sided with the market's CLEM -11 by a hair and was right; its over 41 (model 45.2) never had a chance at 30 points.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "CLEM -11 covered by 1 at 20-10, settled by a field goal with 1:01 left. CLEM held DUKE to 0.77 points a drive and a 25% success rate.",
+    "Beat: Jarvis Green 84 rushing (33 projected) and Javen Nicholas 87 receiving (36)."
+   ],
+   "wrong": [
+    "Over 41 lost on the merits: 0-0 after Q1, 3-0 at half. DUKE punted 7 times on 13 drives; CLEM turned it over twice and settled for 2 FGs.",
+    "DUKE's passing game collapsed: Walker Eget threw 38 times (31 projected) for 149 yards, 3.9 an attempt. Jaivon Solomon and Jared Richardson had 0 yards on 5 targets.",
+    "Nate Sheppard (DUKE RB) had 3 receiving yards against 32 projected, a week after 93.",
+    "Gideon Davidson (CLEM) had 4 carries for 16 against 12 projected; QB Chris Denson, not on the board's projections, ran for 71."
+   ],
+   "chance": [
+    "No chance items: no fumble swing, no return scores, no missed short kicks. The under came from how both offenses played."
+   ],
+   "improve": [
+    "Possibility: CLEM played without QB Tait Reynolds (projected 25 rushing); Chris Denson ran for 71. The board's projections didn't know his role. Check how late it was known.",
+    "Possibility: CLEM's last game was a 6-20 loss to GT (total 21.5 under). Two low totals in a row may point to a CLEM offense the total line still overrates.",
+    "Possibility: CLEM's secondary (Jahiem Lawson 3 pass breakups; Corey Myrick 1 INT, 2 breakups) took away DUKE's wideouts."
+   ]
+  },
+  "2026_12_ORE_MSU": {
+   "by": "claude",
+   "headline": "ORE crushed MSU 45-7. The side lean on ORE -17.5 won on the merits; the over 43 got there only on ORE's 14 garbage-time points.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "ORE -17.5 covered easily: 6 TDs on 13 drives, 3.5 points a drive, and the cover was settled by 31-7 at the end of Q3.",
+    "Beat: Brandon Smith ran for 121 against 33 projected."
+   ],
+   "wrong": [
+    "MSU's offense did almost nothing: 0.7 points a drive, 1 explosive play, 0 for 2 on fourth down.",
+    "Dierre Hill Jr. (ORE) got 2 carries against 12.1 projected; ORE led by 9+ on 65% of plays and gave the work to Brandon Smith.",
+    "Evan Stewart (ORE) had 0 yards on 3 targets against 57 projected; Jeremiah McClellan had 27 after 105 last week."
+   ],
+   "chance": [
+    "The over 43 came from garbage time: ORE scored 14 in Q4 while up 31+. Without them the total is 38, an under. That decided the total, so it counts as chance.",
+    "MSU QB Cam Fancher (projected 129 passing) didn't play, which may explain some of MSU's struggles."
+   ],
+   "improve": [
+    "Possibility: MSU without Fancher, TE Jayden Savoury and WR Rodney Bullard Jr. Check how late those absences were known; the model's 48.7 total assumed them.",
+    "Candidate test: how often ORE's big wins carry garbage-time points. A blowout favourite's over may depend on whether it keeps scoring with the starters out."
+   ]
+  },
+  "2026_12_BYU_KU": {
+   "by": "claude",
+   "headline": "BYU won 31-29 in triple overtime. The model's small lean on BYU -5.5 lost by 3.5, and fumble bounces and a missed short field goal were enough to flip it. The over 47 only got there in overtime.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The over 47 cashed at 60 points, but it was 16-16 at the end of regulation (32). Overtime decided it, so it counts as chance, not a model win.",
+    "Beat: LJ Martin ran for 127 against 64 projected."
+   ],
+   "wrong": [
+    "BYU -5.5 lost: BYU only won by 2. BYU's 2 lost fumbles and a missed short FG cost about 4.5 points, enough to flip the cover.",
+    "KU's projected backs got nothing: Chase Belcher and Khijohnn Cummings-Coleman had 0 carries between them against 15 projected. Yasin Willis, off the projections, ran for 63.",
+    "Nik McMillan and Nahzae Cox (KU) each got 1 target against 55 and 41 projected yards."
+   ],
+   "chance": [
+    "Fumble bounces leaned KU by 3.1 points and BYU missed a short field goal (1.4). Removing those flips the side lean.",
+    "Overtime added 28 points to the total; regulation was a 32-point game, well under 47."
+   ],
+   "improve": [
+    "Possibility: KU played without RB Dylan Edwards (13.7 touches a game). The board split his work between Belcher and Cummings-Coleman, but Willis got it. A depth-chart check would have caught it.",
+    "Possibility: KU came off a 37-14 win over WVU (covered by 24.5). The model also missed it by 23.7; about a tenth of that carries in college, and the line already has it.",
+    "Candidate data check: totals decided only in overtime. Worth tagging so they aren't read as model wins."
+   ]
+  },
+  "2026_12_WAKE_GT": {
+   "by": "claude",
+   "headline": "WAKE led 36-7 at half and won 50-29. GT QB Alberto Mendoza left late in Q2. The model and market both had WAKE by about 21, and the cover came down to GT's late scores.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "Over 56 (model 57.8) went over by Q3 9:16; WAKE scored 7 TDs on 12 drives and 4.2 points a drive.",
+    "Gio Lopez threw for 324 against 212 projected; Carlos Hernandez had 145 receiving yards.",
+    "The model's GT +21.5 lean covered by 0.5, and the model was within 1 point of the margin (WAKE by 21 against 20)."
+   ],
+   "wrong": [
+    "The cover was decided late: GT's TD with 2:42 left made it 50-29, half a point inside the number.",
+    "Mendoza threw 8 passes for 42 yards before leaving; he was projected for 136. GT trailed by 9+ on 88% of its plays.",
+    "Kam Shanks (WAKE) had 0 yards on 1 target; WAKE spread the ball while leading by 9+ on 68% of plays."
+   ],
+   "chance": [
+    "Mendoza left at 0:35 of Q2 having taken 53% of GT's passes; that alone is enough to call the side chance.",
+    "GT lost 3 fumbles, worth about 3.1 points to WAKE; GT's 7 garbage-time points also helped the over."
+   ],
+   "improve": [
+    "Possibility: both teams came off big good weeks (WAKE 49-7 over SMU, GT 20-6 over CLEM). The model missed WAKE by 39.7 last week; that rarely carries into the next game.",
+    "Possibility: WAKE's running game (Ty Clark III 98, Deuce Lawrence 105, Grady Adamson 143 against 24 projected) shows a backfield the projections underrated."
+   ]
+  },
+  "2026_12_IU_WASH": {
+   "by": "claude",
+   "headline": "WASH won 27-24 in overtime as a 9.5-point underdog. The model's WASH lean (+9.5, model IU by only 1.7) was its best read of the week, but IU QB Grant Wilson left in Q3.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The model was 7.8 points closer than the market on the margin (missed by 4.7 against 12.5).",
+    "WASH ran 74 plays and outgained IU on success rate (47% to 36%). Demond Williams Jr. ran for 88 against 29 projected and Charlie Becker caught for 167 against 74."
+   ],
+   "wrong": [
+    "Grant Wilson threw 16 passes for 119 against 220 projected before leaving at 12:40 of Q3, with 55% of IU's attempts.",
+    "Shazz Preston (4) and Tyler Morris (5) fell far short of 33 and 24 projected; IU's passing dried up with the backup in."
+   ],
+   "chance": [
+    "Wilson's exit makes the side chance: IU's offense after Q3 was the backup's.",
+    "The over 44 was reached in regulation when WASH tied it 24-24 with 3:34 left (48 points); overtime only added a FG. With Wilson's exit the rule still marks the total as chance."
+   ],
+   "improve": [
+    "Possibility: IU was 2-7 against the spread coming in. The market may still be pricing IU's early-season form.",
+    "Possibility: IU played without DB A.J. Harris and RB Turbo Richard. Check how those absences show in the projections.",
+    "Candidate test: the model's big disagreement with the market here (7.8 points) was right. Worth tracking whether gaps that large in conference games keep landing."
+   ]
+  },
+  "2026_12_ARK_TEX": {
+   "by": "claude",
+   "headline": "TEX blew out ARK 45-3. The side lean on TEX -19 won on the merits. The over 46.5 hit at 48, but a TEX defensive or return touchdown supplied the margin.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "TEX -19 covered by 23: 5 TDs on 9 drives, 5.0 points a drive, 0.54 EPA a play. The cover was settled by 3-24 in Q2.",
+    "Beat: Chris Marshall and Emmett Mosley V each had 106 receiving yards."
+   ],
+   "wrong": [
+    "ARK's offense stalled: 0.3 points a drive, 0 for 2 in the red zone, 3 turnovers on downs and a missed short FG.",
+    "Raleek Brown (TEX) got 5 carries against 15.6 projected; TEX led by 9+ on 88% of plays and spread the work.",
+    "Cam Coleman (TEX) had 16 yards on 2 targets after a 0 last week."
+   ],
+   "chance": [
+    "The over needed TEX's non-offensive TD (7 points) and its last 7 came in garbage time (3-45, Q4 7:31). Without either the total stays under 46.5."
+   ],
+   "improve": [
+    "Possibility: ARK came off a 34-6 win over SC (covered by 35). A letdown after a big week is possible; the model missed that game by 36.5.",
+    "Possibility: TEX had two former ARK defenders (Ian Geffrard, Brad Spence) facing their old team.",
+    "Candidate data check: backup QBs Hank Hendrix (ARK) and Karle Lacey Jr. (TEX) played late; the board didn't project them."
+   ]
+  },
+  "2026_12_RICE_TEM": {
+   "by": "claude",
+   "headline": "RICE scored twice in the last two minutes to win 31-27. The model was on RICE +3 and right; the under 52.5 lost on those late TDs. QB Gael Ochoa left late in Q4.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "RICE outplayed TEM: 0.31 EPA a play to 0.16, 55% success, 76 plays to 52, 5 of 7 on fourth down.",
+    "D'Andre Hardeman Jr. ran for 137 against 57 projected."
+   ],
+   "wrong": [
+    "The under 52.5 (model 52.4, a near coin flip) lost when RICE scored 14 points after 1:55 of Q4. At 17-27 the total was 44.",
+    "Gael Ochoa ran 6 times for 25 against 11.7 carries and 71.4 yards projected. RICE split the passing: Patrick Crayton Jr., off the projections, threw for 106; Ochoa threw 56% of the passes.",
+    "TEM's projections missed: Hunter Smith had 1 carry (7.4 projected) while De'Carlos Young, off the projections, ran for 85."
+   ],
+   "chance": [
+    "The rule marks Ochoa as leaving at 1:55 of Q4, so both leans count as chance. The game itself turned on two RICE TDs in the last 1:55 (24-27, then 31-27)."
+   ],
+   "improve": [
+    "Possibility: TEM came off a 10-36 loss to UAB (missed by 28.5). The model also missed that by 28.4; about a tenth carries in college.",
+    "Possibility: both teams played without their projected lead back (RICE Tyvonn Byars, TEM Samuel Brown V). Check how late the board knew.",
+    "Candidate data check: TEM QB Ajani Sheppard was Questionable and didn't play."
+   ]
+  },
+  "2026_12_BGSU_TOL": {
+   "by": "claude",
+   "headline": "TOL shut out BGSU 19-0 and covered 17 by 2 with a field goal at 3:54 of Q4. The over 46 (model 48.9) was never close: 19 points, the biggest total miss in this group.",
+   "verdict": {
+    "spread": "chance",
+    "total": "L"
+   },
+   "right": [
+    "The model's TOL -17 lean (model TOL by 18.6) cashed, and the model was within 0.4 of the margin."
+   ],
+   "wrong": [
+    "The over lost on the merits: both offenses had negative EPA (TOL -0.24, BGSU -0.47). BGSU scored 0 on 13 drives; TOL kicked 4 FGs and scored 1 TD.",
+    "CJ Miller (TOL) had 14 carries for 35, 2.5 a carry against 5.5 projected; Autavius Ison got 3 carries against 10.2.",
+    "Adjatay Dabbs (TOL) had 37 on 5 targets after a 144-yard week; Bryson Hammer had 15."
+   ],
+   "chance": [
+    "Fumble bounces were worth about 3.1 points to TOL, more than the 2-point cover margin, so the side counts as chance."
+   ],
+   "improve": [
+    "Possibility: TOL's previous game was a 24-0 win over MASS (total 28 under). Two shutouts in a row may mean TOL's defense is better than the total line holds.",
+    "Possibility: BGSU played without QB Jay Kastantin (8 touches a game), RB Austyn Dendy and WR Winn Sharp. Check how late those were known.",
+    "Candidate test: games where both teams have low EPA in their recent games and the total sits mid-40s."
+   ]
+  },
+  "2026_12_UTEP_AFA": {
+   "by": "claude",
+   "headline": "AFA routed UTEP 52-3. The model's UTEP +22 lean (model AFA by 17.7) lost by 27, a real miss. The over 49 only got there on AFA's garbage-time TD.",
+   "verdict": {
+    "spread": "L",
+    "total": "chance"
+   },
+   "right": [
+    "The model was 1.2 points closer than the market on the total."
+   ],
+   "wrong": [
+    "UTEP +22 lost on the merits: AFA scored 7 TDs on 11 drives (4.7 points a drive) with 15 explosive plays; UTEP ran 41 plays for 0.27 points a drive.",
+    "Raymond Moore III (UTEP) ran 8 times for -8 against 72 projected, a week after 164; UTEP trailed by 9+ on 90% of its plays.",
+    "Kemper Hodges (AFA) threw 0 passes and ran 4 times for 13 against 79.6 projected; Owen Allen had 26 on 9 carries. Rocco Conti and others took the carries in a blowout."
+   ],
+   "chance": [
+    "The over 49 needed AFA's 7 garbage-time points (3-52, Q4 7:42). Without them the total is 48, an under."
+   ],
+   "improve": [
+    "Possibility: UTEP came in 1-8 against the spread. A team that keeps losing against the line may be one the model's rating is behind on; in college only about a tenth of the miss carries, so look for what changed.",
+    "Possibility: UTEP played without RBs Lamar Sperling and Tavorus Jones. Its offense had 1 explosive play.",
+    "Candidate test: service-academy option teams against weak run defenses, where the market may still underrate the margin."
+   ]
+  },
+  "2026_12_UNM_WYO": {
+   "by": "claude",
+   "headline": "UNM won 24-17 at WYO, but backup QB Luke Moga played instead of Toa Fa'avae. UNM led 24-7 in Q4 before a garbage-time FG and a late TD cut the margin below the 9.5.",
+   "verdict": {
+    "spread": "chance",
+    "total": "W"
+   },
+   "right": [
+    "The over 37.5 (model 41.9) won at 41 points; UNM had 17 by half.",
+    "Beat: Bailen George, Kyle Frendt and DJ Darling each beat their receiving projections by 35+ yards."
+   ],
+   "wrong": [
+    "UNM -9.5 failed by 2.5. The cover was settled by WYO's TD with 2:57 left (24-17).",
+    "Fa'avae threw 0 passes and ran 2 times; he was projected for 120 passing. Moga, off the projections, threw for 234.",
+    "Scottre Humphrey (UNM) got 2 carries against 16.1 projected, though they went for 26."
+   ],
+   "chance": [
+    "WYO's FG at Q4 8:12 came with UNM up 17 (garbage time). Without those 3 points UNM wins by 10 and covers. With the late TD, the backdoor decided the cover, so the side counts as chance."
+   ],
+   "improve": [
+    "Possibility: UNM came off a 17-21 loss to UNLV (missed by 23.5). The model also missed that by 18.4; little of that carries into the next game.",
+    "Possibility: WYO played without QB Tyler Hughes (projected 56 rushing). Landon Sims threw 23 times for 142.",
+    "Candidate data check: Fa'avae was projected as UNM's starter but didn't throw. Check how late the QB change was known."
+   ]
+  },
+  "2026_12_ARIZ_KSU": {
+   "by": "claude",
+   "headline": "ARIZ won 35-28 in overtime after an 8-point TD with 1:52 left tied it. The model's ARIZ +10 lean won, but a KSU non-offensive TD and fumble bounces were worth 11.6 points.",
+   "verdict": {
+    "spread": "chance",
+    "total": "W"
+   },
+   "right": [
+    "Over 53.5 (model 55.1) hit at 56 in regulation once ARIZ tied it at 28 late (Q4 1:52); overtime added 7.",
+    "Rodney Fields Jr. ran for 144 against 70 projected; Isaiah Mizell caught for 122."
+   ],
+   "wrong": [
+    "ARIZ's other backs were shut down: Kedrick Reescano 12 yards on 9 carries, Antwan Roberts Jr. 0 on 2, Quincy Craig 2 on 1. Fields took nearly all the work.",
+    "Jaron Tibbs (KSU) had 16 on 5 targets after 115 last week; Joe Jackson ran 10 times for 29."
+   ],
+   "chance": [
+    "KSU's non-offensive TD (7) and the fumble bounces (4.6) leaned KSU by 11.6 points. ARIZ covered anyway, but the chance items swing enough that the side counts as chance."
+   ],
+   "improve": [
+    "Possibility: KSU played without QB Blake Barnett (8.7 touches a game); Dillon Duff started.",
+    "Possibility: ARIZ played without CB Dwight Bootle II and S Malcolm Hartzog Jr.; KSU still scored only 21 on offense.",
+    "Candidate test: projections that split carries among three backs when one back (Fields) takes the job."
+   ]
+  },
+  "2026_12_HOU_WVU": {
+   "by": "claude",
+   "headline": "HOU won 34-31 on a field goal at 0:00 with backup QB Keisean Henderson, as Conner Weigman (Questionable) didn't play. The model's HOU -6.5 lean lost; the under 71.5 won.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Under 71.5 (model 66.5) won on the merits at 65 points; the model was 5 points closer than the market on the total.",
+    "Makhi Hughes ran for 158 against 100 projected; Henderson threw for 268, off the projections."
+   ],
+   "wrong": [
+    "HOU -6.5 lost: HOU trailed 21-31 after Q3 and won by only 3. WVU scored TDs on 4 of 13 drives and had 11 explosive plays.",
+    "Michael Hawkins Jr. (WVU) threw 24 times as projected but averaged 5.4 yards against 9.0. Prince Strachan (0), TaRon Francis (6) and Ryan Ward (0) all fell short; HOU's Will James broke up 4 passes.",
+    "Re'Shaun Sanford II (HOU) had 13 carries for 27 against 85 projected, 2.1 a carry."
+   ],
+   "chance": [
+    "Small chance items leaned WVU by 2.9 (fumbles and a short missed FG), not enough to flip a 3.5-point miss."
+   ],
+   "improve": [
+    "Possibility: Weigman was listed Questionable and sat; the model's number assumed him. Check how late it was known.",
+    "Possibility: both teams came off bad weeks (HOU lost 32-42 to COLO, WVU lost 14-37 to KU). The model missed both by 20+; about a tenth carries in college.",
+    "Candidate test: how the board prices a team when its starting QB is Questionable."
+   ]
+  },
+  "2026_12_UNT_TULN": {
+   "by": "claude",
+   "headline": "TULN rallied from 14-24 to win 28-24 with two Q4 TDs. The model's TULN +7.5 lean (model UNT by 1.8) won outright; the over 56.5 fell 4.5 short.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "TULN +7.5 won on the merits: the model was 5.7 points closer than the market. TULN averaged 2.3 points a drive on only 49 plays.",
+    "Trace Johnson threw for 283 against 201 projected; Brendon Haygood ran for 103."
+   ],
+   "wrong": [
+    "Over 56.5 (model 58.9) lost at 52: 0 points in Q2 for UNT and Q3 was a single FG. TULN had only 12 drives.",
+    "Justin Stevenson (UNT) had 0 yards on 1 target against 82 projected; he averaged 93.7. Chris Jimerson Jr. threw only 16 times (32.9 projected) and WR James Tyre threw for 63.",
+    "TULN's backs fell short: Johnnie Daniels 28 on 9 carries, Maurice Turner 22 on 4."
+   ],
+   "chance": [
+    "Fumble bounces leaned UNT by 3.1, not enough to move the total or the side."
+   ],
+   "improve": [
+    "Possibility: UNT came off a 16-35 loss to UTSA (missed by 22). The model also missed that by 22.1; about a tenth carries in college.",
+    "Possibility: UNT used trick passes (WR James Tyre threw for 63) and Jimerson threw half his projection. Something may have changed in UNT's passing game; Stevenson's 1 target is worth checking.",
+    "Possibility: TULN played without S Jack Tchienchou, S Kevin Adams III, WR Anthony Brown-Stephens and RB DJ Dugar."
+   ]
+  },
+  "2026_12_UTSA_UAB": {
+   "by": "claude",
+   "headline": "UTSA won a 19-17 grinder. Both leans lost: UTSA -4.5 failed by 2.5 and the over 50 fell 14 short. A UTSA non-offensive TD was the only thing keeping UTSA close to the number.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "The model's margin (UTSA by 4.7) missed by 2.7, about the same as the market."
+   ],
+   "wrong": [
+    "Over 50 (model 53.6) lost on the merits: both offenses had negative EPA, 3 missed FGs between them, and only 8 points after half (two FGs and a safety).",
+    "Owen McCown (UTSA) threw 20 times (29 projected) for 112; Ryder Burton (UAB) averaged 4.7 an attempt. Four receivers projected 22-42 yards (Mekhi Anderson, AJ Wilson, CJ Smith, Scott Isacks) had 0 on 1-2 targets each.",
+    "UTSA -4.5 lost: the cover was settled by UAB's FG at 9:36 of Q4 (19-17)."
+   ],
+   "chance": [
+    "UTSA's non-offensive TD was worth 7 to UTSA; without it the side loses by more, so chance didn't flip it. The total miss came from offense, not chance."
+   ],
+   "improve": [
+    "Possibility: both teams came off big good weeks (UTSA beat UNT by 19, UAB beat TEM by 26). Both covered by 22+; little of that carries in college.",
+    "Possibility: UAB played without RB Ja'Vin Simpkins; UTSA without LB Bryce Grays and WR DJ Allen Jr.",
+    "Candidate test: conference rivalry totals after both teams had big offensive weeks."
+   ]
+  },
+  "2026_12_VAN_FLA": {
+   "by": "claude",
+   "headline": "FLA beat VAN 34-27 on a TD with 2:18 left but did not cover 13.5. The model's FLA lean lost on the merits. The over 47 won easily at 61.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Over 47 (model 51.1) went over in Q3 (4:07). VAN kicked 4 FGs and both sides averaged 2.7+ points a drive.",
+    "Beat: Junior Sherrill 149 receiving, Eric Singleton Jr. 117, Sedrick Alexander 129 rushing, Aaron Philo 73 rushing."
+   ],
+   "wrong": [
+    "FLA -13.5 lost: VAN led 24-17 at half and was tied 27-27 with 5:52 left. VAN had 9 explosive plays and a TD on every red-zone trip.",
+    "Three VAN receivers (Ja'Cory Thomas, Tristen Brown, Jayvontay Conner) and FLA's Bailey Stockton (1 yard) fell to near zero on 1-3 targets each."
+   ],
+   "chance": [
+    "FLA's non-offensive TD (7) helped FLA, and fumble bounces leaned VAN by 3.1. Net 3.9 to FLA, so chance didn't flip the side."
+   ],
+   "improve": [
+    "Possibility: VAN came off a 6-21 loss to ALA with a 21.5-point under. The model may not have caught how VAN plays against weaker defenses.",
+    "Possibility: FLA played without S DJ Coleman; backups Cam Dooley and Jeramiah McCloud made 8 and 6 tackles against usual 1.5 and 1.2.",
+    "Candidate test: double-digit home favourites in conference games late in the season."
+   ]
+  },
+  "2026_12_COLO_CIN": {
+   "by": "claude",
+   "headline": "CIN beat COLO 35-28. The model's small leans on CIN -3 and the over 56.5 both won on the merits; the game was settled by Q3.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "CIN -3 covered by 4: 5 TDs on 12 drives, 2.9 points a drive. The cover was settled by CIN's TD at 0:12 of Q2.",
+    "Over 56.5 went over at Q3 2:09; all 63 points came in the first three quarters.",
+    "Beat: Cole Tabb 110 receiving against 20 projected."
+   ],
+   "wrong": [
+    "COLO threw 3 interceptions and lost a fumble (4 turnovers), which capped its 0.13 EPA a play.",
+    "JaQuail Smith (COLO) ran 5 times for 9 against 10 carries and 54.9 projected; Quanell Farrakhan Jr. had 0 targets against 34.7 projected."
+   ],
+   "chance": [
+    "No chance items: no return TDs, no fumble swing, no missed short kicks."
+   ],
+   "improve": [
+    "Possibility: CIN came off a 13-41 loss to ISU (missed by 25.5). The model also missed it by 23.3; about a tenth carries in college, and here CIN bounced back.",
+    "Possibility: CIN played without CB Jacob Finley and RB Gi'Bran Payne but still covered.",
+    "Possibility: CIN's three interceptions came from three different defenders (M.Cannon, J.Beeler, K.Worthy)."
+   ]
+  },
+  "2026_12_SYR_BC": {
+   "by": "claude",
+   "headline": "BC won by 12 as a 3-point underdog because SYR got inside the 20 six times and scored one touchdown. Steve Angeli left at the start of the third quarter, but SYR scored more after he went (12 points) than before (3).",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The under 53 won on the merits: 42 points, with SYR's 6 red-zone trips producing 0 touchdowns, 3 field goals and a missed field goal.",
+    "Beat: Bo MacCormack III ran for 236 against 62 projected, and Umari Hatcher had 212 receiving yards against 78."
+   ],
+   "wrong": [
+    "The side lean, SYR -3 (model SYR by 5.6), lost: BC by 12. SYR had the better success rate (43% to 32%) and ran 81 plays to 60, so the lean lost in the red zone, not between the 20s.",
+    "Ahmad Miller (RB, SYR) ran for 26 against 79 projected on 5 carries against 16.4 projected; Tylik Hill ran for 25 on 9 carries (2.8 a carry). SYR trailed by 9+ on 44% of its plays and threw instead.",
+    "Daunte Bacheyie (TE, SYR) had 0 yards on 3 targets against a 43.5 season average; Mason McKenzie (QB, BC) ran for 32 against 65 projected on 6 carries, 16.2 projected."
+   ],
+   "chance": [
+    "Angeli's exit (SYR down 3-13 at the time) did not decide this: Malachi Nelson threw for 202 and Rich Belin added 78 yards, and SYR scored 12 second-half points. Verdicts moved from chance to the merits for that reason.",
+    "One short missed field goal by SYR (about 1.4 points on the ledger). Not enough to flip the 15-point miss."
+   ],
+   "improve": [
+    "Possibility: red-zone finishing is a team trait the model does not price. A candidate pre-set test: does a team's season red-zone TD rate add anything to the margin after the line?",
+    "Possibility: SYR's three projected receivers who didn't play (Johnathan Montague Jr., Darius Johnson) and RB Nolan Ray thinned the passing game; check how late that was known.",
+    "Possibility: BC came off a 7-41 loss to ND; a bounce-back is plausible, but in college only about a tenth of a team's recent miss carries over and the line already holds it."
+   ]
+  },
+  "2026_12_NU_MINN": {
+   "by": "claude",
+   "headline": "MINN +3 won outright 20-17 on a field goal with 1 second left; the over 41.5 died with two MINN missed field goals and a 7-0 halftime score.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, MINN +3 (model NU by 2.3), won: MINN by 3. The model was closer than the market (5.3 points off against 6).",
+    "MINN's running game held up: Darius Taylor ran for 108 against 50 projected; NU's Caleb Komolafe 109 against 74."
+   ],
+   "wrong": [
+    "The total lean, over 41.5 (model 45.5), lost: 37 points. It was 7-0 at half and 10-14 after three quarters.",
+    "MINN missed 2 field goals in 9 drives, NU punted 5 times and lost a fumble. Only 10 combined possessions per team kept the scoring down.",
+    "Drew Wagner (WR, NU) had 4 yards on 1 target (43.6 projected; previous game 7, so the projection leaned on his season average 29.2). Alex Honig (TE, NU) 4 on 2 targets."
+   ],
+   "chance": [
+    "The two missed MINN kicks were not short ones on the chance ledger; fumble luck was 1.5 points. The under was mostly how the game was played."
+   ],
+   "improve": [
+    "Possibility: MINN came off a 14-42 loss to PSU and covered here; in college only about a tenth of a bad week carries over, and the line already had it.",
+    "Possibility: the model's over leans in low-total Big Ten games. Worth a pre-set check: over leans by the model when the market total is under 45."
+   ]
+  },
+  "2026_12_WIS_PUR": {
+   "by": "claude",
+   "headline": "WIS won by 32 as a 5-point favourite behind Colton Joseph's 187 rushing yards. The side lean won going away; the over needed WIS's two late touchdowns to get there.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, WIS -5 (model WIS by 6.6), won by 27 points beyond the line: WIS scored 6 TDs in 9 drives (4.7 points a drive).",
+    "The model was closer than the market on the total (1.4 off against 5.5)."
+   ],
+   "wrong": [
+    "Colton Joseph (QB, WIS) threw for 114 against 202 projected on 18 attempts, but ran for 187 against 47: the yards came on the ground, not through the air.",
+    "Abu Sama III (RB, WIS) ran for 3 on 2 carries (9.5 projected) as Joseph and Darrion Dupree (125) took the carries.",
+    "PUR's receivers fell short with PUR trailing by 9+ on 95% of its plays: Asaad Waseem 14 (60 projected, 93 the week before), Xavier Townsend 8 (44.5)."
+   ],
+   "chance": [
+    "Over 46.5 won at 52, but WIS's last 14 points came with WIS up 17+ in the fourth: without garbage time it was 38. Chance decided the total.",
+    "The quarterback exit on the ledger was Evans Chuba, a backup with 6% of PUR's passes; Ryan Browne played. The side verdict moved from chance to a win on the merits."
+   ],
+   "improve": [
+    "Possibility: a mobile QB's designed runs can replace his passing yards one-for-one. A candidate check: do QB rushing projections under-react when a team leans on the quarterback run?",
+    "Possibility: Curt Neal (DL, PUR) faced his former team (WIS, 2023-2024)."
+   ]
+  },
+  "2026_12_ECU_ARMY": {
+   "by": "claude",
+   "headline": "A 10-6 game: ECU +4.5 won outright, and the over 46 missed by 30 points. Neither team reached the end zone until ECU's touchdown with 4:24 left.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, ECU +4.5 (model ARMY by 4.2), won: ECU by 4 outright.",
+    "TJ Engleman Jr. (ECU) ran for 113 against 73 projected."
+   ],
+   "wrong": [
+    "The total lean, over 46 (model 49.5), lost: 16 points, the biggest total miss in this group (33.5 for the model, 30 for the market).",
+    "ARMY reached the red zone 0 times; ECU went 1 for 2. ECU punted 5 times in 9 drives, ARMY 4 with a missed field goal and a turnover on downs. With 18 drives in the game, there was little room for points.",
+    "Ray Ray Joseph Jr. (WR, ECU) had -3 yards on 3 targets (50.7 projected) and Emory Williams threw for 130 on 23 attempts (210 projected)."
+   ],
+   "chance": [
+    "One short missed field goal (ARMY) on the ledger; small next to a 30-point miss."
+   ],
+   "improve": [
+    "Possibility: ARMY's option offence shortens games. A candidate pre-set test: a lower total for service-academy games with few expected possessions.",
+    "Possibility: ARMY came off a bye; ECU played without RB Michael Allen (6.7 touches a game) and two projected WRs (Brady Anderson, Ja'Keith Hamilton)."
+   ]
+  },
+  "2026_12_MEM_NAVY": {
+   "by": "claude",
+   "headline": "NAVY won 38-34 on a touchdown with 15 seconds left; both leans lost as NAVY ran for 470 yards between its quarterback and one back.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Nothing on the leans. NAVY's run game beat its projections: Jackson Gutierrez 241 rushing (134 projected), Jaylin Carter 229 (88)."
+   ],
+   "wrong": [
+    "The side lean, MEM -2.5 (model MEM by 8.1), lost: NAVY by 4. The model missed by 12.1, the market by 6.5.",
+    "The total lean, under 68.5 (model 61.1), lost: 72 points. Each team had 15 drives; NAVY scored 5 TDs, MEM 4 with 2 lost fumbles and an interception.",
+    "MEM's passing game fell short: Hunter Tipton (TE) 1 yard on 1 target (47.3 projected), Jemyri Davis 27 on 9 targets after 161 the week before, Jordan Thompson (RB) 1 carry for 4."
+   ],
+   "chance": [
+    "The final NAVY touchdown at 0:15 settled both the cover and the over: before it MEM led 34-31 and the total was 65. Still, that was a real drive in a one-score game, not garbage time, so these count as misses."
+   ],
+   "improve": [
+    "Possibility: the model's number for MEM was 5.5 points away from the market; it may underrate NAVY's run game at home after a bye (NAVY came off a bye).",
+    "Possibility: a projection chasing one big game: Jemyri Davis was projected 73.8 after 161 the week before, against a 62.3 season average."
+   ]
+  },
+  "2026_12_WKU_LIB": {
+   "by": "claude",
+   "headline": "LIB led 35-0 in the third quarter and won by 31; WKU +17.5 lost early, and the over only got there through garbage-time points.",
+   "verdict": {
+    "spread": "L",
+    "total": "chance"
+   },
+   "right": [
+    "Deshawn Purdie (QB, LIB) threw for 344 against 176 projected; LIB had a 61% success rate and 13 explosive plays."
+   ],
+   "wrong": [
+    "The side lean, WKU +17.5 (model LIB by 13.3), lost: LIB by 31, settled when LIB went up 21-0 in the first quarter.",
+    "WKU started Brock Glenn (273 passing yards) instead of Rodney Tisdale Jr. (projected 172, didn't play). WKU went 3 for 3 turning the ball over on downs.",
+    "Ajay Allen (RB, WKU) ran for 13 on 7 carries (12.8 projected) with WKU trailing by 9+ on 89% of its plays."
+   ],
+   "chance": [
+    "The over 53.5 won at 59, but 17 of those points were garbage time (LIB 10, WKU 7): without them it was 42. Verdict on the total moved to chance.",
+    "LIB lost 2 fumbles and still won by 31: fumble luck was -4.6 points against LIB, so luck helped the WKU lean."
+   ],
+   "improve": [
+    "Possibility: a quarterback change the board didn't have (Tisdale out, Glenn in). Check how late it was known.",
+    "Possibility: WKU came off a 17.5-point cover and LIB off a 16.5-point miss; the line already had both, and in college only about a tenth carries over."
+   ]
+  },
+  "2026_12_CLT_TLSA": {
+   "by": "claude",
+   "headline": "TLSA scored 35 unanswered points after trailing 14-7 and won by 28. The cover and the over were both settled by TLSA's last touchdown, with TLSA up 21+.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The model was closer than the market on the margin (4.1 against 5.5). TLSA's backs ran well: Trequan Jones 109 (64 projected), Khamani Alexander 93 (38)."
+   ],
+   "wrong": [
+    "Conner Harrell (QB, CLT) threw for 69 against 158 projected: 26 attempts at 2.7 yards each. CLT never reached the red zone.",
+    "Derrick Eley (WR, CLT) had 5 yards on 5 targets (59.6 projected, 96 the week before); Jaylen Hampton 0 on 1 target; Henry Rutledge ran 4 times for 9."
+   ],
+   "chance": [
+    "TLSA -22.5 covered and the under 52 lost on TLSA's touchdown at 9:13 of the fourth (42-14), counted as garbage time. Before it TLSA led by 21 and the total was 49: one garbage-time score flipped both.",
+    "So the side win and the total loss both came down to that drive; the verdicts moved to chance."
+   ],
+   "improve": [
+    "Possibility: CLT came off a 9.5-point cover, the model's 13.8-point miss the other way; check what changed at quarterback efficiency rather than chasing that miss.",
+    "Possibility: a passing projection built on a recent run (Harrell's recent average 210 against a 166.7 season average)."
+   ]
+  },
+  "2026_12_MOST_JVST": {
+   "by": "claude",
+   "headline": "MOST +11.5 led 20-3 into the fourth and covered by 6.5 despite JVST's 22-point fourth quarter. The under would have won without JVST's late 8 points.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, MOST +11.5 (model JVST by 9.9), won: JVST by 5. The model was closer than the market (4.8 against 6.5).",
+    "Connor Lair (JVST) ran for 109 against 52 projected."
+   ],
+   "wrong": [
+    "The total lean, over 52.5 (model 53.7), lost: 45 points. MOST reached the red zone 4 times and scored 1 TD; JVST had 3 points through three quarters.",
+    "Isaiah Myers (WR, MOST) had 35 yards on 8 targets against 79.8 projected (102.9 season average): enough volume, little efficiency.",
+    "Mekhi Miller (MOST) 7 yards on 2 targets; Jalen Likely (JVST) 3 carries for 13."
+   ],
+   "chance": [
+    "JVST's 8 garbage-time points were the other way: they pushed the total toward the over and still fell short. No QB exit, no defensive scores."
+   ],
+   "improve": [
+    "Possibility: Ronnel Johnson (WR, JVST) faced his former team (MOST, 2025) and had 0 yards on 1 target.",
+    "Possibility: JVST came off a bad week (lost to WKU, 17.5-point cover miss). Only about a tenth carries over in college."
+   ]
+  },
+  "2026_12_MTSU_SHSU": {
+   "by": "claude",
+   "headline": "MTSU won 31-28 but lost the 6-point cover on 4 turnovers. SHSU lost its starting QB in the first quarter and still covered.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The over 48 (model 49.6) won on the merits: 59 points, over by 6:44 of the third with no garbage time.",
+    "Terrence Brown (MTSU) ran for 108 against 54; Roman Gagliano ran for 64 against 28."
+   ],
+   "wrong": [
+    "The side lean, MTSU -6 (model MTSU by 7.6), lost: MTSU by 3. MTSU turned it over 4 times (2 interceptions, 2 lost fumbles) and missed a field goal, and went 0 for 3 in the red zone.",
+    "Landyn Locke (QB, SHSU) threw for 19 on 4 attempts and left at 11:47 of the first quarter; Mason Holtzclaw threw for 191 in relief, so SHSU's passing barely dropped. Chris Reed (WR, SHSU) had 26 on 4 targets (60.3 projected)."
+   ],
+   "chance": [
+    "Locke's exit hurt SHSU, not the MTSU lean, so it can't explain the loss. The verdicts move from chance to the merits.",
+    "Fumble luck was about 1.5 points; MTSU's turnovers were the bigger swing."
+   ],
+   "improve": [
+    "Possibility: MTSU came off a 16.5-point cover at LIB; the line had it, and turnovers, not ratings, decided this one.",
+    "Data check: Holtzclaw and Darrick Bledsoe III (49 yards) weren't on the board's projections."
+   ]
+  },
+  "2026_12_USF_FAU": {
+   "by": "claude",
+   "headline": "FAU led 28-0 in the third and won by 21; both leans won, and the under 64 came in with 15 points to spare.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, FAU +1.5 (model USF by 0.3), won: FAU by 21. FAU scored on 6 of 11 drives (3.2 points a drive).",
+    "The under 64 won at 49: USF turned it over on downs 3 times and twice more by turnover. USF's 7 garbage-time points didn't threaten it."
+   ],
+   "wrong": [
+    "Luke Kromenhoek (QB, USF) threw for 385 (201 projected) but ran for 16 on 18 carries (54.4 projected): sacks and scrambles while trailing by 9+ on 76% of plays.",
+    "USF's backs had no room: Jason Collins Jr. 12 on 6 carries (108 the week before), Tray Kinkle 2 on 1. D.J. Crowther (projected 62) didn't play."
+   ],
+   "chance": [
+    "Nothing big: no QB exit, no defensive scores, and fumbles lost were even (1 each)."
+   ],
+   "improve": [
+    "Possibility: USF was without its lead back D.J. Crowther (12.7 touches a game); check how late it was known.",
+    "Possibility: Wyatt Sullivan (TE, USF) faced his former team (FAU, 2023-2024)."
+   ]
+  },
+  "2026_12_ULM_APP": {
+   "by": "claude",
+   "headline": "APP won 17-16 in overtime as a 13.5-point favourite; it missed 3 field goals, and regulation ended 10-10. Both leans lost.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Treyaun Webb (ULM) ran for 93 against 27 projected; Ja'Quez Cross 48 against 24."
+   ],
+   "wrong": [
+    "The side lean, APP -13.5 (model APP by 18.1), lost: APP by 1. The model missed by 17.1, the market by 12.5.",
+    "The total lean, over 50.5 (model 52), lost: 33 points including overtime. APP had 3 missed field goals and a lost fumble in 12 drives; ULM punted 6 times.",
+    "Sam Pickett III (WR, APP) had 20 on 3 targets (71.7 projected); APP played without RB Jaquari Lewis (projected 85) and Zach Palmer-Smith (50)."
+   ],
+   "chance": [
+    "APP's 3 misses weren't the short kind on the chance ledger, and fumble luck was 1.5 points: this was mostly a real miss. Wind was 13 mph, the highest in this group."
+   ],
+   "improve": [
+    "Possibility: APP's two missing backs (Lewis, 12.7 touches a game) were the biggest change; check whether the board knew.",
+    "Possibility: a candidate pre-set test: lower totals when wind is 12+ mph in college (this one had 13)."
+   ]
+  },
+  "2026_12_CCU_UL": {
+   "by": "claude",
+   "headline": "UL won by 14 and covered 10.5; UL scored twice in the first minute, one of them a non-offensive touchdown, to lead 13-0.",
+   "verdict": {
+    "spread": "L",
+    "total": "chance"
+   },
+   "right": [
+    "UL's receivers beat projections: Colton Hinton 106 (36), Robby Washington 104 (33)."
+   ],
+   "wrong": [
+    "The side lean, CCU +10.5 (model UL by 5.3), lost: UL by 14. The model missed by 8.7, the market by 3.5.",
+    "Deuce Bailey (QB, CCU) ran for -40 on 9 carries (sacks) and threw for 131 on 27 attempts; Osiris Lopez added 168 yards. CCU threw 2 interceptions.",
+    "CCU's pass catchers fell short with CCU trailing by 9+ on 97% of its plays: Tristian Gardner 4 (33.8), Zach Courtney 0 on 3 targets."
+   ],
+   "chance": [
+    "UL's non-offensive touchdown was worth 7 points against the lean, but fumble luck went 4.6 the other way; net 2.4, not enough to flip a 3.5-point loss.",
+    "The over 49.5 won at 62, but 17 points were garbage time (CCU 14, UL 3): without them 45. Total moved to chance."
+   ],
+   "improve": [
+    "Possibility: CCU used two quarterbacks (Bailey and Lopez); a QB split the board didn't project.",
+    "Possibility: UL was without LB Jake St. Andre (11.3 tackles a game) and still held CCU to 10 points into the fourth."
+   ]
+  },
+  "2026_12_DEL_NMSU": {
+   "by": "claude",
+   "headline": "DEL won by 12 as a 3-point favourite behind Nick Minicucci's 398 passing yards; both leans won.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, DEL -3 (model DEL by 4.9), won: DEL by 12, settled by DEL's touchdown at 5:49 of the third. The model was closer than the market (7.1 against 9).",
+    "The over 53.5 won at 72; it would have gone over at 58 even without NMSU's 14 garbage-time points. DEL scored 6 TDs in 12 drives."
+   ],
+   "wrong": [
+    "Nick Minicucci (QB, DEL) ran for -3 on 7 carries (20.3 projected, 69 the week before): the projection leaned on one big game against a 13.9 season average.",
+    "Elijah Sessoms (TE, DEL) had 4 on 2 targets; DEL's TEs Scott Moore (54) and Josh Humes (47), not projected, took his yards."
+   ],
+   "chance": [
+    "One short missed field goal by NMSU; small. Nothing else."
+   ],
+   "improve": [
+    "Possibility: QB rushing projections chase a single big week (Minicucci 69 last week, 13.9 season). A candidate check of how much the last game weighs.",
+    "Data check: four players with 41-70 yards (Myles Libman, Moore, Humes, TJ Pride) weren't on the board's projections."
+   ]
+  },
+  "2026_12_FIU_KENN": {
+   "by": "claude",
+   "headline": "KENN led 35-10 after three quarters and won by 11, covering 2.5. The over 45 got there only through FIU's 14 fourth-quarter garbage-time points.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "The side lean, KENN -2.5 (model KENN by 3.2), won: KENN by 11, settled before half. KENN scored 5 TDs in 11 drives with a 53% success rate."
+   ],
+   "wrong": [
+    "Javon Rogers (WR, KENN) had 0 yards on 1 target (37.4 projected, 0 the week before too).",
+    "FIU's run game fell short while trailing by 9+ on 55% of its plays: Anthony Carrie 16 on 5 carries (34.8), Devonte Lyons 54 (82.6)."
+   ],
+   "chance": [
+    "The over 45 (model 47.7) won at 59, but FIU's 14 points came in garbage time; without them the total was exactly 45, a push. The total moves to chance.",
+    "A short missed KENN field goal and fumble luck roughly cancelled (net 0.1)."
+   ],
+   "improve": [
+    "Possibility: KENN played without QB Rickie Collins (5 touches a game) and still scored 35; Landon Varnes started.",
+    "Possibility: FIU was missing two defensive backs (Demetrius Hill, Shamir Sterlin)."
+   ]
+  },
+  "2026_12_NCSU_FSU": {
+   "by": "claude",
+   "headline": "NCSU won 28-10 as a 10.5-point underdog, the biggest miss in this group: the model was 28.7 off and the market 28.5. FSU scored 3 points after the first quarter.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Davion Gause (NCSU) ran for 134 (55 projected) and caught 71 (24)."
+   ],
+   "wrong": [
+    "The side lean, FSU -10.5 (model FSU by 10.7, almost on the line), lost: NCSU by 18. NCSU went 4 for 4 in the red zone and was far better per play (+0.31 EPA against -0.23).",
+    "The total lean, over 57 (model 59.4), lost: 38 points. FSU had 2 interceptions, 2 turnovers on downs and 5 punts in 11 drives (0.9 points a drive).",
+    "FSU played without both lead backs, Quintrevion Wisner and Amari Thomas (10.3 and 13.7 touches a game); Ashton Daniels ran for 19 on 12 carries (49.4 projected).",
+    "Jayden Scott (RB, NCSU) ran for 24 on 7 carries (74.7 projected, 127 the week before) as Gause took over."
+   ],
+   "chance": [
+    "NCSU missed 2 field goals (one short, about 1.4 points): the result would have been even more lopsided. Nothing flipped the leans."
+   ],
+   "improve": [
+    "Possibility: FSU without its top two backs. If the board didn't know, this is the clearest case this week for a pre-set test of college RB availability.",
+    "Possibility: NCSU came in 2-7 against the spread; a team's ATS record isn't in the model and shouldn't be, but the market may have been slow on NCSU's improvement."
+   ]
+  },
+  "2026_12_RUTG_PSU": {
+   "by": "claude",
+   "headline": "RUTG won 25-24 outright as a 25-point underdog, scoring 8 on the final play. Both leans won, the over only on that last score.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, RUTG +25 (model PSU by 22.8), won with room to spare: RUTG trailed 10-24 after three quarters and still covered by 24.",
+    "AJ Surace (QB, RUTG) threw for 178 against 86 projected; Chase Sowell had 123 receiving (79)."
+   ],
+   "wrong": [
+    "PSU's offence was ordinary (+0.02 EPA a play), lost 2 fumbles and turned it over on downs twice. Without lead back Carson Hansen (15.3 touches a game), James Peoples got 2 carries (8.8 projected).",
+    "Brett Eskildsen (WR, PSU) had 0 on 1 target (42.8 projected); Andrew Rappleyea (TE) 17 (41.2)."
+   ],
+   "chance": [
+    "The over 48 (model 54.5) was 41 points until RUTG's 8-point touchdown at 0:00 of the fourth: a last-play score in a one-point game, not garbage time, but luck-sized.",
+    "PSU's two lost fumbles were worth about 4.6 points to the RUTG lean on the ledger; it covered by far more."
+   ],
+   "improve": [
+    "Possibility: PSU came off a 16-point cover against MINN and RUTG off a 0-31 loss; the market leaned into both and missed by 26.",
+    "Possibility: PSU without Carson Hansen; check whether the board knew."
+   ]
+  },
+  "2026_12_ODU_CONN": {
+   "by": "claude",
+   "headline": "CONN won by 8 as a 14-point favourite, and ODU's touchdown with 1 second left settled both the cover and the over.",
+   "verdict": {
+    "spread": "chance",
+    "total": "chance"
+   },
+   "right": [
+    "The model's number (CONN by 5.9) was much closer than the market's (2.1 off against 6).",
+    "Kalieb Osborne (QB, CONN) ran for 94 against 44.5; Cyncir Bowers 105 against 68."
+   ],
+   "wrong": [
+    "ODU's backs had little: Devin Roche 40 on 7 carries (14.6 projected), Maurki James 9 on 5, Trey Hall -4 on 1, with ODU trailing by 9+ on 61% of its plays.",
+    "TJ Johnson (WR, ODU) had 6 on 2 targets (37.2 projected)."
+   ],
+   "chance": [
+    "Before ODU's touchdown at 0:01, CONN led 29-14: ODU +14 was losing and the total was 43, under 48.5. A last-second backdoor score decided both leans.",
+    "Quinn Henicle, who shared ODU's passing with Jaxon Potter (240 yards), left in the fourth quarter."
+   ],
+   "improve": [
+    "Possibility: ODU split time between Potter and Henicle (99 yards); a QB rotation the board projected as Potter alone.",
+    "Possibility: CONN came off a 28.5-point cover against JMU; the model's own number stayed modest and was right."
+   ]
+  },
+  "2026_12_NIU_NDSU": {
+   "by": "claude",
+   "headline": "NDSU led 31-11 after three, then NIU scored the last 14 points to lose by 6. Both leans won: NIU +26 covered easily and the over 46 cleared.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "NIU +26 won on the merits: the cover was safe by late in Q3 (11-31), long before NIU's last two TDs.",
+    "Over 46 won with 56 points. Take out NIU's 7 garbage-time points and it is still 49, so it held on the merits.",
+    "The model (NDSU by 25.3) was a touch closer than the market (26) on the margin, and closer on the total too (47.6 against 46)."
+   ],
+   "wrong": [
+    "Everyone missed the margin by about 20: NDSU won by 6, not 26.",
+    "Myles Mitchell (RB, NDSU): 2 rushing yards on 1 carry against 52.9 projected on 11.3. DJ Scott took the work (86 yards). A role change, not a bad day.",
+    "Nathan Hayes (QB, NDSU): -21 rushing yards on 2 carries against 25.9 projected. Sacks likely ate his runs; backup Preston Brown also played (43 yards).",
+    "La'Don Bryant (WR, NIU): 13 yards on 5 targets against 44.3. Taron Dickens threw for 260, but it went to DeAree Rogers (116) and Afy Ibekwe (81, not projected)."
+   ],
+   "chance": [
+    "Little luck either way: fumble bounces helped NIU by about 1.5 points. NDSU went soft late with a 20-point lead, which is normal for a big favourite."
+   ],
+   "improve": [
+    "Possibility: NIU came off a bad week (lost 7-28 to NEV, missed the cover by 14.5) and bounced back. College misses carry only about a tenth into the next game, and the line already has it.",
+    "Possibility: NDSU's backfield split is changing (Scott over Mitchell). Worth checking the board's carry shares for NDSU.",
+    "NDSU projected TE Reis Kessel and WR Chris Kiel did not play; check how late that was known."
+   ]
+  },
+  "2026_12_GASO_TROY": {
+   "by": "claude",
+   "headline": "GASO routed TROY 45-7. The TROY +8 lean was never close; the over 47.5 only got there on 21 fourth-quarter garbage points.",
+   "verdict": {
+    "spread": "L",
+    "total": "chance"
+   },
+   "right": [
+    "Andre Greene Jr. (97 against 42) and Taeo Todd (66 against 28) beat their projections for GASO."
+   ],
+   "wrong": [
+    "TROY +8 lost on the merits: GASO was up 14-0 in Q1 and 21-0 at half. The model (GASO by 6.3) was further off than the market (8).",
+    "TROY's offense collapsed: 0.54 points a drive, 3 turnovers, -0.54 EPA a play, 47 plays. MJ Stroud had 3 sacks.",
+    "Goose Crowder (QB, TROY): -33 rushing yards against 37.1, sacks on a team trailing by 9+ on 91% of its plays. Jordan Lovett (1 yard on 3 carries) and Gavin Griffin (9 on 4) got no runs in that script.",
+    "River Helms (TE, GASO): 5 yards on 2 targets against 41.7. GASO led by 9+ on 84% of its plays and didn't need him."
+   ],
+   "chance": [
+    "The over 47.5 landed on garbage time: GASO scored 21 in the fourth while up 17+. Without them the total is 31, so it counts as chance, not a good read.",
+    "Fumble bounces went against TROY (about 4.6 points), but GASO would have covered anyway."
+   ],
+   "improve": [
+    "Possibility: GASO is 8-1 against the spread and beat the line by 10.5, 29 and 12 in its last three. In college about a tenth of that runs on into the next game; the line already holds most of it.",
+    "Possibility: TROY has now missed the cover by 17, 10 and 30 in its last three. Look for what changed (quarterback play, injuries) rather than a rating lag.",
+    "Candidate test: how often the over wins only on fourth-quarter garbage points in lopsided college games, and whether lines on big mismatches already price it."
+   ]
+  },
+  "2026_12_GAST_MRSH": {
+   "by": "claude",
+   "headline": "GAST led 21-13, MRSH scored 15 straight in Q4, and a GAST TD with 2 seconds left made it 28-27. GAST +3 covered on that last play; the over 56.5 fell 1.5 short.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "GAST +3 won, and the model (MRSH by 2.6) was a bit closer than the market (3). The last-second TD was a real attempt to win, not garbage time, but say plainly: it decided the cover.",
+    "Ayden Pereira threw for 249 (172 projected) and Qwantavius Wiggins ran for 114 (63)."
+   ],
+   "wrong": [
+    "Over 56.5 lost at 55. The model's 59.4 was further off than the market. No points in Q3 from either side cost it.",
+    "Toby Payne (TE, MRSH): 5 yards on 2 targets against 36.2; his previous game was 3 too, so the projection leaned on the season average (27.2).",
+    "DJ Riles (WR, GAST): 13 yards on 6 targets against 43.2: the targets were there, the yards weren't.",
+    "Owen Sweeney (WR, MRSH): 11 yards on 2 targets against 38.3, while Chris Culliver had 94."
+   ],
+   "chance": [
+    "Mostly how the teams played. The cover swung on a TD with 0:02 left, so it was close to a coin flip at the end."
+   ],
+   "improve": [
+    "Projected Adrian Norton (WR) and Khalil Wilkins (QB) for MRSH did not play. Check how late that was known.",
+    "Possibility: MRSH was also missing S Terrente Hinton (5 tackles a game), which may help explain GAST's 4 TDs on 12 drives."
+   ]
+  },
+  "2026_12_USA_USM": {
+   "by": "claude",
+   "headline": "USA won a shootout 40-35. The spread pushed at 5 after USM's TD with 1:01 left; the under 65.5 lost when the teams scored 75.",
+   "verdict": {
+    "spread": "push",
+    "total": "L"
+   },
+   "right": [
+    "The side was a push. The market's 5 was exact; the model had USA by 7.4.",
+    "PJ Martin (128 against 75), Trae Stevenson (128 against 29) and Mario Sanders (143 against 76) all beat their numbers."
+   ],
+   "wrong": [
+    "Under 65.5 lost on the merits: 75 points, over at Q4 1:57 with no garbage time. Both offenses scored freely (USA 3.33, USM 2.69 points a drive).",
+    "Jamarice Wilder (RB, USM): 24 yards on 8 carries against 65.4 on 10.1. Efficiency fell from 6.5 to 3.0 a carry, and USM threw more after falling behind late.",
+    "Jeremiah Jones-Thomas (WR, USA): 0 yards on 0 targets against 30. He wasn't part of the plan this week."
+   ],
+   "chance": [
+    "Nothing big: no turnover luck, no non-offensive scores, no early exits."
+   ],
+   "improve": [
+    "Possibility: USM came off a 31-63 loss at LT (total 38 over the line). Its defense keeps giving up points; the model's 63 total sat under the market's 65.5 anyway.",
+    "Possibility: USA LB Tre'Mon Henry faced his former team (USM, 2024)."
+   ]
+  },
+  "2026_12_WSU_TXST": {
+   "by": "claude",
+   "headline": "TXST hammered WSU 42-14. The model liked WSU +14 and was badly wrong; the under 61.5 won.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Under 61.5 won with 56, and garbage time (21 points) only pushed toward the over, so the under held on the merits.",
+    "Brad Jackson (QB, TXST) ran for 127 against 63."
+   ],
+   "wrong": [
+    "WSU +14 lost on the merits. The model (TXST by 7.2) was further off than the market (14). TXST scored TDs on 6 of 9 drives (4.67 a drive); WSU turned it over on downs 3 times.",
+    "Possibility behind the miss: WSU came off a 73-7 win over CSU, a 58.5-point cover. That one game may have lifted WSU's rating more than it should.",
+    "Owen Eshelman (QB, WSU): 22 rushing yards against 60.8, 1.7 a carry, with WSU trailing by 9+ on 82% of its plays.",
+    "Davian Jackson (RB, TXST): 11 yards on 8 carries against 55.8. His QB took the rushing load instead."
+   ],
+   "chance": [
+    "WSU's lone non-offensive TD was worth about 7 points to WSU, and a short missed field goal cost it about 1.4. Neither came close to changing the result."
+   ],
+   "improve": [
+    "Candidate test: does one blowout (a 50+ point cover) pull a college team's model rating too far? Cap or shrink single-game outliers and check the next week's errors, under the keep rule.",
+    "Possibility: TXST RB Jaylen Jenkins faced his former team (WSU, 2023) and WSU CB Khamari Terrell faced his (TXST, 2025)."
+   ]
+  },
+  "2026_12_MD_USC": {
+   "by": "claude",
+   "headline": "USC won 35-21 and was up 35-14 with four minutes left; MD's TD at 3:56 cut it to 14 and beat USC -17.5. The cover came down to a late garbage-time score.",
+   "verdict": {
+    "spread": "chance",
+    "total": "L"
+   },
+   "right": [
+    "The total was close to right: 56 against 57.5, and both the model and market were within 2."
+   ],
+   "wrong": [
+    "The board had the wrong MD quarterback. It projected Cardell Williams for 182.6 passing yards; Malik Washington took the snaps and threw for 251, while Williams threw once.",
+    "Mark Bowman (TE, USC): 0 yards on 2 targets against 52.5, his season low (average 47.1).",
+    "The over 57.5 lost on the merits: MD's 3 interceptions ended drives and USC kicked 2 field goals."
+   ],
+   "chance": [
+    "The cover was settled by MD's TD at 3:56 while down 21 (garbage time). Without it USC wins by 21 and covers, so the side lean counts as chance.",
+    "Even so, the model's USC by 24.8 was much further off than the market's 17.5 (miss of 10.8 against 3.5)."
+   ],
+   "improve": [
+    "Data fix to check: MD's starting QB in the board's data was Cardell Williams. Find when the switch to Malik Washington was known, and whether the board's QB input picked it up.",
+    "Possibility: USC is 3-7 against the spread, and the model has been more bullish on USC than the market.",
+    "Possibility: USC was without DT Alex VanSumeren (4 tackles a game)."
+   ]
+  },
+  "2026_12_UNLV_SJSU": {
+   "by": "claude",
+   "headline": "UNLV led 24-13 after three and held on 24-22. SJSU +6.5 covered with a TD at 0:45; the over 47.5 fell short at 46.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "SJSU +6.5 won. The model and market both had UNLV by about 6.5, so this was a coin flip settled by SJSU's late TD. It was a real comeback drive, not garbage time.",
+    "Taeshaun Lyons (85 against 31) beat his projection for UNLV."
+   ],
+   "wrong": [
+    "Over 47.5 lost with 46. The model's 53.4 was 7.4 off; the market's 47.5 nearly exact. SJSU reached the red zone 3 times with no TD (3 field goals, plus a short miss).",
+    "Jabari Bates (RB, SJSU): 16 yards on 8 carries against 82.6 on 17.2. He had 18 the week before, so the projection leaned on his season average of 70.",
+    "Jai'Den Thomas (RB, UNLV): 43 yards on 14 carries against 90.4. His week-11 game was 21 yards too.",
+    "Anthony Ivey (WR, SJSU): -1 yard on 2 targets against 43.3, a second straight empty game (0 in week 11)."
+   ],
+   "chance": [
+    "A short missed field goal and a fumble bounce roughly cancelled out. Red-zone failure kept the total under."
+   ],
+   "improve": [
+    "Possibility: the model's totals ran high this week in games like this one (53.4 against 47.5 here). Check whether its college totals have run over the market in recent weeks.",
+    "Possibility: both lead backs came in after a weak week; projections that lean on the season average may run high for backs whose role is shrinking."
+   ]
+  },
+  "2026_12_ARST_LT": {
+   "by": "claude",
+   "headline": "LT crushed ARST 48-3. Both leans won, but the 30-point margin miss was shared with the market: nobody saw a rout this big.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "LT -15 won easily: up 21-3 by Q2 5:02. The model and market both had LT by 15.",
+    "Under 54.5 won with 51, even with LT's 13 garbage-time points.",
+    "Jalen Mickens (110 against 55) and Eli Finley (84 against 53) beat their projections."
+   ],
+   "wrong": [
+    "Trey Owens (QB, ARST): -18 rushing yards on 9 carries against 34. Sacks, with ARST trailing by 9+ on 54% of its plays.",
+    "Chauncy Cobb (WR, ARST): 13 yards on 3 targets against 50.8. ARST managed 0.27 points a drive.",
+    "LT's backs came up short (Hurt 14, Burnette 20 on 3 carries) because LT threw for big plays instead."
+   ],
+   "chance": [
+    "No luck to speak of: no non-offensive scores, no early exits."
+   ],
+   "improve": [
+    "Possibility: LT is 8-1 against the spread and beat the line by 9, 17 and 14.5 in its last three. In college only about a tenth of that carries forward, and the line already holds it.",
+    "ARST WR Hunter Summers (projected 52) did not play; check how late that was known."
+   ]
+  },
+  "2026_12_STAN_CAL": {
+   "by": "claude",
+   "headline": "STAN won 44-28. The model's CAL lean lost on the merits and the over 55 won comfortably.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "Over 55 won with 72, and the total was over by Q4 11:24. CAL's 14 garbage points mattered little: without them it is 58.",
+    "Nico Brown (STAN) had 92 against 58."
+   ],
+   "wrong": [
+    "CAL -2.5 lost on the merits. STAN led 17-14 at half and pulled away in Q3. The model (CAL by 2.9) was further off than the market (STAN by 2.5).",
+    "Jaron-Keawe Sagapolutele (QB, CAL): 127 passing yards on 21 attempts against 253.4 on 37.8. CAL ran more and threw less than expected.",
+    "Caden High (WR, STAN): 0 yards on 3 targets against 53.3. CAL's Jae'on Young broke up 5 passes."
+   ],
+   "chance": [
+    "The facts list Dominic Ingrassia leaving on CAL's first possession, but he had 3% of the passes and the board's QB, Sagapolutele, played the rest. That exit didn't cost CAL against the model's read, so I've scored both leans on the merits (the draft had chance)."
+   ],
+   "improve": [
+    "Possibility: STAN came off a 35-point cover at VT and CAL off an 18-point miss at UVA. CAL is 2-7 against the spread; look for what changed rather than assume a rating lag.",
+    "Possibility: CAL was without DB Isaiah Crosby (5.7 tackles a game) and RB Ashten Emory (questionable), which may have shaped both sides of the ball.",
+    "Data check: why the review's QB-exit rule flagged a 3%-share quarterback as an early exit when the projected starter played."
+   ]
+  },
+  "2026_12_CSU_FRES": {
+   "by": "claude",
+   "headline": "FRES won 49-42 in a 91-point shootout. CSU +20.5 covered with ease; the under 66.5 was blown away by the third quarter.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "CSU +20.5 won. The model (FRES by 18.2) was closer than the market (20.5).",
+    "Hauss Hejny (CSU) threw for 413 against 210 and Bryson Donelson (FRES) ran for 165 against 84."
+   ],
+   "wrong": [
+    "Under 66.5 lost on the merits: the total was over at Q3 1:27. Each side scored 6 TDs; FRES averaged 4.9 points a drive.",
+    "Jayden Mandal (QB, FRES): 191 passing yards on 17 attempts against 265.4 on 30.1. FRES led by 9+ on 52% of its plays and ran the ball.",
+    "Jake Appleget (TE, FRES): 11 yards on 3 targets against 31.2."
+   ],
+   "chance": [
+    "FRES scored a non-offensive TD (about 7 points) and the fumble bounces leaned CSU's way. CSU's 15 fourth-quarter points (7 in garbage time) helped the cover, but CSU was already inside 20.5 for most of the game.",
+    "Even without the non-offensive TD and garbage points, the total is about 77, so the under was a real miss."
+   ],
+   "improve": [
+    "Possibility: CSU came off a 7-73 loss at WSU (a 58.5-point miss). The model and the line both shaded CSU down; it bounced back. Same pattern as the WSU blowout at TXST.",
+    "CSU's projected WR RJ Vick (62) and five more players did not play. Check how late that was known."
+   ]
+  },
+  "2026_12_SDSU_BOIS": {
+   "by": "claude",
+   "headline": "SDSU, a 20.5-point underdog, won 22-20 on a field goal at 0:00. Both leans won; nobody had this game close.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "SDSU +20.5 and under 61 both won. The model's lean was small, but on the right side both times.",
+    "Maddux Madsen (BOIS) threw for 311 against 219."
+   ],
+   "wrong": [
+    "The model and market both missed the margin by more than 20 and the total by 16-19.",
+    "Sire Gaines (RB, BOIS): 17 yards on 9 carries against 77.1. Dylan Riley also fell short (69 against 120.1). The game stayed tied or within a score all night, so script doesn't explain it; SDSU stopped the run.",
+    "Rasean Jones (WR, BOIS): 40 yards on 8 targets against 83.9. His projection followed a 230-yard game in week 11; his season average is 99.",
+    "Jordan Napier (WR, SDSU): 3 yards on 5 targets against 37.7."
+   ],
+   "chance": [
+    "BOIS lost 3 turnovers (2 INTs and a fumble) on 12 drives. That is the part of this upset the model couldn't see."
+   ],
+   "improve": [
+    "Possibility: BOIS came off a 46-41 win over ORST and failed to cover by 11. Its defense and turnovers have been shaky; the 20.5 line looked high on both numbers.",
+    "Candidate check: projections that follow one huge game (Jones's 230) may overshoot. A cap on last-game weight could be tested under the keep rule."
+   ]
+  },
+  "2026_12_OKST_ASU": {
+   "by": "claude",
+   "headline": "OKST came back from 24-7 down and won 30-27 in overtime. The spread pushed at 3; the over 60 lost because the teams scored 6 points in regulation's last 4 minutes.",
+   "verdict": {
+    "spread": "push",
+    "total": "L"
+   },
+   "right": [
+    "The market's OKST by 3 was exact. The model's OKST by 8.6 was further off.",
+    "Reed Harris (ASU) had 172 receiving yards against 88."
+   ],
+   "wrong": [
+    "Over 60 lost at 57 even with overtime. ASU scored 3 points in the second half.",
+    "Derek Eusebio (WR, ASU): 0 yards on 2 targets against 42.3. Harris took the lead role with Omarion Miller out.",
+    "Ayo Adeyi (RB, OKST): 0 carries against 5 projected. He wasn't used."
+   ],
+   "chance": [
+    "Not much. Fumble bounces were worth about 1.5 points to OKST. The overtime field goal only decided a push."
+   ],
+   "improve": [
+    "Possibility: OKST came off a 28.5-point miss against TTU and bounced back. Its last three covers swung by -12, +31 and -28.5: a volatile team.",
+    "ASU's top WR Omarion Miller (projected 64) did not play; check how late that was known."
+   ]
+  },
+  "2026_12_USU_ORST": {
+   "by": "claude",
+   "headline": "ORST won 31-24 with a TD at 3:41. The spread pushed at 7 and the over 52 won on that same score.",
+   "verdict": {
+    "spread": "push",
+    "total": "W"
+   },
+   "right": [
+    "Over 52 won with 55, and no garbage time. The model's 54.6 was closer than the market's 52.",
+    "McCae Hillstead (USU) threw for 277 against 189."
+   ],
+   "wrong": [
+    "AJ Newberry (RB, ORST): 6 yards on 1 carry against 45.6 on 8.7. Kourdey Glass ran for 64 instead.",
+    "Javen Jacobs (RB, USU): 20 yards on 6 carries against 64.3. USU threw instead."
+   ],
+   "chance": [
+    "Fumble bounces and a short missed field goal by USU were worth about 4.5 points to ORST. Without them the margin is about 2.5, so the push could have gone either way."
+   ],
+   "improve": [
+    "Possibility: ORST's backfield is shifting with Cornell Hatcher Jr. out (projected 37): Glass got the work, not Newberry.",
+    "Possibility: USU came off a 20-point miss at SDSU; it played close here."
+   ]
+  },
+  "2026_12_HAW_NEV": {
+   "by": "claude",
+   "headline": "NEV won 16-8 in a game with almost no offense. Both leans lost. HAW was down 13-0 when Micah Alejado left in Q3, and scored its only points after.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "The market had the margin almost exactly (NEV by 7); the board's blend (4.5) was closer than the model."
+   ],
+   "wrong": [
+    "HAW +7 lost and the over 40.5 lost, both on the merits. HAW was shut out for 40 minutes with Alejado, who threw for 95 on 21 attempts (4.5 a throw) against 221.2.",
+    "The model's total of 47.1 was 23.1 too high; the market's 40.5 was also 16.5 off. NEV kicked 3 field goals and HAW missed 2.",
+    "NEV's receivers: Gary Givens III, Damien Morgan and Trace Estes all had 0 yards on 4 targets combined. AJ Bianco ran for 55 and threw for 106."
+   ],
+   "chance": [
+    "The early-exit rule flagged Alejado leaving at Q3 10:54, but HAW had 0 points to that point and scored its 8 after. The exit didn't flip either lean, so I've scored both as losses (the draft had chance)."
+   ],
+   "improve": [
+    "Possibility: cold (34°) at NEV; HAW travels from Honolulu across 2 time zones. A late-season trip to a cold site for a passing team may be worth a pre-set test on totals.",
+    "Candidate test: the model's college totals ran well over the market in low-total games this week. Check model-vs-market total errors when the line is under 45."
+   ]
+  },
+  "2026_12_UNC_UVA": {
+   "by": "claude",
+   "headline": "UVA beat UNC 41-24. Both leans won, but the UNC quarterback the board projected, Billy Edwards Jr., didn't play; Travis Burgess threw for 354.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "UVA +1 won on the merits: up 27-10 after three.",
+    "Over 41.5 won with 65. The two sides scored 21 garbage-time points; without them it is 44, still over, but only just. The model's 47.6 was much closer than the market's 41.5.",
+    "Beau Pribula (UVA) threw for 297 against 185; Jordan Shipp (UNC) had 149."
+   ],
+   "wrong": [
+    "Edwards (questionable) did not play. Burgess passed for 354 and ran for 106 (22 projected).",
+    "Jelani Thurman (TE, UNC): 13 yards on 2 targets against 62.2. With a new QB, targets went to Shipp and Mason Humphrey (95, not projected).",
+    "Demon June (RB, UNC): 9 yards on 7 carries against 47.6, trailing by 9+ on 87% of UNC's plays."
+   ],
+   "chance": [
+    "UNC missed 2 short field goals (about 2.8 points) and lost a fumble bounce. Neither changed either lean."
+   ],
+   "improve": [
+    "Possibility: a backup QB with running ability changed UNC's passing tree; projections for the starter's targets didn't fit.",
+    "Data check: Edwards was listed questionable; check when the switch to Burgess was known and whether the board's QB input caught it."
+   ]
+  },
+  "2026_12_PITT_LOU": {
+   "by": "claude",
+   "headline": "LOU beat PITT 42-10. LOU -11 won easily, but the over 50.5 only got there on LOU's TD at 3:19 with a 32-point lead.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "LOU -11 won on the merits: up 28-10 by Q3 5:13. PITT managed 0.83 points a drive and 3 turnovers.",
+    "Lincoln Kienholz threw for 309 (215 projected); Tre Richardson had 114."
+   ],
+   "wrong": [
+    "Corey Dailey (QB, PITT): 22 passing yards on 8 attempts against 185.2. Holden Geriner (not projected) took over and threw for 80.",
+    "PITT's receivers fell short with the QB change: Cataurus Hicks 20 against 64.5 (facing his former team), Malik Knight 7 against 45.7.",
+    "Ja'Kyrian Turner (RB, PITT): 8 yards on 9 carries against 57."
+   ],
+   "chance": [
+    "The over 50.5 was decided by garbage time: LOU scored 14 while up 17+, and the total went over at Q4 3:19. Without those points it is 38, so the over counts as chance.",
+    "LOU also missed 2 field goals, one of them short."
+   ],
+   "improve": [
+    "Possibility: PITT's quarterback spot is unsettled (Dailey benched for Geriner). Check what PITT's QB input should be next week.",
+    "Possibility: Hicks played LOU, his former team (2023-24); the habits cut both ways.",
+    "PITT's RB La'Vell Wright (9.3 touches a game) did not play."
+   ]
+  }
+ }
+}
