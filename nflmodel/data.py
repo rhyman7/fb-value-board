@@ -217,7 +217,10 @@ def load_pbp_aggregates(refresh_current: bool = False, verbose: bool = True):
         spath = C.CACHE / f"stat_games_{season}.csv"
         want_stats = season > now - STATS_SEASONS
         have = tpath.exists() and qpath.exists() and (spath.exists() or not want_stats)
-        if (season == now and refresh_current) or not have:
+        held = season == now and refresh_current and have and C.HOLD_PBP_VALUES
+        if held and verbose:
+            print(f"  play-by-play {season}: refresh held (config.HOLD_PBP_VALUES); using the cached tables", flush=True)
+        if (season == now and refresh_current and not held) or not have:
             if verbose:
                 print(f"  downloading play-by-play {season} ...", flush=True)
             try:

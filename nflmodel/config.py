@@ -15,6 +15,15 @@ GAMES_URL = "https://raw.githubusercontent.com/nflverse/nfldata/master/data/game
 # publishes an opening and closing spread for most games since 2009.
 OPENERS_URL = "https://raw.githubusercontent.com/greerreNFL/nfelo/main/output_data/nfelo_games.csv"
 PBP_URL = "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_{season}.parquet"
+# Hold (Nov 23, 2026, Ryan's call). Between about 3:35 and 4:35 PM ET that day nflverse republished its
+# play-by-play with different EPA and success values for plays already on file (same play counts; pass
+# EPA down, rush EPA up; 306 of 324 team-games of 2026 no longer matched the cache). While this is True
+# the current season's EPA tables (team_games, qb_games, stat_games, team_extra, qb_extra) are NOT
+# re-downloaded, so the boards stay on the values the model was tuned and tested on until Ryan has seen
+# the old-vs-revised comparison. Cost: games finished after the last refresh (first: CIN@WAS, Nov 23)
+# are missing from those tables until the hold is lifted. Set to False to lift it. CONVENTIONS.md,
+# "Play-by-play values hold".
+HOLD_PBP_VALUES = True
 
 FIRST_SEASON = 2006         # first season of play-by-play pulled (burn-in for ratings)
 FIRST_MODEL_SEASON = 2008   # first season whose games are used to train the game model
