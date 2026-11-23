@@ -121,7 +121,9 @@ def load_extra(refresh_current: bool = False, verbose: bool = True):
     for season in range(C.FIRST_SEASON, now + 1):
         tp, qp = C.CACHE / f"team_extra_{season}.csv", C.CACHE / f"qb_extra_{season}.csv"
         stale = tp.exists() and not {"pnt_n", "proe_n"} <= set(pd.read_csv(tp, nrows=0).columns)   # cached before the newer columns
-        if (season == now and refresh_current) or not (tp.exists() and qp.exists()) or stale:
+        have = tp.exists() and qp.exists() and not stale
+        held = season == now and refresh_current and have and C.HOLD_PBP_VALUES   # see config.HOLD_PBP_VALUES
+        if (season == now and refresh_current and not held) or not have:
             if verbose:
                 print(f"  extra stats {season} ...", flush=True)
             t, q = _reduce(season)
