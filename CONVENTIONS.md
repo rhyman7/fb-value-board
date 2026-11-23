@@ -69,17 +69,16 @@ boards in detail; this file is the rules.
   ("College availability backup": Tue-Fri 3:22-7:22 pm ET, Saturday 9:22 am-9:22 pm ET, hourly)
   start it unless it ran in the last 40 minutes, because GitHub dropped most scheduled runs on
   Nov 10-11.
-- **Play-by-play values hold (Nov 23, 2026, Ryan's call; temporary).** On Nov 23, between about
-  3:35 and 4:35 PM ET, nflverse republished its play-by-play with different EPA and success values
-  for plays already on file (same play counts; pass EPA down and rush EPA up; 306 of 324 team-games
-  of 2026 no longer matched `data/cache/team_games_2026.csv`, and the cached earlier seasons differ
-  from nflverse's current files too). While `config.HOLD_PBP_VALUES` is True, `data.load_pbp_aggregates`
-  and `extra.load_extra` do not re-download the current season, so `team_games`, `qb_games`,
-  `stat_games`, `team_extra` and `qb_extra` for 2026 stay on the values the model was tuned and
-  tested on. Everything else refreshes as usual (lines, prices, injuries, player stats, roles).
-  Cost: games finished after the last refresh (first: CIN@WAS, Nov 23) are missing from those five
-  tables. **Lift it (set False) once Ryan has decided on the old-vs-revised comparison, and before
-  Week 12 kicks off if he hasn't said otherwise by then: ask him.** Remove this note when lifted.
+- **Play-by-play values hold switch (`config.HOLD_PBP_VALUES`, normally False).** While True,
+  `data.load_pbp_aggregates` and `extra.load_extra` do not re-download the current season, so its
+  `team_games`, `qb_games`, `stat_games`, `team_extra` and `qb_extra` tables stay on their cached
+  values while everything else refreshes; games finished in the meantime are missing from those
+  tables. Used Nov 23-24, 2026, when nflverse republished its play-by-play with different EPA and
+  success values for plays already on file (same play counts; pass EPA down, rush EPA up). Ryan
+  lifted it after the old-vs-revised comparison (Project doc
+  `claude/nflverse-epa-revision-check-2026-11-23.md`): game projections moved 0.15 points at most.
+  The cached earlier seasons were not rebuilt and still differ from nflverse's current files;
+  rebuilding them is a model test under the usual rule, not a refresh.
 - **The "Browser for the best-bets PDF" step never fails a board build** (`continue-on-error`,
   and it falls back to installing Chromium without system packages). On Nov 11, 2026 Ubuntu's
   mirrors were unreachable from the runners and every Update board / Update college board run
