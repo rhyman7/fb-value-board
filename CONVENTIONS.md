@@ -206,6 +206,14 @@ boards in detail; this file is the rules.
   every played outdoor NFL home game since 2014, one Open-Meteo archive call per stadium per
   game day, resumable. It shares the `board-commits` group. The test that reads it is
   `experiments/wind_direction_test.py` (FEATURES.md "Wind direction and gusts").
+- The **Forecast history** Action (`forecast-history.yml`, by hand only) runs
+  `experiments/fetch_forecast_history.py` and commits only `data/cache/forecast_history.csv`: the
+  rain and snow *forecast* for every played outdoor NFL home game since 2022 from Open-Meteo's
+  forecast archives (game-morning forecasts from 2022; 1, 2 and 3 days ahead from 2024, the
+  earliest those exist), summed over the board's game window, up to two calls per stadium per
+  season, resumable. It shares the `board-commits` group. Only
+  `experiments/rain_forecast_backtest.py` reads it (FEATURES.md "Rain and snow"); the boards and
+  the model do not.
 - **Wind logs (both boards): `data/wind_log.csv`, `data/cfb/wind_log.csv`.** Every forecast
   the board builds fetch, one row per game per fetch: `game_id, fetched` (UTC), `wind_mph,
   gust_mph, dir_deg` (direction the wind blows from), and on the NFL log `along_mph,

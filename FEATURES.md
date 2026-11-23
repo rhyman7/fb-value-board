@@ -1060,6 +1060,19 @@ in `data/wind_log.csv` (`precip_mm`, `snow_cm`). Games forecast wet (2+ mm or an
 now: it joins the Bet sheet only if, after a full season of logged forecasts, the forecast version
 is positive with closing line value above zero, the same bar the wind under has to clear.
 
+**Back-test on archived forecasts (set Nov 23, 2026; results to follow).** Ryan's factor scans
+found the same lean from a different source (kickoff weather notes back to 2001: steady rain
+unders 102-60), again on weather that fell. Open-Meteo archives forecasts from 2022 (a few hours
+old) and, from January 2024, the forecast as it stood 1 to 7 days ahead; nothing free is older.
+`experiments/fetch_forecast_history.py` (the **Forecast history** Action) caches them in
+`data/cache/forecast_history.csv`; `python experiments/rain_forecast_backtest.py` grades them
+(results in `experiments/out/rain_forecast_backtest.json`). Rule, written before any forecast was
+fetched: the primary bet is the under when the forecast one day ahead is wet (the definition
+above), 2024 on; rain only, 5+ mm and the other leads are reported beside it and do not decide.
+It counts as support only if the primary wins more than 52.4% at both the opening and the closing
+total with the score averaging below the line. Expect 50 to 60 games: enough to see the idea fail
+on forecasts, not enough to prove it, so the full-season rule above for the Bet sheet stands.
+
 
 ## Staking rules from the audit (Nov 1, 2026)
 
