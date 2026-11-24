@@ -90,10 +90,8 @@ def report(frame: pd.DataFrame) -> dict:
 def main() -> None:
     fc = pd.read_csv(CACHE)
     games = data.load_games(refresh=False)
-    cols = ["game_id", "week", "total", "total_line", "played"] + (["open_total"] if "open_total" in games else [])
-    frame = fc.merge(games[cols], on="game_id", how="inner")
-    if "open_total" not in frame:
-        frame["open_total"] = np.nan
+    frame = fc.merge(games[["game_id", "week", "total", "total_line", "played"]], on="game_id", how="inner")
+    frame = frame.merge(data.load_openers()[["game_id", "open_total"]], on="game_id", how="left")   # nfelo, totals from 2024
     frame = frame[frame.played & frame.total_line.notna()]
     if FELL.exists():
         a = pd.read_csv(FELL)[["game_id", "precip_mm", "snow_cm"]]
