@@ -1,6 +1,157 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-24T02:51Z",
- "today": "2026-11-23",
- "teams": {}
+ "fetched": "2026-11-24T20:23Z",
+ "today": "2026-11-24",
+ "teams": {
+  "TCU": {
+   "conf": "Big 12",
+   "abbr": "TCU",
+   "report": "Initial",
+   "published": "2026-11-23",
+   "posted": "21:00:00",
+   "game_date": "2026-11-26",
+   "game_time": "19:00:00",
+   "opponent": "Texas Tech",
+   "players": [
+    {
+     "name": "Jaden Craig",
+     "pos": "QB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Lafayette Kaiuway",
+     "pos": "TE",
+     "number": "12",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "G'Ivori Graham",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keylan Abrams",
+     "pos": "LB",
+     "number": "23",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Kari Ashley",
+     "pos": "TE",
+     "number": "81",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Ansel Din-Mbuh",
+     "pos": "DT",
+     "number": "92",
+     "status": "Probable",
+     "season_out": false
+    }
+   ]
+  },
+  "Texas Tech": {
+   "conf": "Big 12",
+   "abbr": "TTU",
+   "report": "Initial",
+   "published": "2026-11-23",
+   "posted": "21:00:00",
+   "game_date": "2026-11-26",
+   "game_time": "19:00:00",
+   "opponent": "TCU",
+   "players": [
+    {
+     "name": "Quinten Joyner",
+     "pos": "RB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Micah Hudson",
+     "pos": "WR",
+     "number": "1",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Kenny Johnson",
+     "pos": "WR",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Coy Eakin",
+     "pos": "WR",
+     "number": "3",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Peyton Morgan",
+     "pos": "S",
+     "number": "3",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Jalen Jones",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brice Pollock",
+     "pos": "CB",
+     "number": "14",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Miquel Dingle Jr.",
+     "pos": "S",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marcus Ramon-Edwards",
+     "pos": "S",
+     "number": "22",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "LaDamion Guyton",
+     "pos": "OLB",
+     "number": "32",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Cash Cleveland",
+     "pos": "OL",
+     "number": "52",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Bryce Butler",
+     "pos": "DL",
+     "number": "92",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  }
+ }
 }
