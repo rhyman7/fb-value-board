@@ -1,0 +1,392 @@
+{
+ "by": "claude",
+ "week_by": "claude",
+ "week_notes": [
+  "Side leans 6-6-1, total leans 7-5-1. On the merits: sides 4-6 (BAL +2.5 and DEN -11.5 covered by chance; MIA_BUF pushed), totals 5-5 (the ARI_KC and TB_DET overs cashed only on garbage-time touchdowns; MIN_SF pushed on one). Season so far (weeks 6-11): sides 36-45-1, totals 38-43-1.",
+  "Average miss on the margin: model 8.65, market 7.85, so the market was better on sides for the fourth time in six weeks. On totals the model was a little closer (10.57 against 10.69).",
+  "The three biggest real misses were all leans on the side the market had as the clear underdog, where the model was much less sure of the favorite: MIN +3.5 at SF (lost by 21.5; model missed by 24.1), ARI +14.5 at KC (lost by 27, with Josh Johnson at quarterback for ARI), IND +13 at HOU (lost by 23; IND scored 3 points on 10 drives without its left tackle and both regular corners). In ARI_KC and IND_HOU the board's number sat close to the market while the model's raw number did not.",
+  "Chance played a big part in 4 of 13 games. Garbage-time touchdowns decided or moved three totals (ARI_KC, TB_DET, MIN_SF), and return or defensive touchdowns swung BAL_CAR and LV_DEN.",
+  "Repeats from earlier weeks: MIN and ARI were in the biggest misses in week 10 too (MIN by beating GB, LA at ARI). The Nov 18 check says a miss does not carry into the next NFL game, so treat it as a possibility, not a trend. Players: 88 of 225 projections met (6 players left early); backup and first-start quarterbacks (McCord, Milton) were again hard to project.",
+  "No bets were staked; the leans are the model's opinions, not money."
+ ],
+ "games": {
+  "2026_11_IND_HOU": {
+   "by": "claude",
+   "headline": "Both leans lost on the merits. HOU won 26-3, so the model's HOU by 8.4 was too low and its over 44 was far too high; IND scored 3 points on 10 drives.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "Not much went right. The board's own number (HOU by 12.3) was close to the market's 13, but the lean came from the model's 8.4.",
+    "Beat his projection: David Montgomery ran for 107 against 31 projected, with Woody Marks (usually 67% of snaps) out."
+   ],
+   "wrong": [
+    "The side lean, IND +13 (model HOU by 8.4, 4.6 off the market), lost: HOU by 23. The model missed by 14.6, the market by 10.",
+    "The over lean (model 46, line 44) lost: 29 points. IND went 1 FG, 2 missed FGs, 1 turnover, 1 turnover on downs and 3 punts on 10 drives (0.3 a drive). HOU had all 26 of its points by the end of the third quarter.",
+    "Jonathan Taylor ran 11 times for 21 yards (projected 15 carries, 54 yards): 1.9 a carry against his 3.6, and IND trailed by 9+ on 56% of its plays. He also caught 4 of 5 targets for 6 yards (21 projected), almost all at or behind the line.",
+    "Laquon Treadwell had 0 yards on 1 target (27.5 projected; usual share 10%, this game 4%). Tyler Warren caught 1 of 5 targets for 22 (45 projected); Jake Hansen broke up 2 of them.",
+    "On HOU's side, Dalton Schultz got 1 target (5.1 projected, share 4% against his usual 15%) and Xavier Hutchinson 3 (6 projected). HOU led by 9+ on 66% of its plays and ran instead; C.J. Stroud threw for 194 against 256."
+   ],
+   "chance": [
+    "Very little. No defensive or return scores, no early exit at quarterback, fumble bounces even. IND's two missed field goals were not short ones.",
+    "The cover was settled early: HOU's field goal with 0:19 left in the first half made it 17-3. No garbage-time points."
+   ],
+   "improve": [
+    "Possibility: IND's secondary was thin. Charvarius Ward (Out) and Sauce Gardner (Questionable) did not play, and Johnathan Edwards, usually 3% of snaps, played 64%. Left tackle Bernhard Raimann was also out, and Will Anderson Jr. had 4 QB hits.",
+    "Possibility: both teams were on 4 days' rest in a division game. Short weeks may favour the healthier, deeper roster; that's a question for a pre-set test, not a conclusion.",
+    "Possibility: IND's last three covers were -24.5, +1.5 and -2.5. Per the Nov 18 check, a run of misses does not carry into the next NFL game, so look for what changed (the injuries above) rather than a lagging rating.",
+    "Candidate data check: the board (12.3) moved most of the way to the market while the model stayed at 8.4. Worth checking which inputs (injuries, the OL and CB absences) the board had that the model's lean did not."
+   ]
+  },
+  "2026_11_ARI_KC": {
+   "by": "claude",
+   "headline": "KC 34-7 behind Josh Johnson's first start for ARI. The ARI +14.5 lean lost on the merits; the over 40.5 only cashed on a KC touchdown on the first play of the fourth quarter with the game long decided.",
+   "verdict": {
+    "spread": "L",
+    "total": "chance"
+   },
+   "right": [
+    "The over lean (model 44.5, line 40.5) won, 41 points, but see chance: it got there on garbage-time points.",
+    "Beat projections, one line: Patrick Mahomes 324 passing (218), Emmett Johnson 105 rushing (66), Travis Kelce 74 (43), Josh Downs 59 (32)."
+   ],
+   "wrong": [
+    "The side lean, ARI +14.5 (model KC by 10.8, 3.7 off the market), lost: KC by 27. The model missed by 16.2, the market by 12.5.",
+    "ARI's offense went 1 TD, 6 punts and 2 turnovers on downs on 9 drives (0.78 a drive), 2 explosive plays and 36% success. KC scored on 6 of 10 drives (3.4 a drive).",
+    "Josh Johnson ran 2 times for 5 yards (projected 4.4 carries, 22). ARI trailed by 9+ on 95% of its plays, so the run game shrank: Tyler Allgeier had 7 carries for 23 (11.7 carries, 44 projected).",
+    "The cover was settled early: KC's touchdown at 2:00 of the second quarter made it 23-7."
+   ],
+   "chance": [
+    "The total: it was 27-7 after three quarters. KC's touchdown at 15:00 of the fourth (34-7, counted as garbage time) took it from 34 to 41, over 40.5. Without it the over loses, so this one is chance, not a read that came good.",
+    "Fumble bounces were small: ARI fumbled once and kept it, worth about 1.6 points to ARI. It didn't change the side."
+   ],
+   "improve": [
+    "Possibility: this was Josh Johnson's first game this season (usual 0% of snaps), behind an ARI line missing Elijah Wilkinson and Hayden Conner (both usually regulars). George Karlaftis had 2.5 sacks and 5 QB hits.",
+    "Candidate data check: the board had KC by 13.9, near the market, while the model's lean used 10.8. Worth checking whether the model's game number fully prices a first-time backup starter.",
+    "Possibility: ARI came off a 6-34 loss to LA (cover -17.5) and KC off a 35-13 win (+18.5). The Nov 18 check says runs like this don't carry over in the NFL; the QB change is the more likely cause.",
+    "No recap could be found in a standard web search, so nothing here comes from news reports."
+   ]
+  },
+  "2026_11_BAL_CAR": {
+   "by": "claude",
+   "headline": "A 35-33 shootout. The BAL +2.5 lean covered by half a point thanks to a BAL return touchdown and a late tying score; the under 45 lost by 23, missed equally by the model and the market.",
+   "verdict": {
+    "spread": "chance",
+    "total": "L"
+   },
+   "right": [
+    "The side lean, BAL +2.5 (model CAR by 2.3), won: CAR by 2. Model and market both missed the margin by less than a point.",
+    "Beat projections, one line: Jacoby Brissett 276 passing (189), Chuba Hubbard 120 rushing (64), Derrick Henry 94 (62), Zay Flowers 97 (64), Rashod Bateman 67 (30)."
+   ],
+   "wrong": [
+    "The under lean (model 44.6, line 45) lost: 68 points, over by the second quarter (25-22 at 2:30). Both teams scored about 2.7 points a drive with 4 TDs each; the model missed by 23.4, the market by 23.",
+    "Chuba Hubbard caught nothing on 0 targets (3.5 projected, usual share 12%) despite 82% of snaps and a full practice week. CAR handed him the ball instead: 120 rushing yards.",
+    "Mark Andrews had 14 yards on 3 targets (32.7 projected; share 8% against his usual 18%). His 82 the week before wasn't the reason; the projection sat near his 31.9 average. Flowers and Bateman took the targets."
+   ],
+   "chance": [
+    "BAL scored on a return right after CAR's touchdown at 10:01 of the second quarter, 7 points on the total and about 6.3 on the margin. With even luck the margin would have been CAR by 6.7, and BAL +2.5 does not cover.",
+    "The cover was settled late: BAL's touchdown at 6:40 of the fourth tied it 32-32, and CAR's field goal at 1:47 won it by 2. Chance flipped this lean, so don't count it as a model win.",
+    "Fumble bounces went slightly CAR's way (about 1.6 points); BAL lost 1 fumble and threw 1 interception, and 3 of its drives ended in turnovers."
+   ],
+   "improve": [
+    "Possibility: both defenses were missing regulars. BAL played without Marlon Humphrey and Nnamdi Madubuike (both Out); T.J. Tampa played 56% of snaps (usually 20%). CAR was without Marco Wilson (usually every snap).",
+    "Possibility: BAL is 0-5 against the spread in these games, on 6 days' rest here. Per the Nov 18 check, losing runs don't carry into the next NFL game; a QB change (Brissett starting) is the thing to watch.",
+    "Even without the return score the total was 61, so the under lost on the merits. Both numbers sat at 45; no one saw a shootout. Nothing here points at a model fix from one game."
+   ]
+  },
+  "2026_11_JAX_NYG": {
+   "by": "claude",
+   "headline": "NYG beat JAX 23-18 as a 6-point underdog. The JAX -6 lean lost on the merits even with fumble luck on JAX's side; the under 45 won with 41.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The under lean (model 43.5, line 45) won: 41 points. JAX kicked 4 field goals and scored 1 TD on 12 drives (1.5 a drive), 1 of 5 in the red zone. The model was closer than the market on the total (2.5 off against 4).",
+    "Beat projections, one line: Parker Washington 103 (60), Jakobi Meyers 85 (44)."
+   ],
+   "wrong": [
+    "The side lean, JAX -6 (model JAX by 8.8, 2.8 off the market), lost: NYG by 5. The model missed by 13.8, the market by 11. NYG led 20-6 at halftime and 20-6 after three.",
+    "Bhayshul Tuten ran 10 times for 33 (15 carries, 62.5 projected), on 43% of snaps against his usual 53%, after a limited practice week. JAX trailed by 9+ on 49% of its plays.",
+    "Isaiah Likely had 35 yards on 3 targets (51.6 projected; share 8% against his usual 27%) after not practising (Did Not Participate). The projection also leaned on his 127 the week before.",
+    "Darnell Mooney had 0 catches on 5 targets with an average depth of 34 yards: all deep shots, none hit. Cam Skattebo got his carries (14) but only 2.4 a carry for 34 yards (58 projected)."
+   ],
+   "chance": [
+    "Fumble bounces went JAX's way, about 4.9 points (JAX fumbled 2 and kept both; NYG lost its 1). NYG also missed a field goal from 45 or closer, about 1.4 more. With even luck NYG wins by about 11.",
+    "So chance helped the lean and it still lost. JAX's 12 fourth-quarter points closed the gap but no garbage time was counted and the cover was never back in play for JAX -6."
+   ],
+   "improve": [
+    "Possibility: JAX came in 3-0 against the spread with covers of 24.5, 13 and 6.5, and the model had been short on JAX each time. Per the Nov 18 check, that run shouldn't carry in the NFL; worth asking whether the rating caught up and then overshot.",
+    "Possibility: JAX had new pieces on defense (Jessie Bates III and Jordan Davis in their first game, 94% and 50% of snaps) and was missing OL Robert Hainsey (Out); Jonah Monheim played every snap (usually 17%). Abdul Carter had 2 sacks and 5 QB hits for NYG.",
+    "Possibility: NYG had 10 days' rest to JAX's 7. Greg Newsome II and Dawuane Smoot both faced their old team; Newsome didn't play.",
+    "Candidate pre-set test: cut a pass catcher's projection when he didn't practise all week (Likely here). One game is not evidence; it's a backtest question.",
+    "No recap could be found in a standard web search, so nothing here comes from news reports."
+   ]
+  },
+  "2026_11_MIA_BUF": {
+   "by": "claude",
+   "headline": "The model's under was right: MIA's offense with Kyle McCord at quarterback scored no touchdowns. The side pushed only because BUF kicked a field goal with 2:00 left to make it 26-9.",
+   "verdict": {
+    "spread": "push",
+    "total": "W"
+   },
+   "right": [
+    "Under 44.5 (model 43.1) won with 35 points. MIA scored 0.9 points a drive (3 FGs, 4 punts, 2 turnovers on downs, 1 interception) and got to the red zone once.",
+    "The model missed the total by 8.1 and the market by 9.5. On the margin the market was exactly right (BUF by 17) and the model was 1.3 short.",
+    "Beat their projections: Josh Allen 304 passing (213 projected), Khalil Shakir 101 (42), DJ Moore 91 (51)."
+   ],
+   "wrong": [
+    "Kyle McCord (QB, MIA): 102 passing yards against 171 projected. He threw more than expected (33 attempts, 27.1 projected) but averaged 3.1 yards an attempt against 6.3. MIA trailed by 9+ on 86% of its plays. His projection rested on one previous game (209 yards against IND, which is also his season average).",
+    "McCord's targets did no better. Greg Dulcich (TE) got 7 targets (3.6 projected) and made 12 yards: 1.7 a target. Chris Bell (WR) got 4 and made 8; Damar Hamlin broke up two of his. BUF's Greg Rousseau had 2 sacks.",
+    "Josh Allen (QB, BUF): 0 rushing yards on 0 carries against 30.8 projected (5.5 carries). He played 99% of snaps and threw for 304, so he wasn't limited. BUF led by 9+ on 65% of its plays. He had 5 rushing yards the week before too, against a 32.2 season average.",
+    "Keon Coleman (WR, BUF): 17 yards against 37 projected. He played more than usual (81% of snaps, usually 69%) and got the expected 4 targets, but only 9% of BUF's targets (usually 15%). Shakir and Moore took the volume."
+   ],
+   "chance": [
+    "No early exit, no defensive or return touchdowns, no costly fumble bounces.",
+    "The side was decided late. At 23-9 the MIA +17 lean was winning; BUF's field goal with 2:00 left made it 26-9 and a push. A two-minute field goal turned a win into a push, not the other way."
+   ],
+   "improve": [
+    "Possibility: McCord had one previous start on file. A pre-set test could pull a backup quarterback's projection toward a backup's normal output when he has only one or two starts. MIA was without its usual quarterback, Malik Willis.",
+    "Possibility: Allen ran 0 times two weeks running while BUF led comfortably. A candidate test: does a running quarterback's rushing projection hold up when his team is a big favorite? One game isn't evidence.",
+    "Possibility: MIA was missing safety Dante Trader (usually 99% of snaps). Zayne Anderson replaced him (100%, usually 7%) and had a sack, an interception and 3 passes defended. That helps explain BUF's 2 interceptions and 2 of 5 red-zone touchdowns.",
+    "Possibility: a division game, and Bradley Chubb (BUF) faced MIA, his team in 2023-2025."
+   ]
+  },
+  "2026_11_NO_CHI": {
+   "by": "claude",
+   "headline": "NO +11.5 covered: CHI won by 8. The offenses stalled on both sides, and the over lean lost on the merits with 34 points.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "NO +11.5 won (model CHI by 10.3). CHI won 21-13. NO's touchdown with 3:38 left in the second quarter, making it 6-16, settled the cover. CHI never led by more than 11.5 after that.",
+    "The model was closer than the market on the margin (missed by 2.3 against 3.5).",
+    "Beat their projections: Chris Olave 102 (65), Devaughn Vele 76 (31), Travis Etienne 76 rushing (31)."
+   ],
+   "wrong": [
+    "Over 47.5 (model 48) lost: 34 points. Each team lost a fumble and threw an interception. NO also missed a field goal and turned it over on downs; CHI turned it over on downs once. Points a drive: CHI 1.91, NO 1.18.",
+    "Jordyn Tyson (WR, NO): 6 yards against 47 projected. He played his usual snaps (50%, usually 47%) but got 2 targets (6.4 projected): 5% of NO's targets against his usual 28%. Olave and Vele took them. A season low; the week before he had 80.",
+    "Luther Burden III (WR, CHI): 10 yards against 62 projected. He got 3 targets (6.7 projected), 14% of the targets (usually 22%). Danny Stutsman broke up two of them. His projection was below his 71.6 season average, so it wasn't chasing his 97 the week before.",
+    "Juwan Johnson (TE, NO): 0 yards on 1 target (28 projected). He played 38% of snaps, usually 59%. Kyle Monangai (RB, CHI): 18 yards on 8 carries (2.2 a carry, 4.0 projected)."
+   ],
+   "chance": [
+    "Nothing big: no early exit, no defensive or return touchdowns, and the fumble bounces were even (one lost each). The result reflects how the teams played."
+   ],
+   "improve": [
+    "Possibility: NO started two backup linemen (Mason Murphy and William Sherman, both 100% of snaps, usually 7% and 11%), with Taliese Fuaga and Asim Richards out. CHI's Jeffery Simmons had 3 sacks. Johnson's snap drop may mean he stayed in to block. A candidate test: trim pass-catcher projections when two or more backup linemen start.",
+    "Possibility: CHI was off a bye (14 days' rest) and its offense was flat (-0.05 EPA a play). The bye didn't help here.",
+    "Data fix: Zavion Thomas (WR, CHI) had 86 yards and had no projection on the board.",
+    "Possibility: Monangai's previous game on file is week 4 (146 yards), so his 81-yard season average leans on older games. Worth checking how a back's projection handles a long gap.",
+    "Possibility: CHI's Clark Phillips filled in for Kyler Gordon (75% of snaps, usually 24%) and had a sack, a forced fumble and a pass defended."
+   ]
+  },
+  "2026_11_TB_DET": {
+   "by": "claude",
+   "headline": "DET covered on the merits, pulling away from 17-14 with two fourth-quarter touchdowns. The over only got there on TB's garbage-time touchdown with 13 seconds left.",
+   "verdict": {
+    "spread": "W",
+    "total": "chance"
+   },
+   "right": [
+    "DET -3.5 won (model DET by 4.6): DET won by 10. DET's touchdown with 5:27 left made it 23-14 and settled the cover; TB's late score didn't change it.",
+    "DET's offense was efficient: 0.258 EPA a play, 62% success, 3 of 3 red-zone trips for touchdowns, no turnovers, 3.1 points a drive.",
+    "The model was closer than the market on both numbers (margin 5.4 against 6.5, total 2.2 against 3.5).",
+    "Beat their projections: Jameson Williams 93 (62), Sam LaPorta 62 (42)."
+   ],
+   "wrong": [
+    "Amon-Ra St. Brown (WR, DET): 37 yards against 88.5 projected. He played more than usual (79%, usually 73%) but got 6 targets (10.1 projected): 21% of DET's targets against his usual 31%. Williams, LaPorta and Brock Wright (42 yards, no projection) shared the ball.",
+    "Chris Godwin Jr. (WR, TB): 13 yards against 46.6 projected on 3 targets (5.4 projected). His projection was well above his 28.8 season average and his 16 the game before.",
+    "Emeka Egbuka (WR, TB): 18 yards against 47 projected. He played 71% of snaps (usually 86%) and got 16% of the targets (usually 24%). Cade Otton (TE, TB) had 8 yards against 30 projected.",
+    "Isaac TeSlaa (WR, DET): 0 yards on 3 targets; Vita Vea broke one up."
+   ],
+   "chance": [
+    "The over 48.5 won only because of garbage time. At 31-14 the total was 45. TB scored a touchdown with 13 seconds left, down 17, to make it 52. Without that, the over lean loses.",
+    "TB fumbled once and kept it; a small break for TB (about 1.6 points) that didn't affect the cover."
+   ],
+   "improve": [
+    "Possibility: Godwin's projection sat about 18 yards above his season average. A candidate test: how much weight do a veteran's earlier seasons get against this season's form?",
+    "Possibility: TB was off a bye (14 days' rest) and still scored only 2.33 points a drive, with 4 punts and 0 of 2 on fourth down.",
+    "Possibility: DET played without Aidan Hutchinson. Kerby Joseph was back (67% of snaps, his first game on file) and four DET defenders still shared 3.5 sacks.",
+    "Possibility: Alex Anzalone (TB) faced DET, his team in 2023-2025. Christian Izien and K.J. Britt (DET) faced their former team, TB."
+   ]
+  },
+  "2026_11_TEN_DAL": {
+   "by": "claude",
+   "headline": "DAL scored on 8 of 9 drives and won by 21, so the side lean covered easily. The under lean lost on the merits: the total passed 54.5 midway through the third quarter.",
+   "verdict": {
+    "spread": "W",
+    "total": "L"
+   },
+   "right": [
+    "DAL -8 won (model DAL by 8.3). DAL led 12-3 late in the first quarter and was never caught: 7 TDs and a FG on 9 drives, 6 of 6 red-zone trips for touchdowns, 0.496 EPA a play.",
+    "Beat their projections: Chimere Dike 69 (34 projected)."
+   ],
+   "wrong": [
+    "Under 54.5 (model 54.1) lost: 81 points. The over came at 7:31 of the third quarter. Garbage time added 17 (DAL 10, TEN 7), but it was 64 without those, so it would have lost anyway. TEN scored 3.33 points a drive: 3 TDs, 3 FGs, 2 punts, 1 lost fumble.",
+    "The model and market both missed the total by about 27 and the margin by about 13. Neither saw this coming.",
+    "Elic Ayomanor (WR, TEN): 27 yards against 51.6 projected. He played 54% of snaps (usually 77%) and got 3 targets (5.3 projected). The projection was well above his 32.2 season average, chasing his 79 the week before.",
+    "Tony Pollard (RB, TEN): 0 receiving yards on 1 target (23.6 projected, 3.6 targets). His season average is 15.1; the projection leaned on 66 the week before. TEN trailed by 9+ on 88% of its plays, so more passing should have helped him.",
+    "Ryan Flournoy (WR, DAL): 11 yards on 1 target (43.4 projected). He played 54% of snaps (usually 81%). James Mitchell (TE, DAL, 40 yards, no projection) seems to have taken some of his role."
+   ],
+   "chance": [
+    "Little luck either way: no early exit, no defensive or return touchdowns, fumble bounces even. Garbage time made it 81, but the total was decided before that."
+   ],
+   "improve": [
+    "Possibility: both teams' previous games went far over too (TEN-JAX 16.5 over the line, DAL-SF 30 over). The Nov 18 check found a run of misses doesn't carry into the next NFL game for sides; whether totals behave the same way could be a pre-set test.",
+    "Candidate test: Ayomanor and Pollard were both projected well above their season averages after one big game. Cap how much one previous game can lift a projection.",
+    "Data fix: James Mitchell (TE, DAL) had no projection.",
+    "Possibility: DAL was without CB DaRon Bland and G Tyler Booker (backup T.J. Bass played 100%, usually 15%), and its offense was still perfect in the red zone. TEN was without S Amani Hooker and WR Wan'Dale Robinson.",
+    "Possibility: Pollard and Solomon Thomas (TEN) faced DAL, a former team."
+   ]
+  },
+  "2026_11_NYJ_LAC": {
+   "by": "claude",
+   "headline": "NYJ won 27-24 as a 3-point underdog, so the LAC lean lost on the merits. The over hit easily: each team had only 6 drives, but both scored on most of them.",
+   "verdict": {
+    "spread": "L",
+    "total": "W"
+   },
+   "right": [
+    "The over lean (model 44.8, line 43) won with 51 points. The model's total was closer than the market's (missed by 6.2 against 8).",
+    "The total went over with 9:46 left on NYJ's touchdown for 27-17. It did not need a late score.",
+    "Beat their projections: NYJ's backs Breece Hall (86 rushing yards, 46 projected) and Braelon Allen (75, 44)."
+   ],
+   "wrong": [
+    "The side lean, LAC -3 (model LAC by 4), lost: NYJ by 3. NYJ were the better offense: 0.24 EPA a play and 55% success against LAC's 0.17 and 53%. NYJ scored on 5 of 6 drives with no punts.",
+    "Justin Herbert threw for 131 against a 193 projection. He was sacked 6 times and threw 21 passes against 28.7 projected. David Bailey had 2 sacks and Jowon Briggs 1.5. LAC were missing guard Cole Strange.",
+    "LAC's receivers got few looks: Tre Harris 2 targets (4.7 projected, share 10% against his usual 19%) and Quentin Johnston 2 targets (3.8), 9 yards. With only 6 drives and 6 sacks there was little passing to share.",
+    "Keaton Mitchell had 0 carries against 4.2 projected and played 3% of snaps (usually 26%). His role disappeared, not just his yards.",
+    "Garrett Wilson had 39 yards on 5 targets (8.4 projected); D. Leonard broke one up. NYJ ran the ball instead, so Geno Smith threw for 176 against 230."
+   ],
+   "chance": [
+    "Little luck either way. LAC fumbled once and kept it, worth about 1.6 points to LAC. With even luck NYJ win by 4.6, so chance did not flip the side.",
+    "LAC's touchdown with 2:01 left made it 27-24. It did not change the cover: LAC still lost outright."
+   ],
+   "improve": [
+    "Possibility: the game had only 12 drives yet 51 points. The model's total may not weigh how few possessions two slow, efficient offenses produce. A pre-set test could compare totals against drive counts.",
+    "Possibility: LAC played without LB Daiyan Henley (Out) and with CB Tarheeb Still questionable. Backups Marlowe Wax (62% of snaps, usually 21%) and Troy Dye (50%, usually 12%) played big roles, and NYJ ran for 161 yards with its two backs.",
+    "Possibility: NYJ came off a bad week (lost 12-31 to BUF, missed the cover by 10.5) and was 1-4 against the spread. The Nov 18 check found a run of misses does not carry into the next NFL game, so this bounce-back is likely noise.",
+    "Data check: TE Oronde Gadsden II was projected (25 yards) but did not play, with no injury status on file. Check how late that was known."
+   ]
+  },
+  "2026_11_LV_DEN": {
+   "by": "claude",
+   "headline": "DEN covered 11.5 only with a touchdown with 2:00 left, and a return or defensive touchdown gave them about 6 points. The over won by 21: both offenses scored far more than anyone expected.",
+   "verdict": {
+    "spread": "chance",
+    "total": "W"
+   },
+   "right": [
+    "The lean was DEN -11.5 (model DEN by 16, one of the week's bigger gaps at 4.5). DEN won by 14, and on the margin the model was closer than the market (missed by 2 against 2.5).",
+    "The over lean (model 41.9, line 41) won: 62 points. It went over with 9:26 left on DEN's touchdown for 31-17.",
+    "Beat their projections: Ashton Jeanty (79 rushing, 90 receiving), Fernando Mendoza (267 passing, 189 projected), Jonah Coleman (111 rushing), Evan Engram (74 receiving)."
+   ],
+   "wrong": [
+    "Both numbers were far off on the total: the model missed by 20.1 and the market by 21. There were 27 drives; DEN scored 5 touchdowns, LV 4.",
+    "Courtland Sutton had 0 yards on 2 targets (5.4 projected). His target share was 6% against his usual 17%, and he played 67% of snaps against 78%. He practiced fully, and Maxx Crosby broke up one pass. Engram took the looks.",
+    "J.K. Dobbins had 1 carry (9.5 projected) and played 1% of snaps (usually 28%). Coleman got the backfield. Troy Franklin also played 33% of snaps against his usual 56% and caught 0 of 2 targets.",
+    "Michael Mayer (LV) got his targets (4 against 4.6) but caught 1 for 4 yards. Alex Singleton and Jonathon Cooper broke up passes to him."
+   ],
+   "chance": [
+    "DEN scored 1 return or defensive touchdown: 7 points on the total and about 6.3 on the margin. With even luck DEN win by 9.3, which does not cover 11.5.",
+    "The cover came on DEN's touchdown with 2:00 left, from 31-24 to 38-24. Before it, DEN were 4.5 points short. Count the side as chance, not a model win.",
+    "Without the non-offensive 7 points the total is still 55, so the over won on the merits."
+   ],
+   "improve": [
+    "Possibility: DEN's backfield has shifted to Coleman. Dobbins' snaps fell from 28% to 1%. Candidate pre-set test: weight a back's last two games of snap share more in his projection.",
+    "Possibility: DEN came off a bye (14 days' rest) and is 3-0 against the spread. A division game, which can slow offenses, but not here.",
+    "Possibility: LV played without TE Brock Bowers (questionable). DEN used backup tackle Matt Peart for 58% of snaps (usually 0%).",
+    "DEN's defense still made plays: Cooper 2 sacks, Ja'Quan McMillian an interception and a forced fumble."
+   ]
+  },
+  "2026_11_PIT_PHI": {
+   "by": "claude",
+   "headline": "PHI won 19-16 as a 3.5-point underdog in a game of field goals. The model agreed exactly with the market (PIT by 3.5), so the side lean was a coin flip; the over lean lost by 2.5.",
+   "verdict": {
+    "spread": "L",
+    "total": "L"
+   },
+   "right": [
+    "The model matched the market on the side and was close on the total (38.3 against 37.5). Neither number was far off: margin missed by 6.5, total by 3.3.",
+    "Beat their projections: Saquon Barkley (75 rushing, 52 projected) and Darius Cooper (59 receiving, 25)."
+   ],
+   "wrong": [
+    "The side lean, PIT -3.5, had no real gap (0.0) and lost: PHI by 3. PHI led 13-0 after the first quarter and PIT never led.",
+    "The over lean (38.3 against 37.5) lost with 35 points. PHI kicked 5 field goals and scored 1 touchdown in 12 drives; PIT scored 1 touchdown in 3 red-zone trips.",
+    "DK Metcalf had 2 yards on 4 targets (7.2 projected). Target share 9% against his usual 23%. Quinyon Mitchell broke up 2 passes to him. Unprojected WRs Max Hurleman (61) and Roman Wilson (43) got the ball instead.",
+    "Jaylen Warren ran 9 times for 28 (14 carries, 65.8 projected). PIT trailed by 9+ on 68% of its plays. It was his second straight low game (15 the week before) against a season average of 79.9.",
+    "Joe Milton III ran 3 times for 10 against 43 projected. That projection leaned on one 64-yard game, his only start on file. DeVonta Smith drew 12 targets (57% share) but made 41 yards; Payton Wilson, Jalen Ramsey and Cameron Heyward broke up passes."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no return or defensive scores, no short missed field goals. PHI fumbled twice and lost one, close to even.",
+    "PIT's touchdown with 1:26 left made it 19-16. It did not change the cover or push the total over."
+   ],
+   "improve": [
+    "Candidate pre-set test: shrink rushing projections for quarterbacks with fewer than 3 starts toward a prior. Milton's 43 came from a single game.",
+    "Possibility: Q. Mitchell shadowed Metcalf. A data check on whether top corners' matchups explain big WR shortfalls could be a test later.",
+    "Possibility: PHI came off a bye (14 days' rest) and was 0-4 against the spread. PIT came off an 18-38 loss to CIN. Per the Nov 18 check, past misses don't carry into the next NFL game.",
+    "Possibility: PHI played without LB Zack Baun (Out) and DT Jordan Davis; S Marcus Epps played 83% (usually 21%). PIT were without CB Asante Samuel Jr. and G Mason McCormick; CB Daylen Everette played every snap (usually 19%).",
+    "Data check: TE Zach Ertz was projected (26 yards) but did not play, with no injury status on file."
+   ]
+  },
+  "2026_11_MIN_SF": {
+   "by": "claude",
+   "headline": "SF won 35-10 at a neutral site; the MIN +3.5 lean lost badly. The model had the game near even (SF by 0.9) and was even further off than the market. A garbage-time touchdown made the total a push.",
+   "verdict": {
+    "spread": "L",
+    "total": "push"
+   },
+   "right": [
+    "The total was right on: 45 points against a 45 line and a 45.6 model. It landed on the number.",
+    "Beat his projection: Mike Evans, 109 receiving yards against 42."
+   ],
+   "wrong": [
+    "The side lean, MIN +3.5 (model SF by 0.9), lost by 21.5. The model missed the margin by 24.1, the market by 21.5. This was one of the week's biggest misses.",
+    "SF scored 5 touchdowns on 10 drives (3.5 points a drive) with 0.36 EPA a play. MIN scored 1 point a drive: 2 missed field goals, 2 turnovers on downs, 1 turnover. SF scored 21 in the second quarter.",
+    "Brock Purdy had 0 rushing yards on 0 carries (3.8 projected). SF led by 9+ on 55% of its plays, so there was no need for him to run. Kaelon Black ran 6 times for 8 (1.3 a carry)."
+   ],
+   "chance": [
+    "SF scored a return or defensive touchdown 4 seconds of game clock after its previous score, going from 10-21 to 10-28. It moved the margin about 6.3. With even luck SF still win by 18.7, so chance did not flip the side.",
+    "SF's touchdown with 13:30 left (10-35) came while up 17+ in the fourth quarter. Without those 7 garbage-time points the total goes under; the push was luck.",
+    "MIN's 2 missed field goals were not short ones, so the model doesn't count them as chance."
+   ],
+   "improve": [
+    "Possibility: MIN came off a 30-10 win at GB, covering by 23. If that blowout pushed MIN's rating up, it may have been too much. The Nov 18 check found misses don't carry into the next NFL game, so this is a question for a test, not a conclusion.",
+    "Possibility: a neutral-site game. The model had SF by 0.9, the market 3.5. A data check on how neutral sites are handled against the market may be worth a pre-set test.",
+    "Possibility: MIN played without WR Jordan Addison (Out) and CB Isaiah Rodgers (questionable). SF used backups LB Garret Wallow (76% of snaps, usually 5%) and OL Vederian Lowe (70%, usually 2%) and still dominated.",
+    "Possibility: MIN's Jauan Jennings and Jordan Mason faced SF, their former team. Each side may know the other's habits."
+   ]
+  },
+  "2026_11_CIN_WAS": {
+   "by": "claude",
+   "headline": "Both leans won on the merits. WAS won 22-20 as a 6.5-point underdog and the game went far under 54. The model was closer than the market on both numbers.",
+   "verdict": {
+    "spread": "W",
+    "total": "W"
+   },
+   "right": [
+    "The side lean, WAS +6.5 (model CIN by 4.2, a 2.3-point gap), won: WAS by 2. The model missed the margin by 6.2, the market by 8.5.",
+    "The under lean (model 51.6, line 54) won with 42. The model missed by 9.6, the market by 12.",
+    "The cover was settled in the third quarter: WAS's field goal for 17-13 with 2:40 left. WAS stayed within 6.5 after that, so the late field goals didn't matter to the side.",
+    "Beat their projections: Antonio Williams (122 receiving, 41 projected), Jayden Daniels (55 rushing), Chig Okonkwo (66) and CIN's Mike Gesicki (77)."
+   ],
+   "wrong": [
+    "Chase Brown ran 6 times for 6 yards against 16.2 carries and 74.6 yards projected. Neither team led by 9+, so script was not the reason. CIN were without G Dalton Risner (Out); backup Jalen Rivers played every snap (usually 15%). Boye Mafe's 3 sacks came on the other side.",
+    "Ja'Marr Chase had 31 yards on 9 targets (3.4 a target against 8.0 projected). Rasul Douglas broke up one pass and made 4 tackles after catches. His projection (88.4) was below his recent average, which a 231-yard game had lifted.",
+    "Tee Higgins played 97% of snaps but drew 3 targets (7.8 projected); target share 7% against his usual 22%. Gesicki took those looks.",
+    "Even the market was 12 points high on the total. WAS settled for 5 field goals and was 1 for 3 scoring touchdowns in the red zone."
+   ],
+   "chance": [
+    "Nothing big: no early exit at quarterback, no return or defensive scores, no fumbles, no short missed field goals.",
+    "The finish was dramatic, CIN's field goal with 0:50 left and WAS's winner with 0:04 left, but neither changed the cover or the total."
+   ],
+   "improve": [
+    "Data check: WAS's RB Rachaad White was projected (35 yards) and listed questionable, then did not play. Jacory Croskey-Merritt, not projected, had 77 yards. Candidate fix: also project the backup when a starting back is questionable.",
+    "Possibility: CIN's backup guard Jalen Rivers may explain the run game failing. Pre-set test idea: lower a team's rushing projection when a starting lineman is out.",
+    "Possibility: CIN came off a good week (38-18 over PIT, covered by 16.5). Per the Nov 18 check, past misses don't carry into the next NFL game. WAS had 11 days' rest to CIN's 8.",
+    "Possibility: CIN's Jonathan Allen faced WAS, his former team."
+   ]
+  }
+ }
+}
