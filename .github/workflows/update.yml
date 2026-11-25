@@ -80,5 +80,9 @@ jobs:
           if [ -d data/recommended ]; then git add data/recommended; fi   # the Recommended list's picks and results (nflmodel/recommended.py)
           if [ -d data/ol_watch ]; then git add data/ol_watch; fi   # teams missing 2+ usual linemen, a paper record (nflmodel/olwatch.py)
           git diff --cached --quiet || git commit -m "Update board"
-          git pull --rebase origin main
-          git push
+          # GitHub sometimes rejects a push with a passing server error (Nov 24, 2026): try up to 4 times, 15 s apart
+          for i in 1 2 3 4; do
+            git pull --rebase origin main && git push && break
+            [ "$i" = 4 ] && { echo "could not push after 4 attempts"; exit 1; }
+            echo "push failed (attempt $i); retrying in 15 s"; git rebase --abort 2>/dev/null || true; sleep 15
+          done

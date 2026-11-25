@@ -49,5 +49,9 @@ jobs:
           fi
           git add data/cfb/outside
           git diff --cached --quiet || git commit -m "Outside ratings: Prediction Tracker season files"
-          git pull --rebase origin "$GITHUB_REF_NAME"
-          git push origin HEAD:"$GITHUB_REF_NAME"
+          # GitHub sometimes rejects a push with a passing server error (Nov 24, 2026): try up to 4 times, 15 s apart
+          for i in 1 2 3 4; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && break
+            [ "$i" = 4 ] && { echo "could not push after 4 attempts"; exit 1; }
+            echo "push failed (attempt $i); retrying in 15 s"; git rebase --abort 2>/dev/null || true; sleep 15
+          done

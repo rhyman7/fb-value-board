@@ -66,4 +66,9 @@ jobs:
             git diff --name-only --diff-filter=U | grep -q . && { echo "unexpected conflict outside the usage log"; exit 1; }
             GIT_EDITOR=true git rebase --continue
           fi
-          git push
+          # GitHub sometimes rejects a push with a passing server error (Nov 24, 2026): try up to 4 times, 15 s apart
+          for i in 1 2 3 4; do
+            { [ "$i" = 1 ] || git pull --rebase origin main; } && git push && break
+            [ "$i" = 4 ] && { echo "could not push after 4 attempts"; exit 1; }
+            echo "push failed (attempt $i); retrying in 15 s"; git rebase --abort 2>/dev/null || true; sleep 15
+          done
