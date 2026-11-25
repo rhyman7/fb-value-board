@@ -69,6 +69,10 @@ boards in detail; this file is the rules.
   ("College availability backup": Tue-Fri 3:22-7:22 pm ET, Saturday 9:22 am-9:22 pm ET, hourly)
   start it unless it ran in the last 40 minutes, because GitHub dropped most scheduled runs on
   Nov 10-11.
+- **Push retries (Nov 24, 2026).** Every Action that commits to `main` pushes in a loop: pull
+  `--rebase` and push, up to 4 tries 15 s apart, then fail the run (a QB starter check push
+  failed on a passing GitHub "Internal Server Error"). College availability keeps its own
+  5-try loop. A new Action that pushes copies the same loop.
 - **Play-by-play values hold switch (`config.HOLD_PBP_VALUES`, normally False).** While True,
   `data.load_pbp_aggregates` and `extra.load_extra` do not re-download the current season, so its
   `team_games`, `qb_games`, `stat_games`, `team_extra` and `qb_extra` tables stay on their cached

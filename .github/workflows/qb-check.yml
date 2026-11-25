@@ -70,8 +70,12 @@ jobs:
           git diff --quiet -- data/overrides.csv || changed=yes
           git add data/qb_check data/overrides.csv
           git diff --cached --quiet || git commit -m "QB starter check (nfelo)"
-          git pull --rebase origin main
-          git push
+          # GitHub sometimes rejects a push with a passing server error (Nov 24, 2026): try up to 4 times, 15 s apart
+          for i in 1 2 3 4; do
+            git pull --rebase origin main && git push && break
+            [ "$i" = 4 ] && { echo "could not push after 4 attempts"; exit 1; }
+            echo "push failed (attempt $i); retrying in 15 s"; git rebase --abort 2>/dev/null || true; sleep 15
+          done
           if [ "$changed" = "yes" ]; then
             gh api -X POST repos/${{ github.repository }}/actions/workflows/update.yml/dispatches -f ref=main
             echo "Starter override changed: Update board started."
