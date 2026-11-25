@@ -94,3 +94,20 @@ def test_ladders_main_line_then_three_rungs_below(tmp_path):
     assert lad["fd"] == [[79.5, -114], [69.5, -162], [59.5, -250], [39.5, -800]]
     assert dashfeed._ladders("nfl", 9, 2026, tmp_path) == {}
 
+
+
+def test_feed_is_for_the_week_the_board_is_on(tmp_path, monkeypatch):
+    """Next week's rows on the board (early lines) don't relabel the feed or replace this week's numbers."""
+    monkeypatch.setattr(dashfeed, "DOCS", tmp_path)
+    d = _data()
+    this = d["players"]["players"][0]
+    nxt = {**this, "week": 9, "game": "g9", "proj": {"rush_yds": 80.0, "carries": 15.0}}
+    other = {**this, "name": "Only Next Week", "week": 9, "game": "g9"}
+    for rows in ([nxt, this, other], [this, other, nxt]):          # whatever order the board lists them in
+        d["players"]["players"] = rows
+        for meta_week in (8, None):                                  # the board's week, or the earliest listed
+            d["meta"]["week"] = meta_week
+            f = dashfeed.build("nfl", d)
+            assert f["week"] == 8
+            assert list(f["players"]) == ["KC|kenneth walker"]
+            assert f["players"]["KC|kenneth walker"]["g"] == "g" and f["players"]["KC|kenneth walker"]["p"]["rush_yds"] == 116.8

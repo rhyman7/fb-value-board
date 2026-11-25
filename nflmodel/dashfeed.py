@@ -133,7 +133,13 @@ def build(league: str, data: dict | None = None) -> dict:
         key = str(g["game_id"]) if league == "cfb" and g.get("game_id") is not None else g["id"]
         games[key] = _game(g)
     pl = (d.get("players") or {}).get("players", [])
-    week = next((p.get("week") for p in pl if p.get("week") is not None), None)
+    # The board lists next week's players too once that week's lines are up (and college lists later
+    # weeks). The feed is for the week the board is on: taking the first row's week, and keying every
+    # row by team and name, once labelled the whole feed a week ahead and replaced players' numbers
+    # for this week with next week's (Nov 25, 2026).
+    weeks = sorted({int(p["week"]) for p in pl if p.get("week") is not None})
+    week = meta.get("week") if meta.get("week") in weeks else (weeks[0] if weeks else None)
+    pl = [p for p in pl if week is None or p.get("week") is None or int(p["week"]) == week]
     lines = _lines(week, meta.get("season")) if league == "nfl" else {}
     ladders = _ladders(league, week, meta.get("season"))
     players = {}
