@@ -66,3 +66,5 @@ game_id,team,kind,player_id,name,status,source
 2026_11_MIN_SF,SF,out,00-0032775,Demarcus Robinson,Inactive,"49ers.com inactives Nov 22 6:50 ET: on the official inactives list (auto, news)"
 2026_12_NE_LAC,NE,starter,00-0038476,Tommy DeVito,,"NFL.com news roundup Nov 23 2026 (Vrabel confirmed DeVito starts Week 12 vs Chargers; Maye fractured right fibula, expected to miss rest of season) + Yardbarker Nov 23 2026 2:13 pm ET; board's game model had Drake Maye"
 2026_12_NYG_IND,IND,starter,00-0039164,Anthony Richardson,,"Yahoo Sports (Roundtable) Nov 23 2026 (Steichen: Richardson 'will be the starter versus the Giants') + AP via NBC Sports Bay Area Nov 20 2026 (Jones released, Richardson starts vs Giants); board's players table had Riley Leonard as passer"
+2026_12_SEA_SF,SEA,starter,00-0035704,Drew Lock,,"nfelo qb_elos.csv, checked 2026-11-25: nfelo starts Drew Lock, board had Sam Darnold (auto, qbcheck)"
+2026_12_WAS_ARI,ARI,starter,00-0026300,Josh Johnson,,"nfelo qb_elos.csv, checked 2026-11-25: nfelo starts Josh Johnson, board had Gardner Minshew (auto, qbcheck)"
