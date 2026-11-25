@@ -559,3 +559,15 @@ def test_underdog_qb_term_only_touches_big_underdog_quarterbacks_from_its_season
     assert out["pass_yds_pre_dog"].tolist() == p["pass_yds_proj"].tolist()
     none = PL.underdog_qb(p.copy(), {})
     assert none["pass_yds_proj"].tolist() == p["pass_yds_proj"].tolist() and (none["dog_adj"] == 0).all()
+
+
+def test_archive_lists_an_unprojected_receiver_who_was_targeted_and_caught_nothing():
+    import pandas as pd
+    from cfbmodel.archive import BOX
+    from nflmodel.archive import box_actuals
+    zero = {k: 0.0 for k in BOX}
+    b = pd.DataFrame([{**zero, "player_id": 1, "targets": 3.0}, {**zero, "player_id": 2, "targets": 0.0},
+                      {**zero, "player_id": 3, "targets": float("nan")}, {**zero, "player_id": 4, "targets": 0.0}])
+    out = box_actuals(b, BOX, {"4"}, lambda r: str(int(r.player_id)), lambda r: {"name": f"P{int(r.player_id)}", "pos": "WR", "team": "AAA"})
+    assert set(out) == {"1", "4"}                     # targeted with no catch is listed; no target is not; projected always is
+    assert out["1"]["rec_yds"] == 0.0 and out["1"]["name"] == "P1" and "targets" not in out["1"]
