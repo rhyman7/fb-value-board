@@ -36,7 +36,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858422,home,Minnesota,FCS,37,15.39,20,17,20,14.1383,1.2517,71
 2026,401858422,away,FCS,Minnesota,23,0.8869,7,10,13,4.5521,-3.6652,42
 2026,401858424,away,UAB,Illinois,65,10.3113,30,26,39,4.0499,6.2614,77
-2026,401858424,home,Illinois,UAB,42,17.3304,22,17,25,13.2291,4.1012,42
+2026,401858424,home,Illinois,UAB,42,15.6075,22,17,25,13.2291,2.3784,42
 2026,401858206,home,Stanford,Miami,34,-0.9566,12,26,8,-1.0984,0.1418,65
 2026,401858206,away,Miami,Stanford,43,23.2326,26,25,18,24.0319,-0.7993,66
 2026,401856664,home,Oklahoma,UTEP,33,12.7025,17,14,19,11.2734,1.4291,59
@@ -73,7 +73,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856634,away,East Carolina,Alabama,17,-2.5922,8,8,9,2.531,-5.1232,41
 2026,401856775,away,FCS,BYU,23,-16.2934,4,14,9,-13.8986,-2.3948,56
 2026,401856775,home,BYU,FCS,44,20.6695,30,21,23,8.5734,12.0961,66
-2026,401858428,home,Michigan,Western Michigan,48,2.64,23,24,24,1.1027,1.5374,48
+2026,401858428,home,Michigan,Western Michigan,48,0.4509,22,24,24,1.1027,-0.6518,48
 2026,401858428,away,Western Michigan,Michigan,66,-13.0393,26,24,42,-9.1276,-3.9117,66
 2026,401858434,home,Penn State,Marshall,38,15.9208,19,19,19,20.2777,-4.3568,72
 2026,401858434,away,Marshall,Penn State,35,-9.8652,13,23,12,-4.5438,-5.3214,54
@@ -123,7 +123,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401862700,home,UTSA,FCS,42,9.0415,25,21,21,3.3058,5.7356,57
 2026,401864499,home,North Dakota State,FCS,43,9.5301,24,20,23,7.2569,2.2732,65
 2026,401864499,away,FCS,North Dakota State,27,-11.5441,9,13,14,-9.1517,-2.3924,48
-2026,401866627,home,App State,FCS,44,23.6904,26,21,23,15.18,8.5104,71
+2026,401866627,home,App State,FCS,44,23.0338,26,21,23,14.5233,8.5104,71
 2026,401866627,away,FCS,App State,23,-10.2016,7,14,9,-10.4824,0.2808,60
 2026,401856772,home,Tulsa,Oklahoma State,56,5.4319,21,24,32,5.4705,-0.0386,56
 2026,401856772,away,Oklahoma State,Tulsa,85,-14.0554,35,50,35,-1.4232,-12.6322,85
@@ -194,7 +194,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856661,home,Ole Miss,Louisville,78,8.1839,36,37,41,9.9554,-1.7715,78
 2026,401856661,away,Louisville,Ole Miss,68,11.9942,29,32,36,7.1611,4.8331,68
 2026,401858437,away,Washington State,Washington,56,-17.7329,19,28,28,-11.6172,-6.1157,56
-2026,401858437,home,Washington,Washington State,62,2.9186,31,34,28,1.2496,1.669,62
+2026,401858437,home,Washington,Washington State,62,2.1572,31,34,28,0.4881,1.669,62
 2026,401858212,away,SMU,Florida State,67,15.114,37,36,31,19.9699,-4.8559,67
 2026,401858212,home,Florida State,SMU,67,-1.1027,25,26,41,2.6479,-3.7506,67
 2026,401858213,away,FCS,Miami,22,-10.0926,6,11,11,-5.0509,-5.0418,47
@@ -228,7 +228,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856679,away,Oklahoma,Michigan,62,-9.2763,23,36,26,-10.743,1.4668,62
 2026,401856679,home,Michigan,Oklahoma,57,-3.689,20,19,38,-0.8423,-2.8466,57
 2026,401856674,home,Kentucky,Alabama,60,-24.5146,19,34,26,-11.0689,-13.4457,63
-2026,401856674,away,Alabama,Kentucky,59,4.4713,31,27,32,-2.6231,7.0945,63
+2026,401856674,away,Alabama,Kentucky,59,3.3867,31,27,32,-2.6231,6.0098,63
 2026,401856783,home,Oregon State,Texas Tech,71,-4.4706,23,54,17,-2.4057,-2.0649,71
 2026,401856783,away,Texas Tech,Oregon State,74,3.6542,28,33,41,6.9014,-3.2472,74
 2026,401858445,home,USC,Louisiana,71,17.3376,35,31,40,15.3457,1.9919,71
@@ -276,7 +276,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401866413,home,Ball State,FCS,65,13.8133,30,36,29,4.664,9.1493,65
 2026,401866413,away,FCS,Ball State,51,-17.7366,17,31,20,-11.2321,-6.5045,64
 2026,401856677,away,Mississippi State,Minnesota,53,15.6507,31,20,33,3.6727,11.978,68
-2026,401856677,home,Minnesota,Mississippi State,58,3.2529,28,47,11,6.7545,-3.5016,63
+2026,401856677,home,Minnesota,Mississippi State,58,0.154,27,47,11,3.6556,-3.5016,63
 2026,401856785,away,FCS,Colorado,50,-5.1753,16,36,14,-4.5831,-0.5923,80
 2026,401856785,home,Colorado,FCS,35,24.2803,19,19,16,18.046,6.2344,71
 2026,401856790,home,Pittsburgh,UCF,68,-7.0853,24,30,38,2.9218,-10.0072,68
@@ -354,7 +354,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856784,away,FCS,Baylor,36,-11.9723,6,21,15,-9.625,-2.3473,55
 2026,401856784,home,Baylor,FCS,40,11.9125,25,25,15,5.9172,5.9953,84
 2026,401856671,away,Southern Miss,Auburn,42,-8.6871,17,28,14,-3.9712,-4.7159,57
-2026,401856671,home,Auburn,Southern Miss,59,16.6049,30,28,31,9.7565,6.8485,85
+2026,401856671,home,Auburn,Southern Miss,59,13.0574,29,28,31,6.2089,6.8485,85
 2026,401864504,home,San José State,FCS,78,15.7896,42,34,44,12.1846,3.605,78
 2026,401864504,away,FCS,San José State,68,1.8092,31,44,24,-0.8933,2.7025,68
 2026,401864505,away,FCS,UTEP,39,-0.4532,16,13,26,1.2546,-1.7078,61
@@ -401,8 +401,8 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858456,home,Penn State,Buffalo,34,10.3204,16,17,17,5.5789,4.7415,67
 2026,401856692,home,Tennessee,Kennesaw State,56,13.6031,31,24,32,3.4759,10.1273,67
 2026,401856692,away,Kennesaw State,Tennessee,38,-8.5933,12,20,18,-3.6676,-4.9257,64
-2026,401858230,away,SMU,Louisville,79,3.3853,36,37,42,4.8491,-1.4638,79
-2026,401858230,home,Louisville,SMU,57,22.5296,31,23,34,9.4768,13.0529,57
+2026,401858230,away,SMU,Louisville,79,4.2727,36,37,42,4.8491,-0.5764,79
+2026,401858230,home,Louisville,SMU,57,19.6875,30,23,34,7.89,11.7975,57
 2026,401856801,home,Utah,Utah State,55,14.017,25,33,22,11.6679,2.3491,73
 2026,401856801,away,Utah State,Utah,34,-12.0769,9,22,12,-13.1388,1.062,54
 2026,401858471,home,Iowa,FCS,36,26.7753,28,19,17,10.8629,15.9123,64
@@ -423,7 +423,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856798,home,Iowa State,Bowling Green,32,14.4271,19,13,19,1.2952,13.1319,63
 2026,401856812,home,Kansas,Arizona State,73,-10.0704,27,33,40,0.6791,-10.7496,73
 2026,401856812,away,Arizona State,Kansas,63,-12.6921,22,25,38,-5.774,-6.9181,63
-2026,401858228,home,Georgia Tech,FCS,45,16.2999,24,20,25,12.7862,3.5137,59
+2026,401858228,home,Georgia Tech,FCS,45,14.8707,24,20,25,12.7862,2.0845,59
 2026,401858228,away,FCS,Georgia Tech,50,3.2658,25,15,35,1.0302,2.2356,60
 2026,401858229,home,Clemson,North Carolina,65,7.1415,31,33,32,-3.0648,10.2063,65
 2026,401858229,away,North Carolina,Clemson,69,-7.4446,31,33,36,-9.5989,2.1543,69
@@ -482,8 +482,8 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401862777,home,South Florida,FCS,50,26.7584,33,31,19,9.2918,17.4665,65
 2026,401862777,away,FCS,South Florida,49,10.7144,24,26,23,13.397,-2.6825,58
 2026,401864443,home,Middle Tennessee,Nevada,65,8.4686,29,30,35,5.2583,3.2102,65
-2026,401864443,away,Nevada,Middle Tennessee,59,-8.2171,19,27,32,-1.9043,-6.3128,59
-2026,401866423,home,South Alabama,Ohio,69,18.6687,33,19,50,11.2017,7.4669,69
+2026,401864443,away,Nevada,Middle Tennessee,59,-8.8079,19,27,32,-2.4951,-6.3128,59
+2026,401866423,home,South Alabama,Ohio,69,18.1934,33,19,50,10.7265,7.4669,69
 2026,401866423,away,Ohio,South Alabama,59,17.0782,28,34,25,12.0236,5.0546,59
 2026,401869948,away,Georgia Southern,Jacksonville State,72,1.2376,34,34,38,-2.7025,3.9401,72
 2026,401869948,home,Jacksonville State,Georgia Southern,47,9.7147,23,24,23,9.0334,0.6813,47
@@ -491,32 +491,32 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401870764,home,Sam Houston,FCS,34,11.4333,17,22,12,11.9767,-0.5433,71
 2026,401858452,home,Nebraska,FCS,56,15.6154,25,21,35,7.3772,8.2382,71
 2026,401858452,away,FCS,Nebraska,38,-9.4207,10,18,20,-5.9797,-3.441,54
-2026,401858459,home,Washington,FCS,48,25.1781,28,29,19,21.3354,3.8427,62
+2026,401858459,home,Washington,FCS,48,24.8479,28,29,19,21.0052,3.8427,62
 2026,401858459,away,FCS,Washington,54,1.3166,23,20,34,9.6051,-8.2884,74
 2026,401856796,home,Northwestern,Colorado,50,8.0495,26,19,31,11.5277,-3.4782,68
 2026,401856796,away,Colorado,Northwestern,46,-7.4242,22,19,27,-2.0565,-5.3677,62
 2026,401858232,away,Virginia Tech,Maryland,71,25.2802,37,40,31,20.0096,5.2706,71
-2026,401858232,home,Maryland,Virginia Tech,64,16.5954,31,45,19,15.7368,0.8586,64
+2026,401858232,home,Maryland,Virginia Tech,64,15.8816,31,45,19,15.023,0.8586,64
 2026,401856799,away,Arkansas State,TCU,51,-12.6142,19,26,25,-14.5766,1.9625,54
 2026,401856799,home,TCU,Arkansas State,67,9.0209,30,29,38,18.4736,-9.4527,67
 2026,401862775,away,FCS,Tulsa,45,-13.6848,15,22,23,-6.9113,-6.7735,71
 2026,401862775,home,Tulsa,FCS,51,6.9275,25,24,27,0.4963,6.4312,67
 2026,401862776,home,Louisiana,UAB,71,-6.0065,27,21,50,-6.4018,0.3953,71
-2026,401862776,away,UAB,Louisiana,58,-5.8457,24,30,28,-0.8863,-4.9594,58
+2026,401862776,away,UAB,Louisiana,58,-9.3345,23,30,28,-4.3751,-4.9594,58
 2026,401864574,away,Charlotte,App State,59,-7.1899,23,35,24,-6.5002,-0.6897,59
 2026,401864574,home,App State,Charlotte,73,-2.3881,31,43,30,10.4672,-12.8554,73
 2026,401860885,away,FCS,Boise State,51,-6.636,13,30,21,2.4517,-9.0877,51
 2026,401860885,home,Boise State,FCS,78,11.1034,44,32,46,6.9987,4.1047,78
 2026,401860887,away,James Madison,San Diego State,72,1.6056,31,30,42,8.9765,-7.3709,72
 2026,401860887,home,San Diego State,James Madison,77,-8.6449,28,35,42,-10.8969,2.252,77
-2026,401856793,away,Northern Illinois,Arizona,50,9.794,21,35,15,7.5259,2.2681,67
+2026,401856793,away,Northern Illinois,Arizona,50,4.1226,20,35,15,1.8545,2.2681,67
 2026,401856793,home,Arizona,Northern Illinois,46,23.2834,25,32,14,22.7075,0.5759,62
 2026,401864507,away,North Dakota State,Sacramento State,53,-3.8912,15,21,32,6.0569,-9.9481,58
 2026,401864507,home,Sacramento State,North Dakota State,58,-13.6007,23,35,23,-6.0002,-7.6005,65
 2026,401858458,home,UCLA,Purdue,79,39.4915,44,33,46,17.7759,21.7155,79
 2026,401858458,away,Purdue,UCLA,58,16.5302,28,33,25,18.6729,-2.1427,58
 2026,401860886,away,FCS,Oregon State,35,-9.041,12,23,12,-9.1043,0.0633,71
-2026,401860886,home,Oregon State,FCS,39,19.4062,20,27,12,18.7171,0.6891,67
+2026,401860886,home,Oregon State,FCS,39,18.0475,20,27,12,17.3584,0.6891,67
 2026,401860888,away,Fresno State,San José State,66,-0.4737,24,30,36,3.0269,-3.5006,66
 2026,401860888,home,San José State,Fresno State,70,-14.973,26,43,27,-12.5202,-2.4527,70
 2026,401869941,home,Coastal Carolina,Liberty,64,-2.9708,20,37,27,-1.3349,-1.6359,64
@@ -672,7 +672,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858476,home,Northwestern,Penn State,62,14.2355,37,15,47,-3.3509,17.5863,66
 2026,401858476,away,Penn State,Northwestern,52,-6.6372,23,33,19,-6.0074,-0.6297,63
 2026,401856705,away,Vanderbilt,Georgia,44,-0.2523,17,24,20,1.9813,-2.2336,49
-2026,401856705,home,Georgia,Vanderbilt,60,20.6699,34,33,27,16.9524,3.7174,64
+2026,401856705,home,Georgia,Vanderbilt,60,20.0659,34,33,27,16.3485,3.7174,64
 2026,401858250,away,Notre Dame,North Carolina,74,18.9494,42,30,44,10.2805,8.669,74
 2026,401858250,home,North Carolina,Notre Dame,51,5.0666,19,29,22,5.6552,-0.5886,51
 2026,401858249,home,Clemson,Miami,71,-11.812,27,50,21,-0.2265,-11.5856,75
@@ -703,7 +703,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401860898,home,Boise State,Utah State,62,9.4813,28,22,40,6.2538,3.2275,62
 2026,401856709,home,South Carolina,Kentucky,74,10.1582,38,38,36,8.1428,2.0154,74
 2026,401856709,away,Kentucky,South Carolina,78,14.545,41,44,34,11.3126,3.2324,78
-2026,401862787,away,Memphis,Charlotte,56,18.6309,35,27,29,12.6485,5.9824,84
+2026,401862787,away,Memphis,Charlotte,56,15.229,34,27,29,9.2466,5.9824,84
 2026,401862787,home,Charlotte,Memphis,31,-5.4464,11,15,16,-8.1381,2.6917,40
 2026,401856807,away,Middle Tennessee,Kansas,29,-16.1931,5,19,10,-10.5643,-5.6288,41
 2026,401856807,home,Kansas,Middle Tennessee,58,20.345,34,22,36,1.3234,19.0216,82
@@ -794,7 +794,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401869933,home,Arkansas State,South Alabama,70,29.77,44,45,25,25.4259,4.3441,70
 2026,401869933,away,South Alabama,Arkansas State,57,20.2746,29,10,47,6.0805,14.194,57
 2026,401856826,home,BYU,Iowa State,59,10.4418,31,30,29,9.6353,0.8065,59
-2026,401856826,away,Iowa State,BYU,56,-8.0954,16,32,24,-10.8026,2.7072,56
+2026,401856826,away,Iowa State,BYU,56,-8.8655,16,32,24,-11.5727,2.7072,56
 2026,401858487,away,Iowa,Washington,49,19.4964,31,19,30,9.3838,10.1126,57
 2026,401858487,home,Washington,Iowa,56,3.3332,25,39,17,10.9047,-7.5716,76
 2026,401858254,away,Florida State,Louisville,76,4.7591,35,41,35,-2.8349,7.5941,77
@@ -818,14 +818,14 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856715,away,LSU,Kentucky,70,15.8577,35,38,32,12.809,3.0486,70
 2026,401856715,home,Kentucky,LSU,68,10.6863,35,37,31,0.0225,10.6638,68
 2026,401856827,home,Utah,Kansas,74,18.104,42,34,40,7.4671,10.6369,74
-2026,401856827,away,Kansas,Utah,58,6.6866,23,37,21,13.2004,-6.5138,58
+2026,401856827,away,Kansas,Utah,58,4.267,23,37,21,10.7809,-6.5138,58
 2026,401858484,away,UCLA,Oregon,70,-17.3914,26,25,45,-2.2727,-15.1187,70
 2026,401858484,home,Oregon,UCLA,61,-31.2397,20,35,26,-17.0379,-14.2018,61
 2026,401856716,away,Texas A&M,Missouri,62,-21.162,20,42,20,-16.1755,-4.9865,62
 2026,401856716,home,Missouri,Texas A&M,70,-4.1971,29,28,42,-7.4456,3.2486,70
 2026,401856713,home,Arkansas,Tennessee,60,-3.5951,26,29,31,-3.9679,0.3728,60
 2026,401856713,away,Tennessee,Arkansas,61,3.9058,27,30,31,0.2997,3.6061,61
-2026,401856714,away,South Carolina,Florida,65,17.1154,32,38,27,12.5462,4.5691,70
+2026,401856714,away,South Carolina,Florida,65,16.5961,32,38,27,12.5462,4.0499,70
 2026,401856714,home,Florida,South Carolina,60,-5.6062,28,31,29,-0.0203,-5.5859,74
 2026,401856824,home,Oklahoma State,UCF,59,16.6465,32,29,30,17.4062,-0.7598,59
 2026,401856824,away,UCF,Oklahoma State,83,9.5535,39,43,40,20.7784,-11.2248,83
@@ -835,12 +835,12 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856825,home,Kansas State,Houston,39,-0.2031,15,21,18,-3.2674,3.0643,59
 2026,401860901,home,Fresno State,Boise State,51,19.4529,24,37,14,15.6587,3.7942,51
 2026,401860901,away,Boise State,Fresno State,78,26.2539,41,34,44,16.6332,9.6207,78
-2026,401858256,home,Pittsburgh,North Carolina,85,-15.2108,34,46,39,-9.7886,-5.4222,85
+2026,401858256,home,Pittsburgh,North Carolina,85,-12.9947,34,46,39,-9.7886,-3.2061,85
 2026,401858256,away,North Carolina,Pittsburgh,49,-3.7775,22,29,20,2.0888,-5.8663,49
 2026,401856823,home,West Virginia,Arizona,103,4.2755,43,29,74,-2.112,6.3875,103
 2026,401856823,away,Arizona,West Virginia,49,15.6544,25,25,24,13.7614,1.8929,49
 2026,401858260,home,NC State,Wake Forest,44,-0.8791,18,29,15,6.5607,-7.4398,63
-2026,401858260,away,Wake Forest,NC State,63,24.5905,32,34,29,23.5741,1.0164,66
+2026,401858260,away,Wake Forest,NC State,63,21.0375,31,34,29,21.8913,-0.8538,66
 2026,401862795,home,Army,Tulane,64,6.8994,32,6,58,-0.5692,7.4686,64
 2026,401862795,away,Tulane,Army,51,-1.1622,15,27,24,-1.2428,0.0806,51
 2026,401866436,home,Bowling Green,Sacramento State,49,6.0947,27,17,32,0.2407,5.854,59
@@ -917,7 +917,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401869844,away,App State,Coastal Carolina,75,28.8432,42,28,47,17.0626,11.7807,75
 2026,401856719,home,Georgia,Auburn,65,3.6866,35,39,26,4.5594,-0.8728,65
 2026,401856719,away,Auburn,Georgia,74,8.3393,32,33,41,6.4578,1.8815,74
-2026,401856809,home,BYU,Notre Dame,66,6.5072,30,37,29,4.6698,1.8374,66
+2026,401856809,home,BYU,Notre Dame,66,5.6266,30,37,29,4.6698,0.9568,66
 2026,401856809,away,Notre Dame,BYU,79,4.6637,34,49,30,6.9015,-2.2378,79
 2026,401858263,away,Florida State,Miami,63,7.1265,22,32,31,19.7561,-12.6296,63
 2026,401858263,home,Miami,Florida State,79,24.2942,39,36,43,18.9895,5.3046,79
@@ -965,7 +965,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858489,away,Rutgers,Maryland,73,26.9467,38,36,37,19.2716,7.6751,73
 2026,401856725,away,FCS,Texas A&M,27,-6.6957,8,3,24,-4.6252,-2.0704,56
 2026,401856725,home,Texas A&M,FCS,34,20.1157,23,13,21,7.8844,12.2313,65
-2026,401862803,home,Temple,Charlotte,61,21.1313,31,29,32,9.1091,12.0222,61
+2026,401862803,home,Temple,Charlotte,61,14.2516,30,29,32,2.2294,12.0222,61
 2026,401862803,away,Charlotte,Temple,67,18.9607,33,32,35,15.1867,3.774,67
 2026,401866442,away,Massachusetts,Buffalo,73,0.8672,32,28,45,-4.5582,5.4254,73
 2026,401866442,home,Buffalo,Massachusetts,78,-7.9088,31,36,42,-6.9343,-0.9745,78
@@ -976,7 +976,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858266,away,North Carolina,Duke,63,-0.3857,30,27,36,3.0637,-3.4495,63
 2026,401858266,home,Duke,North Carolina,71,-0.847,28,42,29,5.8783,-6.7253,71
 2026,401858490,away,Penn State,Michigan,73,-7.2451,33,47,26,-4.0457,-3.1994,73
-2026,401858490,home,Michigan,Penn State,52,3.5579,23,19,33,-4.5846,8.1425,52
+2026,401858490,home,Michigan,Penn State,52,3.101,23,19,33,-4.5846,7.6856,52
 2026,401864522,home,Wyoming,Northern Illinois,58,21.0149,34,19,39,8.9889,12.0261,58
 2026,401864522,away,Northern Illinois,Wyoming,65,5.8904,26,42,23,-6.0048,11.8951,73
 2026,401864524,away,UNLV,Air Force,65,14.5153,33,34,31,11.5423,2.973,65
@@ -990,7 +990,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401869966,home,Louisiana,Troy,59,-0.9707,27,19,40,-8.8435,7.8727,72
 2026,401869966,away,Troy,Louisiana,43,-6.4185,14,20,23,-11.4599,5.0415,53
 2026,401860903,away,Washington State,Oregon State,73,16.1474,35,48,25,9.7489,6.3985,80
-2026,401860903,home,Oregon State,Washington State,70,18.7103,33,39,31,5.2902,13.4201,70
+2026,401860903,home,Oregon State,Washington State,70,18.3416,33,39,31,4.9215,13.4201,70
 2026,401856726,home,Vanderbilt,Arkansas,60,1.2402,25,32,28,1.4656,-0.2255,60
 2026,401856726,away,Arkansas,Vanderbilt,72,13.4233,34,31,41,9.154,4.2693,72
 2026,401856832,home,Baylor,TCU,86,-16.9511,27,56,30,-5.3449,-11.6061,86
@@ -1000,13 +1000,13 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401864520,away,Nevada,North Dakota State,57,-6.3976,19,36,21,-8.4085,2.0109,57
 2026,401864520,home,North Dakota State,Nevada,69,-0.8442,33,26,43,-0.4966,-0.3476,69
 2026,401869934,away,Arkansas State,Southern Miss,76,-14.0381,28,31,45,-3.6679,-10.3702,76
-2026,401869934,home,Southern Miss,Arkansas State,60,-7.5374,20,35,25,-2.563,-4.9745,60
+2026,401869934,home,Southern Miss,Arkansas State,60,-9.0973,19,35,25,-2.563,-6.5343,60
 2026,401858262,away,FCS,Stanford,43,-9.7569,15,22,21,-10.3919,0.635,60
 2026,401858262,home,Stanford,FCS,61,9.9286,30,40,21,7.7717,2.157,75
 2026,401858265,away,Louisville,Syracuse,59,7.0174,26,29,30,8.2301,-1.2127,59
 2026,401858265,home,Syracuse,Louisville,84,-5.3153,35,50,34,-3.0888,-2.2265,84
 2026,401862804,away,Navy,UTSA,56,17.1204,31,8,48,6.6694,10.4511,56
-2026,401862804,home,UTSA,Navy,70,20.4472,33,41,29,23.3448,-2.8976,70
+2026,401862804,home,UTSA,Navy,70,18.2852,33,41,29,21.1828,-2.8976,70
 2026,401871091,away,Louisiana Tech,UL Monroe,62,7.5991,24,27,35,7.1829,0.4162,65
 2026,401871091,home,UL Monroe,Louisiana Tech,46,-17.2797,15,24,22,-9.712,-7.5678,54
 2026,401864523,home,UTEP,San José State,84,3.8405,37,45,39,-6.7165,10.557,84
@@ -1019,7 +1019,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401864521,away,New Mexico,Hawai'i,56,9.4441,21,13,43,4.9881,4.456,56
 2026,401858492,home,Oregon,Nebraska,75,-14.5997,26,39,36,-9.7977,-4.802,75
 2026,401858492,away,Nebraska,Oregon,67,-23.3656,18,37,30,-8.5357,-14.8299,67
-2026,401871055,home,Florida International,Middle Tennessee,57,-3.6695,24,28,29,-3.8491,0.1795,57
+2026,401871055,home,Florida International,Middle Tennessee,57,-4.5003,24,28,29,-4.6799,0.1795,57
 2026,401871055,away,Middle Tennessee,Florida International,64,3.1089,30,27,37,6.1945,-3.0856,64
 2026,401871069,away,Missouri State,Delaware,49,14.0931,30,31,18,9.1009,4.9922,58
 2026,401871069,home,Delaware,Missouri State,60,24.3907,29,32,28,16.0758,8.3149,71
@@ -1071,7 +1071,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856728,away,LSU,Auburn,69,23.0591,34,41,28,14.8269,8.2322,80
 2026,401860907,away,Boise State,Washington State,59,16.7396,25,24,35,5.3901,11.3495,59
 2026,401860907,home,Washington State,Boise State,73,-8.7284,28,44,29,-8.5169,-0.2115,73
-2026,401858270,home,SMU,California,56,20.4256,32,22,34,14.8541,5.5714,68
+2026,401858270,home,SMU,California,56,20.0483,32,22,34,14.8541,5.1942,68
 2026,401858270,away,California,SMU,55,3.0222,22,34,21,2.6799,0.3423,66
 2026,401858498,home,Northwestern,Rutgers,62,21.0494,36,26,36,8.5258,12.5236,65
 2026,401858498,away,Rutgers,Northwestern,61,-7.0643,24,29,32,-21.7361,14.6718,66
@@ -1106,7 +1106,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856839,away,Kansas State,Arizona State,73,-20.063,25,44,29,-13.7857,-6.2773,73
 2026,401856839,home,Arizona State,Kansas State,69,-0.5984,28,35,34,-1.5456,0.9472,69
 2026,401866449,away,Eastern Michigan,Ohio,67,-12.3925,27,42,25,-11.4367,-0.9558,67
-2026,401866449,home,Ohio,Eastern Michigan,55,-10.6598,25,32,23,-1.9075,-8.7524,55
+2026,401866449,home,Ohio,Eastern Michigan,55,-11.1718,25,32,23,-2.4194,-8.7524,55
 2026,401871094,away,UL Monroe,Troy,61,-9.0675,21,33,28,-4.3434,-4.7241,61
 2026,401871094,home,Troy,UL Monroe,64,-8.9567,20,21,43,-11.8254,2.8686,64
 2026,401864528,away,San José State,Nevada,56,-18.3933,14,30,26,-12.8275,-5.5658,56
@@ -1118,10 +1118,10 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401860905,home,Colorado State,San Diego State,71,32.4954,44,31,40,19.8995,12.5958,71
 2026,401860905,away,San Diego State,Colorado State,70,32.2655,37,34,36,19.7773,12.4882,70
 2026,401856836,home,Oklahoma State,Colorado,65,22.0052,34,37,28,16.9867,5.0185,76
-2026,401856836,away,Colorado,Oklahoma State,50,5.5966,25,26,24,11.006,-5.4094,62
+2026,401856836,away,Colorado,Oklahoma State,50,5.0592,25,26,24,10.4686,-5.4094,62
 2026,401858276,away,Virginia Tech,Clemson,67,-9.4938,24,39,28,-10.5369,1.043,67
 2026,401858276,home,Clemson,Virginia Tech,62,-8.9759,26,30,32,-5.4026,-3.5733,62
-2026,401869935,away,Georgia State,Arkansas State,61,9.7334,28,31,30,5.4759,4.2575,61
+2026,401869935,away,Georgia State,Arkansas State,61,14.6622,28,31,30,5.4759,9.1863,61
 2026,401869935,home,Arkansas State,Georgia State,64,17.7276,30,34,30,9.2165,8.5111,64
 2026,401858275,home,North Carolina,Syracuse,69,9.0881,34,46,23,4.4802,4.6079,69
 2026,401858275,away,Syracuse,North Carolina,83,16.6806,40,35,48,11.0718,5.6088,83
@@ -1139,7 +1139,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401871058,home,Middle Tennessee,Kennesaw State,89,-9.4246,40,46,43,-15.3882,5.9635,89
 2026,401871057,away,Jacksonville State,New Mexico State,57,9.3997,29,18,39,-1.197,10.5966,64
 2026,401871057,home,New Mexico State,Jacksonville State,49,-5.1006,21,16,33,-14.1802,9.0796,53
-2026,401862812,away,Florida Atlantic,North Texas,85,21.1718,43,59,26,31.0825,-9.9107,85
+2026,401862812,away,Florida Atlantic,North Texas,85,17.1445,42,59,26,27.0552,-9.9107,85
 2026,401862812,home,North Texas,Florida Atlantic,83,27.2127,46,46,37,21.7859,5.4268,83
 2026,401869963,away,Troy,James Madison,74,-11.7674,26,32,42,-9.5875,-2.1799,74
 2026,401869963,home,James Madison,Troy,77,-17.6516,29,37,40,-10.9285,-6.7231,77
@@ -1150,13 +1150,13 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401866451,home,Sacramento State,Kent State,64,-14.6745,19,27,37,-5.0044,-9.6701,64
 2026,401866451,away,Kent State,Sacramento State,62,-31.9439,16,40,22,-24.3306,-7.6133,62
 2026,401858282,away,Miami,North Carolina,61,27.5552,38,30,31,15.4966,12.0586,61
-2026,401858282,home,North Carolina,Miami,63,28.7599,39,38,25,25.7773,2.9826,63
+2026,401858282,home,North Carolina,Miami,63,28.2365,39,38,25,25.2539,2.9826,63
 2026,401858509,home,USC,Ohio State,49,0.0073,23,24,25,4.0268,-4.0195,49
-2026,401858509,away,Ohio State,USC,81,9.0435,38,40,41,-0.996,10.0395,81
+2026,401858509,away,Ohio State,USC,81,8.3011,38,40,41,-0.996,9.2971,81
 2026,401856734,home,Georgia,Florida,57,-7.3891,25,20,37,-11.3677,3.9786,65
 2026,401856734,away,Florida,Georgia,50,-20.6292,20,28,22,-11.0861,-9.5431,59
 2026,401858501,away,Minnesota,Indiana,60,-18.6853,16,41,19,-18.9764,0.2911,60
-2026,401858501,home,Indiana,Minnesota,69,7.9251,29,38,31,8.1705,-0.2454,69
+2026,401858501,home,Indiana,Minnesota,69,3.6834,28,38,31,3.9289,-0.2454,69
 2026,401859185,home,Navy,Notre Dame,50,4.7174,24,7,43,1.6483,3.0691,56
 2026,401859185,away,Notre Dame,Navy,39,22.0831,24,22,17,9.3962,12.687,59
 2026,401856848,home,Cincinnati,Utah,33,3.4073,15,20,13,3.4645,-0.0572,61
@@ -1164,7 +1164,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858508,away,Nevada,UCLA,45,-21.4553,9,21,24,-14.361,-7.0943,59
 2026,401858508,home,UCLA,Nevada,48,1.5091,20,26,22,1.0587,0.4504,58
 2026,401856843,away,Arizona State,BYU,76,-3.8111,29,48,28,-11.5432,7.7321,76
-2026,401856843,home,BYU,Arizona State,57,0.4368,24,31,26,4.3915,-3.9547,57
+2026,401856843,home,BYU,Arizona State,57,-0.0475,24,31,26,3.9073,-3.9547,57
 2026,401856737,home,Texas,Mississippi State,50,-2.3724,19,25,25,-0.1166,-2.2558,53
 2026,401856737,away,Mississippi State,Texas,55,-22.5477,19,29,26,-14.2931,-8.2546,67
 2026,401856735,home,Ole Miss,Auburn,70,20.1033,41,31,39,7.0206,13.0827,83
@@ -1178,7 +1178,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858505,away,Northwestern,Oregon,74,10.54,30,41,33,4.7891,5.7509,74
 2026,401858505,home,Oregon,Northwestern,55,15.8675,24,31,24,15.1734,0.6941,55
 2026,401860908,away,Texas State,Boise State,63,8.7664,24,40,23,9.7911,-1.0247,63
-2026,401860908,home,Boise State,Texas State,84,14.6079,40,47,37,17.9631,-3.3552,84
+2026,401860908,home,Boise State,Texas State,84,14.0532,40,47,37,17.4085,-3.3552,84
 2026,401856733,home,Arkansas,Missouri,57,-9.9785,24,27,30,-3.1479,-6.8307,70
 2026,401856733,away,Missouri,Arkansas,60,4.4658,24,31,29,3.9567,0.5091,65
 2026,401856847,home,Iowa State,Oklahoma State,72,24.6618,35,29,43,16.3238,8.3379,72
@@ -1233,7 +1233,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858280,away,Clemson,Florida State,73,-2.9776,26,36,37,-4.7775,1.7998,73
 2026,401860909,away,Washington State,San Diego State,73,5.3145,40,45,28,2.3384,2.9762,73
 2026,401860909,home,San Diego State,Washington State,58,8.474,25,22,36,5.4372,3.0368,58
-2026,401858281,home,Pittsburgh,Georgia Tech,82,-3.9643,35,31,51,-6.0901,2.1258,87
+2026,401858281,home,Pittsburgh,Georgia Tech,82,-4.3379,35,31,51,-6.4636,2.1258,87
 2026,401858281,away,Georgia Tech,Pittsburgh,52,-26.9859,14,34,18,-16.9484,-10.0375,76
 2026,401858504,home,Nebraska,Washington,72,-7.2634,32,45,27,-9.6801,2.4167,72
 2026,401858504,away,Washington,Nebraska,61,-6.8037,22,47,14,-3.8643,-2.9394,61
@@ -1278,7 +1278,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856745,away,Kentucky,Tennessee,69,-6.8836,31,38,31,-5.5028,-1.3808,71
 2026,401856745,home,Tennessee,Kentucky,51,12.4321,25,16,35,2.87,9.5621,51
 2026,401856743,away,Texas,Missouri,67,7.6883,31,41,26,6.468,1.2203,67
-2026,401856743,home,Missouri,Texas,68,1.4259,23,45,23,-1.3134,2.7393,68
+2026,401856743,home,Missouri,Texas,68,-1.4447,22,45,23,-3.1271,1.6823,68
 2026,401858512,away,UCLA,Minnesota,52,8.1174,22,17,35,12.089,-3.9715,52
 2026,401858512,home,Minnesota,UCLA,65,-1.3715,24,37,28,1.3714,-2.7428,65
 2026,401858514,home,Ohio State,Oregon,53,-5.9917,21,36,17,-6.7657,0.774,71
@@ -1327,14 +1327,14 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858516,away,Penn State,Washington,61,10.7186,23,30,31,2.8993,7.8193,61
 2026,401862819,away,Charlotte,UAB,62,-16.4994,15,35,27,-9.4456,-7.0537,62
 2026,401862819,home,UAB,Charlotte,69,-9.1588,36,31,38,-11.4452,2.2864,69
-2026,401862820,home,Navy,Temple,75,13.8342,41,12,63,1.5095,12.3247,75
+2026,401862820,home,Navy,Temple,75,12.9434,41,12,63,1.5095,11.4339,75
 2026,401862820,away,Temple,Navy,48,1.9654,17,30,18,1.8546,0.1108,48
 2026,401869951,away,Marshall,Georgia Southern,53,-9.344,20,26,27,-5.0206,-4.3233,68
 2026,401869951,home,Georgia Southern,Marshall,44,8.0044,20,26,18,10.7465,-2.7421,63
 2026,401871076,away,Western Kentucky,Middle Tennessee,68,25.5014,36,37,31,11.1491,14.3523,68
 2026,401871076,home,Middle Tennessee,Western Kentucky,72,18.0653,38,43,29,11.7514,6.3139,72
 2026,401856850,home,Kansas,UCF,70,9.2838,36,31,39,1.3195,7.9643,70
-2026,401856850,away,UCF,Kansas,68,6.5239,31,35,33,10.9921,-4.4682,68
+2026,401856850,away,UCF,Kansas,68,1.3041,30,35,33,5.7724,-4.4682,68
 2026,401862821,away,Rice,North Texas,48,3.0832,19,11,37,5.2538,-2.1707,65
 2026,401862821,home,North Texas,Rice,60,23.9501,30,33,27,16.5742,7.376,63
 2026,401864534,away,Northern Illinois,San José State,74,0.6818,36,41,33,-5.3543,6.0361,74
@@ -1365,7 +1365,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401860913,away,Fresno State,Utah State,66,-5.6682,19,41,25,13.061,-18.7292,66
 2026,401864532,home,UTEP,Hawai'i,47,0.1983,21,18,29,-1.2707,1.469,47
 2026,401864532,away,Hawai'i,UTEP,74,8.5206,37,42,32,10.8302,-2.3097,74
-2026,401860912,away,Texas State,Oregon State,72,20.674,40,21,51,4.2006,16.4733,80
+2026,401860912,away,Texas State,Oregon State,72,19.6388,40,21,51,3.1654,16.4733,80
 2026,401860912,home,Oregon State,Texas State,50,0.1136,20,36,14,-1.776,1.8896,68
 2026,401864535,home,UNLV,Wyoming,62,-4.4355,20,28,34,-6.1073,1.6718,62
 2026,401864535,away,Wyoming,UNLV,69,11.9624,38,16,53,-1.4877,13.4501,69
@@ -1382,7 +1382,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401866463,away,Massachusetts,Toledo,43,-17.5327,14,24,19,-15.7609,-1.7718,59
 2026,401866463,home,Toledo,Massachusetts,55,3.535,23,23,32,0.9096,2.6255,66
 2026,401862824,home,South Florida,Memphis,89,12.8428,39,45,44,-4.0511,16.8939,89
-2026,401862824,away,Memphis,South Florida,68,24.0497,34,32,36,8.5514,15.4982,68
+2026,401862824,away,Memphis,South Florida,68,21.3824,33,32,36,5.8842,15.4982,68
 2026,401869969,home,UL Monroe,Louisiana,77,6.0663,33,30,47,-3.664,9.7303,77
 2026,401869969,away,Louisiana,UL Monroe,45,17.5492,29,13,32,-1.415,18.9642,45
 2026,401858526,home,UCLA,Illinois,59,-4.3473,22,28,31,5.6427,-9.99,59
@@ -1402,15 +1402,15 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856885,away,Texas,LSU,67,-9.3731,24,39,28,-10.2635,0.8904,67
 2026,401856885,home,LSU,Texas,67,2.899,25,40,27,1.9931,0.9059,67
 2026,401858296,away,Duke,Miami,60,10.5924,27,44,16,3.4889,7.1035,60
-2026,401858296,home,Miami,Duke,72,24.6612,38,41,31,25.2958,-0.6345,72
+2026,401858296,home,Miami,Duke,72,20.5604,37,41,31,21.195,-0.6345,72
 2026,401856888,away,Tennessee,Texas A&M,73,-7.771,29,20,53,-2.2462,-5.5248,73
 2026,401856888,home,Texas A&M,Tennessee,44,-22.56,15,25,19,-19.2092,-3.3507,44
 2026,401858518,away,USC,Indiana,67,0.6045,32,42,25,3.1074,-2.5029,67
-2026,401858518,home,Indiana,USC,61,14.4411,26,29,32,13.4721,0.969,61
+2026,401858518,home,Indiana,USC,61,13.9455,26,29,32,13.4721,0.4734,61
 2026,401856858,away,Baylor,BYU,60,-7.7684,20,40,20,-11.8784,4.11,60
 2026,401856858,home,BYU,Baylor,72,1.3944,28,26,46,-2.8069,4.2013,72
 2026,401856884,away,Florida,Kentucky,69,6.8096,36,25,44,-2.1044,8.914,69
-2026,401856884,home,Kentucky,Florida,53,-4.3253,24,28,25,-3.0732,-1.2521,53
+2026,401856884,home,Kentucky,Florida,53,-5.4488,24,28,25,-3.0732,-2.3755,53
 2026,401856863,home,Oklahoma State,Texas Tech,66,-9.7801,23,40,26,1.6662,-11.4463,87
 2026,401856863,away,Texas Tech,Oklahoma State,48,1.2387,19,25,23,1.9065,-0.6678,60
 2026,401858301,home,SMU,Wake Forest,26,-17.5367,6,14,12,-12.1127,-5.424,61
@@ -1436,7 +1436,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858297,home,Clemson,Georgia Tech,68,-22.712,19,38,30,-14.5113,-8.2007,68
 2026,401858297,away,Georgia Tech,Clemson,64,-1.2369,25,15,49,-2.8612,1.6244,64
 2026,401858525,home,Rutgers,Nebraska,35,-14.3182,10,13,22,-11.0582,-3.2601,49
-2026,401858525,away,Nebraska,Rutgers,54,15.3187,33,20,34,9.6528,5.6659,68
+2026,401858525,away,Nebraska,Rutgers,54,11.2754,32,20,34,5.6095,5.6659,68
 2026,401862825,away,East Carolina,Charlotte,79,-12.0897,36,34,45,-6.1582,-5.9315,79
 2026,401862825,home,Charlotte,East Carolina,59,-33.2637,15,35,24,-24.6938,-8.5699,59
 2026,401862829,home,Temple,UAB,51,-17.8266,15,25,26,-18.6004,0.7739,60
@@ -1480,7 +1480,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858298,away,Louisville,North Carolina,62,-0.7646,28,32,30,-3.5993,2.8347,62
 2026,401858298,home,North Carolina,Louisville,57,-0.0819,26,31,26,-13.2111,13.1293,57
 2026,401858524,away,Minnesota,Penn State,43,-18.463,11,27,16,-12.9414,-5.5216,57
-2026,401858524,home,Penn State,Minnesota,45,8.7455,18,15,30,0.9046,7.8409,58
+2026,401858524,home,Penn State,Minnesota,45,7.311,17,15,30,-0.5299,7.8409,58
 2026,401864538,home,Air Force,San José State,76,4.2753,34,6,70,-3.6149,7.8902,76
 2026,401864538,away,San José State,Air Force,47,-13.1898,14,30,17,-9.106,-4.0838,47
 2026,401871100,home,South Alabama,Troy,60,2.8895,23,21,39,2.3582,0.5313,60
@@ -1526,7 +1526,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401864545,away,UTEP,Air Force,24,-11.1988,9,16,8,-7.7654,-3.4335,41
 2026,401864545,home,Air Force,UTEP,40,19.4409,23,4,36,8.0905,11.3504,68
 2026,401864542,home,Wyoming,New Mexico,48,-6.4257,16,26,22,-1.2301,-5.1956,48
-2026,401864542,away,New Mexico,Wyoming,79,12.4654,35,41,38,11.091,1.3744,79
+2026,401864542,away,New Mexico,Wyoming,79,11.795,35,41,38,11.091,0.704,79
 2026,401856753,home,South Carolina,Georgia,45,-4.4789,16,21,24,-8.7628,4.284,49
 2026,401856753,away,Georgia,South Carolina,66,13.9769,33,24,42,19.2847,-5.3078,66
 2026,401856872,home,TCU,Utah,59,-9.7513,21,34,25,-20.1,10.3487,59
@@ -1552,7 +1552,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401856871,home,Baylor,Texas Tech,71,-18.8989,25,53,18,-14.9035,-3.9954,71
 2026,401856871,away,Texas Tech,Baylor,65,-2.9001,24,18,47,-6.2639,3.3638,65
 2026,401858531,home,Nebraska,Ohio State,72,18.4669,38,29,43,19.258,-0.7911,72
-2026,401858531,away,Ohio State,Nebraska,48,15.9425,27,28,20,15.3084,0.6341,48
+2026,401858531,away,Ohio State,Nebraska,48,15.287,27,28,20,14.6529,0.6341,48
 2026,401858527,away,Iowa,Illinois,76,15.0018,40,26,50,4.8717,10.1301,76
 2026,401858527,home,Illinois,Iowa,56,-8.2208,22,41,15,-2.7827,-5.4381,56
 2026,401856751,home,Missouri,Kentucky,49,14.7494,20,22,27,24.1738,-9.4244,49
@@ -1570,7 +1570,7 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401858306,home,Louisville,Pittsburgh,64,-1.0266,24,41,23,3.0043,-4.0309,79
 2026,401858306,away,Pittsburgh,Louisville,47,-24.8283,13,27,20,-17.2352,-7.5931,53
 2026,401856748,away,Vanderbilt,Florida,63,-0.3265,22,28,35,2.0465,-2.373,63
-2026,401856748,home,Florida,Vanderbilt,71,14.8889,37,30,41,6.4097,8.4792,71
+2026,401856748,home,Florida,Vanderbilt,71,8.77,36,30,41,6.4097,2.3604,71
 2026,401856749,home,Ole Miss,FCS,32,29.31,23,23,9,30.9716,-1.6616,78
 2026,401856749,away,FCS,Ole Miss,24,-10.115,4,17,7,-3.5678,-6.5472,55
 2026,401856867,away,Colorado,Cincinnati,54,6.8694,26,27,27,7.4009,-0.5314,54
@@ -1607,9 +1607,9 @@ season,game_id,side,team,opp,plays,epa,succ,n_pass,n_rush,pass_epa,rush_epa,snap
 2026,401869946,home,Louisiana,Coastal Carolina,52,6.0685,22,21,31,15.2345,-9.166,52
 2026,401871077,away,Delaware,New Mexico State,71,25.4432,38,45,26,25.4765,-0.0334,71
 2026,401871077,home,New Mexico State,Delaware,63,12.888,25,36,27,14.313,-1.425,63
-2026,401871078,home,Kennesaw State,Florida International,60,25.3428,32,29,31,20.1787,5.1641,60
+2026,401871078,home,Kennesaw State,Florida International,60,21.1875,31,29,31,16.0234,5.1641,60
 2026,401871078,away,Florida International,Kennesaw State,58,10.4957,27,35,23,6.4252,4.0705,62
-2026,401856747,home,Auburn,FCS,29,24.9716,18,14,15,22.5151,2.4565,60
+2026,401856747,home,Auburn,FCS,29,24.6007,18,14,15,22.1442,2.4565,60
 2026,401856747,away,FCS,Auburn,30,-6.5124,9,20,10,-5.7967,-0.7157,75
 2026,401858304,home,Florida State,NC State,62,-14.3323,23,39,23,-15.0716,0.7393,62
 2026,401858304,away,NC State,Florida State,77,23.466,33,38,39,19.3602,4.1058,77
