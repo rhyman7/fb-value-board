@@ -11,7 +11,8 @@ boards in detail; this file is the rules.
 - The matchup dashboards (rhyman7/nfl, rhyman7/cfb) and the Weekly Gridiron Board
   (rhyman7.github.io) are separate sites with their own CONVENTIONS.md.
 - **What the dashboards read from here** (`docs/feed/`, written by every board build): the
-  matchup feed `<league>.json` (`nflmodel/dashfeed.py`; when the week changes, the last feed of the
+  matchup feed `<league>.json` (`nflmodel/dashfeed.py`; it carries only the week the board is on,
+  `meta.week`, even when the board also lists next week's players, Nov 25, 2026; when the week changes, the last feed of the
   week just left is kept as `<league>_prev.json`, which the dashboards' reports read for that week's
   late games, Nov 14, 2026; each player's `R` holds his yardage ladders from the live prop logs,
   per book the main line and the next three alternate overs below it, which the reports show and
