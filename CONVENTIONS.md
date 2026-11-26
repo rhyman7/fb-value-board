@@ -552,6 +552,17 @@ boards in detail; this file is the rules.
   or a different starter is named for a game in the next 3 days, it changes only that team's
   entry in rhyman7/cfb's `overrides/qb_starters.json` through a PR there, then re-runs
   **Update college board**. Its task prompt has the rules.
+- **No stake outside the price, opener and wind tiers (Nov 26, 2026; Ryan's call).** A model-tier or
+  untiered side used to pick up a small stake whenever one book's line or price beat the number
+  stakes are sized from (the market's own, where the haircut is 0): an edge under the price tier's
+  1% bar. `sheet.model_no_stake` (run after the bucket stakes and the CLV guard, before
+  `cap_week`) sets those stakes to 0 on the bet and on every book quote, on both boards. A
+  model-tier side that had one is marked `tracked` and `ledger.flagged` still records it, at no
+  stake, so the Live record's "Model edges" line goes on: on Nov 26 it was 50-35 on the college
+  board with closing line value +1.5% ± 0.9% (85 graded) and 6-6 on the NFL board. Making that
+  kind a staked bet would be a new bet type and goes through the pre-set test rule. The Closing
+  line value table says "Recorded, never staked" for it. Rows already in the ledger keep the
+  stake they were written with.
 - **Stakes (both boards).** Quarter Kelly, capped at 3% a bet, 5% a game, all sides
   together (`config.MAX_GAME_STAKE`, `slate.cap_game`: every stake in the game is scaled
   down by one factor), and 10% a week, everything the sheet flags that week together

@@ -411,3 +411,21 @@ def test_record_adjusted_ev_is_the_ev_at_the_stake_chance():
                 assert b["ev_rec"] <= b["ev"] + 0.002 or b["prob"] <= b["market_prob"], (g["id"], b["pick"])   # rounding room: a failed check here stops a board build
                 if h == 0:
                     assert b["ev_rec"] <= 0.005, (g["id"], b["pick"])  # the anchor's own price does not beat its own no-vig number (rounding room)
+
+
+def test_model_no_stake_clears_stakes_outside_the_staked_tiers_and_keeps_the_record():
+    """Nov 26, 2026: a model-tier or untiered side carries no stake, on the bet or on any book
+    quote; a model-tier side that had one is still written to the ledger, at no stake."""
+    from nflmodel import ledger, sheet
+    def bet(tier, stake, qstake):
+        return {"market": "Spread", "side": "home", "pick": "X -3", "tier": tier, "stake": stake, "best": "betmgm",
+                "books": [{"book": "betmgm", "stake": qstake, "odds": -110, "ev": 0.05}, {"book": "kalshi", "stake": 0.0, "odds": -104, "ev": 0.01}]}
+    model, untiered, price, opener, plain = bet("model", 0.0, 0.0014), bet(None, 0.002, 0.003), bet("price", 0.008, 0.008), bet("opener", 0.0, 0.002), bet("model", 0.0, 0.0)
+    was = [ledger.flagged(b) for b in (model, untiered, price, opener, plain)]
+    assert sheet.model_no_stake([{"bets": [model, untiered, price, opener, plain]}]) == 2
+    for b in (model, untiered):
+        assert b["stake"] == 0.0 and all(q["stake"] == 0.0 for q in b["books"])
+    assert model.get("tracked") is True and not untiered.get("tracked") and not plain.get("tracked")
+    assert price["stake"] == 0.008 and price["books"][0]["stake"] == 0.008 and opener["books"][0]["stake"] == 0.002
+    assert [ledger.flagged(b) for b in (model, untiered, price, opener, plain)] == was == [True, False, True, True, False]
+    assert sheet.taken_stake(model) == 0.0
