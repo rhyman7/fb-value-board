@@ -1,0 +1,173 @@
+{
+ "quarterback_prior_pff": true,
+ "inputs": {
+  "starters_counted_out_2014_25": 2471,
+  "share_who_also_missed_the_previous_game": 0.357,
+  "share_under_40pct_snap_share": 0.155,
+  "share_out_on_this_weeks_report_only": 0.714,
+  "games_2014_25": 3295,
+  "games_where_the_input_changes": {
+   "A (new only)": 702,
+   "B (beyond recent)": 2140,
+   "C (new and continuing apart)": 702,
+   "D (regulars only)": 331
+  },
+  "spread": {
+   "d_depth1_out": 0.899,
+   "d_n_new": 0.727,
+   "d_n_cont": 0.517,
+   "d_n_beyond": 0.843,
+   "d_n_reg": 0.827
+  }
+ },
+ "tuning": {
+  "A (new only)": {
+   "raw": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.11529,
+    "diff": 0.01439,
+    "se": 0.020672
+   },
+   "board": {
+    "n": 1335,
+    "now": 10.03648,
+    "candidate": 10.04012,
+    "diff": 0.003635,
+    "se": 0.01249
+   },
+   "brier": {
+    "n": 1297,
+    "now": 0.24813,
+    "candidate": 0.24829,
+    "diff": 0.000161,
+    "se": 0.000372
+   }
+  },
+  "B (beyond recent)": {
+   "raw": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.13429,
+    "diff": 0.033397,
+    "se": 0.041638
+   },
+   "board": {
+    "n": 1335,
+    "now": 10.03648,
+    "candidate": 10.06436,
+    "diff": 0.027873,
+    "se": 0.02317
+   },
+   "brier": {
+    "n": 1297,
+    "now": 0.24813,
+    "candidate": 0.24901,
+    "diff": 0.000875,
+    "se": 0.000694
+   }
+  },
+  "C (new and continuing apart)": {
+   "raw": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.09991,
+    "diff": -0.000981,
+    "se": 0.006605
+   },
+   "board": {
+    "n": 1335,
+    "now": 10.03648,
+    "candidate": 10.03869,
+    "diff": 0.002207,
+    "se": 0.006693
+   },
+   "brier": {
+    "n": 1297,
+    "now": 0.24813,
+    "candidate": 0.24827,
+    "diff": 0.000141,
+    "se": 0.000195
+   }
+  },
+  "D (regulars only)": {
+   "raw": {
+    "n": 1335,
+    "now": 10.1009,
+    "candidate": 10.07832,
+    "diff": -0.022577,
+    "se": 0.019687
+   },
+   "board": {
+    "n": 1335,
+    "now": 10.03648,
+    "candidate": 10.03341,
+    "diff": -0.003075,
+    "se": 0.011182
+   },
+   "brier": {
+    "n": 1297,
+    "now": 0.24813,
+    "candidate": 0.24797,
+    "diff": -0.000159,
+    "se": 0.000329
+   }
+  }
+ },
+ "better_on_all_tuning_measures": [
+  "D (regulars only)"
+ ],
+ "chosen": "D (regulars only)",
+ "holdout": {
+  "raw": {
+   "n": 1960,
+   "now": 9.98731,
+   "candidate": 9.99728,
+   "diff": 0.009966,
+   "se": 0.007862
+  },
+  "board": {
+   "n": 1960,
+   "now": 9.83073,
+   "candidate": 9.83751,
+   "diff": 0.006786,
+   "se": 0.003155
+  },
+  "brier": {
+   "n": 1917,
+   "now": 0.24994,
+   "candidate": 0.25014,
+   "diff": 0.000192,
+   "se": 9.8e-05
+  }
+ },
+ "reported_2026_not_judged": {
+  "raw": {
+   "n": 164,
+   "now": 9.4248,
+   "candidate": 9.46505,
+   "diff": 0.040255,
+   "se": 0.024405
+  },
+  "board": {
+   "n": 164,
+   "now": 9.39529,
+   "candidate": 9.40613,
+   "diff": 0.010834,
+   "se": 0.006991
+  },
+  "brier": {
+   "n": 158,
+   "now": 0.24886,
+   "candidate": 0.24914,
+   "diff": 0.000278,
+   "se": 0.000215
+  }
+ },
+ "better_on": "3 of 6",
+ "passes_before_props_check": false,
+ "verdict": "Mixed: a trade-off for Ryan, not kept by the rule.",
+ "coefficients_2025_fit": {
+  "d_n_reg": -1.3825
+ }
+}

@@ -3410,3 +3410,43 @@ miss: one number (A) **+0.048 (0.024)**, offense and defense apart (B) +0.056 (0
 check and the props check were not run.
 
 Test 1 and test 3 were run twice with identical output; test 2 once (about 70 minutes).
+
+## NFL: new absences only, and injury news the line ignores (Nov 26, 2026): nothing kept
+
+Lead: on the Nov 26 board the model had Buffalo by 6.2 over Kansas City against a line of 2.5, with 2.6
+points from `d_depth1_out` (two more Chiefs skill starters out). One had been out since Week 10; the
+other was a fullback at 1% of the snaps. Rule written first: Project doc
+`claude/plan-injury-news-tests-2026-11-26.md` (amended once, before any scoring run, to add version D).
+Scripts `experiments/new_absences_test.py`, `market_shrug_test.py`; scores in `experiments/out/`.
+Tuning 2014-18, holdout 2019-25. Six measures each: raw margin miss, board margin miss and the Brier
+of the cover chance at the closing spread, on both periods. Candidate minus current, paired standard
+error in brackets; negative is better. Nothing on the boards changed.
+
+**1. Count only new absences: not kept, 3 of 6 (worse on the whole holdout).** Of the 2,471 starters
+counted out in 2014-25, 35.7% had also missed the team's previous game and 15.5% averaged under 40% of
+the snaps (98% of fullbacks, 30% of running backs). Versions, each in place of `d_depth1_out`: a
+starter counts only if he had a snap in the team's previous game (A); the count minus the team's
+average over its previous four games (B); new and continuing absences as two inputs (C); only
+starters at 40%+ of the snaps (D). Tuning (1,335 games), raw / board / Brier: A +0.014 (0.021) /
++0.004 (0.012) / +0.00016 (0.00037); B +0.033 (0.042) / +0.028 (0.023) / +0.00088 (0.00069); C −0.001
+(0.007) / +0.002 (0.007) / +0.00014 (0.00020); D −0.023 (0.020) / −0.003 (0.011) / −0.00016 (0.00033).
+Only D was better on all three, so D went to the holdout (1,960 games): raw **+0.010 (0.008)**, board
+**+0.0068 (0.0032)**, Brier **+0.00019 (0.00010)**. Reported, 2026 through Week 11 (164 games): +0.040
+(0.024), +0.011 (0.007), +0.00028 (0.00022). The plain count stays: the starters the team has already
+been without, and the low-snap ones, carry information on the seasons that count.
+
+**2. The market shrug: not kept, nothing reached the holdout.** News points = the season's weight on
+`d_depth1_out` times the starters out on this week's report whose roster status the week before had
+them available; a news game has 1.0+ either way and an opener. Tuning: 365 news games of 1,204 with an
+opener; 184 shrugs (the line moved zero or away from the news between opener and close), 181 followed.
+Versions on news games: drop the news points on a shrug (A) +0.071 (0.062) / +0.057 (0.031) / +0.00144
+(0.00097); cap them at the line's move (B) +0.043 (0.069) / +0.046 (0.035) / +0.00113 (0.00107); halve
+them on a shrug (C) +0.029 (0.031) / +0.025 (0.015) / +0.00064 (0.00047). Worse on every measure in
+every version. Part 1 points the other way from the idea: in shrug games the final margin beat the
+closing line toward the news by 3.1 (1.05) points; in followed games −0.3 (0.97). As a record against
+the close (`market_shrug_record.py`, added after the run, tuning only): news side 104-78-2 on a shrug
+(72-46-1 where the line moved away, 32-32-1 where it did not move), 78-94-9 where the line followed.
+A lead found on the tuning seasons, not a result: the holdout was not read, so it can still be tested
+with a rule written first.
+
+Both tests were run twice with identical output. No error was found in a judged measure.
