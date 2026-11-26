@@ -2535,7 +2535,11 @@ function diagChart(node, o) {
   seg($("#seg-pweek"), weeks.map(w => ({ v: w, t: "Week " + w })), () => ps.week, v => { ps.week = +v; draw(); });
   seg($("#seg-pos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => ps.pos, v => { ps.pos = v; ps.key = "score"; ps.dir = -1; draw(); });
   $("#players-note").textContent = "Projected box scores for every quarterback, running back, receiver and tight end with a role this week. Each projection is volume times efficiency: the team's expected passes and runs (from its pace, the opponent, the projected score and wind), the player's share of them (recent games weighted more, with injured teammates' usage passed on to those available), and his own efficiency, adjusted for what this defense allows. Select a player to see how his numbers are built.";
-  $("#players-note").append(' Under a projection, "typical" is the model\u2019s 50/50 number for him this week (he is as likely to finish above it as below; the projection is an average and sits higher), and "floor" is the most yards he has reached in every game he played this season (⚠: this week looks tougher than any of those games; ▲: a teammate\'s usage is freed up). It is information, not a bet.');
+  // "typical" and "floor" carry data-glossary, so the site's glossary hints (rhyman7.github.io/glossary.js) mark them
+  $("#players-note").append(" Under a projection, ", H("span", { "data-glossary": "typical", text: "typical" }),
+    " is the model\u2019s 50/50 number for him this week (he is as likely to finish above it as below; the projection is an average and sits higher), and ",
+    H("span", { "data-glossary": "floor", text: "floor" }),
+    " is the most yards he has reached in every game he played this season (⚠: this week looks tougher than any of those games; ▲: a teammate\'s usage is freed up). It is information, not a bet.");
 
   const pctx = x => x == null ? "–" : (x * 100).toFixed(x < 0.1 ? 1 : 0) + "%";
   const factor = x => x == null ? "" : (x >= 1 ? (x - 1) * 100 : (1 - x) * 100).toFixed(0) + "% " + (x >= 1 ? "more" : "fewer");

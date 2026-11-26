@@ -960,6 +960,11 @@ boards in detail; this file is the rules.
   it as `t`, and the matchup pages and report PDFs in rhyman7/nfl and rhyman7/cfb print it beside
   the board's projection. **Display only**: nothing reads it back.
 - The Weekly Review's Players page scores it (about half of players should reach it).
+- **Glossary hints (Nov 25, 2026).** In the Players note, the words "typical" and "floor" are
+  `<span data-glossary="…">`, so the site's glossary hints (rhyman7.github.io `glossary.js`) underline
+  them and show the Start here definition. The player card's "Typical" and "Every-game floor"
+  headings are marked by the same script. The per-row "typical 233" / "floor 96" keep their own
+  hover text and are not marked, so the table isn't underlined on every row.
 
 ## Weekly Review (`review/`, Nov 17, 2026)
 
