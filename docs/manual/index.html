@@ -40,8 +40,21 @@
   .new { display: inline-block; font-size: 7.5pt; font-weight: 800; color: #fff; background: #2d7a4f; border-radius: 3px; padding: 0 4px; margin-left: 4px; vertical-align: 2px; letter-spacing: .03em; }
 
   @media screen {
-    html { font-size: 15px; background: #f3f5f2; }
-    body { background: #f3f5f2; }
+    /* On screen the manual wears the site's dark look (Nov 26, 2026); print and the PDF stay
+       black on white, from the rules above. */
+    html { font-size: 15px; background: #131416; color-scheme: dark; }
+    body { background: #131416; color: #f2f1ee; }
+    h2 { border-bottom-color: #f2f1ee; }
+    a { color: #f2f1ee; }
+    .cover .sub, .cover .meta, .cap, .small { color: #9da2ab; }
+    .shot { border-color: #353a42; }
+    th, td { border-bottom-color: #353a42; }
+    th { background: #24272c; }
+    code { background: #24272c; }
+    .box { background: rgba(251, 191, 36, 0.10); border-color: #fbbf24; }
+    .box.red { background: rgba(248, 113, 113, 0.10); border-color: #f87171; }
+    .box.green { background: rgba(74, 222, 128, 0.10); border-color: #4ade80; }
+    .new { color: #10151c; background: #4ade80; }
     .page { max-width: 860px; margin: 0 auto; padding: 24px 22px 60px; }
     .cover { height: auto; padding: 24px 0 8px; }
     .cover h1 { font-size: 38px; }
@@ -61,6 +74,7 @@
   <div class="sub">A professional's manual for the NFL Value Board and the College Value Board.<br>Every page, every number, and what a bettor does with it — written for someone starting from zero.</div>
   <div class="meta">
     Fifth edition, updated from the live boards on Wednesday, November 11, 2026 (NFL Week 10, college Week 11), after the full model review: record-adjusted EV, the DraftKings + FanDuel record, closing line value on the college board, a stricter rule for model changes and a backup for skipped line snapshots. Every screenshot and worked example is from that day.<br><br>
+    Since November 26, 2026 the boards are dark and share one menu with the rest of the Weekly Gridiron Board (the bar across the top of every page). The screenshots here still show the earlier light look; the numbers, columns and rules they explain are the same.<br><br>
     NFL board: rhyman7.github.io/fb-value-board/docs/ &nbsp;·&nbsp; College board: rhyman7.github.io/fb-value-board/docs/cfb/<br><br>
     For research and entertainment. Past results do not predict future results, and nothing here is betting advice.
   </div>
@@ -358,7 +372,7 @@ A page of leans next to the bets turns a three-bet week into a fifteen-game slat
 
 <h2>9. This Week's Matchups</h2>
 <img class="shot" loading="lazy" alt="" src="img/nfl_matchup.jpg">
-<p>A matchup in the dashboards' dark style: each team's projected offense (passing and rushing yards on dials ranked against the week), what its defense is projected to allow, points, attempts and carries against season averages, and full player projections. The Matchups list shows the week's games with implied scores from the betting line. Past weeks' matchups are reachable from Past weeks. "Print matchup" prints one landscape page. This page is for understanding a game; it does not price bets.</p>
+<p>A matchup in the dashboards' dark style: each team's projected offense (passing and rushing yards on dials ranked against the week), what its defense is projected to allow, points, attempts and carries against season averages, and full player projections. Since November 26 this view is no longer on the menu: each game on Past weeks links to its matchup page (projected against actual), and the same page is printed in the matchup dashboards' game packets. For this week's games, use the matchup dashboards (Matchups in the top bar). "Print matchup" prints one landscape page. This page is for understanding a game; it does not price bets.</p>
 
 <h2>10. Players</h2>
 <img class="shot" loading="lazy" alt="" src="img/nfl_players_0.jpg">

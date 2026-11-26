@@ -732,7 +732,10 @@ boards in detail; this file is the rules.
   `#f87171`, caution `#fbbf24`. Headings are Archivo, condensed (`font-stretch`), not Big Shoulders
   Display. Moved so far: Recommended, What's live (through `scripts/whats_live.py`), Parlays
   (`site/parlays.html` and its copy in `docs/`), the Weekly Review (already dark) and the manual
-  (bar only; it is a print-format document and its screenshots are re-shot when the boards move).
+  (dark on screen since Nov 26; its print rules and PDF stay black on white. Its screenshots are
+  still the fifth edition's light ones, from Nov 11: a sixth edition re-shoots them and rewrites the
+  captions and worked examples, and `scripts/manual_shots.py` should then shoot the live pages so
+  the shared bar is in the pictures).
   The two value boards moved the same day (below).
 - **The value boards (Nov 26, 2026).** `site/template.html` has one colour set, the graphite above,
   in `:root`; it no longer follows the device's light or dark setting. The field keeps its turf and
