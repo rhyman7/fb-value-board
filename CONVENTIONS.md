@@ -66,10 +66,10 @@ boards in detail; this file is the rules.
   **Exception: the College availability Action** (`cfb-availability.yml`) has its own group,
   `cfb-availability` (Nov 11, 2026). In `board-commits` a newer board run waiting its turn
   replaced it, so a Game Day report could miss kickoff. It commits only its own files and
-  rebases and retries its push. Besides its GitHub schedule, two Claude scheduled tasks
-  ("College availability backup": Tue-Fri 3:22-7:22 pm ET, Saturday 9:22 am-9:22 pm ET, hourly)
-  start it unless it ran in the last 40 minutes, because GitHub dropped most scheduled runs on
-  Nov 10-11.
+  rebases and retries its push. Besides its GitHub schedule, the **Watchdog** Action (below, under
+  the Market lines Action) starts it in the Game Day report hours (Tue-Fri 3:20-8 pm ET, Saturday
+  9:20 am-10 pm ET) unless it ran in the last 40 minutes, because GitHub dropped most scheduled
+  runs on Nov 10-11. Until Nov 25, 2026 two Claude scheduled tasks did this.
 - **Push retries (Nov 24, 2026).** Every Action that commits to `main` pushes in a loop: pull
   `--rebase` and push, up to 4 tries 15 s apart, then fail the run (a QB starter check push
   failed on a passing GitHub "Internal Server Error"). College availability keeps its own
@@ -272,11 +272,17 @@ boards in detail; this file is the rules.
   a row. It shares the `board-commits` group. The board builds read these files and fall back
   to their usual lines when a game has no quotes; a failed snapshot never stops anything.
   **Backup for skipped runs (Nov 11, 2026):** GitHub often drops the three daily snapshots (02:05,
-  14:05, 20:05 UTC; on Nov 11 the board was built on prices 8 hours old), so a Claude scheduled
-  task, "Market lines backup", runs at 02:45, 14:45 and 20:45 UTC and starts one plain snapshot
-  (no derivatives, no alternates, about 6 credits) unless a Market lines run was created in the
-  last 60 minutes or one is queued or running. It starts nothing else and edits nothing. If the
-  three daily times change, change the task's schedule with them.
+  14:05, 20:05 UTC; on Nov 11 the board was built on prices 8 hours old), so the **Watchdog**
+  Action (`watchdog.yml`, `scripts/watchdog.py`, Nov 25, 2026; before that a Claude scheduled task,
+  "Market lines backup") checks from 40 minutes after each one and starts one plain snapshot (no
+  derivatives, no alternates, about 6 credits) unless a Market lines run created since the slot
+  succeeded or one is queued or running. A failed run is retried, at most twice per slot. It
+  starts nothing but this and the College availability check, and edits nothing. **The Watchdog
+  keeps itself going:** each run ends by waiting until the next check is due and starting the
+  next run, since a schedule can't fix a schedule that doesn't fire; a two-hourly cron only
+  revives the chain. To stop it, set the repository variable `WATCHDOG_CHAIN` to `off`. If the
+  three daily times or the report hours change, change `MARKET_SLOTS` / `availability_window`
+  in the script (and `tests/test_watchdog.py`) with them.
   Kalshi prices are the contract price; `odds.kalshi_effective_odds` adds the exchange fee
   (taker 7% x p x (1-p) per contract, maker 1.75%; the schedule and its date are cited in
   `odds.py`, check it each season) before any EV is computed. Every Kalshi quote on a side
