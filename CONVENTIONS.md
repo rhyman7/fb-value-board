@@ -733,7 +733,20 @@ boards in detail; this file is the rules.
   Display. Moved so far: Recommended, What's live (through `scripts/whats_live.py`), Parlays
   (`site/parlays.html` and its copy in `docs/`), the Weekly Review (already dark) and the manual
   (bar only; it is a print-format document and its screenshots are re-shot when the boards move).
-  **Not yet moved: the two value boards.**
+  The two value boards moved the same day (below).
+- **The value boards (Nov 26, 2026).** `site/template.html` has one colour set, the graphite above,
+  in `:root`; it no longer follows the device's light or dark setting. The field keeps its turf and
+  chalk. `--display` is Archivo, written `extra-condensed` inside each `font:` shorthand (the
+  shorthand takes the keyword, not a percentage). A general `@media print` block right after `:root`
+  puts the light colours back, so every print view and the best-bets and leans PDFs stay black on
+  white.
+- **The boards' own bar is the fallback only.** With the shared bar on (`html.wgb-shell-on`) `.bar`
+  is hidden and the shared bar's second row lists the sections; the board's bar shows only when
+  `/site-bar.js` does not load (a page opened from disk). A new board section is added to both the
+  template and `SECTIONS` in rhyman7.github.io's `site-bar.js`.
+- **"This Week's Matchups" is off the menu but its addresses still work** (`#matchups`,
+  `#matchups/<id>`, `#matchups/<season>_w<week>...`): the dashboards' game packets print from them
+  and Past weeks links each game and week to them. Do not remove the view without moving both.
 - **Print views and documents stay black on white:** the Recommended weekly report
   (`body.report`), anything under `@media print`, and the PDFs. A page that turns dark resets its
   colour tokens to light inside those.
