@@ -1012,6 +1012,18 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
 
 ## Checks before merging
 
+- **Smoke test (added Nov 25, 2026).** `python scripts/smoke.py` loads the pages listed in
+  `smoke.json` in headless Chromium, from this checkout, and fails on a script error, a missing
+  script or stylesheet, a table with too few rows, or "undefined"/"NaN" showing on a page. The
+  **Smoke test** Action (`smoke.yml`) runs it on every pull request and on `main` when a merge
+  changes page code; data-only commits don't start it. A red run on a pull request means don't
+  merge. If a page is added, renamed or removed, or an element it checks is renamed, update
+  `smoke.json` in the same change. The counts are set for the season; out of season, lower any
+  that an empty schedule would trip. `scripts/smoke.py` is the same file in rhyman7/nfl,
+  rhyman7/cfb, rhyman7/fb-value-board and rhyman7.github.io: change it in all four.
+  The two boards are tested as `site/template.html` and `site/cfb-template.html` with the
+  current `docs/data.json` inlined, the same way the build does it, so a template change is
+  checked before the board is rebuilt.
 - `python -m pytest -q` passes (required for anything touching `nflmodel/`, `cfbmodel/` or
   the pipelines). `pytest.ini` limits collection to `tests/`: the `experiments/*_test.py`
   scripts are run by hand, and a `test_*` function in one of them would otherwise break the
