@@ -38,7 +38,7 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from . import bestbets as BB, config as C, sheet as SH
+from . import bestbets as BB, config as C, ledger as L, sheet as SH
 
 LEADS = (35, 20)          # minutes before a window's first kickoff
 WINDOW_MIN = 30           # games kicking off within this of the first one share its refreshes
@@ -48,7 +48,8 @@ CARDS = {"nfl": C.ROOT / "data" / "bestbets.csv", "cfb": C.ROOT / "data" / "cfb"
 ALERT_LEAD = min(LEADS)   # the window's last refresh sends its card
 ET = ZoneInfo("America/New_York")
 BOOKS = {"draftkings": "DraftKings", "fanduel": "FanDuel", "betmgm": "BetMGM", "kalshi": "Kalshi", "consensus": "Consensus"}
-MY_BOOKS = ("draftkings", "fanduel")   # the only books Ryan bets: the alert shows only these
+MY_BOOKS = L.MY_BOOKS                  # where Ryan bets (DraftKings, FanDuel, Kalshi): the alert shows only these
+MINE = "DraftKings, FanDuel or Kalshi"
 NAMES = {"nfl": "NFL", "cfb": "College"}
 
 
@@ -124,8 +125,16 @@ def qualifies(b: dict, q: dict) -> bool:
     return (q.get("ev") or -1.0) > 0
 
 
+def _price(q: dict) -> str:
+    """A quote's price for the alert: Kalshi's after its fee (what the EV and the record use)."""
+    if q.get("book") == "kalshi" and q.get("odds_net") is not None:
+        return f"{int(round(q['odds_net'])):+d} after fee"
+    return f"{int(round(q['odds'])):+d}"
+
+
 def _bet_line(r, b: dict | None) -> tuple[str, bool]:
-    """One card entry at DraftKings or FanDuel, and whether it qualifies there. `r` is the
+    """One card entry at DraftKings, FanDuel or Kalshi, and whether it qualifies there. A Kalshi
+    price is shown after its fee. `r` is the
     record's row (bestbets.csv), `b` the same bet on the board (data.json) with every book's quote."""
     teams = str(r["game_id"]).split("_")[2:]
     game = f"{teams[0]}@{'_'.join(teams[1:])}: " if len(teams) >= 2 else ""
@@ -136,7 +145,7 @@ def _bet_line(r, b: dict | None) -> tuple[str, bool]:
                    "ev_line": SH.PRICE_MIN}]
         b = b or {"tier": "opener"}
     if not quotes:
-        return f"{game}{pick} · no DraftKings or FanDuel price (card: {BOOKS.get(str(r['book']), r['book'])})", False
+        return f"{game}{pick} · no {MINE} price (card: {BOOKS.get(str(r['book']), r['book'])})", False
     good = [q for q in quotes if qualifies(b, q)]
     if good:
         q = max(good, key=lambda q: q.get("ev") or 0.0)
@@ -145,7 +154,7 @@ def _bet_line(r, b: dict | None) -> tuple[str, bool]:
             stake = b.get("bucket_stake") or 0.0
         if stake <= 0 and r["book"] == q["book"] and pd.notna(r["stake"]):
             stake = float(r["stake"])
-        parts = [f"{game}{_pick(r['market'], pick, q.get('line'))} {int(round(q['odds'])):+d}", BOOKS[q["book"]],
+        parts = [f"{game}{_pick(r['market'], pick, q.get('line'))} {_price(q)}", BOOKS[q["book"]],
                  f"stake {stake * 100:.1f}%" if stake > 0 else "no stake"]
         if q.get("ev") is not None:
             parts.append(f"EV {q['ev'] * 100:+.1f}%")
@@ -153,8 +162,8 @@ def _bet_line(r, b: dict | None) -> tuple[str, bool]:
     best = max(quotes, key=lambda q: q.get("ev") if q.get("ev") is not None else -9)
     ev = f", EV {best['ev'] * 100:+.1f}%" if best.get("ev") is not None else ""
     why = "doesn't beat Pinnacle by enough" if b.get("tier") == "price" else "not +EV"
-    return (f"{game}{pick} · NOT A BET at DraftKings or FanDuel ({why}; best there: {BOOKS[best['book']]} "
-            f"{_pick(r['market'], pick, best.get('line'))} {int(round(best['odds'])):+d}{ev}; "
+    return (f"{game}{pick} · NOT A BET at {MINE} ({why}; best there: {BOOKS[best['book']]} "
+            f"{_pick(r['market'], pick, best.get('line'))} {_price(best)}{ev}; "
             f"card has it at {BOOKS.get(str(r['book']), r['book'])})"), False
 
 
@@ -183,7 +192,7 @@ def card(league: str, first: dt.datetime, path: Path | None = None) -> pd.DataFr
 
 def message(windows_: list[tuple[str, dt.datetime]], paths: dict | None = None,
             boards: dict | None = None) -> tuple[str, str] | None:
-    """(title, body) for these windows' cards at DraftKings and FanDuel, or None when every card
+    """(title, body) for these windows' cards at DraftKings, FanDuel and Kalshi, or None when every card
     is empty. A card bet neither book qualifies is listed as not a bet there."""
     parts, heads, n, off = [], [], 0, 0
     for lg, first in windows_:
@@ -200,7 +209,7 @@ def message(windows_: list[tuple[str, dt.datetime]], paths: dict | None = None,
         parts.append("\n".join([f"{NAMES[lg]}, kickoffs from {when}:"] + [t for t, _ in rows]))
     if not parts:
         return None
-    count = f"{n} bet{'s' if n != 1 else ''}" + (f", {off} not at DK/FD" if off else "")
+    count = f"{n} bet{'s' if n != 1 else ''}" + (f", {off} not at your books" if off else "")
     return f"Best bets: {' + '.join(heads)} ({count})", "\n\n".join(parts)
 
 
@@ -227,7 +236,7 @@ def main(argv=None) -> int:
             return 0
         title, body = msg
         a.push.write_text(title + "\n" + body + "\n")
-        a.md.write_text(f"**{title}**\n\n" + body.replace("\n", "  \n") + "\n\nThe Best bets card at the last rebuild before kickoff, at DraftKings and FanDuel only. Lines move: check the book before betting.\n")
+        a.md.write_text(f"**{title}**\n\n" + body.replace("\n", "  \n") + "\n\nThe Best bets card at the last rebuild before kickoff, at DraftKings, FanDuel and Kalshi only (Kalshi after its fee). Lines move: check the book before betting.\n")
         print(title + "\n" + body)
         return 0
     for at, lg, label, alert in plan(dt.datetime.now(dt.timezone.utc), a.horizon):

@@ -11,10 +11,10 @@ by hand then, never by this code):
 
   cfb_spread_open   College spreads at the opener. Week 5 on: the model is OPEN_GAP points or
                     more off the opening spread, and still that far off the spread at the
-                    better of DraftKings and FanDuel when the pick is published.
+                    best of DraftKings, FanDuel and Kalshi when the pick is published.
   nfl_spread_open   NFL spreads at the opener: the same rule (not in the final week, where the
                     board itself defers to the market, config.FINAL_WEEK_MARKET).
-  nfl_price_agree   A DraftKings or FanDuel price beats the sharp book's no-vig number by
+  nfl_price_agree   A DraftKings, FanDuel or Kalshi price beats the sharp book's no-vig number by
                     sheet.PRICE_MIN and the model is on the same side of the sharp line
                     (claude/betting-strategies.md, strategy 3). Spread, total or moneyline.
   nfl_wong_teaser   Wong underdog teasers (strategy 2): underdogs +1.5 to +2.5 at one of the two
@@ -31,7 +31,9 @@ Record rules (the same for every track):
   - a pick is written once, the first build its rule is met before kickoff, with the time,
     book, line and price, and never changed or removed (data/recommended/<league>_picks.csv,
     append-only, written by the Update and Player props Actions only);
-  - DraftKings and FanDuel only (ledger.MY_BOOKS), the better of the two at that moment;
+  - DraftKings, FanDuel and Kalshi only (ledger.MY_BOOKS), the best of the three at that moment,
+    Kalshi at its price after the fee; Kalshi joined on Nov 26, 2026 (Ryan's call, a change to the
+    pre-set rule made mid-trial and dated on the page); teasers and props stay DraftKings and FanDuel;
   - one pick per game and market per track (per player and stat for props);
   - graded at the published price on one flat unit (data/recommended/<league>_results.csv,
     append-only); a push is zero units and left out of the win rate; a prop the books void is
@@ -63,7 +65,9 @@ OUT = ROOT / "docs" / "recommended"
 PROPS = ROOT / "docs" / "props"
 
 UNIT = 10.0                       # dollars a pick, for the rolling total
-MY_BOOKS = L.MY_BOOKS
+MY_BOOKS = L.MY_BOOKS          # game-line tracks: DraftKings, FanDuel and, from KALSHI_FROM, Kalshi
+SPORTSBOOKS = L.SPORTSBOOKS    # teasers and props: Kalshi has neither
+KALSHI_FROM = "2026-11-26"     # Ryan added Kalshi to his books; picks published before it are unchanged
 OPEN_GAP = 2.0                    # points off the opening spread (both leagues)
 TOTAL_GAP = 3.0                   # points off the opening total (college)
 CFB_FROM_WEEK = 5
@@ -77,16 +81,16 @@ NEED = 100                        # graded picks before a track can be reviewed
 # key, league, name, the rule in a sentence, what was known before going live (never part of the record)
 TRACKS = [
     ("cfb_spread_open", "cfb", "College spreads at the opener",
-     "From week 5: the model is 2+ points off the opening spread, and still 2+ off the spread at the better of DraftKings and FanDuel. The pick is the model's side.",
+     "From week 5: the model is 2+ points off the opening spread, and still 2+ off the spread at the best of DraftKings, FanDuel and Kalshi. The pick is the model's side.",
      "Week 5 on, at the opening spread and -110: 53.9% in 2021-25 (721-616), 55.3% in 2026 before this record began (119-96). Not measured at these two books' prices."),
     ("cfb_total_open", "cfb", "College totals at the opener",
-     "The model is 3+ points off the opening total, and still 3+ off the total at the better of DraftKings and FanDuel.",
+     "The model is 3+ points off the opening total, and still 3+ off the total at the best of DraftKings, FanDuel and Kalshi.",
      "56.3% in 2021-25 (640-497); 43.1% in 2026 before this record began (69-91). Starts far behind."),
     ("nfl_spread_open", "nfl", "NFL spreads at the opener",
-     "The model is 2+ points off the opening spread, and still 2+ off the spread at the better of DraftKings and FanDuel. The pick is the model's side.",
+     "The model is 2+ points off the opening spread, and still 2+ off the spread at the best of DraftKings, FanDuel and Kalshi. The pick is the model's side.",
      "54.7%, +4.3% (plus or minus 3.7%) since 2019. The edge is in the very first number."),
     ("nfl_price_agree", "nfl", "NFL price, model agrees",
-     "DraftKings or FanDuel beats the sharp book's fair price by 1% or more, and the model is on the same side.",
+     "DraftKings, FanDuel or Kalshi beats the sharp book's fair price by 1% or more, and the model is on the same side.",
      "24-14 in 2024-25, closing line value +4.4% (plus or minus 1.8%). Missed its pre-set test on one cell."),
     ("nfl_wong_teaser", "nfl", "Wong underdog teasers",
      "Underdogs of +1.5 to +2.5 teased 6 points, total 49.5 or less, two teams at -120 or better. Graded at -120.",
@@ -221,7 +225,7 @@ def opener_picks(g: dict, league: str) -> list[tuple[str, dict, dict, float]]:
 
 
 def price_picks(g: dict) -> list[tuple[str, dict, dict, float]]:
-    """NFL price, model agrees: a DraftKings or FanDuel price that beats the sharp no-vig number
+    """NFL price, model agrees: a DraftKings, FanDuel or Kalshi price that beats the sharp no-vig number
     by sheet.PRICE_MIN, on a side the model's number is on (gap above zero)."""
     out = []
     for b in g.get("bets") or []:
@@ -245,6 +249,8 @@ def teaser_legs(g: dict) -> dict:
         if b["market"] != "Spread":
             continue
         for q in _mine(b):
+            if str(q["book"]).lower() not in SPORTSBOOKS:            # no teasers on Kalshi
+                continue
             if _ok(q.get("line")) and DOG[0] <= float(q["line"]) <= DOG[1]:
                 bk = str(q["book"]).lower()
                 leg = {"game_id": str(g["id"]), "side": b["side"], "team": g.get("home") if b["side"] == "home" else g.get("away"),
@@ -295,7 +301,7 @@ def _teasers(live: list, old: pd.DataFrame, season: int, stamp: str, built: str)
     used = set()
     for s in old.loc[old["track"] == "nfl_wong_teaser", "legs"].dropna():
         used |= {leg["game_id"] for leg in json.loads(s)}
-    by_book: dict = {bk: [] for bk in MY_BOOKS}
+    by_book: dict = {bk: [] for bk in SPORTSBOOKS}
     for ko, g in sorted(live, key=lambda x: (x[0], str(x[1]["id"]))):
         if str(g["id"]) in used:
             continue
@@ -351,7 +357,7 @@ def prop_under(p: dict) -> tuple[str, float] | None:
         return None
     best = None
     for bk, pr in (p.get("bk") or {}).items():
-        if bk.lower() in MY_BOOKS and isinstance(pr, (list, tuple)) and len(pr) > 1 and _ok(pr[1]):
+        if bk.lower() in SPORTSBOOKS and isinstance(pr, (list, tuple)) and len(pr) > 1 and _ok(pr[1]):
             if best is None or _dec(pr[1]) > _dec(best[1]):
                 best = (bk.lower(), float(pr[1]))
     return best

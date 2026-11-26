@@ -113,7 +113,7 @@ boards in detail; this file is the rules.
   next season and starts a new track key so the old record stays.
   Every Update board and Update college board run (`recommended.update_games`) and every Player
   props run (`recommended.update_props`) publishes each pick the first time its rule is met before
-  kickoff, at the better of DraftKings and FanDuel (`ledger.MY_BOOKS`), to
+  kickoff, at the best of DraftKings, FanDuel and Kalshi (`ledger.MY_BOOKS`; Kalshi from Nov 26, 2026, at its price after the fee, a dated change to the pre-set rule made at Ryan's request; teasers and props stay DraftKings and FanDuel, `ledger.SPORTSBOOKS`), to
   `data/recommended/<league>_picks.csv`, grades finished games into `<league>_results.csv`
   (`ledger.grade_frame` for game lines; teasers at -120; props from the Props section's results)
   and rewrites `docs/recommended/<league>.js`. Both CSVs are **append-only, written by the Actions
@@ -266,7 +266,7 @@ boards in detail; this file is the rules.
   after each window's 20-minute refresh it sends that window's Best bets card from
   `bestbets.csv` to ntfy and the week's `best-bets` issue (one per Tuesday-to-Monday week, the old
   one closed by the new week's first alert), nothing when the card is empty, at
-  DraftKings and FanDuel only (`kickoff.MY_BOOKS`; a bet neither qualifies is listed as NOT A BET); it only
+  DraftKings, FanDuel and Kalshi only (`kickoff.MY_BOOKS`, which is `ledger.MY_BOOKS`; Kalshi added Nov 26, 2026 and shown at its price after the fee; a bet none of them qualifies is listed as NOT A BET); it only
   dispatches existing workflows, reads and sends, and never changes the model) and commits only the
   rows that changed to `data/market/<league>_<YYYY-MM>.csv`. Append-only: never edit or delete
   a row. It shares the `board-commits` group. The board builds read these files and fall back
@@ -617,7 +617,7 @@ boards in detail; this file is the rules.
   `ledger_status.csv` beside each ledger (append-only, written by `ledger.track` inside
   `record`) logs each time a row leaves the sheet or comes back before kickoff, so the record
   reads both ways: `kept` (still on the sheet at kickoff) and `withdrawn`; each summary row
-  has `kept`. The record is also split by where the bet would be placed (`by_books`, `ledger.by_books`, Nov 11, 2026): `mine` is DraftKings and FanDuel, the only books Ryan bets (`ledger.MY_BOOKS`, the same pair as `kickoff.MY_BOOKS`), `other` is BetMGM, Kalshi and consensus rows; both records' tables on the Model record page show the two rows, and the Best Bets record carries the same split. **College closing line value** (Nov 11, 2026): `cfbmodel/pipeline.close_by_id` keys the closing quotes by the whole-number ESPN id before grading; until then they were keyed "401856733.0" and no college row had a `clv`. One sanctioned correction: `scripts/backfill_cfb_clv.py --write` filled `close_line`, `close_prob` and `clv` (those three columns only) on the 151 college ledger results and 86 Best Bets results graded before the fix; `tests/test_cfb.py` fails if most graded college rows lack one. `data.json` carries the summary as
+  has `kept`. The record is also split by where the bet would be placed (`by_books`, `ledger.by_books`, Nov 11, 2026): `mine` is DraftKings, FanDuel and, since Nov 26, 2026, Kalshi, where Ryan bets (applied to every row, so the Kalshi rows flagged earlier moved from `other`; `ledger.MY_BOOKS`; `ledger.SPORTSBOOKS` is the two sportsbooks, for teasers and props, the same pair as `kickoff.MY_BOOKS`), `other` is BetMGM, Kalshi and consensus rows; both records' tables on the Model record page show the two rows, and the Best Bets record carries the same split. **College closing line value** (Nov 11, 2026): `cfbmodel/pipeline.close_by_id` keys the closing quotes by the whole-number ESPN id before grading; until then they were keyed "401856733.0" and no college row had a `clv`. One sanctioned correction: `scripts/backfill_cfb_clv.py --write` filled `close_line`, `close_prob` and `clv` (those three columns only) on the 151 college ledger results and 86 Best Bets results graded before the fix; `tests/test_cfb.py` fails if most graded college rows lack one. `data.json` carries the summary as
   `ledger` (records overall, kept, withdrawn, by tier, by market and by week, plus every row) and the Model
   record page leads with it as **Live record**; `tests/test_sheet.py` checks the files.
 - **The Best Bets record (both boards): `data/bestbets.csv`, `data/bestbets_results.csv`, and
