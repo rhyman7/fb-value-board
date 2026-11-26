@@ -1136,8 +1136,15 @@ is listed. Wider screens and print must stay pixel-identical; compare old agains
   - Every section's intro note folds to three lines; "Read more" shows only where there is more.
   - The phone block sits above the page's base rules, so a phone rule needs a more specific
     selector than the base rule it replaces (that is why some carry `main` or `.m-cards`).
-- Not reworked for phones yet: a game's own page, the Best bets and Model leans print views, the
-  teaser table, and the ladder table inside an open prop (it scrolls sideways in its own box).
+- **A game's own page, the teaser table and a prop's ladder (Nov 26, 2026; Ryan approved the
+  before-and-after preview and chose "best book, then Show every book").** Every price is one
+  card per pick (`table.g-prices`). Every book is a small card per book under its pick
+  (`table.g-books`): a phone shows each pick's first row (`tr.group`, the best price) and the
+  "Show every book" button (`everyBook()`) adds the class `all` for the rest; Derivatives carries
+  `all` from the start because its first row per pick is the sharp book. A prop's ladder is one
+  card per rung. The page's other tables (game summary, matchup ranks, recent form, alternate
+  lines) and `#tease-legs` stay tables, with tighter padding and wrapping headings so they fit.
+- Not reworked for phones yet: the Best bets and Model leans print views.
 
 ## Landing page (`index.html`)
 
