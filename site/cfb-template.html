@@ -91,7 +91,7 @@ header.top .words { display: grid; gap: 8px; padding-bottom: 6px; }
    line movement and best prices tables show a card per row, each number named from its column
    (td[data-label], set by table()); a bet's three long columns open from a button on its card.
    Nothing here changes what is shown, only how. Wider screens and print are not touched. */
-.lede-stats, .lede-short, .lede-toggle, .jump, .more-cell, .fold-more, .clamp-more { display: none; }
+.lede-stats, .lede-short, .lede-toggle, .jump, .more-cell, .fold-more, .clamp-more, .m-hint { display: none; }
 table.sheet td.end { padding-right: 0; }
 @media screen and (max-width: 760px) {
   #view-games > section, .sheet-tier, #sheet, #moves { min-width: 0; }
@@ -150,6 +150,61 @@ table.sheet td.end { padding-right: 0; }
   #bets td:nth-child(2) { grid-column: 1 / -1; font: 800 20px/1.1 var(--display); }
   #bets td:nth-child(2)::before { content: none; }
   #bets td:nth-child(9) { grid-column: 1 / span 2; }
+  /* ---- the other sections (Players, Props, Past weeks, Team ratings, Model record): one card per row ---- */
+  .m-hint { display: block; }
+  table.m-cards, table.m-cards > tbody { display: block; }
+  table.m-cards > thead { display: none; }
+  table.m-cards > tbody > tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; margin-top: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
+  table.m-cards > tbody > tr > td { display: block; position: static; min-width: 0; max-width: none; padding: 0; border: 0; text-align: left; white-space: normal; overflow-wrap: anywhere; font-size: 15px; font-weight: 700; color: var(--ink); background: none; }
+  table.m-cards > tbody > tr > td[data-label]::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 400; line-height: 1.3; color: var(--ink-2); }
+  table.m-cards > tbody > tr > td:first-child, table.m-cards > tbody > tr > td[colspan] { grid-column: 1 / -1; font-size: 16px; }
+  table.m-cards > tbody > tr > td:first-child::before, table.m-cards > tbody > tr > td[colspan]::before { content: none; }
+  table.m-cards > tbody > tr > td.nil { display: none; }
+  #hist-games > tbody > tr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #hist-games > tbody > tr > td:first-child a { font: 800 22px/1.1 var(--display); }
+  /* a sortable table keeps its headings as a strip of sort buttons */
+  #ratings-table > thead, #players-table > thead, #props-table > thead { display: block; }
+  #ratings-table > thead > tr, #players-table > thead > tr, #props-table > thead > tr { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  #ratings-table > thead th, #players-table > thead th, #props-table > thead th { flex: none; padding: 0; border: 0; }
+  #ratings-table > thead th button, #players-table > thead th button, #props-table > thead th button { min-height: 36px; padding: 0 12px; border: 1px solid var(--axis); border-radius: 18px; background: var(--surface); white-space: nowrap; }
+  /* players and props: name and opponent, then the numbers that apply; the row still opens on a tap */
+  #players-table.m-cards > tbody > tr.prow > td:first-child, #props-table.m-cards > tbody > tr.prow > td:first-child, #hist-players.m-cards > tbody > tr > td:first-child { grid-column: 1 / span 2; min-width: 0; max-width: none; }
+  #players-table > tbody > tr.prow > td:nth-child(2), #props-table > tbody > tr.prow > td:nth-child(2), #hist-players > tbody > tr > td:nth-child(2) { text-align: right; font-size: 13px; font-weight: 400; color: var(--ink-2); }
+  #players-table > tbody > tr.prow > td:nth-child(2)::before, #props-table > tbody > tr.prow > td:nth-child(2)::before, #hist-players > tbody > tr > td:nth-child(2)::before { content: none; }
+  #players-table td .fl { display: block; margin: 0; font-size: 12px; font-weight: 400; }
+  #players-table > tbody > tr:not(.prow), #props-table > tbody > tr:not(.prow) { display: block; padding: 0; }
+  #players-table > tbody > tr:not(.prow) > td, #props-table > tbody > tr:not(.prow) > td { font-size: 14px; font-weight: 400; padding: 12px 14px; }
+  #props-table td.ladder { overflow-x: auto; }
+  #props-table.m-cards > tbody > tr.prow > td:nth-child(3) { grid-column: 1 / span 2; min-width: 0; font-size: 16px; }
+  #props-table > tbody > tr.prow > td:nth-child(3)::before { content: none; }
+  #props-table > tbody > tr.prow > td:nth-child(n+5) { order: 1; }
+  #props-table > tbody > tr.prow > td:nth-child(n+10) { order: 2; }
+  #props-table > tbody > tr.prow > td:nth-child(6), #props-table > tbody > tr.prow > td:nth-child(7), #props-table > tbody > tr.prow > td:nth-child(13), #props-table > tbody > tr.prow > td:nth-child(14) { order: 3; }
+  #props-table > tbody > tr.prow:not([aria-expanded="true"]) > td:nth-child(6), #props-table > tbody > tr.prow:not([aria-expanded="true"]) > td:nth-child(7),
+  #props-table > tbody > tr.prow:not([aria-expanded="true"]) > td:nth-child(13), #props-table > tbody > tr.prow:not([aria-expanded="true"]) > td:nth-child(14) { display: none; }
+  /* past weeks' players: projection, then what he did */
+  #hist-players > tbody > tr > td.actual, #hist-players > tbody > tr > td.dnp { display: none; }
+  #hist-players > tbody > tr > td.pair { padding: 0; border: 0; }
+  #hist-players > tbody > tr > td.pair[data-act]::after { content: " \2192  " attr(data-act); }
+  /* team ratings: rank, team and rating; a tap opens the rest */
+  #ratings-table > tbody > tr { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 10px 14px; margin-top: 8px; }
+  #ratings-table > tbody > tr > td:first-child { flex: none; width: 22px; font-size: 13px; font-weight: 400; color: var(--ink-2); }
+  #ratings-table > tbody > tr > td:nth-child(2) { flex: 1 1 30%; font-size: 16px; }
+  #players-table.m-cards > tbody > tr.prow > td, #props-table.m-cards > tbody > tr.prow > td { background: none !important; }
+  #players-table.m-cards > tbody > tr.prow[aria-expanded="true"], #props-table.m-cards > tbody > tr.prow[aria-expanded="true"] { border-color: var(--ink); }
+  #ratings-table > tbody > tr > td:nth-child(3) { flex: none; width: 50%; overflow-wrap: normal; }
+  #ratings-table > tbody > tr > td:nth-child(3) span { white-space: nowrap; }
+  #ratings-table > tbody.fold:not(.all) > tr.fold-x { display: none; }
+  #ratings-table > tbody > tr > td:nth-child(2)::before, #ratings-table > tbody > tr > td:nth-child(3)::before { content: none; }
+  #ratings-table > tbody > tr > td:nth-child(n+4) { flex: 1 1 28%; }
+  #ratings-table > tbody > tr > td:nth-child(7) { flex-basis: 100%; }
+  #ratings-table > tbody > tr:not(.open) > td:nth-child(n+4) { display: none; }
+  /* model record: headline numbers two to a row */
+  main .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  main .tiles > .tile { padding: 12px 10px 12px 0; border-left: 0; }
+  main .tiles > .tile:nth-child(even) { padding-left: 12px; border-left: 1px solid var(--rule); }
+  main .tiles > .tile:nth-child(n+3) { border-top: 1px solid var(--rule); }
+  main .tiles > .tile .value { font-size: 32px; }
 }
 
 main { display: grid; gap: 60px; padding-top: 28px; }
@@ -934,6 +989,7 @@ td .act { font-weight: 700; }
             <figcaption><h3>Offense against defense</h3><p class="note">Expected points added per play, adjusted for opponents and weighted toward recent games. Up and to the right is better on both sides of the ball.</p></figcaption>
             <div id="scatter"></div>
           </figure>
+          <p class="note m-hint">Tap a heading to sort. Tap a team for its offense, defense, market rating and quarterback.</p>
           <div class="scroll"><table id="ratings-table" aria-labelledby="ratings-h"></table></div>
         </div>
       </section>
@@ -1263,6 +1319,7 @@ function responsive(node, draw) {
   new ResizeObserver(run).observe(node); run();
   return () => { last = 0; run(); };
 }
+const M_VIEWS = "#view-players, #view-props, #view-history, #view-ratings, #view-model";   // their tables show as cards on a phone
 function table(node, head, rows) {
   const thead = H("thead", {}, H("tr", {}, head.map(h => H("th", { class: h.l ? "l" : "", scope: "col", text: h.t }))));
   const tbody = H("tbody", {}, rows.map(r => H("tr", { class: r.cls || "" }, (r.cells || r).map((c, i) => {
@@ -1274,6 +1331,7 @@ function table(node, head, rows) {
     return td;
   }))));
   node.replaceChildren(thead, tbody);
+  if (node.closest && node.closest(M_VIEWS)) { node.classList.add("m-cards"); if (rows.length > 8) foldTable(node, 6, "rows"); }   // long tables: the first six cards, then a button
 }
 /* Phones only (the button is hidden elsewhere): a long run of cards shows its first few, then a
    button for the rest. `list` holds the rows or cards; the button goes after `after`. */
@@ -1285,6 +1343,16 @@ function foldLong(list, after, keep, what) {
   if (n <= keep) return;
   [...list.children].forEach((el, i) => el.classList.toggle("fold-x", i >= keep));
   after.insertAdjacentElement("afterend", H("p", { class: "fold-more" }, H("button", { class: "link", type: "button", text: "Show all " + n + (what ? " " + what : ""), onclick: e => { list.classList.add("all"); e.currentTarget.parentElement.remove(); } })));
+}
+/* foldLong for a table's rows. Once "Show all" is tapped the table stays open through its redraws (sorting, filtering, opening a row). */
+const NIL = txt => txt === "–" || txt === "" || txt == null ? "nil" : "";
+function foldTable(t, keep, what) {
+  const wrap = t.closest(".scroll") || t, body = t.tBodies[0];
+  if (!body) return;
+  if (t.dataset.all) { const m = wrap.nextElementSibling; if (m && m.classList.contains("fold-more")) m.remove(); return; }
+  foldLong(body, wrap, keep, what);
+  const m = wrap.nextElementSibling, b = m && m.classList.contains("fold-more") && m.querySelector("button");
+  if (b) b.addEventListener("click", () => { t.dataset.all = "1"; });
 }
 function seg(node, options, get, set) {
   const paint = () => [...node.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === String(get()))));
@@ -1935,8 +2003,7 @@ $("#tease-odds").addEventListener("input", e => { const v = parseFloat(e.target.
     if (!name) return;
     jump.append(H("button", { type: "button", text: SHORT[name] || name, onclick: () => sec.scrollIntoView({ block: "start" }) }));
   });
-  ["sheet-note", "moves-note", "tease-note", "slate-note", "games-note"].forEach(id => {
-    const note = document.getElementById(id);
+  [...["sheet-note", "moves-note", "tease-note", "slate-note", "games-note"].map(id => document.getElementById(id)), ...document.querySelectorAll(M_VIEWS.split(", ").map(v => v + " .section-head > p.note").join(", "))].forEach(note => {
     if (!note) return;
     note.classList.add("clamp");
     note.insertAdjacentElement("afterend", H("p", { class: "clamp-more" }, H("button", { class: "link", type: "button", "aria-expanded": "false", text: "Read more", onclick: e => {
@@ -1945,6 +2012,11 @@ $("#tease-odds").addEventListener("input", e => { const v = parseFloat(e.target.
       e.currentTarget.textContent = open ? "Show less" : "Read more";
     } })));
   });
+  /* a "Read more" button only where there is more to read (the notes fill in as each section loads) */
+  const trim = () => document.querySelectorAll(".clamp-more").forEach(m => { const n = m.previousElementSibling; if (n && !n.classList.contains("open")) m.hidden = n.scrollHeight <= n.clientHeight + 1; });
+  const later = () => setTimeout(trim, 0);
+  document.querySelectorAll(".note.clamp").forEach(n => new MutationObserver(later).observe(n, { childList: true, characterData: true, subtree: true }));
+  addEventListener("hashchange", later); addEventListener("resize", later); later();
   const bar = document.querySelector(".bar");
   const place = () => document.documentElement.style.setProperty("--bar-h", (bar ? bar.offsetHeight : 0) + "px");
   place(); window.addEventListener("resize", place);
@@ -2270,7 +2342,9 @@ function renderRatings() {
   [...t.tBodies[0].rows].forEach((tr, i) => {
     tr.addEventListener("pointerenter", () => { hot = rows[i].team; redrawScatter(); });
     tr.addEventListener("pointerleave", () => { hot = null; redrawScatter(); });
+    tr.addEventListener("click", () => tr.classList.toggle("open"));   // phones: the row opens for offense, defense, market and quarterback
   });
+  foldTable(t, 40, "teams");
 }
 renderRatings();
 
@@ -2376,6 +2450,7 @@ function diagChart(node, o) {
   table($("#live-rows"), [{ t: "Flagged", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "Close" }, { t: "CLV" }],
     L.rows.map(r => [r.flagged_at.slice(5, 16), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick + (r.kept === false ? " (withdrawn)" : ""), cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds) + (r.odds_net != null && r.odds_net !== r.odds ? " (" + odds(Math.round(r.odds_net)) + ")" : ""), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
       r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.close_line == null ? "" : String(r.close_line), r.clv == null ? "" : spct(r.clv)]));
+  foldTable($("#live-rows"), 20, "bets");
 })();
 
 /* ---------------- closing line value dashboard ----------------
@@ -2455,6 +2530,7 @@ function diagChart(node, o) {
   table($("#bbrec-rows"), [{ t: "Kickoff", l: 1 }, { t: "Game", l: 1 }, { t: "Pick", l: 1 }, { t: "Kind", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "EV" }, { t: "Stake" }, { t: "Result" }, { t: "CLV" }],
     R.rows.map(r => [String(r.kickoff).slice(5, 16).replace("T", " "), r.game_id.replace(/^\d+_\d+_/, "").replace("_", " @ "), { v: r.pick, cls: "strong" }, TIER[r.tier] ? TIER[r.tier].h : r.tier, bookName(r.book), r.line == null ? "" : String(r.line), odds(r.odds), spct(r.ev), r.stake > 0 ? pct(r.stake) : "—",
       r.result ? { v: r.result === "W" ? "Won " + snum(r.units, 2) : r.result === "L" ? "Lost" : "Push", cls: r.result === "W" ? "w" : "dim" } : "", r.clv == null ? "" : spct(r.clv)]));
+  foldTable($("#bbrec-rows"), 20, "bets");
 })();
 
 /* ---------------- track record ---------------- */
@@ -2748,8 +2824,9 @@ function diagChart(node, o) {
       const chip = chipText(p);
       const name = H("span", {}, document.createTextNode(p.name), dzEl(p), H("span", { class: "rec", text: p.pos + " · " + p.team }), chip ? H("span", { class: "status", text: chip }) : null);
       const cells = [H("td", { class: "l strong" }, name), H("td", { class: "l", text: (p.game.endsWith("_" + p.team) ? "vs " : "at ") + p.opp })];
-      cols.forEach(c => cells.push(c[0] === "td" ? H("td", { text: pct(val(p, "td"), 0) })
-        : H("td", {}, document.createTextNode(c[2](p.proj[c[0]])), tyEl(p, c[0]), flEl(p, c[0]))));
+      cols.forEach(c => { const txt = c[0] === "td" ? pct(val(p, "td"), 0) : c[2](p.proj[c[0]]);   // data-label and nil: the phone card names each number and leaves out the blanks
+        cells.push(c[0] === "td" ? H("td", { class: NIL(txt), "data-label": c[1], text: txt })
+        : H("td", { class: NIL(txt), "data-label": c[1] }, document.createTextNode(txt), tyEl(p, c[0]), flEl(p, c[0]))); });
       const open = ps.open === p.id + p.game;
       const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(open) }, ...cells);
       const toggle = () => { ps.open = open ? null : p.id + p.game; draw(); };
@@ -2759,6 +2836,7 @@ function diagChart(node, o) {
       if (open) tbody.append(H("tr", {}, H("td", { class: "why", colSpan: head.length }, why(p))));
     });
     t.replaceChildren(thead, tbody);
+    t.classList.add("m-cards"); foldTable(t, 20, "players");
     $("#players-foot").textContent = rows.length ? `${rows.length} players. Players listed Out or Doubtful on the conference's official availability report (power-conference teams in conference-game weeks) or, for everyone else, on Covers.com are left out; everyone else who has played lately is projected, so check late news.` + dzFoot() : "No players match.";
   }
   draw();
@@ -2904,6 +2982,7 @@ const historyView = (function () {
           r ? `${g.away} ${r.away_score} – ${r.home_score} ${g.home}` : (g.date ? `${g.date}, not played yet` : "Not played yet"),
           `${fav}, ${g.market.total}`, projTxt, pick(side("Spread")), pick(side("Total")), fl];
       }));
+    foldTable($("#hist-games"), 6, "games");
     const fz = [...new Set(rows.map(g => g.frozen_at))].filter(Boolean).sort();
     const replay = rows.some(g => g.backfilled);
     $("#hist-foot").textContent = `"Side" is whichever side the board's market-adjusted chance favours, with that chance; most are close to 50%, so a week's record is mostly noise. Flagged bets are the ones the board staked. ` + (replay
@@ -2980,13 +3059,16 @@ const historyView = (function () {
       const actual = text => !p.graded ? H("td", { class: "actual", text: "" }) : !p.act ? H("td", { class: "dnp", text: "DNP" }) : H("td", { class: "actual", text });
       cols.forEach(c => {
         const fmt = /yds/.test(c[0]) ? f0 : f1;
-        tds.push(H("td", { class: "pair", text: fmt(p.proj[c[0]]) }), actual(p.act ? fmt(p.act[c[0]]) : ""));
+        const a = actual(p.act ? fmt(p.act[c[0]]) : ""), blank = !(p.proj[c[0]] > 0) && !(p.act && p.act[c[0]] > 0);
+        tds.push(H("td", { class: "pair" + (blank ? " nil" : ""), "data-label": c[1], ...(a.textContent ? { "data-act": a.textContent } : {}), text: fmt(p.proj[c[0]]) }), a);
       });
       const n = tdsOf(p);
-      tds.push(H("td", { class: "pair", text: p.pos === "QB" ? "–" : Math.round(p.td_any * 100) + "%" }), actual(n == null ? "" : n > 0 ? "Yes" + (n > 1 ? " (" + n + ")" : "") : "No"));
+      const tdA = actual(n == null ? "" : n > 0 ? "Yes" + (n > 1 ? " (" + n + ")" : "") : "No");
+      tds.push(H("td", { class: "pair", "data-label": "Touchdown", ...(tdA.textContent ? { "data-act": tdA.textContent } : {}), text: p.pos === "QB" ? "–" : Math.round(p.td_any * 100) + "%" }), tdA);
       tbody.append(H("tr", {}, ...tds));
     });
     $("#hist-players").replaceChildren(H("thead", {}, top, sub2), tbody);
+    $("#hist-players").classList.add("m-cards"); foldTable($("#hist-players"), 20, "players");
     $("#hp-foot").textContent = `${rows.length} players. Quarterback lines assume he starts. Touchdown: the projected anytime-TD chance and whether he scored a rushing or receiving touchdown. DNP: no box score (did not play).`;
   }
   return { open };
@@ -3210,6 +3292,7 @@ const propsView = (function () {
           document.createTextNode(p.fo == null ? "–" : pct(p.fo, 0)), p.sh ? H("span", { class: "tag", text: "shaded" }) : null), H("td", {}, lean), H("td", { class: "px", text: p.dk }), H("td", { class: "px", text: p.fd }),
         H("td", { text: close }), H("td", { class: "l" }, p.y == null ? document.createTextNode(p.res === "void" ? "Void" : "–") : H("span", {}, document.createTextNode(String(p.y)), resBadge(p)))];
       const k = key(p), isOpen = ps.open === k;
+      cells.forEach((td, i) => { td.dataset.label = head[i].t; });   // the phone card names each number from this
       const tr = H("tr", { class: "prow", tabindex: 0, "aria-expanded": String(isOpen) }, ...cells);
       const toggle = () => { ps.open = isOpen ? null : k; draw(); };
       tr.addEventListener("click", toggle);
@@ -3218,6 +3301,7 @@ const propsView = (function () {
       if (isOpen) tbody.append(H("tr", {}, H("td", { class: "ladder", colSpan: head.length }, ladder(d, p))));
     });
     $("#props-table").replaceChildren(thead, tbody);
+    $("#props-table").classList.add("m-cards"); foldTable($("#props-table"), 20, "props");
     $("#props-foot").textContent = rows.length
       ? `${rows.length} props${rows.length > 500 ? " (first 500 shown)" : ""}.${deadN ? " " + deadN + " line" + (deadN === 1 ? "" : "s") + " on players ruled out (or passing lines with no starter) hidden." : ""} Range: where about 80% of his outcomes land, from the model; open a row for his whole outlook (the chance of reaching any number) and the ladder. Ours, over: our chance the over hits. Books': their chance with the vig taken out, shaded toward the under on receptions, receiving yards and running-back rushing (−2.7 points) and toward the over on passing yards (+1.2), by how 2023-2025 lines settled (hover a shaded cell for the plain number; rows priced before Nov 10, 2026 are unshaded). Lean: the side our chance favours and by how many percentage points (a lean is not a bet). DK and FD: DraftKings' and FanDuel's over and under prices, with the book's own line when it differs from the row's. Close: the closing line and how far it moved. Result: what happened; green when it went the way we leaned. "Early" means the game has only its opening prices so far. Quarterback lines assume he starts; a prop is void if the player does not play.`
       : "No props match.";
