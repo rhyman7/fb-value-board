@@ -1222,3 +1222,22 @@ is listed. Wider screens and print must stay pixel-identical; compare old agains
   that changes the board is merged.
 - Every page keeps the disclaimer: for research and entertainment, past results do not
   predict future results, and nothing here is betting advice.
+
+## Cross-links between pages (Nov 26, 2026)
+
+Small links that carry a game or a player from one page to its counterpart. None changes a number.
+
+- **Board game page -> matchup dashboard:** "Full matchup on the dashboard" beside "All games", for
+  the board's first listed week only (`DASH_DIR` in `site/template.html`; the college template gets
+  `/cfb` and uses the game's ESPN `game_id`). The dashboards' "Open on the value board" link comes
+  back to the same game page (`#<game id>`), no longer to the unlisted Matchups view.
+- **Past weeks -> Weekly Review:** each graded game gets a "Review" link when
+  `review/data/<league>/index.json` lists that week (`REVIEW_DIR`; the address is
+  `review/#<league>-<week>-<away>-<home>` in lower case, the review's own slug).
+- **Weekly Review game -> the board's past matchup** (`#matchups/<season>_w<week>/<game id>`):
+  "Projected against actual on the value board" under the game's header.
+- **Player card -> Prop Ladder:** `/prop-ladder/#sport=NFL&player=<name>` (CFB on the college
+  board). Prop Ladder finds the player by name and says so when no props are posted.
+- **Recommended -> board game:** an open pick's game links to `../#<game id>` (the id is inside the
+  pick's id). A game not yet on the board opens the board's Games page. Graded picks stay plain
+  text, and in the weekly report the links print as plain text.

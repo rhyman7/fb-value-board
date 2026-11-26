@@ -71,6 +71,7 @@ details summary { cursor: pointer; font-weight: 600; min-height: 44px; display: 
 footer { font-size: 13px; color: var(--ink-2); }
 
 /* the weekly report: a document, black on white */
+body.report td a[title] { color: inherit; text-decoration: none; }
 body.report { --page: #fff; --surface: #fff; --raised: #eee; --ink: #111; --ink-2: #333; --grid: #ddd; --axis: #999; --rule: #ccc; --turf: #111; --chalk: #fff; --link: #111; color-scheme: light; background: #fff; color: #111; font-size: 14px; line-height: 1.45; }
 .doc { max-width: 880px; margin-inline: auto; padding: 28px var(--gutter) 56px; display: grid; gap: 26px; }
 .doc .controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
@@ -204,7 +205,9 @@ const wl = (r) => r.w + "-" + r.l + (r.p ? "-" + r.p : "");
 const chip = (s) => `<span class="chip ${esc(s)}">${STATUS[s] || esc(s)}</span>`;
 const result = (p) => p.result ? `<span class="res ${p.result}">${{ W: "Won", L: "Lost", P: "Push", V: "Void" }[p.result]}</span>` : `<span class="res open">Open</span>`;
 const tile = (label, value, sub) => `<div class="tile"><div class="label">${label}</div><div class="value">${value}</div><div class="sub">${sub}</div></div>`;
-const game = (p) => esc(p.label) + (p.game ? `<br><span style="color:var(--ink-2);font-size:12.5px">${esc(p.game)}</span>` : "");
+// cross-link (Nov 26, 2026): an open pick's game opens on its value board (the board's game id is in the pick's id)
+const boardHref = (p) => { const m = !p.result && /\|(\d{4}_\d+_[^|]+)\|/.exec(p.id || ""); return m ? (/^cfb/.test(p.id) ? "../cfb/#" : "../#") + encodeURIComponent(m[1]) : ""; };
+const game = (p) => (boardHref(p) ? `<a href="${boardHref(p)}" title="This game on the value board">${esc(p.label)}</a>` : esc(p.label)) + (p.game ? `<br><span style="color:var(--ink-2);font-size:12.5px">${esc(p.game)}</span>` : "");
 const reportHref = (lg, s, w) => `#${lg}/${s}/${w}`;
 const pdfName = (lg, s, w) => `${lg}_${s}_w${String(w).padStart(2, "0")}.pdf`;
 
