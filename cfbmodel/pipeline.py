@@ -199,6 +199,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True, 
         print(f"  CLV guard skipped ({exc})")
         out["meta"]["muted_tiers"] = {}
     out["meta"]["max_week_stake"] = C.MAX_WEEK_STAKE
+    sheet.model_no_stake(slate["games"])        # no stake outside the price, opener and wind tiers; the model tier is still recorded
     out["meta"]["week_cap"] = sheet.cap_week(slate["games"], C.MAX_WEEK_STAKE)   # after the bucket stakes, before the ledger
     try:                                          # the ledger (nflmodel/ledger.py): flagged bets at their first price, graded
         cur = games[games.season == season]

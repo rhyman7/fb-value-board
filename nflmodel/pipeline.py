@@ -283,6 +283,7 @@ def run(refresh: bool = True, with_backtest: bool = True, verbose: bool = True) 
         print(f"  CLV guard skipped ({exc})")
         out["meta"]["muted_tiers"] = {}
     out["meta"]["max_week_stake"] = C.MAX_WEEK_STAKE
+    sheet.model_no_stake(out["slate"]["games"])        # no stake outside the price, opener and wind tiers; the model tier is still recorded
     out["meta"]["week_cap"] = sheet.cap_week(out["slate"]["games"], C.MAX_WEEK_STAKE)   # after the bucket stakes, before the ledger
     # the ledger: every flagged bet at the price it was first flagged, graded against the close
     try:

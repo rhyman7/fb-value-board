@@ -2501,6 +2501,7 @@ function diagChart(node, o) {
     tile("Beat the close", all.n ? pct(all.beat / all.n, 0) : "—", all.n ? all.beat + " of " + all.n : "—"));
   const kinds = ["price", "opener", "wind", "model"].filter(t => L.rows.some(r => r.tier === t));
   const status = (t, st) => muted[t] ? { v: "No stake: losing to the close", cls: "dim" }
+    : t === "model" ? "Recorded, never staked"     // since Nov 26, 2026 (sheet.model_no_stake): the row is kept to see whether the kind beats the close
     : st.n < N ? `Watching (${st.n} of ${N})` : (st.m - Z * st.se < 0 && st.m < 0 ? "Close to the line" : "Staked") + (t === "wind" && LG === "nfl" ? ", half stake" : "");
   table($("#clvdash-kinds"), [{ t: "Kind", l: 1 }, { t: "With closing value" }, { t: "Average" }, { t: "± 1 s.e." }, { t: "Beat the close" }, { t: "Stake rule", l: 1 }],
     [...kinds.map(t => { const st = stat(rows.filter(r => r.tier === t).map(r => r.clv));

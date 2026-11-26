@@ -224,6 +224,39 @@ def bucket_stakes(games: list[dict], openers: dict | None, wind: dict | None, ke
     return n
 
 
+STAKED_TIERS = ("price", "opener", "wind")   # the only kinds of bet a stake is ever sized for
+
+
+def model_no_stake(games: list[dict]) -> int:
+    """No stake outside the price, opener and wind tiers (Nov 26, 2026; Ryan's call).
+
+    A model-tier or untiered side used to pick up a small stake whenever one book's line or
+    price was a little better than the number the stake is sized from (the market's own, on
+    a board whose haircut is 0): an edge under the price tier's PRICE_MIN, which the sheet's
+    own note says is not staked. Those stakes are set to 0 here, on the bet and on every
+    book quote.
+
+    A model-tier side that had one is marked `tracked`, so the ledger keeps writing the same
+    rows it always has, now at no stake (ledger.flagged): they are the whole "Model edges"
+    line of the Live record, and that record is the evidence on whether the model's side
+    plus a better number is worth anything. Derivative sides are left alone (they are a
+    price bet or nothing). Returns the bets changed."""
+    n = 0
+    for g in games:
+        for b in g.get("bets") or []:
+            if b.get("tier") in STAKED_TIERS:
+                continue
+            had = False
+            for x in [b] + list(b.get("books") or []):
+                if float(x.get("stake") or 0) > 0:
+                    x["stake"], had = 0.0, True
+            if had:
+                n += 1
+                if b.get("tier") == "model":
+                    b["tracked"] = True
+    return n
+
+
 def clv_guard(games: list[dict], ledger_summary: dict | None, n_min: int = CLV_GUARD_N, z: float = CLV_GUARD_Z) -> dict:
     """Turn off the stake of every bet of a kind the live ledger says is losing to the close:
     over at least n_min bets with closing line value, the average below zero by more than z

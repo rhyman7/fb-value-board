@@ -79,12 +79,14 @@ def sheet_bets(g: dict) -> list[dict]:
 
 
 def flagged(b: dict) -> bool:
-    """A bet the board would place: a stake on the market-adjusted basis, or a price or
-    opener or wind flag (sized or not)."""
+    """A bet the board records: a stake on the market-adjusted basis, a price or opener or
+    wind flag (sized or not), or a tracked model-tier side (no stake)."""
     if not b.get("tier"):
         return False
     stake = max(float(b.get("stake") or 0), max((float(q.get("stake") or 0) for q in b.get("books") or []), default=0.0))
-    return stake > 0 or b.get("tier") in FLAG_TIERS
+    # `tracked`: a model-tier side that used to carry a small stake and no longer does
+    # (sheet.model_no_stake); it is still recorded, at no stake, so the "Model edges" record goes on
+    return stake > 0 or b.get("tier") in FLAG_TIERS or bool(b.get("tracked"))
 
 
 def record(slate_games: list[dict], season: int, kickoffs: dict, path: Path, now: dt.datetime | None = None) -> int:
