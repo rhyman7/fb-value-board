@@ -1,0 +1,45 @@
+name: Smoke test
+
+# Loads this repo's main pages in headless Chromium (scripts/smoke.py, pages listed in
+# smoke.json) and fails on a script error, a missing script or stylesheet, an empty table or
+# "undefined"/"NaN" showing on a page. Runs on every pull request, and again on main when a
+# merge changes page code. Data-only commits (the daily tasks and the build Actions) don't
+# start it; those are watched by https://rhyman7.github.io/status/.
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "site/**"
+      - "docs/parlays.html"
+      - "docs/recommended/index.html"
+      - "docs/manual/**"
+      - "review/index.html"
+      - "smoke.json"
+      - "scripts/smoke.py"
+      - ".github/workflows/smoke.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Load the pages
+        run: python scripts/smoke.py -v
