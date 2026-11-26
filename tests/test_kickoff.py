@@ -43,7 +43,7 @@ CSV = """row_id,at,season,week,game_id,data_id,kickoff,market,side,pick,tier,boo
 g1|Spread|away,2026-11-08 12:00,2026,10,2026_10_SEA_LV,g1,2026-11-08T18:00Z,Spread,away,SEA -6,price,fanduel,-5.5,-105,-105,0.0361,0.0051,-6,44.5,1
 g1|Total|under,2026-11-08 12:00,2026,10,g1,g1,2026-11-08T18:00Z,Total,under,Under 44.5,price,draftkings,45.5,-110,-110,0.02,0.004,-6,44.5,1
 g1|Total|under,2026-11-08 17:40,2026,10,g1,g1,2026-11-08T18:00Z,Total,under,Under 44.5,price,draftkings,44.5,-110,-110,0.0,0.0,-6,44.5,0
-g2|Moneyline|home,2026-11-08 17:40,2026,10,g2,g2,2026-11-08T18:25Z,Moneyline,home,DAL ML,opener,kalshi,,108,101,0.03,0.006,-3,50,1
+g2|Moneyline|home,2026-11-08 17:40,2026,10,g2,g2,2026-11-08T18:25Z,Moneyline,home,DAL ML,opener,betmgm,,108,108,0.03,0.006,-3,50,1
 g3|Spread|home,2026-11-08 12:00,2026,10,g3,g3,2026-11-08T21:05Z,Spread,home,LV +6,price,fanduel,6.5,-110,-110,0.03,0.005,-6,44.5,1
 """
 
@@ -53,21 +53,22 @@ BOARD = {"slate": {"games": [
         {"book": "fanduel", "line": -5.5, "odds": -105, "ev": 0.0361, "ev_line": 0.0181, "stake": 0.0051},
         {"book": "draftkings", "line": -6, "odds": -110, "ev": -0.0259, "ev_line": -0.0435, "stake": 0}]}]},
     {"id": "g2", "bets": [{"market": "Moneyline", "side": "home", "tier": "opener", "books": [
-        {"book": "kalshi", "line": None, "odds": 108, "ev": 0.03, "stake": 0.006},
+        {"book": "betmgm", "line": None, "odds": 108, "ev": 0.03, "stake": 0.006},
+        {"book": "kalshi", "line": None, "odds": 104, "odds_net": -102, "ev": -0.005, "stake": 0},
         {"book": "draftkings", "line": None, "odds": -105, "ev": -0.01, "stake": 0}]}]},
 ]}}
 
 
-def test_alert_shows_only_draftkings_and_fanduel_and_says_when_neither_qualifies(tmp_path):
+def test_alert_shows_only_the_books_ryan_bets_and_says_when_none_qualifies(tmp_path):
     import json
     p, b = tmp_path / "bestbets.csv", tmp_path / "data.json"
     p.write_text(CSV)
     b.write_text(json.dumps(BOARD))
     title, body = K.message([("nfl", t("2026-11-08 18:00"))], {"nfl": p}, {"nfl": b})
-    assert title == "Best bets: NFL Sun 1:00 PM ET (1 bet, 1 not at DK/FD)"   # the under left the card; g3 is a later window
+    assert title == "Best bets: NFL Sun 1:00 PM ET (1 bet, 1 not at your books)"   # the under left the card; g3 is a later window
     assert body.splitlines()[1:] == [
         "SEA@LV: SEA -5.5 -105 · FanDuel · stake 0.5% · EV +3.6%",
-        "DAL ML · NOT A BET at DraftKings or FanDuel (not +EV; best there: DraftKings DAL ML -105, EV -1.0%; card has it at Kalshi)"]
+        "DAL ML · NOT A BET at DraftKings, FanDuel or Kalshi (not +EV; best there: Kalshi DAL ML -102 after fee, EV -0.5%; card has it at BetMGM)"]
 
 
 def test_a_price_bet_needs_the_book_to_beat_the_sharp_number():
@@ -80,3 +81,16 @@ def test_alert_sends_nothing_for_an_empty_card(tmp_path):
     p = tmp_path / "bestbets.csv"
     p.write_text(CSV)
     assert K.message([("nfl", t("2026-11-08 23:00"))], {"nfl": p}) is None
+
+
+def test_alert_takes_kalshi_when_it_is_the_best_of_the_three_and_shows_its_price_after_the_fee(tmp_path):
+    import json
+    board = {"slate": {"games": [{"id": "g2", "bets": [{"market": "Moneyline", "side": "home", "tier": "opener", "books": [
+        {"book": "kalshi", "line": None, "odds": 108, "odds_net": 101, "ev": 0.03, "stake": 0.006},
+        {"book": "draftkings", "line": None, "odds": -105, "ev": 0.004, "stake": 0.001}]}]}]}}
+    p, b = tmp_path / "bestbets.csv", tmp_path / "data.json"
+    p.write_text(CSV.splitlines()[0] + "\ng2|Moneyline|home,2026-11-08 17:40,2026,10,g2,g2,2026-11-08T18:25Z,Moneyline,home,DAL ML,opener,kalshi,,108,101,0.03,0.006,-3,50,1\n")
+    b.write_text(json.dumps(board))
+    title, body = K.message([("nfl", t("2026-11-08 18:00"))], {"nfl": p}, {"nfl": b})
+    assert title == "Best bets: NFL Sun 1:00 PM ET (1 bet)"
+    assert body.splitlines()[1:] == ["DAL ML +101 after fee · Kalshi · stake 0.6% · EV +3.0%"]

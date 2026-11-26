@@ -316,7 +316,7 @@ withdraws it before kickoff, so the Live record reads both ways: every bet flagg
 those still on the sheet at kickoff), and is graded on the result and on closing line
 value against Pinnacle's close (on both boards; the college board's was missing until
 Nov 11, 2026); the Model record page leads with that live record, which also splits it
-into **DraftKings + FanDuel**, the books Ryan bets, and the other books (`ledger.by_books`). The
+into **DraftKings, FanDuel + Kalshi**, where Ryan bets (Kalshi since Nov 26, 2026), and the other books (`ledger.by_books`). The
 Teasers section prices every leg with 6 or 7 points added off the key-number curve (Wong
 legs marked), and each game's page carries the alternate-line ladder with fair prices
 (`nflmodel/alts.py`).

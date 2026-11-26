@@ -156,4 +156,17 @@ def test_page_file_is_a_script_the_page_can_read_from_disk(tmp_path):
 def test_every_track_starts_on_trial_and_the_rules_are_the_approved_ones():
     assert set(R.STATUS.values()) == {"trial", "held"} and R.HELD == {"nfl_prop_under"} and len(R.TRACKS) == 6
     assert (R.OPEN_GAP, R.TOTAL_GAP, R.CFB_FROM_WEEK, R.DOG, R.MAX_TOTAL, R.TEASER_ODDS, R.NEED, R.UNIT) == (2.0, 3.0, 5, (1.5, 2.5), 49.5, -120.0, 100, 10.0)
-    assert R.MY_BOOKS == ("draftkings", "fanduel")
+    assert R.MY_BOOKS == ("draftkings", "fanduel", "kalshi") and R.SPORTSBOOKS == ("draftkings", "fanduel")
+
+
+def test_kalshi_counts_on_game_lines_at_its_price_after_the_fee_but_not_for_teasers_or_props():
+    # Kalshi's -3 is 3 points off the model like FanDuel's, and pays better after the fee: it is the pick
+    k = {**quote("kalshi", -3.0, -104), "odds_net": -109.0}
+    g = game("2026_12_AAA_BBB", 6.0, 44.0, [bet("Spread", "home", [quote("draftkings", -4.5, -110), quote("fanduel", -3.0, -112), k], opener_gap=3.0)])
+    (_, _, q, _), = R.opener_picks(g, "nfl")
+    assert q["book"] == "kalshi"
+    # a Wong underdog line that only Kalshi has is not a teaser leg; the sportsbooks' still are
+    dog = game("2026_12_CCC_DDD", 0.0, 44.0, [bet("Spread", "away", [quote("kalshi", 2.5, -105)], opener_gap=0.0)])
+    assert R.teaser_legs(dog) == {}
+    dog2 = game("2026_12_CCC_DDD", 0.0, 44.0, [bet("Spread", "away", [quote("kalshi", 2.5, -105), quote("fanduel", 2.5, -110)], opener_gap=0.0)])
+    assert list(R.teaser_legs(dog2)) == ["fanduel"]

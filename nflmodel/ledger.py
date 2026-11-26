@@ -251,12 +251,14 @@ def _clv(r, close: dict | None, curve) -> dict:
             "close_prob": round(p / (1 - push), 4), "clv": round(float(O.expected_value(p, float(r.odds_net), push)), 4)}
 
 
-MY_BOOKS = ("draftkings", "fanduel")   # the only books Ryan bets (the kickoff alert uses the same pair)
+SPORTSBOOKS = ("draftkings", "fanduel")        # the sportsbooks Ryan bets: props, teasers, parlays and boosts live here
+MY_BOOKS = SPORTSBOOKS + ("kalshi",)           # everywhere he bets game lines (Kalshi added Nov 26, 2026; priced after its
+                                               # fee, `odds_net`). The kickoff alert and the Recommended list read this.
 
 
 def by_books(x: pd.DataFrame) -> dict:
-    """The record split by where the bet would be placed: `mine` (DraftKings and FanDuel, the
-    books Ryan bets) and `other` (BetMGM, Kalshi, a consensus line). The other rows are still
+    """The record split by where the bet would be placed: `mine` (DraftKings, FanDuel and
+    Kalshi, where Ryan bets; Kalshi since Nov 26, 2026, applied to every row) and `other` (BetMGM, a consensus line). The other rows are still
     logged, since a price that beats the sharp line there says something about the method, but
     the record that counts for his betting is `mine`."""
     mine = x["book"].astype(str).str.lower().isin(MY_BOOKS)

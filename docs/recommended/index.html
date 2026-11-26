@@ -115,7 +115,7 @@ const R = window.RECOMMENDED || {};
 const LEAGUES = [["nfl", "NFL"], ["cfb", "College"]];
 const NAME = { nfl: "NFL", cfb: "College" };
 const STATUS = { trial: "On trial", recommended: "Recommended", proven: "Proven", paused: "Paused", held: "Stopped" };
-const BOOK = { draftkings: "DraftKings", fanduel: "FanDuel" };
+const BOOK = { draftkings: "DraftKings", fanduel: "FanDuel", kalshi: "Kalshi (after fee)" };
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const minus = (s) => String(s).replace(/-/g, "−");
 const money = (d) => d == null ? "" : (d < 0 ? "−$" : "+$") + Math.abs(d).toFixed(2);
@@ -181,7 +181,7 @@ ${tile("Closing line value", all.clv == null ? "—" : spct(all.clv), all.cse ==
 </section>
 <section aria-labelledby="week-h">
 <h2 id="week-h">Open picks</h2>
-<p class="note">Published and not yet graded. Book and price are the better of DraftKings and FanDuel when the pick was published; check the price before betting. Times are Eastern.</p>`;
+<p class="note">Published and not yet graded. Book and price are the best of DraftKings, FanDuel and Kalshi when the pick was published; check the price before betting. Kalshi joined on Nov 26, 2026 and is shown at its price after the exchange’s fee; teasers and props are DraftKings and FanDuel only. Times are Eastern.</p>`;
   h += open.length ? `<div class="scroll"><table>
 <thead><tr><th class="l">Published</th><th class="l">Track</th><th class="l">Game</th><th class="l">Pick</th><th class="l">Book</th><th>Price</th><th class="l">Status</th></tr></thead><tbody>
 ${open.map((p) => `<tr><td class="l">${when(p.at)}</td><td class="l"><a href="${reportHref(p.league, p.season, p.week)}">${esc(trackName(p.league, p.track))}</a></td><td class="l">${game(p)}</td><td class="l"><strong>${esc(minus(p.pick))}</strong></td><td class="l">${BOOK[p.book] || esc(p.book)}</td><td>${price(p.odds)}</td><td class="l">${chip((tracks.find((t) => t.key === p.track) || {}).status || "trial")}</td></tr>`).join("\n")}
