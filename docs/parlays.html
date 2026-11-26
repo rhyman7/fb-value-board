@@ -10,16 +10,15 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Big+Shoulders+Display:wght@700;800&display=swap">
 <style>
 :root {
-  --page: #f2f4f1; --surface: #fff; --raised: #e7ebe7; --ink: #0f1713; --ink-2: #44514a; --ink-3: #68756d;
-  --rule: #d2d9d4; --turf: #1b5e3a; --chalk: #f6f8f3; --flag: #ffd21f; --flag-ink: #241d00; --link: #17643b;
-  --good: #1b7f4b; --bad: #b3261e; --warn: #9a6a00;
-  --display: "Big Shoulders Display", "Archivo", "Arial Narrow", sans-serif;
+  /* One site (Nov 26, 2026): dark, with the dashboards' graphite and Archivo. */
+  --page: #131416; --surface: #1b1d21; --raised: #24272c; --ink: #f2f1ee; --ink-2: #9da2ab; --ink-3: #9da2ab;
+  --rule: #353a42; --turf: #f2f1ee; --chalk: #131416; --flag: #fbbf24; --flag-ink: #241d00; --link: #f2f1ee;
+  --good: #4ade80; --bad: #f87171; --warn: #fbbf24;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --sans: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: dark;
 }
-@media (prefers-color-scheme: dark) {
-  :root { --page: #0a0e0c; --surface: #121815; --raised: #1d2621; --ink: #eef3ef; --ink-2: #b3bfb8; --ink-3: #85938b;
-    --rule: #29342d; --turf: #174f31; --link: #74d19b; --good: #4cc483; --bad: #ff7b70; --warn: #e2b23c; }
-}
+h1, h2, .bar b { font-stretch: 80%; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.45 var(--sans); }
 a { color: var(--link); }
@@ -56,9 +55,9 @@ input, select { font: 15px var(--sans); padding: 7px 9px; border: 1px solid var(
 .legs li .gm { color: var(--ink-3); font-size: 12px; display: block; }
 .num { font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
 .tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 9px; background: var(--raised); color: var(--ink-2); margin-left: 4px; white-space: nowrap; }
-.tag.warn { background: #fff1c2; color: #6b4b00; }
-.tag.bad { background: #ffd9d5; color: #8a1c14; }
-.tag.good { background: #d4f2df; color: #0f5130; }
+.tag.warn { background: rgba(251,191,36,.15); color: #fbbf24; }
+.tag.bad { background: rgba(248,113,113,.16); color: #f87171; }
+.tag.good { background: rgba(74,222,128,.16); color: #4ade80; }
 .good { color: var(--good); } .bad { color: var(--bad); } .warn { color: var(--warn); }
 table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); }
@@ -71,8 +70,7 @@ th { font-size: 12px; text-transform: uppercase; color: var(--ink-2); letter-spa
 </style>
 </head>
 <body>
-<script src="/site-bar.js"></script>
-<div class="bar"><b>Parlays</b><a href="./">NFL board</a><a href="cfb/">College board</a><a href="../">All boards</a></div>
+<script src="/site-bar.js" data-shell="2"></script>
 <div class="wrap">
   <h1>Parlay tools</h1>
   <p class="sub">Every leg here is priced the same way the boards price bets: game lines off the market-adjusted projection, NFL props from the books' no-vig number moved toward the model, college props from the model alone. <span id="asof" class="muted"></span></p>
