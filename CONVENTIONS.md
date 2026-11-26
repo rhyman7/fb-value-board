@@ -721,6 +721,24 @@ boards in detail; this file is the rules.
   the January recheck documents. The changes kept Nov 4 to 10, 2026 under the earlier rule are one
   group row, not itemised.
 
+## One site: the shared bar and the dark look (Nov 26, 2026)
+
+- The Weekly Gridiron Board is one site with one bar and one look (plan: Project doc
+  `claude/plan-one-site-redesign-2026-11-25.md`). Pages load the bar as
+  `<script src="/site-bar.js" data-shell="2"></script>`; its sections and pages are `SECTIONS` in
+  rhyman7.github.io's `site-bar.js`. A page does not carry its own links to other sections.
+- **Dark, with the dashboards' graphite and Archivo:** page `#131416`, panels `#1b1d21`, raised
+  `#24272c`, rules `#353a42`, text `#f2f1ee`, secondary text `#9da2ab`, good `#4ade80`, bad
+  `#f87171`, caution `#fbbf24`. Headings are Archivo, condensed (`font-stretch`), not Big Shoulders
+  Display. Moved so far: Recommended, What's live (through `scripts/whats_live.py`), Parlays
+  (`site/parlays.html` and its copy in `docs/`), the Weekly Review (already dark) and the manual
+  (bar only; it is a print-format document and its screenshots are re-shot when the boards move).
+  **Not yet moved: the two value boards.**
+- **Print views and documents stay black on white:** the Recommended weekly report
+  (`body.report`), anything under `@media print`, and the PDFs. A page that turns dark resets its
+  colour tokens to light inside those.
+- Parlays' own green header with links to the boards is gone: the shared bar does that job.
+
 ## Site structure
 
 - `docs/index.html` and `docs/cfb/index.html` are **generated**. Don't edit them by hand;
