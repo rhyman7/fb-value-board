@@ -201,8 +201,7 @@ consensus line; only the prices being graded change.
 3. Settings, Actions, General: allow workflows read and write permission.
 
 `.github/workflows/update.yml` then refreshes the board daily during the season
-and re-runs the full backtest on Tuesdays. The workflow has not been run yet;
-check its first run.
+and re-runs the full backtest on Tuesdays.
 
 ## How the model works
 
