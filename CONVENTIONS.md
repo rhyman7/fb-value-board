@@ -1115,8 +1115,29 @@ is listed. Wider screens and print must stay pixel-identical; compare old agains
   lines and "Read more" (`.note.clamp`). All of these buttons are hidden on wider screens.
 - Colors come from the page's own tokens (`--surface`, `--rule`, `--ink`), so the cards follow
   the light and dark themes and any later restyle.
-- Not reworked for phones yet: Players, Props, Past weeks, Team ratings, Model record, a game's
-  own page, the Best bets and Model leans print views, the teaser table.
+- **The other sections (Nov 26, 2026; Ryan approved the mockup, Design canvas "Value Board phone
+  mockup: the other sections").** Every table in Players, Props, Past weeks, Team ratings and
+  Model record shows as one card per row: `table()` adds the class `m-cards` to a table inside
+  one of those views (`M_VIEWS`), and the three hand-built tables (`#players-table`,
+  `#props-table`, `#hist-players`) add it themselves and put `data-label` on their cells. A new
+  table built with `table()` in those views needs nothing extra. Rules to keep:
+  - A blank number ("–") gets the class `nil` and is left out of a player's card.
+  - Players and Props keep their headings as a strip of sort buttons, and a row still opens on
+    a tap. A prop's Range, Floor, Close and Result show only while its row is open; the card
+    rules place the props columns by position (`td:nth-child(n)`), so **a column added, removed
+    or reordered in `#props-table` or `#ratings-table` means updating its card rules**.
+  - Past weeks' players show "projection → actual" from `data-act` on the projection cell.
+  - Team ratings: rank, team and rating; a tap opens offense, defense, market and quarterback
+    (`tr.open`). The `.m-hint` line above it shows on phones only.
+  - Long lists fold with `foldTable()` (it wraps `foldLong()` and keeps a table open through its
+    redraws once "Show all" is tapped): 20 players, props and bets, 6 past games, 40 teams, and
+    the first 6 rows of any other card table longer than 8.
+  - Model record's headline numbers (`.tiles`) sit two to a row.
+  - Every section's intro note folds to three lines; "Read more" shows only where there is more.
+  - The phone block sits above the page's base rules, so a phone rule needs a more specific
+    selector than the base rule it replaces (that is why some carry `main` or `.m-cards`).
+- Not reworked for phones yet: a game's own page, the Best bets and Model leans print views, the
+  teaser table, and the ladder table inside an open prop (it scrolls sideways in its own box).
 
 ## Landing page (`index.html`)
 
