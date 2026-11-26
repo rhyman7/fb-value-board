@@ -7,8 +7,8 @@ name: College availability
 #    (cfbmodel/designations.py) uses these over the Covers.com designations for every team that has one.
 #    When the reports change, this Action starts a quick Update college board run (except Saturday
 #    afternoons, when the Market lines Action already rebuilds hourly), so Game Day reports reach the
-#    projections before kickoff. Also started by the Claude scheduled tasks "College availability
-#    backup" (see concurrency below).
+#    projections before kickoff. Also started by the Watchdog Action when GitHub
+#    skips a run (see concurrency below).
 # 2. History, data/cfb/availability/<season>/: conf_log.csv and conf_archive.json (every report
 #    version); covers_log.csv, every change in the Covers.com designations (docs/cfb/designations.json,
 #    written daily by the Claude task); and ESPN's college injury feed in log.csv, which was empty on
@@ -40,9 +40,9 @@ permissions:
 # Its own group (Nov 11, 2026): in board-commits, a newer board run waiting behind a running one
 # replaced this check while it waited, and a Game Day report could miss kickoff. It commits only
 # its own files (data/cfb/availability, docs/cfb/availability.json), rebasing and retrying if a board
-# run pushes at the same moment. A second schedule outside GitHub (two Claude scheduled tasks,
-# "College availability backup", :22 past the hour in the report windows) starts it too, because
-# GitHub dropped most of the scheduled runs on Nov 10-11.
+# run pushes at the same moment. The Watchdog Action (watchdog.yml, scripts/watchdog.py; before
+# Nov 25, 2026 two Claude scheduled tasks) starts it too in the report windows, because GitHub
+# dropped most of the scheduled runs on Nov 10-11.
 concurrency:
   group: cfb-availability
   cancel-in-progress: false

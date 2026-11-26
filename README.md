@@ -339,8 +339,9 @@ night to Tuesday, when the week's lines open, plus hourly on game days for the l
 playing (college Saturdays, NFL Sundays and Thursday nights), each game-day snapshot followed
 by a quick rebuild of that board so its prices are never much more than an hour old; any
 snapshot that sends a line-movement alert also rebuilds that league's board, any day; GitHub
-often skips the three daily runs, so a Claude scheduled task, "Market lines backup", starts a
-plain snapshot 40 minutes after each one that did not run). The
+often skips the three daily runs, so the **Watchdog** Action (`watchdog.yml`, `scripts/watchdog.py`)
+starts a plain snapshot 40 minutes after each one that did not run, and starts the College
+availability check in the Game Day report hours when that was skipped). The
 **Kickoff refresh** Action (`kickoff.yml`, `nflmodel/kickoff.py`) adds a snapshot and rebuild
 35 and 20 minutes before each kickoff window (the first kickoff of each 30-minute cluster;
 NFL and college refreshes within 5 minutes of each other run as one), so the Best bets card

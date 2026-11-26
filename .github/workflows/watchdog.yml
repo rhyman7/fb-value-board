@@ -1,0 +1,74 @@
+name: Watchdog
+
+# Starts the Market lines snapshot and the College availability check when GitHub's own schedule
+# skipped them (scripts/watchdog.py has the rules). Until Nov 25, 2026 three Claude scheduled
+# tasks did this; it needs no judgement, so it is plain code now.
+#
+# SELF-CHAINING, like Prop Ladder's refresh: a schedule can't be the fix for a schedule that
+# doesn't fire, so each run ends with a job that waits until the next check is due and starts
+# the next run itself (workflow_dispatch from GITHUB_TOKEN is allowed to start runs). The wait
+# is 20 minutes in the Game Day report hours and otherwise until 40 minutes after the next daily
+# snapshot, never more than 5 hours. It starts the next run only if no other Watchdog run is
+# queued or running, so duplicate chains die out. The cron below only revives the chain if it
+# ever breaks.
+# STOP THE CHAIN: set repository variable WATCHDOG_CHAIN to "off"
+# (Settings > Secrets and variables > Actions > Variables).
+#
+# It never edits files or commits. It starts only market.yml (no inputs: a plain snapshot, about
+# 6 Odds API credits, the same call the old task made) and cfb-availability.yml.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "27 */2 * 8-12,1-2 *"   # revives the chain if it breaks; August to February
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: watchdog
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      sleep: ${{ steps.check.outputs.sleep }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check, and start what GitHub skipped
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          python scripts/watchdog.py | tee out.txt | tee -a "$GITHUB_STEP_SUMMARY"
+          grep '^sleep=' out.txt | tail -1 >> "$GITHUB_OUTPUT"
+
+  next:
+    needs: watch
+    if: ${{ always() && vars.WATCHDOG_CHAIN != 'off' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - name: Wait, then start the next check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          SLEEP: ${{ needs.watch.outputs.sleep }}
+        run: |
+          month=$(date -u +%-m)
+          if [ "$month" -ge 3 ] && [ "$month" -le 7 ]; then echo "out of season (March to July): chain ends; the August cron restarts it"; exit 0; fi
+          secs=${SLEEP:-1200}                       # the check failed: look again in 20 minutes
+          echo "waiting $secs seconds"
+          sleep "$secs"
+          others=$(gh api "repos/$REPO/actions/workflows/watchdog.yml/runs?per_page=20" \
+            --jq "[.workflow_runs[] | select(.id != $RUN_ID) | select(.status==\"queued\" or .status==\"in_progress\" or .status==\"waiting\" or .status==\"pending\")] | length")
+          if [ "$others" -gt 0 ]; then echo "another Watchdog run is already queued or running; ending this chain"; exit 0; fi
+          gh workflow run watchdog.yml --repo "$REPO" --ref main
+          echo "next check started"
