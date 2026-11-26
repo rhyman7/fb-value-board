@@ -1,0 +1,182 @@
+{
+  "_about": "Every model change that is live but provisional, with where its setting is and the rule that decides it. scripts/whats_live.py reads each setting's current value from the code and writes docs/whats-live/index.html. Add a row here in the same pull request that applies a provisional change, and remove or move it when the recheck decides it. CONVENTIONS.md, \"What's live\".",
+  "recheck": {"task": "January rechecks (new keep rule)", "date": "2027-01-11", "reads": ["claude/near-misses-and-rechecks.md", "claude/january-recheck-additions.md", "claude/january-recheck-additions-nov20.md"]},
+  "applied": [
+    {
+      "id": "nfl-friday-weight", "league": "NFL", "area": "Game model", "since": "2026-11-19",
+      "title": "Friday weight for current-line games",
+      "basis": "Ryan's call on a trade-off",
+      "what": "Games priced at the current line use the weight the model earns with Friday information (0.156 for 2026) in place of the game-day weight (0.290). Early lines and the final week are unchanged.",
+      "settings": [{"label": "FRIDAY_WEIGHT", "file": "nflmodel/config.py", "regex": "^FRIDAY_WEIGHT = (\\S+)"}],
+      "off": "Set FRIDAY_WEIGHT = False.",
+      "unseen": "NFL games kicked off after Nov 19, 2026, from the forecast log's logged inputs.",
+      "rule": "Comes off if that stretch is worse on average miss. Within 1 standard error either way, it stays and is judged again after 2027.",
+      "code": ["nflmodel/config.py", "nflmodel/bettime.py"],
+      "docs": ["claude/nfl-friday-weight-test-results-2026-11-19.md", "FEATURES.md: Bet-time information: the Friday weight"], "prs": [349]
+    },
+    {
+      "id": "nfl-pff-passing", "league": "NFL", "area": "Player projections", "since": "2026-11-13",
+      "title": "PFF passing grade and opponent coverage in passing yards",
+      "basis": "Kept under the rule; Ryan's go-ahead",
+      "what": "The quarterback's PFF passing grade and the opponent's PFF coverage grade are extra terms in the passing-yards calibration.",
+      "settings": [{"label": "CAL_EXTRA[\"pass_yds\"]", "file": "nflmodel/players.py", "regex": "^    \"pass_yds\": (\\[[^\\]]*\\])"}],
+      "off": "Take pff_pass_grade and pff_opp_cov out of CAL_EXTRA[\"pass_yds\"].",
+      "unseen": "The 2026 season.",
+      "rule": "Comes off if worse on 2026's passing-yards RMSE, or on both 2026 Brier measures at the DraftKings/FanDuel passing-yards lines. No refit on 2026.",
+      "code": ["nflmodel/players.py", "nflmodel/pff_passing.py"],
+      "docs": ["claude/nfl-pff-pairs-test-results-2026-11-13.md", "PLAYERS.md: PFF passing grade and opponent coverage in passing yards"], "prs": [298, 300]
+    },
+    {
+      "id": "nfl-wopr-standing", "league": "NFL", "area": "Player projections", "since": "2026-11-18",
+      "title": "WOPR standing in WR/TE receiving yards",
+      "basis": "Ryan's call on a 14-of-15 trade-off",
+      "what": "Receiving yards for wide receivers and tight ends projected 10+ yards are multiplied by (1 + b × z), z being how far his WOPR sits from the usual for his projection.",
+      "settings": [
+        {"label": "woprstanding.APPLIED", "file": "nflmodel/woprstanding.py", "regex": "^APPLIED = (\\S+)"},
+        {"label": "b", "file": "data/wopr_standing.json", "json": ["b"]},
+        {"label": "min_proj", "file": "data/wopr_standing.json", "json": ["min_proj"]}
+      ],
+      "off": "Set woprstanding.APPLIED = False.",
+      "unseen": "2026 from Week 11 on.",
+      "rule": "Comes off if Weeks 11 on are worse on bet-time RMSE, on bet-time Typical Brier, or at the live WR/TE receiving-yards main lines. A mixed result on the other measures goes to Ryan. Constants are refitted only after that decision.",
+      "code": ["nflmodel/woprstanding.py", "nflmodel/pipeline.py"],
+      "docs": ["claude/wopr-standing-test-results-2026-11-18.md", "PLAYERS.md: WOPR standing in WR/TE receiving yards"], "prs": [341, 342]
+    },
+    {
+      "id": "role-change-spread", "league": "Both", "area": "Props", "since": "2026-11-17",
+      "title": "Role change in the prop spread",
+      "basis": "Ryan's call; the two pieces that nearly passed, by stat",
+      "what": "The spread of a prop's distribution widens after a role change: NFL receptions and receiving yards (WR, TE, RB) and college carries and rushing yards (RB).",
+      "settings": [{"label": "rolechange.APPLIED", "file": "nflmodel/rolechange.py", "regex": "^APPLIED = (\\{.*?\\})\\n"}],
+      "off": "Empty the league's list in rolechange.APPLIED and refit the prop parameters.",
+      "unseen": "The 2026 season (the stat split was chosen after seeing 2017-2025).",
+      "rule": "A piece comes off if 2026 is worse on its main lines (game-day and bet-time) or on its floor rungs. Anything mixed goes to Ryan.",
+      "code": ["nflmodel/rolechange.py"],
+      "docs": ["claude/role-change-spread-test-results-2026-11-17.md", "FEATURES.md: Prop spread that widens after a role change"], "prs": [318, 319]
+    },
+    {
+      "id": "nfl-ol-name-match", "league": "NFL", "area": "Game model", "since": "2026-11-11",
+      "title": "Offensive-line names matched loosely",
+      "basis": "Ryan's call after a flat test",
+      "what": "A lineman the snap counts, roster and injury report spell differently (a dropped \"Jr.\", \"DJ\" for \"Delmar\") no longer counts as missing every week.",
+      "settings": [{"label": "injuries.ALIAS_GROUPS", "file": "nflmodel/injuries.py", "regex": "^ALIAS_GROUPS = (\\([^)]*\\))"}],
+      "off": "Set injuries.ALIAS_GROUPS = ().",
+      "unseen": "The 2026 season, with the PFF data.",
+      "rule": "Removed if worse on 2026 alone (experiments/ol_name_match_test.py).",
+      "code": [],
+      "docs": ["claude/near-misses-and-rechecks.md", "FEATURES.md: Offensive-line input: linemen the name match loses"], "prs": [282]
+    },
+    {
+      "id": "cfb-market-residual", "league": "College", "area": "Game model", "since": "2026-11-19",
+      "title": "Market-residual margin",
+      "basis": "Ryan's call on an 11-of-12 trade-off",
+      "what": "The adjusted college spread is the line plus a ridge fit of (result − line) on the margin inputs and the line, recent seasons weighted more, in place of one blend weight. Early lines and totals are unchanged.",
+      "settings": [
+        {"label": "STACK_MARGIN", "file": "cfbmodel/config.py", "regex": "^STACK_MARGIN = (\\S+)"},
+        {"label": "STACK_ALPHA", "file": "cfbmodel/config.py", "regex": "^STACK_ALPHA = (\\S+)"},
+        {"label": "STACK_HALF_LIFE", "file": "cfbmodel/config.py", "regex": "^STACK_HALF_LIFE = (\\S+)"}
+      ],
+      "off": "Set STACK_MARGIN = False (restores the blend weight).",
+      "unseen": "College games kicked off after Nov 19, 2026 (about 300 with bowls).",
+      "rule": "Comes off if the post-Nov 19 average miss or RMS miss is worse. A mixed result on side win rate or bet-time miss goes to Ryan. No refit of the penalty or half-life on 2026.",
+      "code": ["cfbmodel/config.py"],
+      "docs": ["claude/fresh-eyes-structure-test-results-2026-11-19.md", "CFB_FEATURES.md: Market-residual margin"], "prs": [347]
+    },
+    {
+      "id": "cfb-pff-skill", "league": "College", "area": "Player projections", "since": "2026-11-13",
+      "title": "PFF skill and matchup inputs",
+      "basis": "Kept under the rule; Ryan's go-ahead",
+      "what": "Passing yards get the quarterback's PFF passing grade and the opponent's coverage grade; receiving yards get yards per route run and opponent coverage; receptions get opponent coverage.",
+      "settings": [
+        {"label": "CAL_EXTRA[\"pass_yds\"] +", "file": "cfbmodel/players.py", "regex": "^CAL_EXTRA\\[\"pass_yds\"\\] = CAL_EXTRA\\[\"pass_yds\"\\] \\+ (\\[[^\\]]*\\])"},
+        {"label": "CAL_EXTRA[\"rec_yds\"] +", "file": "cfbmodel/players.py", "regex": "^CAL_EXTRA\\[\"rec_yds\"\\] = CAL_EXTRA\\[\"rec_yds\"\\] \\+ (\\[[^\\]]*\\])"},
+        {"label": "CAL_EXTRA[\"receptions\"] +", "file": "cfbmodel/players.py", "regex": "^CAL_EXTRA\\[\"receptions\"\\] = CAL_EXTRA\\[\"receptions\"\\] \\+ (\\[[^\\]]*\\])"}
+      ],
+      "off": "Remove the pair's line from CAL_EXTRA in cfbmodel/players.py.",
+      "unseen": "The 2026 season (the pairs were chosen from 14 candidates on 2017-2025).",
+      "rule": "A pair comes off if it is worse on 2026's RMSE or at 2026's live main lines. No refit on 2026.",
+      "code": ["cfbmodel/players.py", "cfbmodel/pff_skill.py"],
+      "docs": ["claude/cfb-pff-tables-test-results-2026-11-13.md", "FEATURES.md: PFF tables in the college projections"], "prs": [296, 297]
+    },
+    {
+      "id": "cfb-qb-underdog", "league": "College", "area": "Player projections", "since": "2026-11-19",
+      "title": "Quarterbacks on big underdogs",
+      "basis": "Ryan's call on a 7-of-8 trade-off",
+      "what": "A quarterback's passing yards come down a fixed number of yards for each point his team is projected to lose by beyond the margin, from the 2026 season.",
+      "settings": [
+        {"label": "yards_per_point", "file": "data/cfb/qb_underdog.json", "json": ["yards_per_point"]},
+        {"label": "margin", "file": "data/cfb/qb_underdog.json", "json": ["margin"]},
+        {"label": "from_season", "file": "data/cfb/qb_underdog.json", "json": ["from_season"]}
+      ],
+      "off": "Delete data/cfb/qb_underdog.json.",
+      "unseen": "College games kicked off after Nov 19, 2026.",
+      "rule": "Comes off if the post-Nov 19 RMSE on all starters is worse, or the live passing-yards lines are worse by more than 1 standard error. Anything mixed goes to Ryan. A different threshold or shape needs a new pre-set test.",
+      "code": ["cfbmodel/players.py"],
+      "docs": ["claude/chatgpt-player-changes-test-results-2026-11-19.md"], "prs": [350, 351]
+    },
+    {
+      "id": "cfb-qb-rush-shift", "league": "College", "area": "Props", "since": "2026-11-13",
+      "title": "QB rushing chance shift",
+      "basis": "Kept under the rule; Ryan's go-ahead",
+      "what": "The chance on a college quarterback's rushing-yards prop is shifted on the logit scale before it is shown.",
+      "settings": [{"label": "chance_shift[\"rush_yds|QB\"]", "file": "data/cfb/prop_params.json", "json": ["chance_shift", "rush_yds|QB"]}],
+      "off": "Remove the rush_yds|QB entry from chance_shift in data/cfb/prop_params.json.",
+      "unseen": "The 2026 season's live college QB rushing lines.",
+      "rule": "Comes off if the shifted chance is worse on 2026's main lines. A different refitted value needs a new pre-set test, not a quiet update.",
+      "code": [],
+      "docs": ["claude/cfb-rush-gap-diagnosis-2026-11-13.md", "FEATURES.md: Correcting the college QB rushing chance"], "prs": [301, 302, 303]
+    },
+    {
+      "id": "cfb-props-nudge", "league": "College", "area": "Parlays", "since": "2026-11-13",
+      "title": "Model nudge on Parlays main-line legs",
+      "basis": "Ryan's call on a 19-of-20 trade-off",
+      "what": "Two-sided college main lines on the Parlays page are priced part of the way from the books' number to the model's, up to a cap. Value is still scored on the books' number.",
+      "settings": [
+        {"label": "CFB_W_MAIN", "file": "nflmodel/parlays.py", "regex": "^CFB_W_MAIN = (\\S+)"},
+        {"label": "CFB_PULL_MAX", "file": "nflmodel/parlays.py", "regex": "^CFB_PULL_MAX = (\\S+)"},
+        {"label": "CFB_NUDGE_STATS", "file": "nflmodel/parlays.py", "regex": "^CFB_NUDGE_STATS = (\\([^)]*\\))"}
+      ],
+      "off": "A stat comes off through CFB_NUDGE_STATS.",
+      "unseen": "The full 2026 season's logged chances (through Nov 12 was read when it was applied).",
+      "rule": "Removed if the 2026 all-stats Brier is worse than the books. If all-stats is better but one stat is worse by more than 1 standard error, that stat comes off and it goes to Ryan. Same weight and cap: no refit on 2026.",
+      "code": ["nflmodel/parlays.py"],
+      "docs": ["claude/cfb-props-nudge-test-results-2026-11-13.md", "FEATURES.md: The model nudge on college main lines"], "prs": [291, 292]
+    }
+  ],
+  "groups": [
+    {
+      "id": "kept-since-nov-4", "league": "Both", "since": "2026-11-04",
+      "title": "Everything kept Nov 4 to Nov 10, 2026 under the old \"any improvement\" rule",
+      "what": "Kept with no noise threshold, on seasons the tests had seen. Named in the rechecks list as: the Nov 4 college and NFL game-model additions, PFF route share, the PFF quarterback prior, transfer-aware returning production, the quarterback rushing and kneel-down changes, the Questionable shades, the over-lean shade, and the rest dated Nov 4 on in FEATURES.md, CFB_FEATURES.md, PLAYERS.md and PROPS.md.",
+      "rule": "Each is judged on the 2026 season alone, the only season none of them was chosen on, and removed if worse there. Player changes are scored on bet-time projections as well as game-day ones.",
+      "note": "These are not itemised with their settings yet. The January task works from the four test logs.",
+      "docs": ["claude/near-misses-and-rechecks.md", "claude/keep-rule-rejudge-2026-11-04.md"]
+    }
+  ],
+  "waiting": [
+    {
+      "id": "nfl-totals-cap", "league": "NFL", "title": "Totals cap on the model's weight",
+      "settings": [{"label": "TOTAL_WEIGHT_CAP", "file": "nflmodel/config.py", "regex": "^TOTAL_WEIGHT_CAP = (\\S+)"}],
+      "why": "Raising it to 0.15 was mixed on the seasons tested (Nov 11, 2026). Ryan: leave at 0.05.",
+      "rule": "2026 is the season none of the caps was chosen on: blend total miss and the flagged totals' return at 0.05 against 0.15."
+    },
+    {
+      "id": "cfb-rung-reading", "league": "College", "title": "Alternate-line reading for ladder rungs",
+      "settings": [{"label": "CFB_RUNG_CAL", "file": "nflmodel/parlays.py", "regex": "^CFB_RUNG_CAL = (\\[.*?\\])\\n", "show": "points"}],
+      "why": "Fitted on 2025's rungs and never checked on rungs it didn't see. A Nov 13 refit was not kept.",
+      "rule": "On 2026's live rungs, in every probability band with 100+ rungs the cleared share must be within 2 standard errors of the reading. Otherwise refit."
+    },
+    {
+      "id": "cfb-td-margin", "league": "College", "title": "Anytime-TD margin",
+      "settings": [{"label": "CFB_TD_MARGIN", "file": "nflmodel/parlays.py", "regex": "^CFB_TD_MARGIN = (\\S+)"}],
+      "why": "Fitted on 2025's prices.",
+      "rule": "On 2026's live TD prices: is 17.5% still the best-fitting margin?"
+    },
+    {
+      "id": "cfb-prop-widths", "league": "College", "title": "Prop distribution widths fitted on college misses",
+      "settings": [{"label": "fitted_through", "file": "data/cfb/prop_params.json", "json": ["meta", "fitted_through"]}],
+      "why": "Applied Nov 4, 2026 (near-miss #6): better on all four stats at the 2025 lines.",
+      "rule": "The 2026 live-log recheck still stands: Brier at 2026's live college lines against the earlier widths."
+    }
+  ]
+}

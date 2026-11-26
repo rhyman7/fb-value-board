@@ -694,6 +694,26 @@ boards in detail; this file is the rules.
   before a kept change goes on the live boards.
 - Changes kept under the earlier rules stay until the January recheck; they are not re-judged now.
 
+## What's live (`docs/whats-live/`, Nov 25, 2026)
+
+- **One list of every provisional change:** `data/whats_live.json`. Each row has what the change
+  does, where its setting lives (a constant in a `.py` file or a key in a data file), how to turn it
+  off, the stretch it is judged on and the rule that decides it. `python scripts/whats_live.py`
+  reads each setting's current value from the code and writes `docs/whats-live/index.html`
+  (`/fb-value-board/docs/whats-live/`, not linked from the boards, `noindex`). The page is
+  generated: never edit it by hand.
+- **Applying a provisional change means adding its row in the same pull request**, with the rule
+  as written before the test, then running the script and committing the page. When a recheck
+  decides a change, remove its row (or move a setting to "waiting") in the pull request that acts
+  on the decision. Changing a listed setting's value needs the page regenerated too.
+- **`python scripts/whats_live.py --check`** fails if a listed setting is no longer in the code, if
+  a file under `nflmodel/` or `cfbmodel/` says "provisional" and no row names it, or if the page is
+  stale. The Smoke test Action runs it on every pull request. It is not a pytest test on purpose:
+  the board builds run pytest, and a stale list must never stop a board from building.
+- The list holds changes that are **live**. Tests not kept, leads and forward-only records stay in
+  the January recheck documents. The changes kept Nov 4 to 10, 2026 under the earlier rule are one
+  group row, not itemised.
+
 ## Site structure
 
 - `docs/index.html` and `docs/cfb/index.html` are **generated**. Don't edit them by hand;

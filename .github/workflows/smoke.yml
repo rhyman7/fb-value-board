@@ -15,6 +15,11 @@ on:
       - "docs/parlays.html"
       - "docs/recommended/index.html"
       - "docs/manual/**"
+      - "docs/whats-live/**"
+      - "data/whats_live.json"
+      - "scripts/whats_live.py"
+      - "nflmodel/**"
+      - "cfbmodel/**"
       - "review/index.html"
       - "smoke.json"
       - "scripts/smoke.py"
@@ -43,3 +48,5 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Load the pages
         run: python scripts/smoke.py -v
+      - name: What's live matches the code
+        run: python scripts/whats_live.py --check

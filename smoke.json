@@ -13,6 +13,7 @@
     {"path": "review/#cfb", "need": {"a.grow": 1, "a.wk": 1}},
     {"path": "review/#nfl-patterns", "need": {"table tbody tr": 3}},
     {"path": "review/#cfb-patterns", "need": {"table tbody tr": 3}},
+    {"path": "docs/whats-live/", "need": {"article.item": 5, "#waiting tbody tr": 1}},
     {"path": "docs/manual/", "need": {"table": 5}}
   ]
 }
