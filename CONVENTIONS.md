@@ -1085,6 +1085,36 @@ reads the archive and play-by-play and never feeds the model, the bets or the bo
 - Serve the repo root (`python -m http.server`) and load the landing page and both boards'
   sections you touched at desktop and phone widths with no page errors.
 
+## The boards on a phone (Nov 25, 2026; 760px and under, screen only)
+
+Ryan approved the mockup (Design canvas "Value Board phone mockup") and chose the short summary
+and the long columns behind a tap. Display only: nothing here changes a number, a pick or what
+is listed. Wider screens and print must stay pixel-identical; compare old against new there.
+
+- **Summary.** `#lede-stats` (three numbers: bets on the sheet, bets clearing break-even, the
+  best EV) and `#lede-short` (one line) show in place of the `#lede` paragraph, which opens from
+  "Read the full summary". `renderHero()` fills all three from the same values.
+- **Jump strip.** `#jump`, the first child of `#view-games`, holds one button per section of
+  the Games page, built from each section's `<h2>`; a new section gets a button automatically.
+  They are buttons that scroll, not links: the page's hash is its router. It sticks under the
+  top bar (`--bar-h`, measured in script).
+- **Tables as cards.** `table()` puts each column's name on its cells (`data-label`); the phone
+  rules lay out `table.sheet` (bet sheet, line movement) and `#bets` (best prices) as one card
+  per row. The card rules place cells by position (`td:nth-child(n)`), so **adding, removing
+  or reordering a column in one of those three tables means updating its card rules** in the
+  phone block of `site/template.html`.
+- **Bet sheet detail.** Each row ends with a cell that has no column (`td.more-cell`, hidden
+  except on phones) holding the "Why, timing and record" button; it opens the three long
+  columns (`tr.open`). The Stake cell carries `class="end"` so it stays the last column on
+  wider screens.
+- **Long lists.** `foldLong()` shows the first 5 bets of a tier, the first 5 line-movement
+  sides and the first 16 game cards, then a "Show all N" button. Long section notes show three
+  lines and "Read more" (`.note.clamp`). All of these buttons are hidden on wider screens.
+- Colors come from the page's own tokens (`--surface`, `--rule`, `--ink`), so the cards follow
+  the light and dark themes and any later restyle.
+- Not reworked for phones yet: Players, Props, Past weeks, Team ratings, Model record, a game's
+  own page, the Best bets and Model leans print views, the teaser table.
+
 ## Landing page (`index.html`)
 
 - Titled **Weekly Value Boards**. Same layout, tokens, Archivo type and NCAA/NFL logos as
