@@ -205,6 +205,23 @@ table.sheet td.end { padding-right: 0; }
   main .tiles > .tile:nth-child(even) { padding-left: 12px; border-left: 1px solid var(--rule); }
   main .tiles > .tile:nth-child(n+3) { border-top: 1px solid var(--rule); }
   main .tiles > .tile .value { font-size: 32px; }
+  /* ---- a game's own page, the teaser table and a prop's ladder ---- */
+  #view-game table:not(.m-cards), #tease-legs { font-size: 12.5px; }
+  #view-game table:not(.m-cards) th, #view-game table:not(.m-cards) td, #tease-legs th, #tease-legs td { padding: 7px 4px; }
+  #view-game table:not(.m-cards) th, #tease-legs th, #view-game table:not(.m-cards) td:first-child, #tease-legs td:first-child, #tease-legs td:nth-child(2) { white-space: normal; }
+  #view-game table:not(.m-cards) th:first-child, #view-game table:not(.m-cards) td:first-child, #tease-legs th:first-child, #tease-legs td:first-child { padding-left: 0; }
+  #view-game table:not(.m-cards) th:last-child, #view-game table:not(.m-cards) td:last-child, #tease-legs th:last-child, #tease-legs td:last-child { padding-right: 0; }
+  table.g-prices > tbody > tr > td:first-child { font: 800 20px/1.1 var(--display); }
+  table.g-books > tbody > tr { gap: 4px 10px; margin-top: 4px; padding: 8px 12px; }
+  table.g-books > tbody > tr.group { margin-top: 12px; }
+  table.g-books:not(.all) > tbody > tr:not(.group) { display: none; }
+  table.g-books > tbody > tr > td { font-size: 14px; }
+  table.g-books > tbody > tr > td:first-child { font: 800 18px/1.1 var(--display); padding-bottom: 2px; }
+  table.g-books > tbody > tr > td:first-child:empty { display: none; }
+  table.g-books > tbody > tr > td:last-child:not(:has(*)) { display: none; }
+  table.g-books > tbody > tr > td:last-child { grid-column: 1 / -1; font-size: 13px; font-weight: 400; color: var(--ink-2); }
+  table.g-books > tbody > tr > td:last-child::before { content: none; }
+  #props-table td.ladder table.m-cards { margin: 0; width: 100%; background: none; }
 }
 
 main { display: grid; gap: 60px; padding-top: 28px; }
@@ -1341,6 +1358,8 @@ function foldLong(list, after, keep, what) {
   after.insertAdjacentElement("afterend", H("p", { class: "fold-more" }, H("button", { class: "link", type: "button", text: "Show all " + n + (what ? " " + what : ""), onclick: e => { list.classList.add("all"); e.currentTarget.parentElement.remove(); } })));
 }
 /* foldLong for a table's rows. Once "Show all" is tapped the table stays open through its redraws (sorting, filtering, opening a row). */
+/* Phones only: a per-book table shows each pick's best book; this button shows the rest (hidden on wider screens with the other fold buttons). */
+const everyBook = t => H("p", { class: "fold-more" }, H("button", { class: "link", type: "button", text: "Show every book", onclick: e => { t.classList.add("all"); e.currentTarget.parentElement.remove(); } }));
 const NIL = txt => txt === "–" || txt === "" || txt == null ? "nil" : "";
 function foldTable(t, keep, what) {
   const wrap = t.closest(".scroll") || t, body = t.tBodies[0];
@@ -2215,14 +2234,14 @@ function renderGame(g) {
   }
 
   /* --- prices --- */
-  const pt = H("table");
+  const pt = H("table", { class: "m-cards g-prices" });   // phones: one card per price
   table(pt, priceHead, g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).map(priceRow));
   const prices = sec("Every price", priceNote(), H("div", { class: "scroll" }, pt));
 
   /* --- every book: each side's price at each book, Kalshi with where to post as a maker --- */
   let books = null;
   if (g.bets.some(b => b.books && b.books.length)) {
-    const bt = H("table"), rows = [];
+    const bt = H("table", { class: "m-cards g-books" }), rows = [];   // phones: a compact card per book, grouped under its pick
     g.bets.slice().sort((a, b) => evOf(b) - evOf(a)).forEach(b => {
       if (!b.books || !b.books.length) return;
       b.books.forEach((q, i) => rows.push({ cls: i === 0 ? "group" : "", cells: [
@@ -2235,14 +2254,14 @@ function renderGame(g) {
     });
     table(bt, [{ t: "Pick", l: 1 }, { t: "Book", l: 1 }, { t: "Line" }, { t: "Price" }, { t: "Model" }, { t: "EV per $1" }, { t: "Stake" }, { t: "", l: 1 }], rows);
     books = sec("Every book", "Each side at each book's own line, best price first, priced from the market-adjusted projection; Kalshi prices are the taker price, net of the 7% taker fee in brackets. A Kalshi row also says where a resting (maker) order is worth posting: the highest contract price that is still +EV against the board's chance after the 1.75% maker fee, and the price that matches the best retail book. A resting order may never fill.",
-      H("div", { class: "scroll" }, bt));
+      H("div", { class: "scroll" }, bt), everyBook(bt));
   }
 
   /* --- derivatives: team totals and first-half lines at every book, off the full-game curves (nflmodel/derivs.py) --- */
   let derivs = null;
   if (g.derivs && g.derivs.length) {
     const sharpName = bookName(M.sharp_book || "pinnacle");
-    const dt = H("table");
+    const dt = H("table", { class: "m-cards g-books all" });   // every row: its first row per pick is the sharp book, not the best price
     const rows = [];
     g.derivs.forEach(b => {
       const qs = (b.books || []).slice().sort((x, y) => y.ev - x.ev);
@@ -3220,7 +3239,7 @@ const propsView = (function () {
 
   function ladder(d, p) {
     const rungs = d.props.filter(x => x.g === p.g && x.id === p.id && x.s === p.s).sort((a, b) => a.L - b.L);
-    const t = H("table", { class: "compact" });
+    const t = H("table", { class: "compact m-cards" });   // phones: one card per rung
     table(t, [{ t: "Line", l: 1 }, { t: "Our chance, over" }, { t: "Books', no vig" }, { t: "Ours − books'" }, { t: "DraftKings O / U" }, { t: "FanDuel O / U" }, { t: "EV per $1, over" }, { t: "Result", l: 1 }],
       rungs.map(r => [H("span", {}, document.createTextNode(r.s === "anytime_td" ? "Scores" : r.alt ? Math.ceil(r.L) + "+ (over " + r.L + ")" : "Main line " + r.L),),
         pct(dec(r)), r.fo == null ? "–" : pct(r.fo), gap(r) == null ? "–" : (gap(r) >= 0 ? "+" : "−") + pts(gap(r)),
