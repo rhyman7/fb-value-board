@@ -187,6 +187,24 @@ td.dim { white-space: nowrap; }
 .cross-link a:hover { color: var(--text); border-color: var(--text); }
 .grow .chips + .hl { max-width: 420px; }
 @media (max-width: 860px) { .topnav { gap: 0 16px; } .hl { display: none; } }
+/* Phones: a table too wide for the screen shows one card per row. The script at the end labels each
+   cell from the table's heading row (phoneCards), so a new column needs nothing here. */
+.m-more { display: none; }
+@media screen and (max-width: 760px) {
+  table.m-cards, table.m-cards > tbody { display: block; }
+  table.m-cards tr.m-head { display: none; }
+  table.m-cards tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px 10px; padding: 10px 0; border-bottom: 1px solid rgba(53,58,66,.55); }
+  table.m-cards td { display: block; min-width: 0; padding: 0; border: 0; text-align: left; white-space: normal; font-weight: 700; }
+  table.m-cards td:first-child, .ptab.m-cards td:first-child { grid-column: 1 / -1; min-width: 0; font-size: 1rem; }
+  table.m-cards td[data-label]::before { content: attr(data-label); display: block; font-size: .72rem; font-weight: 400; line-height: 1.3; opacity: .7; }
+  table.m-cards td:empty { display: none; }
+  .bmt.m-cards td:first-child { grid-column: 1; align-self: center; font-size: .8125rem; font-weight: 400; }
+  .bmt.m-cards td:nth-child(2) { grid-column: 2 / -1; font-size: 1rem; }
+  .bmt.m-cards td:nth-child(2)::before { content: none; }
+  table.m-cards.m-fold:not(.all) tr:nth-child(n+22) { display: none; }
+  .m-more { display: block; margin: 10px 0 0; }
+  .m-more button { min-height: 44px; padding: 0 14px; border: 1px solid rgba(157,162,171,.5); border-radius: 8px; background: none; color: inherit; font: inherit; font-weight: 700; }
+}
 @media print { .topbar, .pn { display: none; } body { background: #fff; color: #111; } }
 
 </style>
@@ -686,6 +704,29 @@ async function route() {
   const sel = document.querySelector(".weeknav .sel");   // phones: the strip scrolls to the week in view
   if (sel) { const nav = sel.parentElement; nav.scrollLeft = sel.offsetLeft - nav.clientWidth / 2; }
 }
+/* Phones: turn each too-wide table into cards (the rules are in the style block above). Runs after
+   every redraw of the page; wider screens are left alone. */
+function phoneCards() {
+  if (!window.matchMedia || !matchMedia("(max-width: 760px)").matches) return;
+  document.querySelectorAll("#app .scroll > table:not(.m-cards)").forEach(t => {
+    const head = t.rows[0];
+    if (!head || !head.querySelector("th") || t.scrollWidth <= t.parentElement.clientWidth + 1) return;
+    const labels = [...head.cells].map(c => c.textContent.replace(/[▲▼]/g, "").trim());
+    [...t.rows].slice(1).forEach(tr => [...tr.cells].forEach((td, i) => { if (i && labels[i]) td.dataset.label = labels[i]; }));
+    head.classList.add("m-head"); t.classList.add("m-cards");
+    const n = t.rows.length - 1, wrap = t.parentElement, key = (t.closest("section") && t.closest("section").querySelector("h3") || {}).textContent || "";
+    if (wrap.nextElementSibling && wrap.nextElementSibling.classList.contains("m-more")) wrap.nextElementSibling.remove();
+    if (n > 20 && !phoneCards.open.has(key)) {
+      t.classList.add("m-fold");
+      const more = document.createElement("p"), b = document.createElement("button");
+      more.className = "m-more"; b.type = "button"; b.textContent = "Show all " + n;
+      b.addEventListener("click", () => { phoneCards.open.add(key); t.classList.add("all"); more.remove(); });
+      more.append(b); wrap.insertAdjacentElement("afterend", more);
+    }
+  });
+}
+phoneCards.open = new Set();   // lists opened with "Show all" stay open through a re-sort or a filter
+new MutationObserver(() => requestAnimationFrame(phoneCards)).observe(document.getElementById("app"), { childList: true, subtree: true });
 addEventListener("hashchange", route);
 route();
 

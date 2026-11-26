@@ -196,6 +196,19 @@ section {{ display: grid; gap: 18px; min-width: 0; }}
 .chip.both {{ background: var(--raised); }}
 .item.group {{ border-style: dashed; }}
 .scroll {{ overflow-x: auto; }}
+/* Phones: each waiting change is a card. Labels are set here by column position, so a column added,
+   removed or reordered in the table means updating them. */
+@media screen and (max-width: 760px) {{
+  table.m-cards, table.m-cards > tbody {{ display: block; }}
+  table.m-cards > thead {{ display: none; }}
+  table.m-cards > tbody > tr {{ display: grid; gap: 8px; margin-top: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }}
+  table.m-cards > tbody > tr > td {{ display: block; min-width: 0; max-width: none; width: auto; padding: 0; border: 0; text-align: left; white-space: normal; }}
+  table.m-cards > tbody > tr > td::before {{ display: block; font-size: 12px; line-height: 1.3; color: var(--ink-2); }}
+  table.m-cards > tbody > tr > td:nth-child(2) {{ font-size: 16px; }}
+  table.m-cards > tbody > tr > td:nth-child(3)::before {{ content: "Value now"; }}
+  table.m-cards > tbody > tr > td:nth-child(4)::before {{ content: "Why it waits"; }}
+  table.m-cards > tbody > tr > td:nth-child(5)::before {{ content: "What decides it"; }}
+}}
 table {{ border-collapse: collapse; width: 100%; font-size: 14px; }}
 th, td {{ padding: 10px 12px 10px 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--grid); }}
 th {{ font-weight: 600; color: var(--ink-2); font-size: 12.5px; border-bottom: 2px solid var(--ink); }}
@@ -229,7 +242,7 @@ footer.page {{ font-size: 13px; color: var(--ink-2); display: grid; gap: 6px; }}
 <section id="waiting">
   <h2>SETTINGS WAITING ON A CHECK</h2>
   <p class="note">Fitted values the boards use that are due a check on 2026 data. Nothing here was a model change under the keep rule.</p>
-  <div class="scroll"><table><thead><tr><th></th><th>Setting</th><th>Value now</th><th>Why it waits</th><th>What decides it</th></tr></thead><tbody>{wait_rows}</tbody></table></div>
+  <div class="scroll"><table class="m-cards"><thead><tr><th></th><th>Setting</th><th>Value now</th><th>Why it waits</th><th>What decides it</th></tr></thead><tbody>{wait_rows}</tbody></table></div>
 </section>
 <footer class="page">
   <p>Built by <code>scripts/whats_live.py</code> from <code>data/whats_live.json</code>. Tests that were not kept, leads and forward-only records are not here: they are in the January recheck documents ({', '.join(esc(r) for r in rc['reads'])}).</p>

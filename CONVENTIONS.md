@@ -1162,6 +1162,20 @@ is listed. Wider screens and print must stay pixel-identical; compare old agains
   `all` from the start because its first row per pick is the sharp book. A prop's ladder is one
   card per rung. The page's other tables (game summary, matchup ranks, recent form, alternate
   lines) and `#tease-legs` stay tables, with tighter padding and wrapping headings so they fit.
+- **Recommended, the Weekly Review and What's live on a phone (Nov 26, 2026; Ryan approved the
+  before-and-after preview).** Tables that ran off the side show one card per row at 760px and
+  under; wider screens and print are unchanged.
+  - `docs/recommended/index.html`: its four tables carry `m-cards` plus `m-open`, `m-tracks`,
+    `m-weeks` or `m-graded`. The labels are written in the page's style block by column
+    position, so **a column added, removed or reordered there means updating that block**. Open
+    picks shows the first 10 and "Every pick ever published" the first 15, each with a "Show
+    all" button (`.m-more`).
+  - `review/index.html`: `phoneCards()` runs after every redraw and labels each too-wide table
+    in a `.scroll` box from its own heading row, so a new column or table needs nothing. More
+    than 20 rows fold behind "Show all N", which stays open through a re-sort or filter.
+    Column sorting is desktop-only.
+  - `scripts/whats_live.py`: the waiting-changes table is `table.m-cards`, labels by column
+    position in the script's style block.
 - Not reworked for phones yet: the Best bets and Model leans print views.
 
 ## Landing page (`index.html`)
