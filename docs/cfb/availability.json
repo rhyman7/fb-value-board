@@ -1,640 +1,2333 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-25T20:23Z",
+ "fetched": "2026-11-26T03:00Z",
  "today": "2026-11-25",
  "teams": {
-  "Iowa": {
-   "conf": "Big Ten",
-   "abbr": "IOWA",
+  "Alabama": {
+   "conf": "SEC",
+   "abbr": "ALA",
    "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:00:00",
-   "game_date": "2026-11-27",
-   "game_time": "11:00:00",
-   "opponent": "Nebraska",
-   "players": [
-    {
-     "name": "KJ Parker",
-     "pos": "WR",
-     "number": "1",
-     "status": "Doubtful",
-     "season_out": false
-    },
-    {
-     "name": "Tyler Brown",
-     "pos": "DB",
-     "number": "2",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Jacob Wallace",
-     "pos": "DB",
-     "number": "11",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Tony Diaz",
-     "pos": "WR",
-     "number": "14",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Xavier Styles",
-     "pos": "DB",
-     "number": "18",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Kyler Gerardy",
-     "pos": "DB",
-     "number": "19",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Kamari Moulton",
-     "pos": "RB",
-     "number": "28",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Cannon Leonard",
-     "pos": "OL",
-     "number": "75",
-     "status": "Out",
-     "season_out": true
-    }
-   ]
-  },
-  "Minnesota": {
-   "conf": "Big Ten",
-   "abbr": "MINN",
-   "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:00:00",
-   "game_date": "2026-11-27",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
    "game_time": "18:30:00",
-   "opponent": "Wisconsin",
+   "opponent": "Auburn",
    "players": [
     {
-     "name": "Garrison Monroe",
-     "pos": "DB",
-     "number": "9",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "John Nestor",
-     "pos": "DB",
-     "number": "17",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Donielle Hayes",
-     "pos": "WR",
-     "number": "18",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Pierce Walsh",
-     "pos": "TE",
-     "number": "19",
+     "name": "Luke Metz",
+     "pos": "LB",
+     "number": "4",
      "status": "Probable",
      "season_out": false
     },
     {
-     "name": "Ryan Estrada",
-     "pos": "RB",
-     "number": "20",
-     "status": "Out",
-     "season_out": true
+     "name": "Caleb Woodson",
+     "pos": "LB",
+     "number": "7",
+     "status": "Probable",
+     "season_out": false
     },
     {
-     "name": "Mekhai Smith",
+     "name": "Desmond Umeozulu",
+     "pos": "LB",
+     "number": "9",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Jireh Edwards",
      "pos": "DB",
-     "number": "22",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Mason Carrier",
-     "pos": "LB",
-     "number": "46",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Jaylin Hicks",
-     "pos": "DL",
-     "number": "55",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Brett Carroll",
-     "pos": "OL",
-     "number": "56",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Ashton Beers",
-     "pos": "OL",
-     "number": "78",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Hayden Moore",
-     "pos": "WR",
-     "number": "84",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Riley Sunram",
-     "pos": "DL",
-     "number": "93",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Theorin Randle",
-     "pos": "DL",
-     "number": "99",
-     "status": "Out",
-     "season_out": true
-    }
-   ]
-  },
-  "Mississippi State": {
-   "conf": "SEC",
-   "abbr": "MSST",
-   "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:10:00",
-   "game_date": "2026-11-27",
-   "game_time": "11:00:00",
-   "opponent": "Ole Miss",
-   "players": [
-    {
-     "name": "Kamario Taylor",
-     "pos": "QB",
-     "number": "1",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Isaac Smith",
-     "pos": "S",
-     "number": "2",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Jalen Smith",
-     "pos": "LB",
      "number": "10",
      "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Ayden Williams",
-     "pos": "WR",
-     "number": "11",
-     "status": "Out",
      "season_out": false
     },
     {
-     "name": "Kyle Johnson",
-     "pos": "CB",
-     "number": "17",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "AJ Swann",
-     "pos": "QB",
-     "number": "17",
-     "status": "Doubtful",
-     "season_out": false
-    },
-    {
-     "name": "Trevion Williams",
+     "name": "Fatutoa Henry",
      "pos": "DL",
+     "number": "14",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Cayden Jones",
+     "pos": "LB",
      "number": "23",
      "status": "Out",
      "season_out": true
     },
     {
-     "name": "Diesel Moye",
+     "name": "Mhari Johnson",
      "pos": "DL",
-     "number": "99",
-     "status": "Out",
-     "season_out": true
-    }
-   ]
-  },
-  "Nebraska": {
-   "conf": "Big Ten",
-   "abbr": "NEB",
-   "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:00:00",
-   "game_date": "2026-11-27",
-   "game_time": "11:00:00",
-   "opponent": "Iowa",
-   "players": [
-    {
-     "name": "Owen Chambliss",
-     "pos": "LB",
-     "number": "0",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Jahsear Whittington",
-     "pos": "DL",
-     "number": "1",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Anthony Jones Jr.",
-     "pos": "DL",
-     "number": "5",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Andrew Marshall",
-     "pos": "DB",
-     "number": "7",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Larry Tarver Jr.",
-     "pos": "DB",
-     "number": "11",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Larry Miles",
-     "pos": "WR",
-     "number": "17",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Kahmir Prescott",
-     "pos": "DB",
-     "number": "19",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Vincent Genatone",
-     "pos": "RB",
-     "number": "30",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Jase Reynolds",
-     "pos": "LB",
-     "number": "52",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Jacob Bower",
-     "pos": "LB",
-     "number": "54",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Paul Mubenga",
-     "pos": "OL",
-     "number": "65",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Gunnar Gottula",
-     "pos": "OL",
-     "number": "77",
-     "status": "Probable",
-     "season_out": false
-    },
-    {
-     "name": "Gabe Moore",
-     "pos": "DL",
-     "number": "95",
-     "status": "Out",
-     "season_out": true
-    }
-   ]
-  },
-  "Ole Miss": {
-   "conf": "SEC",
-   "abbr": "MISS",
-   "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:10:00",
-   "game_date": "2026-11-27",
-   "game_time": "11:00:00",
-   "opponent": "Mississippi State",
-   "players": [
-    {
-     "name": "Johntay Cook II",
-     "pos": "WR",
-     "number": "0",
-     "status": "Probable",
-     "season_out": false
-    },
-    {
-     "name": "Deuce Knight",
-     "pos": "QB",
-     "number": "2",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Caleb Cunningham",
-     "pos": "WR",
-     "number": "3",
-     "status": "Probable",
-     "season_out": false
-    },
-    {
-     "name": "Caleb Odom",
-     "pos": "TE",
-     "number": "4",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Kam Franklin",
-     "pos": "DE",
-     "number": "5",
-     "status": "Probable",
-     "season_out": false
-    },
-    {
-     "name": "Kewan Lacy",
-     "pos": "RB",
-     "number": "5",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Sharif Denson",
-     "pos": "S",
-     "number": "7",
-     "status": "Probable",
-     "season_out": false
-    },
-    {
-     "name": "Keaton Thomas",
-     "pos": "LB",
-     "number": "11",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Izaiah Hartrup",
-     "pos": "WR",
-     "number": "12",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Edwin Joseph",
-     "pos": "S",
-     "number": "14",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "MJ Preston",
-     "pos": "S",
-     "number": "19",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Ant Davis Jr.",
-     "pos": "LB",
      "number": "26",
      "status": "Out",
      "season_out": false
     },
     {
-     "name": "Kervin Johnson Jr.",
-     "pos": "WR",
-     "number": "27",
+     "name": "Nick Sherman",
+     "pos": "DB",
+     "number": "29",
      "status": "Out",
-     "season_out": false
+     "season_out": true
     },
     {
-     "name": "JaMichael Garrett",
+     "name": "Josh Ford",
+     "pos": "TE",
+     "number": "40",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Casey Poe",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jeremiah Beaman",
+     "pos": "DL",
+     "number": "92",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "Arkansas": {
+   "conf": "SEC",
+   "abbr": "ARK",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:45:00",
+   "opponent": "LSU",
+   "players": [
+    {
+     "name": "Braydon Lee",
+     "pos": "DB",
+     "number": "3",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Phoenix Jackson",
      "pos": "LB",
-     "number": "30",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Shekai Mills-Knight",
-     "pos": "RB",
-     "number": "33",
+     "number": "8",
      "status": "Questionable",
      "season_out": false
     },
     {
-     "name": "Gerald Lacy Jr.",
-     "pos": "S",
-     "number": "39",
-     "status": "Out",
+     "name": "Brylan Green",
+     "pos": "DB",
+     "number": "34",
+     "status": "Questionable",
      "season_out": false
     },
     {
-     "name": "Carius Curne",
-     "pos": "OL",
-     "number": "57",
+     "name": "Maddox Lassiter",
+     "pos": "TE",
+     "number": "47",
      "status": "Out",
-     "season_out": false
+     "season_out": true
     },
     {
-     "name": "Patrick Kutas",
+     "name": "Kavion Broussard",
      "pos": "OL",
      "number": "75",
-     "status": "Doubtful",
+     "status": "Probable",
      "season_out": false
     },
     {
-     "name": "Brady Prieskorn",
+     "name": "Gavin Garretson",
      "pos": "TE",
-     "number": "86",
+     "number": "89",
      "status": "Out",
      "season_out": false
     }
    ]
   },
-  "Texas": {
+  "Auburn": {
    "conf": "SEC",
-   "abbr": "TEX",
+   "abbr": "AUB",
    "report": "Initial",
-   "published": "2026-11-24",
+   "published": "2026-11-25",
    "posted": "19:10:00",
-   "game_date": "2026-11-27",
+   "game_date": "2026-11-28",
    "game_time": "18:30:00",
-   "opponent": "Texas A&M",
+   "opponent": "Alabama",
    "players": [
     {
-     "name": "Colin Simmons",
-     "pos": "EDG",
+     "name": "De'marcus Riddick",
+     "pos": "LB",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Bryce Deas",
+     "pos": "LB",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Byrum Brown",
+     "pos": "QB",
+     "number": "17",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Gavin Jenkins",
+     "pos": "CB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Boston College": {
+   "conf": "ACC",
+   "abbr": "BC",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "12:00:00",
+   "opponent": "Miami",
+   "players": [
+    {
+     "name": "Onye Nwosisi",
+     "pos": "DL",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Isaiah Farris",
+     "pos": "DB",
+     "number": "16",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Justin Medlock",
+     "pos": "LB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Evan Dickens",
+     "pos": "RB",
+     "number": "23",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Andy Quinn",
+     "pos": "K",
+     "number": "25",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Sedric Addison",
+     "pos": "RB",
+     "number": "26",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Bodie Kahoun",
+     "pos": "LB",
+     "number": "36",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trevon Humphrey",
+     "pos": "OL",
+     "number": "53",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Micah Amedee",
+     "pos": "DL",
+     "number": "59",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Pape Abdoulaye Sy",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Reed Swanson",
+     "pos": "WR",
+     "number": "80",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kaelan Chudzinski",
+     "pos": "TE",
+     "number": "85",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Duke": {
+   "conf": "ACC",
+   "abbr": "DUKE",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:30:00",
+   "opponent": "Wake Forest",
+   "players": [
+    {
+     "name": "Jamien Little",
+     "pos": "WR",
+     "number": "1",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Kyon Loud",
+     "pos": "CB",
      "number": "1",
      "status": "Questionable",
      "season_out": false
     },
     {
-     "name": "Hollywood Smothers",
-     "pos": "RB",
+     "name": "Patrick Smith-Young",
+     "pos": "S",
      "number": "2",
      "status": "Out",
      "season_out": false
     },
     {
-     "name": "Kobe Black",
-     "pos": "DB",
-     "number": "6",
+     "name": "Kavon Simmons",
+     "pos": "WR",
+     "number": "7",
      "status": "Out",
      "season_out": false
     },
     {
-     "name": "Trevor Goosby",
+     "name": "Terry Walker III",
+     "pos": "QB",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kobe Smith",
+     "pos": "DE",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Qeanu Johnson",
+     "pos": "WR",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Elliott Schaper",
+     "pos": "LB",
+     "number": "31",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luke Mergott",
+     "pos": "LB",
+     "number": "34",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cosme Salas",
+     "pos": "K",
+     "number": "39",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cole Allen",
+     "pos": "OL",
+     "number": "62",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kai Jacobowitz",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Reagan McCranie",
      "pos": "OL",
      "number": "74",
      "status": "Out",
      "season_out": false
     },
     {
-     "name": "Andre Cojoe",
+     "name": "Roman Fina",
      "pos": "OL",
-     "number": "77",
-     "status": "Questionable",
+     "number": "79",
+     "status": "Out",
      "season_out": false
     },
     {
-     "name": "Nick Townsend",
+     "name": "Brett Elliott",
      "pos": "TE",
      "number": "81",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Hero Kanu",
-     "pos": "DL",
-     "number": "93",
-     "status": "Out",
-     "season_out": false
-    },
-    {
-     "name": "Richard Wesley",
-     "pos": "EDG",
-     "number": "99",
      "status": "Questionable",
      "season_out": false
     }
    ]
   },
-  "Texas A&M": {
-   "conf": "SEC",
-   "abbr": "TA&M",
+  "Illinois": {
+   "conf": "Big Ten",
+   "abbr": "ILL",
    "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:10:00",
-   "game_date": "2026-11-27",
-   "game_time": "18:30:00",
-   "opponent": "Texas",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:30:00",
+   "opponent": "Northwestern",
    "players": [
     {
-     "name": "Marcus Ratcliffe",
-     "pos": "S",
-     "number": "3",
+     "name": "Jayshon Platt",
+     "pos": "WR",
+     "number": "1",
      "status": "Out",
      "season_out": false
     },
     {
-     "name": "Terry Bussey",
-     "pos": "WR",
-     "number": "6",
+     "name": "Katin Houser",
+     "pos": "QB",
+     "number": "4",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ca'Lil Valentine",
+     "pos": "RB",
+     "number": "5",
      "status": "Out",
      "season_out": true
     },
     {
-     "name": "Ashton Bethel-Roman",
-     "pos": "WR",
+     "name": "Michael Clayton II",
+     "pos": "QB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jacob Eberhart",
+     "pos": "DB",
      "number": "8",
      "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ty Robinson",
+     "pos": "WR",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Hudson Clement",
+     "pos": "WR",
+     "number": "13",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Javari Barnett",
+     "pos": "RB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tywan Cox",
+     "pos": "DB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Beerman",
+     "pos": "LB",
+     "number": "33",
+     "status": "Out",
      "season_out": true
     },
     {
-     "name": "Marco Jones",
-     "pos": "DE",
-     "number": "10",
+     "name": "Robert Edmonson",
+     "pos": "LB",
+     "number": "45",
      "status": "Questionable",
      "season_out": false
     },
     {
-     "name": "Kelshaun Johnson",
+     "name": "Carter Smith",
+     "pos": "DL",
+     "number": "48",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kai Pritchard",
+     "pos": "OL",
+     "number": "53",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "TJ McMillen",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jake Renfro",
+     "pos": "OL",
+     "number": "59",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Kaden Feagin",
+     "pos": "TE",
+     "number": "83",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Indiana": {
+   "conf": "Big Ten",
+   "abbr": "IU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "18:00:00",
+   "opponent": "Purdue",
+   "players": [
+    {
+     "name": "A.J. Harris",
+     "pos": "DB",
+     "number": "4",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Rolijah Hardy",
+     "pos": "LB",
+     "number": "5",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Kellan Wyatt",
+     "pos": "DL",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Khobie Martin",
+     "pos": "RB",
+     "number": "28",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Drew Clausen",
+     "pos": "LS",
+     "number": "49",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joe Brunner",
+     "pos": "OL",
+     "number": "56",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Austin Leibfried",
+     "pos": "OL",
+     "number": "70",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Adedamola Ajani",
+     "pos": "OL",
+     "number": "72",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Bray Lynch",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "LSU": {
+   "conf": "SEC",
+   "abbr": "LSU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:45:00",
+   "opponent": "Arkansas",
+   "players": [
+    {
+     "name": "Jayce Brown",
      "pos": "WR",
-     "number": "11",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jackson Harris",
+     "pos": "WR",
+     "number": "4",
      "status": "Questionable",
      "season_out": false
     },
     {
-     "name": "Tylan Wilson",
+     "name": "Winston Watkins Jr.",
+     "pos": "WR",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Whit Weeks",
+     "pos": "LB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dashawn Spears",
      "pos": "S",
-     "number": "15",
+     "number": "10",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Malachi Thomas",
+     "pos": "TE",
+     "number": "12",
      "status": "Questionable",
      "season_out": false
     },
     {
-     "name": "TK Norman",
+     "name": "Phillip Wright III",
+     "pos": "WR",
+     "number": "15",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Aidan Anding",
+     "pos": "CB",
+     "number": "23",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Charles Ross II",
+     "pos": "LB",
+     "number": "26",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jhase Thomas",
+     "pos": "S",
+     "number": "28",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Richard Anderson",
+     "pos": "DT",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Maryland": {
+   "conf": "Big Ten",
+   "abbr": "MD",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "14:30:00",
+   "opponent": "Penn State",
+   "players": [
+    {
+     "name": "Daniel Wingate",
+     "pos": "LB",
+     "number": "1",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Lavain Scruggs",
+     "pos": "DB",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Darrell Carey",
+     "pos": "DB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cardell Williams",
+     "pos": "QB",
+     "number": "6",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Jordan Scruggs",
+     "pos": "DB",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Zahir Mathis",
+     "pos": "LB",
+     "number": "9",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Chris Durr Jr.",
+     "pos": "WR",
+     "number": "13",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Josiah Teasley",
      "pos": "WR",
      "number": "18",
      "status": "Out",
      "season_out": false
     },
     {
-     "name": "Blake Ivy",
+     "name": "DJ Samuels",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Harry Dalton III",
+     "pos": "RB",
+     "number": "25",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Terrez Worthy",
+     "pos": "RB",
+     "number": "26",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Dontay Joyner",
+     "pos": "DB",
+     "number": "29",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nahsir Taylor",
+     "pos": "LB",
+     "number": "40",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Trevor Szymanski",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Amory Hills",
+     "pos": "OL",
+     "number": "77",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Miami": {
+   "conf": "ACC",
+   "abbr": "MIA",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "12:00:00",
+   "opponent": "Boston College",
+   "players": [
+    {
+     "name": "Malachi Toney",
+     "pos": "WR",
+     "number": "1",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Joshua Moore",
+     "pos": "WR",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "CharMar Brown",
+     "pos": "RB",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zechariah Poyser",
+     "pos": "DB",
+     "number": "7",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Elija Lofton",
+     "pos": "TE",
+     "number": "9",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Chase Smith",
+     "pos": "LB",
+     "number": "9",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Ja'Boree Antoine",
+     "pos": "DB",
+     "number": "16",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Romanas \"OJ\" Frederique Jr.",
+     "pos": "DB",
+     "number": "29",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Max Buchanan",
+     "pos": "OL",
+     "number": "66",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jackson Cantwell",
+     "pos": "OL",
+     "number": "79",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Luka Gilbert",
+     "pos": "TE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Michigan": {
+   "conf": "Big Ten",
+   "abbr": "MICH",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:00:00",
+   "opponent": "Ohio State",
+   "players": [
+    {
+     "name": "Rod Moore",
+     "pos": "S",
+     "number": "1",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Andrew Marsh",
+     "pos": "WR",
+     "number": "3",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "JJ Buchanan",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nathaniel Owusu-Boateng",
+     "pos": "LB",
+     "number": "12",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Bryce Underwood",
+     "pos": "QB",
+     "number": "19",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jaylen Pile",
+     "pos": "WR",
+     "number": "20",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Braydon Alford",
+     "pos": "WR",
+     "number": "22",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jordan Marshall",
+     "pos": "RB",
+     "number": "23",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Micah Ka'apana",
+     "pos": "RB",
+     "number": "25",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Julius Holly",
+     "pos": "DE",
+     "number": "37",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jalen Hoffman",
+     "pos": "TE",
+     "number": "42",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ace Hamilton",
      "pos": "OL",
      "number": "52",
      "status": "Out",
      "season_out": true
     },
     {
-     "name": "Trovon Baugh",
+     "name": "Andrew Sprague",
      "pos": "OL",
-     "number": "76",
+     "number": "54",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brady Norton",
+     "pos": "OL",
+     "number": "70",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Blake Frazier",
+     "pos": "OL",
+     "number": "77",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "John Henry Daley",
+     "pos": "DE",
+     "number": "90",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Michigan State": {
+   "conf": "Big Ten",
+   "abbr": "MSU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:15:00",
+   "opponent": "Rutgers",
+   "players": [
+    {
+     "name": "Cam Edwards",
+     "pos": "RB",
+     "number": "0",
      "status": "Out",
      "season_out": true
     },
     {
-     "name": "Landon Rink",
-     "pos": "DT",
+     "name": "Cam Fancher",
+     "pos": "QB",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Devin Vaught",
+     "pos": "S",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rodney Bullard Jr.",
+     "pos": "WR",
+     "number": "3",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jordan Hall",
+     "pos": "LB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Michael Richard",
+     "pos": "S",
+     "number": "7",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Alessio Milivojevic",
+     "pos": "QB",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marvis Parrish",
+     "pos": "RB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tyran Chappell",
+     "pos": "CB",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jayden Savoury",
+     "pos": "TE",
+     "number": "31",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jay Coyne",
+     "pos": "FB",
+     "number": "44",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brady Pretzlaff",
+     "pos": "LB",
+     "number": "45",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ben Roberts",
+     "pos": "DL",
+     "number": "55",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Conner Moore",
+     "pos": "OL",
+     "number": "58",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tristan Comer",
+     "pos": "OL",
+     "number": "79",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brennan Parachek",
+     "pos": "TE",
+     "number": "82",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Joe Caudill",
+     "pos": "TE",
+     "number": "87",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Eli Coenen",
+     "pos": "DL",
+     "number": "96",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Missouri": {
+   "conf": "SEC",
+   "abbr": "MIZ",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:15:00",
+   "opponent": "Oklahoma",
+   "players": [
+    {
+     "name": "Langden Kitchen",
+     "pos": "EDG",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cameron Keys",
+     "pos": "CB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Malae Fonoti",
+     "pos": "RB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brett Le Blanc",
+     "pos": "LS",
+     "number": "49",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Josh Atkins",
+     "pos": "OL",
+     "number": "54",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Gavin Hoffman",
+     "pos": "TE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "NC State": {
+   "conf": "ACC",
+   "abbr": "NCSU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "12:00:00",
+   "opponent": "North Carolina",
+   "players": [
+    {
+     "name": "Jayden \"Duke\" Scott",
+     "pos": "RB",
+     "number": "1",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ronnie Royal, III",
+     "pos": "S",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tristan Teasdell",
+     "pos": "S",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Vander Ploog",
+     "pos": "TE",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Isaiah Crowell",
+     "pos": "NCK",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keenan Jackson",
+     "pos": "WR",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "AJ Richardson",
+     "pos": "ILB",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rico Jackson",
+     "pos": "OL",
+     "number": "64",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Yousef Mugharbil",
+     "pos": "OL",
+     "number": "71",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Spike Sowells Jr.",
+     "pos": "OL",
+     "number": "72",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ian Flynt",
+     "pos": "TE",
+     "number": "87",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chase Bond",
+     "pos": "DE",
+     "number": "92",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "AJ Prim",
+     "pos": "DL",
      "number": "99",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "North Carolina": {
+   "conf": "ACC",
+   "abbr": "UNC",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "12:00:00",
+   "opponent": "NC State",
+   "players": [
+    {
+     "name": "Greg Smith",
+     "pos": "DB",
+     "number": "1",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ade Willie",
+     "pos": "DB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tre Miller",
+     "pos": "DB",
+     "number": "6",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jonathan Agumadu",
+     "pos": "LB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Melkart Abou Jaoude",
+     "pos": "DL",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tarvorise Brown",
+     "pos": "DL",
+     "number": "14",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joseph Mupoyi",
+     "pos": "DL",
+     "number": "25",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jelani Thurman",
+     "pos": "TE",
+     "number": "45",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Viliami Moala",
+     "pos": "DL",
+     "number": "56",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jordan Hall",
+     "pos": "OL",
+     "number": "66",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Dujuan Davis",
+     "pos": "OL",
+     "number": "67",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keeyun Chapman",
+     "pos": "WR",
+     "number": "82",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Carson Sneed",
+     "pos": "TE",
+     "number": "87",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Vodney Cleveland",
+     "pos": "DL",
+     "number": "88",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jacob Horvath",
+     "pos": "P",
+     "number": "93",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Northwestern": {
+   "conf": "Big Ten",
+   "abbr": "NU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:30:00",
+   "opponent": "Illinois",
+   "players": [
+    {
+     "name": "Aidan Chiles",
+     "pos": "QB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Robert Fitzgerald",
+     "pos": "DB",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Josh Fussell",
+     "pos": "DB",
+     "number": "13",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Brennan Saxe",
+     "pos": "WR",
+     "number": "16",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Daniel Anderson",
+     "pos": "RB",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Max Mohring",
+     "pos": "LB",
+     "number": "37",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jack Sadowsky V",
+     "pos": "LB",
+     "number": "45",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Qayvier Johnson",
+     "pos": "LB",
+     "number": "50",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ezomo Oratokhai",
+     "pos": "OL",
+     "number": "62",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Deuce McGuire",
+     "pos": "OL",
+     "number": "73",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Chris Petrucci",
+     "pos": "TE",
+     "number": "81",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Migo Jackson",
+     "pos": "DL",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Ohio State": {
+   "conf": "Big Ten",
+   "abbr": "OSU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:00:00",
+   "opponent": "Michigan",
+   "players": [
+    {
+     "name": "Julian Sayin",
+     "pos": "QB",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Terry Moore",
+     "pos": "S",
+     "number": "11",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Christian Alliegro",
+     "pos": "LB",
+     "number": "14",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ja’Kobi Jackson",
+     "pos": "RB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jay Timmons",
+     "pos": "CB",
+     "number": "25",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Deshawn Stewart",
+     "pos": "S",
+     "number": "29",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Brennen Schramm",
+     "pos": "WR",
+     "number": "34",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaxon Powell",
+     "pos": "OL",
+     "number": "60",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Phillip Daniels",
+     "pos": "OL",
+     "number": "70",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Max Riley",
+     "pos": "OL",
+     "number": "78",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Maxence LeBlanc",
+     "pos": "TE",
+     "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Oklahoma": {
+   "conf": "SEC",
+   "abbr": "OU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:15:00",
+   "opponent": "Missouri",
+   "players": [
+    {
+     "name": "Reggie Powers III",
+     "pos": "DB",
+     "number": "3",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Parker Livingstone",
+     "pos": "WR",
+     "number": "3",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Tory Blaylock",
+     "pos": "RB",
+     "number": "6",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Taylor Heim",
+     "pos": "LB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trell Harris",
+     "pos": "WR",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trynae Washington",
+     "pos": "TE",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Gunnar Allen",
+     "pos": "OL",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Fodje",
+     "pos": "OL",
+     "number": "70",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Fred Hinton",
+     "pos": "OL",
+     "number": "72",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "E'Marion Harris",
+     "pos": "OL",
+     "number": "76",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Ivan Carreon",
+     "pos": "WR",
+     "number": "82",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kenny Ozowalu",
+     "pos": "DL",
+     "number": "94",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Oregon": {
+   "conf": "Big Ten",
+   "abbr": "ORE",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "18:30:00",
+   "opponent": "Washington",
+   "players": [
+    {
+     "name": "Jordon Davison",
+     "pos": "RB",
+     "number": "0",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Dante Moore",
+     "pos": "QB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dierre Hill Jr.",
+     "pos": "RB",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Aaron Flowers",
+     "pos": "DB",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brayden Platt",
+     "pos": "ILB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Teitum Tuioti",
+     "pos": "OLB",
+     "number": "44",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Matthew Johnson",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trent Ferguson",
+     "pos": "OL",
+     "number": "56",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dave Iuli",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Penn State": {
+   "conf": "Big Ten",
+   "abbr": "PSU",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "14:30:00",
+   "opponent": "Maryland",
+   "players": [
+    {
+     "name": "Jahmir Joseph",
+     "pos": "CB",
+     "number": "0",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "James Peoples",
+     "pos": "RB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brett Eskildsen",
+     "pos": "WR",
+     "number": "4",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Koby Howard",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zion Tracy",
+     "pos": "CB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Caleb Bacon",
+     "pos": "DE",
+     "number": "10",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Max Granville",
+     "pos": "DE",
+     "number": "18",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Carson Hansen",
+     "pos": "RB",
+     "number": "21",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Alex Tatsch",
+     "pos": "LB",
+     "number": "25",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Cam Wallace",
+     "pos": "RB",
+     "number": "26",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Tyler Armstead",
+     "pos": "CB",
+     "number": "35",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ty Blanding",
+     "pos": "DT",
+     "number": "39",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Brock Riker",
+     "pos": "OL",
+     "number": "51",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Trevor Buhr",
+     "pos": "OL",
+     "number": "70",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Donnie Harbour",
+     "pos": "OL",
+     "number": "79",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Andrew Rappleyea",
+     "pos": "TE",
+     "number": "87",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Lucas Tenbrock",
+     "pos": "P",
+     "number": "96",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Purdue": {
+   "conf": "Big Ten",
+   "abbr": "PUR",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "18:00:00",
+   "opponent": "Indiana",
+   "players": [
+    {
+     "name": "Kylan Fox",
+     "pos": "TE",
+     "number": "16",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Raderrion Daniels",
+     "pos": "DB",
+     "number": "24",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Rodney Lora",
+     "pos": "DL",
+     "number": "94",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Rutgers": {
+   "conf": "Big Ten",
+   "abbr": "RUTG",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:15:00",
+   "opponent": "Michigan State",
+   "players": [
+    {
+     "name": "Dyzier Carter",
+     "pos": "WR",
+     "number": "0",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Kaj Sanders",
+     "pos": "DB",
+     "number": "1",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Antwan Raymond",
+     "pos": "RB",
+     "number": "3",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Sean Ashenfelder",
+     "pos": "QB",
+     "number": "6",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Abram Wright",
+     "pos": "LB",
+     "number": "6",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "KJ Duff",
+     "pos": "WR",
+     "number": "8",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "AJ Surace",
+     "pos": "QB",
+     "number": "10",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Zahmir Dawud",
+     "pos": "DB",
+     "number": "12",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Dylan Lonergan",
+     "pos": "QB",
+     "number": "12",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Chris Joines",
+     "pos": "DB",
+     "number": "20",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Sage Clawges",
+     "pos": "DB",
+     "number": "27",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Joey Kopec",
+     "pos": "LB",
+     "number": "38",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Kwabena Asamoah",
+     "pos": "OL",
+     "number": "69",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "Tennessee": {
+   "conf": "SEC",
+   "abbr": "TENN",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
+   "game_time": "18:00:00",
+   "opponent": "Vanderbilt",
+   "players": [
+    {
+     "name": "Ethan Davis",
+     "pos": "TE",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Mike Matthews",
+     "pos": "WR",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Arion Carter",
+     "pos": "LB",
+     "number": "7",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Joakim Dodson",
+     "pos": "WR",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaedon Harmon",
+     "pos": "LB",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Edrees Farooq",
+     "pos": "DB",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Daune Morris",
+     "pos": "RB",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "DeSean Bishop",
+     "pos": "RB",
+     "number": "18",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Tyree Weathersby",
+     "pos": "DL",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dylan Lewis",
+     "pos": "DB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nic Moore",
+     "pos": "OL",
+     "number": "58",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Wendell Moe Jr.",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "UCLA": {
+   "conf": "Big Ten",
+   "abbr": "UCLA",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "14:30:00",
+   "opponent": "USC",
+   "players": [
+    {
+     "name": "Mikey Matthews",
+     "pos": "WR",
+     "number": "7",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Nico Iamaleava",
+     "pos": "QB",
+     "number": "9",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jalen Woods",
+     "pos": "LB",
+     "number": "9",
+     "status": "Doubtful",
+     "season_out": false
+    },
+    {
+     "name": "Ty Dieffenbach",
+     "pos": "QB",
+     "number": "14",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Ryan McCulloch",
+     "pos": "OLB",
+     "number": "19",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Shane Rosenthal",
+     "pos": "WR",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jonah Smith",
+     "pos": "WR",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ashton Sanders",
+     "pos": "DL",
+     "number": "44",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Riley Robell",
+     "pos": "OL",
+     "number": "51",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Sam Yoon",
+     "pos": "OL",
+     "number": "64",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Hall Schmidt",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jalen Saint Paul",
+     "pos": "WR",
+     "number": "86",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "USC": {
+   "conf": "Big Ten",
+   "abbr": "USC",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "14:30:00",
+   "opponent": "UCLA",
+   "players": [
+    {
+     "name": "Terrell Anderson",
+     "pos": "WR",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Braylan Shelby",
+     "pos": "DE",
+     "number": "10",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Corey Simms",
+     "pos": "WR",
+     "number": "10",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kendarius Reddick",
+     "pos": "S",
+     "number": "23",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Trestin Castro",
+     "pos": "S",
+     "number": "37",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Isaiah Rubin",
+     "pos": "S",
+     "number": "38",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Taylor \"Taybo\" Johnson",
+     "pos": "LB",
+     "number": "50",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Roman Marchetti",
+     "pos": "LB",
+     "number": "57",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "GianCarlo Rufo",
+     "pos": "LB",
+     "number": "58",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Kilian O'Connor",
+     "pos": "OL",
+     "number": "67",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Hayden Treter",
+     "pos": "OL",
+     "number": "68",
      "status": "Out",
      "season_out": false
     }
@@ -691,6 +2384,458 @@
      "number": "94",
      "status": "Questionable",
      "season_out": false
+    }
+   ]
+  },
+  "Vanderbilt": {
+   "conf": "SEC",
+   "abbr": "VAN",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:10:00",
+   "game_date": "2026-11-28",
+   "game_time": "18:00:00",
+   "opponent": "Tennessee",
+   "players": [
+    {
+     "name": "Cobey Sellers",
+     "pos": "CB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Blaze Berlowitz",
+     "pos": "QB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Edwin Kolenge",
+     "pos": "EDG",
+     "number": "17",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Josiah Broxton",
+     "pos": "LB",
+     "number": "18",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Evan Hampton",
+     "pos": "RB",
+     "number": "23",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Daniel Vollmer Jr.",
+     "pos": "LB",
+     "number": "34",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Gunner Givens",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Clinton Azubuike",
+     "pos": "OL",
+     "number": "51",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Aaron Bryant",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "Virginia": {
+   "conf": "ACC",
+   "abbr": "UVA",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:00:00",
+   "opponent": "Virginia Tech",
+   "players": [
+    {
+     "name": "Corey Costner",
+     "pos": "S",
+     "number": "4",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Maddox Marcellus",
+     "pos": "LB",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rico Flores Jr.",
+     "pos": "WR",
+     "number": "11",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Matthew Fobbs-White",
+     "pos": "DE",
+     "number": "16",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Omillio Agard",
+     "pos": "CB",
+     "number": "20",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Alex Dunn",
+     "pos": "DB",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Landon Danley",
+     "pos": "LB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Isaiah Reese",
+     "pos": "LB",
+     "number": "42",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Chase Morrison",
+     "pos": "DT",
+     "number": "46",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Noah Hartsoe",
+     "pos": "OL",
+     "number": "58",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Drake Metcalf",
+     "pos": "OL",
+     "number": "60",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Ellinger",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jason Hammond",
+     "pos": "DT",
+     "number": "91",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Bull Richardson",
+     "pos": "DT",
+     "number": "96",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Devon Baxter",
+     "pos": "DE",
+     "number": "99",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Virginia Tech": {
+   "conf": "ACC",
+   "abbr": "VT",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:00:00",
+   "opponent": "Virginia",
+   "players": [
+    {
+     "name": "Thomas Williams",
+     "pos": "CB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "George Ballance",
+     "pos": "LB",
+     "number": "25",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marcellous Hawkins",
+     "pos": "RB",
+     "number": "27",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Nathaniel Wright",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Lucas Austin",
+     "pos": "OL",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Montavious Cunningham",
+     "pos": "OL",
+     "number": "66",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Justin Terry",
+     "pos": "OL",
+     "number": "72",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Marlen Bright",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luke Stuewe",
+     "pos": "WR",
+     "number": "83",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Emmett Laws",
+     "pos": "DL",
+     "number": "99",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Wake Forest": {
+   "conf": "ACC",
+   "abbr": "WAKE",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "20:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:30:00",
+   "opponent": "Duke",
+   "players": [
+    {
+     "name": "Ty Clark III",
+     "pos": "RB",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Langston Hardy",
+     "pos": "DL",
+     "number": "11",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "Devin Cook",
+     "pos": "DB",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tolu Olajide",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dalton DeBoer",
+     "pos": "OL",
+     "number": "69",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "John Ohnegian",
+     "pos": "OL",
+     "number": "74",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Dylan Durbin",
+     "pos": "OL",
+     "number": "77",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Landon Morris",
+     "pos": "TE",
+     "number": "81",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Brandon Smiley",
+     "pos": "DL",
+     "number": "95",
+     "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Washington": {
+   "conf": "Big Ten",
+   "abbr": "WASH",
+   "report": "Initial",
+   "published": "2026-11-25",
+   "posted": "19:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "18:30:00",
+   "opponent": "Oregon",
+   "players": [
+    {
+     "name": "Dezmen Roebuck",
+     "pos": "WR",
+     "number": "2",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jordan Washington",
+     "pos": "RB",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Christian Moss",
+     "pos": "WR",
+     "number": "5",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Chris Lawson",
+     "pos": "WR",
+     "number": "8",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Logan George",
+     "pos": "EDG",
+     "number": "12",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Quaid Carr",
+     "pos": "RB",
+     "number": "21",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Trey Cooley",
+     "pos": "RB",
+     "number": "22",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Darin Conley",
+     "pos": "DL",
+     "number": "33",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Hunter McKee",
+     "pos": "K",
+     "number": "38",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Devin Hyde",
+     "pos": "EDG",
+     "number": "52",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Landen Hatchett",
+     "pos": "OL",
+     "number": "66",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "John Mills",
+     "pos": "OL",
+     "number": "72",
+     "status": "Probable",
+     "season_out": false
+    },
+    {
+     "name": "S CJ Christian",
+     "pos": "",
+     "number": "",
+     "status": "Out",
+     "season_out": true
     }
    ]
   },
@@ -757,74 +2902,6 @@
      "name": "Darius Wiley",
      "pos": "DL",
      "number": "91",
-     "status": "Out",
-     "season_out": false
-    }
-   ]
-  },
-  "Wisconsin": {
-   "conf": "Big Ten",
-   "abbr": "WIS",
-   "report": "Initial",
-   "published": "2026-11-24",
-   "posted": "19:00:00",
-   "game_date": "2026-11-27",
-   "game_time": "18:30:00",
-   "opponent": "Minnesota",
-   "players": [
-    {
-     "name": "Javan Robinson",
-     "pos": "CB",
-     "number": "2",
-     "status": "Doubtful",
-     "season_out": false
-    },
-    {
-     "name": "Cai Bates",
-     "pos": "CB",
-     "number": "3",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Deuce Adams",
-     "pos": "QB",
-     "number": "8",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Carson Van Dinter",
-     "pos": "S",
-     "number": "11",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Matthew Jung",
-     "pos": "S",
-     "number": "29",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Kevin Heywood",
-     "pos": "OL",
-     "number": "55",
-     "status": "Out",
-     "season_out": true
-    },
-    {
-     "name": "Barrett Nelson",
-     "pos": "OL",
-     "number": "70",
-     "status": "Questionable",
-     "season_out": false
-    },
-    {
-     "name": "Emmett Bork",
-     "pos": "TE",
-     "number": "82",
      "status": "Out",
      "season_out": false
     }
