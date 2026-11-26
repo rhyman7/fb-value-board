@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-26T13:46Z",
+ "fetched": "2026-11-26T23:38Z",
  "today": "2026-11-26",
  "teams": {
   "Alabama": {
@@ -3114,6 +3114,53 @@
     }
    ]
   },
+  "TCU": {
+   "conf": "Big 12",
+   "abbr": "TCU",
+   "report": "Game Day",
+   "published": "2026-11-26",
+   "posted": "17:30:00",
+   "game_date": "2026-11-26",
+   "game_time": "19:00:00",
+   "opponent": "Texas Tech",
+   "players": [
+    {
+     "name": "Jaden Craig",
+     "pos": "QB",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "G'Ivori Graham",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Keylan Abrams",
+     "pos": "LB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Joseph Albright",
+     "pos": "S",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kari Ashley",
+     "pos": "TE",
+     "number": "81",
+     "status": "Game Time Decision",
+     "season_out": false
+    }
+   ]
+  },
   "Tennessee": {
    "conf": "SEC",
    "abbr": "TENN",
@@ -3206,6 +3253,60 @@
      "pos": "OL",
      "number": "75",
      "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Texas Tech": {
+   "conf": "Big 12",
+   "abbr": "TTU",
+   "report": "Game Day",
+   "published": "2026-11-26",
+   "posted": "17:30:00",
+   "game_date": "2026-11-26",
+   "game_time": "19:00:00",
+   "opponent": "TCU",
+   "players": [
+    {
+     "name": "Quinten Joyner",
+     "pos": "RB",
+     "number": "0",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jalen Jones",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Miquel Dingle Jr.",
+     "pos": "S",
+     "number": "21",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marcus Ramon-Edwards",
+     "pos": "S",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "LaDamion Guyton",
+     "pos": "OLB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Connor Carty",
+     "pos": "OL",
+     "number": "61",
+     "status": "Game Time Decision",
      "season_out": false
     }
    ]
