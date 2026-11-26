@@ -1,0 +1,18 @@
+{
+  "base": "/fb-value-board/",
+  "pages": [
+    {"path": "", "need": {"a.league-main": 2}},
+    {"path": "docs/", "from_template": {"template": "site/template.html", "data": "docs/data.json"},
+     "need": {"#cards > *": 1, "#sheet table": 1, "#players-table tbody tr": 50, "#ratings-table tbody tr": 32}},
+    {"path": "docs/cfb/", "from_template": {"template": "site/cfb-template.html", "data": "docs/cfb/data.json"},
+     "need": {"#cards > *": 1, "#sheet table": 1, "#players-table tbody tr": 50, "#ratings-table tbody tr": 100}},
+    {"path": "docs/parlays.html", "need": {"option": 20, ".panel": 3}},
+    {"path": "docs/recommended/", "need": {"table tbody tr": 10}},
+    {"path": "review/", "need": {"a.league-main": 2}},
+    {"path": "review/#nfl", "need": {"a.grow": 1, "a.wk": 1}},
+    {"path": "review/#cfb", "need": {"a.grow": 1, "a.wk": 1}},
+    {"path": "review/#nfl-patterns", "need": {"table tbody tr": 3}},
+    {"path": "review/#cfb-patterns", "need": {"table tbody tr": 3}},
+    {"path": "docs/manual/", "need": {"table": 5}}
+  ]
+}
