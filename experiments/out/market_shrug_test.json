@@ -1,0 +1,126 @@
+{
+ "quarterback_prior_pff": true,
+ "points_per_starter_out_by_season": {
+  "2014": -1.718,
+  "2015": -1.72,
+  "2016": -1.428,
+  "2017": -1.366,
+  "2018": -1.302,
+  "2019": -1.392,
+  "2020": -1.229,
+  "2021": -1.221,
+  "2022": -1.244,
+  "2023": -1.197,
+  "2024": -1.239,
+  "2025": -1.326,
+  "2026": -1.302
+ },
+ "news_games": {
+  "tuning_2014_18": 365,
+  "holdout_2019_25": 713,
+  "tuning_games_with_an_opener": 1204
+ },
+ "part1_tuning_only": {
+  "all news games": {
+   "n": 365,
+   "avg_news_points": 1.64,
+   "avg_line_move_toward_news": 0.33,
+   "share_of_news_points_seen_beyond_the_close": 0.667,
+   "se": 0.402,
+   "avg_margin_beyond_close_toward_news": 1.42,
+   "se_avg": 0.72
+  },
+  "shrug": {
+   "n": 184,
+   "avg_news_points": 1.61,
+   "avg_line_move_toward_news": -0.93,
+   "share_of_news_points_seen_beyond_the_close": 1.618,
+   "se": 0.588,
+   "avg_margin_beyond_close_toward_news": 3.1,
+   "se_avg": 1.05
+  },
+  "followed": {
+   "n": 181,
+   "avg_news_points": 1.67,
+   "avg_line_move_toward_news": 1.6,
+   "share_of_news_points_seen_beyond_the_close": -0.229,
+   "se": 0.55,
+   "avg_margin_beyond_close_toward_news": -0.28,
+   "se_avg": 0.97
+  },
+  "shrug_share": 0.504
+ },
+ "tuning": {
+  "A (drop on a shrug)": {
+   "raw": {
+    "n": 365,
+    "now": 10.55839,
+    "candidate": 10.62941,
+    "diff": 0.071013,
+    "se": 0.061776
+   },
+   "board": {
+    "n": 365,
+    "now": 10.44417,
+    "candidate": 10.50159,
+    "diff": 0.057415,
+    "se": 0.031462
+   },
+   "brier": {
+    "n": 354,
+    "now": 0.25028,
+    "candidate": 0.25172,
+    "diff": 0.001444,
+    "se": 0.000968
+   }
+  },
+  "B (count what the line confirms)": {
+   "raw": {
+    "n": 365,
+    "now": 10.55839,
+    "candidate": 10.60159,
+    "diff": 0.043196,
+    "se": 0.069115
+   },
+   "board": {
+    "n": 365,
+    "now": 10.44417,
+    "candidate": 10.49008,
+    "diff": 0.045905,
+    "se": 0.035249
+   },
+   "brier": {
+    "n": 354,
+    "now": 0.25028,
+    "candidate": 0.25141,
+    "diff": 0.001131,
+    "se": 0.001072
+   }
+  },
+  "C (half on a shrug)": {
+   "raw": {
+    "n": 365,
+    "now": 10.55839,
+    "candidate": 10.58785,
+    "diff": 0.029455,
+    "se": 0.030973
+   },
+   "board": {
+    "n": 365,
+    "now": 10.44417,
+    "candidate": 10.46903,
+    "diff": 0.024861,
+    "se": 0.015444
+   },
+   "brier": {
+    "n": 354,
+    "now": 0.25028,
+    "candidate": 0.25092,
+    "diff": 0.000642,
+    "se": 0.000469
+   }
+  }
+ },
+ "better_on_all_tuning_measures": [],
+ "verdict": "No version better on all three tuning measures: nothing carried to the holdout, the holdout not read, nothing kept."
+}
