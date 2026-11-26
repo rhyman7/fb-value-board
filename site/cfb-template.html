@@ -283,6 +283,7 @@ a.bug:hover { border-color: var(--ink); }
 .crumbs { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; font-size: 14px; }
 .crumbs a { font-weight: 600; text-decoration: none; } .crumbs a:hover { text-decoration: underline; }
 .crumbs span { display: inline-flex; gap: 18px; flex-wrap: wrap; }
+#hist-games > tbody > tr > td:first-child a.hist-rv { margin-left: 10px; font: 600 12.5px/1.2 var(--sans); white-space: nowrap; }
 .game-head { display: grid; gap: 16px; }
 .mb { display: grid; grid-template-columns: 8px minmax(0, 1fr) auto auto; column-gap: clamp(12px, 3vw, 36px); row-gap: 0; align-items: center; background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 6px clamp(14px, 3vw, 28px) 10px 0; }
 .mb > div { display: contents; }
@@ -1652,6 +1653,8 @@ function renderBoost() {
    how the sharp line has moved since it opened, when to bet, and how bets of that kind have
    done, so a pick is never taken on the EV alone. */
 const LG = "cfb";
+const DASH_DIR = "/cfb";   // the matchup dashboard and the Weekly Review, for the cross-links
+const REVIEW_DIR = "../../review";
 const TIER = {
   price: { h: "Price beats Pinnacle", d: "The book's price beats the sharp book's own no-vig number at this line by at least 1% per dollar, before the model says anything. This is the one kind of bet that makes money with no model at all; take it at the book named, now." },
   opener: { h: "Model off the opener", d: LG === "nfl" ? "The model is 2 or more points off the opening spread (3 on totals): historically the line has then tended to move its way. The one edge the backtests have found; it is an edge against the opener, so it is worth more the earlier it is bet." : "The model is 3 or more points off the opening total. In college the edge is on totals, which have beaten the opener since 2021; spreads off the opener have not (below 5 points), so they are listed with the model edges. It is an edge against the opener, so bet it early or not at all: once the line has moved to the model it is marked Missed." },
@@ -2107,7 +2110,9 @@ function renderGame(g) {
     H("span", { class: "n", text: score.toFixed(1) }), H("span", { class: "n", text: pct(win, 0) }));
   const head = H("div", { class: "game-head" },
     H("nav", { class: "crumbs", "aria-label": "Games" },
-      H("a", { href: "#games", text: "All games" }),
+      H("span", {}, H("a", { href: "#games", text: "All games" }),
+        // cross-link (Nov 26, 2026): this week's games have a matchup page on the matchup dashboard
+        g.week === DATA.slate.weeks[0] ? H("a", { class: "xl", href: DASH_DIR + "/matchup.html?game=" + encodeURIComponent(g.game_id || g.id), text: "Full matchup on the dashboard" }) : null),
       H("span", {}, prev ? H("a", { href: "#" + prev.id, text: "Previous: " + prev.away + " at " + prev.home }) : null,
         next ? H("a", { href: "#" + next.id, text: "Next: " + next.away + " at " + next.home }) : null)),
     H("h1", { class: "vh", text: g.away_name + " at " + g.home_name }),
@@ -2819,6 +2824,7 @@ function diagChart(node, o) {
     }
     const tb = typicalBox(p); if (tb) grid.append(tb);
     const fb = floorBox(p); if (fb) grid.append(fb);
+    grid.append(box("Prop Ladder", H("a", { href: "/prop-ladder/#" + new URLSearchParams({ sport: LG === "nfl" ? "NFL" : "CFB", player: p.name }).toString(), text: "True probability for each of his rungs" }), tx(", against DraftKings, FanDuel and Kalshi, when books have his props posted.")));
     if (t.out && t.out.length) grid.append(box("Teammates out", tx(t.out.map(o => `${o.name} (${[o.pos, o.status, o.att_share >= 0.5 ? pctx(o.att_share) + " of passes" : "", o.rec_share >= 0.05 ? pctx(o.rec_share) + " of catches" : "", o.car_share >= 0.1 ? pctx(o.car_share) + " of carries" : ""].filter(Boolean).join(", ")})`).join("; ") + ". " + (r => r.length ? `From the ${r.join(" and ")} availability report${r.length > 1 ? "s" : ""}` + (t.out.some(o => !o.src || o.src === "Covers") ? " and Covers.com." : ".") : "From Covers.com.")([...new Set(t.out.map(o => o.src).filter(x => x && x !== "Covers"))]))));
     return grid;
   }
@@ -2877,7 +2883,7 @@ const archive = (() => {
 
 const historyView = (function () {
   let loaded = false, index = [], cur = null;
-  const cache = archive.cache, get = archive.get, hs = { pos: "All", team: "", q: "", key: "score", dir: -1 };
+  const cache = archive.cache, get = archive.get, hs = { pos: "All", team: "", q: "", key: "score", dir: -1 }, reviewed = new Set();
   const f0 = x => x == null ? "–" : Math.round(x).toString(), f1 = x => x == null ? "–" : x.toFixed(1);
   const badge = r => r ? H("span", { class: "res " + (r === "W" ? "w" : r === "L" ? "l" : ""), text: r === "W" ? "Won" : r === "L" ? "Lost" : "Push" }) : null;
 
@@ -2891,6 +2897,8 @@ const historyView = (function () {
       const done = index.filter(w => w.graded > 0);
       cur = (done.length ? done[done.length - 1] : index[index.length - 1]).file;
       drawSeason();
+      // cross-link (Nov 26, 2026): weeks the Weekly Review has written up get a "Review" link on each graded game
+      fetch(REVIEW_DIR + "/data/" + LG + "/index.json").then(r => r.ok ? r.json() : null).then(j => { if (j && j.weeks) { j.weeks.forEach(x => reviewed.add(x.season + "_" + x.week)); show(); } }).catch(() => {});
       seg($("#seg-hweek"), index.map(w => ({ v: w.file, t: "Week " + w.week + (w.backfilled ? "*" : "") })), () => cur, v => { cur = v; show(); });
       seg($("#seg-hpos"), ["All", "QB", "RB", "WR", "TE"].map(v => ({ v, t: v })), () => hs.pos, v => { hs.pos = v; drawPlayers(); });
       $("#hp-team").addEventListener("change", e => { hs.team = e.target.value; drawPlayers(); });
@@ -2993,7 +3001,8 @@ const historyView = (function () {
         const pm = g.proj.margin, projTxt = `${pm >= 0 ? g.home : g.away} by ${Math.abs(pm).toFixed(1)}, ${g.proj.total.toFixed(1)} total`;
         const flagged = (g.bets || []).filter(b => (b.stake || 0) > 0);
         const fl = flagged.length ? H("span", {}, ...flagged.map((b, i) => H("span", {}, document.createTextNode((i ? "; " : "") + `${b.pick} ${odds(b.odds)}`), r ? badge((res[b.market + "|" + b.side] || {}).result) : null))) : "–";
-        return [H("a", { class: "hist-mx", href: `#matchups/${archive.token(cur)}/${encodeURIComponent(g.id)}`, title: "This game's matchup: projected against actual" }, H("strong", { text: `${g.away} at ${g.home}` })),
+        const rv = r && reviewed.has(w.season + "_" + w.week) ? H("a", { class: "hist-rv", href: `${REVIEW_DIR}/#${LG}-${w.week}-${encodeURIComponent((g.away + "-" + g.home).toLowerCase())}`, title: "This game in the Weekly Review: what happened and why", text: "Review" }) : null;
+        return [H("span", {}, H("a", { class: "hist-mx", href: `#matchups/${archive.token(cur)}/${encodeURIComponent(g.id)}`, title: "This game's matchup: projected against actual" }, H("strong", { text: `${g.away} at ${g.home}` })), rv),
           r ? `${g.away} ${r.away_score} – ${r.home_score} ${g.home}` : (g.date ? `${g.date}, not played yet` : "Not played yet"),
           `${fav}, ${g.market.total}`, projTxt, pick(side("Spread")), pick(side("Total")), fl];
       }));

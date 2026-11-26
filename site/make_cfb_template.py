@@ -40,7 +40,9 @@ sub("No data yet. Run python run.py to build the board.", "No data yet. Run pyth
 
 # ---- this week's matchups: college names, conferences and no targets ---------------------------
 sub('  const LEAGUE = "nfl";', '  const LEAGUE = "cfb";')
-sub('const LG = "nfl";', 'const LG = "cfb";')   # the bet sheet: wind unders are an NFL bucket only
+sub('const LG = "nfl";', 'const LG = "cfb";')
+sub('const DASH_DIR = "/nfl";', 'const DASH_DIR = "/cfb";')
+sub('const REVIEW_DIR = "../review";', 'const REVIEW_DIR = "../../review";')   # the bet sheet: wind unders are an NFL bucket only
 
 # ---- market-residual margin (Nov 19, 2026; cfbmodel/config.STACK_MARGIN): the adjusted spread is the
 # line plus what each input has earned against it, not one weight; wording follows M.blend.stacked

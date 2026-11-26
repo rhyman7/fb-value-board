@@ -116,6 +116,7 @@ h2.pg { margin: 0 0 4px; font-size: 2.6rem; line-height: 1; font-stretch: 62%; f
 .gside .fn { font-size: .85rem; color: var(--tc-on2s); }
 .gside .fs { font-size: 3rem; line-height: 1; font-stretch: 62%; font-weight: 800; }
 .gmid { background: var(--panel); display: grid; place-items: center; padding: 0 18px; font-size: .8rem; color: var(--text-dim); text-align: center; }
+.xlink { margin: 0 0 12px; font-size: 0.875rem; }
 .headline { font-size: 1.35rem; line-height: 1.25; font-stretch: 80%; font-weight: 700; margin: 0 0 18px; max-width: 900px; }
 .grid2 { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: 18px; align-items: start; }
 .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 18px; }
@@ -493,6 +494,7 @@ async function gamePage(lg, w, slug) {
     <div class="gmid">${esc(g.date || "")}<br>FINAL${g.neutral ? "<br>neutral" : ""}</div>
     <div class="gside home" style="${teamVars(g.home)}"><div class="fs" style="margin-right:auto">${hs}</div><div><div class="ab">${esc(g.home)}</div><div class="fn">${esc(g.home_name)}${g.home_qb ? " · " + esc(g.home_qb) : ""}</div></div></div>
   </div>
+  <p class="xlink"><a href="../docs/${lg === "cfb" ? "cfb/" : ""}#matchups/${W.facts.season}_w${String(w).padStart(2, "0")}/${encodeURIComponent(g.id)}">Projected against actual on the value board</a></p>
   <p class="headline">${rd ? esc(rd.headline) : ""}</p>
   <div class="chips" style="margin:-6px 0 8px">${chips(g, W.reads)}</div>
   <p class="byline">${rd ? byTag(rd.by) : ""}${g.backfilled ? ` <span class="by draft">Predictions rebuilt after the fact (walk-forward backfill)</span>` : ""}</p>
