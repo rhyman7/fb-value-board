@@ -97,6 +97,57 @@ body.report { --page: #fff; --surface: #fff; --raised: #eee; --ink: #111; --ink-
    Print and the weekly report stay black on white. */
 h1, h2, .tile .value { font-stretch: 75%; }
 body:not(.report) h1 { font-size: clamp(36px, 8vw, 64px); line-height: 0.95; }
+/* Phones: each table row is a card. Labels are written here by column position, so a column added,
+   removed or reordered in one of these four tables means updating its rules below. */
+.m-more { display: none; }
+@media screen and (max-width: 760px) {
+  table.m-cards, table.m-cards > tbody { display: block; }
+  table.m-cards > thead { display: none; }
+  table.m-cards > tbody > tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; margin-top: 10px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; }
+  table.m-cards > tbody > tr > td { display: block; min-width: 0; max-width: none; width: auto; padding: 0; border: 0; text-align: left; white-space: normal; font-size: 15px; font-weight: 700; }
+  table.m-cards > tbody > tr > td::before { display: block; font-size: 12px; font-weight: 400; line-height: 1.3; color: var(--ink-2); }
+  table.m-cards > tbody > tr > td:empty { display: none; }
+  .m-more { display: block; margin: 10px 0 0; }
+  /* open picks: the pick, the game, then book, price and status; track and time under them */
+  .m-open > tbody > tr > td:nth-child(4) { order: -3; grid-column: 1 / -1; font-size: 19px; }
+  .m-open > tbody > tr > td:nth-child(3) { order: -2; grid-column: 1 / -1; font-weight: 400; }
+  .m-open > tbody > tr > td:nth-child(n+5) { order: -1; }
+  .m-open > tbody > tr > td:nth-child(2) { grid-column: span 2; font-size: 13px; font-weight: 400; }
+  .m-open > tbody > tr > td:nth-child(1) { order: 1; font-size: 13px; font-weight: 400; color: var(--ink-2); text-align: right; }
+  .m-open:not(.all) > tbody > tr:nth-child(n+11), .m-graded:not(.all) > tbody > tr:nth-child(n+16) { display: none; }
+  .m-open > tbody > tr > td:nth-child(5)::before { content: "Book"; }
+  .m-open > tbody > tr > td:nth-child(6)::before { content: "Price"; }
+  .m-open > tbody > tr > td:nth-child(7)::before { content: "Status"; }
+  .m-tracks > tbody > tr > td:first-child, .m-tracks > tbody > tr > td:last-child, .m-weeks > tbody > tr > td:first-child { grid-column: 1 / -1; }
+  .m-tracks > tbody > tr > td:first-child { font-size: 16px; }
+  .m-tracks > tbody > tr > td:first-child span { font-weight: 400; }
+  .m-tracks > tbody > tr > td:last-child { font-size: 13px; font-weight: 400; }
+  .m-tracks > tbody > tr > td:nth-child(2)::before { content: "Status"; }
+  .m-tracks > tbody > tr > td:nth-child(3)::before { content: "Live record"; }
+  .m-tracks > tbody > tr > td:nth-child(4)::before { content: "Win rate"; }
+  .m-tracks > tbody > tr > td:nth-child(5)::before { content: "$10 a pick"; }
+  .m-tracks > tbody > tr > td:nth-child(6)::before { content: "Return"; }
+  .m-tracks > tbody > tr > td:nth-child(7)::before { content: "Closing line value"; }
+  .m-tracks > tbody > tr > td:nth-child(8)::before { content: "Picks to 100"; }
+  .m-tracks > tbody > tr > td:nth-child(9)::before { content: "Before going live (not part of the record)"; }
+  .m-weeks > tbody > tr > td:nth-child(2)::before { content: "Picks"; }
+  .m-weeks > tbody > tr > td:nth-child(3)::before { content: "Record"; }
+  .m-weeks > tbody > tr > td:nth-child(4)::before { content: "Week, $10 a pick"; }
+  .m-weeks > tbody > tr > td:nth-child(5)::before { content: "Running total"; }
+  .m-weeks > tbody > tr > td:nth-child(6)::before { content: "Closing line value"; }
+  .m-graded > tbody > tr > td:nth-child(5) { order: -3; grid-column: 1 / -1; font-size: 17px; }
+  .m-graded > tbody > tr > td:nth-child(4) { order: -2; grid-column: 1 / -1; font-weight: 400; }
+  .m-graded > tbody > tr > td:nth-child(n+6) { order: -1; }
+  .m-graded > tbody > tr > td:nth-child(-n+3) { font-size: 13px; font-weight: 400; }
+  .m-graded > tbody > tr > td:nth-child(1)::before { content: "Published"; }
+  .m-graded > tbody > tr > td:nth-child(2)::before { content: "Week"; }
+  .m-graded > tbody > tr > td:nth-child(3)::before { content: "Track"; }
+  .m-graded > tbody > tr > td:nth-child(6)::before { content: "Book"; }
+  .m-graded > tbody > tr > td:nth-child(7)::before { content: "Price"; }
+  .m-graded > tbody > tr > td:nth-child(8)::before { content: "Result"; }
+  .m-graded > tbody > tr > td:nth-child(9)::before { content: "$10"; }
+  .m-graded > tbody > tr > td:nth-child(10)::before { content: "Rolling total"; }
+}
 @media print {
   :root { --page: #fff; --surface: #fff; --raised: #eee; --ink: #111; --ink-2: #333; --grid: #ddd; --axis: #999; --rule: #ccc; --turf: #111; --chalk: #fff; --link: #111; color-scheme: light; }
   #wgb-bar, .controls { display: none !important; }
@@ -187,15 +238,15 @@ ${tile("Closing line value", all.clv == null ? "—" : spct(all.clv), all.cse ==
 <section aria-labelledby="week-h">
 <h2 id="week-h">Open picks</h2>
 <p class="note">Published and not yet graded. Book and price are the best of DraftKings, FanDuel and Kalshi when the pick was published; check the price before betting. Kalshi joined on Nov 26, 2026 and is shown at its price after the exchange’s fee; teasers and props are DraftKings and FanDuel only. Times are Eastern.</p>`;
-  h += open.length ? `<div class="scroll"><table>
+  h += open.length ? `<div class="scroll"><table class="m-cards m-open">
 <thead><tr><th class="l">Published</th><th class="l">Track</th><th class="l">Game</th><th class="l">Pick</th><th class="l">Book</th><th>Price</th><th class="l">Status</th></tr></thead><tbody>
 ${open.map((p) => `<tr><td class="l">${when(p.at)}</td><td class="l"><a href="${reportHref(p.league, p.season, p.week)}">${esc(trackName(p.league, p.track))}</a></td><td class="l">${game(p)}</td><td class="l"><strong>${esc(minus(p.pick))}</strong></td><td class="l">${BOOK[p.book] || esc(p.book)}</td><td>${price(p.odds)}</td><td class="l">${chip((tracks.find((t) => t.key === p.track) || {}).status || "trial")}</td></tr>`).join("\n")}
-</tbody></table></div>` : `<p class="note">Nothing open right now.</p>`;
+</tbody></table></div>${open.length > 10 ? `<p class="m-more"><button type="button" class="btn" onclick="this.parentElement.previousElementSibling.querySelector('table').classList.add('all'); this.parentElement.remove()">Show all ${open.length} open picks</button></p>` : ""}` : `<p class="note">Nothing open right now.</p>`;
   h += `</section>
 <section aria-labelledby="tracks-h">
 <h2 id="tracks-h">The tracks</h2>
 <p class="note">One kind of pick, one fixed rule, one record. The live record counts only picks published here before kickoff. Backtests are kept apart in the last column and never added in.</p>
-<div class="scroll"><table>
+<div class="scroll"><table class="m-cards m-tracks">
 <thead><tr><th class="l">Track</th><th class="l">Status</th><th>Live record</th><th>Win rate</th><th>$10 a pick</th><th>Return</th><th>Closing line value</th><th>Picks to 100</th><th class="l">Before going live (not part of the record)</th></tr></thead><tbody>
 ${tracks.map((t) => `<tr><td class="l t"><strong>${esc(t.name)}</strong><br><span style="color:var(--ink-2);font-size:12.5px">${esc(t.rule)}</span></td><td class="l">${chip(t.status)}</td><td>${t.w}-${t.l}${t.p ? "-" + t.p : ""}</td><td>${t.win_pct == null ? "" : pct(t.win_pct)}</td><td>${t.graded ? money(t.dollars) : ""}</td><td>${t.graded ? pm(t.roi, t.roi_se) : ""}</td><td>${t.clv == null ? "" : pm(t.clv, t.clv_se)}</td><td>${t.status === "held" ? "Stopped: no new picks" : t.to_go ? t.to_go : "0, needs a full season"}</td><td class="w">${esc(minus(t.before))}</td></tr>`).join("\n")}
 </tbody></table></div>
@@ -203,7 +254,7 @@ ${tracks.map((t) => `<tr><td class="l t"><strong>${esc(t.name)}</strong><br><spa
 <section aria-labelledby="weeks-h">
 <h2 id="weeks-h">Week by week</h2>
 <p class="note">Each week has its own report for each league: the picks as they were published, then the results. Every past week stays available as a page and a PDF. The running total is $10 on every pick, by league.</p>`;
-  h += weeks.length ? `<div class="scroll"><table class="narrow">
+  h += weeks.length ? `<div class="scroll"><table class="narrow m-cards m-weeks">
 <thead><tr><th class="l">Week</th><th>Picks</th><th>Record</th><th>Week, $10 a pick</th><th>Running total</th><th>Closing line value</th><th class="l">PDF</th></tr></thead><tbody>
 ${weeks.map((w) => `<tr><td class="l"><a href="${reportHref(w.league, w.season, w.week)}" style="font-weight:600">${NAME[w.league]}, week ${w.week} report</a></td><td>${w.n}</td><td>${w.w}-${w.l}${w.p ? "-" + w.p : ""}</td><td>${w.graded ? money(w.dollars) : ""}</td><td>${money(w.running)}</td><td>${w.clv == null ? "" : spct(w.clv)}</td><td class="l"><a href="${pdfName(w.league, w.season, w.week)}">PDF</a></td></tr>`).join("\n")}
 </tbody></table></div>` : `<p class="note">No weeks yet.</p>`;
@@ -213,10 +264,10 @@ ${weeks.map((w) => `<tr><td class="l"><a href="${reportHref(w.league, w.season, 
   ps.filter((p) => !p.dup && ["W", "L", "P"].includes(p.result)).sort((a, b) => a.kickoff < b.kickoff ? -1 : a.kickoff > b.kickoff ? 1 : a.at < b.at ? -1 : 1)
     .forEach((p) => { run += p.dollars || 0; runBy[p.id] = run; });
   h += `<details><summary>Every pick ever published (${ps.length})</summary>
-<div class="scroll"><table>
+<div class="scroll"><table class="m-cards m-graded">
 <thead><tr><th class="l">Published</th><th class="l">Week</th><th class="l">Track</th><th class="l">Game</th><th class="l">Pick</th><th class="l">Book</th><th>Price</th><th class="l">Result</th><th>$10</th><th>Rolling total</th></tr></thead><tbody>
 ${every.map((p) => `<tr><td class="l">${ETD.format(utc(p.at))}</td><td class="l">${NAME[p.league]} ${p.week}</td><td class="l">${esc(trackName(p.league, p.track))}</td><td class="l">${game(p)}</td><td class="l">${esc(minus(p.pick))}</td><td class="l">${BOOK[p.book] || esc(p.book)}</td><td>${price(p.odds)}</td><td class="l">${result(p)}</td><td>${p.dup ? "counted once" : money(p.dollars)}</td><td>${runBy[p.id] == null ? "" : money(runBy[p.id])}</td></tr>`).join("\n")}
-</tbody></table></div></details>
+</tbody></table></div>${every.length > 15 ? `<p class="m-more"><button type="button" class="btn" onclick="this.parentElement.previousElementSibling.querySelector('table').classList.add('all'); this.parentElement.remove()">Show all ${every.length} picks</button></p>` : ""}</details>
 <div class="btns"><a class="btn" href="../../data/recommended/nfl_picks.csv">NFL pick file (CSV)</a><a class="btn" href="../../data/recommended/cfb_picks.csv">College pick file (CSV)</a></div>
 </section>
 <section aria-labelledby="rules-h">
