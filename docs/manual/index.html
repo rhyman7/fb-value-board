@@ -41,17 +41,20 @@
 
   @media screen {
     html { font-size: 15px; background: #f3f5f2; }
-    body { max-width: 860px; margin: 0 auto; padding: 24px 22px 60px; background: #f3f5f2; }
+    body { background: #f3f5f2; }
+    .page { max-width: 860px; margin: 0 auto; padding: 24px 22px 60px; }
     .cover { height: auto; padding: 24px 0 8px; }
     .cover h1 { font-size: 38px; }
     .shot { max-height: none; }
     table { font-size: 13.5px; }
     .pb { break-before: auto; }
   }
-  @media screen and (max-width: 600px) { html { font-size: 14px; } body { padding: 14px 12px 40px; } .cover h1 { font-size: 30px; } table { display: block; overflow-x: auto; } }
+  @media screen and (max-width: 600px) { html { font-size: 14px; } .page { padding: 14px 12px 40px; } .cover h1 { font-size: 30px; } table { display: block; overflow-x: auto; } }
 </style>
 </head>
 <body>
+<script src="/site-bar.js" data-shell="2"></script>
+<div class="page">
 
 <div class="cover">
   <h1>The Value Boards</h1>
@@ -584,5 +587,6 @@ Still early. Across 54 NFL bets the board has beaten the close by 1.8% ± 1.7%: 
 <p class="term"><b>Wong teaser.</b> A 6-point teaser leg that crosses both 3 and 7: a favorite of −7.5 to −8.5 or an underdog of +1.5 to +2.5. Price them, do not bet them by rule.</p>
 
 <p class="small" style="margin-top:24pt">Fifth edition, updated November 11, 2026 from the live boards (fourth edition November 4, third October 31). The screenshots are re-shot with <code>scripts/manual_shots.py</code>. Numbers change every day; the explanations do not. For research and entertainment; nothing here is betting advice.</p>
+</div>
 </body>
 </html>
