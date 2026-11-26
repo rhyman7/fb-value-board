@@ -4,7 +4,10 @@
     python -m http.server 8770 &          # from the repo root
     python scripts/manual_shots.py [--base http://localhost:8770] [--only nfl_sheet_0,cfb_sheet_0]
 
-One entry per image in SHOTS: the page, the view (hash), what to scroll to, and the crop. "view" is
+One entry per image in SHOTS: the page, the view (hash), what to scroll to, and the crop. To get the site's shared
+bar into the pictures (sixth edition's re-shoot, Nov 26, 2026), serve a folder that has the hub's
+site-bar.js and glossary.js at its root and this repo under /fb-value-board/, and pass
+--base http://localhost:<port>/fb-value-board. "view" is
 the browser window (1280 wide) with the anchor at the top; "sect" is a 1116-wide crop that starts at
 the anchor, as the fifth edition's were taken. Needs Playwright's Chromium. The manual's text and
 captions are written by hand from what these show (docs/manual/index.html); after re-shooting,
@@ -16,8 +19,10 @@ import argparse
 import asyncio
 from pathlib import Path
 
+CHROME = ""
 OUT = Path(__file__).resolve().parent.parent / "docs" / "manual" / "img"
 NFL, CFB, PAR = "/docs/index.html", "/docs/cfb/index.html", "/docs/parlays.html"
+REC, REV = "/docs/recommended/index.html", "/review/index.html"
 GAME = "__GAME__"          # replaced by the first game with an opener-tier bet (else the first game)
 # name: (page, hash, anchor css or None for the top, mode, height, js to run first or None)
 SHOTS = {
@@ -51,13 +56,17 @@ SHOTS = {
     "parlays_boost": (PAR, "", None, "view", 1150,
                       "document.querySelector('[data-tab=boost]').click(); document.querySelector('#f-boost').value='30'; document.querySelector('#f-boost').dispatchEvent(new Event('input',{bubbles:true})); document.querySelector('#go').click()"),
     "parlays_record": (PAR, "", "#record", "sect", 1077, "document.querySelector('[data-tab=record]').click()"),
+    # sixth edition: the Recommended list, a Weekly Review week, and the Games page on a phone ("phone": a 390-wide window)
+    "rec_top": (REC, "", None, "view", 1000, None),
+    "review_week": (REV, "#nfl", None, "view", 1000, None),
+    "phone_games": (NFL, "#games", None, "phone", 844, None),
 }
 
 
 async def main(base: str, only: set | None) -> None:
     from playwright.async_api import async_playwright
     async with async_playwright() as p:
-        b = await p.chromium.launch()
+        b = await p.chromium.launch(**({"executable_path": CHROME} if CHROME else {}))
         pg = await b.new_page(viewport={"width": 1280, "height": 1000})
         errs = []
         pg.on("pageerror", lambda e: errs.append(str(e)[:160]))
@@ -67,7 +76,7 @@ async def main(base: str, only: set | None) -> None:
         for name, (page, hsh, anchor, mode, height, js) in SHOTS.items():
             if only and name not in only:
                 continue
-            await pg.set_viewport_size({"width": 1280, "height": height if mode == "view" else 1000})
+            await pg.set_viewport_size({"width": 390 if mode == "phone" else 1280, "height": height if mode in ("view", "phone") else 1000})
             await pg.goto("about:blank")
             await pg.goto(base + page + hsh.replace(GAME, game))
             await pg.wait_for_timeout(1300)
@@ -85,7 +94,9 @@ async def main(base: str, only: set | None) -> None:
                     print(f"  {name}: anchor {anchor!r} not found ({str(exc)[:60]}); shot skipped")
                     continue
             total = await pg.evaluate("document.documentElement.scrollHeight")
-            if mode == "view":
+            if mode == "phone":
+                clip = {"x": 0, "y": y, "width": 390, "height": min(height, max(total - y, 200))}
+            elif mode == "view":
                 clip = {"x": 0, "y": y, "width": 1280, "height": min(height, max(total - y, 200))}
             else:
                 clip = {"x": max(x - 4, 0), "y": y, "width": 1116, "height": min(height, max(total - y, 120))}
@@ -99,5 +110,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--base", default="http://localhost:8770")
     ap.add_argument("--only", default="")
+    ap.add_argument("--chrome", default="", help="path to a Chrome/Chromium binary, if Playwright's own is not installed")
     a = ap.parse_args()
+    CHROME = a.chrome
     asyncio.run(main(a.base.rstrip("/"), set(filter(None, a.only.split(","))) or None))
