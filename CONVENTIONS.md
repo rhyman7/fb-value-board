@@ -44,7 +44,10 @@ boards in detail; this file is the rules.
 - **One site with the dashboards (Ryan's call, Nov 20, 2026).** The value boards, Parlays and the
   Weekly Review are sections of the Weekly Gridiron Board (rhyman7.github.io), which lists them on
   its hub page. This replaced the earlier "kept separate" rule.
-- **Site bar (Nov 20, 2026).** Every page here (the landing page, both boards, Parlays, the Weekly Review, Recommended; not the manual) loads the Weekly Gridiron Board's site bar as the first
+- **The manual loads the site bar too (Nov 26, 2026)**, as `<script src="/site-bar.js" data-shell="2"></script>`,
+  so it has the Back arrow inside the home-screen app. Its text sits in `<div class="page">` (the
+  width and padding that used to be on `<body>`) so the bar spans the full screen; print is unchanged.
+- **Site bar (Nov 20, 2026).** Every page here (the landing page, both boards, Parlays, the Weekly Review, Recommended) loads the Weekly Gridiron Board's site bar as the first
   thing in `<body>`: `<script src="/site-bar.js"></script>`. The script lives in
   rhyman7/rhyman7.github.io and writes the strip that links the hub, both matchup dashboards,
   both value boards, Parlays and the Weekly Review (Basketball as a side link). Change the bar
