@@ -642,6 +642,22 @@ boards in detail; this file is the rules.
   superscript comes from the board data, not from fetching `designations.json` (that file
   only adds the injury and date to the tooltip), so it always matches the projections.
 
+## Scheduled tasks' instructions (`scripts/tasks/`)
+
+- **A Claude scheduled task's wording lives in this repo, not in the task.** The task's own prompt
+  is a few lines: get the repo, read the file, follow it. So changing what a task does is an
+  ordinary pull request on the file, reviewed like code, and nobody retypes a long prompt.
+  - `scripts/tasks/daily_check.md`: **Value Boards daily check** (moved here Nov 25, 2026).
+  - `scripts/tasks/nfl_late_availability.md`: the **NFL late availability** tasks.
+  - `scripts/tasks/weekly_review.md`: the two **Weekly Review** tasks.
+- **Web addresses are the one exception.** In scheduled runs WebFetch only opens an address written
+  out in the task's prompt or returned by a search; an address read from a file is not trusted. The
+  Value Boards daily check fetches Covers team pages, so its prompt ends with the full Covers list
+  (the same 138 addresses as the end of rhyman7/cfb's WEEKLY_PROMPT.md, which is the copy to edit).
+  If a Covers address changes, change it there and in the prompts of the Value Boards daily check
+  and the CFB dashboard daily update.
+- A task's file never lets it change the model or its betting logic (the keep rule, below).
+
 ## Model tests: the keep rule
 
 - **Rule from Nov 11, 2026 (Ryan; replaces the Nov 4, 2026 "any improvement, however small" rule,
