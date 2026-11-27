@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-27T20:30Z",
+ "fetched": "2026-11-27T22:34Z",
  "today": "2026-11-27",
  "teams": {
   "Akron": {
@@ -277,6 +277,95 @@
      "name": "J'Mari Monette",
      "pos": "DL",
      "number": "94",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "Minnesota": {
+   "conf": "Big Ten",
+   "abbr": "MINN",
+   "report": "Game Day",
+   "published": "2026-11-27",
+   "posted": "16:30:00",
+   "game_date": "2026-11-27",
+   "game_time": "18:30:00",
+   "opponent": "Wisconsin",
+   "players": [
+    {
+     "name": "Garrison Monroe",
+     "pos": "DB",
+     "number": "9",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "John Nestor",
+     "pos": "DB",
+     "number": "17",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Donielle Hayes",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ryan Estrada",
+     "pos": "RB",
+     "number": "20",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Mekhai Smith",
+     "pos": "DB",
+     "number": "22",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaylin Hicks",
+     "pos": "DL",
+     "number": "55",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Brett Carroll",
+     "pos": "OL",
+     "number": "56",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Ashton Beers",
+     "pos": "OL",
+     "number": "78",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Hayden Moore",
+     "pos": "WR",
+     "number": "84",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Riley Sunram",
+     "pos": "DL",
+     "number": "93",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Theorin Randle",
+     "pos": "DL",
+     "number": "99",
      "status": "Out",
      "season_out": true
     }
@@ -1067,6 +1156,60 @@
      "pos": "LB",
      "number": "34",
      "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Wisconsin": {
+   "conf": "Big Ten",
+   "abbr": "WIS",
+   "report": "Game Day",
+   "published": "2026-11-27",
+   "posted": "16:30:00",
+   "game_date": "2026-11-27",
+   "game_time": "18:30:00",
+   "opponent": "Minnesota",
+   "players": [
+    {
+     "name": "Javan Robinson",
+     "pos": "CB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cai Bates",
+     "pos": "CB",
+     "number": "3",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Deuce Adams",
+     "pos": "QB",
+     "number": "8",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Matthew Jung",
+     "pos": "S",
+     "number": "29",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kevin Heywood",
+     "pos": "OL",
+     "number": "55",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Emmett Bork",
+     "pos": "TE",
+     "number": "82",
+     "status": "Out",
      "season_out": false
     }
    ]
