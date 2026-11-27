@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-27T22:34Z",
+ "fetched": "2026-11-27T23:17Z",
  "today": "2026-11-27",
  "teams": {
   "Akron": {
@@ -888,6 +888,142 @@
      "name": "Troy Cunningham",
      "pos": "DL",
      "number": "95",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Texas": {
+   "conf": "SEC",
+   "abbr": "TEX",
+   "report": "Game Day",
+   "published": "2026-11-27",
+   "posted": "17:00:00",
+   "game_date": "2026-11-27",
+   "game_time": "18:30:00",
+   "opponent": "Texas A&M",
+   "players": [
+    {
+     "name": "Colin Simmons",
+     "pos": "EDG",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Hollywood Smothers",
+     "pos": "RB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kobe Black",
+     "pos": "DB",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Trevor Goosby",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Andre Cojoe",
+     "pos": "OL",
+     "number": "77",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Nick Townsend",
+     "pos": "TE",
+     "number": "81",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Hero Kanu",
+     "pos": "DL",
+     "number": "93",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Texas A&M": {
+   "conf": "SEC",
+   "abbr": "TA&M",
+   "report": "Game Day",
+   "published": "2026-11-27",
+   "posted": "17:00:00",
+   "game_date": "2026-11-27",
+   "game_time": "18:30:00",
+   "opponent": "Texas",
+   "players": [
+    {
+     "name": "Marcus Ratcliffe",
+     "pos": "S",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Terry Bussey",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Ashton Bethel-Roman",
+     "pos": "WR",
+     "number": "8",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Marco Jones",
+     "pos": "DE",
+     "number": "10",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Tylan Wilson",
+     "pos": "S",
+     "number": "15",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "TK Norman",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Blake Ivy",
+     "pos": "OL",
+     "number": "52",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Trovon Baugh",
+     "pos": "OL",
+     "number": "76",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Landon Rink",
+     "pos": "DT",
+     "number": "99",
      "status": "Out",
      "season_out": false
     }
