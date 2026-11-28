@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-27T23:17Z",
+ "fetched": "2026-11-28T00:43Z",
  "today": "2026-11-27",
  "teams": {
   "Akron": {
@@ -1292,6 +1292,79 @@
      "pos": "LB",
      "number": "34",
      "status": "Questionable",
+     "season_out": false
+    }
+   ]
+  },
+  "Utah": {
+   "conf": "Big 12",
+   "abbr": "UTAH",
+   "report": "Game Day",
+   "published": "2026-11-27",
+   "posted": "18:30:00",
+   "game_date": "2026-11-27",
+   "game_time": "20:00:00",
+   "opponent": "West Virginia",
+   "players": [
+    {
+     "name": "Wayshawn Parker",
+     "pos": "RB",
+     "number": "1",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Logan Castor",
+     "pos": "LS",
+     "number": "65",
+     "status": "Game Time Decision",
+     "season_out": false
+    }
+   ]
+  },
+  "West Virginia": {
+   "conf": "Big 12",
+   "abbr": "WVU",
+   "report": "Game Day",
+   "published": "2026-11-27",
+   "posted": "18:30:00",
+   "game_date": "2026-11-27",
+   "game_time": "20:00:00",
+   "opponent": "Utah",
+   "players": [
+    {
+     "name": "Michael Hawkins Jr.",
+     "pos": "QB",
+     "number": "3",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jaden Bray",
+     "pos": "WR",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cam Ball",
+     "pos": "TE",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Emory Snyder",
+     "pos": "N/S",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Darius Wiley",
+     "pos": "DL",
+     "number": "91",
+     "status": "Out",
      "season_out": false
     }
    ]
