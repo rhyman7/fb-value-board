@@ -1,8 +1,48 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-28T16:12Z",
+ "fetched": "2026-11-28T16:48Z",
  "today": "2026-11-28",
  "teams": {
+  "Arkansas": {
+   "conf": "SEC",
+   "abbr": "ARK",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "10:15:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:45:00",
+   "opponent": "LSU",
+   "players": [
+    {
+     "name": "Braydon Lee",
+     "pos": "DB",
+     "number": "3",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Brylan Green",
+     "pos": "DB",
+     "number": "34",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Maddox Lassiter",
+     "pos": "TE",
+     "number": "47",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Gavin Garretson",
+     "pos": "TE",
+     "number": "89",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "Ball State": {
    "conf": "MAC",
    "abbr": "BALL",
@@ -656,6 +696,74 @@
      "name": "Kaden Feagin",
      "pos": "TE",
      "number": "83",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "LSU": {
+   "conf": "SEC",
+   "abbr": "LSU",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "10:15:00",
+   "game_date": "2026-11-28",
+   "game_time": "11:45:00",
+   "opponent": "Arkansas",
+   "players": [
+    {
+     "name": "Jayce Brown",
+     "pos": "WR",
+     "number": "1",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Winston Watkins Jr.",
+     "pos": "WR",
+     "number": "6",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Whit Weeks",
+     "pos": "LB",
+     "number": "7",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dashawn Spears",
+     "pos": "S",
+     "number": "10",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Malachi Thomas",
+     "pos": "TE",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Phillip Wright III",
+     "pos": "WR",
+     "number": "15",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Charles Ross II",
+     "pos": "LB",
+     "number": "26",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Richard Anderson",
+     "pos": "DT",
+     "number": "88",
      "status": "Out",
      "season_out": false
     }
