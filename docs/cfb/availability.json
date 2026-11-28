@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-28T16:48Z",
+ "fetched": "2026-11-28T17:38Z",
  "today": "2026-11-28",
  "teams": {
   "Arkansas": {
@@ -39,6 +39,123 @@
      "pos": "TE",
      "number": "89",
      "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Army": {
+   "conf": "American",
+   "abbr": "ARMY",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "11:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "13:00:00",
+   "opponent": "Rice",
+   "players": [
+    {
+     "name": "David Thom-Rogers",
+     "pos": "S",
+     "number": "11",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Josh Milhollin",
+     "pos": "WR",
+     "number": "14",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Taps Hananda",
+     "pos": "CB",
+     "number": "16",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Brady Mott",
+     "pos": "SB",
+     "number": "18",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Larry Pickett Jr.",
+     "pos": "S",
+     "number": "22",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Kai Woolfolk",
+     "pos": "ILB",
+     "number": "29",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Cameron Binkowski",
+     "pos": "OLB",
+     "number": "32",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Brady Small",
+     "pos": "OL",
+     "number": "51",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rhett VanBoening",
+     "pos": "OL",
+     "number": "58",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Miles Hagan",
+     "pos": "OL",
+     "number": "69",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Paolo Gennarelli",
+     "pos": "OL",
+     "number": "71",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Kyle Kloska",
+     "pos": "OL",
+     "number": "75",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kavon Pointer",
+     "pos": "WR",
+     "number": "89",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Sean Donovan",
+     "pos": "DL",
+     "number": "91",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Matt Gemma",
+     "pos": "DL",
+     "number": "95",
+     "status": "Questionable",
      "season_out": false
     }
    ]
@@ -399,6 +516,53 @@
     }
    ]
   },
+  "Colorado": {
+   "conf": "Big 12",
+   "abbr": "COLO",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "11:30:00",
+   "game_date": "2026-11-28",
+   "game_time": "13:00:00",
+   "opponent": "UCF",
+   "players": [
+    {
+     "name": "Naeten Mitchell",
+     "pos": "DB",
+     "number": "4",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Danny Scudero",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Cree Thomas",
+     "pos": "DB",
+     "number": "20",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Braylon Edwards",
+     "pos": "DB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Sam Gadie",
+     "pos": "DE",
+     "number": "92",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
   "East Carolina": {
    "conf": "American",
    "abbr": "ECU",
@@ -696,6 +860,100 @@
      "name": "Kaden Feagin",
      "pos": "TE",
      "number": "83",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Iowa State": {
+   "conf": "Big 12",
+   "abbr": "ISU",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "11:30:00",
+   "game_date": "2026-11-28",
+   "game_time": "13:00:00",
+   "opponent": "Kansas State",
+   "players": [
+    {
+     "name": "Cody Jackson",
+     "pos": "WR",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Connor Moberly",
+     "pos": "QB",
+     "number": "5",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ka'Mori Moore",
+     "pos": "DT",
+     "number": "95",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Kansas State": {
+   "conf": "Big 12",
+   "abbr": "KSU",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "11:30:00",
+   "game_date": "2026-11-28",
+   "game_time": "13:00:00",
+   "opponent": "Iowa State",
+   "players": [
+    {
+     "name": "Avery Johnson",
+     "pos": "QB",
+     "number": "2",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Dillon Duff",
+     "pos": "QB",
+     "number": "10",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Zashon Rich",
+     "pos": "CB",
+     "number": "25",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Sawyer Schilke",
+     "pos": "LB",
+     "number": "26",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ben Osueke",
+     "pos": "CB",
+     "number": "47",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Holden Bass",
+     "pos": "DT",
+     "number": "75",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Eli Jackson",
+     "pos": "DT",
+     "number": "88",
      "status": "Out",
      "season_out": false
     }
@@ -1408,6 +1666,163 @@
      "name": "Maxence LeBlanc",
      "pos": "TE",
      "number": "88",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Rice": {
+   "conf": "American",
+   "abbr": "RICE",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "11:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "13:00:00",
+   "opponent": "Army",
+   "players": [
+    {
+     "name": "Tariq Watson",
+     "pos": "CB",
+     "number": "4",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Preston Zinter",
+     "pos": "TE",
+     "number": "9",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Quinton Jackson",
+     "pos": "RB",
+     "number": "10",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Kyren Condoll",
+     "pos": "CB",
+     "number": "10",
+     "status": "Questionable",
+     "season_out": false
+    },
+    {
+     "name": "Jamir Benjamin",
+     "pos": "CB",
+     "number": "12",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Chibby Nwajuaku",
+     "pos": "DL",
+     "number": "16",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Owen Carter",
+     "pos": "WR",
+     "number": "18",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Michael Amey III",
+     "pos": "S",
+     "number": "27",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Jai Jacobs-Ford",
+     "pos": "SL",
+     "number": "29",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Justin Powell",
+     "pos": "RB",
+     "number": "33",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Ian Bothwell",
+     "pos": "OL",
+     "number": "77",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Colten Cole",
+     "pos": "TE",
+     "number": "82",
+     "status": "Out",
+     "season_out": true
+    }
+   ]
+  },
+  "UCF": {
+   "conf": "Big 12",
+   "abbr": "UCF",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "11:30:00",
+   "game_date": "2026-11-28",
+   "game_time": "13:00:00",
+   "opponent": "Colorado",
+   "players": [
+    {
+     "name": "Demari Henderson",
+     "pos": "DB",
+     "number": "8",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Waden Charles",
+     "pos": "WR",
+     "number": "9",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Antonio Branch Jr.",
+     "pos": "DB",
+     "number": "16",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Tackett Curtis",
+     "pos": "LB",
+     "number": "24",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jayden Jennings",
+     "pos": "LB",
+     "number": "38",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Henry Tabansi",
+     "pos": "OL",
+     "number": "73",
+     "status": "Game Time Decision",
+     "season_out": false
+    },
+    {
+     "name": "Thomas Wadsworth",
+     "pos": "TE",
+     "number": "84",
      "status": "Out",
      "season_out": false
     }
