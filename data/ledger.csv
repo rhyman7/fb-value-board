@@ -228,3 +228,6 @@ row_id,flagged_at,season,week,game_id,data_id,kickoff,market,side,pick,tier,book
 2026_13_DAL_SEA|Total|over,2026-11-27 03:53,2026,13,2026_13_DAL_SEA,2026_13_DAL_SEA,2026-12-08T01:15Z,Total,over,Over 51.5,price,draftkings,50.5,-110.0,-110.0,0.0303,0.0092,consensus,6.5,51.5,6.43,50.35
 2026_13_KC_LA|Total|over,2026-11-27 19:30,2026,13,2026_13_KC_LA,2026_13_KC_LA,2026-12-04T01:15Z,Total,over,Over 44.5,price,fanduel,43.5,-110.0,-110.0,0.0236,0.0043,consensus,1.5,44.5,4.8,47.57
 2026_13_DET_ATL|Total|under,2026-11-27 19:30,2026,13,2026_13_DET_ATL,2026_13_DET_ATL,2026-12-06T18:00Z,Total,under,Under 49.5,price,fanduel,51.5,-110.0,-110.0,0.0553,0.0179,consensus,-3.5,49.5,-6.11,53.28
+2026_12_NO_CIN|Spread|away,2026-11-28 15:20,2026,12,2026_12_NO_CIN,2026_12_NO_CIN,2026-11-29T18:00Z,Spread,away,NO +10.5,model,fanduel,9.5,100.0,100.0,0.0049,0.0,pinnacle,10.5,49.0,10.65,49.83
+2026_12_SEA_SF|Spread|away,2026-11-28 15:20,2026,12,2026_12_SEA_SF,2026_12_SEA_SF,2026-11-29T21:25Z,Spread,away,SEA -1,opener,fanduel,-1.5,-105.0,-105.0,-0.0035,0.0026,pinnacle,-1.0,42.0,-4.19,39.16
+2026_13_DET_ATL|Moneyline|home,2026-11-28 15:20,2026,13,2026_13_DET_ATL,2026_13_DET_ATL,2026-12-06T18:00Z,Moneyline,home,ATL ML,price,kalshi,,203.0,189.4,-0.0376,0.0009,consensus,-3.5,49.5,-6.16,53.35
