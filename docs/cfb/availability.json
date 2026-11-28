@@ -1,6 +1,6 @@
 {
  "source": "Conference availability reports (SEC, ACC, Big 12, Big Ten) via app.hdintelligence.com",
- "fetched": "2026-11-28T17:38Z",
+ "fetched": "2026-11-28T18:21Z",
  "today": "2026-11-28",
  "teams": {
   "Arkansas": {
@@ -1823,6 +1823,191 @@
      "name": "Thomas Wadsworth",
      "pos": "TE",
      "number": "84",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Virginia": {
+   "conf": "ACC",
+   "abbr": "UVA",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "13:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:00:00",
+   "opponent": "Virginia Tech",
+   "players": [
+    {
+     "name": "Maddox Marcellus",
+     "pos": "LB",
+     "number": "11",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Rico Flores Jr.",
+     "pos": "WR",
+     "number": "11",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Omillio Agard",
+     "pos": "CB",
+     "number": "20",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Alex Dunn",
+     "pos": "DB",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Landon Danley",
+     "pos": "LB",
+     "number": "32",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Isaiah Reese",
+     "pos": "LB",
+     "number": "42",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Chase Morrison",
+     "pos": "DT",
+     "number": "46",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Noah Hartsoe",
+     "pos": "OL",
+     "number": "58",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Drake Metcalf",
+     "pos": "OL",
+     "number": "60",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Grant Ellinger",
+     "pos": "OL",
+     "number": "65",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Jason Hammond",
+     "pos": "DT",
+     "number": "91",
+     "status": "Out",
+     "season_out": true
+    },
+    {
+     "name": "Bull Richardson",
+     "pos": "DT",
+     "number": "96",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Devon Baxter",
+     "pos": "DE",
+     "number": "99",
+     "status": "Out",
+     "season_out": false
+    }
+   ]
+  },
+  "Virginia Tech": {
+   "conf": "ACC",
+   "abbr": "VT",
+   "report": "Game Day",
+   "published": "2026-11-28",
+   "posted": "13:00:00",
+   "game_date": "2026-11-28",
+   "game_time": "15:00:00",
+   "opponent": "Virginia",
+   "players": [
+    {
+     "name": "Thomas Williams",
+     "pos": "CB",
+     "number": "23",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "George Ballance",
+     "pos": "LB",
+     "number": "25",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marcellous Hawkins",
+     "pos": "RB",
+     "number": "27",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Nathaniel Wright",
+     "pos": "OL",
+     "number": "50",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Lucas Austin",
+     "pos": "OL",
+     "number": "57",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Montavious Cunningham",
+     "pos": "OL",
+     "number": "66",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Justin Terry",
+     "pos": "OL",
+     "number": "72",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Marlen Bright",
+     "pos": "OL",
+     "number": "74",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Luke Stuewe",
+     "pos": "WR",
+     "number": "83",
+     "status": "Out",
+     "season_out": false
+    },
+    {
+     "name": "Emmett Laws",
+     "pos": "DL",
+     "number": "99",
      "status": "Out",
      "season_out": false
     }
